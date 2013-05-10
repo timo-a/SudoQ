@@ -113,48 +113,65 @@ public class Generator {
 	}
 
 	/**
+	 * Abstrakte Klasse kapselt gemeinsamkeiten von {@link SudokuGenerationStandardType} und {@link SudokuGeneration}
+	 * @author timo
+	 *
+	 */
+	private abstract class SudokuGenerationTopClass implements Runnable{
+		
+		/**
+		 * Das Sudoku auf welchem die Generierung ausgeführt wird
+		 */
+		protected Sudoku sudoku;
+
+		/**
+		 * Das Zufallsobjekt für den Generator
+		 */
+		protected Random random;
+	
+		/**
+		 * Der Solver, der für Validierungsvorgänge genutzt wird
+		 */
+		protected Solver solver;
+		
+		/**
+		 * Das Objekt, auf dem nach Abschluss der Generierung die
+		 * Callback-Methode aufgerufen wird
+		 */
+		protected GeneratorCallback callbackObject;
+
+		/**
+		 * Eine Liste der aktuell definierten Felder
+		 */
+		protected List<Position> definedFields;
+
+		/**
+		 * Die noch freien, also nicht belegten Felder des Sudokus
+		 */
+		protected List<Position> freeFields;
+
+		/**
+		 * Das gelöste Sudoku
+		 */
+		protected Sudoku solvedSudoku;
+		
+		public SudokuGenerationTopClass(Sudoku sudoku, GeneratorCallback callbackObject, Random random) {
+			this.sudoku = sudoku;
+			this.callbackObject = callbackObject;
+			this.solver = new Solver(sudoku);
+			this.freeFields = new ArrayList<Position>();
+			this.definedFields = new ArrayList<Position>();
+			this.random = random;
+		}
+	}
+	
+	/**
 	 * Bietet die Möglichkeit Sudokus abgeleitet vom Typ {@link TypeStandard} zu
 	 * genrieren. Für diese ist der Algorithmus wesentlich schneller als der von
 	 * {@link SudokuGeneration}. Die Klasse implementiert das {@link Runnable}
 	 * interface und kann daher in einem eigenen Thread ausgeführt werden.
 	 */
-	private class SudokuGenerationStandardType implements Runnable {
-
-		/**
-		 * Das Sudoku auf welchem die Generierung ausgeführt wird
-		 */
-		private Sudoku sudoku;
-
-		/**
-		 * Der Solver, der für Validierungsvorgänge genutzt wird
-		 */
-		private Solver solver;
-
-		/**
-		 * Das Objekt, auf dem nach Abschluss der Generierung die
-		 * Callback-Methode aufgerufen wird
-		 */
-		private GeneratorCallback callbackObject;
-
-		/**
-		 * Eine Liste der aktuell definierten Felder
-		 */
-		private List<Position> definedFields;
-
-		/**
-		 * Die noch freien, also nicht belegten Felder des Sudokus
-		 */
-		private List<Position> freeFields;
-
-		/**
-		 * Das Zufallsobjekt für den Generator
-		 */
-		private Random random;
-
-		/**
-		 * Das gelöste Sudoku
-		 */
-		private Sudoku solvedSudoku;
+	private class SudokuGenerationStandardType extends SudokuGenerationTopClass {
 
 		/**
 		 * Definierte Felder
@@ -175,12 +192,7 @@ public class Generator {
 		 *            Das Zufallsobjekt zur Erzeugung des Sudokus
 		 */
 		public SudokuGenerationStandardType(Sudoku sudoku, GeneratorCallback callbackObject, Random random) {
-			this.sudoku = sudoku;
-			this.callbackObject = callbackObject;
-			this.solver = new Solver(sudoku);
-			this.freeFields = new ArrayList<Position>();
-			this.definedFields = new ArrayList<Position>();
-			this.random = random;
+			super(sudoku, callbackObject, random);
 		}
 
 		/**
@@ -396,17 +408,8 @@ public class Generator {
 	 * {@link SudokuGeneration}. Die Klasse implementiert das {@link Runnable}
 	 * interface und kann daher in einem eigenen Thread ausgeführt werden.
 	 */
-	private class SudokuGeneration implements Runnable {
+	private class SudokuGeneration extends SudokuGenerationTopClass {
 
-		/**
-		 * Das Sudoku auf welchem die Generierung ausgeführt wird
-		 */
-		private Sudoku sudoku;
-
-		/**
-		 * Das Zufallsobjekt auf dem der Generator arbeitet.
-		 */
-		private Random random;
 
 		/**
 		 * Die Anzahl der Felder, die fest zu definieren ist
@@ -425,36 +428,10 @@ public class Generator {
 		private int currentFieldsDefined;
 
 		/**
-		 * Der Solver, der für Validierungsvorgänge genutzt wird
-		 */
-		private Solver solver;
-
-		/**
-		 * Das Objekt, auf dem nach Abschluss der Generierung die
-		 * Callback-Methode aufgerufen wird
-		 */
-		private GeneratorCallback callbackObject;
-
-		/**
-		 * Eine Liste der aktuell definierten Felder
-		 */
-		private List<Position> definedFields;
-
-		/**
-		 * Die noch freien, also nicht belegten Felder des Sudokus
-		 */
-		private List<Position> freeFields;
-
-		/**
 		 * ComplexityConstraint für ein Sudoku des definierten
 		 * Schwierigkeitsgrades
 		 */
 		private ComplexityConstraint currentConstraint;
-
-		/**
-		 * Das gelöste Sudoku
-		 */
-		private Sudoku solvedSudoku;
 
 		/**
 		 * Instanziiert ein neues Generierungsobjekt für das spezifizierte
@@ -470,12 +447,7 @@ public class Generator {
 		 *            Das Zufallsobjekt zur Erzeugung des Sudokus
 		 */
 		public SudokuGeneration(Sudoku sudoku, GeneratorCallback callbackObject, Random random) {
-			this.sudoku = sudoku;
-			this.callbackObject = callbackObject;
-			this.solver = new Solver(sudoku);
-			this.freeFields = new ArrayList<Position>();
-			this.definedFields = new ArrayList<Position>();
-			this.random = random;
+			super(sudoku, callbackObject, random);
 
 			this.currentConstraint = sudoku.getSudokuType().buildComplexityConstraint(sudoku.getComplexity());
 
