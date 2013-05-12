@@ -2,13 +2,10 @@ package de.sudoq.model.sudoku.sudokuTypes;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.BitSet;
-
 import org.junit.Test;
 
 
 import de.sudoq.model.sudoku.Constraint;
-import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraintTests;

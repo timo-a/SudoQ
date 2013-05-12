@@ -10,9 +10,6 @@ import org.junit.Test;
 
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
-import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
-import de.sudoq.model.sudoku.complexity.ComplexityConstraintTests;
 import de.sudoq.model.sudoku.sudokuTypes.StairStepSudokuType9x9;
 import de.sudoq.model.sudoku.sudokuTypes.TypeSquiggly;
 

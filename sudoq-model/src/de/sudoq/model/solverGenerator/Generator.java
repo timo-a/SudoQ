@@ -141,7 +141,7 @@ public class Generator {
 		protected GeneratorCallback callbackObject;
 
 		/**
-		 * Eine Liste der aktuell definierten Felder
+		 * Eine Liste der aktuell definierten(belegten) Felder
 		 */
 		protected List<Position> definedFields;
 
@@ -155,6 +155,16 @@ public class Generator {
 		 */
 		protected Sudoku solvedSudoku;
 		
+		/**
+		 * Dimension von Sudoku in X-Richtung
+		 */
+		protected int sudokuSizeX;
+		
+		/**
+		 * Dimension von Sudoku in Y-Richtung
+		 */
+		protected int sudokuSizeY;
+		
 		public SudokuGenerationTopClass(Sudoku sudoku, GeneratorCallback callbackObject, Random random) {
 			this.sudoku = sudoku;
 			this.callbackObject = callbackObject;
@@ -162,6 +172,9 @@ public class Generator {
 			this.freeFields = new ArrayList<Position>();
 			this.definedFields = new ArrayList<Position>();
 			this.random = random;
+			this.sudokuSizeX = sudoku.getSudokuType().getSize().getX();
+			this.sudokuSizeY = sudoku.getSudokuType().getSize().getY();
+			
 		}
 	}
 	
@@ -200,139 +213,153 @@ public class Generator {
 		 * gewünschten Komplexität generiert.
 		 */
 		public void run() {
+			
+			
 			// Reset, if it takes too long
-			// Create template sudoku of defined type and transform it
+			//Create template sudoku of defined type and transform it
+			//TODO make a better template
 			SudokuBuilder sub = new SudokuBuilder(sudoku.getSudokuType());
-			PositionMap<Integer> solution = new PositionMap<Integer>(sudoku.getSudokuType().getSize());
 			int sqrtSymbolNumber = (int) Math.sqrt(sudoku.getSudokuType().getNumberOfSymbols());
-			for (int x = 0; x < sudoku.getSudokuType().getSize().getX(); x++) {
-				for (int y = 0; y < sudoku.getSudokuType().getSize().getY(); y++) {
-					sub.addSolution(Position.get(x, y),
-							((y % sqrtSymbolNumber) * sqrtSymbolNumber + x + (y / sqrtSymbolNumber))
-									% (sqrtSymbolNumber * sqrtSymbolNumber));
+			for (int x = 0; x < sudokuSizeX; x++) {
+				for (int y = 0; y < sudokuSizeY; y++) {
+                    int calculatedsolution = 	((y % sqrtSymbolNumber) * sqrtSymbolNumber + x + (y / sqrtSymbolNumber))
+							                  % (sqrtSymbolNumber * sqrtSymbolNumber);
+					sub.addSolution(Position.get(x, y),calculatedsolution);
 				}
 			}
 			solvedSudoku = sub.createSudoku();
 			Transformer.transform(solvedSudoku);
 
-			for (int x = 0; x < sudoku.getSudokuType().getSize().getX(); x++) {
-				for (int y = 0; y < sudoku.getSudokuType().getSize().getY(); y++) {
-					solution.put(Position.get(x, y), solvedSudoku.getField(Position.get(x, y)).getSolution());
+			/* extract the solutions from solvedSudoku and
+			 * map the positions to their new coordinates */
+			PositionMap<Integer> solutionMap = new PositionMap<Integer>(sudoku.getSudokuType().getSize());
+			
+			for (int x = 0; x < sudokuSizeX; x++) {
+				for (int y = 0; y < sudokuSizeY; y++) {
+					solutionMap.put(Position.get(x, y), solvedSudoku.getField(Position.get(x, y)).getSolution());
 				}
 			}
 
-			// Fill the sudoku being generated with template solutions
-
-			for (int x = 0; x < sudoku.getSudokuType().getSize().getX(); x++) {
-				for (int y = 0; y < sudoku.getSudokuType().getSize().getY(); y++) {
-					sudoku.getField(Position.get(x, y)).setCurrentValue(
-							solvedSudoku.getField(Position.get(x, y)).getSolution(), false);
+						
+			// prefill every field in the sudoku being generated with template solutions
+			// filled as the user would fill in
+			for (int x = 0; x < sudokuSizeX; x++) {
+				for (int y = 0; y < sudokuSizeY; y++) {
+					int solutionFromMap = solutionMap.get(Position.get(x, y));
+					sudoku.getField(Position.get(x, y)).setCurrentValue(solutionFromMap, false);
 					this.definedFields.add(Position.get(x, y));
 				}
 			}
 
+			/* For every Constraint
+			 *   if there is no position empty
+			 *       set one random position empty    */
 			ArrayList<Constraint> constraints = sudoku.getSudokuType().getConstraints();
 			ArrayList<Position> positions;
-			boolean emptyOne = false;
-			for (int i = 0; i < constraints.size(); i++) {
-				positions = constraints.get(i).getPositions();
+			boolean emptyOne;
+			for (Constraint c:constraints){
+				positions = c.getPositions();
 				emptyOne = false;
-				for (int j = 0; j < positions.size(); j++) {
-					if (sudoku.getField(positions.get(j)).isEmpty()) {
+				for (Position p:positions) {
+					if (sudoku.getField(p).isEmpty()) {
 						emptyOne = true;
 						break;
 					}
 				}
 				if (!emptyOne) {
 					int nr = random.nextInt(positions.size());
-					sudoku.getField(positions.get(nr)).setCurrentValue(Field.EMPTYVAL, false);
-					definedFields.remove(positions.get(nr));
-					freeFields.add(positions.get(nr));
+					Position randomPosition = positions.get(nr);
+					
+					sudoku.getField(randomPosition).setCurrentValue(Field.EMPTYVAL, false);
+					definedFields.remove(randomPosition);
+					freeFields.add(randomPosition);
 					definedOnes++;
 				}
 			}
 
+			/* 
+			 * call magic
+			 * TODO understand & document
+			 * */
 			ComplexityConstraint constr = sudoku.getSudokuType().buildComplexityConstraint(sudoku.getComplexity());
 
 			int nr = random.nextInt(definedFields.size());
 			int counter = definedFields.size();
+
+			SolverSudoku solverSudoku = (SolverSudoku) solver.getSudoku();
 			while (counter >= 0 && definedFields.size() > constr.getAverageFields()) {
 				counter--;
-				sudoku.getField(definedFields.get(nr)).setCurrentValue(Field.EMPTYVAL, false);
-				((SolverSudoku) solver.getSudoku()).resetCandidates();
-				if (((SolverSudoku) solver.getSudoku()).getCurrentCandidates(definedFields.get(nr)).cardinality() != 1) {
-					sudoku.getField(definedFields.get(nr)).setCurrentValue(
-							solvedSudoku.getField(definedFields.get(nr)).getSolution(), false);
-					nr = (nr + 1) % definedFields.size();
-				} else {
-					freeFields.add(definedFields.remove(nr));
-					definedOnes++;
-					if (nr >= definedFields.size())
+				Position currentFieldPos = definedFields.get(nr);
+				sudoku.getField(currentFieldPos).setCurrentValue(Field.EMPTYVAL, false);
+				solverSudoku.resetCandidates();
+				if (solverSudoku.getCurrentCandidates(currentFieldPos).cardinality() != 1) {                    //if currentField has not 1 possibilitie
+					sudoku.getField(currentFieldPos).setCurrentValue( solutionMap.get(currentFieldPos), false); //     fill with solution
+					nr = (nr + 1) % definedFields.size();                                                       //     advance to next pos
+				} else {																						//else
+					freeFields.add(definedFields.remove(nr));                                                   //     set one field free
+					definedOnes++;                                                                              //     increase defined ones TODO why?
+					if (nr >= definedFields.size()) //if nr is out of bounds because of the removal, set it to 0, the next logical position. 
+						                            //otherwise nr is already at the next pos(because the original element is gone)
 						nr = 0;
 				}
 			}
 
-			// ArrayList<Constraint> constraints =
-			// sudoku.getSudokuType().getConstraints();
-			// ArrayList<Position> positions;
-			// for (int i = 0; i < constraints.size(); i++) {
-			// positions = constraints.get(i).getPositions();
-			// int nr = random.nextInt(positions.size());
-			// sudoku.getField(positions.get(nr)).setCurrentValue(
-			// solvedSudoku.getField(positions.get(nr)).getSolution(), false);
-			// freeFields.remove(positions.get(nr));
-			// definedFields.add(positions.get(nr));
-			// }
-
-			int allocationFactor = sudoku.getSudokuType().getSize().getX() * sudoku.getSudokuType().getSize().getY()
-					/ 20;
+			int allocationFactor = sudokuSizeX * sudokuSizeY / 20;
 
 			ComplexityRelation rel = ComplexityRelation.INVALID;
 			while (rel != ComplexityRelation.CONSTRAINT_SATURATION) {
-				// while (definedFields.size() > constr.getAverageFields()) {
-				// removeDefinedField();
-				// }
-
-				rel = solver.validate(solution, true);
+			
+				rel = solver.validate(solutionMap, true);
 
 				switch (rel) {
 				case MUCH_TO_EASY:
-					for (int i = 0; i < allocationFactor / 2 && removeDefinedField(); i++) {
-					}
+					//remove more
+					for (int i = 0; i < allocationFactor / 2; i++)
+						removeDefinedField();
 					break;
 				case TO_EASY:
+					//remove one
 					removeDefinedField();
 					break;
 				case INVALID:
+					//do nothen TODO better ideas?
 				case MUCH_TO_DIFFICULT:
-					for (int i = 0; i < allocationFactor && addDefinedField(); i++) {
-					}
+					//add more fields
+					for (int i = 0; i < allocationFactor; i++)
+						addDefinedField();
 					break;
 				case TO_DIFFICULT:
+					//add one
 					addDefinedField();
 					break;
 				}
 			}
 
-			// Call the callback
-			SudokuBuilder suBi = new SudokuBuilder(sudoku.getSudokuType());
-			Position currentPos = null;
-			for (int x = 0; x < sudoku.getSudokuType().getSize().getX(); x++) {
-				for (int y = 0; y < sudoku.getSudokuType().getSize().getY(); y++) {
+			/* fill the real sudoku:
+			 * 
+			 * for every pos
+			 *     pass solution to the builder
+			 *     if already filled:
+			 *          set fixed, so user can't alter*/
+			SudokuBuilder sudokuBuilder = new SudokuBuilder(sudoku.getSudokuType());
+			Position currentPos;
+			for (int x = 0; x < sudokuSizeX; x++) {
+				for (int y = 0; y < sudokuSizeY; y++) {
 					currentPos = Position.get(x, y);
-					if (solvedSudoku.getField(currentPos) != null) {
-						int value = solvedSudoku.getField(currentPos).getSolution();
-						if (!sudoku.getField(currentPos).isEmpty())
-							suBi.setFixed(currentPos);
-						suBi.addSolution(currentPos, value);
-					}
+					int value = solvedSudoku.getField(currentPos).getSolution();
+					sudokuBuilder.addSolution(currentPos, value);
+					if (!sudoku.getField(currentPos).isEmpty())
+						sudokuBuilder.setFixed(currentPos);
 				}
 			}
-			Sudoku res = suBi.createSudoku();
+			Sudoku res = sudokuBuilder.createSudoku();           //the final sudoku
 			res.setComplexity(sudoku.getComplexity());
+
+			// Call the callback
 			callbackObject.generationFinished(res);
 		}
 
+		
 		private boolean addDefinedField() {
 			if (freeFields.isEmpty()) return false;
 			else if (freeFields.size() == definedOnes) {
@@ -343,31 +370,12 @@ public class Generator {
 			definedFields.add(p);
 			return true;
 
-			// int y = random.nextInt(sudoku.getSudokuType().getSize().getY());
-			//
-			// int counter = sudoku.getSudokuType().getSize().getX() *
-			// sudoku.getSudokuType().getSize().getY();
-			// while (!markings[x][y] && counter >= 0) {
-			// x = (x + 1) % sudoku.getSudokuType().getSize().getX();
-			// y = x == 0 ? (y + 1) % sudoku.getSudokuType().getSize().getY() :
-			// y;
-			// counter--;
-			// }
-			//
-			// if (counter != -1) {
-			// sudoku.getField(Position.get(x, y)).setCurrentValue(
-			// solvedSudoku.getField(Position.get(x, y)).getSolution(), false);
-			// markings[x][y] = false;
-			// return true;
-			// } else {
-			// return false;
-			// }
 		}
 
 		/**
 		 * Entfernt eines der definierten Felder.
 		 * 
-		 * @return Die Position des entfernten Feldes
+		 * @return True wenn es geklappt hat, False wenn es schon leer war
 		 */
 		private boolean removeDefinedField() {
 			if (definedFields.isEmpty())
@@ -378,26 +386,6 @@ public class Generator {
 			freeFields.add(p);
 			return true;
 
-			// int x = random.nextInt(sudoku.getSudokuType().getSize().getX());
-			// int y = random.nextInt(sudoku.getSudokuType().getSize().getY());
-			//
-			// int counter = sudoku.getSudokuType().getSize().getX() *
-			// sudoku.getSudokuType().getSize().getY();
-			// while (markings[x][y] && counter >= 0) {
-			// x = (x + 1) % sudoku.getSudokuType().getSize().getX();
-			// y = x == 0 ? (y + 1) % sudoku.getSudokuType().getSize().getY() :
-			// y;
-			// counter--;
-			// }
-			//
-			// if (counter != -1) {
-			// sudoku.getField(Position.get(x,
-			// y)).setCurrentValue(Field.EMPTYVAL, false);
-			// markings[x][y] = true;
-			// return true;
-			// } else {
-			// return false;
-			// }
 		}
 
 	}
@@ -451,8 +439,8 @@ public class Generator {
 
 			this.currentConstraint = sudoku.getSudokuType().buildComplexityConstraint(sudoku.getComplexity());
 
-			for (int y = 0; y < this.sudoku.getSudokuType().getSize().getY(); y++) {
-				for (int x = 0; x < this.sudoku.getSudokuType().getSize().getX(); x++) {
+			for (int y = 0; y < sudokuSizeY; y++) {
+				for (int x = 0; x < sudokuSizeX; x++) {
 					if (this.sudoku.getField(Position.get(x, y)) != null)
 						freeFields.add(Position.get(x, y));
 				}
@@ -464,15 +452,13 @@ public class Generator {
 		 * gewünschten Komplexität generiert.
 		 */
 		public void run() {
-			boolean found = false;
 			// Calculate the number of fields to be filled
-			fieldsToDefine = Math.min((int) (sudoku.getSudokuType().getSize().getX()
-					* sudoku.getSudokuType().getSize().getY() * sudoku.getSudokuType().getStandardAllocationFactor()),
-					currentConstraint.getAverageFields());
+			fieldsToDefine = Math.min((int) (sudokuSizeX * sudokuSizeY * sudoku.getSudokuType().getStandardAllocationFactor()),
+					                        currentConstraint.getAverageFields());
 
-			markings = new boolean[sudoku.getSudokuType().getSize().getX()][sudoku.getSudokuType().getSize().getY()];
+			markings = new boolean[sudokuSizeX][sudokuSizeY];
 			PositionMap<Integer> solution = new PositionMap<Integer>(this.sudoku.getSudokuType().getSize());
-			while (!found) {
+			do {
 				// Remove some fields, because sudoku could not be validated
 				for (int i = 0; i < 5; i++) {
 					removeDefinedField();
@@ -486,9 +472,8 @@ public class Generator {
 					}
 				}
 
-				// Try to fill sudoku to have complexity constraint saturation
-				found = solver.solveAll(false, false);
-			}
+			}while(!solver.solveAll(false, false));
+			
 			// System.out.println("Found one");
 
 			Complexity saveCompl = solver.getSudoku().getComplexity();
@@ -498,8 +483,8 @@ public class Generator {
 
 			// Create the sudoku template generated before
 			SudokuBuilder sub = new SudokuBuilder(sudoku.getSudokuType());
-			for (int x = 0; x < sudoku.getSudokuType().getSize().getX(); x++) {
-				for (int y = 0; y < sudoku.getSudokuType().getSize().getY(); y++) {
+			for (int x = 0; x < sudokuSizeX; x++) {
+				for (int y = 0; y < sudokuSizeY; y++) {
 					if (sudoku.getField(Position.get(x, y)) != null)
 						sub.addSolution(Position.get(x, y), solution.get(Position.get(x, y)));
 				}
@@ -511,8 +496,8 @@ public class Generator {
 			}
 
 			// Fill the sudoku being generated with template solutions
-			for (int x = 0; x < sudoku.getSudokuType().getSize().getX(); x++) {
-				for (int y = 0; y < sudoku.getSudokuType().getSize().getY(); y++) {
+			for (int x = 0; x < sudokuSizeX; x++) {
+				for (int y = 0; y < sudokuSizeY; y++) {
 					if (sudoku.getField(Position.get(x, y)) != null) {
 						sudoku.getField(Position.get(x, y)).setCurrentValue(
 								solvedSudoku.getField(Position.get(x, y)).getSolution(), false);
@@ -520,9 +505,8 @@ public class Generator {
 				}
 			}
 
-			int allocationFactor = sudoku.getSudokuType().getNumberOfSymbols()
-					* sudoku.getSudokuType().getNumberOfSymbols() / 20;
-			allocationFactor = allocationFactor == 0 ? 1 : allocationFactor;
+			int allocationFactor = (int)Math.pow(sudoku.getSudokuType().getNumberOfSymbols(), 2) / 20;
+			allocationFactor = Math.max(1, allocationFactor);
 
 			ComplexityRelation rel = ComplexityRelation.INVALID;
 			while (rel != ComplexityRelation.CONSTRAINT_SATURATION) {
@@ -533,7 +517,8 @@ public class Generator {
 						removeDefinedField();
 				} else if (rel == ComplexityRelation.TO_EASY) {
 					removeDefinedField();
-				} else if (rel == ComplexityRelation.INVALID || rel == ComplexityRelation.TO_DIFFICULT
+				} else if (rel == ComplexityRelation.INVALID 
+						|| rel == ComplexityRelation.TO_DIFFICULT
 						|| rel == ComplexityRelation.MUCH_TO_DIFFICULT) {
 					for (int i = 0; i < allocationFactor && !freeFields.isEmpty(); i++) {
 						Position p = freeFields.remove(0);
@@ -545,15 +530,16 @@ public class Generator {
 
 			// Call the callback
 			SudokuBuilder suBi = new SudokuBuilder(sudoku.getSudokuType());
-			Position currentPos = null;
-			for (int x = 0; x < sudoku.getSudokuType().getSize().getX(); x++) {
-				for (int y = 0; y < sudoku.getSudokuType().getSize().getY(); y++) {
+			Position currentPos;
+			for (int x = 0; x < sudokuSizeX; x++) {
+				for (int y = 0; y < sudokuSizeY; y++) {
 					currentPos = Position.get(x, y);
 					if (solvedSudoku.getField(currentPos) != null) {
 						int value = solvedSudoku.getField(currentPos).getSolution();
+						suBi.addSolution(currentPos, value);
 						if (!sudoku.getField(currentPos).isEmpty())
 							suBi.setFixed(currentPos);
-						suBi.addSolution(currentPos, value);
+						
 					}
 				}
 			}
@@ -573,43 +559,7 @@ public class Generator {
 		 */
 
 		private Position addDefinedField() {
-			// if (freeFields.isEmpty())
-			// return null;
-			//
-			// Position p =
-			// freeFields.remove(random.nextInt(freeFields.size()));
-			// if (solvedSudoku != null) {
-			// sudoku.getField(p).setCurrentValue(solvedSudoku.getField(p).getSolution(),
-			// false);
-			// } else {
-			// boolean valid = false;
-			// int offset =
-			// random.nextInt(sudoku.getSudokuType().getNumberOfSymbols());
-			// for (int j = 0; j < sudoku.getSudokuType().getNumberOfSymbols();
-			// j++) {
-			// sudoku.getField(p).setCurrentValue((j + offset) %
-			// sudoku.getSudokuType().getNumberOfSymbols(),
-			// false);
-			// valid = true;
-			// if (!sudoku.getSudokuType().checkSudoku(sudoku)) {
-			// valid = false;
-			// sudoku.getField(p).setCurrentValue(Field.EMPTYVAL, false);
-			// } else {
-			// break;
-			// }
-			// }
-			// if (!valid) {
-			// freeFields.add(p);
-			// p = null;
-			// }
-			// }
-			// if (p != null) {
-			// definedFields.add(p);
-			// currentFieldsDefined++;
-			// }
-			//
-			// return p;
-
+			
 			int count = definedFields.size();
 
 			for (int x = 0; x < sudoku.getSudokuType().getSize().getX(); x++) {
