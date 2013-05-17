@@ -21,43 +21,12 @@ import de.sudoq.model.xml.SudokuXmlHandler;
  */
 public class SudokuManager implements GeneratorCallback {
 
-	// private static final int[][] neccessaryCounts = new
-	// int[SudokuTypes.values().length][Complexity.values().length];
 	private Generator generator = new Generator();
-	private Sudoku used = null;
 
-	// neccessaryCounts[SudokuTypes.standard9x9.ordinal()][Complexity.easy.ordinal()]
-	// = 10;
-	// neccessaryCounts[SudokuTypes.standard9x9.ordinal()][Complexity.medium.ordinal()]
-	// = 10;
-	// neccessaryCounts[SudokuTypes.standard9x9.ordinal()][Complexity.difficult.ordinal()]
-	// = 10;
-	// neccessaryCounts[SudokuTypes.standard9x9.ordinal()][Complexity.infernal.ordinal()]
-	// = 10;
-	// neccessaryCounts[SudokuTypes.standard16x16.ordinal()][Complexity.easy.ordinal()]
-	// = 10;
-	// neccessaryCounts[SudokuTypes.standard16x16.ordinal()][Complexity.medium.ordinal()]
-	// = 10;
-	// neccessaryCounts[SudokuTypes.standard16x16.ordinal()][Complexity.difficult.ordinal()]
-	// = 10;
-	// neccessaryCounts[SudokuTypes.standard16x16.ordinal()][Complexity.infernal.ordinal()]
-	// = 10;
-	// neccessaryCounts[SudokuTypes.Xsudoku.ordinal()][Complexity.easy.ordinal()]
-	// = 10;
-	// neccessaryCounts[SudokuTypes.Xsudoku.ordinal()][Complexity.medium.ordinal()]
-	// = 10;
-	// neccessaryCounts[SudokuTypes.Xsudoku.ordinal()][Complexity.difficult.ordinal()]
-	// = 10;
-	// neccessaryCounts[SudokuTypes.Xsudoku.ordinal()][Complexity.infernal.ordinal()]
-	// = 10;
-	// neccessaryCounts[SudokuTypes.HyperSudoku.ordinal()][Complexity.easy.ordinal()]
-	// = 10;
-	// neccessaryCounts[SudokuTypes.HyperSudoku.ordinal()][Complexity.medium.ordinal()]
-	// = 10;
-	// neccessaryCounts[SudokuTypes.HyperSudoku.ordinal()][Complexity.difficult.ordinal()]
-	// = 10;
-	// neccessaryCounts[SudokuTypes.HyperSudoku.ordinal()][Complexity.infernal.ordinal()]
-	// = 10;
+	/**
+	 * speicher für das alte Sudoku während ein neues generiert wird
+	 */
+	private Sudoku used = null;
 
 	/**
 	 * Das Callback fuer den Generator
@@ -75,7 +44,7 @@ public class SudokuManager implements GeneratorCallback {
 	 *            das genutzte Sudoku
 	 */
 	public void usedSudoku(Sudoku sudoku) {
-		if (sudoku.getTransformCount() >= 10) {
+		if (sudoku.getTransformCount() >= 1) {//TODO set back to 10 again
 			used = sudoku;
 			generator.generate(sudoku.getSudokuType().getEnumType(), sudoku.getComplexity(), this);
 		} else {
@@ -88,10 +57,8 @@ public class SudokuManager implements GeneratorCallback {
 	 * Gibt ein neues Sudoku des gewünschten Typs und der gewünschten
 	 * Schwierigkeit zurück
 	 * 
-	 * @param t
-	 *            Typ des Sudokus
-	 * @param c
-	 *            Schwierigkeit des Sudokus
+	 * @param t Typ des Sudokus
+	 * @param c Schwierigkeit des Sudokus
 	 * @return das neue Sudoku
 	 */
 	public static Sudoku getNewSudoku(SudokuTypes t, Complexity c) {

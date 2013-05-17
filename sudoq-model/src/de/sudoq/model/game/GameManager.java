@@ -81,7 +81,7 @@ public class GameManager {
 	 * @return Das neue Spiel
 	 * 
 	 * @throws IllegalArgumentException
-	 *             falls gameType invalide ist.
+	 *             falls gameType invalid ist.
 	 * @see SudokuTypes
 	 * @see Complexity
 	 * @see GameType
@@ -90,20 +90,7 @@ public class GameManager {
 	public Game newGame(SudokuTypes type, Complexity complexity, GameType gameType, AssistanceSet assists) {
 		Sudoku sudoku = SudokuManager.getNewSudoku(type, complexity);
 
-		// switch (gameType) {
-		// case LOCAL:
-		// break;
-		// //TODO: Enable MP GameType in GameManager
-		// case MULTIPLAYER:
-		// // sudoku = new Sudoku();
-		// // new SudokuXmlHandler(type,
-		// // complexity).createObjectFromXml(sudoku);
-		// // TODO server client stuff
-		// // break;
-		// default:
-		// throw new IllegalArgumentException("UnsupportedGame");
-		// }
-		new SudokuManager().usedSudoku(sudoku);
+		new SudokuManager().usedSudoku(sudoku);//TODO warum instanziierung?
 
 		Game game = new Game(FileManager.getNextFreeGameId(), sudoku);
 		game.setAssistances(assists);

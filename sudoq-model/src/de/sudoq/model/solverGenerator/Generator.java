@@ -86,12 +86,12 @@ public class Generator {
 		Sudoku sudoku = new SudokuBuilder(type).createSudoku();
 		sudoku.setComplexity(complexity);
 
-		if (sudoku.getSudokuType() instanceof StandardSudokuType
+		/*if (sudoku.getSudokuType() instanceof StandardSudokuType
 				|| sudoku.getSudokuType() instanceof StandardSudokuType16x16) {
 			new Thread(new SudokuGenerationStandardType(sudoku, callbackObject, random)).start();
-		} else {
+		} else {*/
 			new Thread(new SudokuGeneration(sudoku, callbackObject, random)).start();
-		}
+		//}
 
 		// Initiate new random object
 		random = new Random();
