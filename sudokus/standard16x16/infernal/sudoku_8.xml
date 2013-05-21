@@ -1,478 +1,478 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE sudoku SYSTEM "./sudoku.dtd">
-<sudoku transformCount="0" type="3" complexity="3" id="8">
-<fieldmap id="1" editable="true" solution="9">
+<sudoku transformCount="0" type="3" complexity="3">
+<fieldmap id="1" editable="true" solution="1">
 <position x="0" y="0"></position>
 </fieldmap>
-<fieldmap id="32" editable="true" solution="10">
+<fieldmap id="32" editable="false" solution="14">
 <position x="15" y="1"></position>
 </fieldmap>
-<fieldmap id="62" editable="false" solution="15">
+<fieldmap id="62" editable="true" solution="2">
 <position x="13" y="3"></position>
 </fieldmap>
-<fieldmap id="47" editable="true" solution="9">
+<fieldmap id="47" editable="true" solution="10">
 <position x="14" y="2"></position>
 </fieldmap>
-<fieldmap id="92" editable="false" solution="10">
+<fieldmap id="92" editable="true" solution="4">
 <position x="11" y="5"></position>
 </fieldmap>
-<fieldmap id="77" editable="true" solution="15">
+<fieldmap id="77" editable="true" solution="12">
 <position x="12" y="4"></position>
 </fieldmap>
-<fieldmap id="122" editable="true" solution="15">
+<fieldmap id="122" editable="true" solution="7">
 <position x="9" y="7"></position>
 </fieldmap>
-<fieldmap id="107" editable="false" solution="6">
+<fieldmap id="107" editable="false" solution="0">
 <position x="10" y="6"></position>
 </fieldmap>
-<fieldmap id="9" editable="true" solution="13">
+<fieldmap id="9" editable="false" solution="8">
 <position x="8" y="0"></position>
 </fieldmap>
-<fieldmap id="160" editable="false" solution="15">
+<fieldmap id="160" editable="false" solution="5">
 <position x="15" y="9"></position>
 </fieldmap>
-<fieldmap id="24" editable="false" solution="9">
+<fieldmap id="24" editable="true" solution="6">
 <position x="7" y="1"></position>
 </fieldmap>
-<fieldmap id="175" editable="false" solution="4">
+<fieldmap id="175" editable="true" solution="1">
 <position x="14" y="10"></position>
 </fieldmap>
-<fieldmap id="39" editable="true" solution="11">
+<fieldmap id="39" editable="true" solution="0">
 <position x="6" y="2"></position>
 </fieldmap>
-<fieldmap id="190" editable="true" solution="0">
+<fieldmap id="190" editable="false" solution="10">
 <position x="13" y="11"></position>
 </fieldmap>
-<fieldmap id="54" editable="false" solution="6">
+<fieldmap id="54" editable="true" solution="1">
 <position x="5" y="3"></position>
 </fieldmap>
-<fieldmap id="43" editable="false" solution="12">
+<fieldmap id="43" editable="false" solution="6">
 <position x="10" y="2"></position>
 </fieldmap>
-<fieldmap id="111" editable="false" solution="10">
+<fieldmap id="111" editable="false" solution="8">
 <position x="14" y="6"></position>
 </fieldmap>
-<fieldmap id="58" editable="false" solution="5">
+<fieldmap id="58" editable="true" solution="5">
 <position x="9" y="3"></position>
 </fieldmap>
-<fieldmap id="126" editable="false" solution="1">
+<fieldmap id="126" editable="false" solution="3">
 <position x="13" y="7"></position>
 </fieldmap>
-<fieldmap id="73" editable="false" solution="4">
+<fieldmap id="73" editable="false" solution="3">
 <position x="8" y="4"></position>
 </fieldmap>
-<fieldmap id="5" editable="true" solution="7">
+<fieldmap id="5" editable="true" solution="5">
 <position x="4" y="0"></position>
 </fieldmap>
-<fieldmap id="141" editable="false" solution="2">
+<fieldmap id="141" editable="true" solution="8">
 <position x="12" y="8"></position>
 </fieldmap>
-<fieldmap id="88" editable="true" solution="11">
+<fieldmap id="88" editable="false" solution="12">
 <position x="7" y="5"></position>
 </fieldmap>
-<fieldmap id="20" editable="false" solution="15">
+<fieldmap id="20" editable="false" solution="4">
 <position x="3" y="1"></position>
 </fieldmap>
-<fieldmap id="224" editable="true" solution="1">
+<fieldmap id="224" editable="false" solution="10">
 <position x="15" y="13"></position>
 </fieldmap>
-<fieldmap id="156" editable="false" solution="4">
+<fieldmap id="156" editable="false" solution="10">
 <position x="11" y="9"></position>
 </fieldmap>
-<fieldmap id="13" editable="false" solution="14">
+<fieldmap id="13" editable="true" solution="4">
 <position x="12" y="0"></position>
 </fieldmap>
-<fieldmap id="28" editable="false" solution="1">
+<fieldmap id="28" editable="true" solution="1">
 <position x="11" y="1"></position>
 </fieldmap>
-<fieldmap id="96" editable="true" solution="4">
+<fieldmap id="96" editable="true" solution="6">
 <position x="15" y="5"></position>
 </fieldmap>
-<fieldmap id="90" editable="true" solution="2">
+<fieldmap id="90" editable="false" solution="2">
 <position x="9" y="5"></position>
 </fieldmap>
-<fieldmap id="56" editable="true" solution="0">
+<fieldmap id="56" editable="true" solution="9">
 <position x="7" y="3"></position>
 </fieldmap>
-<fieldmap id="22" editable="true" solution="4">
+<fieldmap id="22" editable="false" solution="10">
 <position x="5" y="1"></position>
 </fieldmap>
-<fieldmap id="124" editable="false" solution="13">
+<fieldmap id="124" editable="true" solution="15">
 <position x="11" y="7"></position>
 </fieldmap>
-<fieldmap id="158" editable="false" solution="11">
+<fieldmap id="158" editable="true" solution="0">
 <position x="13" y="9"></position>
 </fieldmap>
-<fieldmap id="192" editable="false" solution="6">
+<fieldmap id="192" editable="true" solution="9">
 <position x="15" y="11"></position>
 </fieldmap>
-<fieldmap id="71" editable="false" solution="6">
+<fieldmap id="71" editable="false" solution="4">
 <position x="6" y="4"></position>
 </fieldmap>
 <fieldmap id="3" editable="false" solution="3">
 <position x="2" y="0"></position>
 </fieldmap>
-<fieldmap id="37" editable="false" solution="15">
+<fieldmap id="37" editable="false" solution="13">
 <position x="4" y="2"></position>
 </fieldmap>
-<fieldmap id="105" editable="false" solution="14">
+<fieldmap id="105" editable="false" solution="10">
 <position x="8" y="6"></position>
 </fieldmap>
-<fieldmap id="207" editable="true" solution="15">
+<fieldmap id="207" editable="true" solution="3">
 <position x="14" y="12"></position>
 </fieldmap>
-<fieldmap id="139" editable="false" solution="1">
+<fieldmap id="139" editable="false" solution="7">
 <position x="10" y="8"></position>
 </fieldmap>
-<fieldmap id="173" editable="false" solution="9">
+<fieldmap id="173" editable="false" solution="3">
 <position x="12" y="10"></position>
 </fieldmap>
-<fieldmap id="60" editable="false" solution="9">
+<fieldmap id="60" editable="false" solution="3">
 <position x="11" y="3"></position>
 </fieldmap>
-<fieldmap id="26" editable="true" solution="6">
+<fieldmap id="26" editable="true" solution="0">
 <position x="9" y="1"></position>
 </fieldmap>
-<fieldmap id="94" editable="true" solution="9">
+<fieldmap id="94" editable="false" solution="1">
 <position x="13" y="5"></position>
 </fieldmap>
-<fieldmap id="128" editable="true" solution="14">
+<fieldmap id="128" editable="true" solution="4">
 <position x="15" y="7"></position>
 </fieldmap>
-<fieldmap id="75" editable="true" solution="5">
+<fieldmap id="75" editable="true" solution="9">
 <position x="10" y="4"></position>
 </fieldmap>
-<fieldmap id="7" editable="true" solution="10">
+<fieldmap id="7" editable="true" solution="2">
 <position x="6" y="0"></position>
 </fieldmap>
-<fieldmap id="41" editable="true" solution="10">
+<fieldmap id="41" editable="true" solution="7">
 <position x="8" y="2"></position>
 </fieldmap>
-<fieldmap id="109" editable="true" solution="7">
+<fieldmap id="109" editable="true" solution="9">
 <position x="12" y="6"></position>
 </fieldmap>
-<fieldmap id="143" editable="false" solution="12">
+<fieldmap id="143" editable="true" solution="4">
 <position x="14" y="8"></position>
 </fieldmap>
-<fieldmap id="30" editable="true" solution="7">
+<fieldmap id="30" editable="false" solution="5">
 <position x="13" y="1"></position>
 </fieldmap>
-<fieldmap id="64" editable="true" solution="11">
+<fieldmap id="64" editable="false" solution="12">
 <position x="15" y="3"></position>
 </fieldmap>
-<fieldmap id="11" editable="false" solution="11">
+<fieldmap id="11" editable="true" solution="10">
 <position x="10" y="0"></position>
 </fieldmap>
-<fieldmap id="45" editable="true" solution="4">
+<fieldmap id="45" editable="false" solution="1">
 <position x="12" y="2"></position>
 </fieldmap>
-<fieldmap id="79" editable="false" solution="11">
+<fieldmap id="79" editable="false" solution="14">
 <position x="14" y="4"></position>
 </fieldmap>
-<fieldmap id="15" editable="true" solution="1">
+<fieldmap id="15" editable="true" solution="6">
 <position x="14" y="0"></position>
 </fieldmap>
-<fieldmap id="240" editable="false" solution="9">
+<fieldmap id="240" editable="false" solution="15">
 <position x="15" y="14"></position>
 </fieldmap>
-<fieldmap id="223" editable="true" solution="6">
+<fieldmap id="223" editable="true" solution="12">
 <position x="14" y="13"></position>
 </fieldmap>
-<fieldmap id="206" editable="true" solution="8">
+<fieldmap id="206" editable="false" solution="4">
 <position x="13" y="12"></position>
 </fieldmap>
-<fieldmap id="138" editable="true" solution="0">
+<fieldmap id="138" editable="false" solution="15">
 <position x="9" y="8"></position>
 </fieldmap>
-<fieldmap id="155" editable="true" solution="9">
+<fieldmap id="155" editable="true" solution="12">
 <position x="10" y="9"></position>
 </fieldmap>
-<fieldmap id="172" editable="false" solution="12">
+<fieldmap id="172" editable="false" solution="8">
 <position x="11" y="10"></position>
 </fieldmap>
-<fieldmap id="189" editable="false" solution="1">
+<fieldmap id="189" editable="true" solution="7">
 <position x="12" y="11"></position>
 </fieldmap>
-<fieldmap id="87" editable="false" solution="8">
+<fieldmap id="87" editable="true" solution="8">
 <position x="6" y="5"></position>
 </fieldmap>
-<fieldmap id="70" editable="true" solution="1">
+<fieldmap id="70" editable="true" solution="5">
 <position x="5" y="4"></position>
 </fieldmap>
-<fieldmap id="53" editable="false" solution="1">
+<fieldmap id="53" editable="false" solution="8">
 <position x="4" y="3"></position>
 </fieldmap>
-<fieldmap id="19" editable="true" solution="11">
+<fieldmap id="19" editable="true" solution="8">
 <position x="2" y="1"></position>
 </fieldmap>
-<fieldmap id="2" editable="true" solution="4">
+<fieldmap id="2" editable="false" solution="14">
 <position x="1" y="0"></position>
 </fieldmap>
-<fieldmap id="36" editable="true" solution="1">
+<fieldmap id="36" editable="true" solution="5">
 <position x="3" y="2"></position>
 </fieldmap>
-<fieldmap id="104" editable="true" solution="3">
+<fieldmap id="104" editable="false" solution="3">
 <position x="7" y="6"></position>
 </fieldmap>
-<fieldmap id="121" editable="false" solution="11">
+<fieldmap id="121" editable="false" solution="12">
 <position x="8" y="7"></position>
 </fieldmap>
-<fieldmap id="208" editable="false" solution="13">
+<fieldmap id="208" editable="true" solution="8">
 <position x="15" y="12"></position>
 </fieldmap>
-<fieldmap id="123" editable="false" solution="8">
+<fieldmap id="123" editable="true" solution="8">
 <position x="10" y="7"></position>
 </fieldmap>
-<fieldmap id="140" editable="false" solution="14">
+<fieldmap id="140" editable="true" solution="2">
 <position x="11" y="8"></position>
 </fieldmap>
-<fieldmap id="157" editable="true" solution="13">
+<fieldmap id="157" editable="false" solution="6">
 <position x="12" y="9"></position>
 </fieldmap>
-<fieldmap id="174" editable="true" solution="3">
+<fieldmap id="174" editable="true" solution="14">
 <position x="13" y="10"></position>
 </fieldmap>
-<fieldmap id="191" editable="true" solution="14">
+<fieldmap id="191" editable="true" solution="15">
 <position x="14" y="11"></position>
 </fieldmap>
-<fieldmap id="89" editable="false" solution="12">
+<fieldmap id="89" editable="true" solution="11">
 <position x="8" y="5"></position>
 </fieldmap>
-<fieldmap id="72" editable="true" solution="14">
+<fieldmap id="72" editable="true" solution="0">
 <position x="7" y="4"></position>
 </fieldmap>
 <fieldmap id="55" editable="false" solution="14">
 <position x="6" y="3"></position>
 </fieldmap>
-<fieldmap id="21" editable="false" solution="5">
+<fieldmap id="21" editable="true" solution="3">
 <position x="4" y="1"></position>
 </fieldmap>
-<fieldmap id="4" editable="false" solution="5">
+<fieldmap id="4" editable="false" solution="9">
 <position x="3" y="0"></position>
 </fieldmap>
-<fieldmap id="38" editable="false" solution="8">
+<fieldmap id="38" editable="false" solution="12">
 <position x="5" y="2"></position>
 </fieldmap>
-<fieldmap id="106" editable="false" solution="1">
+<fieldmap id="106" editable="true" solution="1">
 <position x="9" y="6"></position>
 </fieldmap>
-<fieldmap id="108" editable="true" solution="0">
+<fieldmap id="108" editable="false" solution="5">
 <position x="11" y="6"></position>
 </fieldmap>
-<fieldmap id="125" editable="true" solution="6">
+<fieldmap id="125" editable="false" solution="13">
 <position x="12" y="7"></position>
 </fieldmap>
-<fieldmap id="142" editable="false" solution="10">
+<fieldmap id="142" editable="false" solution="12">
 <position x="13" y="8"></position>
 </fieldmap>
-<fieldmap id="159" editable="true" solution="8">
+<fieldmap id="159" editable="false" solution="2">
 <position x="14" y="9"></position>
 </fieldmap>
-<fieldmap id="176" editable="false" solution="5">
+<fieldmap id="176" editable="false" solution="11">
 <position x="15" y="10"></position>
 </fieldmap>
-<fieldmap id="91" editable="false" solution="7">
+<fieldmap id="91" editable="false" solution="14">
 <position x="10" y="5"></position>
 </fieldmap>
-<fieldmap id="74" editable="true" solution="9">
+<fieldmap id="74" editable="false" solution="13">
 <position x="9" y="4"></position>
 </fieldmap>
-<fieldmap id="57" editable="true" solution="3">
+<fieldmap id="57" editable="true" solution="4">
 <position x="8" y="3"></position>
 </fieldmap>
-<fieldmap id="23" editable="false" solution="3">
+<fieldmap id="23" editable="false" solution="7">
 <position x="6" y="1"></position>
 </fieldmap>
-<fieldmap id="6" editable="false" solution="12">
+<fieldmap id="6" editable="true" solution="15">
 <position x="5" y="0"></position>
 </fieldmap>
-<fieldmap id="40" editable="false" solution="13">
+<fieldmap id="40" editable="true" solution="4">
 <position x="7" y="2"></position>
 </fieldmap>
-<fieldmap id="93" editable="false" solution="5">
+<fieldmap id="93" editable="false" solution="10">
 <position x="12" y="5"></position>
 </fieldmap>
-<fieldmap id="110" editable="true" solution="2">
+<fieldmap id="110" editable="true" solution="11">
 <position x="13" y="6"></position>
 </fieldmap>
 <fieldmap id="127" editable="false" solution="0">
 <position x="14" y="7"></position>
 </fieldmap>
-<fieldmap id="144" editable="true" solution="7">
+<fieldmap id="144" editable="true" solution="13">
 <position x="15" y="8"></position>
 </fieldmap>
-<fieldmap id="76" editable="true" solution="3">
+<fieldmap id="76" editable="true" solution="6">
 <position x="11" y="4"></position>
 </fieldmap>
-<fieldmap id="59" editable="true" solution="4">
+<fieldmap id="59" editable="false" solution="11">
 <position x="10" y="3"></position>
 </fieldmap>
-<fieldmap id="25" editable="true" solution="0">
-<position x="8" y="1"></position>
-</fieldmap>
-<fieldmap id="8" editable="true" solution="2">
+<fieldmap id="8" editable="false" solution="11">
 <position x="7" y="0"></position>
 </fieldmap>
-<fieldmap id="42" editable="false" solution="7">
+<fieldmap id="25" editable="true" solution="15">
+<position x="8" y="1"></position>
+</fieldmap>
+<fieldmap id="42" editable="true" solution="9">
 <position x="9" y="2"></position>
 </fieldmap>
-<fieldmap id="95" editable="false" solution="3">
+<fieldmap id="95" editable="false" solution="5">
 <position x="14" y="5"></position>
 </fieldmap>
-<fieldmap id="78" editable="true" solution="13">
+<fieldmap id="78" editable="true" solution="15">
 <position x="13" y="4"></position>
 </fieldmap>
-<fieldmap id="112" editable="false" solution="12">
+<fieldmap id="112" editable="false" solution="2">
 <position x="15" y="6"></position>
 </fieldmap>
-<fieldmap id="61" editable="true" solution="8">
+<fieldmap id="61" editable="false" solution="15">
 <position x="12" y="3"></position>
 </fieldmap>
-<fieldmap id="10" editable="false" solution="8">
+<fieldmap id="10" editable="false" solution="12">
 <position x="9" y="0"></position>
 </fieldmap>
-<fieldmap id="27" editable="true" solution="14">
+<fieldmap id="27" editable="true" solution="2">
 <position x="10" y="1"></position>
 </fieldmap>
-<fieldmap id="44" editable="true" solution="2">
+<fieldmap id="44" editable="true" solution="14">
 <position x="11" y="2"></position>
 </fieldmap>
-<fieldmap id="80" editable="false" solution="8">
+<fieldmap id="80" editable="false" solution="7">
 <position x="15" y="4"></position>
 </fieldmap>
-<fieldmap id="63" editable="false" solution="13">
+<fieldmap id="63" editable="true" solution="13">
 <position x="14" y="3"></position>
 </fieldmap>
-<fieldmap id="12" editable="true" solution="15">
+<fieldmap id="12" editable="true" solution="13">
 <position x="11" y="0"></position>
 </fieldmap>
-<fieldmap id="29" editable="true" solution="12">
+<fieldmap id="29" editable="true" solution="11">
 <position x="12" y="1"></position>
 </fieldmap>
-<fieldmap id="46" editable="true" solution="5">
+<fieldmap id="46" editable="false" solution="8">
 <position x="13" y="2"></position>
 </fieldmap>
 <fieldmap id="48" editable="true" solution="3">
 <position x="15" y="2"></position>
 </fieldmap>
-<fieldmap id="14" editable="true" solution="6">
+<fieldmap id="14" editable="false" solution="7">
 <position x="13" y="0"></position>
 </fieldmap>
-<fieldmap id="31" editable="false" solution="2">
+<fieldmap id="31" editable="true" solution="9">
 <position x="14" y="1"></position>
 </fieldmap>
 <fieldmap id="16" editable="true" solution="0">
 <position x="15" y="0"></position>
 </fieldmap>
-<fieldmap id="241" editable="false" solution="15">
+<fieldmap id="241" editable="false" solution="9">
 <position x="0" y="15"></position>
 </fieldmap>
-<fieldmap id="242" editable="false" solution="11">
+<fieldmap id="242" editable="false" solution="4">
 <position x="1" y="15"></position>
 </fieldmap>
-<fieldmap id="225" editable="false" solution="1">
+<fieldmap id="225" editable="true" solution="14">
 <position x="0" y="14"></position>
 </fieldmap>
-<fieldmap id="244" editable="true" solution="8">
+<fieldmap id="244" editable="true" solution="12">
 <position x="3" y="15"></position>
 </fieldmap>
-<fieldmap id="226" editable="false" solution="14">
+<fieldmap id="226" editable="false" solution="0">
 <position x="1" y="14"></position>
 </fieldmap>
-<fieldmap id="209" editable="false" solution="5">
+<fieldmap id="209" editable="true" solution="8">
 <position x="0" y="13"></position>
 </fieldmap>
-<fieldmap id="243" editable="false" solution="13">
+<fieldmap id="243" editable="false" solution="10">
 <position x="2" y="15"></position>
 </fieldmap>
-<fieldmap id="227" editable="true" solution="0">
+<fieldmap id="227" editable="false" solution="11">
 <position x="2" y="14"></position>
 </fieldmap>
-<fieldmap id="210" editable="false" solution="3">
+<fieldmap id="210" editable="false" solution="1">
 <position x="1" y="13"></position>
 </fieldmap>
-<fieldmap id="193" editable="false" solution="2">
+<fieldmap id="193" editable="true" solution="7">
 <position x="0" y="12"></position>
 </fieldmap>
-<fieldmap id="246" editable="true" solution="3">
+<fieldmap id="246" editable="false" solution="14">
 <position x="5" y="15"></position>
 </fieldmap>
-<fieldmap id="229" editable="true" solution="8">
+<fieldmap id="229" editable="true" solution="12">
 <position x="4" y="14"></position>
 </fieldmap>
-<fieldmap id="211" editable="false" solution="9">
+<fieldmap id="211" editable="false" solution="13">
 <position x="2" y="13"></position>
 </fieldmap>
-<fieldmap id="194" editable="true" solution="12">
+<fieldmap id="194" editable="false" solution="6">
 <position x="1" y="12"></position>
 </fieldmap>
-<fieldmap id="177" editable="false" solution="4">
+<fieldmap id="177" editable="true" solution="13">
 <position x="0" y="11"></position>
 </fieldmap>
-<fieldmap id="245" editable="true" solution="4">
+<fieldmap id="245" editable="true" solution="2">
 <position x="4" y="15"></position>
 </fieldmap>
-<fieldmap id="228" editable="false" solution="6">
+<fieldmap id="228" editable="false" solution="3">
 <position x="3" y="14"></position>
 </fieldmap>
-<fieldmap id="212" editable="true" solution="4">
+<fieldmap id="212" editable="false" solution="2">
 <position x="3" y="13"></position>
 </fieldmap>
-<fieldmap id="195" editable="false" solution="10">
+<fieldmap id="195" editable="true" solution="5">
 <position x="2" y="12"></position>
 </fieldmap>
-<fieldmap id="161" editable="true" solution="6">
+<fieldmap id="161" editable="false" solution="15">
 <position x="0" y="10"></position>
 </fieldmap>
-<fieldmap id="178" editable="true" solution="9">
+<fieldmap id="178" editable="true" solution="2">
 <position x="1" y="11"></position>
 </fieldmap>
 <fieldmap id="248" editable="false" solution="5">
 <position x="7" y="15"></position>
 </fieldmap>
-<fieldmap id="231" editable="true" solution="13">
+<fieldmap id="231" editable="true" solution="10">
 <position x="6" y="14"></position>
 </fieldmap>
-<fieldmap id="214" editable="false" solution="10">
+<fieldmap id="214" editable="true" solution="4">
 <position x="5" y="13"></position>
 </fieldmap>
-<fieldmap id="196" editable="false" solution="7">
+<fieldmap id="196" editable="false" solution="15">
 <position x="3" y="12"></position>
 </fieldmap>
-<fieldmap id="145" editable="true" solution="7">
+<fieldmap id="145" editable="false" solution="11">
 <position x="0" y="9"></position>
 </fieldmap>
-<fieldmap id="162" editable="false" solution="0">
+<fieldmap id="162" editable="false" solution="5">
 <position x="1" y="10"></position>
 </fieldmap>
-<fieldmap id="179" editable="false" solution="5">
+<fieldmap id="179" editable="true" solution="4">
 <position x="2" y="11"></position>
 </fieldmap>
-<fieldmap id="247" editable="false" solution="9">
+<fieldmap id="247" editable="false" solution="3">
 <position x="6" y="15"></position>
 </fieldmap>
-<fieldmap id="230" editable="true" solution="11">
+<fieldmap id="230" editable="false" solution="8">
 <position x="5" y="14"></position>
 </fieldmap>
-<fieldmap id="213" editable="false" solution="12">
+<fieldmap id="213" editable="true" solution="15">
 <position x="4" y="13"></position>
 </fieldmap>
-<fieldmap id="197" editable="false" solution="6">
+<fieldmap id="197" editable="false" solution="0">
 <position x="4" y="12"></position>
 </fieldmap>
-<fieldmap id="129" editable="true" solution="8">
+<fieldmap id="129" editable="false" solution="0">
 <position x="0" y="8"></position>
 </fieldmap>
-<fieldmap id="146" editable="false" solution="10">
+<fieldmap id="146" editable="true" solution="7">
 <position x="1" y="9"></position>
 </fieldmap>
-<fieldmap id="163" editable="true" solution="1">
+<fieldmap id="163" editable="true" solution="12">
 <position x="2" y="10"></position>
 </fieldmap>
-<fieldmap id="180" editable="true" solution="3">
+<fieldmap id="180" editable="true" solution="14">
 <position x="3" y="11"></position>
 </fieldmap>
-<fieldmap id="250" editable="false" solution="14">
+<fieldmap id="250" editable="false" solution="8">
 <position x="9" y="15"></position>
 </fieldmap>
 <fieldmap id="233" editable="true" solution="2">
@@ -481,292 +481,292 @@
 <fieldmap id="216" editable="false" solution="7">
 <position x="7" y="13"></position>
 </fieldmap>
-<fieldmap id="199" editable="true" solution="0">
+<fieldmap id="199" editable="true" solution="11">
 <position x="6" y="12"></position>
 </fieldmap>
-<fieldmap id="113" editable="true" solution="3">
+<fieldmap id="113" editable="true" solution="5">
 <position x="0" y="7"></position>
 </fieldmap>
-<fieldmap id="130" editable="false" solution="13">
+<fieldmap id="130" editable="true" solution="3">
 <position x="1" y="8"></position>
 </fieldmap>
-<fieldmap id="147" editable="true" solution="2">
+<fieldmap id="147" editable="true" solution="9">
 <position x="2" y="9"></position>
 </fieldmap>
-<fieldmap id="164" editable="true" solution="14">
+<fieldmap id="164" editable="false" solution="6">
 <position x="3" y="10"></position>
 </fieldmap>
-<fieldmap id="181" editable="false" solution="10">
+<fieldmap id="181" editable="true" solution="1">
 <position x="4" y="11"></position>
 </fieldmap>
-<fieldmap id="249" editable="true" solution="1">
+<fieldmap id="249" editable="false" solution="13">
 <position x="8" y="15"></position>
 </fieldmap>
-<fieldmap id="232" editable="false" solution="15">
+<fieldmap id="232" editable="true" solution="1">
 <position x="7" y="14"></position>
 </fieldmap>
-<fieldmap id="215" editable="true" solution="2">
+<fieldmap id="215" editable="false" solution="6">
 <position x="6" y="13"></position>
 </fieldmap>
-<fieldmap id="198" editable="true" solution="14">
+<fieldmap id="198" editable="false" solution="9">
 <position x="5" y="12"></position>
 </fieldmap>
-<fieldmap id="97" editable="false" solution="11">
+<fieldmap id="97" editable="true" solution="4">
 <position x="0" y="6"></position>
 </fieldmap>
-<fieldmap id="114" editable="false" solution="5">
+<fieldmap id="114" editable="true" solution="9">
 <position x="1" y="7"></position>
 </fieldmap>
-<fieldmap id="131" editable="true" solution="15">
+<fieldmap id="131" editable="true" solution="1">
 <position x="2" y="8"></position>
 </fieldmap>
-<fieldmap id="148" editable="true" solution="12">
+<fieldmap id="148" editable="false" solution="8">
 <position x="3" y="9"></position>
 </fieldmap>
-<fieldmap id="165" editable="false" solution="11">
+<fieldmap id="165" editable="false" solution="7">
 <position x="4" y="10"></position>
 </fieldmap>
-<fieldmap id="182" editable="true" solution="2">
+<fieldmap id="182" editable="true" solution="0">
 <position x="5" y="11"></position>
 </fieldmap>
-<fieldmap id="252" editable="false" solution="6">
+<fieldmap id="252" editable="false" solution="7">
 <position x="11" y="15"></position>
 </fieldmap>
-<fieldmap id="235" editable="true" solution="10">
+<fieldmap id="235" editable="true" solution="4">
 <position x="10" y="14"></position>
 </fieldmap>
 <fieldmap id="218" editable="true" solution="11">
 <position x="9" y="13"></position>
 </fieldmap>
-<fieldmap id="201" editable="false" solution="9">
+<fieldmap id="201" editable="false" solution="14">
 <position x="8" y="12"></position>
 </fieldmap>
-<fieldmap id="81" editable="true" solution="14">
+<fieldmap id="81" editable="true" solution="3">
 <position x="0" y="5"></position>
 </fieldmap>
-<fieldmap id="98" editable="false" solution="15">
+<fieldmap id="98" editable="true" solution="12">
 <position x="1" y="6"></position>
 </fieldmap>
-<fieldmap id="115" editable="true" solution="4">
+<fieldmap id="115" editable="true" solution="14">
 <position x="2" y="7"></position>
 </fieldmap>
-<fieldmap id="132" editable="false" solution="11">
+<fieldmap id="132" editable="true" solution="10">
 <position x="3" y="8"></position>
 </fieldmap>
-<fieldmap id="149" editable="true" solution="14">
+<fieldmap id="149" editable="false" solution="4">
 <position x="4" y="9"></position>
 </fieldmap>
-<fieldmap id="166" editable="false" solution="13">
+<fieldmap id="166" editable="false" solution="2">
 <position x="5" y="10"></position>
 </fieldmap>
-<fieldmap id="184" editable="true" solution="12">
+<fieldmap id="184" editable="false" solution="8">
 <position x="7" y="11"></position>
 </fieldmap>
-<fieldmap id="251" editable="false" solution="0">
+<fieldmap id="251" editable="false" solution="15">
 <position x="10" y="15"></position>
 </fieldmap>
-<fieldmap id="234" editable="false" solution="12">
+<fieldmap id="234" editable="true" solution="6">
 <position x="9" y="14"></position>
 </fieldmap>
-<fieldmap id="217" editable="false" solution="15">
+<fieldmap id="217" editable="false" solution="5">
 <position x="8" y="13"></position>
 </fieldmap>
-<fieldmap id="200" editable="false" solution="1">
+<fieldmap id="200" editable="false" solution="13">
 <position x="7" y="12"></position>
 </fieldmap>
-<fieldmap id="82" editable="false" solution="1">
+<fieldmap id="82" editable="false" solution="15">
 <position x="1" y="5"></position>
 </fieldmap>
-<fieldmap id="65" editable="true" solution="12">
+<fieldmap id="65" editable="true" solution="10">
 <position x="0" y="4"></position>
 </fieldmap>
-<fieldmap id="99" editable="false" solution="8">
+<fieldmap id="99" editable="false" solution="6">
 <position x="2" y="6"></position>
 </fieldmap>
-<fieldmap id="116" editable="true" solution="9">
+<fieldmap id="116" editable="true" solution="11">
 <position x="3" y="7"></position>
 </fieldmap>
-<fieldmap id="133" editable="false" solution="3">
+<fieldmap id="133" editable="true" solution="6">
 <position x="4" y="8"></position>
 </fieldmap>
-<fieldmap id="150" editable="false" solution="0">
+<fieldmap id="150" editable="false" solution="3">
 <position x="5" y="9"></position>
 </fieldmap>
-<fieldmap id="167" editable="true" solution="15">
+<fieldmap id="167" editable="true" solution="9">
 <position x="6" y="10"></position>
 </fieldmap>
-<fieldmap id="183" editable="false" solution="7">
+<fieldmap id="183" editable="false" solution="12">
 <position x="6" y="11"></position>
 </fieldmap>
-<fieldmap id="254" editable="false" solution="12">
+<fieldmap id="254" editable="true" solution="6">
 <position x="13" y="15"></position>
 </fieldmap>
-<fieldmap id="237" editable="false" solution="3">
+<fieldmap id="237" editable="false" solution="5">
 <position x="12" y="14"></position>
 </fieldmap>
-<fieldmap id="220" editable="true" solution="8">
+<fieldmap id="220" editable="false" solution="0">
 <position x="11" y="13"></position>
 </fieldmap>
-<fieldmap id="203" editable="false" solution="3">
+<fieldmap id="203" editable="true" solution="1">
 <position x="10" y="12"></position>
 </fieldmap>
-<fieldmap id="83" editable="false" solution="6">
+<fieldmap id="83" editable="false" solution="0">
 <position x="2" y="5"></position>
 </fieldmap>
-<fieldmap id="66" editable="true" solution="2">
+<fieldmap id="66" editable="false" solution="8">
 <position x="1" y="4"></position>
 </fieldmap>
-<fieldmap id="49" editable="true" solution="10">
+<fieldmap id="49" editable="false" solution="6">
 <position x="0" y="3"></position>
 </fieldmap>
 <fieldmap id="100" editable="false" solution="13">
 <position x="3" y="6"></position>
 </fieldmap>
-<fieldmap id="117" editable="true" solution="2">
+<fieldmap id="117" editable="false" solution="10">
 <position x="4" y="7"></position>
 </fieldmap>
-<fieldmap id="134" editable="true" solution="9">
+<fieldmap id="134" editable="false" solution="11">
 <position x="5" y="8"></position>
 </fieldmap>
-<fieldmap id="151" editable="false" solution="1">
+<fieldmap id="151" editable="true" solution="13">
 <position x="6" y="9"></position>
 </fieldmap>
-<fieldmap id="169" editable="true" solution="7">
+<fieldmap id="169" editable="true" solution="0">
 <position x="8" y="10"></position>
 </fieldmap>
-<fieldmap id="186" editable="false" solution="13">
+<fieldmap id="186" editable="true" solution="3">
 <position x="9" y="11"></position>
 </fieldmap>
-<fieldmap id="253" editable="false" solution="10">
+<fieldmap id="253" editable="true" solution="0">
 <position x="12" y="15"></position>
 </fieldmap>
-<fieldmap id="236" editable="true" solution="7">
+<fieldmap id="236" editable="true" solution="9">
 <position x="11" y="14"></position>
 </fieldmap>
-<fieldmap id="219" editable="false" solution="13">
+<fieldmap id="219" editable="true" solution="3">
 <position x="10" y="13"></position>
 </fieldmap>
-<fieldmap id="202" editable="false" solution="4">
+<fieldmap id="202" editable="true" solution="10">
 <position x="9" y="12"></position>
 </fieldmap>
-<fieldmap id="84" editable="false" solution="0">
+<fieldmap id="84" editable="true" solution="7">
 <position x="3" y="5"></position>
 </fieldmap>
-<fieldmap id="67" editable="true" solution="7">
+<fieldmap id="67" editable="false" solution="2">
 <position x="2" y="4"></position>
 </fieldmap>
-<fieldmap id="50" editable="false" solution="7">
+<fieldmap id="50" editable="false" solution="10">
 <position x="1" y="3"></position>
 </fieldmap>
-<fieldmap id="33" editable="true" solution="0">
+<fieldmap id="33" editable="true" solution="2">
 <position x="0" y="2"></position>
 </fieldmap>
-<fieldmap id="101" editable="false" solution="9">
+<fieldmap id="101" editable="true" solution="14">
 <position x="4" y="6"></position>
 </fieldmap>
-<fieldmap id="118" editable="true" solution="7">
+<fieldmap id="118" editable="true" solution="6">
 <position x="5" y="7"></position>
 </fieldmap>
 <fieldmap id="135" editable="false" solution="5">
 <position x="6" y="8"></position>
 </fieldmap>
-<fieldmap id="152" editable="true" solution="6">
+<fieldmap id="152" editable="true" solution="15">
 <position x="7" y="9"></position>
 </fieldmap>
-<fieldmap id="168" editable="true" solution="8">
+<fieldmap id="168" editable="false" solution="10">
 <position x="7" y="10"></position>
 </fieldmap>
-<fieldmap id="185" editable="false" solution="8">
+<fieldmap id="185" editable="true" solution="6">
 <position x="8" y="11"></position>
 </fieldmap>
-<fieldmap id="256" editable="true" solution="2">
+<fieldmap id="256" editable="true" solution="1">
 <position x="15" y="15"></position>
 </fieldmap>
-<fieldmap id="239" editable="true" solution="5">
+<fieldmap id="239" editable="false" solution="7">
 <position x="14" y="14"></position>
 </fieldmap>
-<fieldmap id="222" editable="false" solution="14">
+<fieldmap id="222" editable="true" solution="9">
 <position x="13" y="13"></position>
 </fieldmap>
-<fieldmap id="205" editable="true" solution="11">
+<fieldmap id="205" editable="true" solution="2">
 <position x="12" y="12"></position>
 </fieldmap>
-<fieldmap id="85" editable="true" solution="13">
+<fieldmap id="85" editable="false" solution="9">
 <position x="4" y="5"></position>
 </fieldmap>
-<fieldmap id="68" editable="true" solution="10">
+<fieldmap id="68" editable="true" solution="1">
 <position x="3" y="4"></position>
 </fieldmap>
-<fieldmap id="51" editable="true" solution="12">
+<fieldmap id="51" editable="true" solution="7">
 <position x="2" y="3"></position>
 </fieldmap>
-<fieldmap id="17" editable="false" solution="13">
+<fieldmap id="17" editable="false" solution="12">
 <position x="0" y="1"></position>
 </fieldmap>
-<fieldmap id="34" editable="false" solution="6">
+<fieldmap id="34" editable="true" solution="11">
 <position x="1" y="2"></position>
 </fieldmap>
-<fieldmap id="102" editable="true" solution="5">
+<fieldmap id="102" editable="false" solution="7">
 <position x="5" y="6"></position>
 </fieldmap>
-<fieldmap id="119" editable="true" solution="12">
+<fieldmap id="119" editable="true" solution="1">
 <position x="6" y="7"></position>
 </fieldmap>
-<fieldmap id="136" editable="false" solution="4">
+<fieldmap id="136" editable="true" solution="14">
 <position x="7" y="8"></position>
 </fieldmap>
-<fieldmap id="154" editable="false" solution="3">
+<fieldmap id="154" editable="false" solution="14">
 <position x="9" y="9"></position>
 </fieldmap>
-<fieldmap id="171" editable="true" solution="2">
+<fieldmap id="171" editable="false" solution="13">
 <position x="10" y="10"></position>
 </fieldmap>
 <fieldmap id="188" editable="true" solution="11">
 <position x="11" y="11"></position>
 </fieldmap>
-<fieldmap id="255" editable="false" solution="7">
+<fieldmap id="255" editable="false" solution="11">
 <position x="14" y="15"></position>
 </fieldmap>
-<fieldmap id="238" editable="true" solution="4">
+<fieldmap id="238" editable="true" solution="13">
 <position x="13" y="14"></position>
 </fieldmap>
-<fieldmap id="221" editable="true" solution="0">
+<fieldmap id="221" editable="true" solution="14">
 <position x="12" y="13"></position>
 </fieldmap>
-<fieldmap id="204" editable="true" solution="5">
+<fieldmap id="204" editable="true" solution="12">
 <position x="11" y="12"></position>
 </fieldmap>
-<fieldmap id="86" editable="true" solution="15">
+<fieldmap id="86" editable="false" solution="13">
 <position x="5" y="5"></position>
 </fieldmap>
-<fieldmap id="69" editable="false" solution="0">
+<fieldmap id="69" editable="true" solution="11">
 <position x="4" y="4"></position>
 </fieldmap>
-<fieldmap id="52" editable="false" solution="2">
+<fieldmap id="52" editable="true" solution="0">
 <position x="3" y="3"></position>
 </fieldmap>
-<fieldmap id="18" editable="false" solution="8">
+<fieldmap id="18" editable="true" solution="13">
 <position x="1" y="1"></position>
 </fieldmap>
-<fieldmap id="35" editable="false" solution="14">
+<fieldmap id="35" editable="true" solution="15">
 <position x="2" y="2"></position>
 </fieldmap>
-<fieldmap id="103" editable="true" solution="4">
+<fieldmap id="103" editable="false" solution="15">
 <position x="6" y="6"></position>
 </fieldmap>
-<fieldmap id="120" editable="true" solution="10">
+<fieldmap id="120" editable="true" solution="2">
 <position x="7" y="7"></position>
 </fieldmap>
-<fieldmap id="137" editable="false" solution="6">
+<fieldmap id="137" editable="false" solution="9">
 <position x="8" y="8"></position>
 </fieldmap>
-<fieldmap id="153" editable="true" solution="5">
+<fieldmap id="153" editable="true" solution="1">
 <position x="8" y="9"></position>
 </fieldmap>
-<fieldmap id="170" editable="true" solution="10">
+<fieldmap id="170" editable="false" solution="4">
 <position x="9" y="10"></position>
 </fieldmap>
-<fieldmap id="187" editable="true" solution="15">
+<fieldmap id="187" editable="false" solution="5">
 <position x="10" y="11"></position>
 </fieldmap>
 </sudoku>
