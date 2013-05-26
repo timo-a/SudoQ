@@ -82,19 +82,16 @@ class TestSudoku extends TypeBasic {
 
 	@Override
 	public SudokuTypes getEnumType() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public ComplexityConstraint buildComplexityConstraint(Complexity complexity) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public float getStandardAllocationFactor() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

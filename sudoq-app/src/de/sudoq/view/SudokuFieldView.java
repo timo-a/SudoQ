@@ -395,7 +395,6 @@ public class SudokuFieldView extends View implements ModelChangeListener<Field>,
 	}
 
 	public void removeListener(FieldInteractionListener listener) {
-		// TODO Auto-generated method stub
 
 	}
 

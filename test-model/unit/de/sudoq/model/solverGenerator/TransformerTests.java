@@ -264,7 +264,7 @@ public class TransformerTests implements GeneratorCallback {
 				if (elcount != 1) {
 					return false;
 				}
-			}// TODO Auto-generated method stub
+			}
 		}
 		return true;
 	}

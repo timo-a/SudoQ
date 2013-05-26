@@ -296,7 +296,6 @@ public class GameTests {
 			try {
 				wait(100);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -343,7 +342,6 @@ public class GameTests {
 			try {
 				wait(100);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
