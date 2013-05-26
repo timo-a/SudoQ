@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE sudoku SYSTEM "./sudoku.dtd">
-<sudoku transformCount="0" type="0" complexity="2">
+<sudoku transformCount="0" type="0" complexity="2" id="8">
 <fieldmap id="1" editable="true" solution="0">
 <position x="0" y="0"></position>
 </fieldmap>
