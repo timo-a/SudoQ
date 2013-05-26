@@ -49,7 +49,7 @@ public class Game implements Xmlable {
     private GameStateHandler stateHandler;
 
     /**
-     * Die seit Spielstart verstrichene Zeit
+     * Die seit Spielstart verstrichene Zeit in Sekunden
      */
     private int time;
 
@@ -136,7 +136,7 @@ public class Game implements Xmlable {
     /**
      * Gibt die Zeit dieses Spiels zurück.
      * 
-     * @return Die Zeit dieses Spiels
+     * @return Die Zeit dieses Spiels in Sekunden
      */
     public int getTime() {
         return this.time;
