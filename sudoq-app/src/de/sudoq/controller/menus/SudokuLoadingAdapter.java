@@ -112,12 +112,11 @@ public class SudokuLoadingAdapter extends ArrayAdapter<GameData> {
 		sudokuTime.setText(date);
 
 		if (gameDatas.get(position).isFinished()) {
-			// TODO finished durch Haken ersetzen
-			sudokuState.setText(context.getString(R.string.game_finished));
+			sudokuState.setText("✔");
 			sudokuType.setTextColor(Color.GRAY);
 			sudokuComplexity.setTextColor(Color.GRAY);
 			sudokuTime.setTextColor(Color.GRAY);
-			sudokuState.setTextColor(Color.GRAY);
+			sudokuState.setTextColor(Color.GREEN);
 		}
 
 		return rowView;

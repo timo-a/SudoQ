@@ -146,7 +146,7 @@
     <string name="title_sudokupreferences">Sudoku-Einstellungen</string>
 	
 	<!-- Game states -->    
-    <string name="game_finished">gelöst</string>    
+    <string name="game_finished">✔</string>    
     
     <!-- Sudoku Loading -->
     <string name="tx_no_sudokus_to_load">Keine gespeicherten Sudokus vorhanden.</string>

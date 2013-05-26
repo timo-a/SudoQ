@@ -154,7 +154,7 @@
         
     <!-- Game states -->    
         
-    <string name="game_finished">finished</string>    
+    <string name="game_finished">✔</string>    
 
     <!-- Sudoku Loading -->
     <string name="tx_no_sudokus_to_load">No saved Sudokus available.</string>

@@ -143,7 +143,7 @@
     <string name="title_sudokupreferences">Paramètres du sudoku </string>
 
     <!-- Game states -->
-    <string name="game_finished">Résolu</string>
+    <string name="game_finished">✔</string>
 
     <!-- Sudoku Loading -->
     <string name="tx_no_sudokus_to_load">Aucun sudoku sauvegardé disponible.</string>
