@@ -44,7 +44,7 @@ public class SudokuManager implements GeneratorCallback {
 	 *            das genutzte Sudoku
 	 */
 	public void usedSudoku(Sudoku sudoku) {
-		if (sudoku.getTransformCount() >= 1) {//TODO set back to 10 again
+		if (sudoku.getTransformCount() >= 10) {
 			used = sudoku;
 			generator.generate(sudoku.getSudokuType().getEnumType(), sudoku.getComplexity(), this);
 		} else {

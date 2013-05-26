@@ -90,7 +90,7 @@ public class GameManager {
 	public Game newGame(SudokuTypes type, Complexity complexity, GameType gameType, AssistanceSet assists) {
 		Sudoku sudoku = SudokuManager.getNewSudoku(type, complexity);
 
-		new SudokuManager().usedSudoku(sudoku);//TODO warum instanziierung?
+		new SudokuManager().usedSudoku(sudoku);//TODO warum instanziierung, wenn laut doc singleton?
 
 		Game game = new Game(FileManager.getNextFreeGameId(), sudoku);
 		game.setAssistances(assists);
