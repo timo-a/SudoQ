@@ -112,7 +112,7 @@ public class SudokuLoadingAdapter extends ArrayAdapter<GameData> {
 		sudokuTime.setText(date);
 
 		if (gameDatas.get(position).isFinished()) {
-			sudokuState.setText("✔");
+			sudokuState.setText(context.getString(R.string.game_finished));
 			sudokuType.setTextColor(Color.GRAY);
 			sudokuComplexity.setTextColor(Color.GRAY);
 			sudokuTime.setTextColor(Color.GRAY);
