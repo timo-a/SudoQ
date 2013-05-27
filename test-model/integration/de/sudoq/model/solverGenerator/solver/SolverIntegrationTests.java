@@ -23,7 +23,6 @@ public class SolverIntegrationTests {
 	private Sudoku sudoku16x16;
 	private Solver solver;
 	private PositionMap<Integer> solution;
-	private PositionMap<Integer> solution16x16;
 
 	private static final boolean PRINT_SOLUTIONS = false;
 
@@ -35,7 +34,6 @@ public class SolverIntegrationTests {
 		sudoku16x16 = new SudokuBuilder(SudokuTypes.standard16x16).createSudoku();
 		sudoku16x16.setComplexity(Complexity.arbitrary);
 		solution = new PositionMap<Integer>(sudoku.getSudokuType().getSize());
-		solution16x16 = new PositionMap<Integer>(sudoku16x16.getSudokuType().getSize());
 	}
 
 	@Test

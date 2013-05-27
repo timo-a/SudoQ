@@ -23,8 +23,6 @@ import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType16x16;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeStandard;
 

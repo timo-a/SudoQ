@@ -3,6 +3,9 @@ package de.sudoq.model.sudoku;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Test;
 
 import de.sudoq.model.sudoku.Field;
@@ -15,20 +18,26 @@ public class SudokuBuilderTests {
 
 	Field field;
 
+	static Map<SudokuTypes, Integer> specialParam = new HashMap<SudokuTypes, Integer>(4);
+	
+	static{
+		specialParam.put(SudokuTypes.samurai, 21);
+		specialParam.put(SudokuTypes.standard16x16, 16);
+		specialParam.put(SudokuTypes.standard6x6, 6);
+		specialParam.put(SudokuTypes.standard4x4, 4);
+	}
+	
 	@Test
 	public void testInitialisation() {
 		for (SudokuTypes t : SudokuTypes.values()) {
 
-			if (t != SudokuTypes.samurai && t != SudokuTypes.standard16x16 && t != SudokuTypes.standard4x4
-					&& t != SudokuTypes.standard6x6)
+			if(specialParam.containsKey(t))
+				testBuildergeneric(t, specialParam.get(t));
+			else
 				testBuildergeneric(t, 9);
-			testBuildergeneric(SudokuTypes.samurai, 21);
-			testBuildergeneric(SudokuTypes.standard16x16, 16);
-			testBuildergeneric(SudokuTypes.standard6x6, 6);
-			testBuildergeneric(SudokuTypes.standard4x4, 4);
-
 		}
 		assertEquals(SudokuBuilder.createType(null), null);
+		
 	}
 
 	private void testBuildergeneric(SudokuTypes t, int length) {

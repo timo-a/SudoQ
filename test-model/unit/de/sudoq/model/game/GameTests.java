@@ -292,7 +292,7 @@ public class GameTests {
 
 	@Test
 	public synchronized void testSolve() {
-		while (this.sudoku == null) {
+		while (GameTests.sudoku == null) {
 			try {
 				wait(100);
 			} catch (InterruptedException e) {
@@ -300,7 +300,7 @@ public class GameTests {
 			}
 		}
 
-		Game game = new Game(1, this.sudoku);
+		Game game = new Game(1, sudoku);
 		ArrayList<Field> unsolvedFields = new ArrayList<Field>();
 		for (Field f : sudoku) {
 			if (f.isEditable()) {
@@ -338,14 +338,14 @@ public class GameTests {
 
 	@Test
 	public void testGoToLastCorrectState() {
-		while (this.sudoku == null) {
+		while (sudoku == null) {
 			try {
 				wait(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
-		Game game = new Game(1, this.sudoku);
+		Game game = new Game(1, sudoku);
 
 		Field unsolvedField = null;
 		for (Field f : sudoku) {

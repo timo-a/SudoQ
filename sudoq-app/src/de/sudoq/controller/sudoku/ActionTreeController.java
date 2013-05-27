@@ -376,8 +376,8 @@ public class ActionTreeController implements ActionTreeNavListener, ModelChangeL
 	public void setVisibility(boolean show) {
 		if (show) {
 			inflateActionTree();
-			Log.d(LOG_TAG, "Show action tree: Element: (" + this.activeY + this.AT_RASTER_SIZE / 2 + ", " + this.activeX + this.AT_RASTER_SIZE / 2 + ")");
-			this.actionTreeScroll.scrollTo(this.activeY + this.AT_RASTER_SIZE / 2, this.activeX + this.AT_RASTER_SIZE
+			Log.d(LOG_TAG, "Show action tree: Element: (" + this.activeY + ActionTreeController.AT_RASTER_SIZE / 2 + ", " + this.activeX + ActionTreeController.AT_RASTER_SIZE / 2 + ")");
+			this.actionTreeScroll.scrollTo(this.activeY + ActionTreeController.AT_RASTER_SIZE / 2, this.activeX + ActionTreeController.AT_RASTER_SIZE
 				/ 2);
 					
 			this.actionTreeLayout.setVisibility(View.VISIBLE);
