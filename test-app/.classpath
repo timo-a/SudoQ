@@ -4,12 +4,12 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/sudoq-app"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry kind="lib" path="libs/robotium-solo-3.1.jar">
+	<classpathentry combineaccessrules="false" kind="src" path="/sudoq-model"/>
+	<classpathentry exported="true" kind="lib" path="libs/robotium-solo-4.1-javadoc.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/robotium-solo-4.1.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/home/eagle/pse/sudoq/test-app/libs/robotium-solo-3.1-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/test-app/libs/robotium-solo-4.1-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/sudoq-model"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

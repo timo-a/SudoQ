@@ -40,7 +40,8 @@ public class SudoqTestCase extends ActivityInstrumentationTestCase2<SplashActivi
 	@Override
 	public void tearDown() {
 		solo.goBackToActivity("MainActivity");
-		solo.clickOnButton(solo.getCurrentActivity().getString(R.string.sf_mainmenu_profile));
+		solo.waitForActivity("MainActivity",15000);
+		solo.clickOnButton(solo.getString(R.string.sf_mainmenu_profile));//faster?
 		solo.sendKey(Solo.MENU);
 		solo.clickOnText(solo.getCurrentActivity().getString(R.string.profile_preference_title_deleteprofile));
 		solo.finishOpenedActivities();

@@ -188,6 +188,8 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 
 	/**
 	 * Just for testing!
+	 * @return
+	 * 		number of saved games 
 	 */
 	public int getSize() {
 		return games.size();

@@ -109,6 +109,7 @@ public class MenuTest extends SudoqTestCase {
 		assertTrue(((SudokuLoadingActivity) solo.getCurrentActivity()).getSize() == 2);
 		solo.sendKey(Solo.MENU);
 		solo.clickOnText(solo.getCurrentActivity().getString(R.string.sudokuloading_delete_finished));
+		solo.sleep(13000);
 		assertTrue(((SudokuLoadingActivity) solo.getCurrentActivity()).getSize() == 1);
 	}
 

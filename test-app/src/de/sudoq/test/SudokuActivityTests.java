@@ -1,6 +1,7 @@
 package de.sudoq.test;
 
 import android.util.Log;
+import android.view.View;
 import de.sudoq.R;
 import de.sudoq.controller.menus.SudokuPreferencesActivity;
 import de.sudoq.controller.sudoku.SudokuActivity;
@@ -20,6 +21,7 @@ public class SudokuActivityTests extends SudoqTestCase {
 		solo.clickOnView(solo.getCurrentActivity().findViewById(R.id.button_sudoku_help));
 		solo.sleep(500);
 		solo.clickOnText(solo.getCurrentActivity().getString(R.string.sf_sudoku_assistances_solve_surrender));
+		solo.sleep(13000);
 		assertEquals(true, ((SudokuActivity) solo.getCurrentActivity()).getGame().isFinished());
 	}
 
@@ -40,13 +42,16 @@ public class SudokuActivityTests extends SudoqTestCase {
 		solo.clickOnText(solo.getCurrentActivity().getString(R.string.sf_sudoku_assistances_solve_random));
 
 		solo.goBack();
+		solo.sleep(500);
 		solo.goBack();
 
-		solo.sleep(20000);
+		solo.sleep(120000);
 
 		solo.clickOnText(solo.getCurrentActivity().getString(R.string.sf_mainmenu_continue));
 
-		solo.clickOnView(solo.getCurrentActivity().findViewById(R.id.button_sudoku_help));
+		View helpButton =solo.getView(R.id.button_sudoku_help); 
+		assertNotNull(helpButton);
+		solo.clickOnView(helpButton);
 		solo.clickOnText(solo.getCurrentActivity().getString(R.string.sf_sudoku_assistances_solve_random));
 		solo.clickOnView(solo.getCurrentActivity().findViewById(R.id.button_sudoku_help));
 		solo.clickOnText(solo.getCurrentActivity().getString(R.string.sf_sudoku_assistances_solve_random));
