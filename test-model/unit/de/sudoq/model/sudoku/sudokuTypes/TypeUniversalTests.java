@@ -28,36 +28,37 @@ public class TypeUniversalTests {
 
 	@Test
 	public void initialisationTest() {
+		TypeBasic t;
 		try {
-			TypeBasic t = new TestUniSudoku(null);
+			t = new TestUniSudoku(null);
 			fail();
 		} catch (Exception e) {
 		}
 		try {
 			Map<String, ConstraintBehavior> m = new HashMap<String, ConstraintBehavior>();
 			m.put("abcd", new UniqueConstraintBehavior());
-			TypeBasic t = new TestUniSudoku(m);
+			t = new TestUniSudoku(m);
 		} catch (Exception e) {
 		}
 		try {
 			Map<String, ConstraintBehavior> m = new HashMap<String, ConstraintBehavior>();
 
 			m.put("abcd", null);
-			TypeBasic t = new TestUniSudoku(m);
+			t = new TestUniSudoku(m);
 			fail();
 		} catch (Exception e) {
 		}
 		try {
 			Map<String, ConstraintBehavior> m = new HashMap<String, ConstraintBehavior>();
 			m.put(null, null);
-			TypeBasic t = new TestUniSudoku(m);
+			t = new TestUniSudoku(m);
 			fail();
 		} catch (Exception e) {
 		}
 		try {
 			Map<String, ConstraintBehavior> m = new HashMap<String, ConstraintBehavior>();
 			m.put("abc", null);
-			TypeBasic t = new TestUniSudoku(m);
+			t = new TestUniSudoku(m);
 			fail();
 		} catch (Exception e) {
 		}

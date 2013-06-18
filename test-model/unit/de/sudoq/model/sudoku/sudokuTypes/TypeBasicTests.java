@@ -27,18 +27,19 @@ public class TypeBasicTests {
 
 	@Test
 	public void initialisationTest() {
+		TypeBasic t;
 		try {
-			TypeBasic t = new TestSudoku(0, -1);
+			t = new TestSudoku(0, -1);
 			fail();
 		} catch (Exception e) {
 		}
 		try {
-			TypeBasic t = new TestSudoku(-1, 0);
+			t = new TestSudoku(-1, 0);
 			fail();
 		} catch (Exception e) {
 		}
 		try {
-			TypeBasic t = new TestSudoku(-1, -1);
+			t = new TestSudoku(-1, -1);
 			fail();
 		} catch (Exception e) {
 		}

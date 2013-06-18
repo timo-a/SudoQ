@@ -199,9 +199,11 @@ public class SudokuPreferencesActivity extends SudoqActivity {
 				overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 			} catch (IllegalArgumentException e) {
 				Toast.makeText(this, getString(R.string.sf_sudokupreferences_copying), Toast.LENGTH_SHORT).show();
+				Log.d(LOG_TAG, "no template found- 'wait please'");
 			}
 		} else {
-			Toast.makeText(this, getString(R.string.error_sudoku_preference_incomplete), Toast.LENGTH_SHORT);
+			Toast.makeText(this, getString(R.string.error_sudoku_preference_incomplete), Toast.LENGTH_SHORT).show();
+			Log.d(LOG_TAG, "else- 'wait please'");			
 		}
 	}
 
