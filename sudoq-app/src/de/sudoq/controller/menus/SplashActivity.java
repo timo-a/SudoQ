@@ -30,6 +30,7 @@ import de.sudoq.R;
 import de.sudoq.controller.SudoqActivity;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.profile.Profile;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
 /**
  * Eine Splash Activity für die SudoQ-App, welche einen Splash-Screen zeigt,
@@ -72,20 +73,20 @@ public class SplashActivity extends SudoqActivity {
 	 */
 	private Thread splashThread;
 
-    /**
-      * Indicates the version of the app when the templates have been updated for the last time.
-      * In some cases the sharedpreferences file seems to remain after removal of the app.
-      * So the new app sees no need to copy the templates, because 'Initialized is still true.
-      * If you want an update to update/manipulate the templates-files, advance the value to the current version
-      */
-	private final static String VERSION_VALUE = "1.0.4";//extra variable. pointing to version-code-var is not good, because then every update copies the templates again
-    
+	/**
+	 * Indicates the version of the app when the templates have been updated for
+	 * the last time. In some cases the sharedpreferences file seems to remain
+	 * after removal of the app. So the new app sees no need to copy the
+	 * templates, because 'Initialized is still true. If you want an update to
+	 * update/manipulate the templates-files, advance the value to the current
+	 * version
+	 */
+	private final static String VERSION_VALUE = "1.0.4";// extra variable.
+
 	private final static String INIIALIZED_TAG = "Initialized";
-      
+
 	private final static String VERSION_TAG = "version";
-	
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -94,7 +95,7 @@ public class SplashActivity extends SudoqActivity {
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.splash);
-		
+
 		// If there is no profile initialize one
 		if (FileManager.getNumberOfProfiles() == 0) {
 			Profile.getInstance().setName(getString(R.string.default_user_name));
@@ -111,16 +112,19 @@ public class SplashActivity extends SudoqActivity {
 		// Get the preferences and look if assets where completely copied before
 		SharedPreferences settings = getSharedPreferences("Prefs", 0);
 
-		//DEBUG Map<String, ?> m = settings.getAll();
-		
-		/*if app is opened for 2nd time, no need to copy templates*/
+		// Debugging: see whats in shared preferences
+		// Map<String, ?> m = settings.getAll();
+		// settings.edit().clear().commit();
+
+		/* if app is opened for 2nd time, no need to copy templates */
 		Boolean init = settings.getBoolean(INIIALIZED_TAG, false);
-	    /* in case of an update which is to introduce new template-files, 
-	     * if the sharedpref-file survives, initialized will still be set, so check for a new VERSION_VALUE*/
+		/*
+		 * in case of an update which is to introduce new template-files, if the
+		 * sharedpref-file survives, initialized will still be set, so check for
+		 * a new VERSION_VALUE
+		 */
 		Boolean updateSituation = !settings.getString(VERSION_TAG, "wrongVersion").equals(VERSION_VALUE); //
-		
-		//DEBUG Map<String, ?> mu = settings.getAll();
-		       
+
 		if (!init && !this.startedCopying || updateSituation) {
 			new Initialization().execute(null, null, null);
 			startedCopying = true;
@@ -259,16 +263,30 @@ public class SplashActivity extends SudoqActivity {
 			String[] files = null;
 			try {
 				files = assetManager.list(relPath);
+				/*
+				 * the user will try sudoku9x9 first => make it first in line to
+				 * copy!
+				 */
+				if (relPath.equals("sudokus"))
+					for (int i = 0; i < files.length; i++)
+						if (files[i].equals(SudokuTypes.standard9x9.toString())) {
+							String tmp = files[0];
+							files[0] = files[i];
+							files[i] = tmp;
+							break;
+						}
+
 			} catch (IOException e) {
 				Log.e(LOG_TAG, e.getMessage());
 			}
 
 			for (String filename : files) {
 				String subFilePath = relPath + File.separator + filename;
-				// sudoku pre path must be removed
-				File subFile = new File(FileManager.getSudokuDir().getAbsolutePath(), subFilePath.substring(8));//8 for sudoku+'/'? why cut off every time instead off not prepending in the first place?
+				// sudoku pre path must be removed why cut off every time
+				// instead off not prepending in first place?
+				File subFile = new File(FileManager.getSudokuDir().getAbsolutePath(), subFilePath.substring(8));
 
-				if (!subFile.exists() && !subFile.isDirectory()) {
+				if (/* !subFile.exists() && */!subFile.isDirectory()) {
 					InputStream in = null;
 					OutputStream out = null;
 					try {
