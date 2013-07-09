@@ -8,8 +8,8 @@
     <string name="app_name">SudoQ</string>
     
     <!-- Android specific strings -->
-    <string name="version_code">1.0</string>
-    <string name="version_name">Release</string>
+    <string name="version_code">1.0.4</string>
+    <string name="version_name">Berta</string>
     
     <!-- Options Menu Entries -->
     <string name="optionsmenu_tutorial">Tutorial</string>

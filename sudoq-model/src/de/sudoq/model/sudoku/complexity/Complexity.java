@@ -7,6 +7,10 @@
  */
 package de.sudoq.model.sudoku.complexity;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Dieses enum repräsentiert die Schwierigkeit eines spezielles Sudokus, wobei
  * invalid keine Schwierigkeit im eigentlichen Sinne, sondern eine Kennung für
@@ -49,4 +53,11 @@ public enum Complexity {
 	 * gestellt.
 	 */
 	arbitrary;
+	
+	public static Iterable<Complexity> playableValues(){
+		
+		List<Complexity> l = new ArrayList<Complexity>(Arrays.asList(values()));
+		l.remove(arbitrary);
+		return l;
+	}
 }

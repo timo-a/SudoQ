@@ -12,15 +12,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.res.AssetManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -30,6 +28,7 @@ import de.sudoq.R;
 import de.sudoq.controller.SudoqActivity;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.profile.Profile;
+import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
 /**
@@ -73,19 +72,33 @@ public class SplashActivity extends SudoqActivity {
 	 */
 	private Thread splashThread;
 
-	/**
-	 * Indicates the version of the app when the templates have been updated for
-	 * the last time. In some cases the sharedpreferences file seems to remain
-	 * after removal of the app. So the new app sees no need to copy the
-	 * templates, because 'Initialized is still true. If you want an update to
-	 * update/manipulate the templates-files, advance the value to the current
-	 * version
-	 */
-	private final static String VERSION_VALUE = "1.0.4";// extra variable.
+	private final static String HEAD_DIRECTORY = "sudokus";
 
 	private final static String INIIALIZED_TAG = "Initialized";
 
 	private final static String VERSION_TAG = "version";
+	private final static String NO_VERSION_YET = "0.0.0";
+
+	private static String currentVersionValue = "";
+
+	private Set<SudokuTypes> collectTypesToBeReplaced(String oldVersion) {
+		Set<SudokuTypes> replacies = new HashSet<SudokuTypes>();
+
+		String replaceVersion = "1.0.4";
+
+		if (replaceVersion.compareTo(oldVersion) >= 0) {
+			replacies.add(SudokuTypes.standard16x16);
+			replacies.add(SudokuTypes.standard9x9);
+		}
+		/*
+		 * other versions that replace templates !example! replaceVersion =
+		 * 1.0.6 if(repl.cpT(oldVersion) >=0 ){
+		 * 
+		 * }
+		 */
+
+		return replacies;
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -112,21 +125,22 @@ public class SplashActivity extends SudoqActivity {
 		// Get the preferences and look if assets where completely copied before
 		SharedPreferences settings = getSharedPreferences("Prefs", 0);
 
-		// Debugging: see whats in shared preferences
-		// Map<String, ?> m = settings.getAll();
-		// settings.edit().clear().commit();
+		/* get version value */
+		try
+		{
+			currentVersionValue = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
+		} catch (NameNotFoundException e)
+		{
+			Log.v(LOG_TAG, e.getMessage());
+		}
 
-		/* if app is opened for 2nd time, no need to copy templates */
-		Boolean init = settings.getBoolean(INIIALIZED_TAG, false);
-		/*
-		 * in case of an update which is to introduce new template-files, if the
-		 * sharedpref-file survives, initialized will still be set, so check for
-		 * a new VERSION_VALUE
-		 */
-		Boolean updateSituation = !settings.getString(VERSION_TAG, "wrongVersion").equals(VERSION_VALUE); //
+		/* is this a new version? */
+		String oldVersionName = settings.getString(VERSION_TAG, NO_VERSION_YET);
+		Boolean updateSituation = !oldVersionName.equals(currentVersionValue);
 
-		if (!init && !this.startedCopying || updateSituation) {
-			new Initialization().execute(null, null, null);
+		if (updateSituation && !this.startedCopying) {
+			Set<SudokuTypes> typesToBeReplaced = collectTypesToBeReplaced(oldVersionName);
+			new Initialization(typesToBeReplaced).execute(null, null, null);
 			startedCopying = true;
 		}
 
@@ -194,31 +208,6 @@ public class SplashActivity extends SudoqActivity {
 	}
 
 	/**
-	 * Gibt den Benutzernamen des GoogleAccounts zurück.
-	 * 
-	 * @return Der Benutzername des Google-Accounts
-	 */
-	@SuppressWarnings("unused")
-	private String getUserName() {
-		AccountManager manager = AccountManager.get(this);
-		Account[] accounts = manager.getAccountsByType("com.google");
-		List<String> possibleEmails = new LinkedList<String>();
-
-		Log.d(LOG_TAG, "# of accounts: " + accounts.length);
-
-		for (Account account : accounts) {
-			possibleEmails.add(account.name);
-			Log.d(LOG_TAG, "got account-name: " + account.name);
-		}
-
-		if (!possibleEmails.isEmpty() && possibleEmails.get(0) != null) {
-			return possibleEmails.get(0).substring(0, possibleEmails.get(0).indexOf("@"));
-		}
-
-		return null;
-	}
-
-	/**
 	 * Wechselt in die MainMenu-Activity
 	 */
 	private void goToMainMenu() {
@@ -237,11 +226,18 @@ public class SplashActivity extends SudoqActivity {
 	 * ersten Start.
 	 */
 	private class Initialization extends AsyncTask<Void, Void, Void> {
+
+		private Set<SudokuTypes> typesToBeReplaced;
+
+		public Initialization(Set<SudokuTypes> typesToBeReplaced) {
+			this.typesToBeReplaced = typesToBeReplaced;
+		}
+
 		@Override
 		public void onPostExecute(Void v) {
 			SharedPreferences settings = getSharedPreferences("Prefs", 0);
 			settings.edit().putBoolean(INIIALIZED_TAG, true).commit();
-			settings.edit().putString(VERSION_TAG, VERSION_VALUE).commit();
+			settings.edit().putString(VERSION_TAG, currentVersionValue).commit();
 			Log.d(LOG_TAG, "Assets completely copied");
 		}
 
@@ -249,59 +245,70 @@ public class SplashActivity extends SudoqActivity {
 		 * Kopiert alle Sudoku Vorlagen.
 		 */
 		private void copyAssets() {
-			copyDirectory("sudokus");
+			/* copy sudoku9x9 first as people play it first */
+			SudokuTypes[] types = SudokuTypes.values();
+			for (int i = 0; i < types.length; i++)
+				if (types[i].equals(SudokuTypes.standard9x9.toString())) {
+					SudokuTypes tmp = types[0];
+					types[0] = types[i];
+					types[i] = tmp;
+					break;
+				}
+			
+			for (SudokuTypes t : types) {
+				File typeDir = new File(FileManager.getSudokuDir().getAbsoluteFile() + File.separator + t.toString());
+				Boolean notExistant = !typeDir.exists();
+				Boolean needsReplace = typesToBeReplaced.contains(t);
+				if (notExistant || needsReplace) {
+					typeDir.mkdir();
+				
+					for (Complexity c : Complexity.playableValues()) {
+						String assetsPath = HEAD_DIRECTORY + File.separator + t.toString() + File.separator + c.toString();
+						String relPath = typeDir.getAbsolutePath() + File.separator + c.toString();
+						File f = new File(relPath);
+						f.mkdir();
+						
+						String[] fnames =getSubfiles(assetsPath);
+						for (String filename: fnames){
+							copyFile(assetsPath+File.separator+filename, t.toString() + File.separator + c.toString() + File.separator+filename);
+						}
+					}
+				}
+			}
 		}
 
-		/**
-		 * Kopiert den Ordner mit dem angegebenen Pfad.
-		 * 
-		 * @param relPath
-		 *            Der relative Pfad
-		 */
-		private void copyDirectory(String relPath) {
-			AssetManager assetManager = getAssets();
+				/* get all files/directories in relPath */
+		private String[] getSubfiles(String relPath) {
 			String[] files = null;
 			try {
-				files = assetManager.list(relPath);
-				/*
-				 * the user will try sudoku9x9 first => make it first in line to
-				 * copy!
-				 */
-				if (relPath.equals("sudokus"))
-					for (int i = 0; i < files.length; i++)
-						if (files[i].equals(SudokuTypes.standard9x9.toString())) {
-							String tmp = files[0];
-							files[0] = files[i];
-							files[i] = tmp;
-							break;
-						}
-
+				files = getAssets().list(relPath);
 			} catch (IOException e) {
 				Log.e(LOG_TAG, e.getMessage());
 			}
+			return files;
+		}
 
-			for (String filename : files) {
-				String subFilePath = relPath + File.separator + filename;
-				// sudoku pre path must be removed why cut off every time
-				// instead off not prepending in first place?
-				File subFile = new File(FileManager.getSudokuDir().getAbsolutePath(), subFilePath.substring(8));
-
-				if (/* !subFile.exists() && */!subFile.isDirectory()) {
-					InputStream in = null;
-					OutputStream out = null;
-					try {
-						in = assetManager.open(subFilePath);
-						out = new FileOutputStream(subFile.getAbsolutePath());
-						copyFile(in, out);
-						in.close();
-						out.flush();
-						out.close();
-					} catch (Exception e) {
-						Log.e(LOG_TAG, e.getMessage());
-					}
-				} else {
-					copyDirectory(subFilePath);
-				}
+		/**
+		 * Copies content from sourcePath to destination
+		 * 
+		 * @param assetManager
+		 * @param sourcePath
+		 * @param destination
+		 */
+		private void copyFile(String sourcePath, String destinationPath) {
+			File destination = new File(FileManager.getSudokuDir().getAbsolutePath(), destinationPath);
+			InputStream in = null;
+			OutputStream out = null;
+			try {
+				in = getAssets().open(sourcePath);
+				String abs = destination.getAbsolutePath();
+				out = new FileOutputStream(abs);
+				copyFileOnStreamLevel(in, out);
+				in.close();
+				out.flush();
+				out.close();
+			} catch (Exception e) {
+				Log.e(LOG_TAG, e.getMessage());
 			}
 		}
 
@@ -316,7 +323,7 @@ public class SplashActivity extends SudoqActivity {
 		 *             Wird geworfen, falls beim Lesen/Schreiben der Streams ein
 		 *             Fehler auftritt
 		 */
-		private void copyFile(InputStream in, OutputStream out) throws IOException {
+		private void copyFileOnStreamLevel(InputStream in, OutputStream out) throws IOException {
 			byte[] buffer = new byte[1024];
 			int read;
 			while ((read = in.read(buffer)) != -1) {
@@ -330,6 +337,5 @@ public class SplashActivity extends SudoqActivity {
 			copyAssets();
 			return null;
 		}
-
 	}
 }

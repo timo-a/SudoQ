@@ -57,7 +57,7 @@ public final class FileManager {
 		profiles = p;
 		sudokus = s;
 
-		initSudokuDirectories();
+		//initSudokuDirectories();
 	}
 
 	/**
