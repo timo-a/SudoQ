@@ -14,14 +14,14 @@
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical" >
 	
-	    <TextView 
+	    <!-- TextView 
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:gravity="center"
 	        android:layout_margin="10dp"
 	        android:textAppearance="@android:style/TextAppearance.Large" 
 	        android:text="@string/title_sudokupreferences"
-	        android:textColor="@android:color/black" />
+	        android:textColor="@android:color/black" /-->
 	    
 	    <TextView
 	        android:id="@+id/textview_sudokutype"

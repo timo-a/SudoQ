@@ -17,7 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 import de.sudoq.R;
-import de.sudoq.controller.SudoqActivity;
+import de.sudoq.controller.SudoqActivitySherlock;
 import de.sudoq.controller.sudoku.SudokuActivity;
 import de.sudoq.model.game.AssistanceSet;
 import de.sudoq.model.game.Game;
@@ -30,8 +30,10 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 /**
  * SudokuPreferences ermöglicht das Verwalten von Einstellungen eines zu
  * startenden Sudokus.
+ * 
+ * Hauptmenü -> "neues Sudoku" führt hierher 
  */
-public class SudokuPreferencesActivity extends SudoqActivity {
+public class SudokuPreferencesActivity extends SudoqActivitySherlock {
 	/** Attributes */
 	private Intent startGameIntent;
 
@@ -165,12 +167,7 @@ public class SudokuPreferencesActivity extends SudoqActivity {
 			this.startGameIntent = new Intent(this, SudokuActivity.class);
 			this.gameType = GameType.LOCAL;
 			break;
-		// TODO: Enable MP in SudokuPreferences
-		// case MULTIPLAYER_GAME:
-		// this.startGameIntent = new Intent(this,
-		// SudokuMultiplayerActivity.class);
-		// this.gameType = GameType.MULTIPLAYER;
-		// break;
+		// we assumed there would be multiplayer...
 		}
 	}
 

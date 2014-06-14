@@ -30,21 +30,22 @@ public class TutorialActionTreeActivity extends Activity {
 		viewLayoutParams.leftMargin = 0;
 
 		ActionTreeElementView normal = new ActionElement(this, null, new ActionTreeElement(0, new SolveActionFactory().createAction(0, new Field(1, 9)), null));
-
-		ActionTreeElementView view = new BookmarkedElement(this, normal, new ActionTreeElement(0, new SolveActionFactory().createAction(0, new Field(1, 9)), null));
+		ActionTreeElement dummyATE = new ActionTreeElement(0, new SolveActionFactory().createAction(0, new Field(1, 9)), null);
+		                             
+		ActionTreeElementView view = new BookmarkedElement(this, normal, dummyATE);
 		view.setLayoutParams(viewLayoutParams);
-		((RelativeLayout) findViewById(R.id.tutorial_bookmark)).addView(view);
+		//((RelativeLayout) findViewById(R.id.tutorial_bookmark)).addView(view);
 
 		view = normal;
 		view.setLayoutParams(viewLayoutParams);
-		((RelativeLayout) findViewById(R.id.tutorial_state)).addView(view);
+		//((RelativeLayout) findViewById(R.id.tutorial_state)).addView(view);
 
-		view = new ActiveElement(this, normal, new ActionTreeElement(0, new SolveActionFactory().createAction(0, new Field(1, 9)), null));
+		view = new ActiveElement(this, normal, dummyATE);
 		view.setLayoutParams(viewLayoutParams);
-		((RelativeLayout) findViewById(R.id.tutorial_current_state)).addView(view);
+		//((RelativeLayout) findViewById(R.id.tutorial_current_state)).addView(view);
 
-		view = new BranchingElement(this, normal, new ActionTreeElement(0, new SolveActionFactory().createAction(0, new Field(1, 9)), null));
+		view = new BranchingElement(this, normal, dummyATE);
 		view.setLayoutParams(viewLayoutParams);
-		((RelativeLayout) findViewById(R.id.tutorial_branching)).addView(view);
+		//((RelativeLayout) findViewById(R.id.tutorial_branching)).addView(view);
 	}
 }

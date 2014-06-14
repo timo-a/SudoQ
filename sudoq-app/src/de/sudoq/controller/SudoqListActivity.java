@@ -7,12 +7,15 @@
  */
 package de.sudoq.controller;
 
+import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import de.sudoq.R;
 import de.sudoq.controller.tutorial.TutorialActivity;
 import de.sudoq.model.files.FileManager;
@@ -21,12 +24,8 @@ import de.sudoq.model.files.FileManager;
  * Eine ListActivity, welche die für einwandfreie Funktionalität der SudoQ-App
  * notwendigen Initialisierungsarbeiten ausführt.
  */
-public class SudoqListActivity extends ListActivity {
+public class SudoqListActivity extends SherlockListActivity {
 
-	/**
-	 * Konstante für den Tutorial Menü-Eintrag
-	 */
-	private static final int MENU_TUTORIAL = -1;
 
 	/**
 	 * Initialisiert eine neue Activity, setzt dabei die für die App notwendigen
@@ -58,8 +57,9 @@ public class SudoqListActivity extends ListActivity {
 	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, MENU_TUTORIAL, 0, getString(R.string.optionsmenu_tutorial));
-		return true;
+		MenuInflater inflater = getSupportMenuInflater();
+		inflater.inflate(R.menu.action_bar_standard, menu);    
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	/**
@@ -71,10 +71,13 @@ public class SudoqListActivity extends ListActivity {
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == MENU_TUTORIAL) {
+		switch (item.getItemId()) {
+		case R.id.action_show_tutorial:
 			startActivity(new Intent(this, TutorialActivity.class));
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
-		return true;
 	}
 
 }

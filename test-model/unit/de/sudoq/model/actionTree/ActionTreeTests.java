@@ -69,7 +69,7 @@ public class ActionTreeTests {
 		ActionTreeElement ate1 = at.add(factory.createAction(1, field), null);
 		ActionTreeElement ate2 = at.add(factory.createAction(1, field), ate1);
 		ActionTreeElement ate3 = at.add(factory.createAction(1, field), ate2);
-		ActionTreeElement ate4 = at.add(factory.createAction(1, field), ate2);
+		ActionTreeElement ate4 = at.add(factory.createAction(2, field), ate2);
 
 		assertEquals(ate1, at.getElement(1));
 		assertEquals(ate2, at.getElement(2));
@@ -119,11 +119,11 @@ public class ActionTreeTests {
 		Field field = new Field(-1, 1);
 
 		ActionTreeElement ate1 = at.add(factory.createAction(1, field), null);
-		ActionTreeElement ate2 = at.add(factory.createAction(1, field), ate1);
-		ActionTreeElement ate3 = at.add(factory.createAction(1, field), ate2);
-		ActionTreeElement ate4 = at.add(factory.createAction(1, field), ate3);
-		ActionTreeElement ate5 = at.add(factory.createAction(1, field), ate2);
-		ActionTreeElement ate6 = at.add(factory.createAction(1, field), ate5);
+		ActionTreeElement ate2 =    at.add(factory.createAction(1, field), ate1);
+		ActionTreeElement ate3 =       at.add(factory.createAction(1, field), ate2);
+		ActionTreeElement ate4 =          at.add(factory.createAction(1, field), ate3);
+		ActionTreeElement ate5 =       at.add(factory.createAction(2, field), ate2);
+		ActionTreeElement ate6 =          at.add(factory.createAction(1, field), ate5);
 
 		assertArrayEquals(new ActionTreeElement[] { ate4, ate3, ate2, ate5, ate6 }, ActionTree.findPath(ate4, ate6)
 				.toArray());

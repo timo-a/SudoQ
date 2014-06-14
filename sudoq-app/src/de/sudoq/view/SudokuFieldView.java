@@ -210,15 +210,8 @@ public class SudokuFieldView extends View implements ModelChangeListener<Field>,
 		return false;
 	}
 
-	/**
-	 * Benachrichtigt alle Registrierten Listener über Interaktion mit diesem
-	 * SudokuFieldView.
-	 */
-	public void notifyListener() {
-		for (FieldInteractionListener listener : fieldSelectListener) {
-			listener.onFieldSelected(this);
-		}
-	}
+	
+	
 
 	/**
 	 * Gibt das Feld, welches von dieser View angezeigt wird zurück
@@ -396,6 +389,16 @@ public class SudokuFieldView extends View implements ModelChangeListener<Field>,
 
 	public void removeListener(FieldInteractionListener listener) {
 
+	}
+
+	/**
+	 * Benachrichtigt alle Registrierten Listener über Interaktion mit diesem
+	 * SudokuFieldView.
+	 */
+	public void notifyListener() {
+		for (FieldInteractionListener listener : fieldSelectListener) {
+			listener.onFieldSelected(this);
+		}
 	}
 
 }

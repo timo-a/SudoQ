@@ -15,6 +15,9 @@ import java.io.OutputStream;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.Window;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -23,9 +26,8 @@ import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import de.sudoq.R;
-import de.sudoq.controller.SudoqActivity;
+import de.sudoq.controller.SudoqActivitySherlock;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.complexity.Complexity;
@@ -36,7 +38,7 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
  * sowie den FileManager initialisiert und die Daten für den ersten Start
  * vorbereitet.
  */
-public class SplashActivity extends SudoqActivity {
+public class SplashActivity extends SudoqActivitySherlock {
 	/**
 	 * Das Log-Tag für das LogCat.
 	 */
@@ -82,17 +84,23 @@ public class SplashActivity extends SudoqActivity {
 	private static String currentVersionValue = "";
 
 	private Set<SudokuTypes> collectTypesToBeReplaced(String oldVersion) {
+		/*determines which defectious templates need to be replaced*/
 		Set<SudokuTypes> replacies = new HashSet<SudokuTypes>();
 
+		/*existing installations older than version 1.0.4
+		 * need to replace standard16x16 and standard9x9  */
 		String replaceVersion = "1.0.4";
 
 		if (replaceVersion.compareTo(oldVersion) >= 0) {
 			replacies.add(SudokuTypes.standard16x16);
 			replacies.add(SudokuTypes.standard9x9);
 		}
-		/*
-		 * other versions that replace templates !example! replaceVersion =
-		 * 1.0.6 if(repl.cpT(oldVersion) >=0 ){
+		/* 
+		 * In case 1.0.6 would replace some templates we would write: 
+		 * !example! 
+		 * String replaceVersion = 1.0.6; 
+		 * if(repl.cpT(oldVersion) >=0 ){
+		 * 		r.add...
 		 * 
 		 * }
 		 */
@@ -105,7 +113,10 @@ public class SplashActivity extends SudoqActivity {
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		//this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
+		//requestWindowFeature(Window.FEATURE_ACTION_BAR);
+		//getSupportActionBar().hide();
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.splash);
 
@@ -143,7 +154,7 @@ public class SplashActivity extends SudoqActivity {
 			new Initialization(typesToBeReplaced).execute(null, null, null);
 			startedCopying = true;
 		}
-
+		/* splash thread*/
 		this.splashThread = new Thread() {
 			@Override
 			public void run() {
@@ -263,8 +274,8 @@ public class SplashActivity extends SudoqActivity {
 					typeDir.mkdir();
 				
 					for (Complexity c : Complexity.playableValues()) {
-						String assetsPath = HEAD_DIRECTORY + File.separator + t.toString() + File.separator + c.toString();
-						String relPath = typeDir.getAbsolutePath() + File.separator + c.toString();
+						String assetsPath = HEAD_DIRECTORY + File.separator + t.toString() + File.separator + c.toString(); //template that comes with the app
+						String relPath = typeDir.getAbsolutePath() + File.separator + c.toString();                         //destination folder
 						File f = new File(relPath);
 						f.mkdir();
 						

@@ -7,11 +7,13 @@
  */
 package de.sudoq.model.actionTree;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
+import de.sudoq.model.ModelChangeListener;
 import de.sudoq.model.ObservableModelImpl;
 
 /**
@@ -60,20 +62,42 @@ public class ActionTree extends ObservableModelImpl<ActionTreeElement> implement
 	 */
 	public ActionTreeElement add(Action action, ActionTreeElement mountingElement) {
 
-		ActionTreeElement ate = new ActionTreeElement(idCounter, action, mountingElement);
-
-		if (rootElement != null) {
-			if (mountingElement == null) {
-				throw new IllegalArgumentException();
-			}
-		} else {
-			rootElement = ate;
+		if (rootElement != null && mountingElement == null) {
+				throw new IllegalArgumentException(); //There'a a root but no mounting el? -> throw exception 
 		}
-
-		idCounter++;
+		
+		/* check if action already in Tree, i.e. we went back in actionTree but are doing same steps again */
+		boolean redundandAction = false;
+		ActionTreeElement ate = null;
+		if (mountingElement != null) {
+			ArrayList<ActionTreeElement> children = mountingElement.getChildrenList();
+			for(ActionTreeElement ateI : children)
+				if(ateI.actionEquals(action)){
+					ate = ateI;
+					redundandAction = true;
+					break;
+				}
+		}		
+		
+		/* */
+		if(!redundandAction)
+		{
+			ate = new ActionTreeElement(idCounter, action, mountingElement);
+			idCounter++;
+		}
+		
+		
+		if (rootElement==null) {
+			rootElement = ate;  //if there's no root, ate is root
+		}
+		
 		notifyListeners(ate);
+		
 		return ate;
+		
 	}
+	
+	
 
 	/**
 	 * Diese Methode durchsucht den Baum nach dem Element mit der gegebenen id.

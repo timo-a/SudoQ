@@ -15,7 +15,7 @@
         android:layout_height="fill_parent"
         android:orientation="vertical" >
 
-        <LinearLayout
+        <!--LinearLayout
             android:id="@+id/sudoku_time_border"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
                 android:gravity="right"
                 android:textColor="@android:color/white"
                 android:textSize="10dp" />
-        </LinearLayout>
+        </LinearLayout-->
 
         <LinearLayout
         android:layout_width="fill_parent"

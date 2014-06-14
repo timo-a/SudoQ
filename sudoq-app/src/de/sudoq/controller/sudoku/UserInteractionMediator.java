@@ -27,6 +27,8 @@ import de.sudoq.model.game.Game;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
+import de.sudoq.model.sudoku.sudokuTypes.TypeBasic;
 import de.sudoq.view.SudokuFieldView;
 import de.sudoq.view.SudokuLayout;
 import de.sudoq.view.VirtualKeyboardLayout;
@@ -109,6 +111,7 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 			if (this.noteMode) {
 				if (currentField.getField().isNoteSet(symbol)) {
 					listener.onNoteDelete(currentField.getField(), symbol);
+					restrictCandidates();//because github issue #116 see below					
 				} else {
 					listener.onNoteAdd(currentField.getField(), symbol);
 				}
@@ -126,6 +129,7 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 
 	public void onFieldSelected(SudokuFieldView view) {
 		SudokuFieldView currentField = this.sudokuView.getCurrentFieldView();
+		/* select for the first time -> set a solution */
 		if (currentField != view) {
 			this.noteMode = Profile.getInstance().isGestureActive() && !game.isFinished();
 
@@ -143,7 +147,9 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 			} else {
 				this.virtualKeyboard.setActivated(false);
 			}
+		/* second click */
 		} else if (!game.isFinished()) {
+			/* gestures are enabled -> set solution via touchy swypy*/
 			if (Profile.getInstance().isGestureActive() && this.sudokuView.getCurrentFieldView().getField().isEditable()) {
 				this.gestureOverlay.setVisibility(View.VISIBLE);
 				restrictCandidates();
@@ -152,8 +158,10 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 				textView.setText(" " + gestureOverlay.getContext().getString(R.string.sf_sudoku_title_gesture_input) + " ");
 				textView.setTextSize(18);
 				this.gestureOverlay.addView(textView, new GestureOverlayView.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL));
+			/* no gestures -> toogle noteMode*/	
 			} else {
 				this.noteMode = !this.noteMode;
+				restrictCandidates();
 			}
 			currentField.setNoteState(this.noteMode);
 		}
@@ -261,19 +269,39 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 	 */
 	private void restrictCandidates() {
 		this.virtualKeyboard.enableAllButtons();
+		
+		Field currentField = this.sudokuView.getCurrentFieldView().getField();
+		TypeBasic type = this.game.getSudoku().getSudokuType();
+		/* only if assistance 'input assistance' if enabled */
 		if (this.game.isAssistanceAvailable(Assistances.restrictCandidates)) {
-			int save = this.sudokuView.getCurrentFieldView().getField().getCurrentValue();
-			for (int i = 0; i < this.game.getSudoku().getSudokuType().getNumberOfSymbols(); i++) {
-				this.sudokuView.getCurrentFieldView().getField().setCurrentValue(i, false);
-				for (Constraint c : this.game.getSudoku().getSudokuType()) {
-					if (!c.isSaturated(this.game.getSudoku())) {
+			
+			/* save val of current view */
+			int save = currentField.getCurrentValue();
+			
+			/* iterate over all symbols e.g. 0-8 */
+			for (int i = 0; i < type.getNumberOfSymbols(); i++) {
+				/* set fieldval to current symbol */
+				currentField.setCurrentValue(i, false);
+				/* for every constraint */
+				for (Constraint c : type) {
+					/* if constraint not satisfied -> disable*/
+					boolean constraintViolated =! c.isSaturated(this.game.getSudoku());
+					
+					/* Github Issue #116
+					 * it would be stupid if we were in the mode where notes are set 
+					 * and would disable a note that has been set.
+					 * Because then, it can't be unset by the user*/
+					boolean noteNotSet = ! (noteMode && currentField.isNoteSet(i));
+					
+					if (constraintViolated && noteNotSet) {
 						this.virtualKeyboard.disableButton(i);
 						break;
 					}
 				}
-				this.sudokuView.getCurrentFieldView().getField().setCurrentValue(Field.EMPTYVAL, false);
+				currentField.setCurrentValue(Field.EMPTYVAL, false);
 			}
-			this.sudokuView.getCurrentFieldView().getField().setCurrentValue(save, false);
+			currentField.setCurrentValue(save, false);
+			
 		}
 	}
 

@@ -15,6 +15,10 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Set;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+
 import android.gesture.Gesture;
 import android.gesture.GestureOverlayView;
 import android.gesture.GestureOverlayView.OnGesturePerformedListener;
@@ -23,15 +27,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import de.sudoq.R;
-import de.sudoq.controller.SudoqActivity;
+import de.sudoq.controller.SudoqActivitySherlock;
 import de.sudoq.controller.sudoku.FieldViewPainter;
 import de.sudoq.controller.sudoku.FieldViewStates;
 import de.sudoq.controller.sudoku.InputListener;
@@ -45,7 +47,7 @@ import de.sudoq.view.VirtualKeyboardLayout;
  * @author Anrion
  *
  */
-public class GestureBuilder extends SudoqActivity implements OnGesturePerformedListener, InputListener {
+public class GestureBuilder extends SudoqActivitySherlock implements OnGesturePerformedListener, InputListener {
 
 	/**
 	 * Fängt Gesteneingaben des Benutzers ab
@@ -57,15 +59,6 @@ public class GestureBuilder extends SudoqActivity implements OnGesturePerformedL
 	 */
 	private GestureStore gestureStore = new GestureStore();
 	
-	/**
-	 * ID des OptionsMenu-Eintrags zum Löschen aller Gesten.
-	 */
-	private static final int MENU_FLUSH_GESTURE_LIBRARY = 2;
-
-	/**
-	 * ID des OptionsMenu-Eintrags zum Löschen einer bestimmten Geste.
-	 */
-	private static final int MENU_DELETE_GESTURE = 3;
 
 	private static final String LOG_TAG = GestureBuilder.class.getSimpleName();
 
@@ -125,7 +118,7 @@ public class GestureBuilder extends SudoqActivity implements OnGesturePerformedL
 
 		this.gestureOverlay = new GestureOverlayView(this);
 		this.gestureOverlay.addOnGesturePerformedListener(this);
-		LayoutParams gestureLayoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		LayoutParams gestureLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		this.gestureOverlay.setLayoutParams(gestureLayoutParams);
 		this.gestureOverlay.setBackgroundColor(Color.BLACK);
 		this.gestureOverlay.getBackground().setAlpha(127);
@@ -135,18 +128,18 @@ public class GestureBuilder extends SudoqActivity implements OnGesturePerformedL
 		FrameLayout frameLayout = (FrameLayout) findViewById(R.id.gesture_builder_layout);
 		frameLayout.addView(this.gestureOverlay);
 	}
-
 	@Override
-	protected void prepareOptionsMenu(Menu menu) {
-		super.prepareOptionsMenu(menu);
-		menu.add(0, MENU_FLUSH_GESTURE_LIBRARY, 0, getString(R.string.optionsmenu_gesture_builder_flush));
-		menu.add(0, MENU_DELETE_GESTURE, 0, getString(R.string.optionsmenu_gesture_builder_delete_single));
+	public boolean onCreateOptionsMenu(Menu menu) {		
+		MenuInflater inflater = getSupportMenuInflater();
+		inflater.inflate(R.menu.action_bar_gesture_builder, menu);    
+		return true;
 	}
-
+	
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case MENU_FLUSH_GESTURE_LIBRARY:
+		case R.id.action_delete_all_gestures:
 			Set<String> gestures = this.gestureStore.getGestureEntries();
 			for (Iterator<String> gestureIterator = gestures.iterator(); gestureIterator.hasNext();) {
 				String gestureName = (String) gestureIterator.next();
@@ -155,7 +148,7 @@ public class GestureBuilder extends SudoqActivity implements OnGesturePerformedL
 			saveGestures();
 			refreshKeyboard();
 			break;
-		case MENU_DELETE_GESTURE:
+		case R.id.action_delete_single_gesture:
 			this.deleteSpecific = true;
 			break;
 		}
@@ -217,7 +210,6 @@ public class GestureBuilder extends SudoqActivity implements OnGesturePerformedL
 			this.gestureOverlay.setVisibility(View.INVISIBLE);
 		} else {
 			saveGestures();
-			Set<String> gestures = this.gestureStore.getGestureEntries();
 			super.onBackPressed();
 		}
 	}

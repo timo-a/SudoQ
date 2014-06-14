@@ -33,7 +33,7 @@ public class SudoqTestCase extends ActivityInstrumentationTestCase2<SplashActivi
 		solo.assertCurrentActivity("Should be MainAcitivty", MainActivity.class);
 		solo.clickOnButton(solo.getCurrentActivity().getString(R.string.sf_mainmenu_profile));
 		solo.sendKey(Solo.MENU);
-		solo.clickOnText(solo.getCurrentActivity().getString(R.string.profile_preference_title_createprofile));
+		solo.clickOnText(solo.getCurrentActivity().getString(R.string.action_new_profile));
 		solo.goBack();
 	}
 
@@ -43,7 +43,7 @@ public class SudoqTestCase extends ActivityInstrumentationTestCase2<SplashActivi
 		solo.waitForActivity("MainActivity",15000);
 		solo.clickOnButton(solo.getString(R.string.sf_mainmenu_profile));//faster?
 		solo.sendKey(Solo.MENU);
-		solo.clickOnText(solo.getCurrentActivity().getString(R.string.profile_preference_title_deleteprofile));
+		solo.clickOnText(solo.getCurrentActivity().getString(R.string.action_delete_profile));
 		solo.finishOpenedActivities();
 	}
 }

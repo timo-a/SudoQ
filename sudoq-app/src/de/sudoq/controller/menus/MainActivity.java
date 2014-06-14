@@ -15,7 +15,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import de.sudoq.R;
-import de.sudoq.controller.SudoqActivity;
+import de.sudoq.controller.SudoqActivitySherlock;
 import de.sudoq.controller.sudoku.SudokuActivity;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.profile.Profile;
@@ -23,7 +23,7 @@ import de.sudoq.model.profile.Profile;
 /**
  * Verwaltet das Hauptmenü der App.
  */
-public class MainActivity extends SudoqActivity {
+public class MainActivity extends SudoqActivitySherlock {
 
 	/**
 	 * Der Log-Tag für den LogCat

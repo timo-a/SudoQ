@@ -23,41 +23,42 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="horizontal">
-	<LinearLayout
-	    android:layout_width="wrap_content"
-	    android:layout_height="fill_parent"
-	    android:layout_weight="1.0"
-	    android:orientation="vertical">
-    <Button
-        android:id="@+id/button_mainmenu_new_sudoku"
-        style="@style/style_mainmenu_buttons"
-        android:text="@string/sf_mainmenu_new_sudoku"
-        android:onClick="switchActivity" />
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent"
+			android:layout_weight="1.0"
+			android:orientation="vertical">
+		    <Button
+    		    android:id="@+id/button_mainmenu_new_sudoku"
+    	    	style="@style/style_mainmenu_buttons"
+    	    	android:text="@string/sf_mainmenu_new_sudoku"
+		        android:onClick="switchActivity" />
 
-    <Button
-        android:id="@+id/button_mainmenu_continue"
-        style="@style/style_mainmenu_buttons"
-        android:text="@string/sf_mainmenu_continue"
-        android:onClick="switchActivity" />
-
-    <Button
-        android:id="@+id/button_mainmenu_load_sudoku"
-        style="@style/style_mainmenu_buttons"
-        android:text="@string/sf_mainmenu_load_sudoku"
-        android:onClick="switchActivity" />
-	</LinearLayout>
+		    <Button
+		        android:id="@+id/button_mainmenu_continue"
+		        style="@style/style_mainmenu_buttons"
+		        android:text="@string/sf_mainmenu_continue"
+		        android:onClick="switchActivity" />
+	
+		</LinearLayout>
     
-    <LinearLayout
-	    android:layout_width="wrap_content"
-	    android:layout_height="fill_parent"
-	    android:layout_weight="1.0"
-	    android:orientation="vertical">
-    <Button
-        android:id="@+id/button_mainmenu_profile"
-        style="@style/style_mainmenu_buttons"
-        android:text="@string/sf_mainmenu_profile"
-        android:onClick="switchActivity" />
-
-    </LinearLayout>
+	    <LinearLayout
+		    android:layout_width="wrap_content"
+		    android:layout_height="fill_parent"
+		    android:layout_weight="1.0"
+		    android:orientation="vertical">
+		    <Button
+		        android:id="@+id/button_mainmenu_profile"
+		        style="@style/style_mainmenu_buttons"
+		        android:text="@string/sf_mainmenu_profile"
+		        android:onClick="switchActivity" />
+	    
+		    <Button
+		        android:id="@+id/button_mainmenu_load_sudoku"
+		        style="@style/style_mainmenu_buttons"
+		        android:text="@string/sf_mainmenu_load_sudoku"
+		        android:onClick="switchActivity" />
+		    
+	    </LinearLayout>
 	</LinearLayout>
 </LinearLayout>

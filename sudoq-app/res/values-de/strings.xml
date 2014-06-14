@@ -25,13 +25,17 @@
         <!-- Splash -->
     <string name="splash_text">SudoQ wird für die erste Benutzung vorbereitet</string>
     
-    <!-- Options Menu Entries -->
-    <string name="optionsmenu_tutorial">Tutorial</string>
-    <string name="optionsmenu_gesture_builder_diggits">Gesten für Ziffern</string>
-    <string name="optionsmenu_gesture_builder_letters">Gesten für Buchstaben</string>
-    <string name="optionsmenu_gesture_builder_flush">Alle Gesten löschen</string>
-    <string name="optionsmenu_gesture_builder_delete_single">Spezifische Geste löschen</string>
     
+    <!-- Action Bar Entries -->
+    <string name="action_show_tutorial">Tutorial</string>
+
+    <string name="action_new_profile">Neues Profil erstellen</string>
+    <string name="action_delete_profile">Dieses Profil löschen</string>
+    <string name="action_switch_profile">Profil wechseln</string>
+    <string name="action_delete_all_gestures">Alle Gesten löschen</string>
+    <string name="action_delete_single_gesture">Spezifische Geste löschen</string>
+
+
     <!-- Dialogs -->
     <string name="dialog_yes">Ja</string>
     <string name="dialog_no">Nein</string>
@@ -67,10 +71,7 @@
 	<string name="profile_preference_title_assistance_allowSolveRandomField">Zufälliges Feld lösen</string>
 	<string name="profile_preference_title_assistance_allowGetHint">Tipps</string>
 	<string name="profile_preference_title_assistance_autoAdjustNotes">Notizen automatisch anpassen</string>
-	<string name="profile_preference_title_switchprofile">Profil wechseln</string>
 	<string name="profile_preference_title_profile">Profil</string>
-	<string name="profile_preference_title_createprofile">Neues Profil erstellen</string>
-	<string name="profile_preference_title_deleteprofile">Profil löschen</string>
 	<string name="profile_preference_button_statistics">Statistik</string>
 	<string name="profile_preference_button_gesture_builder">Gesten definieren</string>
 	<string name="profile_preference_button_save">Speichern</string>
@@ -89,6 +90,7 @@
     <string name="sf_mainmenu_profile">Profil</string>
     
     <!-- GestureBuilder -->
+    <string name="gesture_builder_title">Gesten definieren</string>
     <string name="gesture_builder_define_gesture">Zeichne die gewünschte Geste</string>
     
     <!-- GameTypeSelection Buttons -->

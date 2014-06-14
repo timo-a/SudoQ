@@ -100,8 +100,8 @@ public class FullScrollLayout extends LinearLayout {
 		this.verticalScrollView = new VerticalScroll(getContext());
 		this.horizontalScrollView = new HorizontalScroll(getContext());
 
-		this.verticalScrollView.addView(this.horizontalScrollView, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-		this.addView(this.verticalScrollView, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+		this.verticalScrollView.addView(this.horizontalScrollView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		this.addView(this.verticalScrollView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class FullScrollLayout extends LinearLayout {
 		if (v instanceof ZoomableView) {
 			this.horizontalScrollView.removeAllViews();
 			this.childView = (ZoomableView) v;
-			this.horizontalScrollView.addView(v, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+			this.horizontalScrollView.addView(v, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		}
 	}
 

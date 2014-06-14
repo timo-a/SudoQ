@@ -7,12 +7,11 @@
  */
 package de.sudoq.controller.menus;
 
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.widget.TextView;
 import de.sudoq.R;
-import de.sudoq.controller.SudoqActivity;
+import de.sudoq.controller.SudoqActivitySherlock;
+import de.sudoq.controller.sudoku.SudokuActivity;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.profile.Statistics;
 
@@ -20,9 +19,14 @@ import de.sudoq.model.profile.Statistics;
  * Diese Klasse stellt eine Activity zur Anzeige der Statisik des aktuellen
  * Spielerprofils dar.
  */
-public class StatisticsActivity extends SudoqActivity {
+public class StatisticsActivity extends SudoqActivitySherlock {
 	/** Methods */
 
+	private void setScore(int textViewID, int label, Statistics statLabel){
+		TextView current = (TextView) findViewById(textViewID);
+		current.setText(getString(label) + ": " + Profile.getInstance().getStatistic(statLabel));
+	}
+	
 	/**
 	 * Wird beim ersten Start der Activity aufgerufen.
 	 */
@@ -30,27 +34,22 @@ public class StatisticsActivity extends SudoqActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.statistics);
-		TextView current = (TextView) findViewById(R.id.text_played_sudokus);
-		current.setText(getString(R.string.statistics_played_sudokus) + ": " + Profile.getInstance().getStatistic(Statistics.playedSudokus));
-		current = (TextView) findViewById(R.id.text_played_easy_sudokus);
-		current.setText(getString(R.string.statistics_played_easy_sudokus) + ": " + Profile.getInstance().getStatistic(Statistics.playedEasySudokus));
-		current = (TextView) findViewById(R.id.text_played_medium_sudokus);
-		current.setText(getString(R.string.statistics_played_medium_sudokus) + ": " + Profile.getInstance().getStatistic(Statistics.playedMediumSudokus));
-		current = (TextView) findViewById(R.id.text_played_difficult_sudokus);
-		current.setText(getString(R.string.statistics_played_difficult_sudokus) + ": " + Profile.getInstance().getStatistic(Statistics.playedDifficultSudokus));
-		current = (TextView) findViewById(R.id.text_played_infernal_sudokus);
-		current.setText(getString(R.string.statistics_played_infernal_sudokus) + ": " + Profile.getInstance().getStatistic(Statistics.playedInfernalSudokus));
-		current = (TextView) findViewById(R.id.text_score);
-		current.setText(getString(R.string.statistics_score) + ": " + Profile.getInstance().getStatistic(Statistics.maximumPoints));
-		current = (TextView) findViewById(R.id.text_fastest_solving_time);
-		int fullTime = Profile.getInstance().getStatistic(Statistics.fastestSolvingTime);
+		
+		setScore(R.id.text_played_sudokus,          R.string.statistics_played_sudokus,           Statistics.playedSudokus);
+		setScore(R.id.text_played_easy_sudokus,     R.string.statistics_played_easy_sudokus,      Statistics.playedEasySudokus);
+		setScore(R.id.text_played_medium_sudokus,   R.string.statistics_played_medium_sudokus,    Statistics.playedMediumSudokus);
+		setScore(R.id.text_played_difficult_sudokus,R.string.statistics_played_difficult_sudokus, Statistics.playedDifficultSudokus);
+		setScore(R.id.text_played_infernal_sudokus, R.string.statistics_played_infernal_sudokus,  Statistics.playedInfernalSudokus);
+		setScore(R.id.text_score,                   R.string.statistics_score,                    Statistics.maximumPoints);
+        
+		TextView current = (TextView) findViewById(R.id.text_fastest_solving_time);
+		
+		int timeRecordInSecs = Profile.getInstance().getStatistic(Statistics.fastestSolvingTime);
+		
 		String timeString = "---";
-		if (fullTime != 5999) {
-			timeString = fullTime / 60 + ":";
-			if (fullTime % 60 < 10) {
-				timeString += "0";
-			}
-			timeString += fullTime % 60;
+		
+		if (timeRecordInSecs != Profile.INITIAL_TIME_RECORD) {
+			timeString = SudokuActivity.getTimeString(timeRecordInSecs);
 		}
 		current.setText(getString(R.string.statistics_fastest_solving_time) + ": " + timeString);
 	}
@@ -58,9 +57,9 @@ public class StatisticsActivity extends SudoqActivity {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
+	//@Override
+	/*public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-	}
+	}*/
 }

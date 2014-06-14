@@ -11,12 +11,16 @@
     <string name="version_code">1.0.4</string>
     <string name="version_name">Berta</string>
     
-    <!-- Options Menu Entries -->
-    <string name="optionsmenu_tutorial">Tutorial</string>
-    <string name="optionsmenu_gesture_builder_diggits">Gestures for digits</string>
-    <string name="optionsmenu_gesture_builder_letters">Gestures for letters</string>
-    <string name="optionsmenu_gesture_builder_flush">Delete all gestures</string>
-    <string name="optionsmenu_gesture_builder_delete_single">Delete specific gestures</string>
+
+    <!-- Action Bar Entries -->
+    <string name="action_show_tutorial">Tutorial</string>
+
+    <string name="action_new_profile">Create New Profile</string>
+    <string name="action_delete_profile">Delete This Profile</string>
+    <string name="action_switch_profile">Switch Profile</string>
+    <string name="action_delete_all_gestures">Delete all gestures</string>
+    <string name="action_delete_single_gesture">Delete specific gesture</string>
+    
     
     <!-- Error Messages -->
     <string name="error_profile_dir_not_found">Error! Profile folder could not be located!</string>
@@ -73,10 +77,7 @@
 	<string name="profile_preference_title_assistance_allowSolveRandomField">Solve Random Field</string>
 	<string name="profile_preference_title_assistance_allowGetHint">Hint For Easy Field</string>
 	<string name="profile_preference_title_assistance_autoAdjustNotes">Auto Adjust Notices</string>
-	<string name="profile_preference_title_switchprofile">Switch Profile</string>
 	<string name="profile_preference_title_profile">Profile</string>
-	<string name="profile_preference_title_createprofile">Create New Profile</string>
-	<string name="profile_preference_title_deleteprofile">Delete Profile</string>
 	<string name="profile_preference_button_statistics">Statistics</string>
 	<string name="profile_preference_button_gesture_builder">Gesture Builder</string>
 	<string name="profile_preference_button_save">Save</string>
@@ -95,6 +96,7 @@
     <string name="sf_mainmenu_profile">Profile</string>
     
     <!-- GestureBuilder -->
+    <string name="gesture_builder_title">Gesture Builder</string>
     <string name="gesture_builder_define_gesture">Define a Gesture</string>
     
     <!-- GameTypeSelection Buttons -->

@@ -11,5 +11,7 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/test-app/libs/robotium-solo-4.1-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

@@ -290,6 +290,20 @@ public class ActionTreeElement extends ObservableModelImpl<ActionTreeElement> im
 	}
 
 	/**
+	 * Returns whether the action held by this ActionTreeElement is equal to the action passed as parameter
+	 * @param o external action to compare
+	 * @return true if this.action.equals(o) else false
+	 * 
+	 */
+	public boolean actionEquals(Object o){
+		if (o instanceof Action){//actually unneccessary as action checks again
+			Action a = (Action) o;
+			return this.action.equals(a);
+		}
+		return false;
+	}
+	
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override

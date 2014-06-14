@@ -15,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import de.sudoq.R;
 import de.sudoq.controller.SudoqActivity;
+import de.sudoq.controller.SudoqActivitySherlock;
 import de.sudoq.model.ModelChangeListener;
 import de.sudoq.model.game.Assistances;
 import de.sudoq.model.profile.Profile;
@@ -22,7 +23,7 @@ import de.sudoq.model.profile.Profile;
 /**
  * Activity um Profile zu bearbeiten und zu verwalten
  */
-public class AssistancesPreferencesActivity extends SudoqActivity implements ModelChangeListener<Profile> {
+public class AssistancesPreferencesActivity extends SudoqActivitySherlock implements ModelChangeListener<Profile> {
 	/** Attributes */
 	private static final String LOG_TAG = AssistancesPreferencesActivity.class.getSimpleName();
 

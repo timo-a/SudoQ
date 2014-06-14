@@ -9,25 +9,34 @@ package de.sudoq.controller.menus;
 
 import java.util.List;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+
+/*import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;*/
+
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import de.sudoq.R;
 import de.sudoq.controller.SudoqActivity;
+import de.sudoq.controller.SudoqActivitySherlock;
 import de.sudoq.model.ModelChangeListener;
 import de.sudoq.model.game.Assistances;
 import de.sudoq.model.profile.Profile;
 
 /**
  * Activity um Profile zu bearbeiten und zu verwalten
+ * aufgerufen im Hauptmenü 4. Button
  */
-public class PlayerPreferencesActivity extends SudoqActivity implements ModelChangeListener<Profile> {
+public class PlayerPreferencesActivity extends SudoqActivitySherlock implements ModelChangeListener<Profile> {
 	/** Attributes */
 	private static final String LOG_TAG = PlayerPreferencesActivity.class.getSimpleName();
 
@@ -59,6 +68,9 @@ public class PlayerPreferencesActivity extends SudoqActivity implements ModelCha
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		//setTitle(R.string.profile_preference_title);
+		
 		this.setContentView(R.layout.playerpreferences);
 
 		firstStartup = false;
@@ -78,6 +90,7 @@ public class PlayerPreferencesActivity extends SudoqActivity implements ModelCha
 		createProfile = true;
 
 		/* Aufruf aus SudokuPreferenceActivity */
+		/* not happening: assistences preference activity would be called*/
 		if (getIntent().hasExtra(INTENT_ONLYASSISTANCES) && getIntent().getExtras().getBoolean(INTENT_ONLYASSISTANCES)) {
 			Log.d(LOG_TAG, "Short assistances");
 
@@ -229,14 +242,6 @@ public class PlayerPreferencesActivity extends SudoqActivity implements ModelCha
 		Profile.getInstance().deleteProfile();
 	}
 
-	/*
-	 * {@inheritDoc}
-	 */
-	// @Override
-	// public void onConfigurationChanged(Configuration newConfig) {
-	// super.onConfigurationChanged(newConfig);
-	// setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-	// }
 
 	public void onModelChanged(Profile obj) {
 		this.refreshValues();
@@ -244,18 +249,10 @@ public class PlayerPreferencesActivity extends SudoqActivity implements ModelCha
 
 	// ///////////////////////////////////////optionsMenue
 
-	private static final int MENU_SWITCH_PROFILE = 0;
-	private static final int MENU_CREATE_PROFILE = 1;
-	private static final int MENU_DELETE_PROFILE = 2;
-
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		if (createProfile)
-			menu.clear();
-
-		// onPrepareOptionsMenu(menu);
-
+	public boolean onCreateOptionsMenu(Menu menu) {		
+		MenuInflater inflater = getSupportMenuInflater();
+		inflater.inflate(R.menu.action_bar_player_preferences, menu);    
 		return true;
 	}
 
@@ -268,30 +265,30 @@ public class PlayerPreferencesActivity extends SudoqActivity implements ModelCha
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		super.onOptionsItemSelected(item);
-		if (item.getItemId() == MENU_SWITCH_PROFILE) {
-			switchToProfileList(null);
-		} else if (item.getItemId() == MENU_CREATE_PROFILE) {
+		switch (item.getItemId()) {
+		case R.id.action_new_profile:
 			createProfile(null);
-		} else if (item.getItemId() == MENU_DELETE_PROFILE) {
+			return true;
+		case R.id.action_delete_profile:
 			deleteProfile(null);
+			return true;
+		case R.id.action_switch_profile:
+			switchToProfileList(null);
+			return true;	
+		default:
+			return super.onOptionsItemSelected(item);
 		}
-		return true;
 	}
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
-		if (createProfile) {
-			menu.clear();
-			
-			menu.add(0, MENU_CREATE_PROFILE, 0, getString(R.string.profile_preference_title_createprofile));
-			if (Profile.getInstance().getNumberOfAvailableProfiles() > 1) {
-				menu.add(0, MENU_DELETE_PROFILE, 0, getString(R.string.profile_preference_title_deleteprofile));
-				menu.add(0, MENU_SWITCH_PROFILE, 0, getString(R.string.profile_preference_title_switchprofile));
-			}
-		}
-		super.prepareOptionsMenu(menu);
+		
+		boolean multipleProfiles=Profile.getInstance().getNumberOfAvailableProfiles() > 1;
+		
+		menu.findItem(R.id.action_delete_profile).setVisible(multipleProfiles);
+		menu.findItem(R.id.action_switch_profile).setVisible(multipleProfiles);
+		
 		return true;
 	}
 }

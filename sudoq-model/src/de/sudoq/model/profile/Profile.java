@@ -29,6 +29,8 @@ import de.sudoq.model.xml.Xmlable;
 public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 	/** Attributes */
 
+	public  static final int    INITIAL_TIME_RECORD = 5999;
+
 	private static final String ID = "id";
 	private static final String NAME = "name";
 	private static final String CURRENT = "current";
@@ -233,7 +235,7 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 		this.assistances = new AssistanceSet();
 		this.assistances.setAssistance(Assistances.markRowColumn);
 		this.statistics = new int[Statistics.values().length];
-		this.statistics[Statistics.fastestSolvingTime.ordinal()] = 5999;
+		this.statistics[Statistics.fastestSolvingTime.ordinal()] = INITIAL_TIME_RECORD;
 		notifyListeners(this);
 	}
 

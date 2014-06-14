@@ -24,10 +24,11 @@ public class ActionTreeIteratorTests {
 		ActionFactory factory = new SolveActionFactory();
 		Field field = new Field(-1, 1);
 
-		ActionTreeElement ate1 = at.add(factory.createAction(1, field), null);
-		ActionTreeElement ate2 = at.add(factory.createAction(1, field), ate1);
+		ActionTreeElement ate1 = at.add(factory.createAction(1, field), null); //root element
+		ActionTreeElement ate2 = at.add(factory.createAction(1, field), ate1); //one child
 		at.add(factory.createAction(1, field), ate2);
-		at.add(factory.createAction(1, field), ate2);
+		at.add(factory.createAction(1, field), ate2);//this should not be ignored by the actionTree, cause we've been there already
+		at.add(factory.createAction(2, field), ate2);
 
 		int i = 0;
 		ArrayList<Integer> ids = new ArrayList<Integer>();

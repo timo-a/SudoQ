@@ -9,7 +9,7 @@
     <string name="error_profile_dir_not_found">Erreur! Le dossier Profile n’a pas pu être trouvé!</string>
     <string name="error_sudoku_preference_incomplete">Erreur! Paramètres incomplets!</string>
     <string name="error_gestures_no_library">Gestes non disponibles!</string>
-<!--d--><string name="error_thumbnail_get">Vignette n’a pas pu être créé!</string>
+    <string name="error_thumbnail_get">Vignette n’a pas pu être créé!</string>
     <string name="error_thumbnail_saved">Reçu miniature n’a pas pu être sauvé!</string>
     <string name="error_thumbnail_load">Les vignettes peuvent ne pas être chargé!</string>
     <string name="error_gestures_not_complete">Certains symboles ne sont pas liées à un geste!</string>
@@ -25,13 +25,17 @@
     <!-- Splash -->
     <string name="splash_text">SudoQ se prépare pour la première utilisation</string>
     
-    <!-- Options Menu Entries -->
-    <string name="optionsmenu_tutorial">Tutorial</string>
-<!--d--><string name="optionsmenu_gesture_builder_diggits">Gestes pour les chiffres</string>
-    <string name="optionsmenu_gesture_builder_letters">Gestes pour les lettres</string>
-    <string name="optionsmenu_gesture_builder_flush">Supprimer tous les gestes</string>
-    <string name="optionsmenu_gesture_builder_delete_single">Supprimer geste spécifique</string>
-        
+    
+    <!-- Action Bar Entries -->
+    <string name="action_show_tutorial">Tutorial</string>
+
+    <string name="action_new_profile">Créer un nouveau profil</string>
+    <string name="action_delete_profile">Effacer ce profil</string>
+    <string name="action_switch_profile">Changer de profil</string>
+    <string name="action_delete_all_gestures">Supprimer tous les gestes</string>
+    <string name="action_delete_single_gesture">Supprimer geste spécifique</string>
+
+
     <!-- Dialogs -->
     <string name="dialog_yes">Oui</string>
     <string name="dialog_no">Non</string>
@@ -67,12 +71,9 @@
     <string name="profile_preference_title_assistance_allowSolveRandomField">Résoudre une case au hasard</string>
     <string name="profile_preference_title_assistance_allowGetHint">Conseils</string>
     <string name="profile_preference_title_assistance_autoAdjustNotes">Adapter les remarques automatiquement</string>
-    <string name="profile_preference_title_switchprofile">Changer de profil</string>
     <string name="profile_preference_title_profile">Profil</string>
-    <string name="profile_preference_title_createprofile">Créer un nouveau profil</string>
-    <string name="profile_preference_title_deleteprofile">Effacer ce profil</string>
     <string name="profile_preference_button_statistics">Statistiques</string>
-<!--d--><string name="profile_preference_button_gesture_builder">définir des gestes</string>
+    <string name="profile_preference_button_gesture_builder">définir des gestes</string>
 	<string name="profile_preference_button_save">Sauvegarder</string>
     <string name="profile_preference_new_profile">nouveau profil</string>
 
@@ -87,6 +88,11 @@
     <string name="sf_mainmenu_continue">Continuer</string>
     <string name="sf_mainmenu_load_sudoku">Charger un sudoku</string>
     <string name="sf_mainmenu_profile">Profil</string>
+    
+
+    <!-- GestureBuilder -->
+    <string name="gesture_builder_title">définir des gestes</string>
+    <string name="gesture_builder_define_gesture">Dessinez le geste désiré</string>
     
     <!-- GameTypeSelection Buttons -->
     <string name="sf_gametypeselection_local_sudoku">Sudoku</string>

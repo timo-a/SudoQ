@@ -1,6 +1,7 @@
 package de.sudoq.test;
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.jayway.android.robotium.solo.Solo;
 
@@ -15,19 +16,21 @@ import de.sudoq.controller.sudoku.SudokuActivity;
 public class MenuTest extends SudoqTestCase {
 
 	public void testMenus() {
+		Log.d("debug", "mark0");
 		Activity a = getActivity();
 
 		String continueSudoku = a.getString(R.string.sf_mainmenu_continue);
-		String newSudoku = a.getString(R.string.sf_mainmenu_new_sudoku);
-		String loadSudoku = a.getString(R.string.sf_mainmenu_load_sudoku);
-		String profile = a.getString(R.string.sf_mainmenu_profile);
-		String statistics = a.getString(R.string.profile_preference_button_statistics);
+		String newSudoku      = a.getString(R.string.sf_mainmenu_new_sudoku);
+		String loadSudoku     = a.getString(R.string.sf_mainmenu_load_sudoku);
+		String profile        = a.getString(R.string.sf_mainmenu_profile);
+		String statistics     = a.getString(R.string.profile_preference_button_statistics);
 
+		solo.sleep(2000);
 		assertTrue(solo.searchText(continueSudoku));
 		assertTrue(solo.searchText(newSudoku));
 		assertTrue(solo.searchText(loadSudoku));
 		assertTrue(solo.searchText(profile));
-
+		
 		solo.clickOnText(newSudoku);
 		solo.assertCurrentActivity("should be sudokupreferences", SudokuPreferencesActivity.class);
 		assertTrue(solo.searchText(a.getString(R.string.complexity_easy)));
@@ -40,21 +43,25 @@ public class MenuTest extends SudoqTestCase {
 		solo.assertCurrentActivity("should be sudokuloading", SudokuLoadingActivity.class);
 		solo.goBack();
 
+		Log.d("debug", "mark1");
 		solo.clickOnText(profile);
 		solo.assertCurrentActivity("should be preferences", PlayerPreferencesActivity.class);
 
 		solo.clickOnText(statistics);
 		solo.assertCurrentActivity("should be statistics", StatisticsActivity.class);
 		solo.goBack();
-
+		Log.d("debug", "mark2");
+		
 		/* AT 140 */
 		solo.sendKey(Solo.MENU);
-		solo.clickOnText(a.getString(R.string.profile_preference_title_switchprofile));
-		assertTrue(solo.searchText(a.getString(R.string.profile_preference_title_switchprofile)));
+		solo.clickOnText(a.getString(R.string.action_switch_profile));
+		Log.d("debug", "mark3");
+		assertTrue(solo.searchText(a.getString(R.string.action_switch_profile)));
 		solo.goBack();
 	}
 
 	public void testAssistanceBeforeSudoku() {
+		solo.sleep(2000);
 		solo.clickOnText(solo.getCurrentActivity().getString(R.string.sf_mainmenu_new_sudoku));
 		solo.assertCurrentActivity("should be sudokupreferences", SudokuPreferencesActivity.class);
 
@@ -76,17 +83,22 @@ public class MenuTest extends SudoqTestCase {
 	/* AT 150 and AT 160 */
 	public void testCreateProfile() {
 		Activity a = getActivity();
+		solo.sleep(2000);
+		/* go to Profile */
 		solo.clickOnText(a.getString(R.string.sf_mainmenu_profile));
 		solo.assertCurrentActivity("should be preferences", PlayerPreferencesActivity.class);
+		
 		// create new profile
 		solo.sendKey(Solo.MENU);
-		solo.clickOnText(solo.getCurrentActivity().getString(R.string.profile_preference_title_createprofile));
+		solo.clickOnText(solo.getCurrentActivity().getString(R.string.action_new_profile));
+		
 		solo.clickOnText(a.getString(R.string.profile_preference_title_gesture));
 		solo.goBack();
 		solo.clickOnText(a.getString(R.string.sf_mainmenu_profile));
 		assertTrue(solo.isCheckBoxChecked(a.getString(R.string.profile_preference_title_gesture)));
 		solo.sendKey(Solo.MENU);
-		solo.clickOnText(a.getString(R.string.profile_preference_title_deleteprofile));
+		solo.clickOnText(a.getString(R.string.action_delete_profile));
+		solo.goBack();
 	}
 
 	public void testSudokuLoading() {
@@ -116,7 +128,7 @@ public class MenuTest extends SudoqTestCase {
 	public void testTutorial() {
 		Activity a = solo.getCurrentActivity();
 		solo.sendKey(Solo.MENU);
-		solo.clickOnText(a.getString(R.string.optionsmenu_tutorial));
+		solo.clickOnText(a.getString(R.string.action_show_tutorial));
 		solo.clickOnText(a.getString(R.string.sf_tutorial_sudoku_title));
 		solo.clickOnText(a.getString(R.string.sf_tutorial_assistances_title));
 		solo.clickOnText(a.getString(R.string.sf_tutorial_action_title));

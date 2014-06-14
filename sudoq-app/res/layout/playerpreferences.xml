@@ -13,18 +13,7 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical" >
-	    
-	    <TextView 
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:focusableInTouchMode="true" 
-	        android:focusable="true"
-	        android:gravity="center"
-	        android:layout_margin="10dp"
-	        android:textAppearance="@android:style/TextAppearance.Large" 
-	        android:text="@string/profile_preference_title"
-		    android:textColor="@android:color/black" />
-	    
+	    	    
 	    <Button
 	        android:id="@+id/button_showStatistics"
 	        android:layout_width="fill_parent"
@@ -40,23 +29,8 @@
 	        android:layout_margin="5dp"
 	        android:onClick="openGestureBuilder"
 	        android:text="@string/profile_preference_button_gesture_builder" />
-	    <!--
-	    <Button
-	        android:id="@+id/button_switchProfile"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_margin="5dp"
-	        android:onClick="switchToProfileList"
-	        android:text="@string/profile_preference_title_switchprofile" />
 	    
-	    <Button
-	        android:id="@+id/button_createProfile"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_margin="5dp"
-	        android:onClick="createProfile"
-	        android:text="@string/profile_preference_title_createprofile" />
-	    -->
+	    
 	    <LinearLayout
 	        android:id="@+id/playerpreferences_layout_profilename"
 	        android:layout_width="fill_parent"
@@ -122,13 +96,6 @@
 	        android:layout_height="wrap_content" 
 	        android:textColor="@android:color/black"/>
 	    
-	    <!-- Button
-	        android:id="@+id/button_deleteProfile"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_margin="5dp"
-	        android:onClick="deleteProfile"
-	        android:text="@string/profile_preference_title_deleteprofile" /-->
 	    
 	     <Button
 	        android:id="@+id/button_saveChanges"

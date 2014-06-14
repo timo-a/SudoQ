@@ -38,7 +38,7 @@
         	android:layout_height="40dp"
         	android:layout_gravity="center_vertical"
         	android:layout_margin="5dp"
-        	android:src="@drawable/action_tree" />
+        	android:src="@drawable/action_tree"/>
          
      	<TextView
 	        android:layout_width="wrap_content"
@@ -49,7 +49,7 @@
     </LinearLayout>
     
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width= "wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:text="@string/sf_tutorial_action_description3" />
@@ -59,15 +59,16 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
      	
-        <RelativeLayout 
+        <ImageView 
             android:id="@+id/tutorial_state"
-     	    android:layout_width="68px"
-        	android:layout_height="68px"
+     	    android:layout_width ="40dp"
+        	android:layout_height="40dp"
         	android:layout_gravity="center_vertical"
-        	android:layout_margin="5dp" />
+        	android:layout_margin="5dp"
+        	android:src="@drawable/tutorial_state" />
          
      	<TextView
-	        android:layout_width="wrap_content"
+	        android:layout_width ="wrap_content"
         	android:layout_height="wrap_content"
         	android:layout_margin="5dp"
         	android:text="@string/sf_tutorial_action_state" />
@@ -79,12 +80,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
      	
-        <RelativeLayout 
-            android:id="@+id/tutorial_bookmark"
-     	    android:layout_width="68px"
-        	android:layout_height="68px"
+        <ImageView 
+            android:layout_width="40dp"
+        	android:layout_height="40dp"
         	android:layout_gravity="center_vertical"
-        	android:layout_margin="5dp" />
+        	android:layout_margin="5dp" 
+        	android:src="@drawable/tutorial_bookmark" />
          
      	<TextView
 	        android:layout_width="wrap_content"
@@ -99,12 +100,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
      	
-        <RelativeLayout 
-            android:id="@+id/tutorial_current_state"
-     	    android:layout_width="68px"
-        	android:layout_height="68px"
+        <ImageView
+     	    android:layout_width="40dp"
+        	android:layout_height="40dp"
         	android:layout_gravity="center_vertical"
-        	android:layout_margin="5dp" />
+        	android:layout_margin="5dp"
+        	android:src="@drawable/tutorial_current_state" />
          
      	<TextView
 	        android:layout_width="wrap_content"
@@ -119,12 +120,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
      	
-        <RelativeLayout 
-            android:id="@+id/tutorial_branching"
-     	    android:layout_width="68px"
-        	android:layout_height="68px"
+        <ImageView 
+     	    android:layout_width="40dp"
+        	android:layout_height="40dp"
         	android:layout_gravity="center_vertical"
-        	android:layout_margin="5dp" />
+        	android:layout_margin="5dp" 
+        	android:src="@drawable/tutorial_branching" />
          
      	<TextView
 	        android:layout_width="wrap_content"

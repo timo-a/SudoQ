@@ -15,7 +15,7 @@
         android:layout_height="fill_parent"
         android:orientation="vertical" >
 
-        <LinearLayout
+        <!--LinearLayout
             android:id="@+id/sudoku_time_border"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
                 android:gravity="right"
                 android:textColor="@android:color/white"
                 android:textSize="10dp" />
-        </LinearLayout>
+        </LinearLayout-->
 
         <LinearLayout
             android:id="@+id/sudoku_border"
@@ -192,6 +192,7 @@
 	            android:layout_width="wrap_content"
         		android:layout_height="wrap_content"
         		android:layout_weight="1.0"
+        		android:background="@android:drawable/btn_default"
         		android:onClick="onClick"
         		android:text="@string/sf_sudoku_button_bookmark" />
 	        
@@ -200,6 +201,7 @@
 	            android:layout_width="wrap_content"
         		android:layout_height="wrap_content"
         		android:layout_weight="1.0"
+        		android:background="@android:drawable/btn_default"
         		android:onClick="onClick"
         		android:text="@string/sf_sudoku_button_close" />
 	        

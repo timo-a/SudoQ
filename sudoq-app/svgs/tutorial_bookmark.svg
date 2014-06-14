@@ -1,0 +1,11 @@
+<svg width="72" height="72" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+ <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
+
+ <g>
+  <title>Layer 1</title>
+  <!--rect fill="#FFAD00" stroke="#000000" stroke-width="0" x="24" y="24" width="24" height="24" id="rechteck"/>
+  <circle fill="none" stroke="#FF4B00" stroke-width="6" cx="36" cy="36" r="32" id="kreis_rot"/>
+  <circle fill="none" stroke="#FFAD00" stroke-width="8" cx="36" cy="36" r="22" id="kreis_gelb"/-->
+  <circle id="kreis_gelb_klein" r="16" cy="36" cx="36" stroke-width="0" stroke="#000000" fill="#FFAD00"/>
+ </g>
+</svg>

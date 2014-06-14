@@ -7,49 +7,84 @@
  */
 package de.sudoq.controller.tutorial;
 
-import android.app.TabActivity;
-import android.content.Intent;
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.Tab;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+
+import android.content.res.Configuration;
+import android.graphics.drawable.GradientDrawable.Orientation;
 import android.os.Bundle;
-import android.widget.TabHost;
-import android.widget.TabHost.TabSpec;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.view.Window;
 import de.sudoq.R;
 
-public class TutorialActivity extends TabActivity {
+public class TutorialActivity extends SherlockFragmentActivity {
 
+	private ActionBar.Tab createTab(int text, int icon){
+		ActionBar.Tab tab = getSupportActionBar().newTab();
+		if( getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE )
+			tab.setText(text);
+		else
+			tab.setIcon(icon);
+		
+		tab.setTabListener(new MyTabListener());
+		return tab;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	public void onCreate(Bundle savedInstanceState) {
+		//this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.tutorial);
 
-		TabHost tabHost = getTabHost();
+		ActionBar bar = getSupportActionBar();
+		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		
+		/* sudoku tab */
+		bar.addTab(createTab(R.string.sf_tutorial_sudoku_title, R.drawable.sudoku_tutorial));
 
-		// Tab for sudokus
-		TabSpec sudokuspec = tabHost.newTabSpec(getString(R.string.sf_tutorial_sudoku_title));
-		// setting Title and Icon for the Tab
-		sudokuspec.setIndicator(getString(R.string.sf_tutorial_sudoku_title), getResources().getDrawable(R.drawable.sudoku_tutorial));
-		Intent sudokuIntent = new Intent(this, TutorialSudokuActivity.class);
-		sudokuspec.setContent(sudokuIntent);
+		/* assistances tab */
+		bar.addTab(createTab(R.string.sf_tutorial_assistances_title, R.drawable.help_tutorial));
 
-		// Tab for assistances
-		TabSpec assistancesspec = tabHost.newTabSpec(getString(R.string.sf_tutorial_assistances_title));
-		// setting Title and Icon for the Tab
-		assistancesspec.setIndicator(getString(R.string.sf_tutorial_assistances_title), getResources().getDrawable(R.drawable.help_tutorial));
-		Intent assistancesIntent = new Intent(this, TutorialAssistancesActivity.class);
-		assistancesspec.setContent(assistancesIntent);
+		/* action tree tab */
+		bar.addTab(createTab(R.string.sf_tutorial_action_title, R.drawable.action_tree_tutorial));
+		
+		getSupportActionBar().setDisplayShowHomeEnabled(false);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-		// Tab for actiontree
-		TabSpec actiontreespec = tabHost.newTabSpec(getString(R.string.sf_tutorial_action_title));
-		// setting Title and Icon for the Tab
-		actiontreespec.setIndicator(getString(R.string.sf_tutorial_action_title), getResources().getDrawable(R.drawable.action_tree_tutorial));
-		Intent actiontreeIntent = new Intent(this, TutorialActionTreeActivity.class);
-		actiontreespec.setContent(actiontreeIntent);
-
-		// Adding all TabSpec to TabHost
-		tabHost.addTab(sudokuspec); // Adding sudoku tab
-		tabHost.addTab(assistancesspec); // Adding assistances tab
-		tabHost.addTab(actiontreespec); // Adding actiontree tab
 	}
 
+	private class MyTabListener implements ActionBar.TabListener
+	{
+		@Override
+		public void onTabSelected(Tab tab, FragmentTransaction ft) {
+			Fragment frag;
+			switch (tab.getPosition()){
+			case 0:
+				frag = new FragmentSudoku();
+				break;
+			
+			case 1:
+				frag = new FragmentAssistances();
+				break;
+			
+			default:
+				frag = new FragmentActionTree();
+			}
+			ft.replace(android.R.id.content, frag);
+			
+		}
+		@Override
+		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+			// TODO Auto-generated method stub
+		}
+		@Override
+		public void onTabReselected(Tab tab, FragmentTransaction ft) {
+			// TODO Auto-generated method stub
+		}
+	}
 }

@@ -8,7 +8,6 @@
 package de.sudoq.controller.menus;
 
 import java.util.ArrayList;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -51,7 +50,7 @@ public class ProfileListActivity extends SudoqListActivity implements OnItemClic
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		this.setTitle(this.getString(R.string.profile_preference_title_switchprofile));
+		this.setTitle(this.getString(R.string.action_switch_profile));
 
 		profileIds = Profile.getInstance().getProfilesIdList();
 		profileNames = Profile.getInstance().getProfilesNameList();

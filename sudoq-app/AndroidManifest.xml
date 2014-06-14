@@ -5,8 +5,8 @@
 <!-- This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.sudoq"
-    android:versionCode="4"
-    android:versionName="1.0.4"
+    android:versionCode="7"
+    android:versionName="1.0.5"
     android:installLocation="auto" >
 
     <uses-sdk android:minSdkVersion="8" />
@@ -14,23 +14,29 @@
     <application
         android:icon="@drawable/launcher"
         android:label="@string/app_name" android:allowClearUserData="true"
-        android:debuggable="true">
-        <activity android:name=".controller.menus.SplashActivity" android:noHistory="true" android:configChanges="orientation">
+        android:theme="@style/Theme.Sherlock.Light.DarkActionBar">
+        <activity android:name=".controller.menus.SplashActivity" android:noHistory="true" 
+                                                                  android:configChanges="orientation"
+                                                                  android:windowActionBar="false" 
+                                                                  android:theme="@style/Theme.Sherlock.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"></action>
                 <category android:name="android.intent.category.LAUNCHER"></category>
             </intent-filter>
         </activity>
+        <activity android:name=".controller.SudoqActivitySherlock" ></activity>
         <activity android:name=".controller.menus.MainActivity"></activity>
         <activity android:name=".controller.menus.GameTypeSelectionActivity"></activity>
-        <activity android:name=".controller.menus.GestureBuilder"></activity>
+        <activity android:name=".controller.menus.GestureBuilder" android:label="@string/gesture_builder_title"></activity>
         <activity android:name=".controller.sudoku.SudokuActivity"></activity>
-        <activity android:name=".controller.menus.SudokuLoadingActivity" android:noHistory="true" android:configChanges="orientation"></activity>
-        <activity android:name=".controller.menus.SudokuPreferencesActivity" ></activity>
-        <activity android:name=".controller.menus.AssistancesPreferencesActivity"></activity>
-        <activity android:name=".controller.menus.PlayerPreferencesActivity"></activity>
-        <activity android:name=".controller.menus.StatisticsActivity" android:configChanges="orientation"></activity>
-        <activity android:name=".controller.menus.ProfileListActivity" android:theme="@android:style/Theme.Dialog"></activity>
+        <activity android:name=".controller.menus.SudokuLoadingActivity"     android:noHistory="true" 
+                                                                             android:configChanges="orientation"></activity>
+        <activity android:name=".controller.menus.SudokuPreferencesActivity" android:label="@string/title_sudokupreferences"></activity>
+        <activity android:name=".controller.menus.AssistancesPreferencesActivity" android:label="@string/title_sudokupreferences"></activity>
+        <activity android:name=".controller.menus.PlayerPreferencesActivity" android:label="@string/profile_preference_title"
+                                                                             android:windowSoftInputMode="stateHidden"></activity>
+        <activity android:name=".controller.menus.StatisticsActivity"  android:label="@string/statistics_title"></activity>
+        <activity android:name=".controller.menus.ProfileListActivity" android:theme="@android:style/Theme.Dialog" ></activity>
         <activity android:name=".controller.tutorial.TutorialActivity"></activity>
         <activity android:name=".controller.tutorial.TutorialSudokuActivity"></activity>
         <activity android:name=".controller.tutorial.TutorialAssistancesActivity"></activity>

@@ -13,10 +13,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Set;
+
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -42,7 +43,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import de.sudoq.R;
-import de.sudoq.controller.SudoqActivity;
+import de.sudoq.controller.SudoqActivitySherlock;
 import de.sudoq.model.actionTree.ActionTreeElement;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.game.Assistances;
@@ -61,7 +62,7 @@ import de.sudoq.view.VirtualKeyboardLayout;
  * Spielfeld zu reagieren. Die Klasse wird außerdem benutzt um zu verwalten,
  * welche Navigationselemente dem Nutzer angezeigt werden.
  */
-public class SudokuActivity extends SudoqActivity implements OnClickListener, ActionListener, ActionTreeNavListener {
+public class SudokuActivity extends SudoqActivitySherlock implements OnClickListener, ActionListener, ActionTreeNavListener {
 
 	/** Attributes */
 
@@ -153,11 +154,6 @@ public class SudokuActivity extends SudoqActivity implements OnClickListener, Ac
 	private boolean actionTreeShown;
 
 	/**
-	 * Die Anzeige der Zeit
-	 */
-	private TextView timeView;
-
-	/**
 	 * Der Handler für die Zeit
 	 */
 	private final Handler timeHandler = new Handler();
@@ -173,7 +169,9 @@ public class SudokuActivity extends SudoqActivity implements OnClickListener, Ac
 	private UserInteractionMediator mediator;
 
 	private String[] currentSymbolSet;
-
+	
+	/** for time. YES IT IS USED!*/
+	private Menu mMenu;
 	/** Methods */
 
 	/**
@@ -200,6 +198,7 @@ public class SudokuActivity extends SudoqActivity implements OnClickListener, Ac
 		}
 
 		if (game != null) {
+			/* Determine how many numbers are needed. 1-9 or 1-16 ? */
 			switch (this.game.getSudoku().getSudokuType().getNumberOfSymbols()) {
 			case 4:
 				Symbol.createSymbol(Symbol.MAPPING_NUMBERS_FOUR);
@@ -331,57 +330,63 @@ public class SudokuActivity extends SudoqActivity implements OnClickListener, Ac
 	 * Setzt den Text für Typ und Schwierigkeit des aktuellen Sudokus.
 	 */
 	private void setTypeText() {
-		TextView type = (TextView) findViewById(R.id.sudoku_type);
-
+		
+		int t,st;
 		switch (this.game.getSudoku().getSudokuType().getEnumType()) {
 		case HyperSudoku:
-			type.append(getString(R.string.sudoku_type_hyper));
+			t = R.string.sudoku_type_hyper;
 			break;
 		case samurai:
-			type.append(getString(R.string.sudoku_type_samurai));
+			t = R.string.sudoku_type_samurai;
 			break;
 		case squigglya:
-			type.append(getString(R.string.sudoku_type_squiggly_a_9x9));
+			t = R.string.sudoku_type_squiggly_a_9x9;
 			break;
 		case squigglyb:
-			type.append(getString(R.string.sudoku_type_squiggly_b_9x9));
+			t = R.string.sudoku_type_squiggly_b_9x9;
 			break;
 		case stairstep:
-			type.append(getString(R.string.sudoku_type_stairstep_9x9));
+			t = R.string.sudoku_type_stairstep_9x9;
 			break;
 		case standard16x16:
-			type.append(getString(R.string.sudoku_type_standard_16x16));
+			t = R.string.sudoku_type_standard_16x16;
 			break;
 		case standard4x4:
-			type.append(getString(R.string.sudoku_type_standard_4x4));
+			t = R.string.sudoku_type_standard_4x4;
 			break;
 		case standard6x6:
-			type.append(getString(R.string.sudoku_type_standard_6x6));
+			t = R.string.sudoku_type_standard_6x6;
 			break;
 		case standard9x9:
-			type.append(getString(R.string.sudoku_type_standard_9x9));
+			t = R.string.sudoku_type_standard_9x9;
 			break;
 		case Xsudoku:
-			type.append(getString(R.string.sudoku_type_xsudoku));
+			t = R.string.sudoku_type_xsudoku;
 			break;
+		default:
+			t = R.string.sudoku_type_xsudoku;//so that compiler shuts up about t not neccessarily being initialized
 		}
 
-		type.append(", ");
-
+		
 		switch (this.game.getSudoku().getComplexity()) {
-		case difficult:
-			type.append(getString(R.string.complexity_difficult));
-			break;
 		case easy:
-			type.append(getString(R.string.complexity_easy));
-			break;
-		case infernal:
-			type.append(getString(R.string.complexity_infernal));
+			st = R.string.complexity_easy;
 			break;
 		case medium:
-			type.append(getString(R.string.complexity_medium));
+			st = R.string.complexity_medium;
+			break;	
+		case difficult:
+			st = R.string.complexity_difficult;
 			break;
+		case infernal:
+			st = R.string.complexity_infernal;
+			break;
+		default:
+			st= R.string.complexity_infernal;//s.o.
 		}
+		ActionBar ab = getSupportActionBar();
+		ab.setTitle(getString(t));
+		ab.setSubtitle(getString(st));
 	}
 
 	/**
@@ -418,7 +423,7 @@ public class SudokuActivity extends SudoqActivity implements OnClickListener, Ac
 		}
 
 		this.gestureOverlay = new GestureOverlayView(this);
-		LayoutParams gestureLayoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		LayoutParams gestureLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		this.gestureOverlay.setLayoutParams(gestureLayoutParams);
 		this.gestureOverlay.setBackgroundColor(Color.BLACK);
 		this.gestureOverlay.getBackground().setAlpha(127);
@@ -432,9 +437,7 @@ public class SudokuActivity extends SudoqActivity implements OnClickListener, Ac
 	 * Erstellt die Views und Buttons für diese Activity
 	 */
 	private void inflateViewAndButtons() {
-		this.timeView = (TextView) findViewById(R.id.sudoku_time);
-		timeView.setText(getGameTimeString() + " (+ " + getAssistancesTimeString() + ")");
-
+		
 		this.sudokuScrollView = (FullScrollLayout) findViewById(R.id.sudoku_field);
 		this.sudokuView = new SudokuLayout(this);
 		Log.d(LOG_TAG, "Inflated sudoku layout");
@@ -449,8 +452,8 @@ public class SudokuActivity extends SudoqActivity implements OnClickListener, Ac
 		Buttons.bookmarkButton = (Button) findViewById(R.id.sudoku_action_tree_button_bookmark);
 		Buttons.closeButton = (Button) findViewById(R.id.sudoku_action_tree_button_close);
 
-		LinearLayout currentControlsView = (LinearLayout) findViewById(R.id.sudoku_time_border);
-		FieldViewPainter.getInstance().setMarking(currentControlsView, FieldViewStates.CONTROLS);
+		LinearLayout currentControlsView;/* = (LinearLayout) findViewById(R.id.sudoku_time_border);
+		FieldViewPainter.getInstance().setMarking(currentControlsView, FieldViewStates.CONTROLS);*/
 		currentControlsView = (LinearLayout) findViewById(R.id.sudoku_border);
 		FieldViewPainter.getInstance().setMarking(currentControlsView, FieldViewStates.SUDOKU);
 		currentControlsView = (LinearLayout) findViewById(R.id.controls);
@@ -753,21 +756,31 @@ public class SudokuActivity extends SudoqActivity implements OnClickListener, Ac
 	 * @param time the time to format in seconds
 	 * @return a string representing the specified time in format "D..D HH:mm:ss"
 	 */
-	private String getTimeString(int time) {
-		Date res = new Date();
-		res.setMinutes(time / 60);
-		res.setSeconds(time % 60);
-		res.setHours(time / 3600);
+	public static String getTimeString(int time) {
 		
-		StringBuilder pattern = new StringBuilder("mm:ss");
+		int seconds = time % 60;
+		time /= 60;
 		
-		if(res.getHours() > 0){
-				pattern.insert(0, "H:");
-				if(res.getHours() >= 10)
-					pattern.insert(0,"H");
+		int minutes = time % 60;
+		time /= 60;
+		
+		int hours   = time % 24;
+		
+		int days = time /= 60;
+		
+		StringBuilder pattern = new StringBuilder("");
+		
+		if(days > 0)
+			pattern.append(days + " ");
+		if(hours > 0){
+			//padding only if days entry
+			if(days > 0 && hours > 9)
+				pattern.append('0');
+			pattern.append(hours+":");
 		}
+		pattern.append(String.format("%02d:%02d", minutes, seconds));
 		
-		return new SimpleDateFormat(pattern.toString(), Locale.US).format(res);
+		return pattern.toString();
 	}
 
 	/**
@@ -809,14 +822,51 @@ public class SudokuActivity extends SudoqActivity implements OnClickListener, Ac
 		sb.append(getString(R.string.dialog_won_score) + ": " + game.getScore());
 		return sb.toString();
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {		
+		MenuInflater inflater = getSupportMenuInflater();
+		inflater.inflate(R.menu.action_bar_sudoku, menu);    
+		return true;
+	}
 
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		mMenu = menu;
+		return super.onPrepareOptionsMenu(menu);
+	}
+	
 	/**
 	 * Das Update-Runnable für die Zeit
 	 */
 	private Runnable timeUpdate = new Runnable() {
+		private String offset = "";
 		public void run() {
 			game.addTime(1);
-			timeView.setText(getGameTimeString() + " (+ " + getAssistancesTimeString() + ")");
+			
+			//getSupportActionBar().
+			final TextView timeView    = (TextView) findViewById (R.id.time);
+			
+			if(timeView != null ) {
+				
+				/* for easy formatting, we display both: time and penalty on one element separated by \n
+				 * this is not  perfect since we padd with whitespace and the font is not 'mono-style'(=not all letters same width)
+				 * solution would be: create custom xml for action bar, but as of now I see no way how to make this easy. 
+				 * to save computing time we cache the offset*/
+				String t = getGameTimeString();
+				String p = " (+ " + getAssistancesTimeString() + ")";
+				int d = t.length() - p.length();
+				while(offset.length() > Math.abs(d)){offset = offset.substring(1);}
+				while(offset.length() < Math.abs(d)){offset = " " + offset;}
+				if(d > 0){
+					p = offset + p;	 
+				}
+				if(d < 0){
+					t = offset + t;
+				}
+				timeView.setText(t + "\n" + p);
+			}
+			
 			timeHandler.postDelayed(this, 1000);
 		}
 	};

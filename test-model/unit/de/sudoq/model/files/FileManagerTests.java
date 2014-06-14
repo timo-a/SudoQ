@@ -56,6 +56,7 @@ public class FileManagerTests {
 		assertTrue(profiles.exists());
 		assertTrue(FileManager.getProfilesDir().getAbsolutePath().equals(profiles.getAbsolutePath()));
 		assertTrue(FileManager.getSudokuDir().getAbsolutePath().equals(sudokus.getAbsolutePath()));
+		File t = sudokus;
 		assertTrue(sudokus.list().length > 0);
 	}
 
