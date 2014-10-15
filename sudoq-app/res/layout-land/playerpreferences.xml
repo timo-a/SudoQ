@@ -15,9 +15,9 @@
 	    android:orientation="vertical" >
 	    
 	    <LinearLayout android:layout_width="fill_parent"
-	                android:layout_height="wrap_content"
-	                android:orientation="horizontal" 
-	                android:weightSum="1.0">
+	                  android:layout_height="wrap_content"
+	                  android:orientation="horizontal" 
+	                  android:weightSum="1.0">
 	    
 	    	<Button
 		        android:id="@+id/button_showStatistics"
@@ -62,47 +62,70 @@
 	            android:layout_weight="0.12" />
 	
 	    </LinearLayout>
+		<!-- makes 2 collumns -->
+		<LinearLayout android:layout_width="fill_parent"
+	                  android:layout_height="wrap_content"
+	                  android:orientation="horizontal" 
+	                  android:weightSum="1.0">
+	    
+		    <LinearLayout
+			    android:layout_width="0dp"
+			    android:layout_weight="0.5"
+	    		android:layout_height="wrap_content"
+	    		android:orientation="vertical" >
 	
-	    <CheckBox
-	        android:id="@+id/checkbox_gesture"
-	        android:text="@string/profile_preference_title_gesture"
-	   		android:layout_margin="5dp"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content" 
-	        android:textColor="@android:color/black"/>
+				<CheckBox
+			        android:id="@+id/checkbox_gesture"
+			        android:text="@string/profile_preference_title_gesture"
+	   				android:layout_margin="5dp"
+	        		android:layout_width="wrap_content"
+		        	android:layout_height="wrap_content" 
+		        	android:textColor="@android:color/black"/>
 	    
-	    <CheckBox
-	        android:id="@+id/checkbox_autoAdjustNotes"
-	        android:text="@string/profile_preference_title_assistance_autoAdjustNotes"
-	   		android:layout_margin="5dp"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content" 
-	        android:textColor="@android:color/black"/>
+	    		<CheckBox
+			        android:id="@+id/checkbox_autoAdjustNotes"
+			        android:text="@string/profile_preference_title_assistance_autoAdjustNotes"
+	   				android:layout_margin="5dp"
+			        android:layout_width="wrap_content"
+	    		    android:layout_height="wrap_content" 
+			        android:textColor="@android:color/black"/>
 	    
-	    <CheckBox
-	        android:id="@+id/checkbox_markRowColumn"
-	        android:text="@string/profile_preference_title_assistance_markRowColumn"
-	   		android:layout_margin="5dp"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content" 
-	        android:textColor="@android:color/black"/>
+	    		<CheckBox
+			        android:id="@+id/checkbox_markRowColumn"
+			        android:text="@string/profile_preference_title_assistance_markRowColumn"
+	   				android:layout_margin="5dp"
+			        android:layout_width="wrap_content"
+	        		android:layout_height="wrap_content" 
+	        		android:textColor="@android:color/black"/>
+		    
+		    </LinearLayout>
 	    
-	    <CheckBox
-	        android:id="@+id/checkbox_markWrongSymbol"
-	        android:text="@string/profile_preference_title_assistance_markWrongSymbol"
-	   		android:layout_margin="5dp"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content" 
-	        android:textColor="@android:color/black"/>
+		    <LinearLayout
+			    android:layout_width="0dp"
+			    android:layout_weight="0.5"
+	    		android:layout_height="wrap_content"
+	    		android:orientation="vertical" >
+		    	    
 	    
-	    <CheckBox
-	        android:id="@+id/checkbox_restrictCandidates"
-	        android:text="@string/profile_preference_title_assistance_restrictCandidates"
-	   		android:layout_margin="5dp"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content" 
-	        android:textColor="@android:color/black"/>
-	        
+		    	<CheckBox
+		        	android:id="@+id/checkbox_markWrongSymbol"
+			        android:text="@string/profile_preference_title_assistance_markWrongSymbol"
+	   				android:layout_margin="5dp"
+	        		android:layout_width="wrap_content"
+	        		android:layout_height="wrap_content" 
+	        		android:textColor="@android:color/black"/>
+	    
+	    		<CheckBox
+			        android:id="@+id/checkbox_restrictCandidates"
+			        android:text="@string/profile_preference_title_assistance_restrictCandidates"
+	   				android:layout_margin="5dp"
+	        		android:layout_width="wrap_content"
+		        	android:layout_height="wrap_content" 
+		        	android:textColor="@android:color/black"/>
+		    </LinearLayout>
+		    
+		</LinearLayout>
+	    			        
 	    <Button
 	        android:id="@+id/button_saveChanges"
 	        android:layout_width="fill_parent"

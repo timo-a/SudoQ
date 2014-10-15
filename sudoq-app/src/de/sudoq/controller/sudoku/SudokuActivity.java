@@ -174,6 +174,35 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 	private Menu mMenu;
 	/** Methods */
 
+	private void initializeSymbolSet(){
+		switch (this.game.getSudoku().getSudokuType().getNumberOfSymbols()) {
+		case 4:
+			Symbol.createSymbol(Symbol.MAPPING_NUMBERS_FOUR);
+			currentSymbolSet = Symbol.MAPPING_NUMBERS_FOUR;
+			break;
+
+		case 6:
+			Symbol.createSymbol(Symbol.MAPPING_NUMBERS_SIX);
+			currentSymbolSet = Symbol.MAPPING_NUMBERS_SIX;
+			break;
+
+		case 9:
+			Symbol.createSymbol(Symbol.MAPPING_NUMBERS_NINE);
+			currentSymbolSet = Symbol.MAPPING_NUMBERS_NINE;
+			break;
+
+		case 16:
+			Symbol.createSymbol(Symbol.MAPPING_NUMBERS_HEX_LETTERS);
+			currentSymbolSet = Symbol.MAPPING_NUMBERS_HEX_LETTERS;
+			break;
+
+		default:
+			Symbol.createSymbol(Symbol.MAPPING_NUMBERS_HEX_LETTERS);
+			currentSymbolSet = Symbol.MAPPING_NUMBERS_HEX_LETTERS;
+			break;
+		}
+	}
+	
 	/**
 	 * Wird beim ersten Aufruf der Activity aufgerufen. Setzt das Layout der
 	 * Activity und nimmt Initialisierungen vor.
@@ -199,32 +228,7 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 
 		if (game != null) {
 			/* Determine how many numbers are needed. 1-9 or 1-16 ? */
-			switch (this.game.getSudoku().getSudokuType().getNumberOfSymbols()) {
-			case 4:
-				Symbol.createSymbol(Symbol.MAPPING_NUMBERS_FOUR);
-				currentSymbolSet = Symbol.MAPPING_NUMBERS_FOUR;
-				break;
-
-			case 6:
-				Symbol.createSymbol(Symbol.MAPPING_NUMBERS_SIX);
-				currentSymbolSet = Symbol.MAPPING_NUMBERS_SIX;
-				break;
-
-			case 9:
-				Symbol.createSymbol(Symbol.MAPPING_NUMBERS_NINE);
-				currentSymbolSet = Symbol.MAPPING_NUMBERS_NINE;
-				break;
-
-			case 16:
-				Symbol.createSymbol(Symbol.MAPPING_NUMBERS_HEX_LETTERS);
-				currentSymbolSet = Symbol.MAPPING_NUMBERS_HEX_LETTERS;
-				break;
-
-			default:
-				Symbol.createSymbol(Symbol.MAPPING_NUMBERS_HEX_LETTERS);
-				currentSymbolSet = Symbol.MAPPING_NUMBERS_HEX_LETTERS;
-				break;
-			}
+			initializeSymbolSet();
 			setContentView(R.layout.sudoku);
 			this.sudokuController = new SudokuController(this.game, this);
 			this.actionTreeController = new ActionTreeController(this);
@@ -490,12 +494,15 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 		} else if (v == Buttons.actionTreeButton) {
 			toogleActionTree();
 		} else if (v == Buttons.gestureButton) {
+			Profile profile = Profile.getInstance();
 			if (checkGesture()) {
-				Profile.getInstance().setGestureActive(!Profile.getInstance().isGestureActive());
-				v.setSelected(Profile.getInstance().isGestureActive());
+				/* toggle 'gesture active' 
+				 * toggle button icon as well */
+				profile.setGestureActive( !profile.isGestureActive() );
+				v.setSelected(profile.isGestureActive());
 			} else {
-				Profile.getInstance().setGestureActive(false);
-				v.setSelected(false);
+				profile.setGestureActive(false);
+				v.setSelected(           false);
 				Toast.makeText(this, getString(R.string.error_gestures_not_complete), Toast.LENGTH_LONG).show();
 			}
 		} else if (v == Buttons.assistancesButton) {
@@ -520,6 +527,8 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 		updateButtons();
 	}
 
+	/*
+	 * returns whether all Gestures are defined -> Gesture input possible */
 	private boolean checkGesture() {
 		Set<String> gestures = this.gestureStore.getGestureEntries();
 		boolean allGesturesSet = true;
