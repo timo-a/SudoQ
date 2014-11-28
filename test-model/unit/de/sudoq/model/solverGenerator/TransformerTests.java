@@ -10,16 +10,8 @@ import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
-import de.sudoq.model.sudoku.sudokuTypes.HyperSudoku;
-import de.sudoq.model.sudoku.sudokuTypes.SamuraiSudokuType;
-import de.sudoq.model.sudoku.sudokuTypes.SquigglyASudokuType9x9;
-import de.sudoq.model.sudoku.sudokuTypes.SquigglyBSudokuType9x9;
-import de.sudoq.model.sudoku.sudokuTypes.StairStepSudokuType9x9;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType16x16;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType4x4;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType6x6;
-import de.sudoq.model.sudoku.sudokuTypes.XSudoku;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
+import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
 public class TransformerTests implements GeneratorCallback {
 
@@ -32,7 +24,7 @@ public class TransformerTests implements GeneratorCallback {
 				2, 3, 5, 4, 7, 1, 4, 3, 7, 9, 5, 2, 8, 6, 5, 2, 7, 6, 8, 4, 3, 1, 9, 7, 8, 5, 9, 4, 1, 6, 3, 2, 2, 1,
 				9, 8, 3, 6, 4, 7, 5, 6, 3, 4, 2, 5, 7, 1, 9, 8 };
 
-		Sudoku sudoku1 = new Sudoku(new StandardSudokuType(), initializeMap(9, values), new PositionMap<Boolean>(Position.get(9, 9)));
+		Sudoku sudoku1 = new Sudoku(TypeBuilder.get99(), initializeMap(9, values), new PositionMap<Boolean>(Position.get(9, 9)));
 
 		for (int i = 0; i < 1337; i++)
 			Transformer.transform(sudoku1);
@@ -47,7 +39,7 @@ public class TransformerTests implements GeneratorCallback {
 		int[] values = { 5, 2, 6, 3, 1, 4, 4, 3, 1, 6, 2, 5, 1, 6, 5, 4, 3, 2, 2, 4, 3, 5, 6, 1, 3, 1, 4, 2, 5, 6, 6,
 				5, 2, 1, 4, 3 };
 
-		Sudoku sudoku1 = new Sudoku(new StandardSudokuType6x6(), initializeMap(6, values), new PositionMap<Boolean>(Position.get(6, 6)));
+		Sudoku sudoku1 = new Sudoku(TypeBuilder.getType(SudokuTypes.standard6x6), initializeMap(6, values), new PositionMap<Boolean>(Position.get(6, 6)));
 		for (int i = 0; i < 3; i++) {
 			Transformer.transform(sudoku1);
 		}
@@ -60,7 +52,7 @@ public class TransformerTests implements GeneratorCallback {
 
 		int[] values = { 3, 2, 4, 1, 1, 4, 2, 3, 4, 3, 1, 2, 2, 1, 3, 4 };
 
-		Sudoku sudoku1 = new Sudoku(new StandardSudokuType4x4(), initializeMap(4, values), new PositionMap<Boolean>(Position.get(4, 4)));
+		Sudoku sudoku1 = new Sudoku(TypeBuilder.getType(SudokuTypes.standard4x4), initializeMap(4, values), new PositionMap<Boolean>(Position.get(4, 4)));
 		for (int i = 0; i < 100; i++) {
 			Transformer.transform(sudoku1);
 		}
@@ -88,7 +80,7 @@ public class TransformerTests implements GeneratorCallback {
 				5, 14, 5, 8, 7, 9, 14, 16, 1, 11, 12, 15, 6, 4, 3, 10, 13, 2, 2, 1, 16, 4, 12, 8, 5, 13, 14, 10, 11, 3,
 				15, 7, 6, 9 };
 
-		Sudoku sudoku1 = new Sudoku(new StandardSudokuType16x16(), initializeMap(16, values), new PositionMap<Boolean>(Position.get(16, 16)));
+		Sudoku sudoku1 = new Sudoku(TypeBuilder.getType(SudokuTypes.standard16x16), initializeMap(16, values), new PositionMap<Boolean>(Position.get(16, 16)));
 
 		for (int i = 0; i < 100; i++) {
 			Transformer.transform(sudoku1);
@@ -105,7 +97,7 @@ public class TransformerTests implements GeneratorCallback {
 				6, 5, 3, 7, 9, 1, 5, 9, 7, 3, 4, 8, 2, 6, 6, 3, 7, 2, 9, 8, 5, 1, 4, 9, 2, 4, 3, 5, 1, 7, 6, 8, 5, 6,
 				8, 9, 2, 7, 1, 4, 3, 7, 1, 3, 4, 8, 6, 2, 9, 5 };
 
-		Sudoku sudoku1 = new Sudoku(new XSudoku(), initializeMap(9, values), new PositionMap<Boolean>(Position.get(9, 9)));
+		Sudoku sudoku1 = new Sudoku(TypeBuilder.getType(SudokuTypes.Xsudoku), initializeMap(9, values), new PositionMap<Boolean>(Position.get(9, 9)));
 
 		for (int i = 0; i < 100; i++) {
 			Transformer.transform(sudoku1);
@@ -124,7 +116,7 @@ public class TransformerTests implements GeneratorCallback {
 
 				6, 8, 4, 1, 9, 2, 5, 3, 7, 3, 5, 2, 7, 8, 6, 4, 9, 1, 7, 1, 9, 3, 5, 4, 8, 2, 6 };
 
-		Sudoku sudoku1 = new Sudoku(new HyperSudoku(), initializeMap(9, values), new PositionMap<Boolean>(Position.get(9, 9)));
+		Sudoku sudoku1 = new Sudoku(TypeBuilder.getType(SudokuTypes.HyperSudoku), initializeMap(9, values), new PositionMap<Boolean>(Position.get(9, 9)));
 		assertTrue(validSudoku(sudoku1));
 		for (int i = 0; i < 100; i++) {
 			Transformer.transform(sudoku1);
@@ -143,7 +135,7 @@ public class TransformerTests implements GeneratorCallback {
 
 				6, 7, 5, 9, 3, 8, 2, 4, 1, 4, 3, 2, 5, 1, 7, 9, 6, 8, 8, 1, 9, 4, 6, 5, 3, 7, 2 };
 
-		Sudoku sudoku1 = new Sudoku(new StairStepSudokuType9x9(), initializeMap(9, values), new PositionMap<Boolean>(Position.get(9, 9)));
+		Sudoku sudoku1 = new Sudoku(TypeBuilder.getType(SudokuTypes.stairstep), initializeMap(9, values), new PositionMap<Boolean>(Position.get(9, 9)));
 		assertTrue(validSudoku(sudoku1));
 		for (int i = 0; i < 100; i++) {
 			Transformer.transform(sudoku1);
@@ -162,7 +154,7 @@ public class TransformerTests implements GeneratorCallback {
 
 				2, 6, 5, 4, 1, 7, 8, 9, 3, 1, 2, 7, 9, 8, 4, 3, 5, 6, 8, 9, 2, 5, 3, 6, 7, 4, 1 };
 
-		Sudoku sudoku1 = new Sudoku(new SquigglyASudokuType9x9(), initializeMap(9, values), new PositionMap<Boolean>(Position.get(9, 9)));
+		Sudoku sudoku1 = new Sudoku(TypeBuilder.getType(SudokuTypes.squigglya), initializeMap(9, values), new PositionMap<Boolean>(Position.get(9, 9)));
 		assertTrue(validSudoku(sudoku1));
 		for (int i = 0; i < 100; i++) {
 			Transformer.transform(sudoku1);
@@ -185,7 +177,7 @@ public class TransformerTests implements GeneratorCallback {
 				9, 7, 1, 2, 3, 5, 4, 8, 6,
 				3, 6, 8, 4, 7, 1, 9, 5, 2 };
 
-		Sudoku sudoku1 = new Sudoku(new SquigglyBSudokuType9x9(), initializeMap(9, values), new PositionMap<Boolean>(Position.get(9, 9)));
+		Sudoku sudoku1 = new Sudoku(TypeBuilder.getType(SudokuTypes.squigglyb), initializeMap(9, values), new PositionMap<Boolean>(Position.get(9, 9)));
 		assertTrue(validSudoku(sudoku1));
 		for (int i = 0; i < 100; i++) {
 			Transformer.transform(sudoku1);
@@ -218,7 +210,7 @@ public class TransformerTests implements GeneratorCallback {
 				"283719654   564328197" +
 				"471562398   912675438";
 
-		Sudoku sudoku1 = new Sudoku(new SamuraiSudokuType(), initializeSamuraiMap(values), new PositionMap<Boolean>(Position.get(21, 21)));
+		Sudoku sudoku1 = new Sudoku(TypeBuilder.getType(SudokuTypes.samurai), initializeSamuraiMap(values), new PositionMap<Boolean>(Position.get(21, 21)));
 		assertTrue(validSudoku(sudoku1));
 		for (int i = 0; i < 100; i++) {
 			Transformer.transform(sudoku1);

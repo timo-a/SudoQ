@@ -19,6 +19,7 @@ import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
+import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 import de.sudoq.model.xml.SudokuXmlHandler;
 
 public class FileManagerTests {
@@ -56,7 +57,6 @@ public class FileManagerTests {
 		assertTrue(profiles.exists());
 		assertTrue(FileManager.getProfilesDir().getAbsolutePath().equals(profiles.getAbsolutePath()));
 		assertTrue(FileManager.getSudokuDir().getAbsolutePath().equals(sudokus.getAbsolutePath()));
-		File t = sudokus;
 		assertTrue(sudokus.list().length > 0);
 	}
 
@@ -136,7 +136,9 @@ public class FileManagerTests {
 
 	@Test
 	public void testLoadingOfNonexistentSudoku() {
-		assertNull(FileManager.getRandomSudoku(SudokuTypes.samurai, Complexity.difficult));
+		//TypeBuilder.get99();
+		File f = FileManager.getRandomSudoku(SudokuTypes.samurai, Complexity.difficult);
+		assertNull(f);
 	}
 
 	@Test

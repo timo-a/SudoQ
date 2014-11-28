@@ -1,6 +1,6 @@
 /*
  * SudoQ is a Sudoku-App for Adroid Devices with Version 2.2 at least.
- * Copyright (C) 2012  Haiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele
+ * Copyright (C) 2012  Heiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version. 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
  * You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
@@ -54,7 +54,8 @@ public class PositionMap<T> implements Cloneable {
 	 * @return der Wert der vorher an pos lag, oder null falls es keinen gab
 	 */
 	public T put(Position pos, T object) {
-		if (pos == null || object == null || pos.getX() > this.dimension.getX() || pos.getY() > this.dimension.getY())
+		if (pos == null || object == null || pos.getX() > this.dimension.getX() 
+				                          || pos.getY() > this.dimension.getY())
 			throw new IllegalArgumentException();
 
 		T ret = values[pos.getX()][pos.getY()];
@@ -71,13 +72,17 @@ public class PositionMap<T> implements Cloneable {
 	 * @return Das BitSet, welches der spezifizierten Position zugeordnet wurde oder null, falls keines zugewiesen wurde
 	 */
 	public T get(Position pos) {
-		if (pos == null)
+		/*if (pos == null)
 			throw new IllegalArgumentException("pos was null");
 		if (pos.getX() > this.dimension.getX())
 			throw new IllegalArgumentException("x coordinate of pos was > " + this.dimension.getX() + ": " + pos.getX());
 		if (pos.getY() > this.dimension.getY())
-			throw new IllegalArgumentException("y coordinate of pos was > " + this.dimension.getY() + ": " + pos.getY());
-
+			throw new IllegalArgumentException("y coordinate of pos was > " + this.dimension.getY() + ": " + pos.getY());*/
+		assert pos != null;
+		assert pos.getX() < this.dimension.getX();
+		assert pos.getY() < this.dimension.getY();
+		assert pos.getX() >= 0;
+		assert pos.getY() >= 0;
 		return values[pos.getX()][pos.getY()];
 	}
 

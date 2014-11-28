@@ -1,6 +1,6 @@
 /*
  * SudoQ is a Sudoku-App for Adroid Devices with Version 2.2 at least.
- * Copyright (C) 2012  Haiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele
+ * Copyright (C) 2012  Heiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version. 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
  * You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
@@ -289,6 +289,7 @@ public final class FileManager {
 		return sudokus;
 	}
 
+	
 	/**
 	 * Gibt die Anzahl der Sudokus des gesuchten Typs zurueck
 	 * 
@@ -345,6 +346,21 @@ public final class FileManager {
 		}
 	}
 
+
+	/**
+	 * Gibt den die Sudokus mit den gegebenen Parametern enthaltennden Ordner
+	 * zurueck
+	 * 
+	 * @param type
+	 *            der Typ des Sudokus
+	 * @param complexity
+	 *            die Schwierigkeit des Sudokus
+	 * @return der Ordner
+	 */
+	private static File getSudokuDir(SudokuTypes type, Complexity complexity) {
+		return new File(sudokus.getAbsolutePath() + File.separator + type.toString() + File.separator + complexity.toString());
+	}
+	
 	/**
 	 * Gibt den zum Sudoku passenden Ordner zurueck
 	 * 
@@ -367,19 +383,16 @@ public final class FileManager {
 		return new File(getSudokuDir(s).getAbsolutePath(), "sudoku_" + s.getId() + ".xml");
 	}
 
-	/**
-	 * Gibt den die Sudokus mit den gegebenen Parametern enthaltennden Ordner
-	 * zurueck
-	 * 
-	 * @param type
-	 *            der Typ des Sudokus
-	 * @param complexity
-	 *            die Schwierigkeit des Sudokus
-	 * @return der Ordner
+	 /**
+	 * Gibt die Sudoku-Typdatei für den spezifizierten Typ zurück.
+	 * @param type die Typ-Id
+	 * @return die entsprechende Sudoku-Typdatei
 	 */
-	private static File getSudokuDir(SudokuTypes type, Complexity complexity) {
-		return new File(sudokus.getAbsolutePath() + File.separator + type.toString() + File.separator + complexity.toString());
+	public static File getSudokuTypeFile(SudokuTypes type) {
+		String ap = sudokus.getAbsolutePath();
+		return new File(ap + File.separator + type.toString() + File.separator + type.toString() +".xml");
 	}
+
 
 	/**
 	 * Gibt die nächste verfügbare Sudoku ID zurück

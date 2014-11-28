@@ -10,14 +10,14 @@ import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType;
+import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType9x9;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBasic;
 import de.sudoq.model.sudoku.sudokuTypes.TypeStandard;
 
 public class StandardSudokuTypeTest {
 
-	StandardSudokuType sst = new StandardSudokuType();
+	StandardSudokuType9x9 sst = new StandardSudokuType9x9();
 
 	@Test
 	public void test() {
@@ -101,7 +101,7 @@ public class StandardSudokuTypeTest {
 
 	@Test
 	public void complexityTest() {
-		StandardSudokuType type = new StandardSudokuType();
+		StandardSudokuType9x9 type = new StandardSudokuType9x9();
 		testComplexity(type.buildComplexityConstraint(Complexity.easy), Complexity.easy, 35, 45, 600, 1100, 2);
 		testComplexity(type.buildComplexityConstraint(Complexity.medium), Complexity.medium, 27, 35, 1100, 2050, 3);
 		testComplexity(type.buildComplexityConstraint(Complexity.difficult), Complexity.difficult, 22, 28, 1600, 3000,

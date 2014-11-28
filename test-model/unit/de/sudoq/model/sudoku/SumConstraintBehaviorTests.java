@@ -12,6 +12,7 @@ import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.SumConstraintBehavior;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
+import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
 public class SumConstraintBehaviorTests {
 
@@ -23,6 +24,9 @@ public class SumConstraintBehaviorTests {
 
 	@Test
 	public void testConstraint() {
+		
+		TypeBuilder.get99();//just to force initialization of fileManager
+		
 		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard9x9).createSudoku();
 
 		sudoku.getField(Position.get(0, 0)).setCurrentValue(1);

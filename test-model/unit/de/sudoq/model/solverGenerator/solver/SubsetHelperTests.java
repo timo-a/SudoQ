@@ -11,19 +11,20 @@ import java.util.List;
 import org.junit.Test;
 
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
-import de.sudoq.model.solverGenerator.solver.HiddenHelper;
-import de.sudoq.model.solverGenerator.solver.NakedHelper;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
-import de.sudoq.model.solverGenerator.solver.SubsetHelper;
+import de.sudoq.model.solverGenerator.solver.helper.HiddenHelper;
+import de.sudoq.model.solverGenerator.solver.helper.NakedHelper;
+import de.sudoq.model.solverGenerator.solver.helper.SubsetHelper;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType;
+import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType9x9;
+import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
 public class SubsetHelperTests {
 
 	@Test
 	public void testNakedUpdateOne() {
-		SolverSudoku sudoku = new SolverSudoku(new Sudoku(new StandardSudokuType()));
+		SolverSudoku sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
 		sudoku.getField(Position.get(0, 0)).setCurrentValue(0);
 		sudoku.getField(Position.get(2, 0)).setCurrentValue(2);
 		sudoku.getField(Position.get(3, 0)).setCurrentValue(3);
@@ -77,7 +78,7 @@ public class SubsetHelperTests {
 
 	@Test
 	public void testNakedUpdateAll() {
-		SolverSudoku sudoku = new SolverSudoku(new Sudoku(new StandardSudokuType()));
+		SolverSudoku sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
 		sudoku.getField(Position.get(0, 0)).setCurrentValue(0);
 		sudoku.getField(Position.get(2, 0)).setCurrentValue(2);
 		sudoku.getField(Position.get(3, 0)).setCurrentValue(3);
@@ -130,7 +131,7 @@ public class SubsetHelperTests {
 
 	@Test
 	public void testNakedInvalidCandidateLists() {
-		SolverSudoku sudoku = new SolverSudoku(new Sudoku(new StandardSudokuType()));
+		SolverSudoku sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
 		for (Position p : sudoku.positions) {
 			sudoku.getCurrentCandidates(p).clear();
 		}
@@ -153,7 +154,7 @@ public class SubsetHelperTests {
 
 	@Test
 	public void testHiddenUpdateOne() {
-		SolverSudoku sudoku = new SolverSudoku(new Sudoku(new StandardSudokuType()));
+		SolverSudoku sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
 		sudoku.getField(Position.get(0, 0)).setCurrentValue(0);
 		sudoku.getField(Position.get(2, 0)).setCurrentValue(2);
 		sudoku.getField(Position.get(3, 0)).setCurrentValue(3);
@@ -199,7 +200,7 @@ public class SubsetHelperTests {
 
 	@Test
 	public void testHiddenUpdateAll() {
-		SolverSudoku sudoku = new SolverSudoku(new Sudoku(new StandardSudokuType()));
+		SolverSudoku sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
 		sudoku.getField(Position.get(0, 0)).setCurrentValue(0);
 		sudoku.getField(Position.get(2, 0)).setCurrentValue(2);
 		sudoku.getField(Position.get(3, 0)).setCurrentValue(3);
@@ -251,13 +252,13 @@ public class SubsetHelperTests {
 		}
 
 		try {
-			new NakedHelper(new SolverSudoku(new Sudoku(new StandardSudokuType())), 0, 20);
+			new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 0, 20);
 			fail("No IllegalArgumentException thrown, altough level was too low");
 		} catch (IllegalArgumentException e) {
 		}
 
 		try {
-			new NakedHelper(new SolverSudoku(new Sudoku(new StandardSudokuType())), 1, -1);
+			new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 1, -1);
 			fail("No IllegalArgumentException thrown, altough complexity was too low");
 		} catch (IllegalArgumentException e) {
 		}

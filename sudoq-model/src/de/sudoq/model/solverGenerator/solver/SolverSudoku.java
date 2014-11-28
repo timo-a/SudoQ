@@ -139,7 +139,7 @@ public class SolverSudoku extends Sudoku {
 	 * @throws IllegalArgumentException
 	 *             Wird geworfen, falls die spezifizierte Position null oder nicht in dem Sudoku vorhanden ist
 	 */
-	void startNewBranch(Position pos, int candidate) {
+	public void startNewBranch(Position pos, int candidate) {
 		if (pos == null || this.fields.get(pos) == null)
 			throw new IllegalArgumentException("Position was null or does not exist in this sudoku.");
 
@@ -358,6 +358,10 @@ public class SolverSudoku extends Sudoku {
 		return this.complexityValue;
 	}
 
+	public List<Position> getPositions(){
+		return positions;
+	}
+	
 	/**
 	 * Diese Klasse stellt einen Pool von PositionMaps auf BitSets zur Verfügung, sodass benutzte PositionMaps nicht
 	 * verfallen, sondern im Pool behalten und für eine weitere Nutzung vorgehalten werden.

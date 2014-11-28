@@ -1,6 +1,6 @@
 /*
  * SudoQ is a Sudoku-App for Adroid Devices with Version 2.2 at least.
- * Copyright (C) 2012  Haiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele
+ * Copyright (C) 2012  Heiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version. 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
  * You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
@@ -27,6 +27,7 @@ import de.sudoq.model.game.Game;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBasic;
 import de.sudoq.view.SudokuFieldView;
@@ -271,7 +272,7 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 		this.virtualKeyboard.enableAllButtons();
 		
 		Field currentField = this.sudokuView.getCurrentFieldView().getField();
-		TypeBasic type = this.game.getSudoku().getSudokuType();
+		SudokuType type = this.game.getSudoku().getSudokuType();
 		/* only if assistance 'input assistance' if enabled */
 		if (this.game.isAssistanceAvailable(Assistances.restrictCandidates)) {
 			

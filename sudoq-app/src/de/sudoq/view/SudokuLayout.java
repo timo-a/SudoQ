@@ -1,6 +1,6 @@
 /*
  * SudoQ is a Sudoku-App for Adroid Devices with Version 2.2 at least.
- * Copyright (C) 2012  Haiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele
+ * Copyright (C) 2012  Heiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version. 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
  * You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
@@ -27,6 +27,7 @@ import de.sudoq.model.sudoku.ConstraintType;
 import de.sudoq.model.sudoku.Field;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBasic;
 
 /**
@@ -112,7 +113,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 		this.removeAllViews();
 
 		Sudoku sudoku = this.game.getSudoku();
-		TypeBasic sudokuType = sudoku.getSudokuType();
+		SudokuType sudokuType = sudoku.getSudokuType();
 		this.sudokuFieldViews = new SudokuFieldView[sudokuType.getSize().getX() + 1][sudokuType.getSize().getY() + 1];
 		for (int x = 0; x <= sudokuType.getSize().getX(); x++) {
 			for (int y = 0; y <= sudokuType.getSize().getY(); y++) {
@@ -188,7 +189,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	 */
 	private void refresh() {
 		if (this.sudokuFieldViews != null) {
-			TypeBasic sudokuType = this.game.getSudoku().getSudokuType();
+			SudokuType sudokuType = this.game.getSudoku().getSudokuType();
 			for (int x = 0; x <= sudokuType.getSize().getX(); x++) {
 				for (int y = 0; y <= sudokuType.getSize().getY(); y++) {
 					if (game.getSudoku().getField(Position.get(x, y)) != null) {
@@ -327,7 +328,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	 */
 	public void optiZoom(int width, int height) {
 		Log.d(LOG_TAG, "SudokuView height intern: " + this.getMeasuredHeight());
-		TypeBasic sudokuType = this.game.getSudoku().getSudokuType();
+		SudokuType sudokuType = this.game.getSudoku().getSudokuType();
 		int size = width < height ? width : height;
 		int numberOfFields = width < height ? sudokuType.getSize().getX() : sudokuType.getSize().getY();
 		this.defaultFieldViewSize = (size - (numberOfFields + 1) * spacing) / numberOfFields;
@@ -416,7 +417,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	 * {@inheritDoc}
 	 */
 	public void registerListener(FieldInteractionListener listener) {
-		TypeBasic sudokuType = this.game.getSudoku().getSudokuType();
+		SudokuType sudokuType = this.game.getSudoku().getSudokuType();
 		for (int x = 0; x < sudokuType.getSize().getX(); x++) {
 			for (int y = 0; y < sudokuType.getSize().getY(); y++) {
 				if (this.game.getSudoku().getField(Position.get(x, y)) != null)
@@ -429,7 +430,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	 * {@inheritDoc}
 	 */
 	public void removeListener(FieldInteractionListener listener) {
-		TypeBasic sudokuType = this.game.getSudoku().getSudokuType();
+		SudokuType sudokuType = this.game.getSudoku().getSudokuType();
 		for (int x = 0; x < sudokuType.getSize().getX(); x++) {
 			for (int y = 0; y < sudokuType.getSize().getY(); y++) {
 				if (this.game.getSudoku().getField(Position.get(x, y)) != null)

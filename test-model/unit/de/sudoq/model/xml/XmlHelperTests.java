@@ -69,6 +69,8 @@ public class XmlHelperTests {
 		helper.loadXml(null);
 	}
 
+	//TODO test content. it does not seem to bee working
+	
 	@Test
 	public void testSaveXml() throws FileNotFoundException, IllegalArgumentException, IOException {
 

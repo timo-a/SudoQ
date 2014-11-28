@@ -8,19 +8,19 @@ import static org.junit.Assert.fail;
 import org.junit.Test;
 
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
-import de.sudoq.model.solverGenerator.solver.Backtracking;
 import de.sudoq.model.solverGenerator.solver.Solver;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
+import de.sudoq.model.solverGenerator.solver.helper.Backtracking;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType;
+import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
 public class BacktrackingTests {
 
 	@Test
 	public void testInitialisation() {
-		SolverSudoku sudoku = new SolverSudoku(new Sudoku(new StandardSudokuType()));
+		SolverSudoku sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
 		Backtracking back = new Backtracking(sudoku, 10);
 		assertEquals(back.getComplexity(), 10);
 	}
@@ -33,7 +33,7 @@ public class BacktrackingTests {
 		} catch (IllegalArgumentException e) {
 		}
 		try {
-			new Backtracking(new SolverSudoku(new Sudoku(new StandardSudokuType())), -2);
+			new Backtracking(new SolverSudoku(new Sudoku(TypeBuilder.get99())), -2);
 			fail("No IllegalArgumentException, complexity was < 0");
 		} catch (IllegalArgumentException e) {
 		}
@@ -41,7 +41,7 @@ public class BacktrackingTests {
 
 	@Test
 	public void testUpdateOne() {
-		SolverSudoku sudoku = new SolverSudoku(new Sudoku(new StandardSudokuType()));
+		SolverSudoku sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
 		Backtracking back = new Backtracking(sudoku, 10);
 
 		sudoku.getCurrentCandidates(Position.get(1, 3)).clear(2, 8);
@@ -53,7 +53,7 @@ public class BacktrackingTests {
 
 	@Test
 	public void testAlreadySolved() {
-		SolverSudoku sudoku = new SolverSudoku(new Sudoku(new StandardSudokuType()));
+		SolverSudoku sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
 		sudoku.setComplexity(Complexity.arbitrary);
 		assertTrue(new Solver(sudoku).solveAll(false, true));
 		Backtracking back = new Backtracking(sudoku, 10);

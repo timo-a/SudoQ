@@ -15,8 +15,10 @@ import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SumConstraintBehavior;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType;
+import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType9x9;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
+import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 import de.sudoq.model.sudoku.sudokuTypes.TypeSquiggly;
 
 public class SolverSudokuTests {
@@ -25,7 +27,7 @@ public class SolverSudokuTests {
 
 	@Before
 	public void before() {
-		sudoku = new SolverSudoku(new Sudoku(new StandardSudokuType()));
+		sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
 	}
 
 	@Test
@@ -107,32 +109,18 @@ public class SolverSudokuTests {
 	@Test
 	public void testNonUniqueConstraints() {
 		// Create new type with a sum constraint
-		TypeSquiggly type = new TypeSquiggly(4, 4) {
-			{
-				this.constraints.clear();
-				Constraint c = new Constraint(new SumConstraintBehavior(10), ConstraintType.LINE);
-				c.addPosition(Position.get(0, 0));
-				c.addPosition(Position.get(1, 0));
-				c.addPosition(Position.get(2, 0));
-				c.addPosition(Position.get(3, 0));
-				this.constraints.add(c);
-			}
+		
+		
+		SudokuType type = new SudokuType(4, 4, 4);
+		type.getConstraints().clear();//TODO dirty da wir nicht wissen dürfen ob getCons nur eine kopie gibt
+		//sum constraint
+		Constraint c = new Constraint(new SumConstraintBehavior(10), ConstraintType.LINE);
+		c.addPosition(Position.get(0, 0));
+		c.addPosition(Position.get(1, 0));
+		c.addPosition(Position.get(2, 0));
+		c.addPosition(Position.get(3, 0));
+		type.addConstraint(c);
 
-			@Override
-			public SudokuTypes getEnumType() {
-				return null;
-			}
-
-			@Override
-			public ComplexityConstraint buildComplexityConstraint(Complexity complexity) {
-				return null;
-			}
-
-			@Override
-			public float getStandardAllocationFactor() {
-				return 0;
-			}
-		};
 
 		SolverSudoku sudoku = new SolverSudoku(new Sudoku(type));
 		assertEquals(sudoku.getSudokuType().getNumberOfSymbols(), 4);

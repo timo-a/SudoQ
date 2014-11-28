@@ -13,7 +13,7 @@ import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
 import de.sudoq.model.sudoku.sudokuTypes.HyperSudoku;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType;
+import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType9x9;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBasic;
 
@@ -57,7 +57,9 @@ public class TypeBasicTests {
 			for (int x = 0; x < 9; x++)
 				map.put(Position.get(x, y), su1[y * 9 + x]);
 
-		Sudoku sudoku1 = new Sudoku(new StandardSudokuType(), map, new PositionMap<Boolean>(Position.get(9, 9)));
+		SudokuType s99 = TypeBuilder.getType(SudokuTypes.standard9x9);
+		
+		Sudoku sudoku1 = new Sudoku(s99, map, new PositionMap<Boolean>(Position.get(9, 9)));
 		for (Field f : sudoku1)
 			f.setCurrentValue(f.getSolution());
 		assertTrue(sudoku1.getSudokuType().checkSudoku(sudoku1));

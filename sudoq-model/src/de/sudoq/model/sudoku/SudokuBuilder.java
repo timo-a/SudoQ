@@ -1,24 +1,14 @@
 /*
  * SudoQ is a Sudoku-App for Adroid Devices with Version 2.2 at least.
- * Copyright (C) 2012  Haiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele
+ * Copyright (C) 2012  Heiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version. 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
  * You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 package de.sudoq.model.sudoku;
 
-import de.sudoq.model.sudoku.sudokuTypes.HyperSudoku;
-import de.sudoq.model.sudoku.sudokuTypes.SamuraiSudokuType;
-import de.sudoq.model.sudoku.sudokuTypes.SquigglyASudokuType9x9;
-import de.sudoq.model.sudoku.sudokuTypes.SquigglyBSudokuType9x9;
-import de.sudoq.model.sudoku.sudokuTypes.StairStepSudokuType9x9;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType16x16;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType4x4;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType6x6;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.sudoku.sudokuTypes.TypeBasic;
-import de.sudoq.model.sudoku.sudokuTypes.XSudoku;
 
 /**
  * Der SudokuBuilder stellt Methoden zur Verfügung, um einen Sudoku-Typ oder ein
@@ -28,7 +18,7 @@ public class SudokuBuilder {
 
 	private PositionMap<Integer> solutions;
 	private PositionMap<Boolean> setValues;
-	private TypeBasic type;
+	private SudokuType type;
 
 	/** Constructors */
 
@@ -52,7 +42,7 @@ public class SudokuBuilder {
 	 * @throws NullPointerException
 	 *             falls type null ist.
 	 */
-	public SudokuBuilder(TypeBasic type) {
+	public SudokuBuilder(SudokuType type) {
 		this.type = type;
 		solutions = new PositionMap<Integer>(type.getSize());
 		setValues = new PositionMap<Boolean>(type.getSize());
@@ -109,33 +99,10 @@ public class SudokuBuilder {
 	 *         oder null, falls der Name null ist oder nicht zugeordnet werden
 	 *         kann
 	 */
-	public static TypeBasic createType(SudokuTypes type) {
+	public static SudokuType createType(SudokuTypes type) {
 		if (type == null)
 			return null;
-
-		switch (type) {
-		case standard9x9:
-			return new StandardSudokuType();
-		case standard16x16:
-			return new StandardSudokuType16x16();
-		case standard4x4:
-			return new StandardSudokuType4x4();
-		case standard6x6:
-			return new StandardSudokuType6x6();
-		case Xsudoku:
-			return new XSudoku();
-		case HyperSudoku:
-			return new HyperSudoku();
-		case squigglya:
-			return new SquigglyASudokuType9x9();
-		case squigglyb:
-			return new SquigglyBSudokuType9x9();
-		case stairstep:
-			return new StairStepSudokuType9x9();
-		case samurai:
-			return new SamuraiSudokuType();
-		default:
-			return null;
-		}
+		else
+			return SudokuType.getSudokuType(type); //TODO remove this method('create..') and use getSudokuType in the first place 
 	}
 }

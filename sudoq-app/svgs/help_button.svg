@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="823.94324"
+   height="823.94"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="help_button.svg"
+   inkscape:export-filename="/home/timo/Code/android/Sudoq5/SudoQ/sudoq-app/res/drawable/help.png"
+   inkscape:export-xdpi="6.9907727"
+   inkscape:export-ydpi="6.9907727">
+  <defs
+     id="defs4">
+    <filter
+       inkscape:collect="always"
+       id="filter3966"
+       color-interpolation-filters="sRGB">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="5.5984797"
+         id="feGaussianBlur3968" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter4529">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="7.1396484"
+         id="feGaussianBlur4531" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.58"
+     inkscape:cx="478.82916"
+     inkscape:cy="477.43964"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1088"
+     inkscape:window-height="905"
+     inkscape:window-x="117"
+     inkscape:window-y="90"
+     inkscape:window-maximized="0"
+     fit-margin-top="35"
+     fit-margin-left="41"
+     fit-margin-right="41"
+     fit-margin-bottom="28.4" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-88.028398,-155.10312)">
+    <path
+       sodipodi:type="arc"
+       style="fill:#000000;stroke:#ff0000;stroke-width:0;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter3966)"
+       id="path2989-0"
+       sodipodi:cx="363.63635"
+       sodipodi:cy="391.66666"
+       sodipodi:rx="224.24243"
+       sodipodi:ry="155.30302"
+       d="m 587.87878,391.66666 c 0,85.77149 -100.39675,155.30302 -224.24243,155.30302 -123.84567,0 -224.24243,-69.53153 -224.24243,-155.30302 0,-85.7715 100.39676,-155.30303 224.24243,-155.30303 123.84568,0 224.24243,69.53153 224.24243,155.30303 z"
+       transform="matrix(1.5608108,0,0,2.2536587,-67.567537,-312.3208)"
+       inkscape:transform-center-x="436.75127"
+       inkscape:transform-center-y="-40.505165" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#0055d4;stroke:#ffffff;stroke-width:0;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path2989"
+       sodipodi:cx="363.63635"
+       sodipodi:cy="391.66666"
+       sodipodi:rx="224.24243"
+       sodipodi:ry="155.30302"
+       d="m 587.87878,391.66666 c 0,85.77149 -100.39675,155.30302 -224.24243,155.30302 -123.84567,0 -224.24243,-69.53153 -224.24243,-155.30302 0,-85.7715 100.39676,-155.30303 224.24243,-155.30303 123.84568,0 224.24243,69.53153 224.24243,155.30303 z"
+       transform="matrix(1.5608108,0,0,2.2536588,-67.567537,-330.32085)" />
+    <text
+       xml:space="preserve"
+       style="font-size:1400px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Arabic Naskh;-inkscape-font-specification:Droid Arabic Naskh;filter:url(#filter4529)"
+       x="338.4379"
+       y="772.63245"
+       id="text3759-1"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3761-7"
+         x="338.4379"
+         y="772.63245"
+         style="font-size:600px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">?</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:1400px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Droid Arabic Naskh;-inkscape-font-specification:Droid Arabic Naskh"
+       x="338.29785"
+       y="767.25586"
+       id="text3759"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3761"
+         x="338.29785"
+         y="767.25586"
+         style="font-size:600px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial">?</tspan></text>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3763"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(0,52.362183)"><flowRegion
+         id="flowRegion3765"><rect
+           id="rect3767"
+           width="65.957443"
+           height="135.10638"
+           x="268.08511"
+           y="444.68085" /></flowRegion><flowPara
+         id="flowPara3769"></flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3771"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(0,52.362183)"><flowRegion
+         id="flowRegion3773"><rect
+           id="rect3775"
+           width="31.914894"
+           height="143.61702"
+           x="301.06384"
+           y="445.74469" /></flowRegion><flowPara
+         id="flowPara3777"></flowPara></flowRoot>    <text
+       xml:space="preserve"
+       style="font-size:100px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="162.76596"
+       y="-69.148933"
+       id="text3779"
+       sodipodi:linespacing="125%"
+       transform="translate(0,52.362183)"><tspan
+         sodipodi:role="line"
+         id="tspan3781"
+         x="162.76596"
+         y="-69.148933"></tspan><tspan
+         sodipodi:role="line"
+         id="tspan3783"
+         x="162.76596"
+         y="55.851067" /></text>
+  </g>
+</svg>

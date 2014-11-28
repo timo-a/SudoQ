@@ -16,7 +16,10 @@ import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SumConstraintBehavior;
 import de.sudoq.model.sudoku.UniqueConstraintBehavior;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType;
+import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType9x9;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
+import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
 public class ConstraintTests {
 
@@ -72,7 +75,10 @@ public class ConstraintTests {
 		for (int i = 0; i < 81; i++) {
 			map.put(Position.get(i / 9, i % 9), 0);
 		}
-		Sudoku sudo = new Sudoku(new StandardSudokuType(), map, new PositionMap<Boolean>(Position.get(9, 9)));
+		
+		SudokuType s99 = TypeBuilder.getType(SudokuTypes.standard9x9);
+		
+		Sudoku sudo = new Sudoku(s99, map, new PositionMap<Boolean>(Position.get(9, 9)));
 
 		sudo.getField(posA).setCurrentValue(0);
 		sudo.getField(posB).setCurrentValue(4);

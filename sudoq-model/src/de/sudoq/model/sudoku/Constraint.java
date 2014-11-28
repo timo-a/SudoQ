@@ -1,6 +1,6 @@
 /*
  * SudoQ is a Sudoku-App for Adroid Devices with Version 2.2 at least.
- * Copyright (C) 2012  Haiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele
+ * Copyright (C) 2012  Heiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version. 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
  * You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
@@ -11,12 +11,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import de.sudoq.model.xml.XmlAttribute;
+import de.sudoq.model.xml.XmlTree;
+import de.sudoq.model.xml.Xmlable;
+
 /**
  * Ein Constraint-Objekt beschreibt eine Zusammenfassung von Feldern (bzw. dessen Positionen) in einem Sudoku, sodass
  * diese zusammen eine bestimmte Vorgabe erfüllen müssen, die von einem ConstraintBehavior-Objekt beschrieben wird. Im
  * Standardsudoku sind beispielsweise die Zeilen, Spalten und Blöcke Constraint-Objekte.
  */
-public class Constraint implements Iterable<Position> {
+public class Constraint implements Iterable<Position>, Xmlable {
 	/** Attributes */
 
 	/**
@@ -186,4 +190,38 @@ public class Constraint implements Iterable<Position> {
 	public ConstraintType getType() {
 		return this.type;
 	}
+
+	@Override
+	public XmlTree toXmlTree() {
+		XmlTree representation = new XmlTree("constraint");
+		representation.addAttribute(new XmlAttribute("behavior", behavior.getClass().toString()));
+		representation.addAttribute(new XmlAttribute("name", name));
+		representation.addAttribute(new XmlAttribute("type", "" + type.ordinal()));
+		for (Position pos : positions) {
+			representation.addChild(pos.toXmlTree());
+		}
+		return representation;
+	}
+
+	@Override
+	public void fillFromXml(XmlTree xmlTreeRepresentation)
+			throws IllegalArgumentException {
+		String behavior = xmlTreeRepresentation.getAttributeValue("behavior");
+		if (behavior.contains("Unique")) {
+			this.behavior = new UniqueConstraintBehavior();
+		} else {
+			throw new IllegalArgumentException("Undefined constraint behavior");
+		}
+
+		this.name = xmlTreeRepresentation.getAttributeValue("name");
+		this.type = ConstraintType.values()[Integer.parseInt(xmlTreeRepresentation.getAttributeValue("type"))];
+
+		for (Iterator<XmlTree> iterator = xmlTreeRepresentation.getChildren(); iterator.hasNext();) {
+			XmlTree sub = iterator.next();
+			if (sub.getName().equals("position")) {
+				addPosition(Position.fillFromXmlStatic(sub));
+			}
+		}
+	}
+
 }

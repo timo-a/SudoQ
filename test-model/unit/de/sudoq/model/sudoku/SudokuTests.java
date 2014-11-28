@@ -20,10 +20,9 @@ import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.sudokuTypes.SamuraiSudokuType;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType16x16;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
+import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 import de.sudoq.model.xml.XmlHelper;
 import de.sudoq.model.xml.XmlTree;
 
@@ -59,7 +58,7 @@ public class SudokuTests {
 
 	@Test
 	public void testInitializeStandardSudoku() {
-		StandardSudokuType sudokuType = new StandardSudokuType();
+		SudokuType sudokuType = TypeBuilder.getType(SudokuTypes.standard9x9);
 		Sudoku sudoku = new Sudoku(sudokuType);
 
 		assertTrue("Sudokutype isn't the same", sudoku.getSudokuType() == sudokuType);
@@ -83,7 +82,7 @@ public class SudokuTests {
 
 	@Test
 	public void testInitializeWithoutSolutions() {
-		StandardSudokuType sudokuType = new StandardSudokuType();
+		SudokuType sudokuType = TypeBuilder.getType(SudokuTypes.standard9x9);
 		Sudoku sudoku = new Sudoku(sudokuType, null, null);
 
 		assertTrue("Sudokutype isn't the same", sudoku.getSudokuType() == sudokuType);
@@ -102,7 +101,7 @@ public class SudokuTests {
 
 	@Test
 	public void testInitializeWithoutSetValues() {
-		StandardSudokuType sudokuType = new StandardSudokuType();
+		SudokuType sudokuType = TypeBuilder.getType(SudokuTypes.standard9x9);
 		PositionMap<Integer> solutions = new PositionMap<Integer>(Position.get(9, 9));
 		for (int x = 0; x < 9; x++) {
 			for (int y = 0; y < 9; y++) {
@@ -127,7 +126,7 @@ public class SudokuTests {
 
 	@Test
 	public void testGetField() {
-		Sudoku sudoku = new Sudoku(new StandardSudokuType());
+		Sudoku sudoku = new Sudoku(TypeBuilder.getType(SudokuTypes.standard9x9));
 
 		assertFalse(sudoku == null);
 
@@ -143,7 +142,7 @@ public class SudokuTests {
 
 	@Test
 	public void testComplexity() {
-		Sudoku sudoku = new Sudoku(new StandardSudokuType());
+		Sudoku sudoku = new Sudoku(TypeBuilder.getType(SudokuTypes.standard9x9));
 
 		assertTrue(sudoku.getComplexity() == null);
 		sudoku.setComplexity(Complexity.easy);
@@ -154,7 +153,7 @@ public class SudokuTests {
 
 	@Test
 	public void testIterator() {
-		Sudoku su = new Sudoku(new StandardSudokuType());
+		Sudoku su = new Sudoku(TypeBuilder.getType(SudokuTypes.standard9x9));
 
 		su.getField(Position.get(0, 0)).setCurrentValue(5);
 		su.getField(Position.get(1, 4)).setCurrentValue(4);
@@ -189,7 +188,7 @@ public class SudokuTests {
 			}
 		}
 
-		Sudoku sudoku = new Sudoku(new StandardSudokuType(), map, setValues);
+		Sudoku sudoku = new Sudoku(TypeBuilder.getType(SudokuTypes.standard9x9), map, setValues);
 
 		Field field;
 		for (int x = 0; x < 9; x++) {
@@ -259,23 +258,23 @@ public class SudokuTests {
 
 	@Test
 	public void testNotEquals() {
-		Sudoku s1 = new Sudoku(new StandardSudokuType());
-		Sudoku s2 = new Sudoku(new StandardSudokuType16x16());
+		Sudoku s1 = new Sudoku(TypeBuilder.getType(SudokuTypes.standard9x9  ));
+		Sudoku s2 = new Sudoku(TypeBuilder.getType(SudokuTypes.standard16x16));
 		assertFalse(s1.equals(s2));
 		assertFalse(s1.equals(null));
 		assertFalse(s1.equals(new Integer(0)));
-		s2 = new Sudoku(new StandardSudokuType());
+		s2 = new Sudoku(TypeBuilder.getType(SudokuTypes.standard9x9) );
 		s1.setComplexity(Complexity.easy);
 		s2.setComplexity(Complexity.medium);
 		assertFalse(s1.equals(s2));
-		s2 = new Sudoku(new SamuraiSudokuType());
+		s2 = new Sudoku(TypeBuilder.getType(SudokuTypes.samurai));
 		s2.setComplexity(Complexity.easy);
 		assertFalse(s2.equals(s1));
 	}
 
 	@Test
 	public void testHasErrors() {
-		StandardSudokuType sudokuType = new StandardSudokuType();
+		SudokuType sudokuType = TypeBuilder.getType(SudokuTypes.standard9x9);
 		PositionMap<Integer> solutions = new PositionMap<Integer>(Position.get(9, 9));
 		for (int x = 0; x < 9; x++) {
 			for (int y = 0; y < 9; y++) {
@@ -289,7 +288,7 @@ public class SudokuTests {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testFromXmlError() {
-		Sudoku sudoku = new Sudoku(new StandardSudokuType());
+		Sudoku sudoku = new Sudoku(TypeBuilder.get99());
 		XmlTree tree = sudoku.toXmlTree();
 		for (Iterator<XmlTree> iterator = tree.getChildren(); iterator.hasNext();) {
 			XmlTree sub = iterator.next();
@@ -303,7 +302,7 @@ public class SudokuTests {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testFromXmlError2() {
-		Sudoku sudoku = new Sudoku(new StandardSudokuType());
+		Sudoku sudoku = new Sudoku(TypeBuilder.get99());
 		XmlTree tree = sudoku.toXmlTree();
 		for (Iterator<XmlTree> iterator = tree.getChildren(); iterator.hasNext();) {
 			XmlTree sub = iterator.next();
@@ -319,10 +318,10 @@ public class SudokuTests {
 
 	@Test
 	public void testFromXmlAdditionalChild() {
-		Sudoku sudoku = new Sudoku(new StandardSudokuType());
+		Sudoku sudoku = new Sudoku(TypeBuilder.get99());
 		XmlTree tree = sudoku.toXmlTree();
 		tree.addChild(new XmlTree("Test"));
-		Sudoku s2 = new Sudoku(new StandardSudokuType());
+		Sudoku s2 = new Sudoku(TypeBuilder.get99());
 		s2.fillFromXml(tree);
 		assertEquals(sudoku, s2);
 
@@ -330,7 +329,7 @@ public class SudokuTests {
 
 	@Test
 	public void testFieldModification() {
-		Sudoku s = new Sudoku(new StandardSudokuType());
+		Sudoku s = new Sudoku(TypeBuilder.get99());
 		Field f = new Field(1000, 9);
 		s.setField(f, Position.get(4, 4));
 		assertTrue(f.equals(s.getField(Position.get(4, 4))));
@@ -339,14 +338,17 @@ public class SudokuTests {
 
 	@Test
 	public synchronized void testFinishedAndErrors() {
-		while (sudoku == null) {
+		int counter = 0;
+		while (sudoku == null && counter < 80) {
 			try {
 				wait(100);
+				counter++;
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 
+		assertFalse(sudoku==null);
 		assertFalse(sudoku.hasErrors());
 		assertFalse(sudoku.isFinished());
 		for (Field f : sudoku) {

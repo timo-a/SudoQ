@@ -23,8 +23,9 @@ import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType;
+import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType9x9;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
+import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
 public class GameTests {
 
@@ -32,12 +33,16 @@ public class GameTests {
 
 	@BeforeClass
 	public static void beforeClass() {
-		new Generator().generate(SudokuTypes.standard9x9, Complexity.easy, new GeneratorCallback() {
+		TypeBuilder.get99(); //just to force initialization of filemanager
+		
+		GeneratorCallback gc = new GeneratorCallback() {
 			@Override
 			public void generationFinished(Sudoku sudoku) {
 				GameTests.sudoku = sudoku;
 			}
-		});
+		};
+		
+		new Generator().generate(SudokuTypes.standard9x9, Complexity.easy, gc);
 	}
 
 	@Test
@@ -269,7 +274,7 @@ public class GameTests {
 	@Test
 	public void testScore() {
 		for (Complexity c : Complexity.values()) {
-			Sudoku sudoku = new Sudoku(new StandardSudokuType());
+			Sudoku sudoku = new Sudoku(TypeBuilder.get99());
 			sudoku.setComplexity(c);
 			Game game = new Game(0, sudoku);
 			game.addTime(60);
@@ -292,14 +297,21 @@ public class GameTests {
 
 	@Test
 	public synchronized void testSolve() {
-		while (GameTests.sudoku == null) {
+		System.out.println("before while");
+		
+		int counter = 0;
+		while (GameTests.sudoku == null && counter<80) {
 			try {
 				wait(100);
+				counter++;
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
-
+		if(GameTests.sudoku == null)
+			throw new IllegalStateException("infinite loop!");
+		
+        System.out.println("we passed the while loop!");
 		Game game = new Game(1, sudoku);
 		ArrayList<Field> unsolvedFields = new ArrayList<Field>();
 		for (Field f : sudoku) {

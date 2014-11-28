@@ -1,6 +1,6 @@
 /*
  * SudoQ is a Sudoku-App for Adroid Devices with Version 2.2 at least.
- * Copyright (C) 2012  Haiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele
+ * Copyright (C) 2012  Heiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version. 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
  * You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
@@ -16,8 +16,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.Window;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -80,44 +78,38 @@ public class SplashActivity extends SudoqActivitySherlock {
 
 	private final static String VERSION_TAG = "version";
 	private final static String NO_VERSION_YET = "0.0.0";
+	private final static String NEWEST_ASSET_VERSION = "1.0.6";
 
 	private static String currentVersionValue = "";
 
-	private Set<SudokuTypes> collectTypesToBeReplaced(String oldVersion) {
-		/*determines which defectious templates need to be replaced*/
-		Set<SudokuTypes> replacies = new HashSet<SudokuTypes>();
-
-		/*existing installations older than version 1.0.4
-		 * need to replace standard16x16 and standard9x9  */
-		String replaceVersion = "1.0.4";
-
-		if (replaceVersion.compareTo(oldVersion) >= 0) {
-			replacies.add(SudokuTypes.standard16x16);
-			replacies.add(SudokuTypes.standard9x9);
+	/* is version a older than b? 
+	 * a,b = "x.y.z"  */
+	boolean older(String a, String b){
+		String[] aTokenized = a.split("[.]");
+		String[] bTokenized = b.split("[.]");
+		assert aTokenized.length == bTokenized.length;
+				
+		for(int i=0; i< aTokenized.length; i++){
+			int aTok = Integer.parseInt(aTokenized[i]);
+			int bTok = Integer.parseInt(bTokenized[i]);
+			
+			if(aTok < bTok)
+				return true;
+			else if(aTok > bTok)
+				return false;
 		}
-		/* 
-		 * In case 1.0.6 would replace some templates we would write: 
-		 * !example! 
-		 * String replaceVersion = 1.0.6; 
-		 * if(repl.cpT(oldVersion) >=0 ){
-		 * 		r.add...
-		 * 
-		 * }
-		 */
-
-		return replacies;
+		
+		return false;
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		//this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
-		//requestWindowFeature(Window.FEATURE_ACTION_BAR);
-		//getSupportActionBar().hide();
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		
+		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.splash);
 
 		// If there is no profile initialize one
@@ -147,13 +139,16 @@ public class SplashActivity extends SudoqActivitySherlock {
 
 		/* is this a new version? */
 		String oldVersionName = settings.getString(VERSION_TAG, NO_VERSION_YET);
-		Boolean updateSituation = !oldVersionName.equals(currentVersionValue);
+		/* Specifies whether this is a regular start or an assets-update, i.e. version has changed and assets have to be copied*/
+		Boolean updateSituation = older(oldVersionName, NEWEST_ASSET_VERSION);
 
 		if (updateSituation && !this.startedCopying) {
-			Set<SudokuTypes> typesToBeReplaced = collectTypesToBeReplaced(oldVersionName);
-			new Initialization(typesToBeReplaced).execute(null, null, null);
+			Log.v(LOG_TAG, "we will do an initialization");
+			new Initialization().execute(null, null, null);
 			startedCopying = true;
-		}
+		}else
+			Log.v(LOG_TAG, "we will not do an initialization");
+
 		/* splash thread*/
 		this.splashThread = new Thread() {
 			@Override
@@ -215,7 +210,7 @@ public class SplashActivity extends SudoqActivitySherlock {
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 	}
 
 	/**
@@ -237,13 +232,7 @@ public class SplashActivity extends SudoqActivitySherlock {
 	 * ersten Start.
 	 */
 	private class Initialization extends AsyncTask<Void, Void, Void> {
-
-		private Set<SudokuTypes> typesToBeReplaced;
-
-		public Initialization(Set<SudokuTypes> typesToBeReplaced) {
-			this.typesToBeReplaced = typesToBeReplaced;
-		}
-
+		
 		@Override
 		public void onPostExecute(Void v) {
 			SharedPreferences settings = getSharedPreferences("Prefs", 0);
@@ -256,33 +245,38 @@ public class SplashActivity extends SudoqActivitySherlock {
 		 * Kopiert alle Sudoku Vorlagen.
 		 */
 		private void copyAssets() {
-			/* copy sudoku9x9 first as people play it first */
+			/* sudoku types*/
 			SudokuTypes[] types = SudokuTypes.values();
+			
+			/* swap sudoku9x9 with whatever comes at 0th position.
+			 * -> sudoku9x9 will be finished first.
+			 * Reason: people will probably want to play 9x9 first */
+			//TODO superfluous, since 9x9 always first?
 			for (int i = 0; i < types.length; i++)
-				if (types[i].equals(SudokuTypes.standard9x9.toString())) {
-					SudokuTypes tmp = types[0];
-					types[0] = types[i];
-					types[i] = tmp;
+				if (types[i] == SudokuTypes.standard9x9) {
+					types[i] = types[0];
+					types[0] = SudokuTypes.standard9x9;
 					break;
 				}
 			
+			/* actual copying*/
 			for (SudokuTypes t : types) {
-				File typeDir = new File(FileManager.getSudokuDir().getAbsoluteFile() + File.separator + t.toString());
-				Boolean notExistant = !typeDir.exists();
-				Boolean needsReplace = typesToBeReplaced.contains(t);
-				if (notExistant || needsReplace) {
-					typeDir.mkdir();
 				
-					for (Complexity c : Complexity.playableValues()) {
-						String assetsPath = HEAD_DIRECTORY + File.separator + t.toString() + File.separator + c.toString(); //template that comes with the app
-						String relPath = typeDir.getAbsolutePath() + File.separator + c.toString();                         //destination folder
-						File f = new File(relPath);
-						f.mkdir();
-						
-						String[] fnames =getSubfiles(assetsPath);
-						for (String filename: fnames){
-							copyFile(assetsPath+File.separator+filename, t.toString() + File.separator + c.toString() + File.separator+filename);
-						}
+				String sourceType = HEAD_DIRECTORY                               + File.separator + t.toString() + File.separator; // e.g. .../standard9x9/
+				String targetType = FileManager.getSudokuDir().getAbsolutePath() + File.separator + t.toString() + File.separator;
+				
+				copyFile(sourceType + t.toString() + ".xml", 
+						 targetType + t.toString() + ".xml");
+				
+				for (Complexity c : Complexity.playableValues()) {
+											
+					String sourceComplexity = sourceType + c.toString() + File.separator;
+					String targetComplexity = targetType + c.toString() + File.separator;
+					
+					String[] fnames =getSubfiles(sourceType + c.toString());
+					for (String filename: fnames){
+						copyFile( sourceComplexity + filename, 
+		                          targetComplexity + filename);
 					}
 				}
 			}
@@ -307,7 +301,24 @@ public class SplashActivity extends SudoqActivitySherlock {
 		 * @param destination
 		 */
 		private void copyFile(String sourcePath, String destinationPath) {
-			File destination = new File(FileManager.getSudokuDir().getAbsolutePath(), destinationPath);
+			/* ensure parent dirs exist*/
+			//boolean there = new File(sourcePath).exists();
+			//boolean there_l1 = new File(sourcePath).getParentFile().exists();
+			//boolean there_l2 = new File(sourcePath).getParentFile().getParentFile().exists();
+			//boolean there_l3 = new File(sourcePath).getParentFile().getParentFile().getParentFile().exists();
+			
+			/*String[] l1;
+			try {
+				l1 = getAssets().list(HEAD_DIRECTORY);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}*/
+			
+			//new File(     sourcePath).getParentFile().mkdirs();
+			/*boolean tut =*/ new File(destinationPath).getParentFile().mkdirs();
+			
+			File destination = new File(destinationPath);
 			InputStream in = null;
 			OutputStream out = null;
 			try {
@@ -320,6 +331,7 @@ public class SplashActivity extends SudoqActivitySherlock {
 				out.close();
 			} catch (Exception e) {
 				Log.e(LOG_TAG, e.getMessage());
+				Log.e(LOG_TAG, "there seems to be an exception");
 			}
 		}
 

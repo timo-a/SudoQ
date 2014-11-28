@@ -1,6 +1,6 @@
 /*
  * SudoQ is a Sudoku-App for Adroid Devices with Version 2.2 at least.
- * Copyright (C) 2012  Haiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele
+ * Copyright (C) 2012  Heiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version. 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
  * You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
@@ -8,7 +8,9 @@
 package de.sudoq.model.solverGenerator;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Random;
 
 import de.sudoq.model.solverGenerator.solver.ComplexityRelation;
@@ -84,12 +86,7 @@ public class Generator {
 		Sudoku sudoku = new SudokuBuilder(type).createSudoku();
 		sudoku.setComplexity(complexity);
 
-		/*if (sudoku.getSudokuType() instanceof StandardSudokuType
-				|| sudoku.getSudokuType() instanceof StandardSudokuType16x16) {
-			new Thread(new SudokuGenerationStandardType(sudoku, callbackObject, random)).start();
-		} else {*/
-			new Thread(new SudokuGeneration(sudoku, callbackObject, random)).start();
-		//}
+		new Thread(new SudokuGeneration(sudoku, callbackObject, random)).start();
 
 		// Initiate new random object
 		random = new Random();
@@ -112,6 +109,8 @@ public class Generator {
 
 	/**
 	 * Abstrakte Klasse kapselt gemeinsamkeiten von {@link SudokuGenerationStandardType} und {@link SudokuGeneration}
+	 * Grund: wir hatten ursprünglich eine extra methode um 9x9 und 16x16 sudokus zu generieren.
+	 * Um diese Methode zu debuggen, habe ich alle gemeinsamkeiten ausgelagert. 
 	 * @author timo
 	 *
 	 */
@@ -402,16 +401,11 @@ public class Generator {
 		 */
 		private int fieldsToDefine;
 
-		/**
-		 * Ein Array von Markierungen zum Testen, welches Felder belegt werden
-		 * können
-		 */
-		boolean[][] markings;
 
 		/**
 		 * Anzahl aktuell definierter Felder
 		 */
-		private int currentFieldsDefined;
+		//private int currentFieldsDefined;
 
 		/**
 		 * ComplexityConstraint für ein Sudoku des definierten
@@ -437,9 +431,10 @@ public class Generator {
 
 			this.currentConstraint = sudoku.getSudokuType().buildComplexityConstraint(sudoku.getComplexity());
 
+			//füllt die noch freeFields, also noch zu belegende Felder aus dem übergebenen sudoku.
 			for (int y = 0; y < sudokuSizeY; y++) {
 				for (int x = 0; x < sudokuSizeX; x++) {
-					if (this.sudoku.getField(Position.get(x, y)) != null)
+					if (this.sudoku.getField(Position.get(x, y)) != null) // beim Samurai-Sudoku ist etwa 0,10 null
 						freeFields.add(Position.get(x, y));
 				}
 			}
@@ -451,28 +446,38 @@ public class Generator {
 		 */
 		public void run() {
 			// Calculate the number of fields to be filled
-			fieldsToDefine = Math.min((int) (sudokuSizeX * sudokuSizeY * sudoku.getSudokuType().getStandardAllocationFactor()),
-					                        currentConstraint.getAverageFields());
+			int fieldsByType = (int) (sudokuSizeX * sudokuSizeY * sudoku.getSudokuType().getStandardAllocationFactor()); //TODO wäre freeFields.size nicht passender?
+			int fieldsByComp = currentConstraint.getAverageFields();
+			fieldsToDefine = Math.min(fieldsByType, fieldsByComp);
 
-			markings = new boolean[sudokuSizeX][sudokuSizeY];
+			/*for debug*/
+			boolean samurai =sudoku.getSudokuType().getEnumType() == SudokuTypes.samurai; 
+			//Lösung für das sudoku wird hier gespeichert werden
 			PositionMap<Integer> solution = new PositionMap<Integer>(this.sudoku.getSudokuType().getSize());
+			
 			do {
+				if(samurai)	System.out.println("desize:"+definedFields.size());
+				
 				// Remove some fields, because sudoku could not be validated
 				for (int i = 0; i < 5; i++) {
 					removeDefinedField();
 				}
+				
 				// Define average number of fields
-				while (this.currentFieldsDefined < fieldsToDefine) {
-					if (addDefinedField() == null) {
-						for (int j = 0; j < 5 && this.currentFieldsDefined > 0; j++) {
+				while (definedFields.size() < fieldsToDefine) {
+					if (addDefinedField() == null) {								
+						for (int j = 0; j < 5 && definedFields.size() > 0; j++) {
 							removeDefinedField();
 						}
 					}
 				}
-
+				if(samurai){ 
+					System.out.println("direkt davor");
+					System.out.println("  defined:"+definedFields.size()+", "+"toDefine: "+fieldsToDefine);
+					}
 			}while(!solver.solveAll(false, false));
 			
-			// System.out.println("Found one");
+			System.out.println("Found one");
 
 			Complexity saveCompl = solver.getSudoku().getComplexity();
 			solver.getSudoku().setComplexity(Complexity.arbitrary);
@@ -557,45 +562,57 @@ public class Generator {
 		 */
 
 		private Position addDefinedField() {
+			//TODO not sure what they do
 			
+			// Ein Array von Markierungen zum Testen, welches Felder belegt werden können
+			/*true means marked, i.e. already defined or not part of the game e.g. 0,10 for samurai
+			 *false means can be added 
+			 */
+			boolean[][] markings = new boolean[sudokuSizeX][sudokuSizeY]; //all false by default. 
+			
+			
+			int xSize = sudoku.getSudokuType().getSize().getX();
+			int ySize = sudoku.getSudokuType().getSize().getY();
+
+			//definierte Felder markieren
+			for (Position p : this.definedFields) {
+				markings[p.getX()][p.getY()] = true;
+			}
+			/* avoids infitite while loop*/
 			int count = definedFields.size();
 
-			for (int x = 0; x < sudoku.getSudokuType().getSize().getX(); x++) {
-				for (int y = 0; y < sudoku.getSudokuType().getSize().getY(); y++) {
-					markings[x][y] = false;
-				}
-			}
-
-			for (int i = 0; i < this.definedFields.size(); i++) {
-				count++;
-				markings[this.definedFields.get(i).getX()][this.definedFields.get(i).getY()] = true;
-			}
-
+			//bestimme Position p
 			Position p = null;
 
-			while (p == null
-					&& count != this.sudoku.getSudokuType().getSize().getX()
-							* this.sudoku.getSudokuType().getSize().getY()) {
-				int x = random.nextInt(sudoku.getSudokuType().getSize().getX());
-				int y = random.nextInt(sudoku.getSudokuType().getSize().getY());
-				if (sudoku.getField(Position.get(x, y)) == null) {
+			while (p == null && count < xSize * ySize) {
+				int x = random.nextInt(xSize);
+				int y = random.nextInt(ySize);
+				if (sudoku.getField(Position.get(x, y)) == null) {//position existiert nicht
 					markings[x][y] = true;
 					count++;
-				} else if (markings[x][y] == false) {
-					markings[x][y] = true;
-					count++;
+				} else if (markings[x][y] == false) { //pos existiert und ist unmarkiert
 					p = Position.get(x, y);
 				}
 			}
 
+			//construct a list of symbols starting at arbitrary point. there is no short way to do this without '%' 
+			int numSym = sudoku.getSudokuType().getNumberOfSymbols();
+    		int offset = random.nextInt(numSym);
+			Queue<Integer> symbols = new LinkedList<Integer>();
+			for (int i = 0; i < numSym; i++)
+				symbols.add(i);
+
+			for(int i=0; i < offset; i++)//rotate offset times
+				symbols.add(symbols.poll());			
+			
+			//constraint-saturierende belegung suchen 
 			boolean valid = false;
-			int offset = random.nextInt(sudoku.getSudokuType().getNumberOfSymbols());
-			for (int j = 0; j < sudoku.getSudokuType().getNumberOfSymbols(); j++) {
-				sudoku.getField(p).setCurrentValue((j + offset) % sudoku.getSudokuType().getNumberOfSymbols(), false);
+			for (int s: symbols) {				
+				sudoku.getField(p).setCurrentValue(s, false);
+				//alle constraints saturiert?
 				valid = true;
-				ArrayList<Constraint> constraints = this.sudoku.getSudokuType().getConstraints();
-				for (int i = 0; i < constraints.size(); i++) {
-					if (!constraints.get(i).isSaturated(sudoku)) {
+				for (Constraint c: this.sudoku.getSudokuType().getConstraints()) {
+					if (!c.isSaturated(sudoku)) {
 						valid = false;
 						sudoku.getField(p).setCurrentValue(Field.EMPTYVAL, false);
 						break;
@@ -603,8 +620,6 @@ public class Generator {
 				}
 				if (valid) {
 					definedFields.add(p);
-					// freeFields.remove(p);
-					this.currentFieldsDefined++;
 					break;
 				}
 			}
@@ -627,7 +642,6 @@ public class Generator {
 			p = definedFields.remove(nr);
 			sudoku.getField(p).setCurrentValue(Field.EMPTYVAL, false);
 			freeFields.add(p);
-			this.currentFieldsDefined--;
 			return p;
 		}
 

@@ -10,11 +10,17 @@ import de.sudoq.model.actionTree.SolveActionFactory;
 import de.sudoq.model.solverGenerator.solution.DerivationField;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
+import de.sudoq.model.solverGenerator.solver.helper.Backtracking;
+import de.sudoq.model.solverGenerator.solver.helper.HiddenHelper;
+import de.sudoq.model.solverGenerator.solver.helper.NakedHelper;
+import de.sudoq.model.solverGenerator.solver.helper.SolveHelper;
 import de.sudoq.model.sudoku.Constraint;
+import de.sudoq.model.sudoku.Field;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
 /**
  * Diese Klasse bietet Methoden zum Lösen eines Sudokus. Sowohl einzelne Felder, als auch gesamte Sudokus können gelöst
@@ -265,12 +271,11 @@ public class Solver {
 			// store the correct solution
 			if (solution != null) {
 				for (int i = 0; i < this.sudoku.positions.size(); i++) {
+					Position p = this.sudoku.positions.get(i);
+					int curVal = this.sudoku.getField(p).getCurrentValue();
 					if (!in) {
-						solution.put(this.sudoku.positions.get(i), this.sudoku.getField(this.sudoku.positions.get(i))
-								.getCurrentValue());
-					} else if (in
-							&& solution.get(this.sudoku.positions.get(i)) != this.sudoku.getField(
-									this.sudoku.positions.get(i)).getCurrentValue()) {
+						solution.put(p, curVal);
+					} else if (in && solution.get(p) != curVal) {
 						solved = false;
 					}
 				}
@@ -418,25 +423,9 @@ public class Solver {
 			}
 
 			// UNCOMMENT THE FOLLOWING TO PRINT THE WHOLE SUDOKU AFTER EACH LOOP
-
-			// StringBuilder sb = new StringBuilder();
-			// for (int j = 0; j < sudoku.getSudokuType().getSize().getY(); j++)
-			// {
-			// for (int i = 0; i
-			// < sudoku.getSudokuType().getSize().getX(); i++) {
-			// int value =
-			// sudoku.getField(new Position(i, j)).getCurrentValue();
-			// String op = value + "";
-			// if (value < 10)
-			// op = " " + value;
-			// if (value == -1)
-			// op = " x";
-			// sb.append(op + ", ");
-			// }
-			// sb.append("\n");
-			// }
-			// System.out.println(sb);
-
+			if(sudoku.getSudokuType().getEnumType() == SudokuTypes.samurai){
+				print();
+			}
 		}
 
 		if (!solved) {
@@ -449,6 +438,30 @@ public class Solver {
 		return solved;
 	}
 
+	private void print(){
+		StringBuilder sb = new StringBuilder();
+		for (int j = 0; j < sudoku.getSudokuType().getSize().getY(); j++) {
+		for (int i = 0; i < sudoku.getSudokuType().getSize().getX(); i++) {
+			Field f = sudoku.getField(new Position(i, j));
+			String op; 
+			if (f != null){//feld existiert
+				int value = f.getCurrentValue();
+				op = value + "";
+				if (value < 10)
+					op = "" + value;
+				if (value == -1)
+					op = "x";
+				sb.append(op + " ");
+			}else{
+				sb.append("  ");
+				
+			}
+		}
+		sb.append("\n");
+		}
+		System.out.println(sb);
+	}
+	
 	boolean failed = false;
 
 	/**

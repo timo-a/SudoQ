@@ -32,7 +32,7 @@ public class ProfileTests {
 		assertTrue("a default value is wrong",
 				Profile.getInstance().getStatistic(Statistics.fastestSolvingTime) == 5999);
 
-		assertTrue("profile id is wrong", Profile.getInstance().getCurrentProfileID() == 1);
+		assertEquals("profile id is wrong", 1,Profile.getInstance().getCurrentProfileID());
 		assertTrue("next profile ID is wrong", Profile.getInstance().getNewProfileID() == 2);
 
 	}

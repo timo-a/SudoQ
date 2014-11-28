@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE sudokutype SYSTEM "./sudokutype.dtd">
+<sudokutype typename="1" numberOfSymbols="4" standardAllocationFactor="0.25">
+<size x="4" y="4"></size>
+<blockSize x="2" y="2"></blockSize>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 0" type="0">
+<position x="0" y="0"></position>
+<position x="1" y="0"></position>
+<position x="2" y="0"></position>
+<position x="3" y="0"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 1" type="0">
+<position x="0" y="1"></position>
+<position x="1" y="1"></position>
+<position x="2" y="1"></position>
+<position x="3" y="1"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 2" type="0">
+<position x="0" y="2"></position>
+<position x="1" y="2"></position>
+<position x="2" y="2"></position>
+<position x="3" y="2"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 3" type="0">
+<position x="0" y="3"></position>
+<position x="1" y="3"></position>
+<position x="2" y="3"></position>
+<position x="3" y="3"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 0" type="0">
+<position x="0" y="0"></position>
+<position x="0" y="1"></position>
+<position x="0" y="2"></position>
+<position x="0" y="3"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 1" type="0">
+<position x="1" y="0"></position>
+<position x="1" y="1"></position>
+<position x="1" y="2"></position>
+<position x="1" y="3"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 2" type="0">
+<position x="2" y="0"></position>
+<position x="2" y="1"></position>
+<position x="2" y="2"></position>
+<position x="2" y="3"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 3" type="0">
+<position x="3" y="0"></position>
+<position x="3" y="1"></position>
+<position x="3" y="2"></position>
+<position x="3" y="3"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 0" type="1">
+<position x="0" y="0"></position>
+<position x="1" y="0"></position>
+<position x="0" y="1"></position>
+<position x="1" y="1"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 1" type="1">
+<position x="2" y="0"></position>
+<position x="3" y="0"></position>
+<position x="2" y="1"></position>
+<position x="3" y="1"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 2" type="1">
+<position x="0" y="2"></position>
+<position x="1" y="2"></position>
+<position x="0" y="3"></position>
+<position x="1" y="3"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 3" type="1">
+<position x="2" y="2"></position>
+<position x="3" y="2"></position>
+<position x="2" y="3"></position>
+<position x="3" y="3"></position>
+</constraint>
+<SetOfPermutationProperties>
+<PermutationProperty permutationNr="0"></PermutationProperty>
+<PermutationProperty permutationNr="1"></PermutationProperty>
+<PermutationProperty permutationNr="2"></PermutationProperty>
+<PermutationProperty permutationNr="3"></PermutationProperty>
+<PermutationProperty permutationNr="4"></PermutationProperty>
+<PermutationProperty permutationNr="5"></PermutationProperty>
+<PermutationProperty permutationNr="6"></PermutationProperty>
+<PermutationProperty permutationNr="7"></PermutationProperty>
+<PermutationProperty permutationNr="8"></PermutationProperty>
+<PermutationProperty permutationNr="9"></PermutationProperty>
+</SetOfPermutationProperties>
+<ComplexityConstraintBuilder>
+<complexityConstraint complexity="3" averageFields="5" minComplexity="175" maxComplexity="2500" numberOfAllowedHelpers="2147483647"></complexityConstraint>
+<complexityConstraint complexity="2" averageFields="7" minComplexity="150" maxComplexity="190" numberOfAllowedHelpers="2147483647"></complexityConstraint>
+<complexityConstraint complexity="1" averageFields="9" minComplexity="125" maxComplexity="160" numberOfAllowedHelpers="3"></complexityConstraint>
+<complexityConstraint complexity="0" averageFields="12" minComplexity="100" maxComplexity="130" numberOfAllowedHelpers="2"></complexityConstraint>
+<complexityConstraint complexity="4" averageFields="10" minComplexity="1" maxComplexity="2147483647" numberOfAllowedHelpers="2147483647"></complexityConstraint>
+</ComplexityConstraintBuilder>
+</sudokutype>

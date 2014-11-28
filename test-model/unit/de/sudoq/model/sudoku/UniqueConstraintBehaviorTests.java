@@ -12,11 +12,13 @@ import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.UniqueConstraintBehavior;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
+import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
 public class UniqueConstraintBehaviorTests {
 
 	@Test
 	public void testConstraint() {
+		TypeBuilder.get99();//just to force init of filemanager
 		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard9x9).createSudoku();
 
 		sudoku.getField(Position.get(0, 0)).setCurrentValue(1);

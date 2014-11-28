@@ -1,6 +1,6 @@
 /*
  * SudoQ is a Sudoku-App for Adroid Devices with Version 2.2 at least.
- * Copyright (C) 2012  Haiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele
+ * Copyright (C) 2012  Heiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version. 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
  * You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
@@ -14,8 +14,8 @@ import java.util.Map;
 import de.sudoq.model.ModelChangeListener;
 import de.sudoq.model.ObservableModelImpl;
 import de.sudoq.model.sudoku.complexity.Complexity;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.sudoku.sudokuTypes.TypeBasic;
 import de.sudoq.model.xml.XmlAttribute;
 import de.sudoq.model.xml.XmlTree;
 import de.sudoq.model.xml.Xmlable;
@@ -44,7 +44,7 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 	/**
 	 * Der Typ dieses Sudokus
 	 */
-	private TypeBasic type;
+	private SudokuType type;
 
 	/**
 	 * Der Schwierigkeitsgrad dieses Sudokus
@@ -62,9 +62,9 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 	 * @throws IllegalArgumentException
 	 *             Wird geworfen, falls der übergebene Typ null ist
 	 */
-	public Sudoku(TypeBasic type) {
-		this(type, new PositionMap<Integer>(type == null ? Position.get(1, 1) : type.getSize()),
-				new PositionMap<Boolean>(type == null ? Position.get(1, 1) : type.getSize()));
+	public Sudoku(SudokuType type) {
+		this(type, new PositionMap<Integer>(type == null ? Position.get(1, 1) : type.getSize()),//TODO warum so kompliziert? wenn type == null fliegt eh eine exception
+				   new PositionMap<Boolean>(type == null ? Position.get(1, 1) : type.getSize()));
 	}
 
 	/**
@@ -81,7 +81,7 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 	 * @throws IllegalArgumentException
 	 *             Wird geworfen, falls der übergebene Typ null ist
 	 */
-	public Sudoku(TypeBasic type, PositionMap<Integer> map, PositionMap<Boolean> setValues) {
+	public Sudoku(SudokuType type, PositionMap<Integer> map, PositionMap<Boolean> setValues) {
 		if (type == null) {
 			throw new IllegalArgumentException();
 		}
@@ -226,7 +226,7 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 	 * 
 	 * @return Der Typ dieses Sudokus
 	 */
-	public TypeBasic getSudokuType() {
+	public SudokuType getSudokuType() {
 		return type;
 	}
 
@@ -303,8 +303,8 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 		} catch (NumberFormatException e) {
 			id = -1;
 		}
-		type = SudokuBuilder.createType(SudokuTypes.values()[Integer.parseInt(xmlTreeRepresentation
-				.getAttributeValue("type"))]);
+		SudokuTypes enumType = SudokuTypes.values()[Integer.parseInt(xmlTreeRepresentation.getAttributeValue("type"))];
+		type = SudokuBuilder.createType(enumType);
 		transformCount = Integer.parseInt(xmlTreeRepresentation.getAttributeValue("transformCount"));
 
 		String compl = xmlTreeRepresentation.getAttributeValue("complexity");

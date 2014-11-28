@@ -1,11 +1,13 @@
 /*
  * SudoQ is a Sudoku-App for Adroid Devices with Version 2.2 at least.
- * Copyright (C) 2012  Haiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele
+ * Copyright (C) 2012  Heiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version. 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
  * You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 package de.sudoq.controller;
+
+import java.io.File;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
@@ -33,8 +35,9 @@ public class SudoqActivitySherlock extends SherlockActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		System.setProperty("org.xml.sax.driver", "org.xmlpull.v1.sax2.Driver");
-		FileManager.initialize(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE),
-				getDir(getString(R.string.path_rel_sudokus), Context.MODE_PRIVATE));
+		File profilesDir = getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE);
+		File  sudokusDir = getDir(getString(R.string.path_rel_sudokus), Context.MODE_PRIVATE);
+		FileManager.initialize(profilesDir, sudokusDir );
 	}
 
 	/**

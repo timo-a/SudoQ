@@ -390,7 +390,8 @@ public class SolverTests {
 
 		sudoku16x16.setComplexity(Complexity.arbitrary);
 		Solver solver = new Solver(sudoku16x16);
-		assertEquals(solver.validate(solution16x16, false), ComplexityRelation.CONSTRAINT_SATURATION);
+		ComplexityRelation cr = solver.validate(solution16x16, false); 
+		assertEquals(cr, ComplexityRelation.CONSTRAINT_SATURATION);
 
 		// copy solution to current value
 		for (int j = 0; j < sudoku16x16.getSudokuType().getSize().getY(); j++) {

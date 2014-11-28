@@ -16,6 +16,7 @@ import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
+import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 import de.sudoq.model.xml.GameXmlHandler;
 import de.sudoq.model.xml.SudokuXmlHandler;
 import de.sudoq.model.xml.XmlHandler;
@@ -85,6 +86,7 @@ public class XmlHandlerTests {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateObjectFromXmlIllegalArgumentException() throws SecurityException, IllegalArgumentException, IOException, NoSuchFieldException, IllegalAccessException {
+		TypeBuilder.get99();
 		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard16x16).createSudoku();
 		sudoku.setComplexity(Complexity.difficult);
 
