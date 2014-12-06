@@ -40,7 +40,7 @@ public class AssistancesPreferencesActivity extends SudoqActivitySherlock implem
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.setContentView(R.layout.playerpreferences);
+		this.setContentView(R.layout.assistancespreferences);
 
 		gesture = (CheckBox) findViewById(R.id.checkbox_gesture);
 		autoAdjustNotes = (CheckBox) findViewById(R.id.checkbox_autoAdjustNotes);
@@ -54,7 +54,6 @@ public class AssistancesPreferencesActivity extends SudoqActivitySherlock implem
 		Log.d(LOG_TAG, "Short assistances");
 			
 		layout = (LinearLayout) findViewById(R.id.playerpreferences_layout_everything);
-		layout.removeView(findViewById(R.id.button_showStatistics));
 		layout.removeView(findViewById(R.id.playerpreferences_layout_profilename));
 	
 		Profile.getInstance().registerListener(this);
