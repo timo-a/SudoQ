@@ -37,8 +37,7 @@ public class SetOfPermutationProperties extends ArrayList<PermutationProperties>
 
 	@Override
 	public void fillFromXml(XmlTree xmlTreeRepresentation) throws IllegalArgumentException {
-		for (Iterator<XmlTree> iterator = xmlTreeRepresentation.getChildren(); iterator.hasNext();) {
-			XmlTree sub = iterator.next();
+		for (XmlTree sub : xmlTreeRepresentation) {
 			if (sub.getName().equals(PERMUTATION_PROPERTY)) {
 				add(PermutationProperties.values()[Integer.parseInt(sub.getAttributeValue(TAG_PROPERTY_NR))]);
 			}

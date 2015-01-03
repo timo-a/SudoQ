@@ -427,17 +427,12 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 		setCurrentGame(Integer.parseInt(xmlTreeRepresentation.getAttributeValue("currentGame")));
 		setName(xmlTreeRepresentation.getAttributeValue("name"));
 		
-		for (Iterator<XmlTree> iterator = xmlTreeRepresentation.getChildren(); iterator.hasNext();) {
-            XmlTree sub = iterator.next();
-            if(sub.getName().equals("gameSettings")){
+		for(XmlTree sub: xmlTreeRepresentation){
+			if(sub.getName().equals("gameSettings")){
             	gameSettings = new GameSettings();
             	gameSettings.fillFromXml(sub);
             }
-        }
-        /*TODO try this	
-		for(XmlTree xt: xmlTreeRepresentation){
-			
-		}*/
+		}
 		
 		this.statistics = new int[Statistics.values().length];
 		for (Statistics stat : Statistics.values()) {

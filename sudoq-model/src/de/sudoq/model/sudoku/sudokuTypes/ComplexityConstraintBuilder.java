@@ -30,7 +30,7 @@ public class ComplexityConstraintBuilder implements Xmlable {
 	}
 	
 	
-	public final String TITLE = "ComplexityConstraintBuilder";
+	public static final String TITLE = "ComplexityConstraintBuilder";
 	
 	@Override
 	public XmlTree toXmlTree() {
@@ -44,8 +44,7 @@ public class ComplexityConstraintBuilder implements Xmlable {
 	@Override
 	public void fillFromXml(XmlTree xmlTreeRepresentation) throws IllegalArgumentException {
 		specimen = new HashMap<Complexity, ComplexityConstraint>();
-		for (Iterator<XmlTree> iterator = xmlTreeRepresentation.getChildren(); iterator.hasNext();) {
-			XmlTree sub = iterator.next();
+		for (XmlTree sub : xmlTreeRepresentation) {
 			ComplexityConstraint cc = new ComplexityConstraint();
 			cc.fillFromXml(sub);
 			specimen.put(cc.getComplexity(), cc);

@@ -216,8 +216,7 @@ public class Constraint implements Iterable<Position>, Xmlable {
 		this.name = xmlTreeRepresentation.getAttributeValue("name");
 		this.type = ConstraintType.values()[Integer.parseInt(xmlTreeRepresentation.getAttributeValue("type"))];
 
-		for (Iterator<XmlTree> iterator = xmlTreeRepresentation.getChildren(); iterator.hasNext();) {
-			XmlTree sub = iterator.next();
+		for (XmlTree sub : xmlTreeRepresentation) {
 			if (sub.getName().equals("position")) {
 				addPosition(Position.fillFromXmlStatic(sub));
 			}

@@ -516,8 +516,7 @@ public class Game implements Xmlable {
 
         this.assistancesCost = Integer.parseInt(xmlTreeRepresentation.getAttributeValue("assistancesCost"));
 
-        for (Iterator<XmlTree> iterator = xmlTreeRepresentation.getChildren(); iterator.hasNext();) {
-            XmlTree sub = iterator.next();
+        for (XmlTree sub : xmlTreeRepresentation) {
             if (sub.getName().equals("sudoku")) {
                 sudoku = SudokuManager.getEmptySudokuToFillWithXml();
                 sudoku.fillFromXml(sub);
@@ -528,8 +527,7 @@ public class Game implements Xmlable {
         }
         stateHandler = new GameStateHandler();
 
-        for (Iterator<XmlTree> iterator = xmlTreeRepresentation.getChildren(); iterator.hasNext();) {
-            XmlTree sub = iterator.next();
+        for (XmlTree sub : xmlTreeRepresentation) {
             if (sub.getName().equals("action")) {
                 int diff = Integer.parseInt(sub.getAttributeValue(ActionTreeElement.DIFF));
 

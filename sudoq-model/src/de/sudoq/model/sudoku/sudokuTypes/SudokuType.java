@@ -313,8 +313,46 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 		typeName = SudokuTypes.values()[Integer.parseInt(xmlTreeRepresentation.getAttributeValue("typename"))];
 		numberOfSymbols = Integer.parseInt(xmlTreeRepresentation.getAttributeValue("numberOfSymbols")); 
 		standardAllocationFactor = Float.parseFloat(xmlTreeRepresentation.getAttributeValue("standardAllocationFactor"));
-		for (Iterator<XmlTree> iterator = xmlTreeRepresentation.getChildren(); iterator.hasNext();) {
-			XmlTree sub = iterator.next();
+		for (XmlTree sub : xmlTreeRepresentation) {
+			switch (sub.getName()) {
+			case "size":
+				dimensions = Position.fillFromXmlStatic(sub);
+				break;
+
+			case "blockSize":
+				blockSize = Position.fillFromXmlStatic(sub);
+				break;
+				
+			case "constraint":
+				Constraint c = new Constraint(new UniqueConstraintBehavior(), ConstraintType.LINE);
+				c.fillFromXml(sub);
+				constraints.add(c);
+				break;
+				
+			case SetOfPermutationProperties.SET_OF_PERMUTATION_PROPERTIES:
+				setOfPermutationProperties = new SetOfPermutationProperties();
+				((SetOfPermutationProperties) setOfPermutationProperties).fillFromXml(sub);  //cast neccessary because setOPP is defined as 
+				break;
+				
+			case "helperList":
+				helperList = new ArrayList<Helpers>(sub.getNumberOfAttributes());
+				for(Iterator<XmlAttribute> jterator = sub.getAttributes(); jterator.hasNext();){
+					XmlAttribute xa = jterator.next();
+					int index = Integer.parseInt(xa.getName());
+					Helpers h = Helpers.values()[Integer.parseInt(xa.getValue())];
+					helperList.set(index, h);
+				}
+				break;
+				
+			case ComplexityConstraintBuilder.TITLE:
+				ccb = new ComplexityConstraintBuilder();
+				ccb.fillFromXml(sub);
+				break;
+				
+			default:
+				break;
+			}
+			/*
 			if (sub.getName().equals("size")) {
 				dimensions = Position.fillFromXmlStatic(sub);
 			} else if (sub.getName().equals("blockSize")){
@@ -338,7 +376,7 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 			} else if (sub.getName().equals(ccb.TITLE)){
 				ccb = new ComplexityConstraintBuilder();
 				ccb.fillFromXml(sub);
-			}
+			}*/
 		}
 	}
 }

@@ -311,12 +311,11 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 		complexity = compl == null ? null : Complexity.values()[Integer.parseInt(compl)];
 
 		// build the fields
-		for (Iterator<XmlTree> iterator = xmlTreeRepresentation.getChildren(); iterator.hasNext();) {
-			XmlTree sub = iterator.next();
+		for (XmlTree sub : xmlTreeRepresentation) {
 			if (sub.getName().equals("fieldmap")) {
-				int fieldId = Integer.parseInt(sub.getAttributeValue("id"));
+				int     fieldId  = Integer.parseInt(    sub.getAttributeValue("id"));
 				boolean editable = Boolean.parseBoolean(sub.getAttributeValue("editable"));
-				int solution = Integer.parseInt(sub.getAttributeValue("solution"));
+				int     solution = Integer.parseInt(    sub.getAttributeValue("solution"));
 				int x = -1, y = -1;
 				// check if there is only one child element
 				if (sub.getNumberOfChildren() != 1) {

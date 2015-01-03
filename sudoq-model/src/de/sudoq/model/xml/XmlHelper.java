@@ -209,9 +209,8 @@ public class XmlHelper {
 		} else {
 			sb.append(">\n");
 			// write the subtree elements
-			for (Iterator<XmlTree> i = tree.getChildren(); i.hasNext();) {
-				XmlTree subtree = i.next();
-				sb.append(buildXmlStructure(subtree));
+			for (XmlTree sub : tree) {
+				sb.append(buildXmlStructure(sub));
 			}
 		}
 		// close the tag again
