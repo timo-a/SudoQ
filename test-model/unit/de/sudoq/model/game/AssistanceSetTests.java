@@ -5,13 +5,14 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import de.sudoq.model.game.AssistanceSet;
+import de.sudoq.model.game.GameSettings;
 import de.sudoq.model.game.Assistances;
+import de.sudoq.model.xml.XmlTree;
 
 public class AssistanceSetTests {
 	@Test
 	public void test() {
-		AssistanceSet a = new AssistanceSet();
+		GameSettings a = new GameSettings();
 		a.setAssistance(Assistances.autoAdjustNotes);
 		a.setAssistance(Assistances.markWrongSymbol);
 
@@ -20,9 +21,9 @@ public class AssistanceSetTests {
 		assertTrue("markWrongSymbol has wrong value", a.getAssistance(Assistances.markWrongSymbol));
 		assertFalse("restrictCandidates has wrong value", a.getAssistance(Assistances.restrictCandidates));
 
-		String t = a.convertToString();
-		a = null;
-		a = AssistanceSet.fromString(t);
+		XmlTree t = a.toXmlTree();
+		a = new GameSettings();
+		a.fillFromXml(t);
 
 		assertTrue("autoAdjustNotes has wrong value", a.getAssistance(Assistances.autoAdjustNotes));
 		assertFalse("markRowColumn has wrong value", a.getAssistance(Assistances.markRowColumn));
@@ -35,7 +36,7 @@ public class AssistanceSetTests {
 
 	@Test
 	public void testNull() {
-		AssistanceSet a = new AssistanceSet();
+		GameSettings a = new GameSettings();
 		a.setAssistance(null);
 		assertFalse(a.getAssistance(null));
 		a.clearAssistance(null);
@@ -44,6 +45,6 @@ public class AssistanceSetTests {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testFooString() {
-		AssistanceSet.fromString("foo");
+		(new GameSettings()).fillFromXml(new XmlTree("foo"));
 	}
 }

@@ -229,7 +229,14 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 		if (game != null) {
 			/* Determine how many numbers are needed. 1-9 or 1-16 ? */
 			initializeSymbolSet();
-			setContentView(R.layout.sudoku);
+			if (game.isLefthandedModeActive()){
+				setContentView(R.layout.sudoku_for_lefties);
+				
+			}
+			else {
+				setContentView(R.layout.sudoku);
+			}
+			
 			this.sudokuController = new SudokuController(this.game, this);
 			this.actionTreeController = new ActionTreeController(this);
 			Log.d(LOG_TAG, "Initialized");

@@ -61,7 +61,7 @@ public class Game implements Xmlable {
     /**
      * Ein BitSet, welches die zur Verfügung stehenden Hilfestellungen darstellt
      */
-    private AssistanceSet availableAssistances;
+    private GameSettings gameSettings;
 
     /**
      * Zeigt an, ob das Sudoku beendet ist
@@ -89,7 +89,7 @@ public class Game implements Xmlable {
         }
         time = 0;
         this.id = id;
-        availableAssistances = new AssistanceSet();
+        gameSettings = new GameSettings();
         this.sudoku = sudoku;
         this.time = 0;
         stateHandler = new GameStateHandler();
@@ -427,17 +427,6 @@ public class Game implements Xmlable {
         }
     }
 
-    /**
-     * Gibt true zurück, falls die spezifizierte Hilfestellung verfügbar ist, false falls nicht oder falls die
-     * Hilfestellung ungültig ist.
-     * 
-     * @param assist
-     *            Die Hilfestellung, welche auf Verfügbarkeit geprüft werden soll
-     * @return true, falls die Hilfestellung verfügbar ist, false andernfalls
-     */
-    public boolean isAssistanceAvailable(Assistances assist) {
-        return this.availableAssistances.getAssistance(assist);
-    }
 
     /**
      * Setzt die für dieses Spiel verfügbaren Assistances auf die spezifizierten. Diese sollten für korrekte
@@ -449,10 +438,13 @@ public class Game implements Xmlable {
      * @throws IllegalArgumentException
      *             Wird geworfen, falls das spezifizierte BitSet null ist
      */
-    public void setAssistances(AssistanceSet assistances) {
+    public void setAssistances(GameSettings assistances) {
         if (assistances == null)
             throw new IllegalArgumentException("AssistanceSet was null");
-        this.availableAssistances = assistances;
+        
+        this.gameSettings = assistances;
+        
+        /* calculate costs */
         if (isAssistanceAvailable(Assistances.autoAdjustNotes))
             this.assistancesCost += 4;
         if (isAssistanceAvailable(Assistances.markRowColumn))
@@ -464,6 +456,24 @@ public class Game implements Xmlable {
     }
 
     /**
+     * Gibt true zurück, falls die spezifizierte Hilfestellung verfügbar ist, false falls nicht oder falls die
+     * Hilfestellung ungültig ist.
+     * 
+     * @param assist
+     *            Die Hilfestellung, welche auf Verfügbarkeit geprüft werden soll
+     * @return true, falls die Hilfestellung verfügbar ist, false andernfalls
+     */
+    public boolean isAssistanceAvailable(Assistances assist) {
+        return this.gameSettings.getAssistance(assist);
+    }
+
+    public boolean isLefthandedModeActive() {
+        return this.gameSettings.isLefthandModeSet();
+    }
+
+    
+    
+    /**
      * {@inheritDoc}
      */
     public XmlTree toXmlTree() {
@@ -472,7 +482,7 @@ public class Game implements Xmlable {
         representation.addAttribute(new XmlAttribute("finished", "" + finished));
         representation.addAttribute(new XmlAttribute("time", "" + time));
         representation.addAttribute(new XmlAttribute("currentTurnId", "" + getCurrentState().getId()));
-        representation.addAttribute(new XmlAttribute("help", this.availableAssistances.convertToString()));
+        representation.addChild(this.gameSettings.toXmlTree());
         representation.addAttribute(new XmlAttribute("assistancesCost", "" + this.assistancesCost));
 
         representation.addChild(sudoku.toXmlTree());
@@ -504,7 +514,6 @@ public class Game implements Xmlable {
         // - What about corrupt files? is the game validated after it has been
         // filled?
 
-        this.availableAssistances = AssistanceSet.fromString(xmlTreeRepresentation.getAttributeValue("help"));
         this.assistancesCost = Integer.parseInt(xmlTreeRepresentation.getAttributeValue("assistancesCost"));
 
         for (Iterator<XmlTree> iterator = xmlTreeRepresentation.getChildren(); iterator.hasNext();) {
@@ -512,6 +521,9 @@ public class Game implements Xmlable {
             if (sub.getName().equals("sudoku")) {
                 sudoku = SudokuManager.getEmptySudokuToFillWithXml();
                 sudoku.fillFromXml(sub);
+            }else if(sub.getName().equals("gameSettings")){
+            	gameSettings = new GameSettings();
+            	gameSettings.fillFromXml(sub);
             }
         }
         stateHandler = new GameStateHandler();

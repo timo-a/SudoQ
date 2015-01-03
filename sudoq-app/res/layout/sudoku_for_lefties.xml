@@ -46,7 +46,17 @@
            android:layout_weight="2.5"
            android:orientation="horizontal"
            android:background="#282828" >
-    
+
+	       <de.sudoq.view.VirtualKeyboardLayout
+				android:id="@+id/virtual_keyboard"
+                 android:layout_width="0dp"
+                 android:layout_height="fill_parent"
+                 android:layout_weight="1"
+                 android:gravity="left"
+                 android:orientation="vertical"
+                 android:padding="5dp" >
+           </de.sudoq.view.VirtualKeyboardLayout>
+
            <!--Buttons-->
            <LinearLayout 
                android:id="@+id/controls"
@@ -54,36 +64,6 @@
                android:layout_height="fill_parent"
                android:orientation="horizontal">
                
-               <!--BigButtons-->
-               <LinearLayout
-                android:orientation="vertical"
-                android:gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:paddingTop="5dp">
-      
-                  <de.sudoq.view.SquareImageButton
-                      android:id="@+id/button_sudoku_help"
-                      android:padding="7dp"
-                      android:scaleType="fitXY"
-                      android:layout_width="1dp"
-                      android:layout_height="fill_parent"
-                      android:layout_weight="1"
-                      android:layout_margin="0dp"
-                      android:onClick="onClick"
-                      android:src="@drawable/help" />
-                    
-                  <de.sudoq.view.SquareImageButton
-                      android:id="@+id/button_sudoku_actionTree"
-                      android:padding="7dp"
-                      android:scaleType="fitXY"
-                      android:layout_width="1dp"
-                      android:layout_height="fill_parent"
-                      android:layout_weight="1"
-                      android:layout_margin="0dp"
-                      android:onClick="onClick"
-                      android:src="@drawable/action_tree" />
-               </LinearLayout>
                <!--lesserButtons-->
                <LinearLayout
                 android:orientation="vertical"
@@ -126,19 +106,42 @@
                       android:src="@drawable/gesture_button_selector" />
                  
                </LinearLayout>
+               
+               <!--BigButtons-->
+               <LinearLayout
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:paddingTop="5dp">
+      
+                  <de.sudoq.view.SquareImageButton
+                      android:id="@+id/button_sudoku_help"
+                      android:padding="7dp"
+                      android:scaleType="fitXY"
+                      android:layout_width="1dp"
+                      android:layout_height="fill_parent"
+                      android:layout_weight="1"
+                      android:layout_margin="0dp"
+                      android:onClick="onClick"
+                      android:src="@drawable/help" />
+                    
+                  <de.sudoq.view.SquareImageButton
+                      android:id="@+id/button_sudoku_actionTree"
+                      android:padding="7dp"
+                      android:scaleType="fitXY"
+                      android:layout_width="1dp"
+                      android:layout_height="fill_parent"
+                      android:layout_weight="1"
+                      android:layout_margin="0dp"
+                      android:onClick="onClick"
+                      android:src="@drawable/action_tree" />
+               </LinearLayout>
                         
-           </LinearLayout>
+            </LinearLayout>
           
-           <de.sudoq.view.VirtualKeyboardLayout
-                 android:id="@+id/virtual_keyboard"
-                 android:layout_width="match_parent"
-                 android:layout_height="fill_parent"
-                 android:gravity="center"
-                 android:orientation="vertical"
-                 android:padding="5dp" >
-           </de.sudoq.view.VirtualKeyboardLayout>
                        
-        </LinearLayout>
+      </LinearLayout>
     </LinearLayout>
     
     <!-- Following layout is for the ActionTree and initially set invisible -->

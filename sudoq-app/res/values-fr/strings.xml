@@ -75,6 +75,7 @@
     <string name="profile_preference_button_statistics">Statistiques</string>
     <string name="profile_preference_button_gesture_builder">définir des gestes</string>
 	<string name="profile_preference_button_save">Sauvegarder</string>
+    <string name="profile_preference_button_advanced_preferences">paramètres avancés</string>
     <string name="profile_preference_new_profile">nouveau profil</string>
 
     <!-- Profile list -->
@@ -147,6 +148,7 @@
     <string name="sudoku_type_hyper">Hyper-Sudoku</string>
     <string name="sudoku_type_xsudoku">XSudoku</string>
     <string name="title_sudokupreferences">Paramètres du sudoku </string>
+    <string name="title_preferences_advanced">paramètres avancés</string>
 
     <!-- Game states -->
     <string name="game_finished">✔</string>

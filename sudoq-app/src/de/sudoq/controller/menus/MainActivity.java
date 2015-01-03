@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import de.sudoq.R;
 import de.sudoq.controller.SudoqActivitySherlock;
+import de.sudoq.controller.menus.preferences.PlayerPreferencesActivity;
 import de.sudoq.controller.sudoku.SudokuActivity;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.profile.Profile;
@@ -99,8 +100,8 @@ public class MainActivity extends SudoqActivitySherlock {
 			// Intent newSudokuIntent = new Intent(this,
 			// GameTypeSelection.class);
 			// startActivity(newSudokuIntent);
-			Intent startLocalIntent = new Intent(this, SudokuPreferencesActivity.class);
-			startLocalIntent.putExtra(SudokuPreferencesActivity.DESIRED_GAME_TYPE, SudokuPreferencesActivity.LOCAL_GAME);
+			Intent startLocalIntent = new Intent(this, NewSudokuConfigurationActivity.class);
+			startLocalIntent.putExtra(NewSudokuConfigurationActivity.DESIRED_GAME_TYPE, NewSudokuConfigurationActivity.LOCAL_GAME);
 			startActivity(startLocalIntent);
 			break;
 

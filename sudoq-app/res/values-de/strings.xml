@@ -75,6 +75,7 @@
 	<string name="profile_preference_button_statistics">Statistik</string>
 	<string name="profile_preference_button_gesture_builder">Gesten definieren</string>
 	<string name="profile_preference_button_save">Speichern</string>
+	<string name="profile_preference_button_advanced_preferences">Erweiterte Einstellungen</string>
 	<string name="profile_preference_new_profile">unbennant</string>
 		    
 	<!-- Profile list -->
@@ -146,6 +147,7 @@
     <string name="sudoku_type_hyper">Hyper-Sudoku</string>
     <string name="sudoku_type_xsudoku">XSudoku</string>
     <string name="title_sudokupreferences">Sudoku-Einstellungen</string>
+    <string name="title_preferences_advanced">Erweiterte Einstellungen</string>
 	
 	<!-- Game states -->    
     <string name="game_finished">✔</string>    

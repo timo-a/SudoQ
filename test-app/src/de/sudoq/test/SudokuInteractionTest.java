@@ -1,7 +1,7 @@
 package de.sudoq.test;
 
 import de.sudoq.R;
-import de.sudoq.controller.menus.SudokuPreferencesActivity;
+import de.sudoq.controller.menus.NewSudokuConfigurationActivity;
 import de.sudoq.controller.sudoku.SudokuActivity;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.Field;
@@ -13,7 +13,7 @@ public class SudokuInteractionTest extends SudoqTestCase {
 	// MT30-MT80, MT100
 	public void testFieldSelection() {
 		solo.clickOnText(solo.getCurrentActivity().getString(R.string.sf_mainmenu_new_sudoku));
-		solo.assertCurrentActivity("should be sudokupreferences", SudokuPreferencesActivity.class);
+		solo.assertCurrentActivity("should be sudokupreferences", NewSudokuConfigurationActivity.class);
 		solo.clickOnText(solo.getCurrentActivity().getString(R.string.sf_sudokupreferences_start));
 		solo.assertCurrentActivity("should be in sudoku", SudokuActivity.class);
 
@@ -85,7 +85,7 @@ public class SudokuInteractionTest extends SudoqTestCase {
 	// AT100
 	public void testUndoRedo() {
 		solo.clickOnText(solo.getCurrentActivity().getString(R.string.sf_mainmenu_new_sudoku));
-		solo.assertCurrentActivity("should be sudokupreferences", SudokuPreferencesActivity.class);
+		solo.assertCurrentActivity("should be sudokupreferences", NewSudokuConfigurationActivity.class);
 		solo.clickOnText(solo.getCurrentActivity().getString(R.string.sf_sudokupreferences_start));
 		solo.assertCurrentActivity("should be in sudoku", SudokuActivity.class);
 

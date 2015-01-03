@@ -182,7 +182,7 @@ public class GameTests {
 
 		assertFalse(game.isAssistanceAvailable(null));
 
-		game.setAssistances(new AssistanceSet() {
+		game.setAssistances(new GameSettings() {
 			@Override
 			public boolean getAssistance(Assistances assistance) {
 				return true;
@@ -249,7 +249,7 @@ public class GameTests {
 	@Test
 	public void testNoteAdjustment() {
 		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9).createSudoku());
-		AssistanceSet as = new AssistanceSet();
+		GameSettings as = new GameSettings();
 		as.setAssistance(Assistances.autoAdjustNotes);
 		game.setAssistances(as);
 
@@ -396,7 +396,7 @@ public class GameTests {
 			}
 		}
 		Game game = new Game(2, sb.createSudoku());
-		AssistanceSet as = new AssistanceSet();
+		GameSettings as = new GameSettings();
 		as.setAssistance(Assistances.autoAdjustNotes);
 		game.setAssistances(as);
 

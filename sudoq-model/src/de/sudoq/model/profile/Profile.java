@@ -9,11 +9,13 @@ package de.sudoq.model.profile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import de.sudoq.model.ObservableModelImpl;
 import de.sudoq.model.files.FileManager;
-import de.sudoq.model.game.AssistanceSet;
+import de.sudoq.model.game.GameSettings;
 import de.sudoq.model.game.Assistances;
+import de.sudoq.model.sudoku.SudokuManager;
 import de.sudoq.model.xml.ProfileXmlHandler;
 import de.sudoq.model.xml.XmlAttribute;
 import de.sudoq.model.xml.XmlHandler;
@@ -60,16 +62,11 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 	 * ID des aktuellen Games
 	 */
 	private int currentGameId;
-
-	/**
-	 * Gibt die Aktivierung der Gestensteuerung an
-	 */
-	private boolean gestureActive;
-
+	
 	/**
 	 * AssistanceSet mit den Hilfestellungen
 	 */
-	private AssistanceSet assistances = new AssistanceSet();
+	private GameSettings gameSettings = new GameSettings();
 
 	int[] statistics;
 
@@ -231,9 +228,9 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 	private void setDefaultValues() {
 		this.name = DEFAULT_PROFILE_NAME;
 		this.currentGameId = -1;
-		this.gestureActive = false;
-		this.assistances = new AssistanceSet();
-		this.assistances.setAssistance(Assistances.markRowColumn);
+		this.gameSettings = new GameSettings();
+		this.gameSettings.setAssistance(Assistances.markRowColumn);
+//		this.gameSettings.setGestures(false);
 		this.statistics = new int[Statistics.values().length];
 		this.statistics[Statistics.fastestSolvingTime.ordinal()] = INITIAL_TIME_RECORD;
 		notifyListeners(this);
@@ -314,8 +311,8 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 	 * @return Ein AssistanceSet, welches die im Profil aktivierten
 	 *         Hilfestellungen repräsentiert
 	 */
-	public AssistanceSet getAssistances() {
-		return this.assistances;
+	public GameSettings getAssistances() {
+		return this.gameSettings;
 	}
 
 	/**
@@ -326,9 +323,11 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 	 *         false andernfalls
 	 */
 	public boolean isGestureActive() {
-		return this.gestureActive;
+		return this.gameSettings.isGesturesSet();
 	}
 
+	/*Advanced Settings*/
+	
 	/**
 	 * Setzt die Verwendung von Gesten in den Preferences auf den übergebenen
 	 * Wert.
@@ -337,9 +336,17 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 	 *            true, falls Gesten gesetzt werden sollen, false falls nicht
 	 */
 	public void setGestureActive(boolean value) {
-		this.gestureActive = value;
+		this.gameSettings.setGestures(value);
 	}
-
+	
+	public void setLefthandActive(boolean value) {
+		this.gameSettings.setLefthandMode(value);
+	}
+	
+	public void setHelperActive(boolean value) {
+		this.gameSettings.setHelper(value);
+	}
+	
 	/**
 	 * Gibt eine String Liste mit allen Profilnamen zurück.
 	 * 
@@ -377,8 +384,8 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 	 *            true um die Assistance anzuschalten, sonst false
 	 */
 	public void setAssistance(Assistances assistance, boolean value) {
-		if (value) this.assistances.setAssistance(assistance);
-		else this.assistances.clearAssistance(assistance);
+		if (value) this.gameSettings.setAssistance(assistance);
+		else this.gameSettings.clearAssistance(assistance);
 		// notifyListeners(this);
 	}
 
@@ -395,7 +402,7 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 	 *         Profil aktiviert ist, false falls sie es nicht oder ungültig ist
 	 */
 	public boolean getAssistance(Assistances asst) {
-		return this.assistances.getAssistance(asst);
+		return this.gameSettings.getAssistance(asst);
 	}
 
 	/**
@@ -406,8 +413,7 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 		representation.addAttribute(new XmlAttribute("id", String.valueOf(getCurrentProfileID())));
 		representation.addAttribute(new XmlAttribute("currentGame", String.valueOf(getCurrentGame())));
 		representation.addAttribute(new XmlAttribute("name", getName()));
-		representation.addAttribute(new XmlAttribute("gestureActive", String.valueOf(isGestureActive())));
-		representation.addAttribute(new XmlAttribute("help", getAssistances().convertToString()));
+		representation.addChild(gameSettings.toXmlTree());
 		for (Statistics stat : Statistics.values()) {
 			representation.addAttribute(new XmlAttribute(stat.name(), getStatistic(stat) + ""));
 		}
@@ -420,8 +426,19 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 	public void fillFromXml(XmlTree xmlTreeRepresentation) {
 		setCurrentGame(Integer.parseInt(xmlTreeRepresentation.getAttributeValue("currentGame")));
 		setName(xmlTreeRepresentation.getAttributeValue("name"));
-		setGestureActive(Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("gestureActive")));
-		this.assistances = AssistanceSet.fromString(xmlTreeRepresentation.getAttributeValue("help"));
+		
+		for (Iterator<XmlTree> iterator = xmlTreeRepresentation.getChildren(); iterator.hasNext();) {
+            XmlTree sub = iterator.next();
+            if(sub.getName().equals("gameSettings")){
+            	gameSettings = new GameSettings();
+            	gameSettings.fillFromXml(sub);
+            }
+        }
+        /*TODO try this	
+		for(XmlTree xt: xmlTreeRepresentation){
+			
+		}*/
+		
 		this.statistics = new int[Statistics.values().length];
 		for (Statistics stat : Statistics.values()) {
 			this.statistics[stat.ordinal()] = Integer.parseInt(xmlTreeRepresentation.getAttributeValue(stat.name()));

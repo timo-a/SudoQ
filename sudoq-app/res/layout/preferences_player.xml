@@ -13,6 +13,14 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical" >
+	    	    
+	    <Button
+	        android:id="@+id/button_showStatistics"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_margin="5dp"
+	        android:onClick="viewStatistics"
+	        android:text="@string/profile_preference_button_statistics" />
 	    
 	    <Button
 	        android:id="@+id/button_openGestureBuilder"
@@ -87,15 +95,15 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content" 
 	        android:textColor="@android:color/black"/>
-	    
-	    
-	     <Button
-	        android:id="@+id/button_saveChanges"
+	
+	    <Button
+	        android:id="@+id/button_advencedPreferences"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_margin="5dp"
-	        android:onClick="saveChanges"
-	        android:text="@string/profile_preference_button_save" />
-	
+	        android:onClick="switchToAdvancedPreferences"
+	        android:text="@string/profile_preference_button_advanced_preferences" />
+	    
+	    
 	</LinearLayout>
 </ScrollView>

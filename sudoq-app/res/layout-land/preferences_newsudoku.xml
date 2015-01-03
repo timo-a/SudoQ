@@ -14,15 +14,32 @@
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical" >
 	    
-	    
+	    <LinearLayout
+	        android:id="@+id/playerpreferences_layout_profilename"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content" 
+	        android:orientation="horizontal" 
+	        android:weightSum="1.0">
 	    
 		    <Button
 		        android:id="@+id/button_openGestureBuilder"
-		        android:layout_width="fill_parent"
-		        android:layout_height="wrap_content"
+		        android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
 		        android:layout_margin="5dp"
 		        android:onClick="openGestureBuilder"
 		        android:text="@string/profile_preference_button_gesture_builder" />
+		    
+		    <Button
+		        android:id="@+id/button_advencedPreferences"
+		        android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
+		        android:layout_margin="5dp"
+                android:onClick="switchToAdvancedPreferences"
+                android:text="@string/profile_preference_button_advanced_preferences"/>
+
+		</LinearLayout>
 	    
 	    <LinearLayout
 	        android:id="@+id/playerpreferences_layout_profilename"
@@ -55,10 +72,10 @@
 	                  android:weightSum="1.0">
 	    
 		    <LinearLayout
-			    android:layout_width="0dp"
-			    android:layout_weight="0.5"
-	    		android:layout_height="wrap_content"
-	    		android:orientation="vertical" >
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
 	
 				<CheckBox
 			        android:id="@+id/checkbox_gesture"
@@ -87,10 +104,10 @@
 		    </LinearLayout>
 	    
 		    <LinearLayout
-			    android:layout_width="0dp"
-			    android:layout_weight="0.5"
-	    		android:layout_height="wrap_content"
-	    		android:orientation="vertical" >
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
 		    	    
 	    
 		    	<CheckBox

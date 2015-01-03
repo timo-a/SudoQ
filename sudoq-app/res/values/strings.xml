@@ -68,6 +68,8 @@
 	<string name="profile_preference_title">User Preferences</string>
 	<string name="profile_preference_title_name">Name</string>
 	<string name="profile_preference_title_gesture">Gesture Input</string>
+	<string name="profile_preference_title_intelligent_assistant">Intelligent Assistant</string>
+	<string name="profile_preference_title_left_hand_mode">Lefthand mode</string>
 	<string name="profile_preference_title_cat_profile">Profile-Settings</string>
 	<string name="profile_preference_title_cat_assistances">Assistances</string>
 	<string name="profile_preference_title_assistance_markRowColumn">Mark Row/Column</string>
@@ -81,6 +83,8 @@
 	<string name="profile_preference_button_statistics">Statistics</string>
 	<string name="profile_preference_button_gesture_builder">Gesture Builder</string>
 	<string name="profile_preference_button_save">Save</string>
+	<string name="profile_preference_button_advanced_preferences">Advanced Settings</string>
+	<string name="profile_preference_button_provide_restricted_set_of_types">Select which types are offered</string>
 	<string name="profile_preference_new_profile">unnamed</string>
 	    
 	<!-- Profile list -->
@@ -152,6 +156,7 @@
     <string name="sudoku_type_hyper">Hyper-Sudoku</string>
     <string name="sudoku_type_xsudoku">XSudoku</string>
     <string name="title_sudokupreferences">Sudoku-Preferences</string>
+    <string name="title_preferences_advanced">Advanced Settings</string>
     
         
     <!-- Game states -->    

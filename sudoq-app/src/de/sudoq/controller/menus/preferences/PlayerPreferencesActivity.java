@@ -5,7 +5,7 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
  * You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.sudoq.controller.menus;
+package de.sudoq.controller.menus.preferences;
 
 import java.util.List;
 
@@ -15,28 +15,22 @@ import com.actionbarsherlock.view.MenuItem;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-
-/*import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;*/
 
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import de.sudoq.R;
-import de.sudoq.controller.SudoqActivity;
-import de.sudoq.controller.SudoqActivitySherlock;
-import de.sudoq.model.ModelChangeListener;
+import de.sudoq.controller.menus.ProfileListActivity;
+import de.sudoq.controller.menus.StatisticsActivity;
 import de.sudoq.model.game.Assistances;
+import de.sudoq.model.game.GameSettings;
 import de.sudoq.model.profile.Profile;
 
 /**
  * Activity um Profile zu bearbeiten und zu verwalten
  * aufgerufen im Hauptmenü 4. Button
  */
-public class PlayerPreferencesActivity extends SudoqActivitySherlock implements ModelChangeListener<Profile> {
+public class PlayerPreferencesActivity extends PreferencesActivity {
 	/** Attributes */
 	private static final String LOG_TAG = PlayerPreferencesActivity.class.getSimpleName();
 
@@ -53,13 +47,10 @@ public class PlayerPreferencesActivity extends SudoqActivitySherlock implements 
 	private static boolean createProfile;
 
 	EditText name;
-	CheckBox gesture;
-	CheckBox autoAdjustNotes;
-	CheckBox markRowColumn;
-	CheckBox markWrongSymbol;
-	CheckBox restrictCandidates;
 
 	boolean firstStartup;
+	
+	GameSettings gameSettings;
 
 	/**
 	 * Wird aufgerufen, falls die Activity zum ersten Mal gestartet wird. Läd
@@ -67,59 +58,32 @@ public class PlayerPreferencesActivity extends SudoqActivitySherlock implements 
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);		
+		this.setContentView(R.layout.preferences_player);
 		
-		//setTitle(R.string.profile_preference_title);
+		gesture =            (CheckBox) findViewById(R.id.checkbox_gesture);
+		autoAdjustNotes =    (CheckBox) findViewById(R.id.checkbox_autoAdjustNotes);
+		markRowColumn =      (CheckBox) findViewById(R.id.checkbox_markRowColumn);
+		markWrongSymbol =    (CheckBox) findViewById(R.id.checkbox_markWrongSymbol);
+		restrictCandidates = (CheckBox) findViewById(R.id.checkbox_restrictCandidates);
 		
-		this.setContentView(R.layout.playerpreferences);
-
-		firstStartup = false;
-
 		name = (EditText) findViewById(R.id.edittext_profilename);
 		name.clearFocus();
 		name.setSingleLine(true);// no multiline names
 
-		gesture = (CheckBox) findViewById(R.id.checkbox_gesture);
-		autoAdjustNotes = (CheckBox) findViewById(R.id.checkbox_autoAdjustNotes);
-		markRowColumn = (CheckBox) findViewById(R.id.checkbox_markRowColumn);
-		markWrongSymbol = (CheckBox) findViewById(R.id.checkbox_markWrongSymbol);
-		restrictCandidates = (CheckBox) findViewById(R.id.checkbox_restrictCandidates);
-
-		LinearLayout layout = (LinearLayout) findViewById(R.id.playerpreferences_layout_everything);
-
+		firstStartup = false;		
 		createProfile = true;
-
-		/* Aufruf aus SudokuPreferenceActivity */
-		/* not happening: assistences preference activity would be called*/
-		if (getIntent().hasExtra(INTENT_ONLYASSISTANCES) && getIntent().getExtras().getBoolean(INTENT_ONLYASSISTANCES)) {
-			Log.d(LOG_TAG, "Short assistances");
-
-			createProfile = false;
-
-			layout = (LinearLayout) findViewById(R.id.playerpreferences_layout_everything);
-			layout.removeView(findViewById(R.id.button_showStatistics));
-			layout.removeView(findViewById(R.id.playerpreferences_layout_profilename));
-		} else {
-			layout.removeView(findViewById(R.id.button_saveChanges));
-		}
 
 		Profile.getInstance().registerListener(this);
 	}
 
-	/**
-	 * Wird aufgerufen, falls die Activity erneut den Eingabefokus erhält. Läd
-	 * die Preferences anhand der zur Zeit aktiven Profil-ID.
-	 */
-	@Override
-	public void onResume() {
-		super.onResume();
-		refreshValues();
-	}
 
 	/**
 	 * Aktualisiert die Werte in den Views
+	 * 
 	 */
-	private void refreshValues() {
+	@Override
+	protected void refreshValues() {
 		name.setText(Profile.getInstance().getName());
 		gesture.setChecked(Profile.getInstance().isGestureActive());
 		autoAdjustNotes.setChecked(Profile.getInstance().getAssistance(Assistances.autoAdjustNotes));
@@ -177,50 +141,23 @@ public class PlayerPreferencesActivity extends SudoqActivitySherlock implements 
 	}
 
 	/**
-	 * Öffnet den GestureBuilder.
-	 * 
-	 * @param view
-	 *            unbenutzt
-	 */
-	public void openGestureBuilder(View view) {
-		Intent gestureBuilderIntent = new Intent(this, GestureBuilder.class);
-		startActivity(gestureBuilderIntent);
-	}
-
-	/**
-	 * Speichert die Profiländerungen.
-	 * 
-	 * @param view
-	 *            unbenutzt
-	 */
-	public void saveChanges(View view) {
-		onBackPressed();
-	}
-
-	/**
-	 * Wird aufgerufen, falls eine andere Activity den Eingabfokus erhält.
-	 * Speichert die Einstellungen.
-	 */
-	@Override
-	public void onPause() {
-		super.onPause();
-		adjustValuesAndSave();
-	}
-
-	/**
 	 * Uebernimmt die Werte der Views im Profil und speichert die aenderungen
 	 */
-	private void adjustValuesAndSave() {
+	protected void adjustValuesAndSave() {
 		Profile.getInstance().setName(name.getText().toString());
-		Profile.getInstance().setGestureActive(gesture.isChecked());
-		Profile.getInstance().setAssistance(Assistances.autoAdjustNotes, autoAdjustNotes.isChecked());
-		Profile.getInstance().setAssistance(Assistances.markRowColumn, markRowColumn.isChecked());
-		Profile.getInstance().setAssistance(Assistances.markWrongSymbol, markWrongSymbol.isChecked());
-		Profile.getInstance().setAssistance(Assistances.restrictCandidates, restrictCandidates.isChecked());
-
-		Profile.getInstance().saveChanges();
+		saveToProfile();
 	}
 
+	/* parameter View only needed to be foud by xml who clicks this*/
+	public void switchToAdvancedPreferences(View view){
+		
+		Intent advIntent = new Intent(this, AdvancedPreferencesActivity.class);
+		AdvancedPreferencesActivity.myCaller=this;
+		//AdvancedPreferencesActivity.gameSettings = this.gameSettings;
+		startActivity(advIntent);
+
+	}
+	
 	/**
 	 * wechselt zur Profil Liste
 	 * 
@@ -242,10 +179,6 @@ public class PlayerPreferencesActivity extends SudoqActivitySherlock implements 
 		Profile.getInstance().deleteProfile();
 	}
 
-
-	public void onModelChanged(Profile obj) {
-		this.refreshValues();
-	}
 
 	// ///////////////////////////////////////optionsMenue
 

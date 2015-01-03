@@ -194,17 +194,17 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 				for (int y = 0; y <= sudokuType.getSize().getY(); y++) {
 					if (game.getSudoku().getField(Position.get(x, y)) != null) {
 						RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) this.sudokuFieldViews[x][y].getLayoutParams();
-						params.width = (int) this.getCurrentFieldViewSize();
+						params.width  = (int) this.getCurrentFieldViewSize();
 						params.height = (int) this.getCurrentFieldViewSize();
-						params.topMargin = (int) (getCurrentTopMargin() + (y * (this.getCurrentFieldViewSize() + getCurrentSpacing())));
+						params.topMargin =  (int) (getCurrentTopMargin()  + (y * (this.getCurrentFieldViewSize() + getCurrentSpacing())));
 						params.leftMargin = (int) (getCurrentLeftMargin() + (x * (this.getCurrentFieldViewSize() + getCurrentSpacing())));
 						this.sudokuFieldViews[x][y].setLayoutParams(params);
 						this.sudokuFieldViews[x][y].invalidate();
 					} else if (game.getSudoku().getSudokuType().getSize().getX() == x && game.getSudoku().getSudokuType().getSize().getY() == y) {
 						RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams((int) this.getCurrentFieldViewSize(), (int) this.defaultFieldViewSize);
-						params.width = (int) this.getCurrentFieldViewSize();
+						params.width  = (int) this.getCurrentFieldViewSize();
 						params.height = (int) this.getCurrentFieldViewSize();
-						params.topMargin = (int) (2 * getCurrentTopMargin() + ((y - 1) * (this.getCurrentFieldViewSize() + getCurrentSpacing())));
+						params.topMargin =  (int) (2 * getCurrentTopMargin()  + ((y - 1) * (this.getCurrentFieldViewSize() + getCurrentSpacing())));
 						params.leftMargin = (int) (2 * getCurrentLeftMargin() + ((x - 1) * (this.getCurrentFieldViewSize() + getCurrentSpacing())));
 						this.sudokuFieldViews[x][y].setLayoutParams(params);
 						this.sudokuFieldViews[x][y].invalidate();

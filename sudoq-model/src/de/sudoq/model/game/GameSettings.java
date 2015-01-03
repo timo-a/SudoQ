@@ -9,23 +9,31 @@ package de.sudoq.model.game;
 
 import java.util.BitSet;
 
+import de.sudoq.model.xml.XmlAttribute;
+import de.sudoq.model.xml.XmlTree;
+import de.sudoq.model.xml.Xmlable;
+
 /**
- * Diese Klasse repräsentiert einen Satz von Assistances, also für jede
+ * Diese Klasse repräsentiert alle Einstellungen zum Spiel:
+ * -einen Satz von Assistances, also für jede
  * Assistance ob diese gesetzt ist oder nicht.
- * 
+ * -zusätzliche optionen, wie lefthandmode, hints...
  */
-public class AssistanceSet {
+public class GameSettings implements Xmlable{
 	/**
 	 * Ein BitSet, welches die gesetzten bzw. nicht gesetzten Assistances
 	 * repräsentiert
 	 */
 	private BitSet assistances;
+	private boolean lefthandMode;
+	private boolean helper;
+	private boolean gestures;
 
 	/**
 	 * Instanziiert ein neues AssistanceSet in welchem alle Assistances
 	 * deaktiviert sind.
 	 */
-	public AssistanceSet() {
+	public GameSettings() {
 		this.assistances = new BitSet();
 	}
 
@@ -73,13 +81,63 @@ public class AssistanceSet {
 		return this.assistances.get((int) Math.pow(2, assistance.ordinal() + 1));
 	}
 
+	/* additional settings */
+	public void setGestures(boolean value) {
+		gestures = value;
+	}
+	
+	public boolean isGesturesSet(){
+		return gestures;
+	}
+	
+	public void setLefthandMode(boolean value){
+		this.lefthandMode = value;
+	}
+	
+	public boolean isLefthandModeSet(){
+		return lefthandMode;
+	}
+	
+	public void setHelper(boolean value){
+		this.helper = value;
+	}
+	
+	public boolean isHelperSet(){
+		return helper;
+	}
+	
+	/* to and from string */
+	
+	@Override
+	public XmlTree toXmlTree() {
+        XmlTree representation = new XmlTree("gameSettings");
+        representation.addAttribute(new XmlAttribute("assistances", this.convertAssistancesToString()));
+        representation.addAttribute(new XmlAttribute("gestures",   "" + gestures));
+        representation.addAttribute(new XmlAttribute("left",   "" + lefthandMode));
+        representation.addAttribute(new XmlAttribute("helper", "" + helper));
+		return representation;
+	}
+
+	@Override
+	public void fillFromXml(XmlTree xmlTreeRepresentation)
+			throws IllegalArgumentException {
+		
+		AssistancesfromString(xmlTreeRepresentation.getAttributeValue("assistances"));
+		gestures     = Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("gestures"));
+		lefthandMode = Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("left"));
+        helper       = Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("helper"));
+	}
+	
+	
+	
+	
 	/**
-	 * Generiert aus diesem AssistanceSet, einen String aus 0en und 1en. Dieser
+	 * Generiert aus dem AssistanceSet, einen String aus 0en und 1en. Dieser
 	 * kann mittels der fromString-Methode wieder eingelesen werden.
 	 * 
 	 * @return String Repräsentation dieses AssistanceSets
 	 */
-	public String convertToString() {
+	private String convertAssistancesToString() {
 		StringBuilder bitstring = new StringBuilder();
 		for (Assistances assist : Assistances.values()) {
 			if (getAssistance(assist)) {
@@ -92,30 +150,27 @@ public class AssistanceSet {
 	}
 
 	/**
-	 * Generiert aus einer String Repräsentation der aktivierten Hilfestellungen
-	 * durch 0en und 1en ein AssistanceSet
+	 * Füllt aus einer String Repräsentation der aktivierten Hilfestellungen
+	 * durch 0en und 1en das AssistanceSet
 	 * 
 	 * @param representation
 	 *            String Repräsentation der Hilfestellungen
-	 * @return AssistanceSet, welches die Hilfestellungen repräsentiert
 	 * @throws IllegalArgumentException
 	 *             Wird geworfen, wenn aus dem angegebenen String kein
 	 *             AssistanceSet generiert werden kann.
 	 */
-	public static AssistanceSet fromString(String representation) throws IllegalArgumentException {
-		AssistanceSet set = new AssistanceSet();
+	private void AssistancesfromString(String representation) throws IllegalArgumentException {
 		int i = 0;
 		for (Assistances assist : Assistances.values()) {
 			try {
 				if (representation.charAt(i) == '1') {
-					set.setAssistance(assist);
+					setAssistance(assist);
 				}
 			} catch (Exception exc) {
 				throw new IllegalArgumentException();
 			}
 			i++;
 		}
-		return set;
 	}
 
 }

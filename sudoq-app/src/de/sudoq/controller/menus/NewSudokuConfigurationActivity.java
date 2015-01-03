@@ -18,14 +18,16 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import de.sudoq.R;
 import de.sudoq.controller.SudoqActivitySherlock;
+import de.sudoq.controller.menus.preferences.NewSudokuPreferencesActivity;
 import de.sudoq.controller.sudoku.SudokuActivity;
-import de.sudoq.model.game.AssistanceSet;
+import de.sudoq.model.game.GameSettings;
 import de.sudoq.model.game.Game;
 import de.sudoq.model.game.GameManager;
 import de.sudoq.model.game.GameType;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
+import de.sudoq.model.xml.XmlTree;
 
 /**
  * SudokuPreferences ermöglicht das Verwalten von Einstellungen eines zu
@@ -33,7 +35,7 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
  * 
  * Hauptmenü -> "neues Sudoku" führt hierher 
  */
-public class SudokuPreferencesActivity extends SudoqActivitySherlock {
+public class NewSudokuConfigurationActivity extends SudoqActivitySherlock {
 	/** Attributes */
 	private Intent startGameIntent;
 
@@ -55,7 +57,7 @@ public class SudokuPreferencesActivity extends SudoqActivitySherlock {
 	 */
 	public static final int MULTIPLAYER_GAME = 2;
 
-	private static final String LOG_TAG = SudokuPreferencesActivity.class.getSimpleName();
+	private static final String LOG_TAG = NewSudokuConfigurationActivity.class.getSimpleName();
 
 	private SudokuTypes sudokuType;
 
@@ -63,7 +65,7 @@ public class SudokuPreferencesActivity extends SudoqActivitySherlock {
 
 	private Complexity complexity;
 	
-	public static AssistanceSet assistances;
+	public static GameSettings gameSettings;
 
 	/** Constructors */
 
@@ -151,7 +153,10 @@ public class SudokuPreferencesActivity extends SudoqActivitySherlock {
 			}
 		});
 		
-		assistances = AssistanceSet.fromString(Profile.getInstance().getAssistances().convertToString());
+		//start with settings-values from Profile
+		XmlTree xt = Profile.getInstance().getAssistances().toXmlTree();
+		gameSettings = new GameSettings();
+		gameSettings.fillFromXml(xt);
 	}
 
 	/**
@@ -188,9 +193,9 @@ public class SudokuPreferencesActivity extends SudoqActivitySherlock {
 	 *            von android xml übergebene View
 	 */
 	public void startGame(View view) {
-		if (this.sudokuType != null && this.complexity != null && this.gameType != null && assistances != null) {
+		if (this.sudokuType != null && this.complexity != null && this.gameType != null && gameSettings != null) {
 			try {
-				Game game = GameManager.getInstance().newGame(this.sudokuType, this.complexity, this.gameType, assistances);
+				Game game = GameManager.getInstance().newGame(this.sudokuType, this.complexity, this.gameType, gameSettings);
 				Profile.getInstance().setCurrentGame(game.getId());
 				startActivity(this.startGameIntent);
 				overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -228,16 +233,16 @@ public class SudokuPreferencesActivity extends SudoqActivitySherlock {
 		Log.d(LOG_TAG, "complexity changed to:" + difficulty.toString());
 	}
 
+
 	/**
-	 * Ruft die PrefererencesActivityNew auf mit dem Intent, dort nur
-	 * Assistances einzustellen.
-	 * 
+	 * Ruft die AssistancesPrefererencesActivity auf. 
+	 *
 	 * @param view
-	 *            von android xml übergebene View
+	 * von android xml übergebene View
 	 */
 	public void switchToAssistances(View view) {
-		Intent assistancesIntent = new Intent(this, AssistancesPreferencesActivity.class);
-//		assistancesIntent.putExtra(PlayerPreferencesActivity.INTENT_ONLYASSISTANCES, true);
+		Intent assistancesIntent = new Intent(this, NewSudokuPreferencesActivity.class);
 		startActivity(assistancesIntent);
 	}
+	
 }
