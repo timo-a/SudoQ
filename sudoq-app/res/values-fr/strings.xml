@@ -62,7 +62,8 @@
     <string name="profile_preference_title">Paramètres</string>
     <string name="profile_preference_title_name">Nom</string>
     <string name="profile_preference_title_gesture">Entrée de gestes</string>
-    <string name="profile_preference_title_cat_profile">Paramètres du profil</string>
+    <string name="profile_preference_title_left_hand_mode">mode gaucher</string>
+	<string name="profile_preference_title_cat_profile">Paramètres du profil</string>
     <string name="profile_preference_title_cat_assistances">Aide</string>
     <string name="profile_preference_title_assistance_markRowColumn">Séléctionner la ligne/ la colonne</string>
     <string name="profile_preference_title_assistance_markWrongSymbol">Séléctionner les symboles faux</string>

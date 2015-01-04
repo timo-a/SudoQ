@@ -62,6 +62,7 @@
 	<string name="profile_preference_title">Benutzereinstellungen</string>
 	<string name="profile_preference_title_name">Name</string>
 	<string name="profile_preference_title_gesture">Gesteneingabe</string>
+	<string name="profile_preference_title_left_hand_mode">Linkshänder-Modus</string>
 	<string name="profile_preference_title_cat_profile">Profileinstellungen</string>
 	<string name="profile_preference_title_cat_assistances">Hilfestellungen</string>
 	<string name="profile_preference_title_assistance_markRowColumn">Zeile/Spalte markieren</string>

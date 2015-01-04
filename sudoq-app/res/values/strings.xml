@@ -69,7 +69,7 @@
 	<string name="profile_preference_title_name">Name</string>
 	<string name="profile_preference_title_gesture">Gesture Input</string>
 	<string name="profile_preference_title_intelligent_assistant">Intelligent Assistant</string>
-	<string name="profile_preference_title_left_hand_mode">Lefthand mode</string>
+	<string name="profile_preference_title_left_hand_mode">Left-handed mode</string>
 	<string name="profile_preference_title_cat_profile">Profile-Settings</string>
 	<string name="profile_preference_title_cat_assistances">Assistances</string>
 	<string name="profile_preference_title_assistance_markRowColumn">Mark Row/Column</string>
