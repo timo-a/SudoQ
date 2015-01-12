@@ -24,6 +24,7 @@ import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 import de.sudoq.R;
 import de.sudoq.controller.SudoqActivitySherlock;
 import de.sudoq.model.files.FileManager;
@@ -143,6 +144,30 @@ public class SplashActivity extends SudoqActivitySherlock {
 		Boolean updateSituation = older(oldVersionName, NEWEST_ASSET_VERSION);
 
 		if (updateSituation && !this.startedCopying) {
+				
+			/*hint*/
+			try {
+				boolean foundSudokusinAssetfolder = false;
+				String[] l = getAssets().list("");
+				for(String s: l)
+					if (s.equals(HEAD_DIRECTORY))
+						foundSudokusinAssetfolder = true;
+				if(!foundSudokusinAssetfolder){
+					String msg =  "This app will probably crash once you try to start a new sudoku. "+
+	                         "This is pecause the person who compiled this app forgot about the 'assets' folder. "+
+				             "Please tell him that!";
+					Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+					Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+					Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+				}
+				//Toast.makeText(this, l[0].equals(HEAD_DIRECTORY)+"", Toast.LENGTH_SHORT).show();
+				
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			/*end of hint*/
+			
 			Log.v(LOG_TAG, "we will do an initialization");
 			new Initialization().execute(null, null, null);
 			startedCopying = true;
@@ -316,7 +341,8 @@ public class SplashActivity extends SudoqActivitySherlock {
 			}*/
 			
 			//new File(     sourcePath).getParentFile().mkdirs();
-			/*boolean tut =*/ new File(destinationPath).getParentFile().mkdirs();
+			/*boolean tut =*/ 
+			new File(destinationPath).getParentFile().mkdirs();
 			
 			File destination = new File(destinationPath);
 			InputStream in = null;

@@ -23,13 +23,13 @@
     </target>
     <target depends="init" name="build">
         <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="1.6" target="1.6" verbose="true">
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="1.7" target="1.7" verbose="true">
             <src path="src"/>
             <classpath refid="sudoqModel.classpath"/>
         </javac>
     </target>
     <target name="jar" depends="build">
-    	<delete file="../app/libs/model.jar" />
-    	<jar destfile="../app/libs/model.jar" basedir="bin" duplicate="preserve" />
+    	<delete file="../sudoq-app/libs/" />
+    	<jar destfile="../sudoq-app/libs/" basedir="bin" duplicate="preserve" />
     </target>
 </project>
