@@ -211,19 +211,14 @@ public final class TransformationUtilities {
 	protected static void changeSymbols(Sudoku sudoku) {
 		Map<Integer, Integer> permutationRule = TransformationUtilities.createPermutation(sudoku);
 
-		for (int x = 0; x < sudoku.getSudokuType().getSize().getX(); x++) {
-			for (int y = 0; y < sudoku.getSudokuType().getSize().getY(); y++) {
+		for (Position p: sudoku.getSudokuType().getValidPositions()) {
 
-				Field f = sudoku.getField(Position.get(x, y));
-				if (f != null && permutationRule.get(f.getSolution()) != f.getSolution()) // nur
-																							// wenn
-																							// sich
-																							// was
-																							// ändert
-					sudoku.setField(
-							new Field(f.isEditable(), permutationRule.get(f.getSolution()), f.getId(), f
-									.getNumberOfValues()), Position.get(x, y));
-			}
+			Field f = sudoku.getField(p);
+			int oldSymbol = f.getSolution();
+			int newSymbol = permutationRule.get(oldSymbol);
+			if (newSymbol != oldSymbol) // nur wenn sich was ändert, sonst bleibts ja gleich
+				sudoku.setField(new Field(f.isEditable(), newSymbol, f.getId(), f.getNumberOfValues()), p);
+			
 		}
 	}
 

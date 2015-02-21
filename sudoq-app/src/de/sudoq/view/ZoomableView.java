@@ -5,7 +5,7 @@ package de.sudoq.view;
  */
 public interface ZoomableView {
 	/**
-	 * Setzt den aktuellen Zoom-Faktor für diese View und refresh sie.
+	 * Setzt den aktuellen Zoom-Faktor für diese View und refresht sie.
 	 * 
 	 * @param factor
 	 *            Der Zoom-Faktor

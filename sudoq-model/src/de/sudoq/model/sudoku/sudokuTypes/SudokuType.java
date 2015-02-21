@@ -62,6 +62,12 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 	 */
 	protected List<Constraint> constraints;
 
+	/** 
+	 * Alle Positions die in Teil eines Constraints sind -> auf ein Feld verweisen
+	 * (Bei Samurai sind das ja nicht alle) 
+	 * */
+	protected List<Position> positions;
+
 	/**
 	 * eine List die zulässige Transformationen am Sudokutyp hält
 	 */
@@ -73,6 +79,7 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 	
 	public SudokuType(){
 		this.constraints = new ArrayList<Constraint>();
+		this.positions   = new ArrayList<Position>();
 		this.setOfPermutationProperties = new SetOfPermutationProperties();
 		this.helperList = new ArrayList<Helpers>();
 		this.ccb = new ComplexityConstraintBuilder();
@@ -99,6 +106,7 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 		this.numberOfSymbols = numberOfSymbols;
 		this.dimensions = Position.get(width, height);
 		this.constraints = new ArrayList<Constraint>();
+		this.positions   = new ArrayList<Position>();
 		this.setOfPermutationProperties = new SetOfPermutationProperties();
 		this.helperList = new ArrayList<Helpers>();
 		this.ccb = new ComplexityConstraintBuilder();
@@ -162,6 +170,22 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 		return constraints.iterator();
 	}
 
+	private class Positions implements Iterable<Position>{
+		public Iterator<Position> iterator(){
+			return positions.iterator();
+		}
+	}
+	
+	/**
+	 * Returns an iterator over all positions in this type
+	 */
+	public Iterable<Position> getValidPositions() {
+		//return positions.iterator();
+		return new Positions();
+	}
+
+	
+	
 	/**
 	 * Gibt die Anzahl der Symbole eines Sudokus dieses Typs zurück.
 	 * 
@@ -238,6 +262,8 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 		return (ArrayList<Constraint>) this.constraints;
 	}
 	
+	
+	//make a method that returns an iterator over all positions !=null. I think we need this a lot
 	
 	public void addConstraint(Constraint c) {
 		if (c != null) {
@@ -352,31 +378,17 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 			default:
 				break;
 			}
-			/*
-			if (sub.getName().equals("size")) {
-				dimensions = Position.fillFromXmlStatic(sub);
-			} else if (sub.getName().equals("blockSize")){
-				blockSize = Position.fillFromXmlStatic(sub);
-			} else if (sub.getName().equals("constraint")) {
-				Constraint c = new Constraint(new UniqueConstraintBehavior(), ConstraintType.LINE);
-				c.fillFromXml(sub);
-				constraints.add(c);
-			} else if (sub.getName().equals(SetOfPermutationProperties.SET_OF_PERMUTATION_PROPERTIES)){
-				setOfPermutationProperties = new SetOfPermutationProperties();
-				((SetOfPermutationProperties) setOfPermutationProperties).fillFromXml(sub);  //cast neccessary because setOPP is defined as 
-			} else if (sub.getName().equals("helperList")){
-				helperList = new ArrayList<Helpers>(sub.getNumberOfAttributes());
-				for(Iterator<XmlAttribute> jterator = sub.getAttributes(); jterator.hasNext();){
-					XmlAttribute xa = jterator.next();
-					int index = Integer.parseInt(xa.getName());
-					Helpers h = Helpers.values()[Integer.parseInt(xa.getValue())];
-					helperList.set(index, h);
-				}
-				
-			} else if (sub.getName().equals(ccb.TITLE)){
-				ccb = new ComplexityConstraintBuilder();
-				ccb.fillFromXml(sub);
-			}*/
 		}
+		initPositionsList();
+	}
+
+
+	private void initPositionsList() {
+		positions = new ArrayList<Position>();
+		for(Constraint c: constraints)
+			for(Position p: c)
+				if(!positions.contains(p))
+					positions.add(p);
+		
 	}
 }

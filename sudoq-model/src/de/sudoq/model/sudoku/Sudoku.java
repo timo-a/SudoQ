@@ -101,9 +101,10 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 					Field f;
 					Integer solution = map == null ? null : map.get(position);
 					if (solution != null) {
-						f = new Field(setValues == null || setValues.get(position) == null
-								|| setValues.get(position) == false, solution, fieldIdCounter,
-								type.getNumberOfSymbols());
+						boolean editable = setValues    == null ||
+							    setValues.get(position) == null || 
+							    setValues.get(position) == false;
+						f = new Field(editable, solution, fieldIdCounter,type.getNumberOfSymbols());
 					} else {
 						f = new Field(fieldIdCounter, type.getNumberOfSymbols());
 					}

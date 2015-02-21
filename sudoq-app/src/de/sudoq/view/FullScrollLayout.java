@@ -300,7 +300,8 @@ public class FullScrollLayout extends LinearLayout {
 			float newZoom = zoomFactor * scaleFactor;
 
 			// Don't let the object get too large.
-			newZoom = Math.max(Math.min(newZoom, childView.getMaxZoomFactor()), childView.getMinZoomFactor());
+			newZoom = Math.max(Math.min(newZoom, childView.getMaxZoomFactor()),//what are the semantics here!? 
+					                             childView.getMinZoomFactor());//make descriptive variables!
 			
 			if (!childView.zoom(newZoom)) {
 				return false;
