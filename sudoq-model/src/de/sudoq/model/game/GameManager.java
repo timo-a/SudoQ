@@ -7,6 +7,7 @@
  */
 package de.sudoq.model.game;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -138,7 +139,8 @@ public class GameManager {
 	public List<GameData> getGameList() {
 		List<GameData> list = new ArrayList<GameData>();
 		for (XmlTree game : getGamesXml()) {
-			list.add(new GameData(Integer.parseInt(game.getAttributeValue(ID)),
+			list.add(new GameData(
+					Integer.parseInt(game.getAttributeValue(ID)),
 					game.getAttributeValue(PLAYED_AT), Boolean.parseBoolean(game.getAttributeValue(FINISHED)),
 					SudokuTypes.values()[Integer.parseInt(game.getAttributeValue(SUDOKU_TYPE))],
 					Complexity.values()[Integer.parseInt(game.getAttributeValue(COMPLEXITY))]));
@@ -206,6 +208,7 @@ public class GameManager {
 	public void deleteGame(int id) {
 		if (id == Profile.getInstance().getCurrentGame()) {
 			Profile.getInstance().setCurrentGame(Profile.NO_GAME);
+			Profile.getInstance().saveChanges();//save 'currentGameID' in xml (otherwise menu will offer 'continue')
 		}
 		FileManager.deleteGame(id);
 		updateGamesList();
@@ -234,7 +237,10 @@ public class GameManager {
 
 	private XmlTree getGamesXml() {
 		try {
-			return new XmlHelper().loadXml(FileManager.getGamesFile());
+			File gf = FileManager.getGamesFile();
+			boolean ex = gf.exists();
+			Profile p = Profile.getInstance();
+			return new XmlHelper().loadXml(gf);
 		} catch (IOException e) {
 			throw new IllegalStateException("Profil broken", e);
 		}

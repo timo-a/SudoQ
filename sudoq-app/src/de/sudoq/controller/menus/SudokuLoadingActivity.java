@@ -13,6 +13,8 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -20,7 +22,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.TextView;
 import de.sudoq.R;
 import de.sudoq.controller.SudoqListActivity;
@@ -34,7 +38,7 @@ import de.sudoq.model.profile.Profile;
  * SudokuLoading können Sudokus geladen werden und daraufhin zur SudokuActivity
  * gewechselt werden.
  */
-public class SudokuLoadingActivity extends SudoqListActivity implements OnItemClickListener {
+public class SudokuLoadingActivity extends SudoqListActivity implements OnItemClickListener, OnItemLongClickListener {
 
 	/**
 	 * Der Log-Tag für das LogCat
@@ -52,8 +56,6 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 
 	protected static MenuItem menuDeleteSpecific;
 	private static final int MENU_DELETE_SPECIFIC = 1;
-
-	private boolean deleteMode = false;
 	
     /** Constructors */
 
@@ -97,10 +99,13 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_sudokuloading_delete_specific:
-			this.deleteMode = true;
 		case R.id.action_sudokuloading_delete_finished:
 			GameManager.getInstance().deleteFinishedGames();
+			break;
+		case R.id.action_sudokuloading_delete_all:
+			for (GameData gd : GameManager.getInstance().getGameList())
+				GameManager.getInstance().deleteGame(gd.getId());
+			break;
 		default:
 			super.onOptionsItemSelected(item);
 		}
@@ -114,8 +119,8 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 		List<GameData> gamesList = GameManager.getInstance().getGameList();
 		boolean noGames = gamesList.isEmpty();
 		
-		menu.findItem(R.id.action_sudokuloading_delete_specific).setVisible(!noGames);
 		menu.findItem(R.id.action_sudokuloading_delete_finished).setVisible(!noGames);
+		menu.findItem(R.id.action_sudokuloading_delete_all     ).setVisible(!noGames);
 		
 		return true;
 	}
@@ -155,18 +160,49 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Log.d(LOG_TAG, position + "");
 
-		if (!this.deleteMode) {
-			/* selected in order to play */
-			Profile.getInstance().setCurrentGame(adapter.getItem(position).getId());
-			startActivity(new Intent(this, SudokuActivity.class));
-			overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-		} else {
-			/* user wants it deleted */
-			this.deleteMode = false;
-			GameManager.getInstance().deleteGame(adapter.getItem(position).getId());
-			onContentChanged();
-		}
+		/* selected in order to play */
+		Profile.getInstance().setCurrentGame(adapter.getItem(position).getId());
+		startActivity(new Intent(this, SudokuActivity.class));
+		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 	}
+
+	@Override
+	public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+		Log.d(LOG_TAG, "LongClick on "+ position + "");
+		
+		CharSequence[] temp_items = null;
+		boolean specialcase = false;
+		if (specialcase) { } 
+		else {
+			temp_items = new CharSequence[2];
+			temp_items[0]= getString(R.string.sudokuloading_dialog_play);
+			temp_items[1]= getString(R.string.sudokuloading_dialog_delete);
+		}
+		final CharSequence[] items = temp_items;
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		
+		builder.setItems(items, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int item) {
+				switch (item) {
+				case 0://play
+					Profile.getInstance().setCurrentGame(adapter.getItem(position).getId());
+					Intent i = new Intent(SudokuLoadingActivity.this, SudokuActivity.class);
+					startActivity(i);
+					overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+					break;
+				case 1://delete
+					GameManager.getInstance().deleteGame(adapter.getItem(position).getId());
+					onContentChanged();
+					break;
+				}
+			}
+		});
+		AlertDialog alert = builder.create();
+		alert.show();		
+		
+		return true;//prevent itemclick from fire-ing as well
+	}	
 
 	private void initialiseGames() {
 		games = GameManager.getInstance().getGameList();
@@ -174,6 +210,7 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 		adapter = new SudokuLoadingAdapter(this, games);
 		setListAdapter(adapter);
 		getListView().setOnItemClickListener(this);
+		getListView().setOnItemLongClickListener(this);
 
 		TextView noGamesTextView = (TextView) findViewById(R.id.no_games_text_view);
 		TextView noGamesBackButton = (TextView) findViewById(R.id.no_games_back_button);
@@ -183,13 +220,6 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 		} else {
 			noGamesTextView.setVisibility(View.INVISIBLE);
 			noGamesBackButton.setVisibility(View.INVISIBLE);
-		}
-
-		TextView deleteSpecific = (TextView) findViewById(R.id.delete_specific_game_text_view);
-		if (this.deleteMode) {
-			deleteSpecific.setVisibility(View.VISIBLE);
-		} else {
-			deleteSpecific.setVisibility(View.INVISIBLE);
 		}
 	}
 
@@ -210,6 +240,7 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 	 */
 	public int getSize() {
 		return games.size();
-	}	
+	}
+	
 	
 }

@@ -30,16 +30,6 @@
         android:text="@string/sf_loading_back"
         android:layout_width="fill_parent"
         style="@style/style_loading_buttons"
-        android:onClick="goBack"/>
-    
-    <TextView 
-        android:id="@+id/delete_specific_game_text_view"
-        android:text="@string/tx_select_deleted"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center|center_vertical"
-        android:textStyle="bold"
-        android:textSize="12dip"
-        android:textColor="@android:color/black"/>
+        android:onClick="goBack"/>    
 
 </LinearLayout>

@@ -8,17 +8,21 @@
 package de.sudoq.controller.menus;
 
 import java.io.File;
+import java.util.List;
 
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 import de.sudoq.R;
 import de.sudoq.controller.SudoqActivitySherlock;
 import de.sudoq.controller.menus.preferences.PlayerPreferencesActivity;
 import de.sudoq.controller.sudoku.SudokuActivity;
 import de.sudoq.model.files.FileManager;
+import de.sudoq.model.game.GameData;
+import de.sudoq.model.game.GameManager;
 import de.sudoq.model.profile.Profile;
 
 /**
@@ -40,7 +44,9 @@ public class MainActivity extends SudoqActivitySherlock {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//Toast.makeText(this, "onCreate", Toast.LENGTH_LONG).show();
 		setContentView(R.layout.mainmenu);
+		onResume();
 	}
 
 	/**
@@ -49,41 +55,52 @@ public class MainActivity extends SudoqActivitySherlock {
 	@Override
 	public void onResume() {
 		super.onResume();
+		//Toast.makeText(this, "onResume", Toast.LENGTH_LONG).show();
 		Button continueButton = (Button) findViewById(R.id.button_mainmenu_continue);
-		if (Profile.getInstance().getCurrentGame() == Profile.NO_GAME) {
-			continueButton.setEnabled(false);
-		} else {
+		Profile p = Profile.getInstance(); 
+		
+		/*String s1 = "GameID : " + Profile.getInstance().getCurrentGame();
+		String s2 = "NrGames: " + GameManager.getInstance().getGameList().size();
+		Toast.makeText(this, s1+"\n"+s2, Toast.LENGTH_LONG).show();*/
+		
+		/*List<GameData> l = GameManager.getInstance().getGameList();
+		if (l.size() > 0 && !l.get(0).isFinished()) {*/
+		if (p.getCurrentGame() > p.NO_GAME){
 			continueButton.setEnabled(true);
-			File currentThumbnailFile = FileManager.getGameThumbnailFile(Profile.getInstance().getCurrentGame());
-			BitmapFactory bitmapFactory = new BitmapFactory();
-//			bitmapFactory.decodeStream(InputStream)
-//			Bitmap currentThumbnailBitmap = new 
-//			continueButton.setBackgroundDrawable(new Drawable() {
-//				
-//				@Override
-//				public void setColorFilter(ColorFilter cf) {
-//					// ToDO Auto-generated method stub
-//					
-//				}
-//				
-//				@Override
-//				public void setAlpha(int alpha) {
-//					// ToDO Auto-generated method stub
-//					
-//				}
-//				
-//				@Override
-//				public int getOpacity() {
-//					// ToDO Auto-generated method stub
-//					return 0;
-//				}
-//				
-//				@Override
-//				public void draw(Canvas canvas) {
-//					// ToDO Auto-generated method stub
-//					
-//				}
-//			});
+			// I think this is from an attempt to display a preview
+/*			File currentThumbnailFile = FileManager.getGameThumbnailFile(Profile.getInstance().getCurrentGame());
+ 			BitmapFactory bitmapFactory = new BitmapFactory();
+			bitmapFactory.decodeStream(InputStream)
+			Bitmap currentThumbnailBitmap = new 
+			continueButton.setBackgroundDrawable(new Drawable() {
+				
+				@Override
+				public void setColorFilter(ColorFilter cf) {
+					// ToDO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void setAlpha(int alpha) {
+					// ToDO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public int getOpacity() {
+					// ToDO Auto-generated method stub
+					return 0;
+				}
+				
+				@Override
+				public void draw(Canvas canvas) {
+					// ToDO Auto-generated method stub
+					
+				}
+			});*/
+
+		} else {
+			continueButton.setEnabled(false);
 		}
 	}
 

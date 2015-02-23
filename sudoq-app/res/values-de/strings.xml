@@ -155,10 +155,13 @@
     
     <!-- Sudoku Loading -->
     <string name="tx_no_sudokus_to_load">Keine gespeicherten Sudokus vorhanden.</string>
-    <string name="tx_select_deleted">Zu löschendes Sudoku wählen…</string>
     <string name="sudokuloading_delete_finished">Gelöste Sudokus löschen</string>
     <string name="sudokuloading_delete_specific">Bestimmtes Sudoku löschen</string>
     <string name="sf_loading_back">Zurück</string>
+    
+    <string name="sudokuloading_dialog_play">spielen</string>
+    <string name="sudokuloading_dialog_delete">löschen</string>
+    
     
     <!--  Defaults -->
     <string name="default_user_name">Profil 1</string>

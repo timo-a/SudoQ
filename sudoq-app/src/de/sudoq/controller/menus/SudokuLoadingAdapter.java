@@ -69,11 +69,11 @@ public class SudokuLoadingAdapter extends ArrayAdapter<GameData> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View rowView = inflater.inflate(R.layout.sudokuloadingitem, parent, false);
-		ImageView thumbnail = (ImageView) rowView.findViewById(R.id.sudoku_loading_item_thumbnail);
-		TextView sudokuType = (TextView) rowView.findViewById(R.id.type_label);
-		TextView sudokuComplexity = (TextView) rowView.findViewById(R.id.complexity_label);
-		TextView sudokuTime = (TextView) rowView.findViewById(R.id.time_label);
-		TextView sudokuState = (TextView) rowView.findViewById(R.id.state_label);
+		ImageView thumbnail       = (ImageView) rowView.findViewById(R.id.sudoku_loading_item_thumbnail);
+		TextView sudokuType       = (TextView)  rowView.findViewById(R.id.type_label);
+		TextView sudokuComplexity = (TextView)  rowView.findViewById(R.id.complexity_label);
+		TextView sudokuTime       = (TextView)  rowView.findViewById(R.id.time_label);
+		TextView sudokuState      = (TextView)  rowView.findViewById(R.id.state_label);
 
 		File currentThumbnailFile = FileManager.getGameThumbnailFile(gameDatas.get(position).getId());
 		try {
@@ -129,20 +129,20 @@ public class SudokuLoadingAdapter extends ArrayAdapter<GameData> {
 		typeStrings[SudokuTypes.standard6x6.ordinal()] = context.getString(R.string.sudoku_type_standard_6x6);
 		typeStrings[SudokuTypes.standard9x9.ordinal()] = context.getString(R.string.sudoku_type_standard_9x9);
 		typeStrings[SudokuTypes.standard16x16.ordinal()] = context.getString(R.string.sudoku_type_standard_16x16);
-		typeStrings[SudokuTypes.Xsudoku.ordinal()] = context.getString(R.string.sudoku_type_xsudoku);
+		typeStrings[SudokuTypes.Xsudoku.ordinal()]     = context.getString(R.string.sudoku_type_xsudoku);
 		typeStrings[SudokuTypes.HyperSudoku.ordinal()] = context.getString(R.string.sudoku_type_hyper);
 		typeStrings[SudokuTypes.stairstep.ordinal()] = context.getString(R.string.sudoku_type_stairstep_9x9);
 		typeStrings[SudokuTypes.squigglya.ordinal()] = context.getString(R.string.sudoku_type_squiggly_a_9x9);
 		typeStrings[SudokuTypes.squigglyb.ordinal()] = context.getString(R.string.sudoku_type_squiggly_b_9x9);
-		typeStrings[SudokuTypes.samurai.ordinal()] = context.getString(R.string.sudoku_type_samurai);
+		typeStrings[SudokuTypes.samurai.ordinal()]   = context.getString(R.string.sudoku_type_samurai);
 		
 	}
 
 	private void initialiseComplexities() {
 		complexityStrings = new String[Complexity.values().length];
-		complexityStrings[Complexity.easy.ordinal()] = context.getString(R.string.complexity_easy);
-		complexityStrings[Complexity.medium.ordinal()] = context.getString(R.string.complexity_medium);
+		complexityStrings[Complexity.easy.ordinal()]      = context.getString(R.string.complexity_easy);
+		complexityStrings[Complexity.medium.ordinal()]    = context.getString(R.string.complexity_medium);
 		complexityStrings[Complexity.difficult.ordinal()] = context.getString(R.string.complexity_difficult);
-		complexityStrings[Complexity.infernal.ordinal()] = context.getString(R.string.complexity_infernal);
+		complexityStrings[Complexity.infernal.ordinal()]  = context.getString(R.string.complexity_infernal);
 	}
 }

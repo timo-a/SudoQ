@@ -156,10 +156,13 @@
 
     <!-- Sudoku Loading -->
     <string name="tx_no_sudokus_to_load">Aucun sudoku sauvegardé disponible.</string>
-    <string name="tx_select_deleted">Séléctionner le suduko à effacer…</string>
     <string name="sudokuloading_delete_finished">Effacer les sudokus résolus</string>
     <string name="sudokuloading_delete_specific">Effacer un certain sudoku</string>
     <string name="sf_loading_back">Retour</string>
+    
+    <string name="sudokuloading_dialog_play">jouer</string>
+    <string name="sudokuloading_dialog_delete">effacer</string>
+    
     
     <!--  Defaults -->
     <string name="default_user_name">Profil 1</string>

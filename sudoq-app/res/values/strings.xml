@@ -104,10 +104,10 @@
     <string name="gesture_builder_define_gesture">Define a Gesture</string>
     
     <!-- GameTypeSelection Buttons -->
-    <string name="sf_gametypeselection_local_sudoku">Sudoku</string>
+    <string name="sf_gametypeselection_local_sudoku" >Sudoku</string>
     <string name="sf_gametypeselection_server_sudoku">Official Sudoku</string>
-    <string name="sf_gametypeselection_create_mp">Create</string>
-    <string name="sf_gametypeselection_join_mp">Join</string>
+    <string name="sf_gametypeselection_create_mp"    >Create</string>
+    <string name="sf_gametypeselection_join_mp"      >Join</string>
     
     <!-- SudokuPreferences Buttons und TextViews -->    
     <string name="subtitle_sudokupreferences_sudokutype">Sudoku Type:</string>
@@ -165,13 +165,17 @@
 
     <!-- Sudoku Loading -->
     <string name="tx_no_sudokus_to_load">No saved Sudokus available.</string>
-    <string name="tx_select_deleted">Select Sudoku to delete…</string>
     <string name="sudokuloading_delete_finished">Delete finished Sudokus</string>
     <string name="sudokuloading_delete_specific">Select Sudoku to delete</string>
+    <string name="sudokuloading_delete_all"     >Delete all Sudokus</string>
     <string name="time_format">HH:mm:ss dd.MM.yyyy</string>
     <string name="sf_loading_back">Go back!</string>
+    <string name="sudokuloading_dialog_play">play</string>
+    <string name="sudokuloading_dialog_delete">delete</string>
     
-        
+       
+    
+    
     <!-- Profile preference keys -->
 	<string name="profile_preference_key_id">profile_id</string>
 	<string name="profile_preference_key_deleted">deleted</string>

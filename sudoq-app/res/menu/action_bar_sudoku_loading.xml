@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     
-          
-    <!-- Delete Specific -->
-    <item android:id="@+id/action_sudokuloading_delete_specific"
-          android:title="@string/sudokuloading_delete_specific"
+    <!-- Delete All Finished -->
+    <item android:id="@+id/action_sudokuloading_delete_finished"
+          android:title="@string/sudokuloading_delete_finished"
           android:showAsAction="never" />
     
     <!-- Delete All -->
-    <item android:id="@+id/action_sudokuloading_delete_finished"
-          android:title="@string/sudokuloading_delete_finished"
+    <item android:id="@+id/action_sudokuloading_delete_all"
+          android:title="@string/sudokuloading_delete_all"
           android:showAsAction="never" />
     
     <!-- Tutorial -->
