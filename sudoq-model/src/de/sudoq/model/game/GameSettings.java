@@ -8,7 +8,7 @@
 package de.sudoq.model.game;
 
 import java.util.BitSet;
-
+import de.sudoq.model.xml.SudokuTypesList;
 import de.sudoq.model.xml.XmlAttribute;
 import de.sudoq.model.xml.XmlTree;
 import de.sudoq.model.xml.Xmlable;
@@ -28,13 +28,16 @@ public class GameSettings implements Xmlable{
 	private boolean lefthandMode;
 	private boolean helper;
 	private boolean gestures;
-
+	private SudokuTypesList wantedSudokuTypes;
+	
+	
 	/**
 	 * Instanziiert ein neues AssistanceSet in welchem alle Assistances
 	 * deaktiviert sind.
 	 */
-	public GameSettings() {
-		this.assistances = new BitSet();
+ 	public GameSettings() {
+ 		this.assistances = new BitSet();
+		this.wantedSudokuTypes = new SudokuTypesList();
 	}
 
 	/**
@@ -106,6 +109,10 @@ public class GameSettings implements Xmlable{
 		return helper;
 	}
 	
+	public SudokuTypesList getWantedTypesList(){
+		return wantedSudokuTypes;
+	}
+	
 	/* to and from string */
 	
 	@Override
@@ -115,9 +122,10 @@ public class GameSettings implements Xmlable{
         representation.addAttribute(new XmlAttribute("gestures",   "" + gestures));
         representation.addAttribute(new XmlAttribute("left",   "" + lefthandMode));
         representation.addAttribute(new XmlAttribute("helper", "" + helper));
+        representation.addChild(wantedSudokuTypes.toXmlTree());
 		return representation;
 	}
-
+	
 	@Override
 	public void fillFromXml(XmlTree xmlTreeRepresentation)
 			throws IllegalArgumentException {
@@ -126,6 +134,9 @@ public class GameSettings implements Xmlable{
 		gestures     = Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("gestures"));
 		lefthandMode = Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("left"));
         helper       = Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("helper"));
+		for(XmlTree xt: xmlTreeRepresentation)
+        	if(xt.getName().equals(SudokuTypesList.ROOT_NAME))
+        		wantedSudokuTypes.fillFromXml(xt);
 	}
 	
 	

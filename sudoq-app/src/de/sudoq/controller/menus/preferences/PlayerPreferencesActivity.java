@@ -84,11 +84,11 @@ public class PlayerPreferencesActivity extends PreferencesActivity {
 	 */
 	@Override
 	protected void refreshValues() {
-		name.setText(Profile.getInstance().getName());
-		gesture.setChecked(Profile.getInstance().isGestureActive());
-		autoAdjustNotes.setChecked(Profile.getInstance().getAssistance(Assistances.autoAdjustNotes));
-		markRowColumn.setChecked(Profile.getInstance().getAssistance(Assistances.markRowColumn));
-		markWrongSymbol.setChecked(Profile.getInstance().getAssistance(Assistances.markWrongSymbol));
+		name.              setText(Profile.getInstance().getName());
+		gesture.           setChecked(Profile.getInstance().isGestureActive());
+		autoAdjustNotes.   setChecked(Profile.getInstance().getAssistance(Assistances.autoAdjustNotes));
+		markRowColumn.     setChecked(Profile.getInstance().getAssistance(Assistances.markRowColumn));
+		markWrongSymbol.   setChecked(Profile.getInstance().getAssistance(Assistances.markWrongSymbol));
 		restrictCandidates.setChecked(Profile.getInstance().getAssistance(Assistances.restrictCandidates));
 	}
 
@@ -148,7 +148,7 @@ public class PlayerPreferencesActivity extends PreferencesActivity {
 		saveToProfile();
 	}
 
-	/* parameter View only needed to be foud by xml who clicks this*/
+	/* parameter View only needed to be found by xml who clicks this */
 	public void switchToAdvancedPreferences(View view){
 		
 		Intent advIntent = new Intent(this, AdvancedPreferencesActivity.class);

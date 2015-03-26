@@ -21,7 +21,7 @@
 	        android:id="@+id/hack_label"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="@string/sudoku_type_squiggly_a_9x9"
+	        android:text="@string/sudoku_type_dummy_longest_name"
 	        android:hint=""
 	        android:textAppearance="?android:attr/textAppearanceLarge"
 	        android:textColor="@android:color/transparent" />

@@ -31,9 +31,10 @@
         <activity android:name=".controller.sudoku.SudokuActivity"></activity>
         <activity android:name=".controller.menus.SudokuLoadingActivity"     android:noHistory="true" 
                                                                              android:configChanges="orientation"></activity>
-        <activity android:name="de.sudoq.controller.menus.NewSudokuConfigurationActivity" android:label="@string/title_sudokupreferences"></activity>
-        <activity android:name="de.sudoq.controller.menus.preferences.AdvancedPreferencesActivity"  android:label="@string/title_preferences_advanced"></activity>
-        <activity android:name="de.sudoq.controller.menus.preferences.NewSudokuPreferencesActivity" android:label="@string/title_sudokupreferences"></activity>
+        <activity android:name="de.sudoq.controller.menus.NewSudokuConfigurationActivity" android:label="@string/sf_sudokupreferences_title"></activity>
+        <activity android:name="de.sudoq.controller.menus.preferences.AdvancedPreferencesActivity"  android:label="@string/sf_advancedpreferences_title"></activity>
+        <activity android:name="de.sudoq.controller.menus.preferences.RestrictTypesActivity"        android:label="@string/sf_advancedpreferences_restricttypes_title"></activity>
+        <activity android:name="de.sudoq.controller.menus.preferences.NewSudokuPreferencesActivity" android:label="@string/sf_sudokupreferences_title"></activity>
         <activity android:name="de.sudoq.controller.menus.preferences.PlayerPreferencesActivity"    android:label="@string/profile_preference_title"
                                                                              android:windowSoftInputMode="stateHidden"></activity>
         <activity android:name=".controller.menus.StatisticsActivity"  android:label="@string/statistics_title"></activity>

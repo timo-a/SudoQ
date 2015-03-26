@@ -7,6 +7,10 @@
  */
 package de.sudoq.controller.menus;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,10 +27,10 @@ import de.sudoq.controller.sudoku.SudokuActivity;
 import de.sudoq.model.game.GameSettings;
 import de.sudoq.model.game.Game;
 import de.sudoq.model.game.GameManager;
-import de.sudoq.model.game.GameType;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
+import de.sudoq.model.xml.SudokuTypesList;
 import de.sudoq.model.xml.XmlTree;
 
 /**
@@ -36,13 +40,8 @@ import de.sudoq.model.xml.XmlTree;
  * Hauptmenü -> "neues Sudoku" führt hierher 
  */
 public class NewSudokuConfigurationActivity extends SudoqActivitySherlock {
-	/** Attributes */
-	private Intent startGameIntent;
 
-	/**
-	 * Konstante für den Key des GameTypes
-	 */
-	public static final String DESIRED_GAME_TYPE = "desired_game_type";
+	/** Attributes */
 
 	/**
 	 * Konstante für den Wert des Game Typs
@@ -60,8 +59,6 @@ public class NewSudokuConfigurationActivity extends SudoqActivitySherlock {
 	private static final String LOG_TAG = NewSudokuConfigurationActivity.class.getSimpleName();
 
 	private SudokuTypes sudokuType;
-
-	private GameType gameType;
 
 	private Complexity complexity;
 	
@@ -84,23 +81,44 @@ public class NewSudokuConfigurationActivity extends SudoqActivitySherlock {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.sudokupreferences);
 
-		Spinner typeSpinner = (Spinner) findViewById(R.id.spinner_sudokutype);
+		//for initial settings-values from Profile
+		XmlTree xt = Profile.getInstance().getAssistances().toXmlTree();
+		gameSettings = new GameSettings();
+		gameSettings.fillFromXml(xt);
+		
+		/** type spinner **/
+		Spinner typeSpinner = fillTypeSpinner(gameSettings.getWantedTypesList());		
+		
+		// nested Listener for typeSpinner
+		typeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+				String item = parent.getItemAtPosition(pos).toString();
+				if(item.equals(getString(R.string.sf_sudokupreferences_all_disabled_1))
+				|| item.equals(getString(R.string.sf_sudokupreferences_all_disabled_2))){
+					sudokuType=null;//set to null to prevent: going to advanced -> disabling all -> coming back -> now disabled type still set
+					//pass (user disabled all types, so a hint is shown. This hint may not be saved as a sudoku type!)
+				}else{
+					setSudokuType(Utility.string2enum(getApplicationContext(), item));
+				}
+			}
+
+			public void onNothingSelected(AdapterView<?> parent) {
+				// do nothing
+			}
+		});
+
+		/** complexity spinner **/
 		Spinner complexitySpinner = (Spinner) findViewById(R.id.spinner_sudokucomplexity);
-
-		ArrayAdapter<CharSequence> typeAdapter = ArrayAdapter.createFromResource(
-				this, R.array.sudokutype_values, android.R.layout.simple_spinner_item);
-		typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		typeSpinner.setAdapter(typeAdapter);
-
-		ArrayAdapter<CharSequence> complexityAdapter = ArrayAdapter.createFromResource(
-				this, R.array.sudokucomplexity_values, android.R.layout.simple_spinner_item);
+		
+		ArrayAdapter<CharSequence> complexityAdapter = ArrayAdapter.createFromResource(this,
+																					R.array.sudokucomplexity_values, 
+																					android.R.layout.simple_spinner_item);
 		complexityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		complexitySpinner.setAdapter(complexityAdapter);
 
-		// nested Listener for typeSpinner
+		// nested Listener for complexitySpinner
 		complexitySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-			public void onItemSelected(AdapterView<?> parent,
-					View view, int pos, long id) {
+			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 				String item = parent.getItemAtPosition(pos).toString();
 
 				if (item.equals(getResources().getString(R.string.complexity_easy))) {
@@ -111,52 +129,14 @@ public class NewSudokuConfigurationActivity extends SudoqActivitySherlock {
 					setSudokuDifficulty(Complexity.difficult);
 				} else if (item.equals(getResources().getString(R.string.complexity_infernal))) {
 					setSudokuDifficulty(Complexity.infernal);
-				}
+				} 
 			}
 
 			public void onNothingSelected(AdapterView<?> parent) {
 				// do nothing
 			}
-		});
-
-		// nested Listener for complexitySpinner
-		typeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-			public void onItemSelected(AdapterView<?> parent,
-					View view, int pos, long id) {
-				String item = parent.getItemAtPosition(pos).toString();
-
-				if (item.equals(getResources().getString(R.string.sudoku_type_standard_9x9))) {
-					setSudokuType(SudokuTypes.standard9x9);
-				} else if (item.equals(getResources().getString(R.string.sudoku_type_standard_16x16))) {
-					setSudokuType(SudokuTypes.standard16x16);
-				} else if (item.equals(getResources().getString(R.string.sudoku_type_standard_6x6))) {
-					setSudokuType(SudokuTypes.standard6x6);
-				} else if (item.equals(getResources().getString(R.string.sudoku_type_standard_4x4))) {
-					setSudokuType(SudokuTypes.standard4x4);
-				} else if (item.equals(getResources().getString(R.string.sudoku_type_squiggly_a_9x9))) {
-					setSudokuType(SudokuTypes.squigglya);
-				} else if (item.equals(getResources().getString(R.string.sudoku_type_squiggly_b_9x9))) {
-					setSudokuType(SudokuTypes.squigglyb);
-				} else if (item.equals(getResources().getString(R.string.sudoku_type_stairstep_9x9))) {
-					setSudokuType(SudokuTypes.stairstep);
-				} else if (item.equals(getResources().getString(R.string.sudoku_type_hyper))) {
-					setSudokuType(SudokuTypes.HyperSudoku);
-				} else if (item.equals(getResources().getString(R.string.sudoku_type_xsudoku))) {
-					setSudokuType(SudokuTypes.Xsudoku);
-				} else if (item.equals(getResources().getString(R.string.sudoku_type_samurai))) {
-					setSudokuType(SudokuTypes.samurai);
-				}
-			}
-
-			public void onNothingSelected(AdapterView<?> parent) {
-				// do nothing
-			}
-		});
+		});		
 		
-		//start with settings-values from Profile
-		XmlTree xt = Profile.getInstance().getAssistances().toXmlTree();
-		gameSettings = new GameSettings();
-		gameSettings.fillFromXml(xt);
 	}
 
 	/**
@@ -166,25 +146,33 @@ public class NewSudokuConfigurationActivity extends SudoqActivitySherlock {
 	@Override
 	public void onResume() {
 		super.onResume();
-		int desiredGameType = getIntent().getIntExtra(DESIRED_GAME_TYPE, NO_GAME_TYPE);
-		switch (desiredGameType) {
-		case LOCAL_GAME:
-			this.startGameIntent = new Intent(this, SudokuActivity.class);
-			this.gameType = GameType.LOCAL;
-			break;
-		// we assumed there would be multiplayer...
-		}
+		fillTypeSpinner(Profile.getInstance().getAssistances().getWantedTypesList());
 	}
 
-	/*
-	 * {@inheritDoc}
-	 */
-	// @Override
-	// public void onConfigurationChanged(Configuration newConfig) {
-	// super.onConfigurationChanged(newConfig);
-	// setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-	// }
+	private Spinner fillTypeSpinner(SudokuTypesList stl) {
+		
+		Spinner typeSpinner = (Spinner) findViewById(R.id.spinner_sudokutype);
+		
+		List<String> wantedSudokuTypes = new ArrayList<String>();//user can choose to only have selected types offered, so here we filter
+		if(stl.size()==0){
+			/*special case: user disabled all sudoku types so we give him a hint*/
+			wantedSudokuTypes.add(getString(R.string.sf_sudokupreferences_all_disabled_1));
+			wantedSudokuTypes.add(getString(R.string.sf_sudokupreferences_all_disabled_2));
+		}else{
+			Collections.sort(stl);//sortieren 
+			/* converse */
+			for(SudokuTypes st: stl)
+				wantedSudokuTypes.add(Utility.enum2string(this, st));
+			
+		}
+		ArrayAdapter<String> typeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, wantedSudokuTypes);
+		typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		typeSpinner.setAdapter(typeAdapter);	
 
+		return typeSpinner;
+	}
+	
+	
 	/**
 	 * Die Methode startet per Intent ein Sudokus mit den eingegebenen
 	 * Einstellungen.
@@ -193,11 +181,11 @@ public class NewSudokuConfigurationActivity extends SudoqActivitySherlock {
 	 *            von android xml übergebene View
 	 */
 	public void startGame(View view) {
-		if (this.sudokuType != null && this.complexity != null && this.gameType != null && gameSettings != null) {
+		if (this.sudokuType != null && this.complexity != null && gameSettings != null) {
 			try {
-				Game game = GameManager.getInstance().newGame(this.sudokuType, this.complexity, this.gameType, gameSettings);
+				Game game = GameManager.getInstance().newGame(this.sudokuType, this.complexity, gameSettings);
 				Profile.getInstance().setCurrentGame(game.getId());
-				startActivity(this.startGameIntent);
+				startActivity(new Intent(this, SudokuActivity.class));
 				overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 			} catch (IllegalArgumentException e) {
 				Toast.makeText(this, getString(R.string.sf_sudokupreferences_copying), Toast.LENGTH_SHORT).show();
@@ -205,6 +193,15 @@ public class NewSudokuConfigurationActivity extends SudoqActivitySherlock {
 			}
 		} else {
 			Toast.makeText(this, getString(R.string.error_sudoku_preference_incomplete), Toast.LENGTH_SHORT).show();
+			
+			if(this.sudokuType == null)
+				Toast.makeText(this, "sudokuType", Toast.LENGTH_SHORT).show();
+			if(this.complexity == null)
+				Toast.makeText(this, "complexity", Toast.LENGTH_SHORT).show();
+			if(this.gameSettings == null)
+				Toast.makeText(this, "gameSetting", Toast.LENGTH_SHORT).show();
+			
+			
 			Log.d(LOG_TAG, "else- 'wait please'");			
 		}
 	}

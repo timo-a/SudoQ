@@ -75,8 +75,6 @@ public class GameManager {
 	 *            Der Typ des Sudokus
 	 * @param complexity
 	 *            Die Schwierigkeit des Spiels
-	 * @param gameType
-	 *            Der Typ des Spiels
 	 * @param assists
 	 *            Die für dieses Game zu setzen Assistances
 	 * @return Das neue Spiel
@@ -88,7 +86,7 @@ public class GameManager {
 	 * @see GameType
 	 * @see Game
 	 */
-	public Game newGame(SudokuTypes type, Complexity complexity, GameType gameType, GameSettings assists) {
+	public Game newGame(SudokuTypes type, Complexity complexity, GameSettings assists) {
 		Sudoku sudoku = SudokuManager.getNewSudoku(type, complexity);
 
 		new SudokuManager().usedSudoku(sudoku);//TODO warum instanziierung, wenn laut doc singleton?

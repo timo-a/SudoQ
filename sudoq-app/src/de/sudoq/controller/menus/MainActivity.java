@@ -114,12 +114,8 @@ public class MainActivity extends SudoqActivitySherlock {
 	public void switchActivity(View button) {
 		switch (button.getId()) {
 		case R.id.button_mainmenu_new_sudoku:
-			// Intent newSudokuIntent = new Intent(this,
-			// GameTypeSelection.class);
-			// startActivity(newSudokuIntent);
-			Intent startLocalIntent = new Intent(this, NewSudokuConfigurationActivity.class);
-			startLocalIntent.putExtra(NewSudokuConfigurationActivity.DESIRED_GAME_TYPE, NewSudokuConfigurationActivity.LOCAL_GAME);
-			startActivity(startLocalIntent);
+			Intent newSudokuIntent = new Intent(this, NewSudokuConfigurationActivity.class);
+			startActivity(newSudokuIntent);
 			break;
 
 		case R.id.button_mainmenu_continue:

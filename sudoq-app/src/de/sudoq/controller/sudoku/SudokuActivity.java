@@ -44,6 +44,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import de.sudoq.R;
 import de.sudoq.controller.SudoqActivitySherlock;
+import de.sudoq.controller.menus.Utility;
 import de.sudoq.model.actionTree.ActionTreeElement;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.game.Assistances;
@@ -342,43 +343,10 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 	 */
 	private void setTypeText() {
 		
-		int t,st;
-		switch (this.game.getSudoku().getSudokuType().getEnumType()) {
-		case HyperSudoku:
-			t = R.string.sudoku_type_hyper;
-			break;
-		case samurai:
-			t = R.string.sudoku_type_samurai;
-			break;
-		case squigglya:
-			t = R.string.sudoku_type_squiggly_a_9x9;
-			break;
-		case squigglyb:
-			t = R.string.sudoku_type_squiggly_b_9x9;
-			break;
-		case stairstep:
-			t = R.string.sudoku_type_stairstep_9x9;
-			break;
-		case standard16x16:
-			t = R.string.sudoku_type_standard_16x16;
-			break;
-		case standard4x4:
-			t = R.string.sudoku_type_standard_4x4;
-			break;
-		case standard6x6:
-			t = R.string.sudoku_type_standard_6x6;
-			break;
-		case standard9x9:
-			t = R.string.sudoku_type_standard_9x9;
-			break;
-		case Xsudoku:
-			t = R.string.sudoku_type_xsudoku;
-			break;
-		default:
-			t = R.string.sudoku_type_xsudoku;//so that compiler shuts up about t not neccessarily being initialized
-		}
-
 		
+		String type = Utility.enum2string(this, this.game.getSudoku().getSudokuType().getEnumType());
+		
+		int st;
 		switch (this.game.getSudoku().getComplexity()) {
 		case easy:
 			st = R.string.complexity_easy;
@@ -396,7 +364,7 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 			st= R.string.complexity_infernal;//s.o.
 		}
 		ActionBar ab = getSupportActionBar();
-		ab.setTitle(getString(t));
+		ab.setTitle(type);
 		ab.setSubtitle(getString(st));
 	}
 

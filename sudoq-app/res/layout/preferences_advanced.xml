@@ -38,7 +38,7 @@
 	        android:layout_margin="5dp"
 	        android:onClick="selectTypesToRestrict"
 	        android:text="@string/profile_preference_button_provide_restricted_set_of_types"
-	        android:visibility="gone" />
+	         />
 	    	
 	</LinearLayout>
 </ScrollView>

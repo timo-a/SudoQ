@@ -9,13 +9,11 @@ package de.sudoq.model.profile;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import de.sudoq.model.ObservableModelImpl;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.game.GameSettings;
 import de.sudoq.model.game.Assistances;
-import de.sudoq.model.sudoku.SudokuManager;
 import de.sudoq.model.xml.ProfileXmlHandler;
 import de.sudoq.model.xml.XmlAttribute;
 import de.sudoq.model.xml.XmlHandler;
@@ -91,7 +89,6 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 			instance = new Profile();
 			instance.loadCurrentProfile();
 		}
-
 		return instance;
 	}
 

@@ -10,55 +10,57 @@ package de.sudoq.model.xml;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import de.sudoq.model.sudoku.ConstraintType;
-import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.sudokuTypes.PermutationProperties;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.xml.XmlAttribute;
 import de.sudoq.model.xml.XmlTree;
 import de.sudoq.model.xml.Xmlable;
 
-/** Do never ever try to do this generic. NEVER
+/**
  * An xmlable ArrayList of PermutationProperties
  */
-public abstract class XmlableEnumList extends ArrayList<Integer> implements Xmlable{
+public class SudokuTypesList extends ArrayList<SudokuTypes> implements Xmlable{
 
-	public final String rootName;
-	String enumType;
-		
+	public static final String ROOT_NAME    = "SudokuTypesList";
+	private       final String ELEMENT_NAME = "Type";
+	private       final String TYPE_ID      = "TypeID";
 	
-//TODO replace setofpermutationproperties by this
-	public XmlableEnumList(String rootName, String enumType) {
-		super();
-		this.rootName = rootName;
-		this.enumType = enumType;
+	public ArrayList<SudokuTypes> getAllTypes(){
+		ArrayList<SudokuTypes> allTypes = new ArrayList<SudokuTypes>();
+		
+		for(SudokuTypes st: SudokuTypes.values())
+			allTypes.add(st);
+		
+		return allTypes;
 	}
 	
-	public boolean add(Enum<?> h){
-		return this.add(h.ordinal());
+	public SudokuTypesList(){
+		this.addAll(getAllTypes());
 	}
 	
-	abstract public ArrayList<?> getList();
-		
+	
+	public boolean isTypeWanted(SudokuTypes t){
+		return contains(t); 
+	}
+	
 	@Override
 	public XmlTree toXmlTree() {
-		XmlTree representation = new XmlTree(rootName);
-		for (Integer i: this){
-			String index = ""+representation.getNumberOfChildren(); 
-			String value = ""+this.get(i);
-			XmlAttribute xa = new XmlAttribute(index,value);
-			representation.addAttribute(xa);
+		XmlTree representation = new XmlTree(ROOT_NAME);
+		for (SudokuTypes p:this){
+			String index = Integer.toString(representation.getNumberOfAttributes());
+			representation.addAttribute(new XmlAttribute(TYPE_ID+"_"+index, Integer.toString(p.ordinal())));
 		}
+		
 		return representation;
 	}
-
+	
 	@Override
 	public void fillFromXml(XmlTree xmlTreeRepresentation) throws IllegalArgumentException {
-		this.clear();
-		this.ensureCapacity(xmlTreeRepresentation.getNumberOfAttributes());
+		clear();
 		for (XmlAttribute xa : xmlTreeRepresentation.getAttributes2()) {
-			int index = Integer.parseInt(xa.getName());
-			int value = Integer.parseInt(xa.getValue()); //TODO wont work wg. type erasure?
-			this.set(index, value);
+			if (xa.getName().startsWith(TYPE_ID)) {
+				SudokuTypes st = SudokuTypes.values()[Integer.parseInt(xa.getValue())]; 
+				add(st); //right order not guaranteed(if s.o. messes with xml)
+			}
 		}		
 	}
 }

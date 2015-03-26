@@ -137,6 +137,11 @@ public class XmlTree implements Iterable<XmlTree> {
 	public Iterator<XmlTree> getChildren() {
 		return children.iterator();
 	}
+	
+	
+	
+	
+	
 
 	/**
 	 * Diese Methode gibt eine Liste aller Attribute des Xml Baumes zurück.
@@ -147,6 +152,12 @@ public class XmlTree implements Iterable<XmlTree> {
 		return attributes.iterator();
 	}
 
+	/* zum bequem drüberiterieren*/
+	public Iterable<XmlAttribute> getAttributes2() {
+		return new AttributesIterator();
+	}
+
+	
 	/**
 	 * Diese Methode fügt ein Unterobjekt an diesen Xml Baum an.
 	 * 
@@ -227,4 +238,15 @@ public class XmlTree implements Iterable<XmlTree> {
 		return getChildren();
 	}
 
+	
+	
+	public class AttributesIterator implements Iterable<XmlAttribute>{
+
+		@Override
+		public Iterator<XmlAttribute> iterator() {
+			return attributes.iterator();
+		}
+		
+	}
+	
 }

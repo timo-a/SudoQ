@@ -58,7 +58,6 @@ public class SudokuLoadingAdapter extends ArrayAdapter<GameData> {
 		super(context, R.layout.sudokuloadingitem, games);
 		this.context = context;
 		this.gameDatas = games;
-		initialiseTypes();
 		initialiseComplexities();
 	}
 
@@ -111,7 +110,7 @@ public class SudokuLoadingAdapter extends ArrayAdapter<GameData> {
 		sudokuTime.setText(date);
 
 		if (gameDatas.get(position).isFinished()) {
-			sudokuState.setText(context.getString(R.string.game_finished));
+			sudokuState.setText(context.getString(R.string.check_mark));
 			sudokuType.setTextColor(Color.GRAY);
 			sudokuComplexity.setTextColor(Color.GRAY);
 			sudokuTime.setTextColor(Color.GRAY);
@@ -121,21 +120,6 @@ public class SudokuLoadingAdapter extends ArrayAdapter<GameData> {
 		}
 
 		return rowView;
-	}
-
-	private void initialiseTypes() {
-		typeStrings = new String[SudokuTypes.values().length];
-		typeStrings[SudokuTypes.standard4x4.ordinal()] = context.getString(R.string.sudoku_type_standard_4x4);
-		typeStrings[SudokuTypes.standard6x6.ordinal()] = context.getString(R.string.sudoku_type_standard_6x6);
-		typeStrings[SudokuTypes.standard9x9.ordinal()] = context.getString(R.string.sudoku_type_standard_9x9);
-		typeStrings[SudokuTypes.standard16x16.ordinal()] = context.getString(R.string.sudoku_type_standard_16x16);
-		typeStrings[SudokuTypes.Xsudoku.ordinal()]     = context.getString(R.string.sudoku_type_xsudoku);
-		typeStrings[SudokuTypes.HyperSudoku.ordinal()] = context.getString(R.string.sudoku_type_hyper);
-		typeStrings[SudokuTypes.stairstep.ordinal()] = context.getString(R.string.sudoku_type_stairstep_9x9);
-		typeStrings[SudokuTypes.squigglya.ordinal()] = context.getString(R.string.sudoku_type_squiggly_a_9x9);
-		typeStrings[SudokuTypes.squigglyb.ordinal()] = context.getString(R.string.sudoku_type_squiggly_b_9x9);
-		typeStrings[SudokuTypes.samurai.ordinal()]   = context.getString(R.string.sudoku_type_samurai);
-		
 	}
 
 	private void initialiseComplexities() {

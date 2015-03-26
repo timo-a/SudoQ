@@ -11,6 +11,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -18,12 +19,13 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
 import de.sudoq.R;
+import de.sudoq.controller.menus.SudokuLoadingActivity;
 import de.sudoq.model.game.GameSettings;
 import de.sudoq.model.profile.Profile;
 
 /**
  * Activity um Profile zu bearbeiten und zu verwalten
- * aufgerufen im Hauptmenü 4. Button
+ * 
  */
 public class AdvancedPreferencesActivity extends PreferencesActivity {
 	/** Attributes */
@@ -72,7 +74,7 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 	 *            von android xml übergebene View
 	 */
 	public void selectTypesToRestrict(View view) {
-		Toast.makeText(this, "no functionality at the moment", Toast.LENGTH_LONG).show();
+		startActivity(new Intent(this, RestrictTypesActivity.class));
 	}
 
 

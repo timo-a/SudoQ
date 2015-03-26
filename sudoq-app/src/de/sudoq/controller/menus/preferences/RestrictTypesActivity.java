@@ -5,7 +5,7 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
  * You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.sudoq.controller.menus;
+package de.sudoq.controller.menus.preferences;
 
 import java.util.List;
 
@@ -32,24 +32,26 @@ import de.sudoq.controller.sudoku.SudokuActivity;
 import de.sudoq.model.game.GameData;
 import de.sudoq.model.game.GameManager;
 import de.sudoq.model.profile.Profile;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
+import de.sudoq.model.xml.SudokuTypesList;
 
 /**
  * Diese Klasse repräsentiert den Lade-Controller des Sudokuspiels. Mithilfe von
  * SudokuLoading können Sudokus geladen werden und daraufhin zur SudokuActivity
  * gewechselt werden.
  */
-public class SudokuLoadingActivity extends SudoqListActivity implements OnItemClickListener, OnItemLongClickListener {
+public class RestrictTypesActivity extends SudoqListActivity implements OnItemClickListener, OnItemLongClickListener {
 
 	/**
 	 * Der Log-Tag für das LogCat
 	 */
-	private static final String LOG_TAG = SudokuLoadingActivity.class.getSimpleName();
+	private static final String LOG_TAG = RestrictTypesActivity.class.getSimpleName();
 
 	/** Attributes */
 
-	private SudokuLoadingAdapter adapter;
+	private RestrictTypesAdapter adapter;
 
-	private List<GameData> games;
+	private SudokuTypesList types;
 
 	protected static MenuItem menuDeleteFinished;
 	private static final int MENU_DELETE_FINISHED = 0;
@@ -69,8 +71,8 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.sudokuloading);
-		initialiseGames();
+		setContentView(R.layout.restricttypes);
+		initialiseTypes();
 	}
 	
 	
@@ -140,7 +142,7 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 	@Override
 	public void onContentChanged() {
 		super.onContentChanged();
-		initialiseGames();
+		initialiseTypes();
 	}
 
 	
@@ -160,68 +162,33 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Log.d(LOG_TAG, position + "");
 
-		/* selected in order to play */
-		Profile.getInstance().setCurrentGame(adapter.getItem(position).getId());
-		startActivity(new Intent(this, SudokuActivity.class));
-		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+		/* toggle item */
+		SudokuTypes st = adapter.getItem(position);
+		if (types.contains(st))
+			types.remove(st);
+		else
+			types.add(st);
+		Profile.getInstance().saveChanges();
+		adapter.notifyDataSetChanged();
 	}
 
 	@Override
 	public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 		Log.d(LOG_TAG, "LongClick on "+ position + "");
 		
-		/*gather all options */
-		CharSequence[] temp_items = null;
-		boolean specialcase = false;
-		if (specialcase) { } 
-		else {
-			temp_items = new CharSequence[2];
-			temp_items[0]= getString(R.string.sudokuloading_dialog_play);
-			temp_items[1]= getString(R.string.sudokuloading_dialog_delete);
-		}
-		final CharSequence[] items = temp_items;
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		
-		builder.setItems(items, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int item) {
-				switch (item) {
-				case 0://play
-					Profile.getInstance().setCurrentGame(adapter.getItem(position).getId());
-					Intent i = new Intent(SudokuLoadingActivity.this, SudokuActivity.class);
-					startActivity(i);
-					overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-					break;
-				case 1://delete
-					GameManager.getInstance().deleteGame(adapter.getItem(position).getId());
-					onContentChanged();
-					break;
-				}
-			}
-		});
-		AlertDialog alert = builder.create();
-		alert.show();		
-		
+		/* nothing */
+			
 		return true;//prevent itemclick from fire-ing as well
 	}	
 
-	private void initialiseGames() {
-		games = GameManager.getInstance().getGameList();
+	private void initialiseTypes() {
+		types = Profile.getInstance().getAssistances().getWantedTypesList();
+		Log.d(LOG_TAG, "typesSize: "+types.size());
 		// initialize ArrayAdapter for the profile names and set it
-		adapter = new SudokuLoadingAdapter(this, games);
+		adapter = new RestrictTypesAdapter(this, types);
 		setListAdapter(adapter);
 		getListView().setOnItemClickListener(this);
 		getListView().setOnItemLongClickListener(this);
-
-		TextView noGamesTextView = (TextView) findViewById(R.id.no_games_text_view);
-		TextView noGamesBackButton = (TextView) findViewById(R.id.no_games_back_button);
-		if (games.isEmpty()) {
-			noGamesTextView.setVisibility(View.VISIBLE);
-			noGamesBackButton.setVisibility(View.VISIBLE);
-		} else {
-			noGamesTextView.setVisibility(View.INVISIBLE);
-			noGamesBackButton.setVisibility(View.INVISIBLE);
-		}
 	}
 
 	/**
@@ -233,15 +200,5 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 	public void goBack(View view) {
 		super.onBackPressed();
 	}
-
-	/**
-	 * Just for testing!
-	 * @return
-	 * 		number of saved games 
-	 */
-	public int getSize() {
-		return games.size();
-	}
-	
-	
+		
 }

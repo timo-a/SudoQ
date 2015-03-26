@@ -83,8 +83,7 @@ public class GameManagerTests {
 
 	@Test
 	public void testDeletingCurrentGame() {
-		Game game = GameManager.getInstance().newGame(SudokuTypes.standard9x9, Complexity.difficult, GameType.LOCAL,
-				new GameSettings());
+		Game game = GameManager.getInstance().newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings());
 		Profile.getInstance().setCurrentGame(game.getId());
 		GameManager.getInstance().deleteGame(Profile.getInstance().getCurrentGame());
 		assertEquals(Profile.NO_GAME, Profile.getInstance().getCurrentGame());
@@ -100,8 +99,7 @@ public class GameManagerTests {
 
 	@Test
 	public void testCreatingAndSolving() {
-		Game game = GameManager.getInstance().newGame(SudokuTypes.standard9x9, Complexity.difficult, GameType.LOCAL,
-				new GameSettings());
+		Game game = GameManager.getInstance().newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings());
 		assertFalse(game.isFinished());
 		int count = 0;
 		for (Field f : game.getSudoku()) {
@@ -129,8 +127,7 @@ public class GameManagerTests {
 	public void testAssitenceSetting() {
 		GameSettings set = new GameSettings();
 		set.setAssistance(Assistances.autoAdjustNotes);
-		Game game = GameManager.getInstance().newGame(SudokuTypes.standard9x9, Complexity.difficult, GameType.LOCAL,
-				set);
+		Game game = GameManager.getInstance().newGame(SudokuTypes.standard9x9, Complexity.difficult, set);
 		assertTrue(game.isAssistanceAvailable(Assistances.autoAdjustNotes));
 		assertFalse(game.isAssistanceAvailable(Assistances.markRowColumn));
 		game.addTime(50);
@@ -139,22 +136,18 @@ public class GameManagerTests {
 	}
 
 	public void testLoadingAndSaving() {
-		Game game = GameManager.getInstance().newGame(SudokuTypes.standard9x9, Complexity.difficult, GameType.LOCAL,
-				new GameSettings());
+		Game game = GameManager.getInstance().newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings());
 		GameManager.getInstance().save(game);
 		assertTrue(GameManager.getInstance().load(game.getId()).equals(game));
 	}
 
 	@Test
 	public void testGameList() {
-		Game game1 = GameManager.getInstance().newGame(SudokuTypes.standard9x9, Complexity.easy, GameType.LOCAL,
-				new GameSettings());
+		Game game1 = GameManager.getInstance().newGame(SudokuTypes.standard9x9, Complexity.easy, new GameSettings());
 		GameManager.getInstance().save(game1);
-		Game game2 = GameManager.getInstance().newGame(SudokuTypes.standard9x9, Complexity.medium, GameType.LOCAL,
-				new GameSettings());
+		Game game2 = GameManager.getInstance().newGame(SudokuTypes.standard9x9, Complexity.medium, new GameSettings());
 		GameManager.getInstance().save(game2);
-		Game game3 = GameManager.getInstance().newGame(SudokuTypes.standard9x9, Complexity.difficult, GameType.LOCAL,
-				new GameSettings());
+		Game game3 = GameManager.getInstance().newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings());
 		GameManager.getInstance().save(game3);
 		assertEquals(GameManager.getInstance().getGameList().size(), 3);
 		game3.solveAll();
@@ -169,7 +162,7 @@ public class GameManagerTests {
 	@Test
 	public void testSudokuLoading() {
 		GameManager gm = GameManager.getInstance();
-		Game game = gm.newGame(SudokuTypes.standard9x9, Complexity.medium, GameType.LOCAL, new GameSettings());
+		Game game = gm.newGame(SudokuTypes.standard9x9, Complexity.medium, new GameSettings());
 		int id = game.getId();
 		Field field = null;
 		for (Field f : game.getSudoku()) {

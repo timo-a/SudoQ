@@ -18,7 +18,6 @@ import de.sudoq.model.game.GameSettings;
 import de.sudoq.model.profile.Profile;
 
 /**
- * Activity um Profile zu bearbeiten und zu verwalten
  * Wird aufgerufen in Hauptmenü-> neues Sudoku -> einstellungen
  */
 public class NewSudokuPreferencesActivity extends PreferencesActivity {

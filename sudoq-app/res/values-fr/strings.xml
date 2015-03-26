@@ -77,6 +77,7 @@
     <string name="profile_preference_button_gesture_builder">définir des gestes</string>
 	<string name="profile_preference_button_save">Sauvegarder</string>
     <string name="profile_preference_button_advanced_preferences">paramètres avancés</string>
+    <string name="profile_preference_button_provide_restricted_set_of_types">Sélectionnez les types sont proposés</string>
     <string name="profile_preference_new_profile">nouveau profil</string>
 
     <!-- Profile list -->
@@ -110,7 +111,9 @@
     <string name="sf_sudokupreferences_sudokucomplexity">Choisir le degré de difficulté</string>
     <string name="sf_sudokupreferences_assistances">Configurer l’aide</string>
     <string name="sf_sudokupreferences_copying">Les modèles sont en train d’être copiés. Veuillez patienter.</string>
-
+    <string name="sf_sudokupreferences_all_disabled_1">Vous avez désactivé tous les types de sudoku…</string>
+    <string name="sf_sudokupreferences_all_disabled_2">Activer les dans les paramètres avancés.</string>
+    
     <!-- SudokuActivity -->
     <string name="sf_sudoku_button_bookmark">Marque-page</string>
     <string name="sf_sudoku_button_close">Fermer</string>
@@ -138,26 +141,25 @@
     <string name="complexity_infernal">Infernal</string>
     
     <!-- Sudoku Types -->
-    <string name="sudoku_type_standard_9x9">Sudoku standard 9x9</string>
+    <string name="sudoku_type_standard_9x9"  >Sudoku standard 9x9</string>
     <string name="sudoku_type_standard_16x16">Sudoku standard 16x16</string>
-    <string name="sudoku_type_standard_6x6">Sudoku standard 6x6</string>
-    <string name="sudoku_type_standard_4x4">Sudoku standard 4x4</string>
-    <string name="sudoku_type_squiggly_a_9x9">Squiggly-Sudoku de type A 9x9</string>
-    <string name="sudoku_type_squiggly_b_9x9">Squiggly-Sudoku de type B 9x9</string>
-    <string name="sudoku_type_stairstep_9x9">Stairstep-Sudoku 9x9</string>
-    <string name="sudoku_type_samurai">Samurai-Sudoku</string>
-    <string name="sudoku_type_hyper">Hyper-Sudoku</string>
-    <string name="sudoku_type_xsudoku">XSudoku</string>
-    <string name="title_sudokupreferences">Paramètres du sudoku </string>
-    <string name="title_preferences_advanced">paramètres avancés</string>
-
-    <!-- Game states -->
-    <string name="game_finished">✔</string>
-
+    <string name="sudoku_type_standard_6x6"  >Sudoku standard 6x6</string>
+    <string name="sudoku_type_standard_4x4"  >Sudoku standard 4x4</string>
+    <string name="sudoku_type_squiggly_a_9x9">Squiggly-Sudoku 9x9</string>
+    <string name="sudoku_type_squiggly_b_9x9">Squoggly-Sudoku 9x9</string>
+    <string name="sudoku_type_stairstep_9x9" >Stairstep-Sudoku 9x9</string>
+    <string name="sudoku_type_samurai"       >Samurai-Sudoku</string>
+    <string name="sudoku_type_hyper"         >Hyper-Sudoku</string>
+    <string name="sudoku_type_xsudoku"       >X-Sudoku</string>
+    <string name="sudoku_type_dummy_longest_name">Sudoku standard 16x16</string>
+    <string name="sf_sudokupreferences_title">Paramètres du sudoku </string>
+    <string name="sf_advancedpreferences_title">Paramètres avancés</string>
+    <string name="sf_advancedpreferences_restricttypes_title">Types proposés</string>
+                  
     <!-- Sudoku Loading -->
     <string name="tx_no_sudokus_to_load">Aucun sudoku sauvegardé disponible.</string>
     <string name="sudokuloading_delete_finished">Effacer les sudokus résolus</string>
-    <string name="sudokuloading_delete_specific">Effacer un certain sudoku</string>
+    <string name="sudokuloading_delete_all">Effacer tous les sudokus</string>
     <string name="sf_loading_back">Retour</string>
     
     <string name="sudokuloading_dialog_play">jouer</string>

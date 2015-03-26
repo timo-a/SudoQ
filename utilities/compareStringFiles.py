@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+#aufruf: python comparebla.py english foreign ignore
+
 import sys
 import datetime
 import re
@@ -29,6 +31,11 @@ for l in only_foreign_strings:
 		#print engDic
 		print key
 	engDic.pop(key)
+
+#delete all keys that are international e.g. ✔ or otherwise never altered in foreign locatization
+ignored = map(lambda x: x.strip(), open(sys.argv[3]).readlines())
+for s in ignored:
+    engDic.pop(s)
 
 #unique keys remain
 for k,v in engDic.iteritems():
