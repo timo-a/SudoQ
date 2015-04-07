@@ -17,6 +17,3 @@
           android:showAsAction="never" />
     
 </menu>
-
-<!-- android:icon="@drawable/ic_action_refresh"
-android:title="@string/action_tutorial"-->

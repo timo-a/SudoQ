@@ -13,24 +13,16 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.TextView;
+import android.widget.Toast;
 import de.sudoq.R;
 import de.sudoq.controller.SudoqListActivity;
-import de.sudoq.controller.sudoku.SudokuActivity;
-import de.sudoq.model.game.GameData;
-import de.sudoq.model.game.GameManager;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.xml.SudokuTypesList;
@@ -52,12 +44,6 @@ public class RestrictTypesActivity extends SudoqListActivity implements OnItemCl
 	private RestrictTypesAdapter adapter;
 
 	private SudokuTypesList types;
-
-	protected static MenuItem menuDeleteFinished;
-	private static final int MENU_DELETE_FINISHED = 0;
-
-	protected static MenuItem menuDeleteSpecific;
-	private static final int MENU_DELETE_SPECIFIC = 1;
 	
     /** Constructors */
 
@@ -86,7 +72,7 @@ public class RestrictTypesActivity extends SudoqListActivity implements OnItemCl
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getSupportMenuInflater();
-		inflater.inflate(R.menu.action_bar_sudoku_loading, menu);    
+		inflater.inflate(R.menu.action_bar_restrict_types, menu);    
 		return true;
 	}
 
@@ -101,12 +87,11 @@ public class RestrictTypesActivity extends SudoqListActivity implements OnItemCl
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_sudokuloading_delete_finished:
-			GameManager.getInstance().deleteFinishedGames();
-			break;
-		case R.id.action_sudokuloading_delete_all:
-			for (GameData gd : GameManager.getInstance().getGameList())
-				GameManager.getInstance().deleteGame(gd.getId());
+		case R.id.action_restore_all:
+			/* add (only!) types that are not currently selected */
+			for(SudokuTypes s: types.getAllTypes())
+				if(!types.contains(s))
+					types.add(s);
 			break;
 		default:
 			super.onOptionsItemSelected(item);
@@ -118,11 +103,9 @@ public class RestrictTypesActivity extends SudoqListActivity implements OnItemCl
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
-		List<GameData> gamesList = GameManager.getInstance().getGameList();
-		boolean noGames = gamesList.isEmpty();
 		
-		menu.findItem(R.id.action_sudokuloading_delete_finished).setVisible(!noGames);
-		menu.findItem(R.id.action_sudokuloading_delete_all     ).setVisible(!noGames);
+		//Toast.makeText(getApplicationContext(), "prepOpt called. s_1: "+types.size()+" s_2: "+types.getAllTypes().size(), Toast.LENGTH_LONG).show();
+		menu.findItem(R.id.action_restore_all).setVisible(types.size() < types.getAllTypes().size());//offer option to restore all only when some are disabled...
 		
 		return true;
 	}
@@ -183,8 +166,7 @@ public class RestrictTypesActivity extends SudoqListActivity implements OnItemCl
 
 	private void initialiseTypes() {
 		types = Profile.getInstance().getAssistances().getWantedTypesList();
-		Log.d(LOG_TAG, "typesSize: "+types.size());
-		// initialize ArrayAdapter for the profile names and set it
+		// initialize ArrayAdapter for the type names and set it
 		adapter = new RestrictTypesAdapter(this, types);
 		setListAdapter(adapter);
 		getListView().setOnItemClickListener(this);

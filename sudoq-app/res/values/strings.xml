@@ -20,6 +20,7 @@
     <string name="action_switch_profile">Switch Profile</string>
     <string name="action_delete_all_gestures">Delete all gestures</string>
     <string name="action_delete_single_gesture">Delete specific gesture</string>
+    <string name="action_restore_all">Restore all</string>
     
     
     <!-- Error Messages -->

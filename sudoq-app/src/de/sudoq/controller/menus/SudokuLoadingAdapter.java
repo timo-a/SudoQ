@@ -32,8 +32,6 @@ import android.widget.Toast;
 import de.sudoq.R;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.game.GameData;
-import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
 /**
  * Adapter für die Anzeige aller Spiele des Spielers
@@ -43,8 +41,6 @@ public class SudokuLoadingAdapter extends ArrayAdapter<GameData> {
 	private static final String LOG_TAG = SudokuLoadingAdapter.class.getSimpleName();
 	private final Context context;
 	private final List<GameData> gameDatas;
-	private String[] typeStrings;
-	private String[] complexityStrings;
 
 	/**
 	 * Erzeugt einen neuen SudokuLoadingAdpater mit den gegebenen Parametern
@@ -58,7 +54,6 @@ public class SudokuLoadingAdapter extends ArrayAdapter<GameData> {
 		super(context, R.layout.sudokuloadingitem, games);
 		this.context = context;
 		this.gameDatas = games;
-		initialiseComplexities();
 	}
 
 	/**
@@ -98,8 +93,8 @@ public class SudokuLoadingAdapter extends ArrayAdapter<GameData> {
 			((SudokuLoadingActivity) context).finish();
 		}
 		
-		sudokuType.setText(typeStrings[gameDatas.get(position).getType().ordinal()]);
-		sudokuComplexity.setText(complexityStrings[gameDatas.get(position).getComplexity().ordinal()]);
+		sudokuType.      setText(Utility.      type2string(getContext(), gameDatas.get(position).getType()));
+		sudokuComplexity.setText(Utility.complexity2string(getContext(), gameDatas.get(position).getComplexity()));
 
 		TimeZone tz = TimeZone.getDefault();
 		SimpleDateFormat sdf = new SimpleDateFormat(context.getString(R.string.time_format));
@@ -111,22 +106,15 @@ public class SudokuLoadingAdapter extends ArrayAdapter<GameData> {
 
 		if (gameDatas.get(position).isFinished()) {
 			sudokuState.setText(context.getString(R.string.check_mark));
-			sudokuType.setTextColor(Color.GRAY);
-			sudokuComplexity.setTextColor(Color.GRAY);
-			sudokuTime.setTextColor(Color.GRAY);
 			sudokuState.setTextColor(Color.GREEN);
+			sudokuType.      setTextColor(Color.GRAY);
+			sudokuComplexity.setTextColor(Color.GRAY);
+			sudokuTime.      setTextColor(Color.GRAY);
+			
 		}else{
 			sudokuState.setText("");
 		}
 
 		return rowView;
-	}
-
-	private void initialiseComplexities() {
-		complexityStrings = new String[Complexity.values().length];
-		complexityStrings[Complexity.easy.ordinal()]      = context.getString(R.string.complexity_easy);
-		complexityStrings[Complexity.medium.ordinal()]    = context.getString(R.string.complexity_medium);
-		complexityStrings[Complexity.difficult.ordinal()] = context.getString(R.string.complexity_difficult);
-		complexityStrings[Complexity.infernal.ordinal()]  = context.getString(R.string.complexity_infernal);
 	}
 }

@@ -34,6 +34,7 @@
     <string name="action_switch_profile">Profil wechseln</string>
     <string name="action_delete_all_gestures">Alle Gesten löschen</string>
     <string name="action_delete_single_gesture">Spezifische Geste löschen</string>
+    <string name="action_restore_all">Alle wiederherstellen</string>
 
 
     <!-- Dialogs -->

@@ -98,7 +98,9 @@ public class NewSudokuConfigurationActivity extends SudoqActivitySherlock {
 					sudokuType=null;//set to null to prevent: going to advanced -> disabling all -> coming back -> now disabled type still set
 					//pass (user disabled all types, so a hint is shown. This hint may not be saved as a sudoku type!)
 				}else{
-					setSudokuType(Utility.string2enum(getApplicationContext(), item));
+					Log.d(LOG_TAG, "OnItemSel_a "+sudokuType);
+					setSudokuType(Utility.string2type(getApplicationContext(), item));
+					Log.d(LOG_TAG, "OnItemSel_z "+sudokuType);
 				}
 			}
 
@@ -121,15 +123,7 @@ public class NewSudokuConfigurationActivity extends SudoqActivitySherlock {
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 				String item = parent.getItemAtPosition(pos).toString();
 
-				if (item.equals(getResources().getString(R.string.complexity_easy))) {
-					setSudokuDifficulty(Complexity.easy);
-				} else if (item.equals(getResources().getString(R.string.complexity_medium))) {
-					setSudokuDifficulty(Complexity.medium);
-				} else if (item.equals(getResources().getString(R.string.complexity_difficult))) {
-					setSudokuDifficulty(Complexity.difficult);
-				} else if (item.equals(getResources().getString(R.string.complexity_infernal))) {
-					setSudokuDifficulty(Complexity.infernal);
-				} 
+				setSudokuDifficulty(Utility.string2complexity(getApplicationContext(), item));
 			}
 
 			public void onNothingSelected(AdapterView<?> parent) {
@@ -146,7 +140,14 @@ public class NewSudokuConfigurationActivity extends SudoqActivitySherlock {
 	@Override
 	public void onResume() {
 		super.onResume();
-		fillTypeSpinner(Profile.getInstance().getAssistances().getWantedTypesList());
+		SudokuTypesList wtl = Profile.getInstance().getAssistances().getWantedTypesList(); 
+		fillTypeSpinner(wtl);
+		/* this is a hack: for some reason when returning from settings, the typeSpinner selects the first position
+		 *                 probably because it gets a new adapter. At the time I'm unable to debug this properly
+		 *                 (judging from the LOG.d's it happens after this method) but it seems to work */
+		if(wtl.contains(sudokuType))
+			((Spinner) findViewById(R.id.spinner_sudokutype)).setSelection(wtl.indexOf(sudokuType));
+		Log.d(LOG_TAG, "Resume_ende: "+sudokuType);
 	}
 
 	private Spinner fillTypeSpinner(SudokuTypesList stl) {
@@ -162,12 +163,14 @@ public class NewSudokuConfigurationActivity extends SudoqActivitySherlock {
 			Collections.sort(stl);//sortieren 
 			/* converse */
 			for(SudokuTypes st: stl)
-				wantedSudokuTypes.add(Utility.enum2string(this, st));
-			
+				wantedSudokuTypes.add(Utility.type2string(this, st));
 		}
+		
+		Log.d(LOG_TAG, "Sudokutype_1: " + this.sudokuType);
 		ArrayAdapter<String> typeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, wantedSudokuTypes);
 		typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		typeSpinner.setAdapter(typeAdapter);	
+		Log.d(LOG_TAG, "Sudokutype_4: " + this.sudokuType);
 
 		return typeSpinner;
 	}

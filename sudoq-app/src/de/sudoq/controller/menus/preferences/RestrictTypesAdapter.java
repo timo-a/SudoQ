@@ -56,7 +56,7 @@ public class RestrictTypesAdapter extends ArrayAdapter<SudokuTypes> {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View rowView = inflater.inflate(R.layout.restricttypes_item, parent, false);
 		SudokuTypes type = super.getItem(position);
-		String full = Utility.enum2string(context, type);//translated name of Sudoku type;
+		String full = Utility.type2string(context, type);//translated name of Sudoku type;
 		
 		String lang = Locale.getDefault().getLanguage();
 		

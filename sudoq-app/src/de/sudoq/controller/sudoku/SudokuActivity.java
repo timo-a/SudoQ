@@ -344,7 +344,7 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 	private void setTypeText() {
 		
 		
-		String type = Utility.enum2string(this, this.game.getSudoku().getSudokuType().getEnumType());
+		String type = Utility.type2string(this, this.game.getSudoku().getSudokuType().getEnumType());
 		
 		int st;
 		switch (this.game.getSudoku().getComplexity()) {

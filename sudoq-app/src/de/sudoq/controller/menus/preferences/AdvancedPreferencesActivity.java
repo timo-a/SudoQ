@@ -17,9 +17,7 @@ import android.view.View;
 
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.Toast;
 import de.sudoq.R;
-import de.sudoq.controller.menus.SudokuLoadingActivity;
 import de.sudoq.model.game.GameSettings;
 import de.sudoq.model.profile.Profile;
 
@@ -83,7 +81,7 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {		
 		MenuInflater inflater = getSupportMenuInflater();
-		inflater.inflate(R.menu.action_bar_player_preferences, menu);    
+		inflater.inflate(R.menu.action_bar_standard, menu);    
 		return true;
 	}
 
