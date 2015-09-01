@@ -15,9 +15,9 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Set;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import android.gesture.Gesture;
 import android.gesture.GestureOverlayView;
@@ -130,7 +130,7 @@ public class GestureBuilder extends SudoqActivitySherlock implements OnGesturePe
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {		
-		MenuInflater inflater = getSupportMenuInflater();
+		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.action_bar_gesture_builder, menu);    
 		return true;
 	}

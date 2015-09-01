@@ -14,11 +14,11 @@
     <application
         android:icon="@drawable/launcher"
         android:label="@string/app_name" android:allowClearUserData="true"
-        android:theme="@style/Theme.Sherlock.Light.DarkActionBar">
+        android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
         <activity android:name=".controller.menus.SplashActivity" android:noHistory="true" 
                                                                   android:configChanges="orientation"
                                                                   android:windowActionBar="false" 
-                                                                  android:theme="@style/Theme.Sherlock.NoActionBar">
+                                                                  android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"></action>
                 <category android:name="android.intent.category.LAUNCHER"></category>
@@ -26,7 +26,6 @@
         </activity>
         <activity android:name=".controller.SudoqActivitySherlock" ></activity>
         <activity android:name=".controller.menus.MainActivity"></activity>
-        <activity android:name=".controller.menus.GameTypeSelectionActivity"></activity>
         <activity android:name=".controller.menus.GestureBuilder" android:label="@string/gesture_builder_title"></activity>
         <activity android:name=".controller.sudoku.SudokuActivity"></activity>
         <activity android:name=".controller.menus.SudokuLoadingActivity"     android:noHistory="true" 

@@ -7,9 +7,9 @@
  */
 package de.sudoq.controller.menus.preferences;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -80,7 +80,7 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {		
-		MenuInflater inflater = getSupportMenuInflater();
+		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.action_bar_standard, menu);    
 		return true;
 	}

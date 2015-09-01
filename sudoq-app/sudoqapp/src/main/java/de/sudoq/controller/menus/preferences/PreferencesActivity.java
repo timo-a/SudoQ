@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.Toast;
 import de.sudoq.controller.SudoqActivitySherlock;
 import de.sudoq.controller.menus.GestureBuilder;
 import de.sudoq.model.ModelChangeListener;

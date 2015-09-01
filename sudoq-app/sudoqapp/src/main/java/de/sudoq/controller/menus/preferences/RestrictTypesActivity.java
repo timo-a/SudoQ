@@ -9,9 +9,9 @@ package de.sudoq.controller.menus.preferences;
 
 import java.util.List;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -71,7 +71,7 @@ public class RestrictTypesActivity extends SudoqListActivity implements OnItemCl
 	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getSupportMenuInflater();
+		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.action_bar_restrict_types, menu);    
 		return true;
 	}

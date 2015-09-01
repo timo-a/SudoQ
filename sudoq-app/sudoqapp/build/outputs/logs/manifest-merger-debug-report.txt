@@ -17,7 +17,9 @@ ADDED from AndroidManifest.xml:6:1
 		ADDED from AndroidManifest.xml:10:5
 uses-sdk
 ADDED from AndroidManifest.xml:12:5
-MERGED from com.actionbarsherlock:actionbarsherlock:4.4.0:3:3
+MERGED from com.android.support:appcompat-v7:21.0.3:15:5
+MERGED from com.android.support:support-v4:21.0.3:15:5
+MERGED from com.android.support:support-v4:21.0.3:15:5
 	android:targetSdkVersion
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
@@ -27,7 +29,9 @@ MERGED from com.actionbarsherlock:actionbarsherlock:4.4.0:3:3
 		INJECTED from AndroidManifest.xml:0:0
 application
 ADDED from AndroidManifest.xml:14:5
-MERGED from com.actionbarsherlock:actionbarsherlock:4.4.0:4:3
+MERGED from com.android.support:appcompat-v7:21.0.3:16:5
+MERGED from com.android.support:support-v4:21.0.3:16:5
+MERGED from com.android.support:support-v4:21.0.3:16:5
 	android:label
 		ADDED from AndroidManifest.xml:16:9
 	android:icon
@@ -66,85 +70,81 @@ activity#de.sudoq.controller.menus.MainActivity
 ADDED from AndroidManifest.xml:28:9
 	android:name
 		ADDED from AndroidManifest.xml:28:19
-activity#de.sudoq.controller.menus.GameTypeSelectionActivity
+activity#de.sudoq.controller.menus.GestureBuilder
 ADDED from AndroidManifest.xml:29:9
+	android:label
+		ADDED from AndroidManifest.xml:29:67
 	android:name
 		ADDED from AndroidManifest.xml:29:19
-activity#de.sudoq.controller.menus.GestureBuilder
+activity#de.sudoq.controller.sudoku.SudokuActivity
 ADDED from AndroidManifest.xml:30:9
-	android:label
-		ADDED from AndroidManifest.xml:30:67
 	android:name
 		ADDED from AndroidManifest.xml:30:19
-activity#de.sudoq.controller.sudoku.SudokuActivity
+activity#de.sudoq.controller.menus.SudokuLoadingActivity
 ADDED from AndroidManifest.xml:31:9
+	android:noHistory
+		ADDED from AndroidManifest.xml:31:78
+	android:configChanges
+		ADDED from AndroidManifest.xml:32:78
 	android:name
 		ADDED from AndroidManifest.xml:31:19
-activity#de.sudoq.controller.menus.SudokuLoadingActivity
-ADDED from AndroidManifest.xml:32:9
-	android:noHistory
-		ADDED from AndroidManifest.xml:32:78
-	android:configChanges
-		ADDED from AndroidManifest.xml:33:78
-	android:name
-		ADDED from AndroidManifest.xml:32:19
 activity#de.sudoq.controller.menus.NewSudokuConfigurationActivity
+ADDED from AndroidManifest.xml:33:9
+	android:label
+		ADDED from AndroidManifest.xml:33:91
+	android:name
+		ADDED from AndroidManifest.xml:33:19
+activity#de.sudoq.controller.menus.preferences.AdvancedPreferencesActivity
 ADDED from AndroidManifest.xml:34:9
 	android:label
-		ADDED from AndroidManifest.xml:34:91
+		ADDED from AndroidManifest.xml:34:101
 	android:name
 		ADDED from AndroidManifest.xml:34:19
-activity#de.sudoq.controller.menus.preferences.AdvancedPreferencesActivity
+activity#de.sudoq.controller.menus.preferences.RestrictTypesActivity
 ADDED from AndroidManifest.xml:35:9
 	android:label
 		ADDED from AndroidManifest.xml:35:101
 	android:name
 		ADDED from AndroidManifest.xml:35:19
-activity#de.sudoq.controller.menus.preferences.RestrictTypesActivity
+activity#de.sudoq.controller.menus.preferences.NewSudokuPreferencesActivity
 ADDED from AndroidManifest.xml:36:9
 	android:label
 		ADDED from AndroidManifest.xml:36:101
 	android:name
 		ADDED from AndroidManifest.xml:36:19
-activity#de.sudoq.controller.menus.preferences.NewSudokuPreferencesActivity
+activity#de.sudoq.controller.menus.preferences.PlayerPreferencesActivity
 ADDED from AndroidManifest.xml:37:9
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:38:78
 	android:label
 		ADDED from AndroidManifest.xml:37:101
 	android:name
 		ADDED from AndroidManifest.xml:37:19
-activity#de.sudoq.controller.menus.preferences.PlayerPreferencesActivity
-ADDED from AndroidManifest.xml:38:9
-	android:windowSoftInputMode
-		ADDED from AndroidManifest.xml:39:78
-	android:label
-		ADDED from AndroidManifest.xml:38:101
-	android:name
-		ADDED from AndroidManifest.xml:38:19
 activity#de.sudoq.controller.menus.StatisticsActivity
-ADDED from AndroidManifest.xml:40:9
+ADDED from AndroidManifest.xml:39:9
 	android:label
+		ADDED from AndroidManifest.xml:39:72
+	android:name
+		ADDED from AndroidManifest.xml:39:19
+activity#de.sudoq.controller.menus.ProfileListActivity
+ADDED from AndroidManifest.xml:40:9
+	android:theme
 		ADDED from AndroidManifest.xml:40:72
 	android:name
 		ADDED from AndroidManifest.xml:40:19
-activity#de.sudoq.controller.menus.ProfileListActivity
+activity#de.sudoq.controller.tutorial.TutorialActivity
 ADDED from AndroidManifest.xml:41:9
-	android:theme
-		ADDED from AndroidManifest.xml:41:72
 	android:name
 		ADDED from AndroidManifest.xml:41:19
-activity#de.sudoq.controller.tutorial.TutorialActivity
+activity#de.sudoq.controller.tutorial.TutorialSudokuActivity
 ADDED from AndroidManifest.xml:42:9
 	android:name
 		ADDED from AndroidManifest.xml:42:19
-activity#de.sudoq.controller.tutorial.TutorialSudokuActivity
+activity#de.sudoq.controller.tutorial.TutorialAssistancesActivity
 ADDED from AndroidManifest.xml:43:9
 	android:name
 		ADDED from AndroidManifest.xml:43:19
-activity#de.sudoq.controller.tutorial.TutorialAssistancesActivity
+activity#de.sudoq.controller.tutorial.TutorialActionTreeActivity
 ADDED from AndroidManifest.xml:44:9
 	android:name
 		ADDED from AndroidManifest.xml:44:19
-activity#de.sudoq.controller.tutorial.TutorialActionTreeActivity
-ADDED from AndroidManifest.xml:45:9
-	android:name
-		ADDED from AndroidManifest.xml:45:19

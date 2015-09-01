@@ -2,11 +2,18 @@
 <items version="2" >
 
     <item
-        jar="/home/timo/tests/adt-bundle-linux-x86_64-20131030/sdk/extras/android/m2repository/com/android/support/support-v4/18.0.0/support-v4-18.0.0.jar"
+        jar="/home/timo/tests/adt-bundle-linux-x86_64-20131030/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="44ec51e9d395a47aab135e5e1b556c0007442156">
-        <dex dex="/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/build/intermediates/pre-dexed/debug/support-v4-18.0.0-ce7c04a81cc16ba19e60b943df7eb6b5fe29bc0b.jar" />
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-a4d98ad83e3d9aec6db0a224079f4b51050085ac.jar" />
+    </item>
+    <item
+        jar="/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/build/intermediates/pre-dexed/debug/classes-b92ed539df8b982408a4c07e2439ea906ddb7a39.jar" />
     </item>
     <item
         jar="/home/timo/.gradle/caches/modules-2/files-2.1/org.apache.directory.studio/org.apache.commons.io/2.4/b98d592c582262b3da8a871c7317f4902d98e996/org.apache.commons.io-2.4.jar"
@@ -23,18 +30,25 @@
         <dex dex="/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/build/intermediates/pre-dexed/debug/commons-io-2.4-1d8af90033329ccc47481ed51ef466c37d2d5e3c.jar" />
     </item>
     <item
-        jar="/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/build/intermediates/exploded-aar/com.actionbarsherlock/actionbarsherlock/4.4.0/classes.jar"
+        jar="/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="af64527b748983a75de9c0756e9768b56b240a49">
-        <dex dex="/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/build/intermediates/pre-dexed/debug/classes-9d6891da5f98fac48c0283c1d559938a8996fe03.jar" />
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/build/intermediates/pre-dexed/debug/classes-4dd687d1f5015d1e3550386310ab2a92ec676dd1.jar" />
     </item>
     <item
         jar="/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqmodel/build/libs/sudoqmodel.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="29640a01a51b1aaf95adb81fdf31b7517c80fdd0">
+        sha1="68cd461027e3f2ddba1e7e7001c3c2fdc0ef2c49">
         <dex dex="/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/build/intermediates/pre-dexed/debug/sudoqmodel-68535c915b17db39ff6999b2fd2888cbbc3531dd.jar" />
+    </item>
+    <item
+        jar="/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-af38f98a92ad341c10460084deedaa43d3a80ef5.jar" />
     </item>
 
 </items>

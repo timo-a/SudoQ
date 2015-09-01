@@ -9,10 +9,10 @@ package de.sudoq.controller;
 
 import java.io.File;
 
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +25,7 @@ import de.sudoq.model.files.FileManager;
  * Eine Activity, welche die für einwandfreie Funktionalität der SudoQ-App
  * notwendigen Initialisierungsarbeiten ausführt.
  */
-public class SudoqActivitySherlock extends SherlockActivity {
+public class SudoqActivitySherlock extends ActionBarActivity {
 
 	/**
 	 * Initialisiert eine neue Activity, setzt dabei die für die App notwendigen
@@ -58,7 +58,7 @@ public class SudoqActivitySherlock extends SherlockActivity {
 	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getSupportMenuInflater();
+		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.action_bar_standard, menu);    
 		return super.onCreateOptionsMenu(menu);
 	}

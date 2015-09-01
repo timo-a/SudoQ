@@ -7,19 +7,20 @@
  */
 package de.sudoq.controller.tutorial;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.ActionBar.Tab;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
+import android.support.v7.app.ActionBarActivity;
 
 import android.content.res.Configuration;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Window;
 import de.sudoq.R;
 
-public class TutorialActivity extends SherlockFragmentActivity {
+public class TutorialActivity extends ActionBarActivity {
 
 	private ActionBar.Tab createTab(int text, int icon){
 		ActionBar.Tab tab = getSupportActionBar().newTab();

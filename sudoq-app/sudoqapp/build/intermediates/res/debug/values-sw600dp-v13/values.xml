@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/build/intermediates/exploded-aar/com.actionbarsherlock/actionbarsherlock/4.4.0/res/values-sw600dp/values.xml -->
+    <!-- From: file:/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values-sw600dp/values.xml -->
     <eat-comment/>
-    <bool name="abs__action_bar_expanded_action_views_exclusive">false</bool>
-    <dimen name="abs__action_bar_default_height">56dip</dimen>
-    <dimen name="abs__action_bar_icon_vertical_padding">4dip</dimen>
-    <dimen name="abs__action_bar_subtitle_bottom_margin">9dip</dimen>
-    <dimen name="abs__action_bar_subtitle_text_size">14dp</dimen>
-    <dimen name="abs__action_bar_subtitle_top_margin">-3dp</dimen>
-    <dimen name="abs__action_bar_title_text_size">18dp</dimen>
-    <dimen name="abs__action_button_min_width">64dip</dimen>
-    <integer name="abs__max_action_buttons">5</integer>
+    <dimen name="abc_action_bar_default_height_material">64dp</dimen>
+    <dimen name="abc_action_bar_default_padding_material">4dp</dimen>
+    <dimen name="abc_config_prefDialogWidth">580dp</dimen>
+    <dimen name="abc_text_size_subtitle_material_toolbar">16dp</dimen>
+    <dimen name="abc_text_size_title_material_toolbar">20dp</dimen>
+    <integer name="abc_max_action_buttons">5</integer>
 </resources>

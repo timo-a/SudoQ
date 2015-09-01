@@ -15,9 +15,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Set;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
+import android.support.v7.app.ActionBar;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -810,7 +810,7 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {		
-		MenuInflater inflater = getSupportMenuInflater();
+		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.action_bar_sudoku, menu);    
 		return true;
 	}
