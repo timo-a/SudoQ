@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SudoQ is a Sudoku-App for Adroid Devices with Version 2.2 at least. -->
+<!-- Copyright (C) 2012  Haiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele -->
+<!-- This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.  -->
+<!-- This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.  -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:orientation="vertical"
+		android:background="@drawable/background_serious">
+	<LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical" >
+	
+	    <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_margin="10dp"
+	        android:textSize="20dp"
+	        android:text="@string/statistics_counters"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="@android:color/black" />
+	
+	    <TextView
+	        android:id="@+id/text_played_sudokus"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="20dp"
+	        android:textAppearance="?android:attr/textAppearanceSmall"
+	        android:textColor="@android:color/black" />
+	
+	    <TextView
+	        android:id="@+id/text_played_easy_sudokus"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="10dp"
+	        android:layout_marginLeft="20dp"
+	        android:textAppearance="?android:attr/textAppearanceSmall"
+	        android:textColor="@android:color/black" />
+	
+	    <TextView
+	        android:id="@+id/text_played_medium_sudokus"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="10dp"
+	        android:layout_marginLeft="20dp"
+	        android:textAppearance="?android:attr/textAppearanceSmall"
+	        android:textColor="@android:color/black" />
+	
+	    <TextView
+	        android:id="@+id/text_played_difficult_sudokus"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="10dp"
+	        android:layout_marginLeft="20dp"
+	        android:textAppearance="?android:attr/textAppearanceSmall"
+	        android:textColor="@android:color/black" />
+	
+	    <TextView
+	        android:id="@+id/text_played_infernal_sudokus"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="10dp"
+	        android:layout_marginLeft="20dp"
+	        android:layout_marginBottom="10dp"
+	        android:textAppearance="?android:attr/textAppearanceSmall"
+	        android:textColor="@android:color/black" />
+	
+	    <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_margin="10dp"
+	        android:textSize="20dp"
+	        android:text="@string/statistics_records"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="@android:color/black" />
+	
+	    <TextView
+	        android:id="@+id/text_score"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="20dp"
+	        android:textAppearance="?android:attr/textAppearanceSmall"
+	        android:textColor="@android:color/black" />
+	
+	    <TextView
+	        android:id="@+id/text_fastest_solving_time"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="10dp"
+	        android:layout_marginLeft="20dp"
+	        android:textAppearance="?android:attr/textAppearanceSmall"
+	        android:textColor="@android:color/black" />
+	    
+	</LinearLayout>
+</ScrollView><!-- From: file:/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/src/main/res/layout/statistics.xml -->

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SudoQ is a Sudoku-App for Adroid Devices with Version 2.2 at least. -->
+<!-- Copyright (C) 2012  Haiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele -->
+<!-- This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.  -->
+<!-- This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.  -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:gravity="bottom"
+        android:orientation="vertical" >
+        <!--  This is a hack: the parent layout for the texts is wrapping and the picture_layout is matching. 
+                   so for each item, the longest text determines the horizontal(x) position of the thumbnail. 
+                   Hence this invisible dummy label holds what is expected to be the longest text 
+                   to assure the same alignment for all thumbnails. -->
+	    <TextView
+	        android:id="@+id/hack_label"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/sudoku_type_dummy_longest_name"
+	        android:hint=""
+	        android:textAppearance="?android:attr/textAppearanceLarge"
+	        android:textColor="@android:color/transparent" />
+	    
+	    <TextView
+	        android:id="@+id/type_label"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Default text for type"
+	        android:textAppearance="?android:attr/textAppearanceLarge"
+	        android:textColor="@android:color/black" />
+	
+	    <TextView
+	        android:id="@+id/complexity_label"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Default text for complexity"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="@android:color/black" />
+	
+	    <TextView
+	        android:id="@+id/time_label"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Default text for time"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="@android:color/black" />
+	
+	   <TextView
+	        android:id="@+id/state_label"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="text"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="@android:color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/sudoku_loading_item_thumbnail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:contentDescription="thumbnail of the sudoku"
+            android:src="@drawable/empty_sudoku" />
+
+    </LinearLayout>
+    
+</LinearLayout><!-- From: file:/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/src/main/res/layout-land/sudokuloadingitem.xml -->

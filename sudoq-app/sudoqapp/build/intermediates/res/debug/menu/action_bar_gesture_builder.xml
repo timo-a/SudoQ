@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+          
+    <!-- Delete All Gestures -->
+    <item android:id="@+id/action_delete_all_gestures"
+          android:title="@string/action_delete_all_gestures"
+          android:showAsAction="never" />
+    
+    <!-- Delete Profile -->
+    <item android:id="@+id/action_delete_single_gesture"
+          android:title="@string/action_delete_single_gesture"
+          android:showAsAction="never" />
+    
+    <!-- Tutorial -->
+    <item android:id="@+id/action_show_tutorial"
+          android:title="@string/action_show_tutorial"
+          android:showAsAction="never" />
+    
+    
+</menu>
+
+<!-- android:icon="@drawable/ic_action_refresh"
+android:title="@string/action_tutorial"--><!-- From: file:/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/src/main/res/menu/action_bar_gesture_builder.xml -->

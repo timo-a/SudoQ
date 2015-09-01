@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SudoQ is a Sudoku-App for Adroid Devices with Version 2.2 at least. -->
+<!-- Copyright (C) 2012  Haiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele -->
+<!-- This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.  -->
+<!-- This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.  -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:scrollbars="none" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="vertical" >
+    	
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"
+        android:text="@string/sf_tutorial_sudoku_title"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="@string/sf_tutorial_sudoku_description1" />
+    
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_margin="5dp"
+         android:text="@string/sf_tutorial_sudoku_description2" />
+     
+     <ImageView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_margin="5dp"
+         android:layout_gravity="center_horizontal"
+         android:src="@drawable/squiggly" />
+     
+      <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginBottom="15dp"
+         android:layout_gravity="center_horizontal"
+         android:text="@string/sf_tutorial_sudoku_squiggly" />
+     
+     <ImageView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_margin="5dp"
+         android:layout_gravity="center_horizontal"
+         android:src="@drawable/xsudoku" />
+
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginBottom="15dp"
+         android:layout_gravity="center_horizontal"
+         android:text="@string/sf_tutorial_sudoku_xsudoku" />
+     
+     </LinearLayout>
+</ScrollView><!-- From: file:/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/src/main/res/layout/tutorial_sudoku.xml -->

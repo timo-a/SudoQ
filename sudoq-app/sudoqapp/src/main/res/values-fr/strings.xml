@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SudoQ is a Sudoku-App for Adroid Devices with Version 2.2 at least. -->
+<!-- Copyright (C) 2012  Haiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele -->
+<!-- This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.  -->
+<!-- This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.  -->
+<resources>
+
+    <!-- Error Messages -->
+    <string name="error_profile_dir_not_found">Erreur! Le dossier Profile n’a pas pu être trouvé!</string>
+    <string name="error_sudoku_preference_incomplete">Erreur! Paramètres incomplets!</string>
+    <string name="error_gestures_no_library">Gestes non disponibles!</string>
+    <string name="error_thumbnail_get">Vignette n’a pas pu être créé!</string>
+    <string name="error_thumbnail_saved">Reçu miniature n’a pas pu être sauvé!</string>
+    <string name="error_thumbnail_load">Les vignettes peuvent ne pas être chargé!</string>
+    <string name="error_gestures_not_complete">Certains symboles ne sont pas liées à un geste!</string>
+    <string name="error_cant_switch_symbols">Pas de symbole alternatif fixe disponible!</string>
+    
+    <!-- Toasts -->
+    <string name="toast_solved_wrong">Une case n’a pas été résolue correctement</string>
+    <string name="toast_solved_correct">Toutes les cases ont été résolues correctement</string>
+    <string name="toast_invalid_symbol">Symbole invalide</string>
+    <string name="toast_restricted_symbol">Symbole restreint</string>
+    <string name="toast_stop_that">HALTE AU!!!</string>
+    
+    <!-- Splash -->
+    <string name="splash_text">SudoQ se prépare pour la première utilisation</string>
+    
+    
+    <!-- Action Bar Entries -->
+    <string name="action_show_tutorial">Tutorial</string>
+
+    <string name="action_new_profile">Créer un nouveau profil</string>
+    <string name="action_delete_profile">Effacer ce profil</string>
+    <string name="action_switch_profile">Changer de profil</string>
+    <string name="action_delete_all_gestures">Supprimer tous les gestes</string>
+    <string name="action_delete_single_gesture">Supprimer geste spécifique</string>
+    <string name="action_restore_all">Restaurer Tous</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_yes">Oui</string>
+    <string name="dialog_no">Non</string>
+    <string name="dialog_won_title">Tu as gagné!</string>
+    <string name="dialog_surrender_title">Tu as abandonné!</string>
+    <string name="dialog_won_text">Veux-tu fermer ce sudoku?</string>
+    <string name="dialog_won_statistics">Statistiques</string>
+    <string name="dialog_won_timeneeded">Temps joué</string>
+    <string name="dialog_won_score">Score</string>
+    
+    <!-- Statistics -->
+    <string name="statistics_title">Statistiques</string>
+    <string name="statistics_counters">Compteur</string>
+    <string name="statistics_played_sudokus">Sudokus joués</string>
+    <string name="statistics_played_easy_sudokus">Sudokus faciles joués</string>
+    <string name="statistics_played_medium_sudokus">Sudokus moyens joués</string>
+    <string name="statistics_played_difficult_sudokus">Sudokus difficiles joués</string>
+    <string name="statistics_played_infernal_sudokus">Sudokus infernales joués</string>
+    <string name="statistics_records">Records</string>
+    <string name="statistics_score">Score maximal</string>
+    <string name="statistics_fastest_solving_time">Temps de résolution le plus rapide</string>
+
+    <!-- Profile preference titles und textviews -->
+    <string name="profile_preference_title">Paramètres</string>
+    <string name="profile_preference_title_name">Nom</string>
+    <string name="profile_preference_title_gesture">Entrée de gestes</string>
+    <string name="profile_preference_title_left_hand_mode">mode gaucher</string>
+	<string name="profile_preference_title_cat_profile">Paramètres du profil</string>
+    <string name="profile_preference_title_cat_assistances">Aide</string>
+    <string name="profile_preference_title_assistance_markRowColumn">Séléctionner la ligne/ la colonne</string>
+    <string name="profile_preference_title_assistance_markWrongSymbol">Séléctionner les symboles faux</string>
+    <string name="profile_preference_title_assistance_restrictCandidates">Aide de saisie</string>
+    <string name="profile_preference_title_assistance_allowSolveSpecificField">Résoudre la case choisie</string>
+    <string name="profile_preference_title_assistance_allowSolveRandomField">Résoudre une case au hasard</string>
+    <string name="profile_preference_title_assistance_allowGetHint">Conseils</string>
+    <string name="profile_preference_title_assistance_autoAdjustNotes">Adapter les remarques automatiquement</string>
+    <string name="profile_preference_title_profile">Profil</string>
+    <string name="profile_preference_button_statistics">Statistiques</string>
+    <string name="profile_preference_button_gesture_builder">définir des gestes</string>
+	<string name="profile_preference_button_save">Sauvegarder</string>
+    <string name="profile_preference_button_advanced_preferences">paramètres avancés</string>
+    <string name="profile_preference_button_provide_restricted_set_of_types">Sélectionnez les types sont proposés</string>
+    <string name="profile_preference_new_profile">nouveau profil</string>
+
+    <!-- Profile list -->
+    <string name="profile_list_profile_changed">Profil changé</string>
+    
+    <!-- Player Preferences Button -->
+    <string name="player_preferences_button_changeprofile">Changer de profil</string>
+    
+    <!-- MainMenu Buttons -->
+    <string name="sf_mainmenu_new_sudoku">Nouveau sudoku</string>
+    <string name="sf_mainmenu_continue">Continuer</string>
+    <string name="sf_mainmenu_load_sudoku">Charger un sudoku</string>
+    <string name="sf_mainmenu_profile">Profil</string>
+    
+
+    <!-- GestureBuilder -->
+    <string name="gesture_builder_title">définir des gestes</string>
+    <string name="gesture_builder_define_gesture">Dessinez le geste désiré</string>
+    
+    <!-- GameTypeSelection Buttons -->
+    <string name="sf_gametypeselection_local_sudoku">Sudoku</string>
+    <string name="sf_gametypeselection_server_sudoku">Sudoku officiel</string>
+    <string name="sf_gametypeselection_create_mp">Créer</string>
+    <string name="sf_gametypeselection_join_mp">Adhérer</string>
+
+    <!-- SudokuPreferences Buttons und TextViews -->
+    <string name="subtitle_sudokupreferences_sudokutype">Type du sudoku:</string>
+    <string name="subtitle_sudokupreferences_sudokucomplexity">Difficulté:</string>
+    <string name="sf_sudokupreferences_start">Départ</string>
+    <string name="sf_sudokupreferences_sudokutype">Choisir le type du sudoku</string>
+    <string name="sf_sudokupreferences_sudokucomplexity">Choisir le degré de difficulté</string>
+    <string name="sf_sudokupreferences_assistances">Configurer l’aide</string>
+    <string name="sf_sudokupreferences_copying">Les modèles sont en train d’être copiés. Veuillez patienter.</string>
+    <string name="sf_sudokupreferences_all_disabled_1">Vous avez désactivé tous les types de sudoku…</string>
+    <string name="sf_sudokupreferences_all_disabled_2">Activer les dans les paramètres avancés.</string>
+    
+    <!-- SudokuActivity -->
+    <string name="sf_sudoku_button_bookmark">Marque-page</string>
+    <string name="sf_sudoku_button_close">Fermer</string>
+    <string name="sf_sudoku_assistances_title">Aide</string>
+    <string name="sf_sudoku_assistances_check">Vérifier la solution</string>
+    <string name="sf_sudoku_assistances_solve_specific">Résoudre la case choisie</string>
+    <string name="sf_sudoku_assistances_solve_random">Résoudre une case au hasard </string>
+    <string name="sf_sudoku_assistances_solve_surrender">Abandonner</string>
+    <string name="sf_sudoku_assistances_back_to_valid_state">Retourner au dernier état correct</string>
+    <string name="sf_sudoku_assistances_back_to_bookmark">Retourner au dernier signet</string>
+    <string name="sf_sudoku_title_gesture_input">Entrée de l’icône par un geste</string>
+    <string name="sf_sudoku_title_action_tree">Les dernières actions</string>
+    
+    <!-- Titles -->
+    <string name="title_mainmenu">SudoQ</string>
+    <string name="title_gametypeselection">Nouveau sudoku</string>
+    
+    <!-- Subtitles -->
+    <string name="subtitle_gametypeselection_mp">Multiplayer</string>
+    
+    <!-- Complexity -->
+    <string name="complexity_easy">Facile</string>
+    <string name="complexity_medium">Moyen</string>
+    <string name="complexity_difficult">Difficile</string>
+    <string name="complexity_infernal">Infernal</string>
+    
+    <!-- Sudoku Types -->
+    <string name="sudoku_type_standard_9x9"  >Sudoku standard 9x9</string>
+    <string name="sudoku_type_standard_16x16">Sudoku standard 16x16</string>
+    <string name="sudoku_type_standard_6x6"  >Sudoku standard 6x6</string>
+    <string name="sudoku_type_standard_4x4"  >Sudoku standard 4x4</string>
+    <string name="sudoku_type_squiggly_a_9x9">Squiggly-Sudoku 9x9</string>
+    <string name="sudoku_type_squiggly_b_9x9">Squoggly-Sudoku 9x9</string>
+    <string name="sudoku_type_stairstep_9x9" >Stairstep-Sudoku 9x9</string>
+    <string name="sudoku_type_samurai"       >Samurai-Sudoku</string>
+    <string name="sudoku_type_hyper"         >Hyper-Sudoku</string>
+    <string name="sudoku_type_xsudoku"       >X-Sudoku</string>
+    <string name="sudoku_type_dummy_longest_name">Sudoku standard 16x16</string>
+    <string name="sf_sudokupreferences_title">Paramètres du sudoku </string>
+    <string name="sf_advancedpreferences_title">Paramètres avancés</string>
+    <string name="sf_advancedpreferences_restricttypes_title">Types proposés</string>
+                  
+    <!-- Sudoku Loading -->
+    <string name="tx_no_sudokus_to_load">Aucun sudoku sauvegardé disponible.</string>
+    <string name="sudokuloading_delete_finished">Effacer les sudokus résolus</string>
+    <string name="sudokuloading_delete_all">Effacer tous les sudokus</string>
+    <string name="sf_loading_back">Retour</string>
+    
+    <string name="sudokuloading_dialog_play">jouer</string>
+    <string name="sudokuloading_dialog_delete">effacer</string>
+    
+    
+    <!--  Defaults -->
+    <string name="default_user_name">Profil 1</string>
+
+</resources>

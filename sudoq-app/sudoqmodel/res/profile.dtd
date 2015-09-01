@@ -1,0 +1,8 @@
+<!ELEMENT profile EMPTY>
+<!ATTLIST profile 
+	id CDATA #REQUIRED
+	currentGame CDATA #REQUIRED
+	name CDATA #REQUIRED
+	gestureActive CDATA #REQUIRED
+	help CDATA #REQUIRED>
+	

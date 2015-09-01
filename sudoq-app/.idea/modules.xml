@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/sudoq-app.iml" filepath="$PROJECT_DIR$/sudoq-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sudoqapp/sudoqapp.iml" filepath="$PROJECT_DIR$/sudoqapp/sudoqapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sudoqmodel/sudoqmodel.iml" filepath="$PROJECT_DIR$/sudoqmodel/sudoqmodel.iml" />
+    </modules>
+  </component>
+</project>

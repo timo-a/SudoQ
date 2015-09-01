@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<!-- SudoQ is a Sudoku-App for Adroid Devices with Version 2.2 at least. -->
+<!-- Copyright (C) 2012  Haiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele -->
+<!-- This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.  -->
+<!-- This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.  --> 
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background_serious">
+    
+	<LinearLayout
+	    android:id="@+id/playerpreferences_layout_everything"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical" >
+	    	    
+	    <Button
+	        android:id="@+id/button_showStatistics"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_margin="5dp"
+	        android:onClick="viewStatistics"
+	        android:text="@string/profile_preference_button_statistics" />
+	    
+	    <Button
+	        android:id="@+id/button_openGestureBuilder"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_margin="5dp"
+	        android:onClick="openGestureBuilder"
+	        android:text="@string/profile_preference_button_gesture_builder" />
+	    
+	    
+	    <LinearLayout
+	        android:id="@+id/playerpreferences_layout_profilename"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content" >
+	        
+	        <TextView
+	            android:id="@+id/textview_profilename"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/profile_preference_title_name"
+	            android:layout_margin="5dp"
+	            android:singleLine="true"
+	            android:inputType="textCapCharacters"
+	            android:textAppearance="?android:attr/textAppearanceMedium"
+	        	android:textColor="@android:color/black" />
+	
+	        <EditText
+	            android:id="@+id/edittext_profilename"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_margin="5dp"
+	            android:layout_weight="0.12" />
+	
+	    </LinearLayout>
+	
+	    <CheckBox
+	        android:id="@+id/checkbox_gesture"
+	        android:text="@string/profile_preference_title_gesture"
+	   		android:layout_margin="5dp"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" 
+	        android:textColor="@android:color/black"/>
+	    
+	    <CheckBox
+	        android:id="@+id/checkbox_autoAdjustNotes"
+	        android:text="@string/profile_preference_title_assistance_autoAdjustNotes"
+	   		android:layout_margin="5dp"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" 
+	        android:textColor="@android:color/black"/>
+	    
+	    <CheckBox
+	        android:id="@+id/checkbox_markRowColumn"
+	        android:text="@string/profile_preference_title_assistance_markRowColumn"
+	   		android:layout_margin="5dp"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" 
+	        android:textColor="@android:color/black"/>
+	    
+	    <CheckBox
+	        android:id="@+id/checkbox_markWrongSymbol"
+	        android:text="@string/profile_preference_title_assistance_markWrongSymbol"
+	   		android:layout_margin="5dp"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" 
+	        android:textColor="@android:color/black"/>
+	    
+	    <CheckBox
+	        android:id="@+id/checkbox_restrictCandidates"
+	        android:text="@string/profile_preference_title_assistance_restrictCandidates"
+	   		android:layout_margin="5dp"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" 
+	        android:textColor="@android:color/black"/>
+	
+	    <Button
+	        android:id="@+id/button_advencedPreferences"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_margin="5dp"
+	        android:onClick="switchToAdvancedPreferences"
+	        android:text="@string/profile_preference_button_advanced_preferences" />
+	    
+	    
+	</LinearLayout>
+</ScrollView><!-- From: file:/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/src/main/res/layout/preferences_player.xml -->

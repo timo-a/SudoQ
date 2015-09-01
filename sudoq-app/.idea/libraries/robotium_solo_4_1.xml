@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="robotium-solo-4.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/sudoqapp/libs/robotium-solo-4.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

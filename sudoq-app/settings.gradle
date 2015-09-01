@@ -1,0 +1,2 @@
+include ':sudoqmodel'
+include ':sudoqapp'

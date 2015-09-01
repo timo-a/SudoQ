@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT profile (statistics)>
+<!ATTLIST profile 
+	id ID #REQUIRED
+	name CDATA #REQUIRED
+	asstistance CDATA #REQUIRED
+	gesturesactive (yes | no) #REQUIRED>
+<!ELEMENT statistics EMPTY>
+<!ATTLIST statistics 
+	playedsudokus CDATA #REQUIRED
+	playedeasysudokus CDATA #REQUIRED
+	playedmediumsudokus CDATA #REQUIRED
+	playeddifficultsudokus CDATA #REQUIRED
+	playedinfernalsudokus CDATA #REQUIRED
+	minsolvingtime CDATA #REQUIRED
+	maxpoints CDATA #REQUIRED>

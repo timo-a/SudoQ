@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SudoQ is a Sudoku-App for Adroid Devices with Version 2.2 at least. -->
+<!-- Copyright (C) 2012  Haiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele -->
+<!-- This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.  -->
+<!-- This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.  -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <LinearLayout 
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center" >
+        <ImageView 
+            android:id="@+id/sudoku_loading_item_thumbnail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/empty_sudoku"
+            android:contentDescription="thumbnail of the sudoku"
+            />
+    </LinearLayout>
+    
+    <LinearLayout 
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+    
+	    <TextView
+	        android:id="@+id/type_label"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Large Text"
+	        android:textAppearance="?android:attr/textAppearanceLarge"
+	        android:textColor="@android:color/black" />
+	
+	    <TextView
+	        android:id="@+id/complexity_label"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Medium Text"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="@android:color/black" />
+	
+	    <TextView
+	        android:id="@+id/time_label"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Medium Text"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="@android:color/black" />
+	
+	   <TextView
+	        android:id="@+id/state_label"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text=""
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textColor="@android:color/black" />
+    </LinearLayout>
+
+</LinearLayout><!-- From: file:/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/src/main/res/layout/sudokuloadingitem.xml -->

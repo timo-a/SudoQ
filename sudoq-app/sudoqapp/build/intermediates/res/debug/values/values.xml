@@ -1,0 +1,837 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- From: file:/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/src/main/res/values/sudoku_preferences_arrays.xml -->
+    <eat-comment/>
+    <string-array name="sudokucomplexity_values">
+	    <item>@string/complexity_easy</item>
+	    <item>@string/complexity_medium</item>
+	    <item>@string/complexity_difficult</item>
+	    <item>@string/complexity_infernal</item>
+	</string-array>
+    <string-array name="sudokutype_values">
+	    <item>@string/sudoku_type_standard_9x9</item>
+	    <item>@string/sudoku_type_standard_4x4</item>
+	    <item>@string/sudoku_type_standard_6x6</item>
+	    <item>@string/sudoku_type_standard_16x16</item>
+        <item>@string/sudoku_type_squiggly_a_9x9</item>
+        <item>@string/sudoku_type_squiggly_b_9x9</item>
+	    <item>@string/sudoku_type_stairstep_9x9</item>
+	    <item>@string/sudoku_type_samurai</item>
+	    <item>@string/sudoku_type_hyper</item> 
+	    <item>@string/sudoku_type_xsudoku</item> 
+	</string-array>
+    <!-- From: file:/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/build/intermediates/exploded-aar/com.actionbarsherlock/actionbarsherlock/4.4.0/res/values/values.xml -->
+    <eat-comment/>
+    <attr format="reference|color" name="background"/>
+    <attr format="reference|color" name="backgroundSplit"/>
+    <attr format="reference" name="divider"/>
+    <attr format="dimension" name="height"/>
+    <attr format="reference" name="subtitleTextStyle"/>
+    <attr format="reference" name="titleTextStyle"/>
+    <bool name="abs__action_bar_embed_tabs">false</bool>
+    <bool name="abs__action_bar_expanded_action_views_exclusive">true</bool>
+    <bool name="abs__config_actionMenuItemAllCaps">true</bool>
+    <bool name="abs__config_allowActionMenuItemTextWithIcon">false</bool>
+    <bool name="abs__config_showMenuShortcutsWhenKeyboardPresent">false</bool>
+    <bool name="abs__split_action_bar_is_narrow">true</bool>
+    <color name="abs__background_holo_dark">#ff000000</color>
+    <color name="abs__background_holo_light">#fff3f3f3</color>
+    <color name="abs__bright_foreground_disabled_holo_dark">#ff4c4c4c</color>
+    <color name="abs__bright_foreground_disabled_holo_light">#ffb2b2b2</color>
+    <color name="abs__bright_foreground_holo_dark">@color/abs__background_holo_light</color>
+    <color name="abs__bright_foreground_holo_light">@color/abs__background_holo_dark</color>
+    <declare-styleable name="SherlockActionBar"><attr name="navigationMode"><enum name="normal" value="0"/><enum name="listMode" value="1"/><enum name="tabMode" value="2"/></attr><attr name="displayOptions"><flag name="useLogo" value="0x1"/><flag name="showHome" value="0x2"/><flag name="homeAsUp" value="0x4"/><flag name="showTitle" value="0x8"/><flag name="showCustom" value="0x10"/><flag name="disableHome" value="0x20"/></attr><attr format="string" name="title"/><attr format="string" name="subtitle"/><attr name="titleTextStyle"/><attr name="subtitleTextStyle"/><attr format="reference" name="icon"/><attr format="reference" name="logo"/><attr name="divider"/><attr name="background"/><attr format="reference|color" name="backgroundStacked"/><attr name="backgroundSplit"/><attr format="reference" name="customNavigationLayout"/><attr name="height"/><attr format="reference" name="homeLayout"/><attr format="reference" name="progressBarStyle"/><attr format="reference" name="indeterminateProgressStyle"/><attr format="dimension" name="progressBarPadding"/><attr format="dimension" name="itemPadding"/></declare-styleable>
+    <declare-styleable name="SherlockActionMenuItemView"><attr name="android:minWidth"/></declare-styleable>
+    <declare-styleable name="SherlockActionMode"><attr name="titleTextStyle"/><attr name="subtitleTextStyle"/><attr name="background"/><attr name="backgroundSplit"/><attr name="height"/></declare-styleable>
+    <declare-styleable name="SherlockActivityChooserView"><attr format="string" name="initialActivityCount"/><attr format="reference" name="expandActivityOverflowButtonDrawable"/><attr name="android:background"/></declare-styleable>
+    <declare-styleable name="SherlockMenuGroup"><attr name="android:id"/><attr name="android:menuCategory"/><attr name="android:orderInCategory"/><attr name="android:checkableBehavior"/><attr name="android:visible"/><attr name="android:enabled"/></declare-styleable>
+    <declare-styleable name="SherlockMenuItem"><attr name="android:id"/><attr name="android:menuCategory"/><attr name="android:orderInCategory"/><attr name="android:title"/><attr name="android:titleCondensed"/><attr name="android:icon"/><attr name="android:alphabeticShortcut"/><attr name="android:numericShortcut"/><attr name="android:checkable"/><attr name="android:checked"/><attr name="android:visible"/><attr name="android:enabled"/><attr name="android:onClick"/><attr name="android:showAsAction"/><attr name="android:actionLayout"/><attr name="android:actionViewClass"/><attr name="android:actionProviderClass"/></declare-styleable>
+    <declare-styleable name="SherlockMenuView"><attr format="reference" name="itemTextAppearance"/><attr format="reference" name="horizontalDivider"/><attr format="reference" name="verticalDivider"/><attr format="color|reference" name="headerBackground"/><attr format="color|reference" name="itemBackground"/><attr format="reference" name="windowAnimationStyle"/><attr format="float" name="itemIconDisabledAlpha"/><attr format="boolean" name="preserveIconSpacing"/></declare-styleable>
+    <declare-styleable name="SherlockSearchView"><attr format="boolean" name="iconifiedByDefault"/><attr name="android:maxWidth"/><attr format="string" name="queryHint"/><attr name="android:imeOptions"/><attr name="android:inputType"/></declare-styleable>
+    <declare-styleable name="SherlockSpinner"><attr name="android:prompt"/><attr name="android:dropDownSelector"/><attr name="android:popupBackground"/><attr name="android:dropDownVerticalOffset"/><attr name="android:dropDownHorizontalOffset"/><attr name="android:dropDownWidth"/><attr name="android:popupPromptView"/><attr name="android:gravity"/></declare-styleable>
+    <declare-styleable name="SherlockTheme"><attr format="reference" name="actionBarTabStyle"/><attr format="reference" name="actionBarTabBarStyle"/><attr format="reference" name="actionBarTabTextStyle"/><attr format="reference" name="actionOverflowButtonStyle"/><attr format="reference" name="actionBarStyle"/><attr format="reference" name="actionBarSplitStyle"/><attr format="reference" name="actionBarWidgetTheme"/><attr format="dimension" name="actionBarSize"><enum name="wrap_content" value="0"/></attr><attr format="reference" name="actionBarDivider"/><attr format="reference" name="actionBarItemBackground"/><attr format="reference" name="actionMenuTextAppearance"/><attr format="color|reference" name="actionMenuTextColor"/><attr format="reference" name="actionModeStyle"/><attr format="reference" name="actionModeCloseButtonStyle"/><attr format="reference" name="actionModeBackground"/><attr format="reference" name="actionModeSplitBackground"/><attr format="reference" name="actionModeCloseDrawable"/><attr format="reference" name="actionModeShareDrawable"/><attr format="reference" name="actionModePopupWindowStyle"/><attr format="reference" name="buttonStyleSmall"/><attr format="reference" name="selectableItemBackground"/><attr format="reference" name="windowContentOverlay"/><attr format="reference" name="textAppearanceLargePopupMenu"/><attr format="reference" name="textAppearanceSmallPopupMenu"/><attr format="reference" name="textAppearanceSmall"/><attr format="color" name="textColorPrimary"/><attr format="color" name="textColorPrimaryDisableOnly"/><attr format="color" name="textColorPrimaryInverse"/><attr format="reference" name="spinnerItemStyle"/><attr format="reference" name="spinnerDropDownItemStyle"/><attr format="reference" name="searchAutoCompleteTextView"/><attr format="reference" name="searchDropdownBackground"/><attr format="reference" name="searchViewCloseIcon"/><attr format="reference" name="searchViewGoIcon"/><attr format="reference" name="searchViewSearchIcon"/><attr format="reference" name="searchViewVoiceIcon"/><attr format="reference" name="searchViewEditQuery"/><attr format="reference" name="searchViewEditQueryBackground"/><attr format="reference" name="searchViewTextField"/><attr format="reference" name="searchViewTextFieldRight"/><attr format="reference|color" name="textColorSearchUrl"/><attr format="dimension" name="searchResultListItemHeight"/><attr format="reference" name="textAppearanceSearchResultTitle"/><attr format="reference" name="textAppearanceSearchResultSubtitle"/><attr format="dimension" name="listPreferredItemHeightSmall"/><attr format="dimension" name="listPreferredItemPaddingLeft"/><attr format="dimension" name="listPreferredItemPaddingRight"/><attr format="reference" name="textAppearanceListItemSmall"/><attr format="dimension" name="windowMinWidthMajor"/><attr format="dimension" name="windowMinWidthMinor"/><attr format="reference" name="dividerVertical"/><attr format="reference" name="actionDropDownStyle"/><attr format="reference" name="actionButtonStyle"/><attr format="reference" name="homeAsUpIndicator"/><attr format="reference" name="dropDownListViewStyle"/><attr format="reference" name="popupMenuStyle"/><attr format="dimension" name="dropdownListPreferredItemHeight"/><attr format="reference" name="actionSpinnerItemStyle"/><attr format="boolean" name="windowNoTitle"/><attr format="boolean" name="windowActionBar"/><attr format="boolean" name="windowActionBarOverlay"/><attr format="boolean" name="windowActionModeOverlay"/><attr format="boolean" name="windowSplitActionBar"/><attr format="reference" name="listPopupWindowStyle"/><attr format="reference" name="activityChooserViewStyle"/><attr format="reference" name="activatedBackgroundIndicator"/><attr format="reference" name="dropDownHintAppearance"/></declare-styleable>
+    <declare-styleable name="SherlockView"><attr name="android:focusable"/></declare-styleable>
+    <dimen name="abs__action_bar_default_height">48dip</dimen>
+    <dimen name="abs__action_bar_icon_vertical_padding">8dip</dimen>
+    <dimen name="abs__action_bar_subtitle_bottom_margin">5dip</dimen>
+    <dimen name="abs__action_bar_subtitle_text_size">14dp</dimen>
+    <dimen name="abs__action_bar_subtitle_top_margin">-3dp</dimen>
+    <dimen name="abs__action_bar_title_text_size">18dp</dimen>
+    <dimen name="abs__action_button_min_width">56dip</dimen>
+    <dimen name="abs__config_prefDialogWidth">320dp</dimen>
+    <dimen name="abs__dropdownitem_icon_width">32dip</dimen>
+    <dimen name="abs__dropdownitem_text_padding_left">8dip</dimen>
+    <dimen name="abs__dropdownitem_text_padding_right">8dip</dimen>
+    <dimen name="abs__search_view_preferred_width">320dip</dimen>
+    <dimen name="abs__search_view_text_min_width">160dip</dimen>
+    <item name="abs__action_menu_divider" type="id"/>
+    <item name="abs__action_menu_presenter" type="id"/>
+    <item name="abs__home" type="id"/>
+    <item name="abs__progress_circular" type="id"/>
+    <item name="abs__progress_horizontal" type="id"/>
+    <item name="abs__up" type="id"/>
+    <integer name="abs__max_action_buttons">2</integer>
+    <string name="abs__action_bar_home_description">Navigate home</string>
+    <string name="abs__action_bar_up_description">Navigate up</string>
+    <string name="abs__action_menu_overflow_description">More options</string>
+    <string name="abs__action_mode_done">Done</string>
+    <string name="abs__activity_chooser_view_see_all">See all...</string>
+    <string name="abs__activitychooserview_choose_application">Choose an application</string>
+    <string name="abs__searchview_description_clear">Clear query</string>
+    <string name="abs__searchview_description_query">Search query</string>
+    <string name="abs__searchview_description_search">Search</string>
+    <string name="abs__searchview_description_submit">Submit query</string>
+    <string name="abs__searchview_description_voice">Voice search</string>
+    <string name="abs__shareactionprovider_share_with">Share with</string>
+    <string name="abs__shareactionprovider_share_with_application">Share with <ns1:g example="Bluetooth" id="application_name">%s</ns1:g></string>
+    <!-- From: file:/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="action_delete_all_gestures">Delete all gestures</string>
+    <string name="action_delete_profile">Delete This Profile</string>
+    <string name="action_delete_single_gesture">Delete specific gesture</string>
+    <string name="action_new_profile">Create New Profile</string>
+    <string name="action_restore_all">Restore all</string>
+    <string name="action_show_tutorial">Tutorial</string>
+    <string name="action_switch_profile">Switch Profile</string>
+    <string name="app_name">SudoQ</string>
+    <string name="check_mark">✔</string>
+    <string name="complexity_difficult">Difficult</string>
+    <string name="complexity_easy">Easy</string>
+    <string name="complexity_infernal">Infernal</string>
+    <string name="complexity_medium">Medium</string>
+    <string name="current_profile_file">current_profile</string>
+    <string name="default_user_name">Profile 1</string>
+    <string name="dialog_no">No</string>
+    <string name="dialog_surrender_title">You surrendered!</string>
+    <string name="dialog_won_score">Score</string>
+    <string name="dialog_won_statistics">Statistics</string>
+    <string name="dialog_won_text">Do you want to quit?</string>
+    <string name="dialog_won_timeneeded">Time needed</string>
+    <string name="dialog_won_title">You won!</string>
+    <string name="dialog_yes">Yes</string>
+    <string name="error_cant_switch_symbols">No alternate symbolset available!</string>
+    <string name="error_gestures_no_library">Gestures not available!</string>
+    <string name="error_gestures_not_complete">You need to define Gestures for all Symbols in your Profile!</string>
+    <string name="error_profile_dir_not_found">Error! Profile folder could not be located!</string>
+    <string name="error_sudoku_preference_incomplete">Error! Settings are incomplete!</string>
+    <string name="error_thumbnail_get">Cannot capture screen on pause!</string>
+    <string name="error_thumbnail_load">Cannot load thumbnail for given game!</string>
+    <string name="error_thumbnail_saved">Cannot save captured thumbnail!</string>
+    <string name="game_file_prefix">game_</string>
+    <string name="gesture_builder_define_gesture">Define a Gesture</string>
+    <string name="gesture_builder_title">Gesture Builder</string>
+    <string name="path_rel_profiles">profiles</string>
+    <string name="path_rel_sudokus">sudokus</string>
+    <string name="player_preferences_button_changeprofile">Change Profile</string>
+    <string name="profile_file_prefix">profile_</string>
+    <string name="profile_list_profile_changed">Profile changed to</string>
+    <string name="profile_preference_button_advanced_preferences">Advanced Settings</string>
+    <string name="profile_preference_button_gesture_builder">Gesture Builder</string>
+    <string name="profile_preference_button_provide_restricted_set_of_types">Select which types are offered</string>
+    <string name="profile_preference_button_save">Save</string>
+    <string name="profile_preference_button_statistics">Statistics</string>
+    <string name="profile_preference_new_profile">unnamed</string>
+    <string name="profile_preference_title">User Preferences</string>
+    <string name="profile_preference_title_assistance_allowGetHint">Hint For Easy Field</string>
+    <string name="profile_preference_title_assistance_allowSolveRandomField">Solve Random Field</string>
+    <string name="profile_preference_title_assistance_allowSolveSpecificField">Solve Specific Field</string>
+    <string name="profile_preference_title_assistance_autoAdjustNotes">Auto Adjust Notices</string>
+    <string name="profile_preference_title_assistance_markRowColumn">Mark Row/Column</string>
+    <string name="profile_preference_title_assistance_markWrongSymbol">Mark wrong Symbols</string>
+    <string name="profile_preference_title_assistance_restrictCandidates">Input Assistance</string>
+    <string name="profile_preference_title_cat_assistances">Assistances</string>
+    <string name="profile_preference_title_cat_profile">Profile-Settings</string>
+    <string name="profile_preference_title_gesture">Gesture Input</string>
+    <string name="profile_preference_title_intelligent_assistant">Intelligent Assistant</string>
+    <string name="profile_preference_title_left_hand_mode">Left-handed mode</string>
+    <string name="profile_preference_title_name">Name</string>
+    <string name="profile_preference_title_profile">Profile</string>
+    <string name="sf_advancedpreferences_restricttypes_title">Offered Types</string>
+    <string name="sf_advancedpreferences_title">Advanced Settings</string>
+    <string name="sf_gametypeselection_create_mp">Create</string>
+    <string name="sf_gametypeselection_join_mp">Join</string>
+    <string name="sf_gametypeselection_local_sudoku">Sudoku</string>
+    <string name="sf_gametypeselection_server_sudoku">Official Sudoku</string>
+    <string name="sf_loading_back">Go back!</string>
+    <string name="sf_mainmenu_continue">Continue</string>
+    <string name="sf_mainmenu_load_sudoku">Load Sudoku</string>
+    <string name="sf_mainmenu_new_sudoku">New Sudoku</string>
+    <string name="sf_mainmenu_profile">Profile</string>
+    <string name="sf_sudoku_assistances_back_to_bookmark">Back to last bookmark</string>
+    <string name="sf_sudoku_assistances_back_to_valid_state">Back to last correct status</string>
+    <string name="sf_sudoku_assistances_check">Check solution</string>
+    <string name="sf_sudoku_assistances_solve_random">Solve random field</string>
+    <string name="sf_sudoku_assistances_solve_specific">Solve selected field</string>
+    <string name="sf_sudoku_assistances_solve_surrender">Surrender</string>
+    <string name="sf_sudoku_assistances_title">Assistances</string>
+    <string name="sf_sudoku_button_bookmark">Bookmark</string>
+    <string name="sf_sudoku_button_close">Close</string>
+    <string name="sf_sudoku_title_action_tree">Action History</string>
+    <string name="sf_sudoku_title_gesture_input">Input symbol via gesture</string>
+    <string name="sf_sudokupreferences_all_disabled_1">You disabled all sudoku types…</string>
+    <string name="sf_sudokupreferences_all_disabled_2">Enable them again in advanced settings.</string>
+    <string name="sf_sudokupreferences_assistances">Adjust Assistances</string>
+    <string name="sf_sudokupreferences_copying">Templates are currently being copied. Please wait a moment.</string>
+    <string name="sf_sudokupreferences_start">Start</string>
+    <string name="sf_sudokupreferences_sudokucomplexity">Choose Difficulty</string>
+    <string name="sf_sudokupreferences_sudokutype">Choose Sudoku Type</string>
+    <string name="sf_sudokupreferences_title">Sudoku-Preferences</string>
+    <!-- From: file:/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/src/main/res/values/tutorial.xml -->
+    <eat-comment/>
+    <string name="sf_tutorial_action_bookmark">In the action history you can set bookmarks to remember a state. Such a bookmark is represented
+	    as you can see in the image on the left.</string>
+    <string name="sf_tutorial_action_branching">If there is a state from which you tried two different solutions there are two branches and
+	    the state is marked as you can see on the left.</string>
+    <string name="sf_tutorial_action_current_state">The image on the left shows how the state you are currently in is marked.</string>
+    <string name="sf_tutorial_action_description1">The action history saves everything you do in a sudoku game. Every field you modify by either
+	    solving it or by setting notes is saved into an action history. This enables you to try a solution and go back if it was
+	    wrong without having to memorise every step you made since your solution was right for the last time.</string>
+    <string name="sf_tutorial_action_description2">With the button at the left you can open this history in a game and navigate through the
+	    actions you did.</string>
+    <string name="sf_tutorial_action_description3">If you move back in the history and start playing from there a new branch is the history
+	    is created, so you can even go back to your old solution again.</string>
+    <string name="sf_tutorial_action_redoundo_description">With the buttons on the left you can easily undo or redo an action without
+	    opening the action history.</string>
+    <string name="sf_tutorial_action_redoundo_title">Undo / Redo</string>
+    <string name="sf_tutorial_action_state">The image on the left shows a single action you did in the history.</string>
+    <string name="sf_tutorial_action_title">Action History</string>
+    <string name="sf_tutorial_assistances_active_backtolastcorrect_description1">Using this assistance reverts the game to the last state
+	    where all fields you have solved were correct. Although all your action that are reverted are saved in the action history and can
+	    be redone.</string>
+    <string name="sf_tutorial_assistances_active_backtolastcorrect_title">Back to last correct status</string>
+    <string name="sf_tutorial_assistances_active_check_description1">Your current solution is checked and a message tells you if your
+	    currently solved fields are all correct or if there is a field that is solved wrong.</string>
+    <string name="sf_tutorial_assistances_active_check_title">Check solution</string>
+    <string name="sf_tutorial_assistances_active_description1">Active assistances can be used as you need them during a game.
+	    You can reach them by clicking on the button shown left.</string>
+    <string name="sf_tutorial_assistances_active_solvecurrentfield_description1">The field you have currently selected is solved for you.</string>
+    <string name="sf_tutorial_assistances_active_solvecurrentfield_title">Solve current field</string>
+    <string name="sf_tutorial_assistances_active_solverandomfield_description1">A random field is automatically solved for you.</string>
+    <string name="sf_tutorial_assistances_active_solverandomfield_title">Solve random field</string>
+    <string name="sf_tutorial_assistances_active_surrender_description1">This is not an ordinary assistance. Using this the whole sudoku
+	    is automatically solved and you can take a look at the solution. You will get no score for a game you surrendered.</string>
+    <string name="sf_tutorial_assistances_active_surrender_title">Surrender</string>
+    <string name="sf_tutorial_assistances_active_title">Active assistances</string>
+    <string name="sf_tutorial_assistances_description1">There are several assistances available to make it easier to solve a sudoku.
+	    These assistances can be classified as "passive" and "active" assistances.</string>
+    <string name="sf_tutorial_assistances_description2">But: Activating a passive assistance or using an active assistance implies 
+	    your highscore to be lowered. Using an assistance has an effect on the highscore equal to needing more time to solve the
+	    sudoku, so the assistances are presented as additional needed time behind the game time itself.</string>
+    <string name="sf_tutorial_assistances_passive_autoadjustnotes_description1">This assistance updates your notes when a digit is put into a field. 
+	    If that digit is in the notes of a field in the same row, column or block you put it in, it is removed from those notes. </string>
+    <string name="sf_tutorial_assistances_passive_autoadjustnotes_title">Auto adjust notes</string>
+    <string name="sf_tutorial_assistances_passive_description1">Passive assistances are those that can be activated in the profile or before
+	    starting a game. These assistances do not have to be called in a game but therefore they cannot be activated or deactivated in the
+	    game.</string>
+    <string name="sf_tutorial_assistances_passive_inputassistance_description1">With this assistance activated you can only put a digit into a
+	    field that is not in one of the fields of the same row, column or block yet. All other digits are grayed out.</string>
+    <string name="sf_tutorial_assistances_passive_inputassistance_title">Input assistance</string>
+    <string name="sf_tutorial_assistances_passive_markrowcolumn_description1">Activating this assistance emphasises the fields in the
+	    currently selected row and column.</string>
+    <string name="sf_tutorial_assistances_passive_markrowcolumn_title">Mark row / column</string>
+    <string name="sf_tutorial_assistances_passive_markwrongsymbols_description1">If a digit is put into a field although it is already 
+	    in a field of the same row, column or block it is marked red because there cannot be the same digit in both fields.</string>
+    <string name="sf_tutorial_assistances_passive_markwrongsymbols_title">Mark wrong symbols</string>
+    <string name="sf_tutorial_assistances_passive_title">Passive assistances</string>
+    <string name="sf_tutorial_assistances_title">Assistances</string>
+    <string name="sf_tutorial_sudoku_description1">A sudoku is a logic-based, combinatorial number-placement puzzle. The original sudoku
+	    is a 9x9 grid that has to be filled with digits so hat each column, each row and each of the nine 3x3 sub-grids contains
+	    all the digits from 1 to 9. At the beginning a sudoku is partially completed and has only one correct solution.</string>
+    <string name="sf_tutorial_sudoku_description2">Further sudoku types do not define the 3x3 sub-grids but other sets of fields which are 
+	    represented by a black edging or gray shaded fields in this app. The following images show both types of representation which can 
+	    overlap:</string>
+    <string name="sf_tutorial_sudoku_squiggly">Squiggly Type A Sudoku</string>
+    <string name="sf_tutorial_sudoku_title">Sudoku</string>
+    <string name="sf_tutorial_sudoku_xsudoku">X-Sudoku Type</string>
+    <!-- From: file:/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="splash_text">SudoQ is being initialized for the first start</string>
+    <string name="statistics_counters">Counters</string>
+    <string name="statistics_fastest_solving_time">Fastest solving time</string>
+    <string name="statistics_played_difficult_sudokus">Played difficult sudokus</string>
+    <string name="statistics_played_easy_sudokus">Played easy sudokus</string>
+    <string name="statistics_played_infernal_sudokus">Played infernal sudokus</string>
+    <string name="statistics_played_medium_sudokus">Played medium sudokus</string>
+    <string name="statistics_played_sudokus">Played sudokus</string>
+    <string name="statistics_records">Records</string>
+    <string name="statistics_score">Highscore</string>
+    <string name="statistics_title">Statistics</string>
+    <string name="subtitle_gametypeselection_mp">Multiplayer</string>
+    <string name="subtitle_sudokupreferences_sudokucomplexity">Difficulty:</string>
+    <string name="subtitle_sudokupreferences_sudokutype">Sudoku Type:</string>
+    <string name="sudoku_file_prefix">sudoku_</string>
+    <string name="sudoku_type_dummy_longest_name">Standard-Sudoku 16x16</string>
+    <string name="sudoku_type_hyper">Hyper-Sudoku</string>
+    <string name="sudoku_type_samurai">Samurai-Sudoku</string>
+    <string name="sudoku_type_squiggly_a_9x9">Squiggly-Sudoku 9x9</string>
+    <string name="sudoku_type_squiggly_b_9x9">Squoggly-Sudoku 9x9</string>
+    <string name="sudoku_type_stairstep_9x9">Stairstep-Sudoku 9x9</string>
+    <string name="sudoku_type_standard_16x16">Standard-Sudoku 16x16</string>
+    <string name="sudoku_type_standard_4x4">Standard-Sudoku 4x4</string>
+    <string name="sudoku_type_standard_6x6">Standard-Sudoku 6x6</string>
+    <string name="sudoku_type_standard_9x9">Standard-Sudoku 9x9</string>
+    <string name="sudoku_type_xsudoku">X-Sudoku</string>
+    <string name="sudokuloading_delete_all">Delete all Sudokus</string>
+    <string name="sudokuloading_delete_finished">Delete finished Sudokus</string>
+    <string name="sudokuloading_dialog_delete">delete</string>
+    <string name="sudokuloading_dialog_play">play</string>
+    <string name="time_format">HH:mm:ss dd.MM.yyyy</string>
+    <string name="title_gametypeselection">New Sudoku</string>
+    <string name="title_mainmenu">SudoQ</string>
+    <string name="toast_invalid_symbol">Invalid symbol</string>
+    <string name="toast_restricted_symbol">Symbol is restricted</string>
+    <string name="toast_solved_correct">Everything is solved correctly</string>
+    <string name="toast_solved_wrong">A field is not solved correctly</string>
+    <string name="toast_stop_that">STOP THAT!!!</string>
+    <string name="tx_no_sudokus_to_load">No saved Sudokus available.</string>
+    <string name="version_code">1.0.4</string>
+    <string name="version_name">Berta</string>
+    <string name="x_mark">✘</string>
+    <!-- From: file:/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/build/intermediates/exploded-aar/com.actionbarsherlock/actionbarsherlock/4.4.0/res/values/values.xml -->
+    <eat-comment/>
+    <style name="Sherlock.__TextAppearance.Small" parent="Widget">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+    <style name="Sherlock.__Theme" parent="android:Theme.NoTitleBar">
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+    <style name="Sherlock.__Theme.DarkActionBar" parent="Theme.Sherlock.Light"/>
+    <style name="Sherlock.__Theme.Light" parent="android:Theme.Light.NoTitleBar">
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+    <style name="Sherlock.__Widget.ActionBar" parent="Widget">
+        <item name="displayOptions">useLogo|showHome|showTitle</item>
+        <item name="height">?attr/actionBarSize</item>
+        <item name="android:paddingLeft">0dip</item>
+        <item name="android:paddingTop">0dip</item>
+        <item name="android:paddingRight">0dip</item>
+        <item name="android:paddingBottom">0dip</item>
+        <item name="homeLayout">@layout/abs__action_bar_home</item>
+    </style>
+    <style name="Sherlock.__Widget.ActionMode" parent="Widget">
+        <item name="background">?attr/actionModeBackground</item>
+        <item name="backgroundSplit">?attr/actionModeSplitBackground</item>
+        <item name="height">?attr/actionBarSize</item>
+    </style>
+    <style name="Sherlock.__Widget.ActivityChooserView" parent="Widget">
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/abs__ab_share_pack_holo_dark</item>
+        <item name="android:divider">?attr/dividerVertical</item>
+        <item name="android:showDividers">middle</item>
+        <item name="android:dividerPadding">6dip</item>
+        <item name="android:minHeight">?attr/actionBarSize</item>
+    </style>
+    <style name="Sherlock.__Widget.Holo.DropDownItem" parent="Widget">
+        <item name="android:textAppearance">@style/TextAppearance.Sherlock.Widget.DropDownItem</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+    <style name="Sherlock.__Widget.Holo.ListView" parent="android:Widget.ListView">
+        <item name="android:divider">@drawable/abs__list_divider_holo_dark</item>
+        <item name="android:listSelector">@drawable/abs__list_selector_holo_dark</item>
+    </style>
+    <style name="Sherlock.__Widget.Holo.Spinner" parent="Widget">
+        <item name="android:dropDownSelector">@drawable/abs__list_selector_holo_dark</item>
+        <item name="android:popupBackground">@drawable/abs__menu_dropdown_panel_holo_dark</item>
+        <item name="android:dropDownVerticalOffset">0dip</item>
+        <item name="android:dropDownHorizontalOffset">0dip</item>
+        <item name="android:dropDownWidth">wrap_content</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:spinnerMode">dropdown</item>
+        <item name="android:clickable">true</item>
+    </style>
+    <style name="Sherlock.__Widget.SearchAutoCompleteTextView" parent="Widget">
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMediumInverse</item>
+        <item name="android:textColor">?attr/textColorPrimary</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:completionHintView">@layout/abs__simple_dropdown_hint</item>
+        <item name="android:completionThreshold">2</item>
+        <item name="android:dropDownWidth">wrap_content</item>
+    </style>
+    <style name="TextAppearance.Sherlock" parent="@android:style/TextAppearance"/>
+    <style name="TextAppearance.Sherlock.Light.SearchResult" parent="TextAppearance.Sherlock.SearchResult"/>
+    <style name="TextAppearance.Sherlock.Light.SearchResult.Subtitle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+    <style name="TextAppearance.Sherlock.Light.SearchResult.Title">
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="TextAppearance.Sherlock.Light.Small" parent="TextAppearance.Sherlock.Small"/>
+    <style name="TextAppearance.Sherlock.Light.Widget.PopupMenu.Large" parent="TextAppearance.Sherlock.Widget.PopupMenu.Large"/>
+    <style name="TextAppearance.Sherlock.Light.Widget.PopupMenu.Small" parent="TextAppearance.Sherlock.Widget.PopupMenu.Small"/>
+    <style name="TextAppearance.Sherlock.SearchResult">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textColorHint">?android:attr/textColorHint</item>
+    </style>
+    <style name="TextAppearance.Sherlock.SearchResult.Subtitle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+    <style name="TextAppearance.Sherlock.SearchResult.Title">
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="TextAppearance.Sherlock.Small" parent="Sherlock.__TextAppearance.Small"/>
+    <style name="TextAppearance.Sherlock.Widget.ActionBar.Menu" parent="Widget">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?attr/actionMenuTextColor</item>
+        <item name="android:textAllCaps">@bool/abs__config_actionMenuItemAllCaps</item>
+    </style>
+    <style name="TextAppearance.Sherlock.Widget.ActionBar.Subtitle" parent="Widget">
+        <item name="android:textSize">@dimen/abs__action_bar_subtitle_text_size</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+    <style name="TextAppearance.Sherlock.Widget.ActionBar.Subtitle.Inverse" parent="Widget">
+        <item name="android:textSize">@dimen/abs__action_bar_subtitle_text_size</item>
+        <item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
+    </style>
+    <style name="TextAppearance.Sherlock.Widget.ActionBar.Title" parent="Widget">
+        <item name="android:textSize">@dimen/abs__action_bar_title_text_size</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+    <style name="TextAppearance.Sherlock.Widget.ActionBar.Title.Inverse" parent="Widget">
+        <item name="android:textSize">@dimen/abs__action_bar_title_text_size</item>
+        <item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
+    </style>
+    <style name="TextAppearance.Sherlock.Widget.ActionMode.Subtitle" parent="Widget">
+        <item name="android:textSize">@dimen/abs__action_bar_subtitle_text_size</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+    <style name="TextAppearance.Sherlock.Widget.ActionMode.Subtitle.Inverse" parent="Widget">
+        <item name="android:textSize">@dimen/abs__action_bar_subtitle_text_size</item>
+        <item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
+    </style>
+    <style name="TextAppearance.Sherlock.Widget.ActionMode.Title" parent="Widget">
+        <item name="android:textSize">@dimen/abs__action_bar_title_text_size</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+    <style name="TextAppearance.Sherlock.Widget.ActionMode.Title.Inverse" parent="Widget">
+        <item name="android:textSize">@dimen/abs__action_bar_title_text_size</item>
+        <item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
+    </style>
+    <style name="TextAppearance.Sherlock.Widget.DropDownHint" parent="Widget">
+        <item name="android:textColor">?textColorPrimary</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="TextAppearance.Sherlock.Widget.DropDownItem" parent="Widget">
+        <item name="android:textColor">?textColorPrimaryDisableOnly</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    <style name="TextAppearance.Sherlock.Widget.PopupMenu" parent="Widget">
+        <item name="android:textColor">?attr/textColorPrimary</item>
+    </style>
+    <style name="TextAppearance.Sherlock.Widget.PopupMenu.Large">
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="TextAppearance.Sherlock.Widget.PopupMenu.Small">
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="TextAppearance.Sherlock.Widget.TextView.SpinnerItem" parent="Widget">
+        <item name="android:textColor">?textColorPrimary</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    <style name="Theme.Sherlock" parent="Sherlock.__Theme">
+
+        <!-- Action bar styles (from Theme.Holo) -->
+        <item name="actionDropDownStyle">@style/Widget.Sherlock.Spinner.DropDown.ActionBar</item>
+        <item name="actionButtonStyle">@style/Widget.Sherlock.ActionButton</item>
+        <item name="actionOverflowButtonStyle">@style/Widget.Sherlock.ActionButton.Overflow</item>
+        <item name="actionModeBackground">@drawable/abs__cab_background_top_holo_dark</item>
+        <item name="actionModeSplitBackground">@drawable/abs__cab_background_bottom_holo_dark</item>
+        <item name="actionModeCloseDrawable">@drawable/abs__ic_cab_done_holo_dark</item>
+        <item name="actionBarTabStyle">@style/Widget.Sherlock.ActionBar.TabView</item>
+        <item name="actionBarTabBarStyle">@style/Widget.Sherlock.ActionBar.TabBar</item>
+        <item name="actionBarTabTextStyle">@style/Widget.Sherlock.ActionBar.TabText</item>
+        <item name="actionModeStyle">@style/Widget.Sherlock.ActionMode</item>
+        <item name="actionModeCloseButtonStyle">@style/Widget.Sherlock.ActionButton.CloseMode</item>
+        <item name="actionBarStyle">@style/Widget.Sherlock.ActionBar</item>
+        <item name="actionBarSize">@dimen/abs__action_bar_default_height</item>
+        <!-- Internal -->
+        <item name="actionModePopupWindowStyle">@style/Widget.Sherlock.PopupWindow.ActionMode</item>
+        <item name="actionBarWidgetTheme">@null</item>
+
+        <!-- Action bar styles (defaults from Theme) -->
+        <item name="actionBarSplitStyle">?attr/actionBarStyle</item>
+        <item name="actionMenuTextAppearance">@style/TextAppearance.Sherlock.Widget.ActionBar.Menu</item>
+        <item name="actionMenuTextColor">?attr/textColorPrimary</item>
+        <item name="actionBarDivider">?attr/dividerVertical</item>
+        <item name="actionBarItemBackground">?attr/selectableItemBackground</item>
+        <item name="buttonStyleSmall">@style/Widget.Sherlock.Button.Small</item>
+        <item name="selectableItemBackground">@drawable/abs__item_background_holo_dark</item>
+        <item name="activatedBackgroundIndicator">@drawable/abs__activated_background_holo_dark</item>
+        <item name="actionModeShareDrawable">@drawable/abs__ic_menu_share_holo_dark</item>
+        <item name="activityChooserViewStyle">@style/Widget.Sherlock.ActivityChooserView</item>
+        <item name="homeAsUpIndicator">@drawable/abs__ic_ab_back_holo_dark</item>
+        <item name="dividerVertical">@drawable/abs__list_divider_holo_dark</item>
+        <item name="spinnerDropDownItemStyle">@style/Widget.Sherlock.DropDownItem.Spinner</item>
+        <item name="spinnerItemStyle">@style/Widget.Sherlock.TextView.SpinnerItem</item>
+        <item name="textColorPrimary">@color/abs__primary_text_holo_dark</item>
+        <item name="textColorPrimaryDisableOnly">@color/abs__primary_text_disable_only_holo_dark</item>
+        <item name="textColorPrimaryInverse">@color/abs__primary_text_holo_light</item>
+
+        <!-- Internal -->
+        <item name="dropdownListPreferredItemHeight">48dip</item>
+        <item name="dropDownListViewStyle">@style/Widget.Sherlock.ListView.DropDown</item>
+        <item name="textAppearanceSmall">@style/TextAppearance.Sherlock.Small</item>
+        <item name="textAppearanceLargePopupMenu">@style/TextAppearance.Sherlock.Widget.PopupMenu.Large</item>
+        <item name="textAppearanceSmallPopupMenu">@style/TextAppearance.Sherlock.Widget.PopupMenu.Small</item>
+        <item name="textAppearanceSearchResultTitle">@style/TextAppearance.Sherlock.SearchResult.Title</item>
+        <item name="textAppearanceSearchResultSubtitle">@style/TextAppearance.Sherlock.SearchResult.Subtitle</item>
+        <item name="popupMenuStyle">@style/Widget.Sherlock.PopupMenu</item>
+        <!-- Internal -->
+        <item name="listPopupWindowStyle">@style/Widget.Sherlock.ListPopupWindow</item>
+        <item name="searchDropdownBackground">@drawable/abs__search_dropdown_dark</item>
+        <item name="searchViewTextField">@drawable/abs__textfield_searchview_holo_dark</item>
+        <item name="searchViewTextFieldRight">@drawable/abs__textfield_searchview_right_holo_dark</item>
+        <item name="searchViewCloseIcon">@drawable/abs__ic_clear</item>
+        <item name="searchViewSearchIcon">@drawable/abs__ic_search</item>
+        <item name="searchViewGoIcon">@drawable/abs__ic_go</item>
+        <item name="searchViewVoiceIcon">@drawable/abs__ic_voice_search</item>
+        <item name="searchAutoCompleteTextView">@style/Widget.Sherlock.SearchAutoCompleteTextView</item>
+        <item name="dropDownHintAppearance">@style/TextAppearance.Sherlock.Widget.DropDownHint</item>
+        <item name="searchViewEditQuery">@drawable/abs__ic_commit_search_api_holo_dark</item>
+        <item name="searchViewEditQueryBackground">?selectableItemBackground</item>
+        <item name="searchResultListItemHeight">58dp</item>
+        <item name="windowNoTitle">false</item>
+        <item name="windowActionBar">true</item>
+        <item name="windowActionModeOverlay">false</item>
+        <item name="windowContentOverlay">@null</item>
+    </style>
+    <style name="Theme.Sherlock.Light" parent="Sherlock.__Theme.Light">
+
+        <!-- Action bar styles (from Theme.Holo) -->
+        <item name="actionDropDownStyle">@style/Widget.Sherlock.Light.Spinner.DropDown.ActionBar</item>
+        <item name="actionButtonStyle">@style/Widget.Sherlock.Light.ActionButton</item>
+        <item name="actionOverflowButtonStyle">@style/Widget.Sherlock.Light.ActionButton.Overflow</item>
+        <item name="actionModeBackground">@drawable/abs__cab_background_top_holo_light</item>
+        <item name="actionModeSplitBackground">@drawable/abs__cab_background_bottom_holo_light</item>
+        <item name="actionModeCloseDrawable">@drawable/abs__ic_cab_done_holo_light</item>
+        <item name="actionBarTabStyle">@style/Widget.Sherlock.Light.ActionBar.TabView</item>
+        <item name="actionBarTabBarStyle">@style/Widget.Sherlock.Light.ActionBar.TabBar</item>
+        <item name="actionBarTabTextStyle">@style/Widget.Sherlock.Light.ActionBar.TabText</item>
+        <item name="actionModeStyle">@style/Widget.Sherlock.Light.ActionMode</item>
+        <item name="actionModeCloseButtonStyle">@style/Widget.Sherlock.Light.ActionButton.CloseMode</item>
+        <item name="actionBarStyle">@style/Widget.Sherlock.Light.ActionBar.Solid</item>
+        <item name="actionBarSize">@dimen/abs__action_bar_default_height</item>
+        <!-- Internal -->
+        <item name="actionModePopupWindowStyle">@style/Widget.Sherlock.Light.PopupWindow.ActionMode</item>
+        <item name="actionBarWidgetTheme">@null</item>
+
+        <!-- Action bar styles (defaults from Theme) -->
+        <item name="actionBarSplitStyle">?attr/actionBarStyle</item>
+        <item name="actionMenuTextAppearance">@style/TextAppearance.Sherlock.Widget.ActionBar.Menu</item>
+        <item name="actionMenuTextColor">?attr/textColorPrimary</item>
+        <item name="actionBarDivider">?attr/dividerVertical</item>
+        <item name="actionBarItemBackground">?attr/selectableItemBackground</item>
+        <item name="buttonStyleSmall">@style/Widget.Sherlock.Light.Button.Small</item>
+        <item name="selectableItemBackground">@drawable/abs__item_background_holo_light</item>
+        <item name="activatedBackgroundIndicator">@drawable/abs__activated_background_holo_light</item>
+        <item name="actionModeShareDrawable">@drawable/abs__ic_menu_share_holo_light</item>
+        <item name="activityChooserViewStyle">@style/Widget.Sherlock.Light.ActivityChooserView</item>
+        <item name="homeAsUpIndicator">@drawable/abs__ic_ab_back_holo_light</item>
+        <item name="dividerVertical">@drawable/abs__list_divider_holo_light</item>
+        <item name="spinnerDropDownItemStyle">@style/Widget.Sherlock.Light.DropDownItem.Spinner</item>
+        <item name="spinnerItemStyle">@style/Widget.Sherlock.TextView.SpinnerItem</item>
+        <item name="textColorPrimary">@color/abs__primary_text_holo_light</item>
+        <item name="textColorPrimaryDisableOnly">@color/abs__primary_text_disable_only_holo_light</item>
+        <item name="textColorPrimaryInverse">@color/abs__primary_text_holo_dark</item>
+
+        <!-- Internal -->
+        <item name="dropdownListPreferredItemHeight">48dip</item>
+        <item name="dropDownListViewStyle">@style/Widget.Sherlock.Light.ListView.DropDown</item>
+        <item name="textAppearanceSmall">@style/TextAppearance.Sherlock.Light.Small</item>
+        <item name="textAppearanceLargePopupMenu">@style/TextAppearance.Sherlock.Light.Widget.PopupMenu.Large</item>
+        <item name="textAppearanceSmallPopupMenu">@style/TextAppearance.Sherlock.Light.Widget.PopupMenu.Small</item>
+        <item name="textAppearanceSearchResultTitle">@style/TextAppearance.Sherlock.Light.SearchResult.Title</item>
+        <item name="textAppearanceSearchResultSubtitle">@style/TextAppearance.Sherlock.Light.SearchResult.Subtitle</item>
+        <item name="popupMenuStyle">@style/Widget.Sherlock.Light.PopupMenu</item>
+        <!-- Internal -->
+        <item name="listPopupWindowStyle">@style/Widget.Sherlock.Light.ListPopupWindow</item>
+        <item name="searchDropdownBackground">@drawable/abs__search_dropdown_light</item>
+        <item name="searchViewTextField">@drawable/abs__textfield_searchview_holo_light</item>
+        <item name="searchViewTextFieldRight">@drawable/abs__textfield_searchview_right_holo_light</item>
+        <item name="searchViewCloseIcon">@drawable/abs__ic_clear_holo_light</item>
+        <item name="searchViewSearchIcon">@drawable/abs__ic_search_api_holo_light</item>
+        <item name="searchViewGoIcon">@drawable/abs__ic_go_search_api_holo_light</item>
+        <item name="searchViewVoiceIcon">@drawable/abs__ic_voice_search_api_holo_light</item>
+        <item name="searchAutoCompleteTextView">@style/Widget.Sherlock.Light.SearchAutoCompleteTextView</item>
+        <item name="dropDownHintAppearance">@style/TextAppearance.Sherlock.Widget.DropDownHint</item>
+        <item name="searchViewEditQuery">@drawable/abs__ic_commit_search_api_holo_light</item>
+        <item name="searchViewEditQueryBackground">?selectableItemBackground</item>
+        <item name="searchResultListItemHeight">58dp</item>
+        <item name="windowNoTitle">false</item>
+        <item name="windowActionBar">true</item>
+        <item name="windowActionModeOverlay">false</item>
+        <item name="windowContentOverlay">@null</item>
+    </style>
+    <style name="Theme.Sherlock.Light.DarkActionBar" parent="Sherlock.__Theme.DarkActionBar">
+        <item name="windowContentOverlay">@drawable/abs__ab_solid_shadow_holo</item>
+        <item name="actionBarStyle">@style/Widget.Sherlock.Light.ActionBar.Solid.Inverse</item>
+        <item name="actionBarWidgetTheme">@style/Theme.Sherlock</item>
+        <item name="actionDropDownStyle">@style/Widget.Sherlock.Spinner.DropDown.ActionBar</item>
+        <item name="actionButtonStyle">@style/Widget.Sherlock.ActionButton</item>
+        <item name="actionOverflowButtonStyle">@style/Widget.Sherlock.ActionButton.Overflow</item>
+        <item name="actionModeBackground">@drawable/abs__cab_background_top_holo_dark</item>
+        <item name="actionModeSplitBackground">@drawable/abs__cab_background_bottom_holo_dark</item>
+        <item name="actionModeCloseDrawable">@drawable/abs__ic_cab_done_holo_dark</item>
+        <item name="homeAsUpIndicator">@drawable/abs__ic_ab_back_holo_dark</item>
+        <item name="actionBarTabStyle">@style/Widget.Sherlock.Light.ActionBar.TabView.Inverse</item>
+        <item name="actionBarTabBarStyle">@style/Widget.Sherlock.Light.ActionBar.TabBar.Inverse</item>
+        <item name="actionBarTabTextStyle">@style/Widget.Sherlock.Light.ActionBar.TabText.Inverse</item>
+        <item name="actionBarDivider">@drawable/abs__list_divider_holo_dark</item>
+        <item name="actionBarItemBackground">@drawable/abs__item_background_holo_dark</item>
+        <item name="actionMenuTextColor">?attr/textColorPrimaryInverse</item>
+        <item name="actionModeStyle">@style/Widget.Sherlock.Light.ActionMode.Inverse</item>
+        <item name="actionModeCloseButtonStyle">@style/Widget.Sherlock.ActionButton.CloseMode</item>
+        <item name="actionModePopupWindowStyle">@style/Widget.Sherlock.PopupWindow.ActionMode</item>
+        <item name="actionModeShareDrawable">@drawable/abs__ic_menu_share_holo_dark</item>
+
+        <!-- We want the dark action bar SearchView stuff -->
+        <item name="searchDropdownBackground">@drawable/abs__search_dropdown_dark</item>
+        <item name="searchViewTextField">@drawable/abs__textfield_searchview_holo_dark</item>
+        <item name="searchViewTextFieldRight">@drawable/abs__textfield_searchview_right_holo_dark</item>
+        <item name="searchViewCloseIcon">@drawable/abs__ic_clear</item>
+        <item name="searchViewSearchIcon">@drawable/abs__ic_search</item>
+        <item name="searchViewGoIcon">@drawable/abs__ic_go</item>
+        <item name="searchViewVoiceIcon">@drawable/abs__ic_voice_search</item>
+        <item name="searchAutoCompleteTextView">@style/Widget.Sherlock.SearchAutoCompleteTextView</item>
+        <item name="dropDownHintAppearance">@style/TextAppearance.Sherlock.Widget.DropDownHint</item>
+        <item name="searchViewEditQuery">@drawable/abs__ic_commit_search_api_holo_dark</item>
+    </style>
+    <style name="Theme.Sherlock.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="Theme.Sherlock.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="Widget"/>
+    <style name="Widget.Sherlock.ActionBar" parent="Sherlock.__Widget.ActionBar">
+        <item name="titleTextStyle">@style/TextAppearance.Sherlock.Widget.ActionBar.Title</item>
+        <item name="subtitleTextStyle">@style/TextAppearance.Sherlock.Widget.ActionBar.Subtitle</item>
+        <item name="background">@drawable/abs__ab_transparent_dark_holo</item>
+        <item name="backgroundStacked">@drawable/abs__ab_stacked_transparent_dark_holo</item>
+        <item name="backgroundSplit">@drawable/abs__ab_bottom_transparent_dark_holo</item>
+        <item name="divider">?attr/dividerVertical</item>
+        <item name="progressBarStyle">@style/Widget.Sherlock.ProgressBar.Horizontal</item>
+        <item name="indeterminateProgressStyle">@style/Widget.Sherlock.ProgressBar</item>
+        <item name="progressBarPadding">32dip</item>
+        <item name="itemPadding">8dip</item>
+    </style>
+    <style name="Widget.Sherlock.ActionBar.Solid" parent="Sherlock.__Widget.ActionBar">
+        <item name="titleTextStyle">@style/TextAppearance.Sherlock.Widget.ActionBar.Title</item>
+        <item name="subtitleTextStyle">@style/TextAppearance.Sherlock.Widget.ActionBar.Subtitle</item>
+        <item name="background">@drawable/abs__ab_solid_dark_holo</item>
+        <item name="backgroundStacked">@drawable/abs__ab_stacked_solid_dark_holo</item>
+        <item name="backgroundSplit">@drawable/abs__ab_bottom_solid_dark_holo</item>
+        <item name="divider">?attr/dividerVertical</item>
+        <item name="progressBarStyle">@style/Widget.Sherlock.ProgressBar.Horizontal</item>
+        <item name="indeterminateProgressStyle">@style/Widget.Sherlock.ProgressBar</item>
+        <item name="progressBarPadding">32dip</item>
+        <item name="itemPadding">8dip</item>
+    </style>
+    <style name="Widget.Sherlock.ActionBar.TabBar" parent="Widget">
+        <item name="android:divider">?attr/actionBarDivider</item>
+        <item name="android:showDividers">middle</item>
+        <item name="android:dividerPadding">12dip</item>
+    </style>
+    <style name="Widget.Sherlock.ActionBar.TabText" parent="Widget">
+        <item name="android:textAppearance">@null</item>
+        <item name="android:textColor">?attr/textColorPrimary</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:maxLines">2</item>
+    </style>
+    <style name="Widget.Sherlock.ActionBar.TabView" parent="Widget">
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:background">@drawable/abs__tab_indicator_ab_holo</item>
+        <item name="android:paddingLeft">16dip</item>
+        <item name="android:paddingRight">16dip</item>
+    </style>
+    <style name="Widget.Sherlock.ActionButton" parent="Widget">
+        <item name="android:background">?attr/actionBarItemBackground</item>
+        <item name="android:minHeight">?attr/actionBarSize</item>
+        <item name="android:minWidth">@dimen/abs__action_button_min_width</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">12dip</item>
+        <item name="android:paddingRight">12dip</item>
+        <item name="android:scaleType">center</item>
+    </style>
+    <style name="Widget.Sherlock.ActionButton.CloseMode">
+        <item name="android:background">@drawable/abs__btn_cab_done_holo_dark</item>
+    </style>
+    <style name="Widget.Sherlock.ActionButton.Overflow">
+        <item name="android:src">@drawable/abs__ic_menu_moreoverflow_holo_dark</item>
+        <item name="android:background">?attr/actionBarItemBackground</item>
+        <item name="android:contentDescription">@string/abs__action_menu_overflow_description</item>
+    </style>
+    <style name="Widget.Sherlock.ActionMode" parent="Sherlock.__Widget.ActionMode">
+        <item name="titleTextStyle">@style/TextAppearance.Sherlock.Widget.ActionMode.Title</item>
+        <item name="subtitleTextStyle">@style/TextAppearance.Sherlock.Widget.ActionMode.Subtitle</item>
+    </style>
+    <style name="Widget.Sherlock.ActivityChooserView" parent="Sherlock.__Widget.ActivityChooserView"/>
+    <style name="Widget.Sherlock.Button.Small" parent="Widget">
+        <item name="android:textAppearance">?attr/textAppearanceSmall</item>
+        <item name="android:textColor">@color/abs__primary_text_holo_dark</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:minWidth">48dip</item>
+    </style>
+    <style name="Widget.Sherlock.DropDownItem.Spinner" parent="Sherlock.__Widget.Holo.DropDownItem"/>
+    <style name="Widget.Sherlock.Light.ActionBar" parent="Widget.Sherlock.ActionBar">
+        <item name="titleTextStyle">@style/TextAppearance.Sherlock.Widget.ActionBar.Title</item>
+        <item name="subtitleTextStyle">@style/TextAppearance.Sherlock.Widget.ActionBar.Subtitle</item>
+        <item name="background">@drawable/abs__ab_transparent_light_holo</item>
+        <item name="backgroundStacked">@drawable/abs__ab_stacked_transparent_light_holo</item>
+        <item name="backgroundSplit">@drawable/abs__ab_bottom_transparent_light_holo</item>
+        <item name="homeAsUpIndicator">@drawable/abs__ic_ab_back_holo_light</item>
+        <item name="progressBarStyle">@style/Widget.Sherlock.Light.ProgressBar.Horizontal</item>
+        <item name="indeterminateProgressStyle">@style/Widget.Sherlock.Light.ProgressBar</item>
+    </style>
+    <style name="Widget.Sherlock.Light.ActionBar.Solid">
+        <item name="titleTextStyle">@style/TextAppearance.Sherlock.Widget.ActionBar.Title</item>
+        <item name="subtitleTextStyle">@style/TextAppearance.Sherlock.Widget.ActionBar.Subtitle</item>
+        <item name="background">@drawable/abs__ab_solid_light_holo</item>
+        <item name="backgroundStacked">@drawable/abs__ab_stacked_solid_light_holo</item>
+        <item name="backgroundSplit">@drawable/abs__ab_bottom_solid_light_holo</item>
+        <item name="divider">?attr/dividerVertical</item>
+        <item name="progressBarStyle">@style/Widget.Sherlock.Light.ProgressBar.Horizontal</item>
+        <item name="indeterminateProgressStyle">@style/Widget.Sherlock.Light.ProgressBar</item>
+        <item name="progressBarPadding">32dip</item>
+        <item name="itemPadding">8dip</item>
+    </style>
+    <style name="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+        <item name="titleTextStyle">@style/TextAppearance.Sherlock.Widget.ActionBar.Title.Inverse</item>
+        <item name="subtitleTextStyle">@style/TextAppearance.Sherlock.Widget.ActionBar.Subtitle.Inverse</item>
+        <item name="background">@drawable/abs__ab_solid_dark_holo</item>
+        <item name="backgroundStacked">@drawable/abs__ab_stacked_solid_dark_holo</item>
+        <item name="backgroundSplit">@drawable/abs__ab_bottom_solid_inverse_holo</item>
+        <item name="divider">@drawable/abs__list_divider_holo_dark</item>
+        <item name="progressBarStyle">@style/Widget.Sherlock.ProgressBar.Horizontal</item>
+        <item name="indeterminateProgressStyle">@style/Widget.Sherlock.ProgressBar</item>
+        <item name="progressBarPadding">32dip</item>
+        <item name="itemPadding">8dip</item>
+    </style>
+    <style name="Widget.Sherlock.Light.ActionBar.TabBar" parent="Widget.Sherlock.ActionBar.TabBar"/>
+    <style name="Widget.Sherlock.Light.ActionBar.TabBar.Inverse"/>
+    <style name="Widget.Sherlock.Light.ActionBar.TabText" parent="Widget.Sherlock.ActionBar.TabText"/>
+    <style name="Widget.Sherlock.Light.ActionBar.TabText.Inverse">
+        <item name="android:textColor">?attr/textColorPrimaryInverse</item>
+    </style>
+    <style name="Widget.Sherlock.Light.ActionBar.TabView" parent="Widget.Sherlock.ActionBar.TabView"/>
+    <style name="Widget.Sherlock.Light.ActionBar.TabView.Inverse"/>
+    <style name="Widget.Sherlock.Light.ActionButton" parent="Widget.Sherlock.ActionButton"/>
+    <style name="Widget.Sherlock.Light.ActionButton.CloseMode">
+        <item name="android:background">@drawable/abs__btn_cab_done_holo_light</item>
+    </style>
+    <style name="Widget.Sherlock.Light.ActionButton.Overflow">
+        <item name="android:src">@drawable/abs__ic_menu_moreoverflow_holo_light</item>
+    </style>
+    <style name="Widget.Sherlock.Light.ActionMode" parent="Widget.Sherlock.ActionMode">
+        <item name="titleTextStyle">@style/TextAppearance.Sherlock.Widget.ActionMode.Title</item>
+        <item name="subtitleTextStyle">@style/TextAppearance.Sherlock.Widget.ActionMode.Subtitle</item>
+    </style>
+    <style name="Widget.Sherlock.Light.ActionMode.Inverse" parent="Sherlock.__Widget.ActionMode">
+        <item name="titleTextStyle">@style/TextAppearance.Sherlock.Widget.ActionMode.Title.Inverse</item>
+        <item name="subtitleTextStyle">@style/TextAppearance.Sherlock.Widget.ActionMode.Subtitle.Inverse</item>
+    </style>
+    <style name="Widget.Sherlock.Light.ActivityChooserView" parent="Widget.Sherlock.ActivityChooserView">
+        <item name="android:background">@drawable/abs__ab_share_pack_holo_light</item>
+    </style>
+    <style name="Widget.Sherlock.Light.Button.Small" parent="Widget">
+        <item name="android:textAppearance">?attr/textAppearanceSmall</item>
+        <item name="android:textColor">@color/abs__primary_text_holo_light</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:minWidth">48dip</item>
+    </style>
+    <style name="Widget.Sherlock.Light.DropDownItem.Spinner" parent="Sherlock.__Widget.Holo.DropDownItem"/>
+    <style name="Widget.Sherlock.Light.ListPopupWindow" parent="Widget">
+        <item name="android:dropDownSelector">@drawable/abs__list_selector_holo_light</item>
+        <item name="android:popupBackground">@drawable/abs__menu_dropdown_panel_holo_light</item>
+        <item name="android:dropDownVerticalOffset">0dip</item>
+        <item name="android:dropDownHorizontalOffset">0dip</item>
+        <item name="android:dropDownWidth">wrap_content</item>
+    </style>
+    <style name="Widget.Sherlock.Light.ListView.DropDown" parent="Sherlock.__Widget.Holo.ListView">
+        <item name="android:divider">@drawable/abs__list_divider_holo_light</item>
+        <item name="android:listSelector">@drawable/abs__list_selector_holo_light</item>
+    </style>
+    <style name="Widget.Sherlock.Light.PopupMenu" parent="Widget.Sherlock.Light.ListPopupWindow"/>
+    <style name="Widget.Sherlock.Light.PopupWindow.ActionMode" parent="Widget">
+        <item name="android:popupBackground">@android:color/white</item>
+    </style>
+    <style name="Widget.Sherlock.Light.ProgressBar" parent="Widget.Sherlock.ProgressBar"/>
+    <style name="Widget.Sherlock.Light.ProgressBar.Horizontal" parent="Widget.Sherlock.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/abs__progress_horizontal_holo_light</item>
+    </style>
+    <style name="Widget.Sherlock.Light.SearchAutoCompleteTextView" parent="Sherlock.__Widget.SearchAutoCompleteTextView">
+        <item name="android:dropDownSelector">@drawable/abs__list_selector_holo_light</item>
+        <item name="android:popupBackground">@drawable/abs__menu_dropdown_panel_holo_light</item>
+    </style>
+    <style name="Widget.Sherlock.Light.Spinner.DropDown.ActionBar" parent="Sherlock.__Widget.Holo.Spinner">
+        <item name="android:background">@drawable/abs__spinner_ab_holo_light</item>
+        <item name="android:dropDownSelector">@drawable/abs__list_selector_holo_light</item>
+        <item name="android:popupBackground">@drawable/abs__menu_dropdown_panel_holo_light</item>
+    </style>
+    <style name="Widget.Sherlock.ListPopupWindow" parent="Widget">
+        <item name="android:dropDownSelector">@drawable/abs__list_selector_holo_dark</item>
+        <item name="android:popupBackground">@drawable/abs__menu_dropdown_panel_holo_dark</item>
+        <item name="android:dropDownVerticalOffset">0dip</item>
+        <item name="android:dropDownHorizontalOffset">0dip</item>
+        <item name="android:dropDownWidth">wrap_content</item>
+    </style>
+    <style name="Widget.Sherlock.ListView.DropDown" parent="Sherlock.__Widget.Holo.ListView"/>
+    <style name="Widget.Sherlock.PopupMenu" parent="Widget.Sherlock.ListPopupWindow"/>
+    <style name="Widget.Sherlock.PopupWindow.ActionMode" parent="Widget"/>
+    <style name="Widget.Sherlock.ProgressBar" parent="android:Widget.ProgressBar">
+        <item name="android:indeterminateDrawable">@drawable/abs__progress_medium_holo</item>
+        <item name="android:animationResolution">33</item>
+    </style>
+    <style name="Widget.Sherlock.ProgressBar.Horizontal" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/abs__progress_horizontal_holo_dark</item>
+        <!-- item name="android:indeterminateDrawable">@drawable/abs__progress_indeterminate_horizontal_holo</item -->
+        <item name="android:minHeight">16dip</item>
+        <item name="android:maxHeight">16dip</item>
+    </style>
+    <style name="Widget.Sherlock.SearchAutoCompleteTextView" parent="Sherlock.__Widget.SearchAutoCompleteTextView">
+        <item name="android:dropDownSelector">@drawable/abs__list_selector_holo_dark</item>
+        <item name="android:popupBackground">@drawable/abs__menu_dropdown_panel_holo_dark</item>
+    </style>
+    <style name="Widget.Sherlock.Spinner.DropDown.ActionBar" parent="Sherlock.__Widget.Holo.Spinner">
+        <item name="android:background">@drawable/abs__spinner_ab_holo_dark</item>
+    </style>
+    <style name="Widget.Sherlock.TextView.SpinnerItem" parent="Widget">
+        <item name="android:textAppearance">@style/TextAppearance.Sherlock.Widget.TextView.SpinnerItem</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+    </style>
+    <!-- From: file:/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/src/main/res/values/styles.xml -->
+    <eat-comment/>
+    <style name="style_black_text">
+        <item name="android:textColor">#000</item>
+    </style>
+    <style name="style_buttons">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="style_gametypeselection_buttons" parent="@style/style_buttons">
+        <item name="android:layout_margin">15dp</item>
+    </style>
+    <style name="style_loading_buttons" parent="@style/style_buttons">
+        <item name="android:layout_margin">10dp</item>
+    </style>
+    <style name="style_mainmenu_buttons" parent="@style/style_buttons">
+        <item name="android:layout_margin">8dp</item>
+    </style>
+</resources>

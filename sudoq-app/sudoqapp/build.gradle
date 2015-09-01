@@ -1,0 +1,31 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion "22.0.1"
+
+    defaultConfig {
+        applicationId "de.sudoq"
+        minSdkVersion 8
+        targetSdkVersion 8
+
+        testApplicationId "de.sudoq.test"
+        testInstrumentationRunner "android.test.InstrumentationTestRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+dependencies {
+    compile project(':sudoqmodel')
+    compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
+    compile 'com.android.support:support-v4:18.0.0'
+    compile 'org.apache.directory.studio:org.apache.commons.io:2.4'
+    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.4.1'
+    androidTestCompile files('libs/robotium-solo-4.1.jar')
+}

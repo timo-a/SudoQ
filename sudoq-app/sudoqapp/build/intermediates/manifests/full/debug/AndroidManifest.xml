@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SudoQ is a Sudoku-App for Adroid Devices with Version 2.2 at least. -->
+<!-- Copyright (C) 2012  Haiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele -->
+<!-- This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version. -->
+<!-- This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="de.sudoq"
+    android:installLocation="auto"
+    android:versionCode="13"
+    android:versionName="1.0.8" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="8" />
+
+    <application
+        android:allowClearUserData="true"
+        android:icon="@drawable/launcher"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.Sherlock.Light.DarkActionBar" >
+        <activity
+            android:name="de.sudoq.controller.menus.SplashActivity"
+            android:configChanges="orientation"
+            android:noHistory="true"
+            android:theme="@style/Theme.Sherlock.NoActionBar"
+            android:windowActionBar="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="de.sudoq.controller.SudoqActivitySherlock" />
+        <activity android:name="de.sudoq.controller.menus.MainActivity" />
+        <activity android:name="de.sudoq.controller.menus.GameTypeSelectionActivity" />
+        <activity
+            android:name="de.sudoq.controller.menus.GestureBuilder"
+            android:label="@string/gesture_builder_title" />
+        <activity android:name="de.sudoq.controller.sudoku.SudokuActivity" />
+        <activity
+            android:name="de.sudoq.controller.menus.SudokuLoadingActivity"
+            android:configChanges="orientation"
+            android:noHistory="true" />
+        <activity
+            android:name="de.sudoq.controller.menus.NewSudokuConfigurationActivity"
+            android:label="@string/sf_sudokupreferences_title" />
+        <activity
+            android:name="de.sudoq.controller.menus.preferences.AdvancedPreferencesActivity"
+            android:label="@string/sf_advancedpreferences_title" />
+        <activity
+            android:name="de.sudoq.controller.menus.preferences.RestrictTypesActivity"
+            android:label="@string/sf_advancedpreferences_restricttypes_title" />
+        <activity
+            android:name="de.sudoq.controller.menus.preferences.NewSudokuPreferencesActivity"
+            android:label="@string/sf_sudokupreferences_title" />
+        <activity
+            android:name="de.sudoq.controller.menus.preferences.PlayerPreferencesActivity"
+            android:label="@string/profile_preference_title"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="de.sudoq.controller.menus.StatisticsActivity"
+            android:label="@string/statistics_title" />
+        <activity
+            android:name="de.sudoq.controller.menus.ProfileListActivity"
+            android:theme="@android:style/Theme.Dialog" />
+        <activity android:name="de.sudoq.controller.tutorial.TutorialActivity" />
+        <activity android:name="de.sudoq.controller.tutorial.TutorialSudokuActivity" />
+        <activity android:name="de.sudoq.controller.tutorial.TutorialAssistancesActivity" />
+        <activity android:name="de.sudoq.controller.tutorial.TutorialActionTreeActivity" />
+    </application>
+
+</manifest>

@@ -1,0 +1,8 @@
+apply plugin: 'java'
+
+
+dependencies {
+    testCompile 'junit:junit:4.7'
+    testCompile 'org.apache.directory.studio:org.apache.commons.io:2.4'
+    testCompile 'org.kie.modules:org-apache-commons-lang3:6.3.0.CR1'
+}

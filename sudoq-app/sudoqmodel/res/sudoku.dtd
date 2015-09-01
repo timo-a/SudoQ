@@ -1,0 +1,16 @@
+<!ELEMENT sudoku (fieldmap)*>
+<!ATTLIST sudoku 
+	id CDATA #REQUIRED
+	type CDATA #REQUIRED
+	complexity CDATA #REQUIRED>
+	
+<!ELEMENT fieldmap (position)>
+<!ATTLIST fieldmap
+	id CDATA #REQUIRED
+	editable (true | false) "no"
+	solution CDATA #REQUIRED>
+	
+<!ELEMENT position EMPTY>
+<!ATTLIST position 
+	x CDATA #REQUIRED
+	y CDATA #REQUIRED>
