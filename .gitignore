@@ -19,6 +19,7 @@ local.properties
 *.snm
 *.class
 *.cfg
+*.bin
 lint.xml
 sudoq-model/bin
 test-model/bin
@@ -26,6 +27,7 @@ sudoq-app/bin
 sudoq-app/gen
 sudoq-app/assets
 sudoq-app/libs/model.jar
+sudoq-app/sudoqapp/build/intermediates/
 test-app/bin
 test-app/gen
 test-app/coverage/
