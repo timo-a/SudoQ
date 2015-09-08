@@ -13,6 +13,8 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical" >
+
+		<include layout="@layout/toolbar"/>
 	    
 	    <LinearLayout android:layout_width="fill_parent"
 	                  android:layout_height="wrap_content"
@@ -133,14 +135,6 @@
 	        android:layout_margin="5dp"
 	        android:onClick="switchToAdvancedPreferences"
 	        android:text="@string/profile_preference_button_advanced_preferences" />
-			        
-	    <Button
-	        android:id="@+id/button_saveChanges"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_margin="5dp"
-	        android:onClick="saveChanges"
-	        android:text="@string/profile_preference_button_save" />
 	
 	</LinearLayout>
 </ScrollView>

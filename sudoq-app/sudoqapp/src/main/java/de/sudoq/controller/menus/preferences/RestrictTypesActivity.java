@@ -9,6 +9,8 @@ package de.sudoq.controller.menus.preferences;
 
 import java.util.List;
 
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -58,6 +60,14 @@ public class RestrictTypesActivity extends SudoqListActivity implements OnItemCl
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.restricttypes);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+
+		final ActionBar ab = getSupportActionBar();
+		ab.setHomeAsUpIndicator(R.drawable.launcher);
+		ab.setDisplayHomeAsUpEnabled(true);
+		ab.setDisplayShowTitleEnabled(true);
+
 		initialiseTypes();
 	}
 	

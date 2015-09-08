@@ -7,6 +7,8 @@
  */
 package de.sudoq.controller.menus.preferences;
 
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,7 +31,7 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 	/** Attributes */
 	private static final String LOG_TAG = AdvancedPreferencesActivity.class.getSimpleName();
 	
-	/*this is a hack!*/
+	/*this is a hack! activity can be called in sudoku-pref and in profile, but has different behaviours*/
 	public static PreferencesActivity myCaller;
 	//public static GameSettings    gameSettings;
 	
@@ -41,7 +43,15 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);		
 		this.setContentView(R.layout.preferences_advanced);
-		
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+
+		final ActionBar ab = getSupportActionBar();
+		ab.setHomeAsUpIndicator(R.drawable.launcher);
+		ab.setDisplayHomeAsUpEnabled(true);
+		ab.setDisplayShowTitleEnabled(true);
+
+
 		myCaller.helper        = (CheckBox) findViewById(R.id.checkbox_hints_provider);
 		myCaller.lefthand      = (CheckBox) findViewById(R.id.checkbox_lefthand_mode);
 		myCaller.restricttypes = (Button)   findViewById(R.id.button_provide_restricted_set_of_types);

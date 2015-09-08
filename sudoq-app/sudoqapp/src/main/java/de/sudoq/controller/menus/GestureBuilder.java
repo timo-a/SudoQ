@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Set;
 
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -86,6 +88,7 @@ public class GestureBuilder extends SudoqActivitySherlock implements OnGesturePe
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.gesturebuilder);
+
 		Symbol.createSymbol(currentSymbolSet);
 		this.virtualKeyboard = (VirtualKeyboardLayout) findViewById(R.id.gesture_builder_virtual_keyboard);
 		inflateGestures();

@@ -8,8 +8,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/gesture_builder_layout" >
-    	    
+
     <de.sudoq.view.VirtualKeyboardLayout
+
        	android:id="@+id/gesture_builder_virtual_keyboard"
        	android:layout_width="wrap_content"
        	android:layout_height="fill_parent"

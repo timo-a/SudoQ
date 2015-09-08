@@ -10,6 +10,7 @@ package de.sudoq.controller;
 import java.io.File;
 
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,7 +26,7 @@ import de.sudoq.model.files.FileManager;
  * Eine Activity, welche die für einwandfreie Funktionalität der SudoQ-App
  * notwendigen Initialisierungsarbeiten ausführt.
  */
-public class SudoqActivitySherlock extends ActionBarActivity {
+public class SudoqActivitySherlock extends AppCompatActivity {
 
 	/**
 	 * Initialisiert eine neue Activity, setzt dabei die für die App notwendigen

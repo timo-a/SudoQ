@@ -49,7 +49,7 @@ public class ProfileListActivity extends SudoqListActivity implements OnItemClic
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+setContentView(R.layout.profilelist);
 		this.setTitle(this.getString(R.string.action_switch_profile));
 
 		profileIds = Profile.getInstance().getProfilesIdList();
@@ -57,8 +57,8 @@ public class ProfileListActivity extends SudoqListActivity implements OnItemClic
 
 		Log.d(LOG_TAG, "Array length: " + Profile.getInstance().getProfilesNameList().size());
 
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, Profile.getInstance().getProfilesNameList());
+		ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+				R.layout.profilelist_item, Profile.getInstance().getProfilesNameList());
 		setListAdapter(adapter);
 		getListView().setOnItemClickListener(this);
 	}

@@ -7,13 +7,15 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/background_serious">
-    
+
 	<LinearLayout
 	    android:id="@+id/playerpreferences_layout_everything"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical" >
-	    
+
+		<include layout="@layout/toolbar"/>
+
 	    <Button
 	        android:id="@+id/button_openGestureBuilder"
 	        android:layout_width="fill_parent"

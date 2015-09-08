@@ -13,6 +13,8 @@ import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -80,6 +82,13 @@ public class NewSudokuConfigurationActivity extends SudoqActivitySherlock {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.sudokupreferences);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+
+		final ActionBar ab = getSupportActionBar();
+		ab.setHomeAsUpIndicator(R.drawable.launcher);
+		ab.setDisplayHomeAsUpEnabled(true);
+		ab.setDisplayShowTitleEnabled(true);
 
 		//for initial settings-values from Profile
 		XmlTree xt = Profile.getInstance().getAssistances().toXmlTree();

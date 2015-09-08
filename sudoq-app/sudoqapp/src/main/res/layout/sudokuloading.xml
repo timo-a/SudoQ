@@ -8,28 +8,37 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
 	android:background="@drawable/background_serious" >
-    
+    <include layout="@layout/toolbar"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
     <ListView android:id="@id/android:list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:cacheColorHint="#00000000">
     </ListView>
-    
-    <TextView 
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_delete_white_24dp" />
+
+    <TextView
         android:id="@+id/no_games_text_view"
         android:text="@string/tx_no_sudokus_to_load"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center|center_vertical"
         android:textStyle="bold"
-        android:textSize="24dip"
+        android:textSize="24sp"
         android:textColor="@android:color/black"/>
-    
-    <Button 
-        android:id="@+id/no_games_back_button"
-        android:text="@string/sf_loading_back"
-        android:layout_width="fill_parent"
-        style="@style/style_loading_buttons"
-        android:onClick="goBack"/>    
 
+
+    </FrameLayout>
 </LinearLayout>

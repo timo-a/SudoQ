@@ -7,14 +7,16 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/background_serious">
-    
+
 	<LinearLayout
 	    android:id="@+id/playerpreferences_layout_everything"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical" >
-	    
-	    <LinearLayout
+		<include layout="@layout/toolbar"/>
+
+
+		<LinearLayout
 	        android:id="@+id/playerpreferences_layout_profilename"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content" 

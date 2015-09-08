@@ -24,5 +24,33 @@
     <style name="style_black_text">
         <item name="android:textColor">#000</item>
     </style>
-    
+
+    <!-->demo<-->
+    <style name="Theme.DesignDemo" parent="Base.Theme.DesignDemo">
+    </style>
+
+    <style name="Base.Theme.DesignDemo" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">#00695c</item>
+        <item name="colorPrimaryDark">#004d40</item>
+        <item name="colorAccent">#7c6354</item>
+        <!--item name="android:textColorSecondary">#7c6354</item-->
+        <item name="android:windowBackground">@color/window_background</item>
+    </style>
+
+    <style name="Theme.DesignDemo.Dialog" parent="Theme.AppCompat.Dialog">
+        <item name="colorPrimary">@color/cp</item>
+        <item name="colorPrimaryDark">#004d40</item>
+        <item name="colorAccent">#7c6354</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:windowBackground">@color/cp</item>
+    </style>
+
+    <style name="Widget.CardContent" parent="android:Widget">
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingTop">24dp</item>
+        <item name="android:paddingBottom">24dp</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
 </resources>

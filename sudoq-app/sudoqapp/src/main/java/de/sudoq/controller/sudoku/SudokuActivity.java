@@ -16,6 +16,7 @@ import java.io.OutputStream;
 import java.util.Set;
 
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 
@@ -230,15 +231,19 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 		if (game != null) {
 			/* Determine how many numbers are needed. 1-9 or 1-16 ? */
 			initializeSymbolSet();
-			if (game.isLefthandedModeActive()){
+/*			if (game.isLefthandedModeActive()){
 				setContentView(R.layout.sudoku_for_lefties);
 				
 			}
 			else {
 				setContentView(R.layout.sudoku);
-			}
-			
-			this.sudokuController = new SudokuController(this.game, this);
+			}*/
+            setContentView(game.isLefthandedModeActive()? R.layout.sudoku_for_lefties : R.layout.sudoku);
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+
+
+            this.sudokuController = new SudokuController(this.game, this);
 			this.actionTreeController = new ActionTreeController(this);
 			Log.d(LOG_TAG, "Initialized");
 			inflateViewAndButtons();
@@ -345,8 +350,8 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 		
 		
 		String type = Utility.type2string(this, this.game.getSudoku().getSudokuType().getEnumType());
-		
-		int st;
+		String comp = Utility.complexity2string(this, this.game.getSudoku().getComplexity());
+		/*int st;
 		switch (this.game.getSudoku().getComplexity()) {
 		case easy:
 			st = R.string.complexity_easy;
@@ -362,11 +367,13 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 			break;
 		default:
 			st= R.string.complexity_infernal;//s.o.
-		}
+		}*/
 		ActionBar ab = getSupportActionBar();
 		ab.setTitle(type);
-		ab.setSubtitle(getString(st));
-	}
+        //ab.setSubtitle(getString(st));
+        ab.setSubtitle(comp);
+
+    }
 
 	/**
 	 * Erzeugt die View für die Gesteneingabe
@@ -831,7 +838,9 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 			
 			//getSupportActionBar().
 			final TextView timeView    = (TextView) findViewById (R.id.time);
-			
+			timeView.setTextColor(getResources().getColor(R.color.text1));
+
+
 			if(timeView != null ) {
 				
 				/* for easy formatting, we display both: time and penalty on one element separated by \n

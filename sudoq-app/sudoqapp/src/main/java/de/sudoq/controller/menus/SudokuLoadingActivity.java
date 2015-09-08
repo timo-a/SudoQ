@@ -9,6 +9,13 @@ package de.sudoq.controller.menus;
 
 import java.util.List;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,6 +31,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import de.sudoq.R;
 import de.sudoq.controller.SudoqListActivity;
 import de.sudoq.controller.sudoku.SudokuActivity;
@@ -54,7 +63,11 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 
 	protected static MenuItem menuDeleteSpecific;
 	private static final int MENU_DELETE_SPECIFIC = 1;
-	
+
+	private enum FAB_STATES { DELETE, INACTIVE, GO_BACK};
+
+    private FAB_STATES fabstate=FAB_STATES.INACTIVE;
+
     /** Constructors */
 
 	/** Methods */
@@ -68,6 +81,41 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.sudokuloading);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+        final ActionBar ab = getSupportActionBar();
+        ab.setHomeAsUpIndicator(R.drawable.launcher);
+        ab.setDisplayHomeAsUpEnabled(true);
+        ab.setDisplayShowTitleEnabled(true);
+
+        final Context ctx = this;
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            Drawable trash = ContextCompat.getDrawable(ctx, R.drawable.ic_delete_white_24dp);
+            Drawable close = ContextCompat.getDrawable(ctx, R.drawable.ic_close_white_24dp);
+
+            @Override
+            public void onClick(View view) {
+                switch (fabstate){
+                    case INACTIVE:
+                        fabstate = FAB_STATES.DELETE;
+                        fab.setImageDrawable(close);
+                        Toast.makeText(ctx, R.string.fab_go_back,Toast.LENGTH_LONG).show();
+                        break;
+                    case DELETE:
+                        fabstate = FAB_STATES.INACTIVE;
+                        fab.setImageDrawable(trash);
+
+                        break;
+                    case GO_BACK:
+                        goBack(view);
+                        break;
+                }
+            }
+        });
+
 		initialiseGames();
 	}
 	
@@ -158,10 +206,17 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Log.d(LOG_TAG, position + "");
 
-		/* selected in order to play */
-		Profile.getInstance().setCurrentGame(adapter.getItem(position).getId());
-		startActivity(new Intent(this, SudokuActivity.class));
-		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        if(fabstate==FAB_STATES.INACTIVE) {
+		    /* selected in order to play */
+            Profile.getInstance().setCurrentGame(adapter.getItem(position).getId());
+            startActivity(new Intent(this, SudokuActivity.class));
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+        }else{
+            /*selected in order to delete*/
+            GameManager.getInstance().deleteGame(adapter.getItem(position).getId());
+			onContentChanged();
+        }
 	}
 
 	@Override
@@ -211,15 +266,18 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 		getListView().setOnItemClickListener(this);
 		getListView().setOnItemLongClickListener(this);
 
-		TextView noGamesTextView = (TextView) findViewById(R.id.no_games_text_view);
-		TextView noGamesBackButton = (TextView) findViewById(R.id.no_games_back_button);
-		if (games.isEmpty()) {
-			noGamesTextView.setVisibility(View.VISIBLE);
-			noGamesBackButton.setVisibility(View.VISIBLE);
-		} else {
-			noGamesTextView.setVisibility(View.INVISIBLE);
-			noGamesBackButton.setVisibility(View.INVISIBLE);
-		}
+		TextView noGamesTextView =   (TextView) findViewById(R.id.no_games_text_view);
+		if(games.isEmpty()) {
+            noGamesTextView.setVisibility(View.VISIBLE);
+            final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_arrow_back_white_24dp));
+            fabstate=FAB_STATES.GO_BACK;
+        }else{
+            noGamesTextView.setVisibility(View.INVISIBLE);
+            //pass
+        }
+
+
 	}
 
 	/**
@@ -240,6 +298,32 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 	public int getSize() {
 		return games.size();
 	}
-	
-	
+
+
+    private class FAB extends FloatingActionButton{
+
+        public FAB(Context context) {
+            super(context);
+        }
+        private FAB_STATES fs;
+
+        public void setState(FAB_STATES fs){
+            this.fs=fs;
+            int id;
+            switch (fs){
+                case DELETE:
+                    id=R.drawable.ic_close_white_24dp;
+                    break;
+                case INACTIVE:
+                    id=R.drawable.ic_delete_white_24dp;
+                    break;
+                default://case GO_BACK:
+                    id=R.drawable.ic_arrow_back_white_24dp;
+                    break;
+            }
+            super.setImageDrawable(ContextCompat.getDrawable(this.getContext(), id));
+        }
+
+
+    }
 }

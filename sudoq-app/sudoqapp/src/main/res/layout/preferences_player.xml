@@ -13,8 +13,11 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical" >
-	    	    
-	    <Button
+
+		<include layout="@layout/toolbar"/>
+
+
+		<Button
 	        android:id="@+id/button_showStatistics"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"

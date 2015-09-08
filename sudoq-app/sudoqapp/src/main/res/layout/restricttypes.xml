@@ -8,9 +8,11 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
 	android:background="@drawable/background_serious" >
-    
+
+    <include layout="@layout/toolbar"/>
+
     <TextView 
-        android:id="@+id/no_games_text_view"
+        android:id="@+id/no_types_text_view"
         android:text="@string/tx_no_sudokus_to_load"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

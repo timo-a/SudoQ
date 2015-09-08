@@ -9,6 +9,7 @@ package de.sudoq.controller;
 
 import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,7 +29,7 @@ import de.sudoq.model.files.FileManager;
  * Eine ListActivity, welche die für einwandfreie Funktionalität der SudoQ-App
  * notwendigen Initialisierungsarbeiten ausführt.
  */
-public class SudoqListActivity extends Activity {
+public class SudoqListActivity extends AppCompatActivity {
 
 
 	private ListView mListView;

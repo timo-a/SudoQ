@@ -8,6 +8,8 @@
 package de.sudoq.controller.menus;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 import de.sudoq.R;
 import de.sudoq.controller.SudoqActivitySherlock;
@@ -34,7 +36,15 @@ public class StatisticsActivity extends SudoqActivitySherlock {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.statistics);
-		
+
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+
+		final ActionBar ab = getSupportActionBar();
+		ab.setHomeAsUpIndicator(R.drawable.launcher);
+		ab.setDisplayHomeAsUpEnabled(true);
+		ab.setDisplayShowTitleEnabled(true);
+
 		setScore(R.id.text_played_sudokus,          R.string.statistics_played_sudokus,           Statistics.playedSudokus);
 		setScore(R.id.text_played_easy_sudokus,     R.string.statistics_played_easy_sudokus,      Statistics.playedEasySudokus);
 		setScore(R.id.text_played_medium_sudokus,   R.string.statistics_played_medium_sudokus,    Statistics.playedMediumSudokus);

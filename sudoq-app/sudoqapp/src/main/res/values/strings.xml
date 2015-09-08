@@ -191,5 +191,8 @@
     
     <!--  Defaults -->
     <string name="default_user_name">Profile 1</string>
-        
+    <string name="menu_settings">MENU_SETTINGS</string>
+    <string name="fab_go_back">Click to delete.\nClick button again to stop deleting</string>
+    <string name="sf_sudokuloading_title">Saved Sudokus</string>
+
 </resources>

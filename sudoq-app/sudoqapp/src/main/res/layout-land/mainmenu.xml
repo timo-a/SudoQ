@@ -8,8 +8,10 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:background="@drawable/background_serious" >
-    
-    <TextView 
+
+	<include layout="@layout/toolbar"/>
+
+	<TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textSize="35dp"

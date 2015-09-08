@@ -169,5 +169,7 @@
     
     <!--  Defaults -->
     <string name="default_user_name">Profil 1</string>
-    
+    <string name="fab_go_back">Geklickte Sudokus werden gelöscht.\nUm aufzuhören nochmal auf den Button klicken</string>
+    <string name="sf_sudokuloading_title">Gespeicherte Sudokus</string>
+
 </resources>

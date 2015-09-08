@@ -9,6 +9,8 @@ package de.sudoq.controller.menus;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import de.sudoq.R;
@@ -38,7 +40,16 @@ public class MainActivity extends SudoqActivitySherlock {
 		super.onCreate(savedInstanceState);
 		//Toast.makeText(this, "onCreate", Toast.LENGTH_LONG).show();
 		setContentView(R.layout.mainmenu);
-		onResume();
+
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        final ActionBar ab = getSupportActionBar();
+        ab.setHomeAsUpIndicator(R.drawable.launcher);
+        ab.setDisplayHomeAsUpEnabled(true);
+        ab.setDisplayShowTitleEnabled(false);
+
+        onResume();
 	}
 
 	/**
@@ -48,10 +59,13 @@ public class MainActivity extends SudoqActivitySherlock {
 	public void onResume() {
 		super.onResume();
 		//Toast.makeText(this, "onResume", Toast.LENGTH_LONG).show();
+		Profile p = Profile.getInstance();
+
 		Button continueButton = (Button) findViewById(R.id.button_mainmenu_continue);
-		Profile p = Profile.getInstance(); 
-		
 		continueButton.setEnabled(p.getCurrentGame() > p.NO_GAME);
+
+		Button loadButton = (Button) findViewById(R.id.button_mainmenu_load_sudoku);
+		loadButton.setEnabled(p.getCurrentGame() > p.NO_GAME);
 
 	}
 

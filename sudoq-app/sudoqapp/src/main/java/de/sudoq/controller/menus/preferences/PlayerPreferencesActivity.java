@@ -9,6 +9,8 @@ package de.sudoq.controller.menus.preferences;
 
 import java.util.List;
 
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -60,6 +62,14 @@ public class PlayerPreferencesActivity extends PreferencesActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);		
 		this.setContentView(R.layout.preferences_player);
+
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+
+		final ActionBar ab = getSupportActionBar();
+		ab.setHomeAsUpIndicator(R.drawable.launcher);
+		ab.setDisplayHomeAsUpEnabled(true);
+		ab.setDisplayShowTitleEnabled(true);
 		
 		gesture =            (CheckBox) findViewById(R.id.checkbox_gesture);
 		autoAdjustNotes =    (CheckBox) findViewById(R.id.checkbox_autoAdjustNotes);

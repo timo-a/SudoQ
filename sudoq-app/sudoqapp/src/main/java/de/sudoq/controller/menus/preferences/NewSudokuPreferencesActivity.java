@@ -9,6 +9,8 @@ package de.sudoq.controller.menus.preferences;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.CheckBox;
 import de.sudoq.R;
@@ -33,6 +35,14 @@ public class NewSudokuPreferencesActivity extends PreferencesActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.preferences_newsudoku);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        final ActionBar ab = getSupportActionBar();
+        ab.setHomeAsUpIndicator(R.drawable.launcher);
+        ab.setDisplayHomeAsUpEnabled(true);
+        ab.setDisplayShowTitleEnabled(true);
+
 
 		gesture =            (CheckBox) findViewById(R.id.checkbox_gesture);
 		autoAdjustNotes =    (CheckBox) findViewById(R.id.checkbox_autoAdjustNotes);
