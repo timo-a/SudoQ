@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- From: file:/home/timo/Code/android/Sudoq8_the_new/SudoQ/sudoq-app/sudoqapp/src/androidTest/res/values/strings.xml -->
-    <eat-comment/>
-    <string name="app_name">SudoQRobotiumTests</string>
-</resources>

@@ -27,7 +27,7 @@ sudoq-app/bin
 sudoq-app/gen
 sudoq-app/assets
 sudoq-app/libs/model.jar
-sudoq-app/sudoqapp/build/intermediates/
+sudoq-app/sudoqapp/build/
 test-app/bin
 test-app/gen
 test-app/coverage/

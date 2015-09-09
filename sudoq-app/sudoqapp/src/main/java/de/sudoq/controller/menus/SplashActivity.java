@@ -7,8 +7,6 @@
  */
 package de.sudoq.controller.menus;
 
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -317,7 +315,7 @@ public class SplashActivity extends SudoqActivitySherlock {
 			return files;
 		}
 
-		/**
+		/**TODO  do shorter with library
 		 * Copies content from sourcePath to destination
 		 * 
 		 * @param sourcePath

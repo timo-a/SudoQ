@@ -170,5 +170,6 @@
     <string name="default_user_name">Profil 1</string>
     <string name="fab_go_back">Cliquez sur pour supprimer.\nCliquez à nouveau sur le bouton pour arrêter la suppression</string>
     <string name="sf_sudokuloading_title">Sudoku Sauvegardé</string>
+    <string name="profile_preference_title_intelligent_assistant">Assistant Intelligent</string>
 
 </resources>

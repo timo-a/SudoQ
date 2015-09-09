@@ -5,11 +5,11 @@
 <!-- This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.  -->
 <resources>
 
-    <string name="app_name">SudoQ</string>
+    <string name="app_name" translatable="false">SudoQ</string>
     
     <!-- Android specific strings -->
-    <string name="version_code">1.0.4</string>
-    <string name="version_name">Berta</string>
+    <string name="version_code" translatable="false">1.0.4</string>
+    <string name="version_name" translatable="false">Berta</string>
     
 
     <!-- Action Bar Entries -->
@@ -167,31 +167,31 @@
         
     <!-- Game states -->    
         
-    <string name="check_mark">✔</string>  
-    <string name="x_mark">✘</string>
+    <string name="check_mark" translatable="false">✔</string>
+    <string name=    "x_mark" translatable="false">✘</string>
 
     <!-- Sudoku Loading -->
     <string name="tx_no_sudokus_to_load">No saved Sudokus available.</string>
     <string name="sudokuloading_delete_finished">Delete finished Sudokus</string>
     <string name="sudokuloading_delete_all"     >Delete all Sudokus</string>
-    <string name="time_format">HH:mm:ss dd.MM.yyyy</string>
+    <string name="time_format" translatable="false">HH:mm:ss dd.MM.yyyy</string>
     <string name="sf_loading_back">Go back!</string>
     <string name="sudokuloading_dialog_play">play</string>
     <string name="sudokuloading_dialog_delete">delete</string>
     
 	<!-- File conventions -->
-    <string name="profile_file_prefix">profile_</string>
-    <string name="game_file_prefix">game_</string>
-    <string name="sudoku_file_prefix">sudoku_</string>
-    <string name="current_profile_file">current_profile</string>
+    <string name="profile_file_prefix"  translatable="false">profile_</string>
+    <string name="game_file_prefix"     translatable="false">game_</string>
+    <string name="sudoku_file_prefix"   translatable="false">sudoku_</string>
+    <string name="current_profile_file" translatable="false">current_profile</string>
     
     <!-- Relative Path -->
-    <string name="path_rel_profiles">profiles</string>
-    <string name="path_rel_sudokus">sudokus</string>
+    <string name="path_rel_profiles" translatable="false">profiles</string>
+    <string name="path_rel_sudokus"  translatable="false">sudokus</string>
     
     <!--  Defaults -->
     <string name="default_user_name">Profile 1</string>
-    <string name="menu_settings">MENU_SETTINGS</string>
+    <string name="menu_settings" translatable="false">MENU_SETTINGS</string>
     <string name="fab_go_back">Click to delete.\nClick button again to stop deleting</string>
     <string name="sf_sudokuloading_title">Saved Sudokus</string>
 
