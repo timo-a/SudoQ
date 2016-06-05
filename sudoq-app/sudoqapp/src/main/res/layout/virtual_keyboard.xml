@@ -1,0 +1,8 @@
+<de.sudoq.view.VirtualKeyboardLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/virtual_keyboard"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="5dp" >
+</de.sudoq.view.VirtualKeyboardLayout>

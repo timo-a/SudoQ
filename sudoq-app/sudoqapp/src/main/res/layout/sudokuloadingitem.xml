@@ -9,10 +9,10 @@
     android:orientation="vertical" >
 
     <LinearLayout 
-    android:layout_width="wrap_content"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:layout_gravity="center" >
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:layout_gravity="center" >
         <ImageView 
             android:id="@+id/sudoku_loading_item_thumbnail"
             android:layout_width="wrap_content"

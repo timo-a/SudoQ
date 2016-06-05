@@ -67,33 +67,29 @@ public class SolverSudoku extends Sudoku {
 		this.setComplexity(sudoku.getComplexity());
 
 		// initialize the list of positions
-		this.positions = new ArrayList<Position>();
-		for (Position p : fields.keySet()) {
-			this.positions.add(p);
-		}
+		this.positions = new ArrayList<>(fields.keySet());
 
 		// initialize new SolverSudoku with the fields of the specified one
-		for (int i = 0; i < this.positions.size(); i++) {
-			if (fields.remove(positions.get(i)) != null)
-				fields.put(positions.get(i), sudoku.getField(positions.get(i)));
-		}
+		for (Position p : this.positions)
+			if (fields.remove(p) != null) //!?
+				fields.put(p, sudoku.getField(p));
 
 		// initialize the constraints lists for each position and the initial
 		// candidates for each field
 		this.constraints = new PositionMap<ArrayList<Constraint>>(this.getSudokuType().getSize());
-		for (int i = 0; i < this.positions.size(); i++) {
-			this.constraints.put(positions.get(i), new ArrayList<Constraint>());
-		}
+		for (Position p: positions)
+			this.constraints.put(p, new ArrayList<Constraint>());
+
+
+		//if we were functional
+		//this.constraints = new PositionMap<>(this.getSudokuType().getSize());
+		//this.positions.stream().forEach(p -> this.constraints.put(p, new ArrayList<>()));
 
 		// add the constraints each position belongs to to the list
 		ArrayList<Constraint> allConstraints = sudoku.getSudokuType().getConstraints();
-		ArrayList<Position> currentPositions;
-		for (int constrNum = 0; constrNum < allConstraints.size(); constrNum++) {
-			currentPositions = allConstraints.get(constrNum).getPositions();
-			for (int posNum = 0; posNum < currentPositions.size(); posNum++) {
-				this.constraints.get(currentPositions.get(posNum)).add(allConstraints.get(constrNum));
-			}
-		}
+		for (Constraint constr : allConstraints)
+			for (Position pos : constr.getPositions())
+				this.constraints.get(pos).add(constr);
 
 		// initialize the candidates map
 		this.positionPool = new PositionMapPool(getSudokuType().getSize(), positions);
@@ -101,7 +97,7 @@ public class SolverSudoku extends Sudoku {
 		this.currentCandidates = this.positionPool.getPositionMap();
 
 		// initialize the candidate lists and branchings
-		this.branchings = new Stack<Branching>();
+		this.branchings = new Stack<>();
 		this.resetCandidates();
 	}
 
@@ -120,12 +116,16 @@ public class SolverSudoku extends Sudoku {
 
 		this.currentCandidates = this.positionPool.getPositionMap();
 		// set the candidate lists of all fields to maximum
-		for (int i = 0; i < this.positions.size(); i++) {
-			if (fields.get(this.positions.get(i)).isEmpty()) {
-				this.currentCandidates.get(this.positions.get(i)).set(0, getSudokuType().getNumberOfSymbols());
-			}
-		}
+		for (Position p: this.positions)
+			if (fields.get(p).isEmpty())
+				this.currentCandidates.get(p).set(0, getSudokuType().getNumberOfSymbols());
+			
+		
 
+		/*this.positions.stream()
+						.filter(p -> fields.get(p).isEmpty())
+						.forEach(p -> this.currentCandidates.get(p).set(0, getSudokuType().getNumberOfSymbols()));
+		functional*/
 		updateCandidates();
 	}
 
@@ -147,9 +147,9 @@ public class SolverSudoku extends Sudoku {
 		Branching branch = this.branchPool.getBranching(pos, candidate);
 		branch.candidates = currentCandidates;
 		this.currentCandidates = this.positionPool.getPositionMap();
-		for (int i = 0; i < this.positions.size(); i++) {
-			this.currentCandidates.get(this.positions.get(i)).or(branch.candidates.get(this.positions.get(i)));
-		}
+
+		for (Position p : this.positions)
+			this.currentCandidates.get(p).or(branch.candidates.get(p));
 
 		this.branchings.push(branch);
 
@@ -171,9 +171,9 @@ public class SolverSudoku extends Sudoku {
 		// candidates list
 		Branching lastBranching = this.branchings.pop();
 		currentCandidates = lastBranching.candidates;
-		for (int i = 0; i < lastBranching.solutionsSet.size(); i++) {
-			fields.get(lastBranching.solutionsSet.get(i)).setCurrentValue(Field.EMPTYVAL, false);
-		}
+		for (Position p : lastBranching.solutionsSet)
+			fields.get(p).setCurrentValue(Field.EMPTYVAL, false);
+
 		this.complexityValue -= lastBranching.complexityValue;
 
 		BitSet branchCandidates = this.currentCandidates.get(lastBranching.position);
@@ -197,17 +197,19 @@ public class SolverSudoku extends Sudoku {
 		boolean isInvalid = false;
 
 		for (int posNum = 0; posNum < this.positions.size() && !isInvalid; posNum++) {
-			if (!getField(this.positions.get(posNum)).isEmpty()) {
+			Position position = this.positions.get(posNum);
+			if (!getField(position).isEmpty()) {
 				// Update fields in unique constraints
-				updatedConstraints = this.constraints.get(this.positions.get(posNum));
+				updatedConstraints = this.constraints.get(position);
 				for (int uc = 0; uc < updatedConstraints.size() && !isInvalid; uc++) {
-					if (updatedConstraints.get(uc).hasUniqueBehavior()) {
-						updatedPositions = updatedConstraints.get(uc).getPositions();
+					Constraint uConstraint = updatedConstraints.get(uc);
+					if (uConstraint.hasUniqueBehavior()) {
+						updatedPositions = uConstraint.getPositions();
 						for (int up = 0; up < updatedPositions.size() && !isInvalid; up++) {
-							this.currentCandidates.get(updatedPositions.get(up)).clear(
-									getField(this.positions.get(posNum)).getCurrentValue());
-							if (this.currentCandidates.get(updatedPositions.get(up)).cardinality() == 0
-									&& getField(updatedPositions.get(up)).isEmpty())
+							Position updatedPosition = updatedPositions.get(up);
+							this.currentCandidates.get(updatedPosition).clear(getField(position).getCurrentValue());
+							if (this.currentCandidates.get(updatedPosition).cardinality() == 0
+							    && getField(updatedPosition).isEmpty())
 								isInvalid = true;
 						}
 					}
@@ -215,27 +217,28 @@ public class SolverSudoku extends Sudoku {
 			} else {
 				// Update candidates in non-unique constraints
 				boolean hasNonUnique = false;
-				updatedConstraints = this.constraints.get(this.positions.get(posNum));
-				for (int i = 0; i < updatedConstraints.size(); i++) {
-					if (!updatedConstraints.get(i).hasUniqueBehavior()) {
+				updatedConstraints = this.constraints.get(position);
+				for (Constraint updatedConstraint : updatedConstraints) {
+					if (!updatedConstraint.hasUniqueBehavior()) {
 						hasNonUnique = true;
 						break;
 					}
 				}
+				//boolean hasNonUnique = updatedConstraints.stream().anyMatch(c -> !c.hasUniqueBehavior());
 				if (hasNonUnique) {
 					Field currentField = null;
 					BitSet currentCandidatesSet = null;
-					currentField = this.fields.get(this.positions.get(posNum));
-					currentCandidatesSet = this.currentCandidates.get(this.positions.get(posNum));
+					currentField = this.fields.get(position);
+					currentCandidatesSet = this.currentCandidates.get(position);
 					int currentCandidate = -1;
 					int numberOfCandidates = currentCandidatesSet.cardinality();
 					for (int i = 0; i < numberOfCandidates; i++) {
 						currentCandidate = currentCandidatesSet.nextSetBit(currentCandidate + 1);
 						currentField.setCurrentValue(currentCandidate, false);
-						for (int constrNum = 0; constrNum < updatedConstraints.size(); constrNum++) {
-							if (!updatedConstraints.get(constrNum).isSaturated(this))
+						for (Constraint updatedConstraint : updatedConstraints)
+							if (!updatedConstraint.isSaturated(this))
 								currentCandidatesSet.clear(currentCandidate);
-						}
+
 						currentField.setCurrentValue(Field.EMPTYVAL, false);
 					}
 				}
@@ -260,31 +263,31 @@ public class SolverSudoku extends Sudoku {
 			return;
 
 		ArrayList<Constraint> updatedConstraints = this.constraints.get(pos);
-		ArrayList<Position> updatedPositions;
+		ArrayList<Position>   updatedPositions;
 		ArrayList<Constraint> checkedConstraints;
-		for (int constrNum = 0; constrNum < updatedConstraints.size(); constrNum++) {
-			updatedPositions = updatedConstraints.get(constrNum).getPositions();
-			for (int posNum = 0; posNum < updatedPositions.size(); posNum++) {
-				if (this.fields.get(updatedPositions.get(posNum)).isEmpty()) {
-					if (updatedConstraints.get(constrNum).hasUniqueBehavior()) {
-						this.currentCandidates.get(updatedPositions.get(posNum)).clear(candidate);
-					} else {
+		for (Constraint constr: updatedConstraints) {
+			updatedPositions = constr.getPositions();
+			for (Position uPos : updatedPositions)
+				if (this.fields.get(uPos).isEmpty())
+					if (constr.hasUniqueBehavior())
+						this.currentCandidates.get(uPos).clear(candidate);
+					else {
 						int currentCandidate = -1;
-						int numberOfCandidates = this.currentCandidates.get(updatedPositions.get(posNum)).cardinality();
+						int numberOfCandidates = this.currentCandidates.get(uPos).cardinality();
 						for (int i = 0; i < numberOfCandidates; i++) {
-							currentCandidate = this.currentCandidates.get(updatedPositions.get(posNum)).nextSetBit(
-									currentCandidate + 1);
-							this.fields.get(updatedPositions.get(posNum)).setCurrentValue(currentCandidate, false);
-							checkedConstraints = constraints.get(updatedPositions.get(posNum));
-							for (int upCon = 0; upCon < checkedConstraints.size(); upCon++) {
-								if (!checkedConstraints.get(upCon).isSaturated(this))
-									this.currentCandidates.get(updatedPositions.get(posNum)).clear(currentCandidate);
+							currentCandidate = this.currentCandidates.get(uPos).nextSetBit(currentCandidate + 1);
+							this.fields.get(uPos).setCurrentValue(currentCandidate, false);
+							checkedConstraints = constraints.get(uPos);
+							for (Constraint checkedConstraint : checkedConstraints) {
+								if (!checkedConstraint.isSaturated(this))
+									this.currentCandidates.get(uPos).clear(currentCandidate);
 							}
-							this.fields.get(updatedPositions.get(posNum)).setCurrentValue(Field.EMPTYVAL, false);
+
+							this.fields.get(uPos).setCurrentValue(Field.EMPTYVAL, false);
 						}
 					}
-				}
-			}
+
+
 		}
 	}
 
@@ -428,8 +431,8 @@ public class SolverSudoku extends Sudoku {
 		public void returnPositionMap() {
 			if (!usedMaps.isEmpty()) {
 				PositionMap<BitSet> returnedMap = usedMaps.pop();
-				for (int i = 0; i < this.positions.size(); i++) {
-					returnedMap.get(this.positions.get(i)).clear();
+				for (Position pos : this.positions) {
+					returnedMap.get(pos).clear();
 				}
 				unusedMaps.push(returnedMap);
 			}
@@ -442,8 +445,8 @@ public class SolverSudoku extends Sudoku {
 		 */
 		private PositionMap<BitSet> initialisePositionMap() {
 			PositionMap<BitSet> newMap = new PositionMap<BitSet>(currentDimension);
-			for (int i = 0; i < this.positions.size(); i++) {
-				newMap.put(this.positions.get(i), new BitSet());
+			for (Position pos : this.positions) {
+				newMap.put(pos, new BitSet());
 			}
 
 			return newMap;

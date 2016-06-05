@@ -11,9 +11,9 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:gravity="bottom"
-        android:orientation="vertical" >
-        <!--  This is a hack: the parent layout for the texts is wrapping and the picture_layout is matching. 
+        android:orientation="vertical"
+		android:gravity="bottom">
+		<!--  The following is a hack: the parent layout for the texts is wrapping and the picture_layout is matching.
                    so for each item, the longest text determines the horizontal(x) position of the thumbnail. 
                    Hence this invisible dummy label holds what is expected to be the longest text 
                    to assure the same alignment for all thumbnails. -->

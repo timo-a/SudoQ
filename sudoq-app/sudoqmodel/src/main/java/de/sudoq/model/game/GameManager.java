@@ -136,11 +136,13 @@ public class GameManager {
 	public List<GameData> getGameList() {
 		List<GameData> list = new ArrayList<GameData>();
 		for (XmlTree game : getGamesXml()) {
-			list.add(new GameData(
-					Integer.parseInt(game.getAttributeValue(ID)),
-					game.getAttributeValue(PLAYED_AT), Boolean.parseBoolean(game.getAttributeValue(FINISHED)),
-					SudokuTypes.values()[Integer.parseInt(game.getAttributeValue(SUDOKU_TYPE))],
-					Complexity.values()[Integer.parseInt(game.getAttributeValue(COMPLEXITY))]));
+			list.add(new GameData(Integer.parseInt(game.getAttributeValue(ID))
+					             ,game.getAttributeValue(PLAYED_AT)
+					             ,Boolean.parseBoolean(game.getAttributeValue(FINISHED))
+				                 ,SudokuTypes.values()[Integer.parseInt(game.getAttributeValue(SUDOKU_TYPE))]
+					             ,Complexity. values()[Integer.parseInt(game.getAttributeValue(COMPLEXITY))]
+			                     )
+			        );
 
 		}
 		java.util.Collections.sort(list);

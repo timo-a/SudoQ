@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 
 import android.view.Menu;
 import android.content.Intent;
@@ -22,6 +23,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
 import de.sudoq.R;
 import de.sudoq.controller.SudoqActivitySherlock;
 import de.sudoq.model.files.FileManager;
@@ -144,15 +146,14 @@ public class SplashActivity extends SudoqActivitySherlock {
 				
 			/*hint*/
 			try {
-				boolean foundSudokusinAssetfolder = false;
 				String[] l = getAssets().list("");
-				for(String s: l)
-					if (s.equals(HEAD_DIRECTORY))
-						foundSudokusinAssetfolder = true;
+                boolean foundSudokusinAssetfolder = Arrays.asList(l).contains(HEAD_DIRECTORY);
+                //TODO make this work:
+				//boolean fsaf = Stream.of(l).anyMatch(s -> s.equals(HEAD_DIRECTORY));
 				if(!foundSudokusinAssetfolder){
 					String msg =  "This app will probably crash once you try to start a new sudoku. "+
-	                         "This is pecause the person who compiled this app forgot about the 'assets' folder. "+
-				             "Please tell him that!";
+					              "This is because the person who compiled this app forgot about the 'assets' folder. "+
+					              "Please tell him that!";
 					Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
 					Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
 					Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
@@ -269,7 +270,6 @@ public class SplashActivity extends SudoqActivitySherlock {
 		private void copyAssets() {
 			/* sudoku types*/
 			SudokuTypes[] types = SudokuTypes.values();
-			
 			/* swap sudoku9x9 with whatever comes at 0th position.
 			 * -> sudoku9x9 will be finished first.
 			 * Reason: people will probably want to play 9x9 first */
@@ -281,14 +281,25 @@ public class SplashActivity extends SudoqActivitySherlock {
 					break;
 				}
 			
-			/* actual copying*/ //apache FileUtils.copyDirectory does not work!
-			for (SudokuTypes t : types) {
+			/* actual copying*/
+			//apache FileUtils.copyDirectory does not work!
+            /*try {
+                FileUtils.copyDirectory(new File(HEAD_DIRECTORY), FileManager.getSudokuDir().getAbsoluteFile());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }*/
+
+			//for(File f : new File(HEAD_DIRECTORY).listFiles())
+
+            for (SudokuTypes t : types) {
 
 				String sourceType = HEAD_DIRECTORY                               + File.separator + t.toString() + File.separator; // e.g. .../standard9x9/
 				String targetType = FileManager.getSudokuDir().getAbsolutePath() + File.separator + t.toString() + File.separator;
 
 				copyFile(sourceType + t.toString() + ".xml",
 						 targetType + t.toString() + ".xml");
+
+
 
 				for (Complexity c : Complexity.playableValues()) {
 
@@ -297,12 +308,41 @@ public class SplashActivity extends SudoqActivitySherlock {
 
 					String[] fnames =getSubfiles(sourceType + c.toString());
 					for (String filename: fnames){
-						copyFile( sourceComplexity + filename,
+                        copyFile( sourceComplexity + filename,
 		                          targetComplexity + filename);
 					}
 				}
 			}
 		}
+
+
+		/** apache scheint hier wirklich nicht zu funktionieren...
+		* @deprecated is is only here to keep you from implementing it and wasting your time
+		*/
+		/*private void copyFileApacheStyle(String source, String target){
+			try {
+				FileUtils.copyFile(new File(source), new File(target));
+
+			} catch (IOException e) {
+				Log.e(LOG_TAG, "ichbins"+e.getMessage());
+			}
+		}
+
+		private void copySubfiles(File source, File target){
+			for(File f: source.listFiles()){
+				source = new File(source,f.getName());
+				target = new File(target,f.getName());
+				if(f.isFile())
+					try {
+						FileUtils.copyFile(source, target);
+					} catch (IOException e) {
+						Log.e(LOG_TAG, "apache!"+e.getMessage());
+					}
+				else
+					copySubfiles(source, target);
+			}
+		}*/
+
 
 				/* get all files/directories in relPath */
 		private String[] getSubfiles(String relPath) {

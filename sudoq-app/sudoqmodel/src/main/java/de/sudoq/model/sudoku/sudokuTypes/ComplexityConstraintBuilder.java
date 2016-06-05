@@ -1,15 +1,16 @@
 package de.sudoq.model.sudoku.sudokuTypes;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
 import de.sudoq.model.xml.XmlTree;
 import de.sudoq.model.xml.Xmlable;
 
+/**
+ * Builder for Complexity constraints.
+ */
 public class ComplexityConstraintBuilder implements Xmlable {
 
 	public Map<Complexity, ComplexityConstraint> specimen = new HashMap<Complexity, ComplexityConstraint>();

@@ -89,8 +89,11 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 	/**
 	 * Konstruktor für einen SudokuTyp
 	 * 
-	 * @param length
-	 *            die maximale Kantenlänge des SudokuTyps
+         *
+         * @param width
+         *            width of the sudoku in fields
+         * @param height
+         *            height of the sudoku in fields
 	 * @param numberOfSymbols
 	 *            die Anzahl an Symbolen die dieses Sudoku verwendet
 	 */
@@ -153,8 +156,8 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 
 		boolean allSaturated = true;
 
-		for (int i = 0; i < this.constraints.size(); i++) {
-			if (!this.constraints.get(i).isSaturated(sudoku))
+		for (Constraint c : this.constraints) {
+			if (!c.isSaturated(sudoku))
 				allSaturated = false;
 		}
 
@@ -234,10 +237,6 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 		this.dimensions = p;
 	}
 
-	public void setBlockDimensions(Position p) {
-		this.blockSize = p;
-	}
-	
 	public void setNumberOfSymbols(int numberOfSymbols) {
 		if (numberOfSymbols > 0) 
 			this.numberOfSymbols = numberOfSymbols;
@@ -285,21 +284,14 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 			XmlTree xt = helper.loadXml(f);
 			t.fillFromXml(xt);
 			return t;
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 	
 	public static List<Integer> getSudokuTypeIds() {
-		List<Integer> ids = new ArrayList<Integer>();
+		List<Integer> ids = new ArrayList<>();
 		File f = FileManager.getSudokuDir();
 		for (File id : f.listFiles()) {
 			if (id.isDirectory()) {
@@ -361,7 +353,7 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 				break;
 				
 			case "helperList":
-				helperList = new ArrayList<Helpers>(sub.getNumberOfAttributes());
+				helperList = new ArrayList<>(sub.getNumberOfAttributes());
 				for(Iterator<XmlAttribute> jterator = sub.getAttributes(); jterator.hasNext();){
 					XmlAttribute xa = jterator.next();
 					int index = Integer.parseInt(xa.getName());
@@ -384,7 +376,7 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 
 
 	private void initPositionsList() {
-		positions = new ArrayList<Position>();
+		positions = new ArrayList<>();
 		for(Constraint c: constraints)
 			for(Position p: c)
 				if(!positions.contains(p))

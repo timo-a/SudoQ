@@ -1,0 +1,42 @@
+<!--lesserButtons-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:orientation="vertical"
+android:layout_gravity="center_vertical"
+android:layout_width="wrap_content"
+android:layout_height="fill_parent"
+android:paddingTop="5dp">
+
+<de.sudoq.view.SquareImageButton
+    android:id="@+id/button_sudoku_undo"
+    android:padding="7dp"
+    android:scaleType="fitXY"
+    android:layout_width="1dp"
+    android:layout_height="fill_parent"
+    android:layout_weight="1"
+    android:layout_margin="0dp"
+    android:onClick="onClick"
+    android:src="@drawable/undo" />
+
+<de.sudoq.view.SquareImageButton
+    android:id="@+id/button_sudoku_redo"
+    android:padding="7dp"
+    android:scaleType="fitXY"
+    android:layout_width="1dp"
+    android:layout_height="fill_parent"
+    android:layout_weight="1"
+    android:layout_margin="0dp"
+    android:onClick="onClick"
+    android:src="@drawable/redo" />
+
+<de.sudoq.view.SquareImageButton
+    android:id="@+id/button_sudoku_toggle_gesture"
+    android:padding="7dp"
+    android:scaleType="fitXY"
+    android:layout_width="1dp"
+    android:layout_height="fill_parent"
+    android:layout_weight="1"
+    android:layout_margin="0dp"
+    android:onClick="onClick"
+    android:src="@drawable/gesture_button_selector" />
+
+</LinearLayout>

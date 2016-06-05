@@ -93,6 +93,6 @@ public class XmlAttribute {
 		if (attribute == null) {
 			throw new IllegalArgumentException();
 		}
-		return ((XmlAttribute) attribute).getName().equals(name);
+		return attribute.getName().equals(name);
 	}
 }

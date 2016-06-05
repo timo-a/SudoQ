@@ -7,6 +7,10 @@
  */
 package de.sudoq.model.sudoku;
 
+/*Never used, just here to show what's possible.
+  Sudokus don't use this! or do they? not sure anymore...
+  I say they wouln't be neccessary if the fully solved part was moved to uniquebehavior*/
+
 /**
  * Das SumConstraintBehavior repräsentiert ein Constraint-Verhalten, wobei die Summe der Feld-Werte eines Constraints
  * eine vorgegebene Summe haben muss.

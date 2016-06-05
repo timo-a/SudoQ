@@ -109,6 +109,10 @@ public class Transformer {
 				l.add(p);
 			}
 		}
+		//if we were functional...
+		//List<Permutation> l = elementaryList.stream().filter(p -> sudoku.getSudokuType().getPermutationProperties().contains(p.getCondition()))
+		//		                                     .collect(Collectors.toList());
+
 		if (l.size() > 0) {
 			l.get(getRandom().nextInt(l.size())).permutate(sudoku);
 		}
@@ -122,15 +126,22 @@ public class Transformer {
 	 *            das Sudoku dessen Felder permutiert werden
 	 */
 	private static void subtlePermutation(Sudoku sudoku) {
+		/* make sure only allowed permutations are executed by intersecting subtleList with properties of the sudoku */
 		List<Permutation> l = new Vector<Permutation>();
-		for (Permutation p : subtleList) {
-			if (sudoku.getSudokuType().getPermutationProperties().contains(p.getCondition())) {
+		for (Permutation p : subtleList)
+			if (sudoku.getSudokuType().getPermutationProperties().contains(p.getCondition()))
 				l.add(p);
-			}
-		}
-		for (Permutation p : l) {
+
+		for (Permutation p : l)
 			p.permutate(sudoku);
-		}
+
+
+
+		//if we were functional
+		//List<Permutation> l = subtleList.stream().filter(p->sudoku.getSudokuType().getPermutationProperties().contains(p.getCondition()))
+		//		                                 .collect(Collectors.toList());
+
+		//l.forEach( p -> p.permutate(sudoku) );
 	}
 
 }

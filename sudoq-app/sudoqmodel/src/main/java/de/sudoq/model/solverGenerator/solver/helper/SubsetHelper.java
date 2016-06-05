@@ -20,7 +20,7 @@ public abstract class SubsetHelper extends SolveHelper {
 	 * Ein BitSet, welches alle Kandidaten des aktuell untersuchten Constraints enthält. Aus Performancegründen nicht
 	 * lokal definiert.
 	 */
-	protected BitSet constraintSet;
+	protected BitSet constraintSet;//TODO call it candidateset?
 
 	/**
 	 * Das BitSet, welches das gerade untersuchte Subset darstellt. Aus Performancegründen nicht lokal definiert.
@@ -54,8 +54,6 @@ public abstract class SubsetHelper extends SolveHelper {
 	 *            Das Größe der Symbolmenge auf die der Helper hin überprüft
 	 * @param complexity
 	 *            Die Schwierigkeit der Anwendung dieser Vorgehensweise
-	 * @param hidden
-	 *            Definiert, ob nach versteckten oder nach sichtbaren Subsets gesucht werden soll
 	 * @throws IllegalArgumentException
 	 *             Wird geworfen, falls das Sudoku null oder das level oder die complexity kleiner oder gleich 0 ist
 	 */
@@ -65,11 +63,11 @@ public abstract class SubsetHelper extends SolveHelper {
 			throw new IllegalArgumentException("level <= 0 : " + level);
 		this.level = level;
 
-		this.allConstraints = this.sudoku.getSudokuType().getConstraints();
-		this.constraintSet = new BitSet();
-		this.currentSet = new BitSet();
+		this.allConstraints  = this.sudoku.getSudokuType().getConstraints();
+		this.constraintSet   = new BitSet();
+		this.currentSet      = new BitSet();
 		this.subsetPositions = new Position[this.level];
-		this.localCopy = new BitSet();
+		this.localCopy       = new BitSet();
 	}
 
 	/** Methods */
@@ -95,21 +93,29 @@ public abstract class SubsetHelper extends SolveHelper {
 		boolean found = false;
 
 		ArrayList<Position> positions;
-		for (int constrNum = 0; constrNum < allConstraints.size(); constrNum++) {
-			if (allConstraints.get(constrNum).hasUniqueBehavior()) {
+		//iterate over all 'unique'-Constraints
+		for (Constraint constraint : allConstraints) {
+			if (constraint.hasUniqueBehavior()) {
 				// Save the constraint being checked for naked subsets.
 				// Combine all the candidate lists in this constraint
 				constraintSet.clear();
-				positions = allConstraints.get(constrNum).getPositions();
-				for (int i = 0; i < positions.size(); i++) {
-					if (this instanceof HiddenHelper
-							|| this.sudoku.getCurrentCandidates(positions.get(i)).cardinality() <= this.level)
-						constraintSet.or(this.sudoku.getCurrentCandidates(positions.get(i)));
+				//iterate over all candidate lists and merge them
+				//merge all for HiddenHelper
+				//merge those with maxum of 'level' candidates for NakedHelper
+				for (Position pos : constraint.getPositions()) {
+					BitSet currentCandidates = this.sudoku.getCurrentCandidates(pos);
+					if (this instanceof HiddenHelper || currentCandidates.cardinality() <= this.level)
+						constraintSet.or(currentCandidates);
 				}
+				//now we have constraintSet of all candidates in the constraint
 
+				//if we find 'level' or more candidates
 				if (constraintSet.cardinality() >= this.level) {
 					// Initialize the current set to check for naked subset by
 					// selecting the first candidates in this constraint
+
+					//fill currentSet with the first 'level' candidates in constraintSet
+					//TODO is there a better, clearer way?
 					currentSet.clear();
 					currentCandidate = -1;
 					for (int i = 0; i < this.level; i++) {
@@ -117,7 +123,7 @@ public abstract class SubsetHelper extends SolveHelper {
 						currentSet.set(currentCandidate);
 					}
 
-					found = updateNext(allConstraints.get(constrNum), buildDerivation);
+					found = updateNext(constraint, buildDerivation);
 
 					// Stop searching if a subset was found
 					if (found) {
@@ -133,37 +139,34 @@ public abstract class SubsetHelper extends SolveHelper {
 	/**
 	 * Berechnet das nächste Subset des spezifizierten BitSets mit der im Konstruktor definierten Größe "level",
 	 * ausgehend von demjenigen Subset, welches die niederwertigsten Kandidaten gesetzt hat. Das übergebene Subset muss
-	 * bereits entsprechend viele Kandidaten gesetzt haben. Es wird immer der hochwertigste Kandidate erhöht bis dieser
+	 * bereits entsprechend viele Kandidaten gesetzt haben. Es wird immer der hochwertigste Kandidat erhöht bis dieser
 	 * beim letzten Kandidaten angelangt ist, daraufhin wird der nächste Kandidat erhöht bis schließlich das
 	 * hochwertigste Subset berechnet wurde.
 	 * 
-	 * @param set
-	 *            Das Set aus dem das Subset berechnet werden soll
-	 * @param subset
-	 *            Das Subset, aus dem das nächste Subset aus dem spezifizierten BitSet berechnet werden soll
 	 * @return true, falls es noch ein Subset gibt, false falls nicht
 	 */
 	protected boolean getNextSubset() {
 		boolean nextSetExists = false;
+		final BitSet allCandidates = constraintSet; //rename for clarity, holds all candiates(set to 1) in the current constraint
 
 		// Get the last set candidate
 		int currentCandidate = currentSet.length() - 1;
 
 		// Calculate next candidate set if existing
 		int nextCandidate = currentCandidate;
-		currentCandidate = constraintSet.nextSetBit(currentCandidate + 1);
-		if (currentCandidate != -1)
-			currentCandidate++;
+		currentCandidate  = allCandidates.nextSetBit(currentCandidate + 1);//test if there is another candidate -> we can shift
+		if (currentCandidate != -1) //if we found one
+			currentCandidate++;  //?? why increment??
 
 		while (!nextSetExists && nextCandidate != -1) {
 			// If the next candidate can be increased without interfering with
 			// the next one, do it
-			if (constraintSet.nextSetBit(nextCandidate + 1) != currentCandidate) {
+			if (allCandidates.nextSetBit(nextCandidate + 1) != currentCandidate) {
 				nextSetExists = true;
 				currentSet.clear(nextCandidate);
 				currentCandidate = nextCandidate;
 				while (currentSet.cardinality() < this.level) {
-					currentCandidate = constraintSet.nextSetBit(currentCandidate + 1);
+					currentCandidate = allCandidates.nextSetBit(currentCandidate + 1);
 					currentSet.set(currentCandidate);
 				}
 			}

@@ -211,17 +211,16 @@ public class Solver {
 	public boolean solveAll(boolean buildDerivation, boolean applySolutions) {
 		boolean solved = false;
 		PositionMap<Integer> copy = new PositionMap<Integer>(this.sudoku.getSudokuType().getSize());
-		for (int i = 0; i < this.sudoku.positions.size(); i++) {
-			copy.put(this.sudoku.positions.get(i), this.sudoku.getField(this.sudoku.positions.get(i)).getCurrentValue());
+		for (Position p : this.sudoku.positions) {
+			copy.put(p, this.sudoku.getField(p).getCurrentValue());
 		}
 
 		solved = solveAll(buildDerivation, false, false);
 
 		// Restore old state if solutions shell not be applied or if sudoku could not be solved
 		if (!applySolutions || !solved) {
-			for (int i = 0; i < this.sudoku.positions.size(); i++) {
-				this.sudoku.getField(this.sudoku.positions.get(i)).setCurrentValue(
-						copy.get(this.sudoku.positions.get(i)), false);
+			for (Position p : this.sudoku.positions) {
+				this.sudoku.getField(p).setCurrentValue(copy.get(p), false);
 			}
 		}
 
@@ -262,8 +261,8 @@ public class Solver {
 		boolean solved = false;
 		boolean invalid = false;
 		PositionMap<Integer> copy = new PositionMap<Integer>(this.sudoku.getSudokuType().getSize());
-		for (int i = 0; i < this.sudoku.positions.size(); i++) {
-			copy.put(this.sudoku.positions.get(i), this.sudoku.getField(this.sudoku.positions.get(i)).getCurrentValue());
+		for (Position p : this.sudoku.positions) {
+			copy.put(p, this.sudoku.getField(p).getCurrentValue());
 		}
 
 		if (solveAll(false, true, false)) {
@@ -289,10 +288,9 @@ public class Solver {
 		}
 
 		// restore initial state
-		for (int i = 0; i < this.sudoku.positions.size(); i++) {
-			this.sudoku.getField(this.sudoku.positions.get(i)).setCurrentValue(copy.get(this.sudoku.positions.get(i)),
-					false);
-		}
+		for(Position p : this.sudoku.positions)
+			this.sudoku.getField(p).setCurrentValue(copy.get(p),false);
+
 
 		// depending on the result, return an int
 		if (!invalid && solved) {
@@ -321,7 +319,7 @@ public class Solver {
 	 * Reihenfolge die Reihenfolge der Lösungsschritte des Algorithmus, realisiert durch die SolveHelper, repräsentiert.
 	 * Ist das Sudoku invalide und kann somit nicht eindeutig gelöst werden, so wird null zurückgegeben.
 	 * 
-	 * @param returnDerivation
+	 * @param buildDerivation
 	 *            Bestimmt, ob die Herleitung der Lösung oder lediglich eine leere Liste zurückgegeben werden soll
 	 * @param followComplexityConstraints
 	 *            Bestimmt, ob zum Lösen die Constraints der Komplexität des Sudokus befolgt werden müssen
@@ -468,7 +466,7 @@ public class Solver {
 	 * Sucht nach NakedSingles und trägt diese daraufhin als Lösung für das jeweilige Feld ein. Gibt zurück, ob ein
 	 * NakedSingle gefunden wurde.
 	 * 
-	 * @param returnDerivations
+	 * @param addDerivations
 	 *            Bestimmt, ob die Herleitung der Lösungen zurückgegeben oder lediglich eine leere Liste zurückgegeben
 	 *            werden soll
 	 * @param addComplexity
@@ -480,21 +478,21 @@ public class Solver {
 		failed = false;
 		// Iterate trough the fields to look if each field has only one
 		// candidate left = solved
-		for (int i = 0; i < this.sudoku.positions.size(); i++) {
-			BitSet b = this.sudoku.getCurrentCandidates(this.sudoku.positions.get(i));
+		for (Position p : this.sudoku.positions) {
+			BitSet b = this.sudoku.getCurrentCandidates(p);
 			if (b.cardinality() == 1) {
 				if (addDerivations) {
 					Solution sol = lastSolutions.get(lastSolutions.size() - 1);
 					SolveDerivation deriv = new SolveDerivation();
-					deriv.addDerivationField(new DerivationField(this.sudoku.positions.get(i), (BitSet) b.clone(),
+					deriv.addDerivationField(new DerivationField(p, (BitSet) b.clone(),
 							new BitSet()));
 					SolveAction action = (SolveAction) new SolveActionFactory().createAction(b.nextSetBit(0),
-							this.sudoku.getField(this.sudoku.positions.get(i)));
+							this.sudoku.getField(p));
 					sol.setAction(action);
 					sol.addDerivation(deriv);
 					lastSolutions.add(new Solution());
 				}
-				sudoku.setSolution(this.sudoku.positions.get(i), b.nextSetBit(0));
+				sudoku.setSolution(p, b.nextSetBit(0));
 				if (addComplexity) {
 					this.sudoku.addComplexityValue(18, true);
 					if (this.candidatesNeeded)
@@ -515,32 +513,33 @@ public class Solver {
 	 */
 	private boolean isInvalid() {
 		boolean invalid = false;
-		for (int i = 0; i < this.sudoku.positions.size(); i++) {
-			if (this.sudoku.getCurrentCandidates(this.sudoku.positions.get(i)).cardinality() == 0
-					&& this.sudoku.getField(this.sudoku.positions.get(i)).isEmpty()) {
+		for (Position p : this.sudoku.positions) {
+			if (this.sudoku.getCurrentCandidates(p).cardinality() == 0
+			 && this.sudoku.getField(p).isEmpty()) {
 				invalid = true;
 			}
 		}
 
 		return invalid;
+
+
 	}
 
 	/**
 	 * Überprüft, ob das Sudoku gelöst ist. Dies ist der Fall, wenn für jedes Feld eine Lösung eingetragen worden ist
-	 * und alle Constraints des Sudokus erfüllt sind.
+	 * und alle Constraints des Sudokus erfüllt sind. TODO zzt wird nur überprüft ob voll...
 	 * 
 	 * @return true, falls das Sudoku gelöst ist, false andernfalls
 	 */
 	private boolean isSolved() {
 		boolean solved = true;
 
-		for (int i = 0; i < this.sudoku.positions.size(); i++) {
-			if (this.sudoku.getField(this.sudoku.positions.get(i)).isEmpty()) {
+		for (Position p : this.sudoku.positions)
+			if (this.sudoku.getField(p).isEmpty())
 				solved = false;
-			}
-		}
 
 		return solved;
+
 	}
 
 }

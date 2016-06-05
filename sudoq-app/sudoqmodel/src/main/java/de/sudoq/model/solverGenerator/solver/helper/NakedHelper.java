@@ -54,15 +54,16 @@ public class NakedHelper extends SubsetHelper {
 			// look if one of the other positions would be updated to prevent
 			// from finding one subset again
 			subsetCount = 0;
-			for (int i = 0; i < positions.size(); i++) {
-				if (this.sudoku.getCurrentCandidates(positions.get(i)).cardinality() > 0
-						&& this.sudoku.getCurrentCandidates(positions.get(i)).cardinality() <= this.level) {
+			for (Position pos : positions) {
+				BitSet currentCandidates = this.sudoku.getCurrentCandidates(pos);
+				if (0 < currentCandidates.cardinality()
+				     && currentCandidates.cardinality() <= this.level) {
 					localCopy.clear();
-					localCopy.or(this.sudoku.getCurrentCandidates(positions.get(i)));
+					localCopy.or(currentCandidates);
 					localCopy.and(currentSet);
-					if (this.sudoku.getCurrentCandidates(positions.get(i)).equals(localCopy)) {
+					if (currentCandidates.equals(localCopy)) {
 						if (subsetCount < this.level) {
-							subsetPositions[subsetCount] = positions.get(i);
+							subsetPositions[subsetCount] = pos;
 							subsetCount++;
 						} else {
 							subsetCount++;

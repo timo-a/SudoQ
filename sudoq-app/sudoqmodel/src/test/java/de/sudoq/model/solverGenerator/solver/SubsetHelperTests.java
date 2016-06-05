@@ -17,7 +17,6 @@ import de.sudoq.model.solverGenerator.solver.helper.NakedHelper;
 import de.sudoq.model.solverGenerator.solver.helper.SubsetHelper;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType9x9;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
 public class SubsetHelperTests {

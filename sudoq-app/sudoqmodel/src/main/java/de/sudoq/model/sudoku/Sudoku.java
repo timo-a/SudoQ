@@ -7,8 +7,11 @@
  */
 package de.sudoq.model.sudoku;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import de.sudoq.model.ModelChangeListener;
@@ -161,13 +164,13 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 	 * @return Das Feld an der spezifizierten Position oder null, falls dies nicht existiert oder null übergeben wurde
 	 */
 	public Field getField(Position position) {
-		if (position == null)
-			return null;
-		return fields.get(position);
+		return (position == null) ? null
+		                          : fields.get(position);
 	}
 
 	/**
-	 * Belegt die spezifizierte Position mit einem neuen Field
+	 * Belegt die spezifizierte Position mit einem neuen Field.
+	 * Falls field oder position null sind, bricht die Methode ab
 	 * 
 	 * @param field
 	 *            das neue Field
@@ -247,12 +250,11 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 	 * @return true, falls das Sudoku ausgefüllt und gelöst ist, sonst false
 	 */
 	public boolean isFinished() {
-		for (Field field : fields.values()) {
-			if (!field.isSolvedCorrect()) {
-				return false;
-			}
-		}
-		return true;
+		boolean allCorrect = true;
+		for (Field field : fields.values())
+			allCorrect &= field.isSolvedCorrect();
+
+		return allCorrect;
 	}
 
 	/**
@@ -362,19 +364,16 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 	public boolean equals(Object obj) {
 		if (obj != null && obj instanceof Sudoku) {
 
-			boolean allEqual = true;
 			Sudoku other = (Sudoku) obj;
 
-			allEqual &= complexity == other.getComplexity();
-			allEqual &= other.getSudokuType().getEnumType().equals(type.getEnumType());
+			boolean complexityMatch = this.complexity    == other.getComplexity();
+			boolean       typeMatch = type.getEnumType() == other.getSudokuType().getEnumType();
 
-			for (Map.Entry<Position, Field> fieldpos : fields.entrySet()) {
-				Field field = fieldpos.getValue();
-				Field compare = other.getField(Integer.valueOf(field.getId()));
-				allEqual &= compare != null;
-				allEqual &= field.equals(compare);
-			}
-			return allEqual;
+			boolean     fieldsMatch = true;
+			for(Field f: this.fields.values())
+				fieldsMatch &= f.equals(other.getField(f.getId()));
+
+			return complexityMatch && typeMatch && fieldsMatch;
 		}
 		return false;
 	}
@@ -386,11 +385,12 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 	 * @return true, falls es in dem Sudoku falsch gelöste Felder gibt, false andernfalls
 	 */
 	public boolean hasErrors() {
-		for (Field f : this.fields.values()) {
-			if (!f.isNotWrong()) {
+		for (Field f : this.fields.values())
+			if (!f.isNotWrong())
 				return true;
-			}
-		}
+
 		return false;
+
+        //return this.fields.values().stream().anyMatch(f -> !f.isNotWrong()); //looks weird but be very careful with simplifications!
 	}
 }

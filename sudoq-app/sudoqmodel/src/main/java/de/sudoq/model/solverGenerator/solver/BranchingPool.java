@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Stack;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
@@ -35,8 +37,8 @@ class BranchingPool {
 	 *             Wird geworfen, falls die Dimension null oder in einer Komponente 0 ist
 	 */
 	BranchingPool() {
-		usedBranchings = new Stack<Branching>();
-		unusedBranchings = new Stack<Branching>();
+		usedBranchings = new Stack<>();
+		unusedBranchings = new Stack<>();
 		numberOfAllocatedBranchings = 2;
 		unusedBranchings.push(new Branching());
 		unusedBranchings.push(new Branching());
@@ -53,7 +55,8 @@ class BranchingPool {
 	Branching getBranching(Position p, int candidate) {
 		if (p == null)
 			throw new IllegalArgumentException("Position was null");
-		if (unusedBranchings.size() == 0) {
+		if (unusedBranchings.isEmpty()) {
+			/*add nOAB new Branchings to unusedBranchings*/
 			for (int i = 0; i < numberOfAllocatedBranchings; i++) {
 				unusedBranchings.add(new Branching());
 			}
@@ -109,7 +112,7 @@ class BranchingPool {
 		/**
 		 * Die Liste von Positionen an denen in diesem Branch eine Lösung eingetragen wurde.
 		 */
-		List<Position> solutionsSet;
+		List<Position> solutionsSet; //TODO rename to sol..LIST??
 
 		/**
 		 * Eine Map, welche für jede Position dessen Kandidaten vor dem Branchen speichert.

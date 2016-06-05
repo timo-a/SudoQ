@@ -28,8 +28,6 @@ import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Field;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.sudoku.sudokuTypes.TypeBasic;
 import de.sudoq.view.SudokuFieldView;
 import de.sudoq.view.SudokuLayout;
 import de.sudoq.view.VirtualKeyboardLayout;

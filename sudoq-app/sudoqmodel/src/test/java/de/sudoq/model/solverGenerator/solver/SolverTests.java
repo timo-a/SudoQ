@@ -14,8 +14,6 @@ import org.junit.Test;
 
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
-import de.sudoq.model.solverGenerator.solver.ComplexityRelation;
-import de.sudoq.model.solverGenerator.solver.Solver;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Field;
 import de.sudoq.model.sudoku.Position;

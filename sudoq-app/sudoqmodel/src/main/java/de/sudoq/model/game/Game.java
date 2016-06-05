@@ -249,6 +249,11 @@ public class Game implements Xmlable {
         Position editedPos = sudoku.getPosition(field.getId());
         int value = field.getCurrentValue();
 
+        /*this.sudoku.getSudokuType().getConstraints().stream().filter(c -> c.includes(editedPos))
+                                                             .flatMap(c -> c.getPositions().stream())
+                                                             .filter(changePos -> this.sudoku.getField(changePos).isNoteSet(value))
+                                                             .forEachOrdered(changePos -> this.addAndExecute(new NoteActionFactory().createAction(value, this.sudoku.getField(changePos))));
+        should work, but to tired to try*/
         for (Constraint c : this.sudoku.getSudokuType()) {
             if (c.includes(editedPos)) {
                 for (Position changePos : c) {

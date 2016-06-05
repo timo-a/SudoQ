@@ -62,10 +62,10 @@ public class MainActivity extends SudoqActivitySherlock {
 		Profile p = Profile.getInstance();
 
 		Button continueButton = (Button) findViewById(R.id.button_mainmenu_continue);
-		continueButton.setEnabled(p.getCurrentGame() > p.NO_GAME);
+		continueButton.setEnabled(p.getCurrentGame() > Profile.NO_GAME);
 
 		Button loadButton = (Button) findViewById(R.id.button_mainmenu_load_sudoku);
-		loadButton.setEnabled(p.getCurrentGame() > p.NO_GAME);
+		loadButton.setEnabled(p.getCurrentGame() > Profile.NO_GAME);
 
 	}
 

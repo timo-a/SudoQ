@@ -81,11 +81,7 @@ public class Field extends ObservableModelImpl<Field> {
 		this.editable = editable;
 		this.solution = solution;
 
-		if (!editable) {
-			currentVal = solution;
-		} else {
-			currentVal = EMPTYVAL;
-		}
+		currentVal = editable ? EMPTYVAL : solution;
 
 	}
 
@@ -260,8 +256,12 @@ public class Field extends ObservableModelImpl<Field> {
 
 			Field other = (Field) obj;
 
-			return this.id == other.id && this.solution == other.solution && this.currentVal == other.currentVal
-					&& this.editable == other.editable && this.noticeFlags.equals(other.noticeFlags);
+			return this.id         == other.id         &&
+                   this.solution   == other.solution   &&
+                   this.currentVal == other.currentVal &&
+                   this.editable   == other.editable   &&
+                   this.noticeFlags.equals(
+                                      other.noticeFlags);
 		}
 
 		return false;

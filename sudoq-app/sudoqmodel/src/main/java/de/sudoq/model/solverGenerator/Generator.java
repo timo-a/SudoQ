@@ -26,7 +26,6 @@ import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.sudoku.sudokuTypes.TypeStandard;
 
 /**
  * Diese Klasse stellt verschiedene Methoden zum Erstellen eines validen, neuen
@@ -110,7 +109,7 @@ public class Generator {
 	/**
 	 * Abstrakte Klasse kapselt gemeinsamkeiten von {@link SudokuGenerationStandardType} und {@link SudokuGeneration}
 	 * Grund: wir hatten ursprünglich eine extra methode um 9x9 und 16x16 sudokus zu generieren.
-	 * Um diese Methode zu debuggen, habe ich alle gemeinsamkeiten ausgelagert. 
+	 * Um diese Methode zu debuggen, habe ich alle Gemeinsamkeiten ausgelagert.
 	 * @author timo
 	 *
 	 */
@@ -176,7 +175,7 @@ public class Generator {
 	}
 	
 	/**
-	 * Bietet die Möglichkeit Sudokus abgeleitet vom Typ {@link TypeStandard} zu
+	 * Bietet die Möglichkeit Sudokus abgeleitet vom Typ TypeStandard(deprecated) zu
 	 * genrieren. Für diese ist der Algorithmus wesentlich schneller als der von
 	 * {@link SudokuGeneration}. Die Klasse implementiert das {@link Runnable}
 	 * interface und kann daher in einem eigenen Thread ausgeführt werden.
@@ -219,7 +218,7 @@ public class Generator {
 			int sqrtSymbolNumber = (int) Math.sqrt(sudoku.getSudokuType().getNumberOfSymbols());
 			for (int x = 0; x < sudokuSizeX; x++) {
 				for (int y = 0; y < sudokuSizeY; y++) {
-                    int calculatedsolution = 	((y % sqrtSymbolNumber) * sqrtSymbolNumber + x + (y / sqrtSymbolNumber))
+					int calculatedsolution = ((y % sqrtSymbolNumber) * sqrtSymbolNumber + x + (y / sqrtSymbolNumber))
 							                  % (sqrtSymbolNumber * sqrtSymbolNumber);
 					sub.addSolution(Position.get(x, y),calculatedsolution);
 				}
@@ -388,7 +387,7 @@ public class Generator {
 	}
 
 	/**
-	 * Bietet die Möglichkeit Sudokus abgeleitet vom Typ {@link TypeStandard} zu
+	 * Bietet die Möglichkeit Sudokus abgeleitet vom Typ TypeStandard(deprecated) zu
 	 * genrieren. Für diese ist der Algorithmus wesentlich schneller als der von
 	 * {@link SudokuGeneration}. Die Klasse implementiert das {@link Runnable}
 	 * interface und kann daher in einem eigenen Thread ausgeführt werden.
@@ -432,12 +431,8 @@ public class Generator {
 			this.currentConstraint = sudoku.getSudokuType().buildComplexityConstraint(sudoku.getComplexity());
 
 			//füllt die noch freeFields, also noch zu belegende Felder aus dem übergebenen sudoku.
-			for (int y = 0; y < sudokuSizeY; y++) {
-				for (int x = 0; x < sudokuSizeX; x++) {
-					if (this.sudoku.getField(Position.get(x, y)) != null) // beim Samurai-Sudoku ist etwa 0,10 null
-						freeFields.add(Position.get(x, y));
-				}
-			}
+			freeFields.addAll(getPositions(sudoku));
+
 		}
 
 		/**
@@ -450,34 +445,24 @@ public class Generator {
 			int fieldsByComp = currentConstraint.getAverageFields();
 			fieldsToDefine = Math.min(fieldsByType, fieldsByComp);
 
-			/*for debug*/
-			boolean samurai =sudoku.getSudokuType().getEnumType() == SudokuTypes.samurai; 
 			//Lösung für das sudoku wird hier gespeichert werden
-			PositionMap<Integer> solution = new PositionMap<Integer>(this.sudoku.getSudokuType().getSize());
+			PositionMap<Integer> solution = new PositionMap<>(this.sudoku.getSudokuType().getSize());
 			
 			do {
-				if(samurai)	System.out.println("desize:"+definedFields.size());
-				
+
 				// Remove some fields, because sudoku could not be validated
-				for (int i = 0; i < 5; i++) {
+				for (int i = 0; i < 5; i++)
 					removeDefinedField();
-				}
-				
+
 				// Define average number of fields
-				while (definedFields.size() < fieldsToDefine) {
-					if (addDefinedField() == null) {								
-						for (int j = 0; j < 5 && definedFields.size() > 0; j++) {
+				while (definedFields.size() < fieldsToDefine)
+					if (addDefinedField() == null) //try to add field, if null returned i.e. nospace / invalid
+						for (int j = 0; j < 5; j++)  //remove 5 fields
 							removeDefinedField();
-						}
-					}
-				}
-				if(samurai){ 
-					System.out.println("direkt davor");
-					System.out.println("  defined:"+definedFields.size()+", "+"toDefine: "+fieldsToDefine);
-					}
+
 			}while(!solver.solveAll(false, false));
 			
-			System.out.println("Found one");
+			/*we found a solution*/
 
 			Complexity saveCompl = solver.getSudoku().getComplexity();
 			solver.getSudoku().setComplexity(Complexity.arbitrary);
@@ -486,12 +471,9 @@ public class Generator {
 
 			// Create the sudoku template generated before
 			SudokuBuilder sub = new SudokuBuilder(sudoku.getSudokuType());
-			for (int x = 0; x < sudokuSizeX; x++) {
-				for (int y = 0; y < sudokuSizeY; y++) {
-					if (sudoku.getField(Position.get(x, y)) != null)
-						sub.addSolution(Position.get(x, y), solution.get(Position.get(x, y)));
-				}
-			}
+			for(Position p : getPositions(sudoku))
+				sub.addSolution(p, solution.get(p));
+
 			solvedSudoku = sub.createSudoku();
 
 			while (!this.freeFields.isEmpty()) {
@@ -499,14 +481,9 @@ public class Generator {
 			}
 
 			// Fill the sudoku being generated with template solutions
-			for (int x = 0; x < sudokuSizeX; x++) {
-				for (int y = 0; y < sudokuSizeY; y++) {
-					if (sudoku.getField(Position.get(x, y)) != null) {
-						sudoku.getField(Position.get(x, y)).setCurrentValue(
-								solvedSudoku.getField(Position.get(x, y)).getSolution(), false);
-					}
-				}
-			}
+			//TODO simplify: iterate over fields/positions
+			for(Field f : sudoku)
+				f.setCurrentValue(f.getSolution(), false);
 
 			int allocationFactor = (int)Math.pow(sudoku.getSudokuType().getNumberOfSymbols(), 2) / 20;
 			allocationFactor = Math.max(1, allocationFactor);
@@ -533,17 +510,15 @@ public class Generator {
 
 			// Call the callback
 			SudokuBuilder suBi = new SudokuBuilder(sudoku.getSudokuType());
-			Position currentPos;
-			for (int x = 0; x < sudokuSizeX; x++) {
-				for (int y = 0; y < sudokuSizeY; y++) {
-					currentPos = Position.get(x, y);
-					if (solvedSudoku.getField(currentPos) != null) {
-						int value = solvedSudoku.getField(currentPos).getSolution();
-						suBi.addSolution(currentPos, value);
-						if (!sudoku.getField(currentPos).isEmpty())
-							suBi.setFixed(currentPos);
-						
-					}
+
+			for(Position p : getPositions(solvedSudoku)){
+				if (solvedSudoku.getField(p) != null) {
+					int value = solvedSudoku.getField(p).getSolution();
+					suBi.addSolution(p, value);
+					if (!sudoku.getField(p).isEmpty())
+						suBi.setFixed(p);
+
+
 				}
 			}
 			Sudoku res = suBi.createSudoku();
@@ -578,6 +553,7 @@ public class Generator {
 			for (Position p : this.definedFields) {
 				markings[p.getX()][p.getY()] = true;
 			}
+
 			/* avoids infitite while loop*/
 			int count = definedFields.size();
 
@@ -597,7 +573,7 @@ public class Generator {
 
 			//construct a list of symbols starting at arbitrary point. there is no short way to do this without '%' 
 			int numSym = sudoku.getSudokuType().getNumberOfSymbols();
-    		int offset = random.nextInt(numSym);
+			int offset = random.nextInt(numSym);
 			Queue<Integer> symbols = new LinkedList<Integer>();
 			for (int i = 0; i < numSym; i++)
 				symbols.add(i);
@@ -630,20 +606,31 @@ public class Generator {
 		}
 
 		/**
-		 * Entfernt eines der definierten Felder.
+		 * Removes one of the defined fields
 		 * 
-		 * @return Die Position des entfernten Feldes
+		 * @return position of removed field or null is nothing there to remove
 		 */
 		private Position removeDefinedField() {
 			if (definedFields.isEmpty())
 				return null;
-			Position p;
+
 			int nr = random.nextInt(definedFields.size());
-			p = definedFields.remove(nr);
+			Position p = definedFields.remove(nr);
 			sudoku.getField(p).setCurrentValue(Field.EMPTYVAL, false);
 			freeFields.add(p);
 			return p;
 		}
 
+	}
+
+	public static List<Position> getPositions(Sudoku sudoku){
+		List<Position> p = new ArrayList<>();
+
+		for (int x = 0; x < sudoku.getSudokuType().getSize().getX(); x++)
+			for (int y = 0; y < sudoku.getSudokuType().getSize().getY(); y++)
+				if (sudoku.getField(Position.get(x, y)) != null)
+					p.add(Position.get(x, y));
+
+		return p;
 	}
 }

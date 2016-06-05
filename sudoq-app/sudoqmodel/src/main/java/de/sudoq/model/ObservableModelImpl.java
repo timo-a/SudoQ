@@ -26,9 +26,8 @@ public abstract class ObservableModelImpl<T> implements ObservableModel<T> {
 	 */
 	@Override
 	public void notifyListeners(T obj) {
-		for (int i = 0; i < listeners.size(); i++) {
-			listeners.get(i).onModelChanged(obj);
-		}
+		for(ModelChangeListener<T> l: listeners)
+			l.onModelChanged(obj);
 	}
 
 	/**

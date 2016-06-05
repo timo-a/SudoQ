@@ -8,7 +8,7 @@
     <string name="app_name" translatable="false">SudoQ</string>
     
     <!-- Android specific strings -->
-    <string name="version_code" translatable="false">1.0.4</string>
+    <string name="version_code" translatable="false">1.0.4</string><!--where are these used??? in manifest code is an integer and name is the x.y.z thing-->
     <string name="version_name" translatable="false">Berta</string>
     
 

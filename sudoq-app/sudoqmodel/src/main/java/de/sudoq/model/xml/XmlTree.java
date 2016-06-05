@@ -60,8 +60,8 @@ public class XmlTree implements Iterable<XmlTree> {
 		}
 		this.name = name;
 		this.content = "";
-		this.attributes = new ArrayList<XmlAttribute>();
-		this.children = new ArrayList<XmlTree>();
+		this.attributes = new ArrayList<>();
+		this.children = new ArrayList<>();
 		this.numberOfChildren = 0;
 	}
 

@@ -28,7 +28,6 @@ import de.sudoq.model.sudoku.Field;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
-import de.sudoq.model.sudoku.sudokuTypes.TypeBasic;
 
 /**
  * Eine View als RealativeLayout, die eine Sudoku-Anzeige verwaltet.

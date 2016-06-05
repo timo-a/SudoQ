@@ -44,8 +44,8 @@ public class SudokuBuilder {
 	 */
 	public SudokuBuilder(SudokuType type) {
 		this.type = type;
-		solutions = new PositionMap<Integer>(type.getSize());
-		setValues = new PositionMap<Boolean>(type.getSize());
+		solutions = new PositionMap<>(type.getSize());
+		setValues = new PositionMap<>(type.getSize());
 	}
 
 	/** Methods */
@@ -100,9 +100,6 @@ public class SudokuBuilder {
 	 *         kann
 	 */
 	public static SudokuType createType(SudokuTypes type) {
-		if (type == null)
-			return null;
-		else
-			return SudokuType.getSudokuType(type);
+		return type == null ? null : SudokuType.getSudokuType(type);
 	}
 }

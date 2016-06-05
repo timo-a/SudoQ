@@ -15,6 +15,12 @@ import de.sudoq.model.sudoku.Position;
  * innerhalb der Constraints eines Sudokus nach n Kandidaten, die lediglich noch in denselben n Feldern vorkommen. (n
  * entspricht dem level des Helpers). Ist dies der Fall, müssen diese n Kandidaten in den n Feldern in irgendeiner
  * Kombination eingetragen werden und können somit aus den restlichen Kandidatnelisten entfernt werden.
+ *
+ * [¹²³⁴][¹²³⁴][³..][³..] -> [¹²][¹²][³..][³..]
+ * Looks for a constraint and a set of n candidates(i.e. distinct symbols that are not a solution).
+ * For these candidates must hold that they exclusively appear in n unsolved fields.
+ * In that case, they are all the solutions to these n fields (in some order) and all other candidates within these n fields can be removed
+ * 
  */
 public class HiddenHelper extends SubsetHelper {
 
@@ -49,14 +55,14 @@ public class HiddenHelper extends SubsetHelper {
 			foundSubset = false;
 			// Count and save all the positions whose candidates are a subset of
 			// the one to be checked for,
-			// look if one of the other positions would be updated to prevent
+			// look if one of the other positions would be updated to prevent <- where does this happen?
 			// from finding one subset again
 			subsetCount = 0;
-			for (int posNum = 0; posNum < positions.size(); posNum++) {
-				if (this.sudoku.getCurrentCandidates(positions.get(posNum)).cardinality() > 0
-						&& this.sudoku.getCurrentCandidates(positions.get(posNum)).intersects(currentSet)) {
+			for (Position pos : positions) {
+				BitSet currentCandidates = this.sudoku.getCurrentCandidates(pos);
+				if (!currentCandidates.isEmpty() && currentCandidates.intersects(currentSet)) {//TODO why check for empty??
 					if (subsetCount < this.level) {
-						subsetPositions[subsetCount] = positions.get(posNum);
+						subsetPositions[subsetCount] = pos;
 						subsetCount++;
 					} else {
 						subsetCount++;
@@ -72,13 +78,14 @@ public class HiddenHelper extends SubsetHelper {
 			foundSubset = false;
 			if (subsetCount == this.level) {
 				for (Position pos: subsetPositions) {
+					BitSet currerntCandidates = this.sudoku.getCurrentCandidates(pos);
 					localCopy.clear();
-					localCopy.or(this.sudoku.getCurrentCandidates(pos));
-					this.sudoku.getCurrentCandidates(pos).and(currentSet);
-					if (!this.sudoku.getCurrentCandidates(pos).equals(localCopy)) {
+					localCopy.or(currerntCandidates);// localCopy <- currentCand...
+					currerntCandidates.and(currentSet);
+					if (!currerntCandidates.equals(localCopy)) {
 						// If something changed, a field could be updated, so
 						// the helper is applied
-						// If the derivation shell be returned, add the updated
+						// If the derivation shall be returned, add the updated
 						// field to the derivation object
 						if (buildDerivation) {
 							if (!foundSubset) {
@@ -86,12 +93,10 @@ public class HiddenHelper extends SubsetHelper {
 								lastDerivation.addDerivationBlock(new DerivationBlock(constraint));
 							}
 
-							BitSet relevantCandidates = (BitSet) this.sudoku.getCurrentCandidates(pos)
-									.clone();
+							BitSet relevantCandidates = (BitSet) currerntCandidates.clone();
 							BitSet irrelevantCandidates = localCopy;
 							irrelevantCandidates.andNot(currentSet);
-							DerivationField field = new DerivationField(pos, relevantCandidates,
-									irrelevantCandidates);
+							DerivationField field = new DerivationField(pos, relevantCandidates, irrelevantCandidates);
 							lastDerivation.addDerivationField(field);
 						}
 						foundSubset = true;
@@ -108,21 +113,19 @@ public class HiddenHelper extends SubsetHelper {
 			}
 		}
 
-		// If the derivation shell be returned, add the subset fields to the
+		// If the derivation shall be returned, add the subset fields to the
 		// derivation object
 		if (foundSubset && buildDerivation) {
-			boolean foundOne = false;
-			for (int posNum = 0; posNum < positions.size(); posNum++) {
+			boolean foundOne;
+			for (Position pos : positions) {
 				foundOne = false;
 				for (int i = 0; i < subsetCount; i++) {
-					if (positions.get(posNum) == subsetPositions[i])
+					if (pos == subsetPositions[i])
 						foundOne = true;
 				}
 				if (!foundOne) {
-					BitSet irrelevantCandidates = (BitSet) this.sudoku.getCurrentCandidates(positions.get(posNum))
-							.clone();
-					DerivationField field = new DerivationField(positions.get(posNum), new BitSet(),
-							irrelevantCandidates);
+					BitSet irrelevantCandidates = (BitSet) this.sudoku.getCurrentCandidates(pos).clone();
+					DerivationField field = new DerivationField(pos, new BitSet(), irrelevantCandidates);
 					lastDerivation.addDerivationField(field);
 				}
 			}

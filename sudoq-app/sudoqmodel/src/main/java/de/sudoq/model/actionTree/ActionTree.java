@@ -109,32 +109,13 @@ public class ActionTree extends ObservableModelImpl<ActionTreeElement> implement
 	 */
 	public ActionTreeElement getElement(int id) {
 		if (id < idCounter && id >= 1) {
-			ActionTreeElement currentElement = rootElement;
-			Stack<ActionTreeElement> otherPaths = new Stack<ActionTreeElement>();
+			//ActionTreeElement currentElement = rootElement;
+			//Stack<ActionTreeElement> otherPaths = new Stack<ActionTreeElement>();
 
-			// earlier while (currentElement != null) but since an element will
-			// be found since the id range fits we can go with while true
-			while (true) {
-				if (currentElement.getId() == id) {
-					return currentElement;
-				}
+			for(ActionTreeElement ate:this)
+				if(ate.getId() == id)
+					return ate;
 
-				for (int i = currentElement.getChildrenList().size() - 1; i >= 0; i--) {
-					if (currentElement.getChildrenList().get(i).getId() <= id) {
-						otherPaths.push(currentElement.getChildrenList().get(i));
-					}
-				}
-
-				currentElement = otherPaths.pop();
-				// if (!otherPaths.empty()) {
-				// currentElement = otherPaths.pop();
-				// } else {
-				// this will never be reached cause in the beginning we check
-				// that the searched id exists in this tree, so we can always
-				// pop
-				// currentElement = null;
-				// }
-			}
 		}
 
 		return null;
