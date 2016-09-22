@@ -9,10 +9,6 @@ import org.junit.Test;
 
 import de.sudoq.model.actionTree.Action;
 import de.sudoq.model.actionTree.SolveActionFactory;
-import de.sudoq.model.solverGenerator.solution.DerivationBlock;
-import de.sudoq.model.solverGenerator.solution.DerivationField;
-import de.sudoq.model.solverGenerator.solution.Solution;
-import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.ConstraintType;
 import de.sudoq.model.sudoku.Field;
@@ -42,11 +38,9 @@ public class SolutionTests {
 		sol.addDerivation(derivs[2]);
 
 		int counter = 0;
-		Iterator<SolveDerivation> it = sol.getDerivationIterator();
-		while (it.hasNext()) {
-			assertEquals(it.next(), derivs[counter]);
+		for (SolveDerivation sd: sol.getDerivations()){
+			assertEquals(sd, derivs[counter]);
 			counter++;
 		}
 	}
-
 }

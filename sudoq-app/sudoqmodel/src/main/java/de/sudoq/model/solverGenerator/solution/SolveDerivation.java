@@ -14,6 +14,16 @@ public class SolveDerivation {
 	/** Attributes */
 
 	/**
+	 * A string holding the name of the technique that led to this derivation
+	 */
+	private String technique;
+
+	/**
+	 * A textual illustration of this solution step
+	 */
+	private String description;
+
+	/**
 	 * Eine Liste von DerivationFields, die für diesen Lösungsschritt relevant
 	 * sind
 	 */
@@ -31,11 +41,22 @@ public class SolveDerivation {
 	 * Initiiert ein neues SolveDerivation-Objekt.
 	 */
 	public SolveDerivation() {
+		this("unknown");
+	}
+
+	public SolveDerivation(String technique) {
+		this.technique = technique;
 		this.fields = new ArrayList<DerivationField>();
 		this.blocks = new ArrayList<DerivationBlock>();
 	}
 
+
+
 	/** Methods */
+
+	public void setDescription(String descrip){
+		this.description = descrip;
+	}
 
 	/**
 	 * Diese Methode fügt das spezifizierte DerivationField zur Liste der
@@ -87,5 +108,9 @@ public class SolveDerivation {
 	 */
 	public Iterator<DerivationBlock> getBlockIterator() {
 		return blocks.iterator();
+	}
+
+	public String toString(){
+		return description;
 	}
 }

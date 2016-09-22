@@ -168,13 +168,13 @@ public class FileManagerTests {
 
 	@Test
 	public void getGameThumbnailFile() throws IOException {
-		assertEquals(1, FileManager.getNextFreeGameId());
+		assertEquals(1, FileManager.getNextFreeGameId());//currentProfileID==-1
 		assertTrue(FileManager.getGamesFile().exists());
-		File game = FileManager.getGameFile(1);
+		File game  = FileManager.getGameFile(1);
 		File thumb = FileManager.getGameThumbnailFile(1);
-		assertTrue(game.getName().equals("game_1.xml"));
+		assertTrue(game. getName().equals("game_1.xml"));
 		assertTrue(thumb.getName().equals("game_1.png"));
-		assertTrue(game.createNewFile());
+		assertTrue(game. createNewFile());
 		assertTrue(thumb.createNewFile());
 		assertTrue(FileManager.deleteGame(1));
 	}

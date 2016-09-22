@@ -83,4 +83,8 @@ public class Solution {
 	public Iterator<SolveDerivation> getDerivationIterator() {
 		return derivations.iterator();
 	}
+
+	public List<SolveDerivation> getDerivations() {
+		return derivations;
+	}
 }

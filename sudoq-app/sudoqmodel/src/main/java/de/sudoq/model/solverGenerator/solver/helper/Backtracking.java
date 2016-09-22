@@ -50,8 +50,8 @@ public class Backtracking extends SolveHelper {
 		lastDerivation = null;
 
 		int leastCandidates = -1;
-		for (Position p: this.sudoku.getPositions()) {
-			int cardinality =this.sudoku.getCurrentCandidates(p).cardinality(); 
+		for (Position p : this.sudoku.getPositions()) {
+			int cardinality = this.sudoku.getCurrentCandidates(p).cardinality();
 			if ((cardinality < leastCandidates || leastCandidates == -1) && cardinality > 1) {
 				leastCandidates = cardinality;
 				leastCandidatesPosition = p;

@@ -13,13 +13,8 @@ import de.sudoq.model.sudoku.ConstraintType;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SumConstraintBehavior;
-import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType9x9;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
-import de.sudoq.model.sudoku.sudokuTypes.TypeSquiggly;
 
 public class SolverSudokuTests {
 
@@ -32,9 +27,9 @@ public class SolverSudokuTests {
 
 	@Test
 	public void testStandardSudoku() {
-		Position firstPos = Position.get(5, 7);
+		Position firstPos  = Position.get(5, 7);
 		Position secondPos = Position.get(8, 4);
-		Position thirdPos = Position.get(3, 2);
+		Position thirdPos  = Position.get(3, 2);
 
 		sudoku.killCurrentBranch();
 		sudoku.getCurrentCandidates(firstPos).clear();

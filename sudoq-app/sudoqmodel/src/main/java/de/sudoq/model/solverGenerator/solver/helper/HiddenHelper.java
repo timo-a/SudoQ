@@ -42,6 +42,24 @@ public class HiddenHelper extends SubsetHelper {
 	}
 
 	/**
+	 * Collect all candidates appearing in this constraint.
+ 	 * This is 'hidden'-specific code for the template method in superclass
+	 * @param sudoku
+	 * @param constraint
+     * @return
+     */
+	@Override
+	protected BitSet collectPossibleCandidates(SolverSudoku sudoku, Constraint constraint) {
+		BitSet constraintSet = new BitSet();
+		for (Position pos : constraint.getPositions()) {
+				constraintSet.or(this.sudoku.getCurrentCandidates(pos));
+		}
+		//now we have constraintSet of all candidates in the constraint
+		return constraintSet;
+
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	protected boolean updateNext(Constraint constraint, boolean buildDerivation) {
@@ -119,10 +137,10 @@ public class HiddenHelper extends SubsetHelper {
 			boolean foundOne;
 			for (Position pos : positions) {
 				foundOne = false;
-				for (int i = 0; i < subsetCount; i++) {
-					if (pos == subsetPositions[i])
+				for (Position pSub: subsetPositions)
+					if(pos == pSub)
 						foundOne = true;
-				}
+
 				if (!foundOne) {
 					BitSet irrelevantCandidates = (BitSet) this.sudoku.getCurrentCandidates(pos).clone();
 					DerivationField field = new DerivationField(pos, new BitSet(), irrelevantCandidates);

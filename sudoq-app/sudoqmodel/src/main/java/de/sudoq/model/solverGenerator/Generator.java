@@ -54,13 +54,11 @@ public class Generator {
 	/** Methods */
 
 	/**
-	 * Erzeugt ein Sudoku entsprechend dem spezifizierten Typ und fügt dieses
-	 * zusammen mit dem spezifizierten Callback-Objekt der Warteschlage zur
-	 * Generierung von Sudokus hinzu. Zusätzlich wird dessen Schwierigkeit wie
-	 * spezifiziert gesetzt. Ist die Warteschlange leer und läuft aktuell keine
-	 * Generierung, so wird die Generierung dieses Sudokus sofort gestartet.
-	 * Andernfalls wird die Generierung nach Beendigung aller in der
-	 * Warteschlange befindlichen Sudokus gestartet.
+	 * creates a sudoku of type @param{type} and difficulty @param{complexity} and appends it
+	 * (together with the callback object) to the queue of sudokus being generated.
+	 * If the queue is empty and there is no sudoku being generated at the moment,
+	 * generation of the new sudoku beginns immediately.
+	 * Otherwise it begins after all sudokus in the queue are generated.
 	 * 
 	 * Ist das spezifizierte SudokuType-Objekt oder das GeneratorCallback-Objekt
 	 * null, oder hat das Complexity-Argument einen ungültigen Wert, so wird
@@ -179,6 +177,7 @@ public class Generator {
 	 * genrieren. Für diese ist der Algorithmus wesentlich schneller als der von
 	 * {@link SudokuGeneration}. Die Klasse implementiert das {@link Runnable}
 	 * interface und kann daher in einem eigenen Thread ausgeführt werden.
+	 * @deprecated keept until debugging complete, but not to be used
 	 */
 	private class SudokuGenerationStandardType extends SudokuGenerationTopClass {
 
@@ -219,7 +218,7 @@ public class Generator {
 			for (int x = 0; x < sudokuSizeX; x++) {
 				for (int y = 0; y < sudokuSizeY; y++) {
 					int calculatedsolution = ((y % sqrtSymbolNumber) * sqrtSymbolNumber + x + (y / sqrtSymbolNumber))
-							                  % (sqrtSymbolNumber * sqrtSymbolNumber);
+					                         % (sqrtSymbolNumber * sqrtSymbolNumber);
 					sub.addSolution(Position.get(x, y),calculatedsolution);
 				}
 			}
@@ -295,7 +294,7 @@ public class Generator {
 					freeFields.add(definedFields.remove(nr));                                                   //     set one field free
 					definedOnes++;                                                                              //     increase defined ones TODO why?
 					if (nr >= definedFields.size()) //if nr is out of bounds because of the removal, set it to 0, the next logical position. 
-						                            //otherwise nr is already at the next pos(because the original element is gone)
+					                                //otherwise nr is already at the next pos(because the original element is gone)
 						nr = 0;
 				}
 			}
@@ -368,6 +367,8 @@ public class Generator {
 
 		}
 
+
+
 		/**
 		 * Entfernt eines der definierten Felder.
 		 * 
@@ -387,10 +388,9 @@ public class Generator {
 	}
 
 	/**
-	 * Bietet die Möglichkeit Sudokus abgeleitet vom Typ TypeStandard(deprecated) zu
-	 * genrieren. Für diese ist der Algorithmus wesentlich schneller als der von
-	 * {@link SudokuGeneration}. Die Klasse implementiert das {@link Runnable}
-	 * interface und kann daher in einem eigenen Thread ausgeführt werden.
+	 * Bietet die Möglichkeit Sudokus zu genrieren.
+	 * Die Klasse implementiert das {@link Runnable} interface
+	 * und kann daher in einem eigenen Thread ausgeführt werden.
 	 */
 	private class SudokuGeneration extends SudokuGenerationTopClass {
 
@@ -430,8 +430,7 @@ public class Generator {
 
 			this.currentConstraint = sudoku.getSudokuType().buildComplexityConstraint(sudoku.getComplexity());
 
-			//füllt die noch freeFields, also noch zu belegende Felder aus dem übergebenen sudoku.
-			freeFields.addAll(getPositions(sudoku));
+			freeFields.addAll(getPositions(sudoku));//fills the currenlty empty list freefields as no field is defined=occupied
 
 		}
 
@@ -440,34 +439,40 @@ public class Generator {
 		 * gewünschten Komplexität generiert.
 		 */
 		public void run() {
+			/* 1. Finde Totalbelegung */
 			// Calculate the number of fields to be filled
+			float sAF = sudoku.getSudokuType().getStandardAllocationFactor();
+			float erg = sudokuSizeX * sudokuSizeY * sAF;
 			int fieldsByType = (int) (sudokuSizeX * sudokuSizeY * sudoku.getSudokuType().getStandardAllocationFactor()); //TODO wäre freeFields.size nicht passender?
 			int fieldsByComp = currentConstraint.getAverageFields();
 			fieldsToDefine = Math.min(fieldsByType, fieldsByComp);
 
 			//Lösung für das sudoku wird hier gespeichert werden
 			PositionMap<Integer> solution = new PositionMap<>(this.sudoku.getSudokuType().getSize());
-			
+			int iteration=0;
+			System.out.println("Fields to define: "+fieldsToDefine);
 			do {
-
+				System.out.println("Iteration: "+(iteration++)+", defined Fields: "+definedFields.size());
 				// Remove some fields, because sudoku could not be validated
-				for (int i = 0; i < 5; i++)
-					removeDefinedField();
+				removeDefinedFields(5);
 
 				// Define average number of fields
 				while (definedFields.size() < fieldsToDefine)
 					if (addDefinedField() == null) //try to add field, if null returned i.e. nospace / invalid
-						for (int j = 0; j < 5; j++)  //remove 5 fields
-							removeDefinedField();
+						removeDefinedFields(5); //remove 5 fields
 
 			}while(!solver.solveAll(false, false));
 			
 			/*we found a solution*/
 
+			/* not sure what's happening why tmp-save complexity? is it ever read? maybe in solveall?*/
+			/* maybe this is from previous debugging, wanting to see if it's invalid here already */
 			Complexity saveCompl = solver.getSudoku().getComplexity();
 			solver.getSudoku().setComplexity(Complexity.arbitrary);
 			solver.validate(solution, false);
 			solver.getSudoku().setComplexity(saveCompl);
+
+			/* We have validated */
 
 			// Create the sudoku template generated before
 			SudokuBuilder sub = new SudokuBuilder(sudoku.getSudokuType());
@@ -482,8 +487,12 @@ public class Generator {
 
 			// Fill the sudoku being generated with template solutions
 			//TODO simplify: iterate over fields/positions
-			for(Field f : sudoku)
-				f.setCurrentValue(f.getSolution(), false);
+
+			for (Position pos : getPositions(sudoku)) {
+				Field fSudoku =       sudoku.getField(pos);
+				Field fSolved = solvedSudoku.getField(pos);
+				fSudoku.setCurrentValue(fSolved.getSolution(), false);
+			}
 
 			int allocationFactor = (int)Math.pow(sudoku.getSudokuType().getNumberOfSymbols(), 2) / 20;
 			allocationFactor = Math.max(1, allocationFactor);
@@ -492,19 +501,19 @@ public class Generator {
 			while (rel != ComplexityRelation.CONSTRAINT_SATURATION) {
 				rel = solver.validate(null, false);
 
-				if (rel == ComplexityRelation.MUCH_TO_EASY) {
-					for (int i = 0; i < allocationFactor; i++)
-						removeDefinedField();
-				} else if (rel == ComplexityRelation.TO_EASY) {
-					removeDefinedField();
-				} else if (rel == ComplexityRelation.INVALID 
-						|| rel == ComplexityRelation.TO_DIFFICULT
-						|| rel == ComplexityRelation.MUCH_TO_DIFFICULT) {
-					for (int i = 0; i < allocationFactor && !freeFields.isEmpty(); i++) {
-						Position p = freeFields.remove(0);
-						sudoku.getField(p).setCurrentValue(solvedSudoku.getField(p).getSolution(), false);
-						definedFields.add(p);
-					}
+				switch(rel){
+					case MUCH_TO_EASY: removeDefinedFields(allocationFactor);
+								   break;
+					case      TO_EASY: removeDefinedFields(1);
+								   break;
+					case INVALID:  //freeFields ARE empty ?! hence infinite loop
+					case TO_DIFFICULT:
+					case MUCH_TO_DIFFICULT:
+						for (int i = 0; i < allocationFactor && !freeFields.isEmpty(); i++) {
+							Position p = freeFields.remove(0);
+							sudoku.getField(p).setCurrentValue(solvedSudoku.getField(p).getSolution(), false);
+							definedFields.add(p);
+						}
 				}
 			}
 
@@ -512,18 +521,16 @@ public class Generator {
 			SudokuBuilder suBi = new SudokuBuilder(sudoku.getSudokuType());
 
 			for(Position p : getPositions(solvedSudoku)){
-				if (solvedSudoku.getField(p) != null) {
 					int value = solvedSudoku.getField(p).getSolution();
 					suBi.addSolution(p, value);
 					if (!sudoku.getField(p).isEmpty())
 						suBi.setFixed(p);
 
-
-				}
 			}
 			Sudoku res = suBi.createSudoku();
 			res.setComplexity(sudoku.getComplexity());
 			callbackObject.generationFinished(res);
+
 		}
 
 		/**
@@ -621,8 +628,25 @@ public class Generator {
 			return p;
 		}
 
+		/**
+		 * Tries {@code numberOfFieldsToRemove} times to remove a defined field
+		 * @param numberOfFieldsToRemove number of fields to remove
+		 * @return list of removed positions
+		 * */
+		private List<Position> removeDefinedFields(int numberOfFieldsToRemove){
+			ArrayList<Position> removed = new ArrayList<>();
+			for (int i = 0; i < numberOfFieldsToRemove; i++){
+				Position p = removeDefinedField();
+				if(p != null)
+					removed.add(p);
+			}
+
+			return removed;
+		}
+
 	}
 
+	/** returns all positions of non-null Fields of sudoku */
 	public static List<Position> getPositions(Sudoku sudoku){
 		List<Position> p = new ArrayList<>();
 

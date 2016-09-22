@@ -23,7 +23,6 @@ import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType9x9;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
@@ -300,9 +299,9 @@ public class GameTests {
 		System.out.println("before while");
 		
 		int counter = 0;
-		while (GameTests.sudoku == null && counter<80) {
+		while (GameTests.sudoku == null && counter<120) {
 			try {
-				wait(100);
+				wait(1000);
 				counter++;
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -349,7 +348,7 @@ public class GameTests {
 	}
 
 	@Test
-	public void testGoToLastCorrectState() {
+	public synchronized void testGoToLastCorrectState() {
 		while (sudoku == null) {
 			try {
 				wait(100);

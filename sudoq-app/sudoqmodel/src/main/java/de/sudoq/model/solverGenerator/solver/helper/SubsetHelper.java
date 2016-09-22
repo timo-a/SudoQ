@@ -96,25 +96,15 @@ public abstract class SubsetHelper extends SolveHelper {
 		//iterate over all 'unique'-Constraints
 		for (Constraint constraint : allConstraints) {
 			if (constraint.hasUniqueBehavior()) {
-				// Save the constraint being checked for naked subsets.
-				// Combine all the candidate lists in this constraint
-				constraintSet.clear();
-				//iterate over all candidate lists and merge them
-				//merge all for HiddenHelper
-				//merge those with maxum of 'level' candidates for NakedHelper
-				for (Position pos : constraint.getPositions()) {
-					BitSet currentCandidates = this.sudoku.getCurrentCandidates(pos);
-					if (this instanceof HiddenHelper || currentCandidates.cardinality() <= this.level)
-						constraintSet.or(currentCandidates);
-				}
-				//now we have constraintSet of all candidates in the constraint
+
+				constraintSet = collectPossibleCandidates(this.sudoku, constraint);
 
 				//if we find 'level' or more candidates
 				if (constraintSet.cardinality() >= this.level) {
 					// Initialize the current set to check for naked subset by
 					// selecting the first candidates in this constraint
 
-					//fill currentSet with the first 'level' candidates in constraintSet
+					//initializeWith currentSet with the first 'level' candidates in constraintSet
 					//TODO is there a better, clearer way?
 					currentSet.clear();
 					currentCandidate = -1;
@@ -122,6 +112,12 @@ public abstract class SubsetHelper extends SolveHelper {
 						currentCandidate = constraintSet.nextSetBit(currentCandidate + 1);
 						currentSet.set(currentCandidate);
 					}
+
+					/* this should be better
+					currentSet = (BitSet) constraintSet.clone();
+					while (currentSet.cardinality() > this.level)
+						currentSet.clear(currentSet.length()-1);
+					*/
 
 					found = updateNext(constraint, buildDerivation);
 
@@ -132,9 +128,10 @@ public abstract class SubsetHelper extends SolveHelper {
 				}
 			}
 		}
-
 		return found;
 	}
+
+	protected abstract BitSet collectPossibleCandidates(SolverSudoku sudoku, Constraint constraint);
 
 	/**
 	 * Berechnet das nächste Subset des spezifizierten BitSets mit der im Konstruktor definierten Größe "level",
@@ -142,6 +139,10 @@ public abstract class SubsetHelper extends SolveHelper {
 	 * bereits entsprechend viele Kandidaten gesetzt haben. Es wird immer der hochwertigste Kandidat erhöht bis dieser
 	 * beim letzten Kandidaten angelangt ist, daraufhin wird der nächste Kandidat erhöht bis schließlich das
 	 * hochwertigste Subset berechnet wurde.
+	 *
+	 * new interpretation: if highest bit in current set can be moved to the right, do so
+	 *                     otherwise look from right to left for the first bit after(left of) a gap./fook for rightmost bit that can be moved to the right. move it to the right and set remaining bits next to it
+	 * Gospers hack is a beautiful implementation, but worthless here as it operates on (binary) numbers, which we cannot convert to/from BitSets
 	 * 
 	 * @return true, falls es noch ein Subset gibt, false falls nicht
 	 */
@@ -149,34 +150,35 @@ public abstract class SubsetHelper extends SolveHelper {
 		boolean nextSetExists = false;
 		final BitSet allCandidates = constraintSet; //rename for clarity, holds all candiates(set to 1) in the current constraint
 
+		int lastBitSet = currentSet.length() - 1;
 		// Get the last set candidate
-		int currentCandidate = currentSet.length() - 1;
 
 		// Calculate next candidate set if existing
-		int nextCandidate = currentCandidate;
-		currentCandidate  = allCandidates.nextSetBit(currentCandidate + 1);//test if there is another candidate -> we can shift
+		int nextCandidate = lastBitSet;
+		int currentCandidate  = allCandidates.nextSetBit(lastBitSet + 1);//test if there is another candidate -> we can shift
 		if (currentCandidate != -1) //if we found one
-			currentCandidate++;  //?? why increment??
+			currentCandidate++;  //increment for coming 'if' namely 'if (allCandidates.nextSetBit(nextCandidate + 1) != currentCandidate) {' left side is either -1 => no next set or currentCandidate, but we want ineq in that case , so increment it. Why not writing '-1' in the left side? because loop: the limit won't always be the last bit, it is shifted to the left.
 
-		while (!nextSetExists && nextCandidate != -1) {
+		while (!nextSetExists && nextCandidate != -1) {//initially true iff currentSet not empty
 			// If the next candidate can be increased without interfering with
 			// the next one, do it
 			if (allCandidates.nextSetBit(nextCandidate + 1) != currentCandidate) {
 				nextSetExists = true;
 				currentSet.clear(nextCandidate);
 				currentCandidate = nextCandidate;
-				while (currentSet.cardinality() < this.level) {
+				while (currentSet.cardinality() < this.level) {//fill remaining
 					currentCandidate = allCandidates.nextSetBit(currentCandidate + 1);
 					currentSet.set(currentCandidate);
-				}
-			}
+			}	}
 
-			// If no set was found, get the next candidate to manipulate it
+
+			// If no set was found, get the next highest candidate to manipulate it
+			// save nextCandidate in currentCandidate and have the new nextCandidate point to the next set bit below where it's currently pointing at; then delete old one
 			if (!nextSetExists) {
 				currentCandidate = nextCandidate;
-				nextCandidate = -1;
-				while (currentSet.nextSetBit(nextCandidate + 1) < currentCandidate) {
-					nextCandidate = currentSet.nextSetBit(nextCandidate + 1);
+				nextCandidate = -1;                                                   //
+				while (currentSet.nextSetBit(nextCandidate + 1) < currentCandidate) { // == nextCandidate = currentSet.previousSetBit(nextCandidate)
+					nextCandidate = currentSet.nextSetBit(nextCandidate + 1);         // but we don't have the api for it
 				}
 				currentSet.clear(currentCandidate);
 			}
@@ -185,13 +187,100 @@ public abstract class SubsetHelper extends SolveHelper {
 		return nextSetExists;
 	}
 
+
+	/* these are all untested :-( but they are better to understand than current getNextSubset TODO substitute current one for these  */
+
+	protected boolean getNextSubset2() {
+		BitSet current = contract(currentSet, constraintSet);
+
+		/* are all true bits at the end? == are all k bits at the end true?*/
+		boolean lastElement = true;
+		for(int i = 0; i < constraintSet.cardinality(); i++)
+			lastElement &= current.get(constraintSet.cardinality()-i);
+
+		if(lastElement)
+			return false; // we're done
+		else {
+			//advance to net combination, project back to our candidates
+			BitSet nextOne = step(current, constraintSet.cardinality(), currentSet.cardinality());
+			currentSet = inflate(nextOne, constraintSet);
+			return true;
+		}
+	}
+
+
+	/**
+	 * Provided a combination and values n,k calculate the next step in a loop of 'n choose k' combinations.
+	 *
+	 * @param bitSet
+	 * @param n supposed length of bitSet i.e. nr of bits to choose from
+	 * @param k size of the subsets
+     * @return
+     */
+	private static BitSet step(BitSet bitSet, int n, int k){
+		//idea: looking from right if there is a '1' that can be moved to the right, do so
+		//      all other '1' right from it(that didn't have a '0' to their right) are lined up directly to the right of it
+		//e.g. |11  11| -> |1 111 |
+        int i;
+		for (i= n-1; i>0; i--){
+
+			if(bitSet.get(i))
+				bitSet.clear(i);
+			else
+				if(bitSet.get(i-1)){
+					bitSet.clear(i-1);
+					break;
+				}
+		}
+		for(;bitSet.cardinality() < k;i++)
+			bitSet.set(i);
+
+		return bitSet;
+	}
+
+	public static BitSet contract(BitSet sparseSet, BitSet pattern){
+
+		BitSet denseSet = new BitSet();
+
+		//loop over true bits of pattern as described in JavaDoc of 'nextSetBit'
+		int denseIndex;
+		int sparseIndex;
+		for (sparseIndex = pattern.nextSetBit(0), denseIndex=0;
+			 sparseIndex >= 0;
+			 sparseIndex = pattern.nextSetBit(sparseIndex+1), denseIndex++) {
+
+			denseSet.set(denseIndex, sparseSet.get(sparseIndex));
+
+			if (sparseIndex == Integer.MAX_VALUE) break; // or (i+1) would overflow
+
+		}
+		return denseSet;
+	}
+
+	public static BitSet inflate(BitSet denseSet, BitSet pattern){
+		BitSet sparseSet = new BitSet();
+
+		int denseIndex;
+		int sparseIndex;
+		for (sparseIndex = pattern.nextSetBit(0), denseIndex=0;
+			 sparseIndex >= 0;
+			 sparseIndex = pattern.nextSetBit(sparseIndex+1), denseIndex++) {
+
+			sparseSet.set(sparseIndex, denseSet.get(denseIndex));
+
+			if (sparseIndex == Integer.MAX_VALUE) break; // or (i+1) would overflow
+
+		}
+		return sparseSet;
+	}
+
 	/**
 	 * Sucht das nächste Subset der im Konstruktor definierten Größe {@code level} im spezifizierten {@link Constraint}
 	 * mit dem spezifizierten Kandidaten-Set {@code set}, sowie dem aktuellen Subset. Es werden alle mittels der
-	 * {@link getNextSubset}-Methode ab dem spezifizierten Subset ermittelten Kandidatenlisten überprüft.
+	 * {@link this.getNextSubset}-Methode ab dem spezifizierten Subset ermittelten Kandidatenlisten überprüft.
 	 * 
 	 * @param constraint
-	 *            Das Constraint, in dem ein NakedSubset gesucht werden soll
+	 *            Der Constraint, in dem ein NakedSubset gesucht werden soll
 	 * @param buildDerivation
 	 *            Gibt an, ob eine Herleitung für ein gefundenes Subset erstellt werden soll, welche über die
 	 *            getDerivation Methode abgerufen werden kann

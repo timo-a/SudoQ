@@ -13,17 +13,13 @@ import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraintTests;
-import de.sudoq.model.sudoku.sudokuTypes.SquigglyBSudokuType9x9;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.sudoku.sudokuTypes.TypeBasic;
-import de.sudoq.model.sudoku.sudokuTypes.TypeSquiggly;
 
 public class SquigglyBSudokuTest extends SquigglySudokuTypesTest {
 
-	TypeBasic squigglyB = new SquigglyBSudokuType9x9();
+	SudokuType squigglyB = TypeBuilder.getType(SudokuTypes.squigglyb);
 
 	
-	public void printsession(TypeSquiggly s) {
+	public void printsession(SudokuType s) {
 		for (Constraint c : s) {
 			System.out.println(c);
 			for (Position p : c)
@@ -33,14 +29,14 @@ public class SquigglyBSudokuTest extends SquigglySudokuTypesTest {
 
 	@Override
 	public void initialiser() {
-		SquigglyBSudokuType9x9 sq = new SquigglyBSudokuType9x9();
+		SudokuType sq = TypeBuilder.getType(SudokuTypes.squigglyb);
 		printsession(sq);
 		ConstraintTest(sq);
 	}
 
 	@Override
 	protected void constraintsA(Constraint c) {
-		List<Position> m = new ArrayList<Position>();
+		List<Position> m = new ArrayList<>();
 		m.add(Position.get(0, 0));
 		m.add(Position.get(1, 0));
 		m.add(Position.get(2, 0));
@@ -56,7 +52,7 @@ public class SquigglyBSudokuTest extends SquigglySudokuTypesTest {
 
 	@Override
 	protected void constraintsB(Constraint c) {
-		List<Position> m = new ArrayList<Position>();
+		List<Position> m = new ArrayList<>();
 		m.add(Position.get(5, 0));
 		m.add(Position.get(6, 0));
 		m.add(Position.get(7, 0));
@@ -72,7 +68,7 @@ public class SquigglyBSudokuTest extends SquigglySudokuTypesTest {
 
 	@Override
 	protected void constraintsC(Constraint c) {
-		List<Position> m = new ArrayList<Position>();
+		List<Position> m = new ArrayList<>();
 		m.add(Position.get(2, 1));
 		m.add(Position.get(3, 1));
 		m.add(Position.get(4, 1));
@@ -89,7 +85,7 @@ public class SquigglyBSudokuTest extends SquigglySudokuTypesTest {
 
 	@Override
 	protected void constraintsD(Constraint c) {
-		List<Position> m = new ArrayList<Position>();
+		List<Position> m = new ArrayList<>();
 		m.add(Position.get(6, 1));
 		m.add(Position.get(6, 2));
 		m.add(Position.get(7, 2));
@@ -105,7 +101,7 @@ public class SquigglyBSudokuTest extends SquigglySudokuTypesTest {
 
 	@Override
 	protected void constraintsE(Constraint c) {
-		List<Position> m = new ArrayList<Position>();
+		List<Position> m = new ArrayList<>();
 		m.add(Position.get(3, 2));
 		m.add(Position.get(1, 3));
 		m.add(Position.get(2, 3));
@@ -121,7 +117,7 @@ public class SquigglyBSudokuTest extends SquigglySudokuTypesTest {
 
 	@Override
 	protected void constraintsF(Constraint c) {
-		List<Position> m = new ArrayList<Position>();
+		List<Position> m = new ArrayList<>();
 		m.add(Position.get(4, 2));
 		m.add(Position.get(4, 3));
 		m.add(Position.get(2, 4));
@@ -137,7 +133,7 @@ public class SquigglyBSudokuTest extends SquigglySudokuTypesTest {
 
 	@Override
 	protected void constraintsG(Constraint c) {
-		List<Position> m = new ArrayList<Position>();
+		List<Position> m = new ArrayList<>();
 		m.add(Position.get(0, 4));
 		m.add(Position.get(0, 5));
 		m.add(Position.get(0, 6));
@@ -153,7 +149,7 @@ public class SquigglyBSudokuTest extends SquigglySudokuTypesTest {
 
 	@Override
 	protected void constraintsH(Constraint c) {
-		List<Position> m = new ArrayList<Position>();
+		List<Position> m = new ArrayList<>();
 		m.add(Position.get(2, 5));
 		m.add(Position.get(3, 5));
 		m.add(Position.get(3, 6));
@@ -169,7 +165,7 @@ public class SquigglyBSudokuTest extends SquigglySudokuTypesTest {
 
 	@Override
 	protected void constraintsI(Constraint c) {
-		List<Position> m = new ArrayList<Position>();
+		List<Position> m = new ArrayList<>();
 		m.add(Position.get(8, 5));
 		m.add(Position.get(8, 6));
 		m.add(Position.get(7, 7));
@@ -214,7 +210,7 @@ public class SquigglyBSudokuTest extends SquigglySudokuTypesTest {
 
 	@Test
 	public void getAllocationFactorTest() {
-		TypeBasic squigglyB = new SquigglyBSudokuType9x9();
+		SudokuType squigglyB = TypeBuilder.getType(SudokuTypes.squigglyb);
 		assertTrue(squigglyB.getStandardAllocationFactor() == 0.20f);
 	}
 

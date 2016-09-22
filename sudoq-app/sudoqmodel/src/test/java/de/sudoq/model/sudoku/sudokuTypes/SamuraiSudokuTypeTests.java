@@ -6,19 +6,15 @@ import java.util.BitSet;
 
 import org.junit.Test;
 
-
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraintTests;
-import de.sudoq.model.sudoku.sudokuTypes.SamuraiSudokuType;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.sudoku.sudokuTypes.TypeBasic;
 
 public class SamuraiSudokuTypeTests {
 
-	TypeBasic samurai = new SamuraiSudokuType();
+	SudokuType samurai = TypeBuilder.getType(SudokuTypes.samurai);
 
 	@Test
 	public void constraintsTest() {
@@ -137,7 +133,7 @@ public class SamuraiSudokuTypeTests {
 
 	@Test
 	public void buildComplexityConstraintTest() {
-		TypeBasic samurai = new SamuraiSudokuType();
+		SudokuType samurai = TypeBuilder.getType(SudokuTypes.samurai);
 
 		ComplexityConstraint comCo = samurai.buildComplexityConstraint(Complexity.easy);
 		ComplexityConstraintTests.returnsValues(comCo, Complexity.easy, 70, 1000, 1500, 2);

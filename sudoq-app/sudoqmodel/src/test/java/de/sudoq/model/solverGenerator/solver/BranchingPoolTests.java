@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import de.sudoq.model.solverGenerator.solver.BranchingPool;
 import de.sudoq.model.sudoku.Position;
 
 public class BranchingPoolTests {
@@ -17,9 +16,9 @@ public class BranchingPoolTests {
 		// new branchings to be initialized
 		pool.getBranching(Position.get(1, 5), 4);
 
-		pool.returnAll();
+		pool.recycleAllBranchings();
 		// return another branching
-		pool.returnBranching();
+		pool.recycleLastBranching();
 
 		// should throw exception
 		pool.getBranching(null, 5);

@@ -143,6 +143,16 @@ public class Position implements Xmlable {
 	}
 
 	/**
+	 * returns a distance vector by subtracting the parameter. (both objects remain unchanged)
+	 * @param p a position to substract from this position
+	 * @return distance between this and other as position(this-p)
+     */
+	public Position distance(Position p){
+		return new Position(x-p.getX(), y-p.getY());
+	}
+
+
+	/**
 	 * Gibt eine String-Repräsentation dieser Position zurück.
 	 */
 	public String toString() {
@@ -176,6 +186,7 @@ public class Position implements Xmlable {
 	}
 
 	public static Position fillFromXmlStatic(XmlTree xmlTreeRepresentation) {
-		return get(Integer.parseInt(xmlTreeRepresentation.getAttributeValue("x")), Integer.parseInt(xmlTreeRepresentation.getAttributeValue("y")));
+		return get(Integer.parseInt(xmlTreeRepresentation.getAttributeValue("x"))
+		          ,Integer.parseInt(xmlTreeRepresentation.getAttributeValue("y")));
 	}
 }

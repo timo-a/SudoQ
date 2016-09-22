@@ -62,7 +62,7 @@ public final class FileManager {
 			else
 			                err += " s can't write";
 
-			throw new IllegalArgumentException("unvalid directories:"+err);
+			throw new IllegalArgumentException("invalid directories:"+err);
 		}
 		profiles = p;
 		sudokus = s;

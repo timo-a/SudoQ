@@ -4,8 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import de.sudoq.model.sudoku.ConstraintType;
-
 public class ConstraintTypeTests {
 
 	@Test

@@ -14,13 +14,10 @@ import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.UniqueConstraintBehavior;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.sudoku.sudokuTypes.TypeBasic;
-import de.sudoq.model.sudoku.sudokuTypes.TypeUniversal;
 
 public class TypeUniversalTests {
 
-	PositionMap<Integer> map = new PositionMap<Integer>(Position.get(9, 9));
+	/*PositionMap<Integer> map = new PositionMap<Integer>(Position.get(9, 9));
 
 	int[] su1 = { 9, 5, 8, 3, 1, 2, 7, 6, 4, 4, 6, 1, 5, 7, 9, 8, 2, 3, 3, 7, 2, 4, 6, 8, 9, 5, 1, 8, 9, 6, 1, 2, 3, 5,
 			4, 7, 1, 4, 3, 7, 9, 5, 2, 8, 6, 5, 2, 7, 6, 8, 4, 3, 1, 9, 7, 8, 5, 9, 4, 1, 6, 3, 2, 2, 1, 9, 8, 3, 6, 4,
@@ -140,6 +137,6 @@ class TestUniSudoku extends TypeUniversal {
 	@Override
 	public float getStandardAllocationFactor() {
 		return 0;
-	}
+	}*/
 
 }

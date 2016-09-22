@@ -1,0 +1,1462 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE sudokutype SYSTEM "./sudokutype.dtd">
+<sudokutype typename="4" numberOfSymbols="9" standardAllocationFactor="0.05">
+<size x="21" y="21"></size>
+<blockSize x="3" y="3"></blockSize>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 0" type="0">
+<position x="0" y="0"></position>
+<position x="1" y="0"></position>
+<position x="2" y="0"></position>
+<position x="3" y="0"></position>
+<position x="4" y="0"></position>
+<position x="5" y="0"></position>
+<position x="6" y="0"></position>
+<position x="7" y="0"></position>
+<position x="8" y="0"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 1" type="0">
+<position x="0" y="1"></position>
+<position x="1" y="1"></position>
+<position x="2" y="1"></position>
+<position x="3" y="1"></position>
+<position x="4" y="1"></position>
+<position x="5" y="1"></position>
+<position x="6" y="1"></position>
+<position x="7" y="1"></position>
+<position x="8" y="1"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 2" type="0">
+<position x="0" y="2"></position>
+<position x="1" y="2"></position>
+<position x="2" y="2"></position>
+<position x="3" y="2"></position>
+<position x="4" y="2"></position>
+<position x="5" y="2"></position>
+<position x="6" y="2"></position>
+<position x="7" y="2"></position>
+<position x="8" y="2"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 3" type="0">
+<position x="0" y="3"></position>
+<position x="1" y="3"></position>
+<position x="2" y="3"></position>
+<position x="3" y="3"></position>
+<position x="4" y="3"></position>
+<position x="5" y="3"></position>
+<position x="6" y="3"></position>
+<position x="7" y="3"></position>
+<position x="8" y="3"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 4" type="0">
+<position x="0" y="4"></position>
+<position x="1" y="4"></position>
+<position x="2" y="4"></position>
+<position x="3" y="4"></position>
+<position x="4" y="4"></position>
+<position x="5" y="4"></position>
+<position x="6" y="4"></position>
+<position x="7" y="4"></position>
+<position x="8" y="4"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 5" type="0">
+<position x="0" y="5"></position>
+<position x="1" y="5"></position>
+<position x="2" y="5"></position>
+<position x="3" y="5"></position>
+<position x="4" y="5"></position>
+<position x="5" y="5"></position>
+<position x="6" y="5"></position>
+<position x="7" y="5"></position>
+<position x="8" y="5"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 6" type="0">
+<position x="0" y="6"></position>
+<position x="1" y="6"></position>
+<position x="2" y="6"></position>
+<position x="3" y="6"></position>
+<position x="4" y="6"></position>
+<position x="5" y="6"></position>
+<position x="6" y="6"></position>
+<position x="7" y="6"></position>
+<position x="8" y="6"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 7" type="0">
+<position x="0" y="7"></position>
+<position x="1" y="7"></position>
+<position x="2" y="7"></position>
+<position x="3" y="7"></position>
+<position x="4" y="7"></position>
+<position x="5" y="7"></position>
+<position x="6" y="7"></position>
+<position x="7" y="7"></position>
+<position x="8" y="7"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 8" type="0">
+<position x="0" y="8"></position>
+<position x="1" y="8"></position>
+<position x="2" y="8"></position>
+<position x="3" y="8"></position>
+<position x="4" y="8"></position>
+<position x="5" y="8"></position>
+<position x="6" y="8"></position>
+<position x="7" y="8"></position>
+<position x="8" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 9" type="0">
+<position x="12" y="0"></position>
+<position x="13" y="0"></position>
+<position x="14" y="0"></position>
+<position x="15" y="0"></position>
+<position x="16" y="0"></position>
+<position x="17" y="0"></position>
+<position x="18" y="0"></position>
+<position x="19" y="0"></position>
+<position x="20" y="0"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 10" type="0">
+<position x="12" y="1"></position>
+<position x="13" y="1"></position>
+<position x="14" y="1"></position>
+<position x="15" y="1"></position>
+<position x="16" y="1"></position>
+<position x="17" y="1"></position>
+<position x="18" y="1"></position>
+<position x="19" y="1"></position>
+<position x="20" y="1"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 11" type="0">
+<position x="12" y="2"></position>
+<position x="13" y="2"></position>
+<position x="14" y="2"></position>
+<position x="15" y="2"></position>
+<position x="16" y="2"></position>
+<position x="17" y="2"></position>
+<position x="18" y="2"></position>
+<position x="19" y="2"></position>
+<position x="20" y="2"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 12" type="0">
+<position x="12" y="3"></position>
+<position x="13" y="3"></position>
+<position x="14" y="3"></position>
+<position x="15" y="3"></position>
+<position x="16" y="3"></position>
+<position x="17" y="3"></position>
+<position x="18" y="3"></position>
+<position x="19" y="3"></position>
+<position x="20" y="3"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 13" type="0">
+<position x="12" y="4"></position>
+<position x="13" y="4"></position>
+<position x="14" y="4"></position>
+<position x="15" y="4"></position>
+<position x="16" y="4"></position>
+<position x="17" y="4"></position>
+<position x="18" y="4"></position>
+<position x="19" y="4"></position>
+<position x="20" y="4"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 14" type="0">
+<position x="12" y="5"></position>
+<position x="13" y="5"></position>
+<position x="14" y="5"></position>
+<position x="15" y="5"></position>
+<position x="16" y="5"></position>
+<position x="17" y="5"></position>
+<position x="18" y="5"></position>
+<position x="19" y="5"></position>
+<position x="20" y="5"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 15" type="0">
+<position x="12" y="6"></position>
+<position x="13" y="6"></position>
+<position x="14" y="6"></position>
+<position x="15" y="6"></position>
+<position x="16" y="6"></position>
+<position x="17" y="6"></position>
+<position x="18" y="6"></position>
+<position x="19" y="6"></position>
+<position x="20" y="6"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 16" type="0">
+<position x="12" y="7"></position>
+<position x="13" y="7"></position>
+<position x="14" y="7"></position>
+<position x="15" y="7"></position>
+<position x="16" y="7"></position>
+<position x="17" y="7"></position>
+<position x="18" y="7"></position>
+<position x="19" y="7"></position>
+<position x="20" y="7"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 17" type="0">
+<position x="12" y="8"></position>
+<position x="13" y="8"></position>
+<position x="14" y="8"></position>
+<position x="15" y="8"></position>
+<position x="16" y="8"></position>
+<position x="17" y="8"></position>
+<position x="18" y="8"></position>
+<position x="19" y="8"></position>
+<position x="20" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 18" type="0">
+<position x="0" y="12"></position>
+<position x="1" y="12"></position>
+<position x="2" y="12"></position>
+<position x="3" y="12"></position>
+<position x="4" y="12"></position>
+<position x="5" y="12"></position>
+<position x="6" y="12"></position>
+<position x="7" y="12"></position>
+<position x="8" y="12"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 19" type="0">
+<position x="0" y="13"></position>
+<position x="1" y="13"></position>
+<position x="2" y="13"></position>
+<position x="3" y="13"></position>
+<position x="4" y="13"></position>
+<position x="5" y="13"></position>
+<position x="6" y="13"></position>
+<position x="7" y="13"></position>
+<position x="8" y="13"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 20" type="0">
+<position x="0" y="14"></position>
+<position x="1" y="14"></position>
+<position x="2" y="14"></position>
+<position x="3" y="14"></position>
+<position x="4" y="14"></position>
+<position x="5" y="14"></position>
+<position x="6" y="14"></position>
+<position x="7" y="14"></position>
+<position x="8" y="14"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 21" type="0">
+<position x="0" y="15"></position>
+<position x="1" y="15"></position>
+<position x="2" y="15"></position>
+<position x="3" y="15"></position>
+<position x="4" y="15"></position>
+<position x="5" y="15"></position>
+<position x="6" y="15"></position>
+<position x="7" y="15"></position>
+<position x="8" y="15"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 22" type="0">
+<position x="0" y="16"></position>
+<position x="1" y="16"></position>
+<position x="2" y="16"></position>
+<position x="3" y="16"></position>
+<position x="4" y="16"></position>
+<position x="5" y="16"></position>
+<position x="6" y="16"></position>
+<position x="7" y="16"></position>
+<position x="8" y="16"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 23" type="0">
+<position x="0" y="17"></position>
+<position x="1" y="17"></position>
+<position x="2" y="17"></position>
+<position x="3" y="17"></position>
+<position x="4" y="17"></position>
+<position x="5" y="17"></position>
+<position x="6" y="17"></position>
+<position x="7" y="17"></position>
+<position x="8" y="17"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 24" type="0">
+<position x="0" y="18"></position>
+<position x="1" y="18"></position>
+<position x="2" y="18"></position>
+<position x="3" y="18"></position>
+<position x="4" y="18"></position>
+<position x="5" y="18"></position>
+<position x="6" y="18"></position>
+<position x="7" y="18"></position>
+<position x="8" y="18"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 25" type="0">
+<position x="0" y="19"></position>
+<position x="1" y="19"></position>
+<position x="2" y="19"></position>
+<position x="3" y="19"></position>
+<position x="4" y="19"></position>
+<position x="5" y="19"></position>
+<position x="6" y="19"></position>
+<position x="7" y="19"></position>
+<position x="8" y="19"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 26" type="0">
+<position x="0" y="20"></position>
+<position x="1" y="20"></position>
+<position x="2" y="20"></position>
+<position x="3" y="20"></position>
+<position x="4" y="20"></position>
+<position x="5" y="20"></position>
+<position x="6" y="20"></position>
+<position x="7" y="20"></position>
+<position x="8" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 27" type="0">
+<position x="12" y="12"></position>
+<position x="13" y="12"></position>
+<position x="14" y="12"></position>
+<position x="15" y="12"></position>
+<position x="16" y="12"></position>
+<position x="17" y="12"></position>
+<position x="18" y="12"></position>
+<position x="19" y="12"></position>
+<position x="20" y="12"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 28" type="0">
+<position x="12" y="13"></position>
+<position x="13" y="13"></position>
+<position x="14" y="13"></position>
+<position x="15" y="13"></position>
+<position x="16" y="13"></position>
+<position x="17" y="13"></position>
+<position x="18" y="13"></position>
+<position x="19" y="13"></position>
+<position x="20" y="13"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 29" type="0">
+<position x="12" y="14"></position>
+<position x="13" y="14"></position>
+<position x="14" y="14"></position>
+<position x="15" y="14"></position>
+<position x="16" y="14"></position>
+<position x="17" y="14"></position>
+<position x="18" y="14"></position>
+<position x="19" y="14"></position>
+<position x="20" y="14"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 30" type="0">
+<position x="12" y="15"></position>
+<position x="13" y="15"></position>
+<position x="14" y="15"></position>
+<position x="15" y="15"></position>
+<position x="16" y="15"></position>
+<position x="17" y="15"></position>
+<position x="18" y="15"></position>
+<position x="19" y="15"></position>
+<position x="20" y="15"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 31" type="0">
+<position x="12" y="16"></position>
+<position x="13" y="16"></position>
+<position x="14" y="16"></position>
+<position x="15" y="16"></position>
+<position x="16" y="16"></position>
+<position x="17" y="16"></position>
+<position x="18" y="16"></position>
+<position x="19" y="16"></position>
+<position x="20" y="16"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 32" type="0">
+<position x="12" y="17"></position>
+<position x="13" y="17"></position>
+<position x="14" y="17"></position>
+<position x="15" y="17"></position>
+<position x="16" y="17"></position>
+<position x="17" y="17"></position>
+<position x="18" y="17"></position>
+<position x="19" y="17"></position>
+<position x="20" y="17"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 33" type="0">
+<position x="12" y="18"></position>
+<position x="13" y="18"></position>
+<position x="14" y="18"></position>
+<position x="15" y="18"></position>
+<position x="16" y="18"></position>
+<position x="17" y="18"></position>
+<position x="18" y="18"></position>
+<position x="19" y="18"></position>
+<position x="20" y="18"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 34" type="0">
+<position x="12" y="19"></position>
+<position x="13" y="19"></position>
+<position x="14" y="19"></position>
+<position x="15" y="19"></position>
+<position x="16" y="19"></position>
+<position x="17" y="19"></position>
+<position x="18" y="19"></position>
+<position x="19" y="19"></position>
+<position x="20" y="19"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 35" type="0">
+<position x="12" y="20"></position>
+<position x="13" y="20"></position>
+<position x="14" y="20"></position>
+<position x="15" y="20"></position>
+<position x="16" y="20"></position>
+<position x="17" y="20"></position>
+<position x="18" y="20"></position>
+<position x="19" y="20"></position>
+<position x="20" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 36" type="0">
+<position x="6" y="6"></position>
+<position x="7" y="6"></position>
+<position x="8" y="6"></position>
+<position x="9" y="6"></position>
+<position x="10" y="6"></position>
+<position x="11" y="6"></position>
+<position x="12" y="6"></position>
+<position x="13" y="6"></position>
+<position x="14" y="6"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 37" type="0">
+<position x="6" y="7"></position>
+<position x="7" y="7"></position>
+<position x="8" y="7"></position>
+<position x="9" y="7"></position>
+<position x="10" y="7"></position>
+<position x="11" y="7"></position>
+<position x="12" y="7"></position>
+<position x="13" y="7"></position>
+<position x="14" y="7"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 38" type="0">
+<position x="6" y="8"></position>
+<position x="7" y="8"></position>
+<position x="8" y="8"></position>
+<position x="9" y="8"></position>
+<position x="10" y="8"></position>
+<position x="11" y="8"></position>
+<position x="12" y="8"></position>
+<position x="13" y="8"></position>
+<position x="14" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 39" type="0">
+<position x="6" y="9"></position>
+<position x="7" y="9"></position>
+<position x="8" y="9"></position>
+<position x="9" y="9"></position>
+<position x="10" y="9"></position>
+<position x="11" y="9"></position>
+<position x="12" y="9"></position>
+<position x="13" y="9"></position>
+<position x="14" y="9"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 40" type="0">
+<position x="6" y="10"></position>
+<position x="7" y="10"></position>
+<position x="8" y="10"></position>
+<position x="9" y="10"></position>
+<position x="10" y="10"></position>
+<position x="11" y="10"></position>
+<position x="12" y="10"></position>
+<position x="13" y="10"></position>
+<position x="14" y="10"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 41" type="0">
+<position x="6" y="11"></position>
+<position x="7" y="11"></position>
+<position x="8" y="11"></position>
+<position x="9" y="11"></position>
+<position x="10" y="11"></position>
+<position x="11" y="11"></position>
+<position x="12" y="11"></position>
+<position x="13" y="11"></position>
+<position x="14" y="11"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 42" type="0">
+<position x="6" y="12"></position>
+<position x="7" y="12"></position>
+<position x="8" y="12"></position>
+<position x="9" y="12"></position>
+<position x="10" y="12"></position>
+<position x="11" y="12"></position>
+<position x="12" y="12"></position>
+<position x="13" y="12"></position>
+<position x="14" y="12"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 43" type="0">
+<position x="6" y="13"></position>
+<position x="7" y="13"></position>
+<position x="8" y="13"></position>
+<position x="9" y="13"></position>
+<position x="10" y="13"></position>
+<position x="11" y="13"></position>
+<position x="12" y="13"></position>
+<position x="13" y="13"></position>
+<position x="14" y="13"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 44" type="0">
+<position x="6" y="14"></position>
+<position x="7" y="14"></position>
+<position x="8" y="14"></position>
+<position x="9" y="14"></position>
+<position x="10" y="14"></position>
+<position x="11" y="14"></position>
+<position x="12" y="14"></position>
+<position x="13" y="14"></position>
+<position x="14" y="14"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 0" type="0">
+<position x="0" y="0"></position>
+<position x="0" y="1"></position>
+<position x="0" y="2"></position>
+<position x="0" y="3"></position>
+<position x="0" y="4"></position>
+<position x="0" y="5"></position>
+<position x="0" y="6"></position>
+<position x="0" y="7"></position>
+<position x="0" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 1" type="0">
+<position x="1" y="0"></position>
+<position x="1" y="1"></position>
+<position x="1" y="2"></position>
+<position x="1" y="3"></position>
+<position x="1" y="4"></position>
+<position x="1" y="5"></position>
+<position x="1" y="6"></position>
+<position x="1" y="7"></position>
+<position x="1" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 2" type="0">
+<position x="2" y="0"></position>
+<position x="2" y="1"></position>
+<position x="2" y="2"></position>
+<position x="2" y="3"></position>
+<position x="2" y="4"></position>
+<position x="2" y="5"></position>
+<position x="2" y="6"></position>
+<position x="2" y="7"></position>
+<position x="2" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 3" type="0">
+<position x="3" y="0"></position>
+<position x="3" y="1"></position>
+<position x="3" y="2"></position>
+<position x="3" y="3"></position>
+<position x="3" y="4"></position>
+<position x="3" y="5"></position>
+<position x="3" y="6"></position>
+<position x="3" y="7"></position>
+<position x="3" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 4" type="0">
+<position x="4" y="0"></position>
+<position x="4" y="1"></position>
+<position x="4" y="2"></position>
+<position x="4" y="3"></position>
+<position x="4" y="4"></position>
+<position x="4" y="5"></position>
+<position x="4" y="6"></position>
+<position x="4" y="7"></position>
+<position x="4" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 5" type="0">
+<position x="5" y="0"></position>
+<position x="5" y="1"></position>
+<position x="5" y="2"></position>
+<position x="5" y="3"></position>
+<position x="5" y="4"></position>
+<position x="5" y="5"></position>
+<position x="5" y="6"></position>
+<position x="5" y="7"></position>
+<position x="5" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 6" type="0">
+<position x="6" y="0"></position>
+<position x="6" y="1"></position>
+<position x="6" y="2"></position>
+<position x="6" y="3"></position>
+<position x="6" y="4"></position>
+<position x="6" y="5"></position>
+<position x="6" y="6"></position>
+<position x="6" y="7"></position>
+<position x="6" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 7" type="0">
+<position x="7" y="0"></position>
+<position x="7" y="1"></position>
+<position x="7" y="2"></position>
+<position x="7" y="3"></position>
+<position x="7" y="4"></position>
+<position x="7" y="5"></position>
+<position x="7" y="6"></position>
+<position x="7" y="7"></position>
+<position x="7" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 8" type="0">
+<position x="8" y="0"></position>
+<position x="8" y="1"></position>
+<position x="8" y="2"></position>
+<position x="8" y="3"></position>
+<position x="8" y="4"></position>
+<position x="8" y="5"></position>
+<position x="8" y="6"></position>
+<position x="8" y="7"></position>
+<position x="8" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 9" type="0">
+<position x="12" y="0"></position>
+<position x="12" y="1"></position>
+<position x="12" y="2"></position>
+<position x="12" y="3"></position>
+<position x="12" y="4"></position>
+<position x="12" y="5"></position>
+<position x="12" y="6"></position>
+<position x="12" y="7"></position>
+<position x="12" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 10" type="0">
+<position x="13" y="0"></position>
+<position x="13" y="1"></position>
+<position x="13" y="2"></position>
+<position x="13" y="3"></position>
+<position x="13" y="4"></position>
+<position x="13" y="5"></position>
+<position x="13" y="6"></position>
+<position x="13" y="7"></position>
+<position x="13" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 11" type="0">
+<position x="14" y="0"></position>
+<position x="14" y="1"></position>
+<position x="14" y="2"></position>
+<position x="14" y="3"></position>
+<position x="14" y="4"></position>
+<position x="14" y="5"></position>
+<position x="14" y="6"></position>
+<position x="14" y="7"></position>
+<position x="14" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 12" type="0">
+<position x="15" y="0"></position>
+<position x="15" y="1"></position>
+<position x="15" y="2"></position>
+<position x="15" y="3"></position>
+<position x="15" y="4"></position>
+<position x="15" y="5"></position>
+<position x="15" y="6"></position>
+<position x="15" y="7"></position>
+<position x="15" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 13" type="0">
+<position x="16" y="0"></position>
+<position x="16" y="1"></position>
+<position x="16" y="2"></position>
+<position x="16" y="3"></position>
+<position x="16" y="4"></position>
+<position x="16" y="5"></position>
+<position x="16" y="6"></position>
+<position x="16" y="7"></position>
+<position x="16" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 14" type="0">
+<position x="17" y="0"></position>
+<position x="17" y="1"></position>
+<position x="17" y="2"></position>
+<position x="17" y="3"></position>
+<position x="17" y="4"></position>
+<position x="17" y="5"></position>
+<position x="17" y="6"></position>
+<position x="17" y="7"></position>
+<position x="17" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 15" type="0">
+<position x="18" y="0"></position>
+<position x="18" y="1"></position>
+<position x="18" y="2"></position>
+<position x="18" y="3"></position>
+<position x="18" y="4"></position>
+<position x="18" y="5"></position>
+<position x="18" y="6"></position>
+<position x="18" y="7"></position>
+<position x="18" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 16" type="0">
+<position x="19" y="0"></position>
+<position x="19" y="1"></position>
+<position x="19" y="2"></position>
+<position x="19" y="3"></position>
+<position x="19" y="4"></position>
+<position x="19" y="5"></position>
+<position x="19" y="6"></position>
+<position x="19" y="7"></position>
+<position x="19" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 17" type="0">
+<position x="20" y="0"></position>
+<position x="20" y="1"></position>
+<position x="20" y="2"></position>
+<position x="20" y="3"></position>
+<position x="20" y="4"></position>
+<position x="20" y="5"></position>
+<position x="20" y="6"></position>
+<position x="20" y="7"></position>
+<position x="20" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 18" type="0">
+<position x="0" y="12"></position>
+<position x="0" y="13"></position>
+<position x="0" y="14"></position>
+<position x="0" y="15"></position>
+<position x="0" y="16"></position>
+<position x="0" y="17"></position>
+<position x="0" y="18"></position>
+<position x="0" y="19"></position>
+<position x="0" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 19" type="0">
+<position x="1" y="12"></position>
+<position x="1" y="13"></position>
+<position x="1" y="14"></position>
+<position x="1" y="15"></position>
+<position x="1" y="16"></position>
+<position x="1" y="17"></position>
+<position x="1" y="18"></position>
+<position x="1" y="19"></position>
+<position x="1" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 20" type="0">
+<position x="2" y="12"></position>
+<position x="2" y="13"></position>
+<position x="2" y="14"></position>
+<position x="2" y="15"></position>
+<position x="2" y="16"></position>
+<position x="2" y="17"></position>
+<position x="2" y="18"></position>
+<position x="2" y="19"></position>
+<position x="2" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 21" type="0">
+<position x="3" y="12"></position>
+<position x="3" y="13"></position>
+<position x="3" y="14"></position>
+<position x="3" y="15"></position>
+<position x="3" y="16"></position>
+<position x="3" y="17"></position>
+<position x="3" y="18"></position>
+<position x="3" y="19"></position>
+<position x="3" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 22" type="0">
+<position x="4" y="12"></position>
+<position x="4" y="13"></position>
+<position x="4" y="14"></position>
+<position x="4" y="15"></position>
+<position x="4" y="16"></position>
+<position x="4" y="17"></position>
+<position x="4" y="18"></position>
+<position x="4" y="19"></position>
+<position x="4" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 23" type="0">
+<position x="5" y="12"></position>
+<position x="5" y="13"></position>
+<position x="5" y="14"></position>
+<position x="5" y="15"></position>
+<position x="5" y="16"></position>
+<position x="5" y="17"></position>
+<position x="5" y="18"></position>
+<position x="5" y="19"></position>
+<position x="5" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 24" type="0">
+<position x="6" y="12"></position>
+<position x="6" y="13"></position>
+<position x="6" y="14"></position>
+<position x="6" y="15"></position>
+<position x="6" y="16"></position>
+<position x="6" y="17"></position>
+<position x="6" y="18"></position>
+<position x="6" y="19"></position>
+<position x="6" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 25" type="0">
+<position x="7" y="12"></position>
+<position x="7" y="13"></position>
+<position x="7" y="14"></position>
+<position x="7" y="15"></position>
+<position x="7" y="16"></position>
+<position x="7" y="17"></position>
+<position x="7" y="18"></position>
+<position x="7" y="19"></position>
+<position x="7" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 26" type="0">
+<position x="8" y="12"></position>
+<position x="8" y="13"></position>
+<position x="8" y="14"></position>
+<position x="8" y="15"></position>
+<position x="8" y="16"></position>
+<position x="8" y="17"></position>
+<position x="8" y="18"></position>
+<position x="8" y="19"></position>
+<position x="8" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 27" type="0">
+<position x="12" y="12"></position>
+<position x="12" y="13"></position>
+<position x="12" y="14"></position>
+<position x="12" y="15"></position>
+<position x="12" y="16"></position>
+<position x="12" y="17"></position>
+<position x="12" y="18"></position>
+<position x="12" y="19"></position>
+<position x="12" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 28" type="0">
+<position x="13" y="12"></position>
+<position x="13" y="13"></position>
+<position x="13" y="14"></position>
+<position x="13" y="15"></position>
+<position x="13" y="16"></position>
+<position x="13" y="17"></position>
+<position x="13" y="18"></position>
+<position x="13" y="19"></position>
+<position x="13" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 29" type="0">
+<position x="14" y="12"></position>
+<position x="14" y="13"></position>
+<position x="14" y="14"></position>
+<position x="14" y="15"></position>
+<position x="14" y="16"></position>
+<position x="14" y="17"></position>
+<position x="14" y="18"></position>
+<position x="14" y="19"></position>
+<position x="14" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 30" type="0">
+<position x="15" y="12"></position>
+<position x="15" y="13"></position>
+<position x="15" y="14"></position>
+<position x="15" y="15"></position>
+<position x="15" y="16"></position>
+<position x="15" y="17"></position>
+<position x="15" y="18"></position>
+<position x="15" y="19"></position>
+<position x="15" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 31" type="0">
+<position x="16" y="12"></position>
+<position x="16" y="13"></position>
+<position x="16" y="14"></position>
+<position x="16" y="15"></position>
+<position x="16" y="16"></position>
+<position x="16" y="17"></position>
+<position x="16" y="18"></position>
+<position x="16" y="19"></position>
+<position x="16" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 32" type="0">
+<position x="17" y="12"></position>
+<position x="17" y="13"></position>
+<position x="17" y="14"></position>
+<position x="17" y="15"></position>
+<position x="17" y="16"></position>
+<position x="17" y="17"></position>
+<position x="17" y="18"></position>
+<position x="17" y="19"></position>
+<position x="17" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 33" type="0">
+<position x="18" y="12"></position>
+<position x="18" y="13"></position>
+<position x="18" y="14"></position>
+<position x="18" y="15"></position>
+<position x="18" y="16"></position>
+<position x="18" y="17"></position>
+<position x="18" y="18"></position>
+<position x="18" y="19"></position>
+<position x="18" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 34" type="0">
+<position x="19" y="12"></position>
+<position x="19" y="13"></position>
+<position x="19" y="14"></position>
+<position x="19" y="15"></position>
+<position x="19" y="16"></position>
+<position x="19" y="17"></position>
+<position x="19" y="18"></position>
+<position x="19" y="19"></position>
+<position x="19" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 35" type="0">
+<position x="20" y="12"></position>
+<position x="20" y="13"></position>
+<position x="20" y="14"></position>
+<position x="20" y="15"></position>
+<position x="20" y="16"></position>
+<position x="20" y="17"></position>
+<position x="20" y="18"></position>
+<position x="20" y="19"></position>
+<position x="20" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 36" type="0">
+<position x="6" y="6"></position>
+<position x="6" y="7"></position>
+<position x="6" y="8"></position>
+<position x="6" y="9"></position>
+<position x="6" y="10"></position>
+<position x="6" y="11"></position>
+<position x="6" y="12"></position>
+<position x="6" y="13"></position>
+<position x="6" y="14"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 37" type="0">
+<position x="7" y="6"></position>
+<position x="7" y="7"></position>
+<position x="7" y="8"></position>
+<position x="7" y="9"></position>
+<position x="7" y="10"></position>
+<position x="7" y="11"></position>
+<position x="7" y="12"></position>
+<position x="7" y="13"></position>
+<position x="7" y="14"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 38" type="0">
+<position x="8" y="6"></position>
+<position x="8" y="7"></position>
+<position x="8" y="8"></position>
+<position x="8" y="9"></position>
+<position x="8" y="10"></position>
+<position x="8" y="11"></position>
+<position x="8" y="12"></position>
+<position x="8" y="13"></position>
+<position x="8" y="14"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 39" type="0">
+<position x="9" y="6"></position>
+<position x="9" y="7"></position>
+<position x="9" y="8"></position>
+<position x="9" y="9"></position>
+<position x="9" y="10"></position>
+<position x="9" y="11"></position>
+<position x="9" y="12"></position>
+<position x="9" y="13"></position>
+<position x="9" y="14"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 40" type="0">
+<position x="10" y="6"></position>
+<position x="10" y="7"></position>
+<position x="10" y="8"></position>
+<position x="10" y="9"></position>
+<position x="10" y="10"></position>
+<position x="10" y="11"></position>
+<position x="10" y="12"></position>
+<position x="10" y="13"></position>
+<position x="10" y="14"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 41" type="0">
+<position x="11" y="6"></position>
+<position x="11" y="7"></position>
+<position x="11" y="8"></position>
+<position x="11" y="9"></position>
+<position x="11" y="10"></position>
+<position x="11" y="11"></position>
+<position x="11" y="12"></position>
+<position x="11" y="13"></position>
+<position x="11" y="14"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 42" type="0">
+<position x="12" y="6"></position>
+<position x="12" y="7"></position>
+<position x="12" y="8"></position>
+<position x="12" y="9"></position>
+<position x="12" y="10"></position>
+<position x="12" y="11"></position>
+<position x="12" y="12"></position>
+<position x="12" y="13"></position>
+<position x="12" y="14"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 43" type="0">
+<position x="13" y="6"></position>
+<position x="13" y="7"></position>
+<position x="13" y="8"></position>
+<position x="13" y="9"></position>
+<position x="13" y="10"></position>
+<position x="13" y="11"></position>
+<position x="13" y="12"></position>
+<position x="13" y="13"></position>
+<position x="13" y="14"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Column 44" type="0">
+<position x="14" y="6"></position>
+<position x="14" y="7"></position>
+<position x="14" y="8"></position>
+<position x="14" y="9"></position>
+<position x="14" y="10"></position>
+<position x="14" y="11"></position>
+<position x="14" y="12"></position>
+<position x="14" y="13"></position>
+<position x="14" y="14"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 0" type="1">
+<position x="0" y="0"></position>
+<position x="1" y="0"></position>
+<position x="2" y="0"></position>
+<position x="0" y="1"></position>
+<position x="1" y="1"></position>
+<position x="2" y="1"></position>
+<position x="0" y="2"></position>
+<position x="1" y="2"></position>
+<position x="2" y="2"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 1" type="1">
+<position x="3" y="0"></position>
+<position x="4" y="0"></position>
+<position x="5" y="0"></position>
+<position x="3" y="1"></position>
+<position x="4" y="1"></position>
+<position x="5" y="1"></position>
+<position x="3" y="2"></position>
+<position x="4" y="2"></position>
+<position x="5" y="2"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 2" type="1">
+<position x="6" y="0"></position>
+<position x="7" y="0"></position>
+<position x="8" y="0"></position>
+<position x="6" y="1"></position>
+<position x="7" y="1"></position>
+<position x="8" y="1"></position>
+<position x="6" y="2"></position>
+<position x="7" y="2"></position>
+<position x="8" y="2"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 3" type="1">
+<position x="0" y="3"></position>
+<position x="1" y="3"></position>
+<position x="2" y="3"></position>
+<position x="0" y="4"></position>
+<position x="1" y="4"></position>
+<position x="2" y="4"></position>
+<position x="0" y="5"></position>
+<position x="1" y="5"></position>
+<position x="2" y="5"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 4" type="1">
+<position x="3" y="3"></position>
+<position x="4" y="3"></position>
+<position x="5" y="3"></position>
+<position x="3" y="4"></position>
+<position x="4" y="4"></position>
+<position x="5" y="4"></position>
+<position x="3" y="5"></position>
+<position x="4" y="5"></position>
+<position x="5" y="5"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 5" type="1">
+<position x="6" y="3"></position>
+<position x="7" y="3"></position>
+<position x="8" y="3"></position>
+<position x="6" y="4"></position>
+<position x="7" y="4"></position>
+<position x="8" y="4"></position>
+<position x="6" y="5"></position>
+<position x="7" y="5"></position>
+<position x="8" y="5"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 6" type="1">
+<position x="0" y="6"></position>
+<position x="1" y="6"></position>
+<position x="2" y="6"></position>
+<position x="0" y="7"></position>
+<position x="1" y="7"></position>
+<position x="2" y="7"></position>
+<position x="0" y="8"></position>
+<position x="1" y="8"></position>
+<position x="2" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 7" type="1">
+<position x="3" y="6"></position>
+<position x="4" y="6"></position>
+<position x="5" y="6"></position>
+<position x="3" y="7"></position>
+<position x="4" y="7"></position>
+<position x="5" y="7"></position>
+<position x="3" y="8"></position>
+<position x="4" y="8"></position>
+<position x="5" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 8" type="1">
+<position x="6" y="6"></position>
+<position x="7" y="6"></position>
+<position x="8" y="6"></position>
+<position x="6" y="7"></position>
+<position x="7" y="7"></position>
+<position x="8" y="7"></position>
+<position x="6" y="8"></position>
+<position x="7" y="8"></position>
+<position x="8" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 9" type="1">
+<position x="12" y="0"></position>
+<position x="13" y="0"></position>
+<position x="14" y="0"></position>
+<position x="12" y="1"></position>
+<position x="13" y="1"></position>
+<position x="14" y="1"></position>
+<position x="12" y="2"></position>
+<position x="13" y="2"></position>
+<position x="14" y="2"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 10" type="1">
+<position x="15" y="0"></position>
+<position x="16" y="0"></position>
+<position x="17" y="0"></position>
+<position x="15" y="1"></position>
+<position x="16" y="1"></position>
+<position x="17" y="1"></position>
+<position x="15" y="2"></position>
+<position x="16" y="2"></position>
+<position x="17" y="2"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 11" type="1">
+<position x="18" y="0"></position>
+<position x="19" y="0"></position>
+<position x="20" y="0"></position>
+<position x="18" y="1"></position>
+<position x="19" y="1"></position>
+<position x="20" y="1"></position>
+<position x="18" y="2"></position>
+<position x="19" y="2"></position>
+<position x="20" y="2"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 12" type="1">
+<position x="12" y="3"></position>
+<position x="13" y="3"></position>
+<position x="14" y="3"></position>
+<position x="12" y="4"></position>
+<position x="13" y="4"></position>
+<position x="14" y="4"></position>
+<position x="12" y="5"></position>
+<position x="13" y="5"></position>
+<position x="14" y="5"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 13" type="1">
+<position x="15" y="3"></position>
+<position x="16" y="3"></position>
+<position x="17" y="3"></position>
+<position x="15" y="4"></position>
+<position x="16" y="4"></position>
+<position x="17" y="4"></position>
+<position x="15" y="5"></position>
+<position x="16" y="5"></position>
+<position x="17" y="5"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 14" type="1">
+<position x="18" y="3"></position>
+<position x="19" y="3"></position>
+<position x="20" y="3"></position>
+<position x="18" y="4"></position>
+<position x="19" y="4"></position>
+<position x="20" y="4"></position>
+<position x="18" y="5"></position>
+<position x="19" y="5"></position>
+<position x="20" y="5"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 15" type="1">
+<position x="12" y="6"></position>
+<position x="13" y="6"></position>
+<position x="14" y="6"></position>
+<position x="12" y="7"></position>
+<position x="13" y="7"></position>
+<position x="14" y="7"></position>
+<position x="12" y="8"></position>
+<position x="13" y="8"></position>
+<position x="14" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 16" type="1">
+<position x="15" y="6"></position>
+<position x="16" y="6"></position>
+<position x="17" y="6"></position>
+<position x="15" y="7"></position>
+<position x="16" y="7"></position>
+<position x="17" y="7"></position>
+<position x="15" y="8"></position>
+<position x="16" y="8"></position>
+<position x="17" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 17" type="1">
+<position x="18" y="6"></position>
+<position x="19" y="6"></position>
+<position x="20" y="6"></position>
+<position x="18" y="7"></position>
+<position x="19" y="7"></position>
+<position x="20" y="7"></position>
+<position x="18" y="8"></position>
+<position x="19" y="8"></position>
+<position x="20" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 18" type="1">
+<position x="0" y="12"></position>
+<position x="1" y="12"></position>
+<position x="2" y="12"></position>
+<position x="0" y="13"></position>
+<position x="1" y="13"></position>
+<position x="2" y="13"></position>
+<position x="0" y="14"></position>
+<position x="1" y="14"></position>
+<position x="2" y="14"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 19" type="1">
+<position x="3" y="12"></position>
+<position x="4" y="12"></position>
+<position x="5" y="12"></position>
+<position x="3" y="13"></position>
+<position x="4" y="13"></position>
+<position x="5" y="13"></position>
+<position x="3" y="14"></position>
+<position x="4" y="14"></position>
+<position x="5" y="14"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 20" type="1">
+<position x="6" y="12"></position>
+<position x="7" y="12"></position>
+<position x="8" y="12"></position>
+<position x="6" y="13"></position>
+<position x="7" y="13"></position>
+<position x="8" y="13"></position>
+<position x="6" y="14"></position>
+<position x="7" y="14"></position>
+<position x="8" y="14"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 21" type="1">
+<position x="0" y="15"></position>
+<position x="1" y="15"></position>
+<position x="2" y="15"></position>
+<position x="0" y="16"></position>
+<position x="1" y="16"></position>
+<position x="2" y="16"></position>
+<position x="0" y="17"></position>
+<position x="1" y="17"></position>
+<position x="2" y="17"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 22" type="1">
+<position x="3" y="15"></position>
+<position x="4" y="15"></position>
+<position x="5" y="15"></position>
+<position x="3" y="16"></position>
+<position x="4" y="16"></position>
+<position x="5" y="16"></position>
+<position x="3" y="17"></position>
+<position x="4" y="17"></position>
+<position x="5" y="17"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 23" type="1">
+<position x="6" y="15"></position>
+<position x="7" y="15"></position>
+<position x="8" y="15"></position>
+<position x="6" y="16"></position>
+<position x="7" y="16"></position>
+<position x="8" y="16"></position>
+<position x="6" y="17"></position>
+<position x="7" y="17"></position>
+<position x="8" y="17"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 24" type="1">
+<position x="0" y="18"></position>
+<position x="1" y="18"></position>
+<position x="2" y="18"></position>
+<position x="0" y="19"></position>
+<position x="1" y="19"></position>
+<position x="2" y="19"></position>
+<position x="0" y="20"></position>
+<position x="1" y="20"></position>
+<position x="2" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 25" type="1">
+<position x="3" y="18"></position>
+<position x="4" y="18"></position>
+<position x="5" y="18"></position>
+<position x="3" y="19"></position>
+<position x="4" y="19"></position>
+<position x="5" y="19"></position>
+<position x="3" y="20"></position>
+<position x="4" y="20"></position>
+<position x="5" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 26" type="1">
+<position x="6" y="18"></position>
+<position x="7" y="18"></position>
+<position x="8" y="18"></position>
+<position x="6" y="19"></position>
+<position x="7" y="19"></position>
+<position x="8" y="19"></position>
+<position x="6" y="20"></position>
+<position x="7" y="20"></position>
+<position x="8" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 27" type="1">
+<position x="12" y="12"></position>
+<position x="13" y="12"></position>
+<position x="14" y="12"></position>
+<position x="12" y="13"></position>
+<position x="13" y="13"></position>
+<position x="14" y="13"></position>
+<position x="12" y="14"></position>
+<position x="13" y="14"></position>
+<position x="14" y="14"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 28" type="1">
+<position x="15" y="12"></position>
+<position x="16" y="12"></position>
+<position x="17" y="12"></position>
+<position x="15" y="13"></position>
+<position x="16" y="13"></position>
+<position x="17" y="13"></position>
+<position x="15" y="14"></position>
+<position x="16" y="14"></position>
+<position x="17" y="14"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 29" type="1">
+<position x="18" y="12"></position>
+<position x="19" y="12"></position>
+<position x="20" y="12"></position>
+<position x="18" y="13"></position>
+<position x="19" y="13"></position>
+<position x="20" y="13"></position>
+<position x="18" y="14"></position>
+<position x="19" y="14"></position>
+<position x="20" y="14"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 30" type="1">
+<position x="12" y="15"></position>
+<position x="13" y="15"></position>
+<position x="14" y="15"></position>
+<position x="12" y="16"></position>
+<position x="13" y="16"></position>
+<position x="14" y="16"></position>
+<position x="12" y="17"></position>
+<position x="13" y="17"></position>
+<position x="14" y="17"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 31" type="1">
+<position x="15" y="15"></position>
+<position x="16" y="15"></position>
+<position x="17" y="15"></position>
+<position x="15" y="16"></position>
+<position x="16" y="16"></position>
+<position x="17" y="16"></position>
+<position x="15" y="17"></position>
+<position x="16" y="17"></position>
+<position x="17" y="17"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 32" type="1">
+<position x="18" y="15"></position>
+<position x="19" y="15"></position>
+<position x="20" y="15"></position>
+<position x="18" y="16"></position>
+<position x="19" y="16"></position>
+<position x="20" y="16"></position>
+<position x="18" y="17"></position>
+<position x="19" y="17"></position>
+<position x="20" y="17"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 33" type="1">
+<position x="12" y="18"></position>
+<position x="13" y="18"></position>
+<position x="14" y="18"></position>
+<position x="12" y="19"></position>
+<position x="13" y="19"></position>
+<position x="14" y="19"></position>
+<position x="12" y="20"></position>
+<position x="13" y="20"></position>
+<position x="14" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 34" type="1">
+<position x="15" y="18"></position>
+<position x="16" y="18"></position>
+<position x="17" y="18"></position>
+<position x="15" y="19"></position>
+<position x="16" y="19"></position>
+<position x="17" y="19"></position>
+<position x="15" y="20"></position>
+<position x="16" y="20"></position>
+<position x="17" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 35" type="1">
+<position x="18" y="18"></position>
+<position x="19" y="18"></position>
+<position x="20" y="18"></position>
+<position x="18" y="19"></position>
+<position x="19" y="19"></position>
+<position x="20" y="19"></position>
+<position x="18" y="20"></position>
+<position x="19" y="20"></position>
+<position x="20" y="20"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 36" type="1">
+<position x="9" y="6"></position>
+<position x="10" y="6"></position>
+<position x="11" y="6"></position>
+<position x="9" y="7"></position>
+<position x="10" y="7"></position>
+<position x="11" y="7"></position>
+<position x="9" y="8"></position>
+<position x="10" y="8"></position>
+<position x="11" y="8"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 37" type="1">
+<position x="6" y="9"></position>
+<position x="7" y="9"></position>
+<position x="8" y="9"></position>
+<position x="6" y="10"></position>
+<position x="7" y="10"></position>
+<position x="8" y="10"></position>
+<position x="6" y="11"></position>
+<position x="7" y="11"></position>
+<position x="8" y="11"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 38" type="1">
+<position x="9" y="9"></position>
+<position x="10" y="9"></position>
+<position x="11" y="9"></position>
+<position x="9" y="10"></position>
+<position x="10" y="10"></position>
+<position x="11" y="10"></position>
+<position x="9" y="11"></position>
+<position x="10" y="11"></position>
+<position x="11" y="11"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 39" type="1">
+<position x="12" y="9"></position>
+<position x="13" y="9"></position>
+<position x="14" y="9"></position>
+<position x="12" y="10"></position>
+<position x="13" y="10"></position>
+<position x="14" y="10"></position>
+<position x="12" y="11"></position>
+<position x="13" y="11"></position>
+<position x="14" y="11"></position>
+</constraint>
+<constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Block 40" type="1">
+<position x="9" y="12"></position>
+<position x="10" y="12"></position>
+<position x="11" y="12"></position>
+<position x="9" y="13"></position>
+<position x="10" y="13"></position>
+<position x="11" y="13"></position>
+<position x="9" y="14"></position>
+<position x="10" y="14"></position>
+<position x="11" y="14"></position>
+</constraint>
+<SetOfPermutationProperties>
+<PermutationProperty permutationNr="0"></PermutationProperty>
+<PermutationProperty permutationNr="1"></PermutationProperty>
+<PermutationProperty permutationNr="8"></PermutationProperty>
+<PermutationProperty permutationNr="9"></PermutationProperty>
+<PermutationProperty permutationNr="6"></PermutationProperty>
+<PermutationProperty permutationNr="7"></PermutationProperty>
+</SetOfPermutationProperties>
+<ComplexityConstraintBuilder>
+<complexityConstraint complexity="3" averageFields="30" minComplexity="4000" maxComplexity="25000" numberOfAllowedHelpers="2147483647"></complexityConstraint>
+<complexityConstraint complexity="2" averageFields="40" minComplexity="2300" maxComplexity="4000" numberOfAllowedHelpers="2147483647"></complexityConstraint>
+<complexityConstraint complexity="1" averageFields="55" minComplexity="1500" maxComplexity="2300" numberOfAllowedHelpers="3"></complexityConstraint>
+<complexityConstraint complexity="0" averageFields="70" minComplexity="1000" maxComplexity="1500" numberOfAllowedHelpers="2"></complexityConstraint>
+<complexityConstraint complexity="4" averageFields="32" minComplexity="1" maxComplexity="2147483647" numberOfAllowedHelpers="2147483647"></complexityConstraint>
+</ComplexityConstraintBuilder>
+</sudokutype>

@@ -1,5 +1,6 @@
 package de.sudoq.model.sudoku.sudokuTypes;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -13,13 +14,10 @@ import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraintTests;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.sudoku.sudokuTypes.TypeBasic;
-import de.sudoq.model.sudoku.sudokuTypes.XSudoku;
 
 public class XSudokuTests {
 
-	TypeBasic stX = new XSudoku();
+	SudokuType stX = TypeBuilder.getType(SudokuTypes.Xsudoku);
 
 	@Test
 	public void ConstraintsTest() {
@@ -72,7 +70,7 @@ public class XSudokuTests {
 
 	@Test
 	public void buildComplexityConstraintTest() {
-		TypeBasic xSudo = new XSudoku();
+		SudokuType xSudo = TypeBuilder.getType(SudokuTypes.Xsudoku);
 
 		ComplexityConstraint comCo = xSudo.buildComplexityConstraint(Complexity.easy);
 		ComplexityConstraintTests.returnsValues(comCo, Complexity.easy, 40, 450, 750, 2);
@@ -89,7 +87,7 @@ public class XSudokuTests {
 		comCo = xSudo.buildComplexityConstraint(Complexity.arbitrary);
 		ComplexityConstraintTests.returnsValues(comCo, Complexity.arbitrary, 32, 1, Integer.MAX_VALUE, Integer.MAX_VALUE);
 
-		assertTrue(xSudo.buildComplexityConstraint(null) == null);
+		assertNull(xSudo.buildComplexityConstraint(null));
 
 	}
 

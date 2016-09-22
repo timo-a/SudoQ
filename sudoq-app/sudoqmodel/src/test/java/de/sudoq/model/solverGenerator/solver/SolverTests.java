@@ -2,6 +2,9 @@ package de.sudoq.model.solverGenerator.solver;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
@@ -12,6 +15,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.sudoq.model.files.FileManagerTests;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.sudoku.Constraint;
@@ -34,6 +38,7 @@ public class SolverTests {
 
 	@Before
 	public void before() {
+		FileManagerTests.init();
 		sudoku = new SudokuBuilder(SudokuTypes.standard9x9).createSudoku();
 		sudoku.setComplexity(Complexity.arbitrary);
 		solver = new Solver(sudoku);
@@ -42,8 +47,19 @@ public class SolverTests {
 		solution16x16 = new PositionMap<Integer>(sudoku16x16.getSudokuType().getSize());
 	}
 
-	@Test
-	public void testSolveOneAutomaticallyApplied() {
+	/** convenience init sudoku	 */
+	private void initSudoku9x9(Sudoku sudoku){
+		    
+		String s= "0    52  "+
+		          " 2  0  3 "+
+		          "  84    6"+
+		          "  52     "+
+		          " 1  7    "+
+		          "6    3   "+
+		          "  48    2"+
+		          "8     0  "+
+		          " 7  1  6 ";
+
 		sudoku.getField(Position.get(0, 0)).setCurrentValue(0);
 		sudoku.getField(Position.get(5, 0)).setCurrentValue(6);
 		sudoku.getField(Position.get(7, 0)).setCurrentValue(8);
@@ -67,75 +83,51 @@ public class SolverTests {
 		sudoku.getField(Position.get(8, 7)).setCurrentValue(6);
 		sudoku.getField(Position.get(2, 8)).setCurrentValue(6);
 		sudoku.getField(Position.get(6, 8)).setCurrentValue(2);
+	}
 
+	@Test
+	public void testSolveOneAutomaticallyApplied() {
+		initSudoku9x9(sudoku);
 		Solution solution = new Solution();
 		while (solution != null) {
 			solution = solver.solveOne(true);
 			if (solution == null)
 				break;
-			Iterator<SolveDerivation> it = solution.getDerivationIterator();
 			SolveDerivation sd = null;
-			while (it.hasNext()) {
-				sd = it.next();
-			}
+			for (SolveDerivation d: solution.getDerivations()) sd = d; //getLastelement
 			if (solution.getAction() != null) {
-				assertTrue(this.sudoku.getField(sd.getFieldIterator().next().getPosition()).getCurrentValue() != Field.EMPTYVAL);
+				assertNotEquals(this.sudoku.getField(sd.getFieldIterator().next().getPosition()).getCurrentValue(),Field.EMPTYVAL);
 			} else {
 				solution = null;
 			}
 		}
 
 		for (Field f : this.sudoku) {
-			assertTrue(f.getCurrentValue() != -1);
+			assertNotEquals(f.getCurrentValue(), -1);
 		}
 	}
 
 	@Test
 	public void testSolveOneManuallyApplied() {
-		sudoku.getField(Position.get(0, 0)).setCurrentValue(0);
-		sudoku.getField(Position.get(5, 0)).setCurrentValue(6);
-		sudoku.getField(Position.get(7, 0)).setCurrentValue(8);
-		sudoku.getField(Position.get(1, 1)).setCurrentValue(2);
-		sudoku.getField(Position.get(4, 1)).setCurrentValue(1);
-		sudoku.getField(Position.get(8, 1)).setCurrentValue(7);
-		sudoku.getField(Position.get(2, 2)).setCurrentValue(8);
-		sudoku.getField(Position.get(3, 2)).setCurrentValue(5);
-		sudoku.getField(Position.get(6, 2)).setCurrentValue(4);
-		sudoku.getField(Position.get(2, 3)).setCurrentValue(4);
-		sudoku.getField(Position.get(3, 3)).setCurrentValue(2);
-		sudoku.getField(Position.get(6, 3)).setCurrentValue(8);
-		sudoku.getField(Position.get(1, 4)).setCurrentValue(0);
-		sudoku.getField(Position.get(4, 4)).setCurrentValue(7);
-		sudoku.getField(Position.get(8, 4)).setCurrentValue(1);
-		sudoku.getField(Position.get(0, 5)).setCurrentValue(5);
-		sudoku.getField(Position.get(5, 5)).setCurrentValue(3);
-		sudoku.getField(Position.get(0, 6)).setCurrentValue(2);
-		sudoku.getField(Position.get(7, 6)).setCurrentValue(0);
-		sudoku.getField(Position.get(1, 7)).setCurrentValue(3);
-		sudoku.getField(Position.get(8, 7)).setCurrentValue(6);
-		sudoku.getField(Position.get(2, 8)).setCurrentValue(6);
-		sudoku.getField(Position.get(6, 8)).setCurrentValue(2);
-
+		initSudoku9x9(sudoku);
 		Solution solution = new Solution();
 		while (solution != null) {
 			solution = solver.solveOne(false);
 			if (solution == null)
 				break;
-			Iterator<SolveDerivation> it = solution.getDerivationIterator();
 			SolveDerivation sd = null;
-			while (it.hasNext()) {
-				sd = it.next();
-			}
+			for (SolveDerivation d: solution.getDerivations()) sd = d; //getLastelement
 			if (solution.getAction() != null) {
 				solution.getAction().execute();
-				assertTrue(this.sudoku.getField(sd.getFieldIterator().next().getPosition()).getCurrentValue() != Field.EMPTYVAL);
+				assertNotEquals(this.sudoku.getField(sd.getFieldIterator().next().getPosition()).getCurrentValue()
+						       ,Field.EMPTYVAL);
 			} else {
 				solution = null;
 			}
 		}
 
 		for (Field f : this.sudoku) {
-			assertTrue(f.getCurrentValue() != -1);
+			assertNotEquals(f.getCurrentValue(), -1);
 		}
 	}
 
@@ -143,95 +135,42 @@ public class SolverTests {
 	public void solveOneIncorrect() {
 		sudoku.getField(Position.get(0, 0)).setCurrentValue(0);
 		sudoku.getField(Position.get(1, 0)).setCurrentValue(0);
-		assertTrue(solver.solveOne(true) == null);
+		assertNull(solver.solveOne(true));
 	}
 
 	@Test
 	public void testSolveAllAutomaticallyApplied() {
-		sudoku.getField(Position.get(0, 0)).setCurrentValue(0);
-		sudoku.getField(Position.get(5, 0)).setCurrentValue(6);
-		sudoku.getField(Position.get(7, 0)).setCurrentValue(8);
-		sudoku.getField(Position.get(1, 1)).setCurrentValue(2);
-		sudoku.getField(Position.get(4, 1)).setCurrentValue(1);
-		sudoku.getField(Position.get(8, 1)).setCurrentValue(7);
-		sudoku.getField(Position.get(2, 2)).setCurrentValue(8);
-		sudoku.getField(Position.get(3, 2)).setCurrentValue(5);
-		sudoku.getField(Position.get(6, 2)).setCurrentValue(4);
-		sudoku.getField(Position.get(2, 3)).setCurrentValue(4);
-		sudoku.getField(Position.get(3, 3)).setCurrentValue(2);
-		sudoku.getField(Position.get(6, 3)).setCurrentValue(8);
-		sudoku.getField(Position.get(1, 4)).setCurrentValue(0);
-		sudoku.getField(Position.get(4, 4)).setCurrentValue(7);
-		sudoku.getField(Position.get(8, 4)).setCurrentValue(1);
-		sudoku.getField(Position.get(0, 5)).setCurrentValue(5);
-		sudoku.getField(Position.get(5, 5)).setCurrentValue(3);
-		sudoku.getField(Position.get(0, 6)).setCurrentValue(2);
-		sudoku.getField(Position.get(7, 6)).setCurrentValue(0);
-		sudoku.getField(Position.get(1, 7)).setCurrentValue(3);
-		sudoku.getField(Position.get(8, 7)).setCurrentValue(6);
-		sudoku.getField(Position.get(2, 8)).setCurrentValue(6);
-		sudoku.getField(Position.get(6, 8)).setCurrentValue(2);
+		initSudoku9x9(sudoku);
 
 		solver.solveAll(true, true);
 		List<Solution> solutions = solver.getSolutions();
 		for (Solution solution : solutions) {
-			assertTrue(solution.getAction() != null);
-			Iterator<SolveDerivation> it = solution.getDerivationIterator();
-			SolveDerivation sd = null;
-			while (it.hasNext()) {
-				sd = it.next();
-				assertTrue(sd != null);
-			}
+			assertNotNull(solution.getAction());
+			for (SolveDerivation sd: solution.getDerivations())
+				assertNotNull(sd);
 		}
 
-		for (Field f : this.sudoku) {
-			assertTrue(f.getCurrentValue() != Field.EMPTYVAL);
-		}
+		for (Field f : this.sudoku)
+			assertNotEquals(f.getCurrentValue(), Field.EMPTYVAL);
+
 	}
 
 	@Test
 	public void testSolveAllManuallyApplied() {
-		sudoku.getField(Position.get(0, 0)).setCurrentValue(0);
-		sudoku.getField(Position.get(5, 0)).setCurrentValue(6);
-		sudoku.getField(Position.get(7, 0)).setCurrentValue(8);
-		sudoku.getField(Position.get(1, 1)).setCurrentValue(2);
-		sudoku.getField(Position.get(4, 1)).setCurrentValue(1);
-		sudoku.getField(Position.get(8, 1)).setCurrentValue(7);
-		sudoku.getField(Position.get(2, 2)).setCurrentValue(8);
-		sudoku.getField(Position.get(3, 2)).setCurrentValue(5);
-		sudoku.getField(Position.get(6, 2)).setCurrentValue(4);
-		sudoku.getField(Position.get(2, 3)).setCurrentValue(4);
-		sudoku.getField(Position.get(3, 3)).setCurrentValue(2);
-		sudoku.getField(Position.get(6, 3)).setCurrentValue(8);
-		sudoku.getField(Position.get(1, 4)).setCurrentValue(0);
-		sudoku.getField(Position.get(4, 4)).setCurrentValue(7);
-		sudoku.getField(Position.get(8, 4)).setCurrentValue(1);
-		sudoku.getField(Position.get(0, 5)).setCurrentValue(5);
-		sudoku.getField(Position.get(5, 5)).setCurrentValue(3);
-		sudoku.getField(Position.get(0, 6)).setCurrentValue(2);
-		sudoku.getField(Position.get(7, 6)).setCurrentValue(0);
-		sudoku.getField(Position.get(1, 7)).setCurrentValue(3);
-		sudoku.getField(Position.get(8, 7)).setCurrentValue(6);
-		sudoku.getField(Position.get(2, 8)).setCurrentValue(6);
-		sudoku.getField(Position.get(6, 8)).setCurrentValue(2);
-
+		initSudoku9x9(sudoku);
 		solver.solveAll(true, false);
 		List<Solution> solutions = solver.getSolutions();
 		for (Solution solution : solutions) {
-			assertTrue(solution.getAction() != null);
+			assertNotNull(solution.getAction());
 			solution.getAction().execute();
-			Iterator<SolveDerivation> it = solution.getDerivationIterator();
-			SolveDerivation sd = null;
-			while (it.hasNext()) {
-				sd = it.next();
-				assertTrue(sd != null);
-			}
+			for (SolveDerivation sd: solution.getDerivations())
+				assertNotNull(sd);
 		}
 
 		SudokuTestUtilities.printSudoku(sudoku);
 
 		for (Field f : this.sudoku) {
-			assertTrue(f.getCurrentValue() != Field.EMPTYVAL);
+			assertNotEquals(f.getCurrentValue(),Field.EMPTYVAL);
 		}
 	}
 
@@ -273,17 +212,17 @@ public class SolverTests {
 
 	@Test
 	public void testStandard16x16() {
-		sudoku16x16.getField(Position.get(2, 0)).setCurrentValue(15);
-		sudoku16x16.getField(Position.get(4, 0)).setCurrentValue(9);
-		sudoku16x16.getField(Position.get(6, 0)).setCurrentValue(12);
-		sudoku16x16.getField(Position.get(7, 0)).setCurrentValue(7);
-		sudoku16x16.getField(Position.get(8, 0)).setCurrentValue(3);
-		sudoku16x16.getField(Position.get(9, 0)).setCurrentValue(4);
+		sudoku16x16.getField(Position.get( 2, 0)).setCurrentValue(15);
+		sudoku16x16.getField(Position.get( 4, 0)).setCurrentValue(9);
+		sudoku16x16.getField(Position.get( 6, 0)).setCurrentValue(12);
+		sudoku16x16.getField(Position.get( 7, 0)).setCurrentValue(7);
+		sudoku16x16.getField(Position.get( 8, 0)).setCurrentValue(3);
+		sudoku16x16.getField(Position.get( 9, 0)).setCurrentValue(4);
 		sudoku16x16.getField(Position.get(11, 0)).setCurrentValue(5);
 		sudoku16x16.getField(Position.get(12, 0)).setCurrentValue(10);
 		sudoku16x16.getField(Position.get(13, 0)).setCurrentValue(14);
-		sudoku16x16.getField(Position.get(0, 1)).setCurrentValue(12);
-		sudoku16x16.getField(Position.get(4, 1)).setCurrentValue(5);
+		sudoku16x16.getField(Position.get( 0, 1)).setCurrentValue(12);
+		sudoku16x16.getField(Position.get( 4, 1)).setCurrentValue(5);
 		sudoku16x16.getField(Position.get(11, 1)).setCurrentValue(11);
 		sudoku16x16.getField(Position.get(12, 1)).setCurrentValue(13);
 		sudoku16x16.getField(Position.get(13, 1)).setCurrentValue(9);
@@ -424,11 +363,11 @@ public class SolverTests {
 
 	@Test
 	public void testStandard16x16No2() {
-		sudoku16x16.getField(Position.get(0, 0)).setCurrentValue(0);
-		sudoku16x16.getField(Position.get(3, 0)).setCurrentValue(1);
-		sudoku16x16.getField(Position.get(4, 0)).setCurrentValue(2);
-		sudoku16x16.getField(Position.get(5, 0)).setCurrentValue(3);
-		sudoku16x16.getField(Position.get(8, 0)).setCurrentValue(11);
+		sudoku16x16.getField(Position.get( 0, 0)).setCurrentValue(0);
+		sudoku16x16.getField(Position.get( 3, 0)).setCurrentValue(1);
+		sudoku16x16.getField(Position.get( 4, 0)).setCurrentValue(2);
+		sudoku16x16.getField(Position.get( 5, 0)).setCurrentValue(3);
+		sudoku16x16.getField(Position.get( 8, 0)).setCurrentValue(11);
 		sudoku16x16.getField(Position.get(10, 0)).setCurrentValue(5);
 		sudoku16x16.getField(Position.get(14, 0)).setCurrentValue(6);
 		sudoku16x16.getField(Position.get(2, 1)).setCurrentValue(7);

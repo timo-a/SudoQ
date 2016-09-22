@@ -9,13 +9,10 @@ import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraintTests;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType16x16;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.sudoku.sudokuTypes.TypeBasic;
 
 public class StandardSudokuType16x16Tests {
 
-	TypeBasic sst1616 = new StandardSudokuType16x16();
+	SudokuType sst1616 = TypeBuilder.getType(SudokuTypes.standard16x16);
 
 	@Test
 	public void constraintsTest() {
@@ -38,7 +35,7 @@ public class StandardSudokuType16x16Tests {
 
 	@Test
 	public void buildComplexityConstraintTest() {
-		TypeBasic standard16x16 = new StandardSudokuType16x16();
+		SudokuType standard16x16 = TypeBuilder.getType(SudokuTypes.standard16x16);
 
 		ComplexityConstraint comCo = standard16x16.buildComplexityConstraint(Complexity.easy);
 		ComplexityConstraintTests.returnsValues(comCo, Complexity.easy, 190, 900, 1300, 2);

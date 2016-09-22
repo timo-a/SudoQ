@@ -4,8 +4,13 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.sudoq.model.files.FileManager;
+import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Position;
+import de.sudoq.model.sudoku.Sudoku;
 
 /**
  * abstract utility class for operations shared by several tests
@@ -36,4 +41,41 @@ public abstract class Utility {
         profiles.mkdir();
         FileManager.initialize(profiles, sudokus);
     }
+
+    public static void print9x9(Sudoku sudoku){
+        StringBuilder sb = new StringBuilder();
+        for (int j = 0; j < sudoku.getSudokuType().getSize().getY(); j++) {
+            for (int i = 0; i < sudoku.getSudokuType().getSize().getX(); i++) {
+                Field f = sudoku.getField(new Position(i, j));
+                String op;
+                if (f != null){//feld existiert
+                    int value = f.getCurrentValue();
+                    op = value + "";
+                    if (value < 10)
+                        op = "" + value;
+                    if (value == -1)
+                        op = "x";
+                    sb.append(op + " ");
+                }else{
+                    sb.append("  ");
+
+                }
+            }
+            sb.append("\n");
+        }
+        System.out.println(sb);
+    }
+
+
+    /** returns all positions of non-null Fields of sudoku */
+    public static List<Position> getPositionsByRow(Sudoku sudoku){
+        List<Position> p = new ArrayList<>();
+        for (int y = 0; y < sudoku.getSudokuType().getSize().getY(); y++)
+            for (int x = 0; x < sudoku.getSudokuType().getSize().getX(); x++)
+                if (sudoku.getField(Position.get(x, y)) != null)
+                    p.add(Position.get(x, y));
+        return p;
+    }
+
+
 }

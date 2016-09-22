@@ -10,41 +10,22 @@ import de.sudoq.model.sudoku.Field;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
-import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
-import de.sudoq.model.sudoku.sudokuTypes.HyperSudoku;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType9x9;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.sudoku.sudokuTypes.TypeBasic;
 
 public class TypeBasicTests {
 
 	PositionMap<Integer> map = new PositionMap<Integer>(Position.get(9, 9));
 
-	int[] su1 = { 9, 5, 8, 3, 1, 2, 7, 6, 4, 4, 6, 1, 5, 7, 9, 8, 2, 3, 3, 7, 2, 4, 6, 8, 9, 5, 1, 8, 9, 6, 1, 2, 3, 5,
-			4, 7, 1, 4, 3, 7, 9, 5, 2, 8, 6, 5, 2, 7, 6, 8, 4, 3, 1, 9, 7, 8, 5, 9, 4, 1, 6, 3, 2, 2, 1, 9, 8, 3, 6, 4,
-			7, 5, 6, 3, 4, 2, 5, 7, 1, 9, 8 };
+	int[] su1 = { 9, 5, 8, 3, 1, 2, 7, 6, 4
+	            , 4, 6, 1, 5, 7, 9, 8, 2, 3
+	            , 3, 7, 2, 4, 6, 8, 9, 5, 1
+	            , 8, 9, 6, 1, 2, 3, 5, 4, 7
+	            , 1, 4, 3, 7, 9, 5, 2, 8, 6
+	            , 5, 2, 7, 6, 8, 4, 3, 1, 9
+	            , 7, 8, 5, 9, 4, 1, 6, 3, 2
+	            , 2, 1, 9, 8, 3, 6, 4, 7, 5
+	            , 6, 3, 4, 2, 5, 7, 1, 9, 8 };
 
-	@Test
-	public void initialisationTest() {
-		TypeBasic t;
-		try {
-			t = new TestSudoku(0, -1);
-			fail();
-		} catch (Exception e) {
-		}
-		try {
-			t = new TestSudoku(-1, 0);
-			fail();
-		} catch (Exception e) {
-		}
-		try {
-			t = new TestSudoku(-1, -1);
-			fail();
-		} catch (Exception e) {
-		}
 
-	}
 
 	@Test
 	public void Checktest() {
@@ -71,13 +52,13 @@ public class TypeBasicTests {
 
 	@Test
 	public void toStringTest() {
-		TypeBasic hy = new HyperSudoku();
+		SudokuType hy = TypeBuilder.getType(SudokuTypes.HyperSudoku);
 		assertTrue(hy.toString().equals(SudokuTypes.HyperSudoku.toString()));
 	}
 
 }
 
-class TestSudoku extends TypeBasic {
+/*class TestSudoku extends TypeBasic {
 
 	public TestSudoku(int a, int b) {
 		super(a, b);
@@ -98,4 +79,4 @@ class TestSudoku extends TypeBasic {
 		return 0;
 	}
 
-}
+}*/

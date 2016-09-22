@@ -32,14 +32,12 @@ public class GeneratorTests implements GeneratorCallback {
 		assertEquals(new Solver(sudoku).validate(null, false), ComplexityRelation.CONSTRAINT_SATURATION);
 		this.notifyAll();
 	}
-
-	// Empirischer Test durch mehrfaches Generieren
 	@Test
-	public void testGeneration() {
+	public void testGenerationDeb() {
 		Random rnd = new Random(0);
 		generator.setRandom(rnd);
 		Transformer.setRandom(rnd);
-		generator.generate(SudokuTypes.standard16x16, Complexity.infernal, this);
+		generator.generate(SudokuTypes.standard4x4, Complexity.infernal, this);
 		synchronized (this) {
 			try {
 				wait();
@@ -47,7 +45,15 @@ public class GeneratorTests implements GeneratorCallback {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("16 done");
+		System.out.println("4 done");
+	}
+
+
+	// Empirischer Test durch mehrfaches Generieren
+	@Test
+	public void testGeneration() {
+		/* validate returns INVADILD. why?? - is this solved now? tests run through */
+		Random rnd = new Random(0);
 		generator.setRandom(rnd);
 		Transformer.setRandom(rnd);
 		generator.generate(SudokuTypes.standard9x9, Complexity.infernal, this);
@@ -59,6 +65,17 @@ public class GeneratorTests implements GeneratorCallback {
 			}
 		}
 		System.out.println("9 done");
+		generator.setRandom(rnd);
+		Transformer.setRandom(rnd);
+		generator.generate(SudokuTypes.standard16x16, Complexity.infernal, this);
+		synchronized (this) {
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		System.out.println("16 done");
 		generator.setRandom(rnd);
 		Transformer.setRandom(rnd);
 		generator.generate(SudokuTypes.Xsudoku, Complexity.medium, this);
@@ -82,16 +99,16 @@ public class GeneratorTests implements GeneratorCallback {
 		}
 		System.out.println("sqA done");
 		//TODO fix this
-		/*generator.setRandom(rnd);
+		generator.setRandom(rnd);
 		Transformer.setRandom(rnd);
-		generator.generate(SudokuTypes.samurai, Complexity.easy, this);
+		generator.generate(SudokuTypes.samurai, Complexity.difficult, this);
 		synchronized (this) {
 			try {
 				wait();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-		}*/
+		}
 		
 		System.out.println("samurai done");
 		

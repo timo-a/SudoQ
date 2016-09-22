@@ -393,4 +393,33 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 
         //return this.fields.values().stream().anyMatch(f -> !f.isNotWrong()); //looks weird but be very careful with simplifications!
 	}
+
+	//debug
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+		final String OFFSET = type.getNumberOfSymbols()< 10 ? ""  : " ";
+		final String EMPTY  = type.getNumberOfSymbols()< 10 ? "x" : "xx";
+		final String NONE   = type.getNumberOfSymbols()< 10 ? " " : "  ";
+		for (int j = 0; j < getSudokuType().getSize().getY(); j++) {
+			for (int i = 0; i < getSudokuType().getSize().getX(); i++) {
+				Field f = getField(Position.get(i, j));
+				String op;
+				if (f != null){//feld existiert
+					int value = f.getCurrentValue();
+
+					     if (value == -1)	op = EMPTY;
+					else if (value < 10)	op = OFFSET + value;
+					else 					op = value + "";
+
+					sb.append(op);
+				}else{
+					sb.append(NONE);
+				}
+				sb.append(" ");//separator
+			}
+			sb.replace(sb.length() - 1, sb.length(), "\n");
+		}
+		sb.delete(sb.length() - 1, sb.length());
+		return sb.toString();
+	}
 }

@@ -2,6 +2,7 @@ package de.sudoq.model.sudoku;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -201,6 +202,7 @@ public class SudokuTests {
 		}
 	}
 
+	@Test
 	public void testFieldChangeNotification() {
 		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard9x9).createSudoku();
 		Listener listener = new Listener();
@@ -352,5 +354,40 @@ public class SudokuTests {
 			f.setCurrentValue(f.getSolution());
 		}
 		assertTrue(sudoku.isFinished());
+	}
+
+	@Test
+	public synchronized void testToString() {
+
+		SudokuType sudokuType = TypeBuilder.getType(SudokuTypes.standard4x4);
+		Sudoku sudoku = new Sudoku(sudokuType);
+		sudoku.getField(Position.get(1,1)).setCurrentValue(3);
+		sudoku.fields.remove(Position.get(1,2));
+		assertEquals("x x x x\n"
+		            +"x 3 x x\n"
+		            +"x   x x\n"
+		            +"x x x x",sudoku.toString());
+
+
+
+		sudokuType = TypeBuilder.getType(SudokuTypes.standard16x16);
+		sudoku = new Sudoku(sudokuType);
+		sudoku.getField(Position.get(1,1)).setCurrentValue(12);
+		assertEquals("xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
+		            +"xx 12 xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
+		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
+		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
+		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
+		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
+		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
+		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
+		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
+		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
+		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
+		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
+		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
+		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
+		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
+		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx",sudoku.toString());
 	}
 }

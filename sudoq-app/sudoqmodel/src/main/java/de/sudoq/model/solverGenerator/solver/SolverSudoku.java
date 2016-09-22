@@ -5,6 +5,7 @@ import java.util.BitSet;
 import java.util.List;
 import java.util.Stack;
 
+import de.sudoq.model.solverGenerator.Generator;
 import de.sudoq.model.solverGenerator.solver.BranchingPool.Branching;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Field;
@@ -35,7 +36,8 @@ public class SolverSudoku extends Sudoku {
 	private PositionMap<BitSet> currentCandidates;
 
 	/**
-	 * Speichert die Positionen an denen gebrancht wurde.
+	 * Speichert die Positionen an denen gebrancht wurde. (implizit in den einzelnen branchings )
+	 * TODO warum nehmen wir nicht branchPool.usedBranchings?
 	 */
 	Stack<Branching> branchings;
 
@@ -58,16 +60,23 @@ public class SolverSudoku extends Sudoku {
 	 * Instanziiert ein neues SolverSudoku, welches sich auf das spezifizierte Sudoku bezieht.
 	 * 
 	 * @param sudoku
-	 *            Das Sudoku zu dem dieses SolverSudoku gehört
-	 * @throws NullpointerException
-	 *             Wird geworfen, falls das spezifizierte Sudoku null ist
+	 *            Das Sudoku das zu dem dieses SolverSudoku gehört
 	 */
 	public SolverSudoku(Sudoku sudoku) {
 		super(sudoku.getSudokuType());
-		this.setComplexity(sudoku.getComplexity());
+		this.setComplexity(sudoku.getComplexity());//transfer complexity as well
 
 		// initialize the list of positions
-		this.positions = new ArrayList<>(fields.keySet());
+		//this.positions = new ArrayList<>(fields.keySet());
+		this.positions = new ArrayList<Position>();//for debugging we need the same as once
+		for (Position p : fields.keySet()) {
+			this.positions.add(p);
+		}
+
+		/** For debugging, we need predictable order */
+		this.positions = Generator.getPositions(sudoku);
+		//TODO remove again
+
 
 		// initialize new SolverSudoku with the fields of the specified one
 		for (Position p : this.positions)
@@ -102,7 +111,7 @@ public class SolverSudoku extends Sudoku {
 	}
 
 	/**
-	 * Setzt die Kandidatenlisten aller Feldern zurück, sodass alle Kandidatenlisten komplett befüllt sind. "Komplett"
+	 * Setzt die Kandidatenlisten aller Felder zurück, sodass alle Kandidatenlisten komplett befüllt sind. "Komplett"
 	 * wird anhand des größten Constraints in dem sich dieses Feld befindet bemessen. Anschließend werden die
 	 * Kandidatenlisten bzgl. ConstraintSaturation upgedatet.
 	 */
@@ -110,7 +119,7 @@ public class SolverSudoku extends Sudoku {
 		this.complexityValue = 0;
 
 		// delete the branchings
-		this.branchPool.returnAll();
+		this.branchPool.recycleAllBranchings();
 		this.positionPool.returnAll();
 		this.branchings.clear();
 
@@ -177,10 +186,10 @@ public class SolverSudoku extends Sudoku {
 		this.complexityValue -= lastBranching.complexityValue;
 
 		BitSet branchCandidates = this.currentCandidates.get(lastBranching.position);
-		branchCandidates.clear(lastBranching.candidate);
-		this.branchPool.returnBranching();
+		branchCandidates.clear(lastBranching.candidate);//guessing this candidate led to failure -> it is not part of solution, we need to delete it
+		this.branchPool.recycleLastBranching();
 		this.positionPool.returnPositionMap();
-		if (branchCandidates.cardinality() == 0) {
+		if (branchCandidates.isEmpty()) {
 			return killCurrentBranch();
 		} else {
 			return lastBranching.position;
@@ -196,26 +205,24 @@ public class SolverSudoku extends Sudoku {
 		ArrayList<Position> updatedPositions;
 		boolean isInvalid = false;
 
-		for (int posNum = 0; posNum < this.positions.size() && !isInvalid; posNum++) {
-			Position position = this.positions.get(posNum);
-			if (!getField(position).isEmpty()) {
+		for (Position position : positions) {
+			if (!isInvalid && !getField(position).isEmpty()) {
 				// Update fields in unique constraints
 				updatedConstraints = this.constraints.get(position);
-				for (int uc = 0; uc < updatedConstraints.size() && !isInvalid; uc++) {
-					Constraint uConstraint = updatedConstraints.get(uc);
-					if (uConstraint.hasUniqueBehavior()) {
+				for (Constraint uConstraint : updatedConstraints) {
+					if (!isInvalid && uConstraint.hasUniqueBehavior()) {
 						updatedPositions = uConstraint.getPositions();
 						for (int up = 0; up < updatedPositions.size() && !isInvalid; up++) {
 							Position updatedPosition = updatedPositions.get(up);
 							this.currentCandidates.get(updatedPosition).clear(getField(position).getCurrentValue());
-							if (this.currentCandidates.get(updatedPosition).cardinality() == 0
-							    && getField(updatedPosition).isEmpty())
+							if (this.currentCandidates.get(updatedPosition).isEmpty()
+							 && getField(updatedPosition).isEmpty())
 								isInvalid = true;
 						}
 					}
 				}
 			} else {
-				// Update candidates in non-unique constraints
+				/* Update candidates in non-unique constraints */
 				boolean hasNonUnique = false;
 				updatedConstraints = this.constraints.get(position);
 				for (Constraint updatedConstraint : updatedConstraints) {
@@ -308,7 +315,7 @@ public class SolverSudoku extends Sudoku {
 		fields.get(pos).setCurrentValue(candidate, false);
 
 		currentCandidates.get(pos).clear();
-		if (!branchings.isEmpty())
+		if (hasBranch())
 			branchings.peek().solutionsSet.add(pos);
 		updateCandidates(pos, candidate);
 	}

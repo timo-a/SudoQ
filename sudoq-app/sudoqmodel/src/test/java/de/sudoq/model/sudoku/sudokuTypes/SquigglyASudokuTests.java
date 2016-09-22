@@ -8,13 +8,10 @@ import org.junit.Test;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraintTests;
-import de.sudoq.model.sudoku.sudokuTypes.SquigglyASudokuType9x9;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.sudoku.sudokuTypes.TypeBasic;
 
 public class SquigglyASudokuTests {
 
-	TypeBasic squigglyA = new SquigglyASudokuType9x9();
+	SudokuType squigglyA = TypeBuilder.getType(SudokuTypes.squigglya);
 	
 	
 	@Test

@@ -12,13 +12,10 @@ import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraintTests;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType6x6;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.sudoku.sudokuTypes.TypeBasic;
 
 public class StandardSudokuType6x6Tests {
 
-	TypeBasic sst66 = new StandardSudokuType6x6();
+	SudokuType sst66 = TypeBuilder.getType(SudokuTypes.standard6x6);
 
 	@Test
 	public void constraintsTest() {
@@ -90,7 +87,7 @@ public class StandardSudokuType6x6Tests {
 
 	@Test
 	public void buildComplexityConstraintTest() {
-		sst66 = new StandardSudokuType6x6();
+		sst66 = TypeBuilder.getType(SudokuTypes.standard6x6);
 
 		ComplexityConstraint comCo = sst66.buildComplexityConstraint(Complexity.easy);
 		ComplexityConstraintTests.returnsValues(comCo, Complexity.easy, 26, 200, 350, 2);

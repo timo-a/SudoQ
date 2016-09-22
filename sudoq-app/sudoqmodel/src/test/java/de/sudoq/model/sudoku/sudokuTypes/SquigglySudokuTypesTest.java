@@ -10,18 +10,16 @@ import org.junit.Test;
 
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
-import de.sudoq.model.sudoku.sudokuTypes.StairStepSudokuType9x9;
-import de.sudoq.model.sudoku.sudokuTypes.TypeSquiggly;
 
 public class SquigglySudokuTypesTest {
 
 	@Test
 	public void initialiser() {
-		TypeSquiggly stair = new StairStepSudokuType9x9();
+		SudokuType stair = TypeBuilder.getType(SudokuTypes.stairstep);
 		ConstraintTest(stair);
 	}
 
-	public void ConstraintTest(TypeSquiggly squig) {
+	public void ConstraintTest(SudokuType squig) {
 		int counter = 0;
 		boolean touched[] = { false, false, false, false, false, false, false, false, false };// schonmal
 																								// da
@@ -92,7 +90,7 @@ public class SquigglySudokuTypesTest {
 	}
 
 	protected void constraintsA(Constraint c) {
-		List<Position> m = new ArrayList<Position>();
+		List<Position> m = new ArrayList<>();
 		m.add(Position.get(0, 0));
 		m.add(Position.get(1, 0));
 		m.add(Position.get(2, 0));
@@ -107,7 +105,7 @@ public class SquigglySudokuTypesTest {
 	}
 
 	protected void constraintsB(Constraint c) {
-		List<Position> m = new ArrayList<Position>();
+		List<Position> m = new ArrayList<>();
 		m.add(Position.get(4, 1 - 1));
 		m.add(Position.get(5, 1 - 1));
 		m.add(Position.get(6, 1 - 1));

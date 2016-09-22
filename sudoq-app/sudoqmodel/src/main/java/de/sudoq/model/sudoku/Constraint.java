@@ -154,9 +154,9 @@ public class Constraint implements Iterable<Position>, Xmlable {
 	}
 
 	/**
-	 * Gibt zurück, ob das Verhalten dieses Constraints das UniqueConstraintBehavior ist.
+	 * Returns whether this Constraint has {link UniqueConstraintBehavior} i.e. no symbol may appear more than once.
 	 * 
-	 * @return true, falls dieses Constraint ein UniqueConstraint-Verhalten hat, false andernfalls
+	 * @return true, if  this Constraint has {link UniqueConstraintBehavior}, false otherwise
 	 */
 	public boolean hasUniqueBehavior() {
 		return (behavior instanceof UniqueConstraintBehavior);

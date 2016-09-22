@@ -174,7 +174,7 @@ public class XmlHelper {
 
 	}
 
-	/**
+	/** TODO if no children make just one tag instead of opening tag + closing tag
 	 * Gibt eine String Repäsentation des eingegebenen Xml Baumes zurück
 	 * 
 	 * @param tree
@@ -202,16 +202,17 @@ public class XmlHelper {
 		}
 
 		// check if there are subtree elements
-		if (!tree.getChildren().hasNext()) {
-			// write the content if there is any
-			sb.append(">");
-			sb.append(tree.getContent());
-		} else {
+		if (tree.getChildren().hasNext()) {
 			sb.append(">\n");
 			// write the subtree elements
 			for (XmlTree sub : tree) {
 				sb.append(buildXmlStructure(sub));
 			}
+
+		} else {
+			// write the content if there is any
+			sb.append(">");
+			sb.append(tree.getContent());
 		}
 		// close the tag again
 		sb.append("</");

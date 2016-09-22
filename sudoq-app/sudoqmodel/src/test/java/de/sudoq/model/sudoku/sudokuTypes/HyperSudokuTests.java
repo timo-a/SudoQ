@@ -11,13 +11,10 @@ import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
-import de.sudoq.model.sudoku.sudokuTypes.HyperSudoku;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.sudoku.sudokuTypes.TypeBasic;
-
+//TODO since we no longer have classes maybe we can merge some of these tests?
 public class HyperSudokuTests {
 
-	TypeBasic stHy = new HyperSudoku();
+	SudokuType stHy = TypeBuilder.getType(SudokuTypes.HyperSudoku);
 
 	@Test
 	public void ConstraintsTest() {

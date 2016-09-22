@@ -10,16 +10,13 @@ import org.junit.Test;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
-import de.sudoq.model.sudoku.sudokuTypes.HyperSudoku;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.sudoku.sudokuTypes.TypeBasic;
 import de.sudoq.model.xml.XmlHelper;
 
 public class Pseudotest {
 
-	TypeBasic stHy = new HyperSudoku();
+	SudokuType stHy = TypeBuilder.getType(SudokuTypes.HyperSudoku);
 
-	public SudokuType usual(TypeBasic oldType){
+	public SudokuType usual(SudokuType oldType){
 		
 		SudokuType s = new SudokuType(9, 9, 9);
 		s.setTypeName(oldType.getEnumType());
@@ -30,7 +27,7 @@ public class Pseudotest {
 		s.standardAllocationFactor = oldType.getStandardAllocationFactor();
 		for(Constraint c : oldType.getConstraints())
 			s.addConstraint(c);
-		for (PermutationProperties p : oldType.permutationProperties)
+		for (PermutationProperties p : oldType.getPermutationProperties())
 			s.setOfPermutationProperties.add(p);
 		
 		Complexity[] comps = {Complexity.easy,

@@ -337,7 +337,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 						
 						/*Now filling the edges*/
 						boolean belowRightMember = c.includes(Position.get(p.getX() + 1, p.getY() + 1));
-						/*For a field on the right border, fill edge to neighbour below 
+						/*For a field on the right border, initializeWith edge to neighbour below
 						 * 
 						 * !isBottom excludes:      corner to the left -> no neighbour directly below i.e. unwanted filling
 						 *  3rd condition excludes: corner to the right-> member below right          i.e. unwanted filling
@@ -351,7 +351,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 									getCurrentTopMargin()  + (p.getY() + 1) * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) + edgeRadius,
 									paint);
 						}
-						/*For a field at the bottom, fill edge to right neighbour */
+						/*For a field at the bottom, initializeWith edge to right neighbour */
 						if (isBottom && !isRight && !belowRightMember) {
 							canvas.drawLine(
 									getCurrentLeftMargin() + (p.getX() + 1) * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) - edgeRadius - getCurrentSpacing(),
@@ -361,7 +361,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 									paint);
 						}
 						
-						/*For a field on the left border, fill edge to upper neighbour*/
+						/*For a field on the left border, initializeWith edge to upper neighbour*/
 						if (isLeft && !isTop && (p.getX() == 0 || !c.includes(Position.get(p.getX() - 1, p.getY() - 1)))) {
 							canvas.drawLine(
 									getCurrentLeftMargin() + p.getX() * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) - i,
@@ -370,7 +370,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 									getCurrentTopMargin()  + p.getY() * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) + edgeRadius,
 									paint);
 						}
-						/*For a field at the top fill to the left*/
+						/*For a field at the top initializeWith to the left*/
 						if (isTop && !isLeft && (p.getY() == 0 || !c.includes(Position.get(p.getX() - 1, p.getY() - 1)))) {
 							canvas.drawLine(
 									getCurrentLeftMargin() + p.getX() * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) - edgeRadius - getCurrentSpacing(),

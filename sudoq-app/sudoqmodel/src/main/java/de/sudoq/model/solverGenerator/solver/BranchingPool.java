@@ -4,90 +4,74 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Stack;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
 
 class BranchingPool {
 	/**
-	 * Eine Liste der erstellten, noch nicht vergebenen Maps
+	 * Stores discarded branching objects ready to be reused (we want to save on object instantiation for performance)
 	 */
-	private Stack<Branching> unusedBranchings;
+	private Stack<Branching> recycledBranchings;
 
 	/**
 	 * Ein Stack der erstellten und bereits vergebenen Maps
 	 */
 	private Stack<Branching> usedBranchings;
 
-	/**
-	 * Die Anzahl der im Pool befindlichen PositionMaps
-	 */
-	private int numberOfAllocatedBranchings;
 
 	/**
-	 * Initialisiert einen neues PositionMapPool mit PositionMaps der spezifizierten Größe. Ist diese null oder ist eine
-	 * Dimension gleich 0, so wird eine IllegalArgumentException geworfen. Der Pool wird mit 2 PositionMaps
-	 * initialisiert.
+	 * Initialisiert einen neuen BranchingPool. Der Pool wird mit 2 PositionMaps initialisiert.
 	 * 
-	 * @param dimension
-	 *            Die Größe der verwalteten PositionMaps
-	 * @throws IllegalArgumentException
-	 *             Wird geworfen, falls die Dimension null oder in einer Komponente 0 ist
 	 */
 	BranchingPool() {
-		usedBranchings = new Stack<>();
-		unusedBranchings = new Stack<>();
-		numberOfAllocatedBranchings = 2;
-		unusedBranchings.push(new Branching());
-		unusedBranchings.push(new Branching());
+		    usedBranchings = new Stack<>();
+		recycledBranchings = new Stack<>();
 	}
 
 	/**
-	 * Gibt eine PositionMap entsprechend der aktuell gesetzten Größe zurück. Ist der Pool leer, so wird seine Größe
-	 * verdoppelt.
-	 * 
-	 * @return Eine PositionMap entsprechend der aktuell gesetzten Größe
+	 * Returns an unused Branching initialized with Position {@code p} and Candidate {@code candidate}.
+	 * If possible a branch is recycled, otherwise newly instantiated.
+	 *
+	 * @return a Branching initialized with {@code p} and {@code candidate}
 	 * @throws IllegalArgumentException
 	 *             Wird geworfen, falls die spezifizierte Position null ist
 	 */
 	Branching getBranching(Position p, int candidate) {
 		if (p == null)
 			throw new IllegalArgumentException("Position was null");
-		if (unusedBranchings.isEmpty()) {
-			/*add nOAB new Branchings to unusedBranchings*/
-			for (int i = 0; i < numberOfAllocatedBranchings; i++) {
-				unusedBranchings.add(new Branching());
-			}
-			numberOfAllocatedBranchings *= 2;
+
+		/* fetch a new Branching. Preferrably recycle one from unused */
+		Branching ret;
+		/* if no unused Branchings ready */
+		if (recycledBranchings.isEmpty()) {
+			ret = new Branching(p,candidate);
+		}else{
+			ret = recycledBranchings.pop();
+			ret.initializeWith(p,candidate);
 		}
 
-		Branching ret = unusedBranchings.pop();
-		ret.position = p;
-		ret.candidate = candidate;
-		ret.complexityValue = 0;
-		usedBranchings.push(ret);
+		usedBranchings.push(ret); //store it among the used
 		return ret;
 	}
 
 	/**
-	 * Gibt die zuletzt geholte PositionMap an den Pool zurück.
+	 * Recycles most recent branching
 	 */
-	void returnBranching() {
+	void recycleLastBranching() {
 		if (!usedBranchings.isEmpty()) {
 			Branching returnedMap = usedBranchings.pop();
 			returnedMap.solutionsSet.clear();
-			unusedBranchings.push(returnedMap);
+			recycledBranchings.push(returnedMap);
 		}
 	}
 
 	/**
-	 * Gibt alle PositionMaps an den Pool zurück.
+	 * Recycles all branchings
 	 */
-	void returnAll() {
+	void recycleAllBranchings () {
 		while (!this.usedBranchings.isEmpty()) {
-			returnBranching();
+			recycleLastBranching();
 		}
 	}
 
@@ -125,10 +109,19 @@ class BranchingPool {
 		int complexityValue;
 
 		/**
-		 * Erstellt ein neues Branching mit einem leeren SolutionSet. Alle anderen Attribute werden nicht initialisiert.
+		 * Erstellt ein neues Branching mit einem leeren SolutionSet.
+		 * position and candidate are set by parameter values, complexity value is set to 0
 		 */
-		protected Branching() {
+		protected Branching(Position p, int candidate) {
 			this.solutionsSet = new ArrayList<Position>();
+			initializeWith(p, candidate);
+		}
+
+		//we have an extra method here to ensure that reinitialization as well as initialization are invariant with regard to pos, can, complxVal
+		protected void initializeWith(Position p, int candidate){
+			this.position       =p;
+			this.candidate      =candidate;
+			this.complexityValue=0;
 		}
 
 	}

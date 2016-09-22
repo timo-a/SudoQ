@@ -4,17 +4,13 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraintTests;
-import de.sudoq.model.sudoku.sudokuTypes.StairStepSudokuType9x9;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.sudoku.sudokuTypes.TypeBasic;
 
 public class StairStepSudokuTests {
 
-	TypeBasic stair = new StairStepSudokuType9x9();
+	SudokuType stair = TypeBuilder.getType(SudokuTypes.stairstep);
 
 	@Test
 	public void getEnumTypeTests() {

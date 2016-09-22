@@ -212,7 +212,7 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 	 * Gibt den Standard Belegungsfaktor zurück
 	 */
 	public float getStandardAllocationFactor() {
-		return 0.35f;
+		return standardAllocationFactor; //0.35f; TODO WHY DID I SET A CONST. VALUE?! REALLY?!
 	}
 
 	/**

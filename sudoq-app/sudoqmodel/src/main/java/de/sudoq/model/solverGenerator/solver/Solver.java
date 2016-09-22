@@ -15,12 +15,10 @@ import de.sudoq.model.solverGenerator.solver.helper.HiddenHelper;
 import de.sudoq.model.solverGenerator.solver.helper.NakedHelper;
 import de.sudoq.model.solverGenerator.solver.helper.SolveHelper;
 import de.sudoq.model.sudoku.Constraint;
-import de.sudoq.model.sudoku.Field;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
 /**
  * Diese Klasse bietet Methoden zum Lösen eines Sudokus. Sowohl einzelne Felder, als auch gesamte Sudokus können gelöst
@@ -67,14 +65,14 @@ public class Solver {
 	/** Constructors */
 
 	/**
-	 * Initialisiert einen neuen Solver für das spezifizierte Sudoku-Objekt. Ist das Sudoku-Objekt null, so wird eine
-	 * IllegalArgumentException geworfen. Alle Methoden dieser Klasse werden auf dem hier spezifizierten Sudoku
-	 * ausgeführt.
+	 * Creates a new solver for {@code sudoku}.
+	 * If the argument is null, a IllegalArgumentException is thrown.
+	 * All methods of this class refer to this sudoku object.
 	 * 
 	 * @param sudoku
-	 *            Das Sudoku, welches von diesem Solver gelöst werden soll
+	 *            Sudoku to be solved by this solver
 	 * @throws IllegalArgumentException
-	 *             Wird geworfen, falls das spezifizierte Sudoku null ist
+	 *             if {@code sudoku == null}
 	 */
 	public Solver(Sudoku sudoku) {
 		if (sudoku == null)
@@ -94,13 +92,15 @@ public class Solver {
 		helper.add(new NakedHelper(this.sudoku, 5, 49));
 		helper.add(new HiddenHelper(this.sudoku, 4, 54));
 		// helper.add(new HiddenHelper(this.sudoku, 5, 57));
-
+//TODO add locked, wing
 		helper.add(new Backtracking(this.sudoku, 70));
 		numberOfHelpers = helper.size();
 	}
 
 	/**
-	 * Gibt das Sudoku zurück, auf dem der Solver arbeitet. Dieses Sudoku ist ein anderes als das originale!
+	 * Returns the sudoku this solver is working on.
+	 * The returned object not identical to the object passed as parameter to the constructor!
+	 * A solverSudoku is returned, containing the original parameter-sudoku.
 	 * 
 	 * @return Das Sudoku-Objekt, auf dem der Solver arbeitet
 	 */
@@ -125,8 +125,8 @@ public class Solver {
 	public Solution solveOne(boolean applySolution) {
 		this.sudoku.resetCandidates();
 
-		// Look for constraint saturation at the beginning
-		for (Constraint con : this.sudoku.getSudokuType()) {
+		// Look for constraint saturation at the beginning * if(this.sudoku.getSudokuType().exists((x => !x.isSaturated(this.sudoku)))
+		for (Constraint con : this.sudoku.getSudokuType()) {     // return null
 			if (!con.isSaturated(this.sudoku))
 				return null;
 		}
@@ -137,39 +137,35 @@ public class Solver {
 		boolean didUpdate = true;
 		boolean isIncorrect = false;
 
+		//loop until we get the solution for a field TODO what if a helper solves a field directly? solvedField would never be true right? I DONT THINK WE ARE SUPPOSED TO 'SOLVE' IN HELPERS, JUST FIND
 		while (!solvedField && didUpdate && !isIncorrect) {
 			didUpdate = false;
 
-			// try to solve the sudoku
-			if (isSolved())
-				return null;
+			if (isSolved())	return null; // if every field is already filled, no solution can be found, because that already happened
 
-			if (!solvedField && isInvalid()) {
-				// if sudoku is invalid, has no branches and no solution was
-				// found, it is invalid
-				// if there was already a solution there is no further one, so
-				// it is solved correct
-				// if there is a branch, make a backstep
-				if (!this.sudoku.hasBranch()) {
+			if (isInvalid()) {
+				if (!this.sudoku.hasBranch()) {	// if sudoku is invalid && has no branches we're in a dead end
 					isIncorrect = true;
 				} else {
-					this.sudoku.killCurrentBranch();
+					this.sudoku.killCurrentBranch(); //if there is a branch, make a backstep
 					didUpdate = true;
 				}
 			}
 
+			/* try to solve fields where only one note is remaining TODO why not just make a naked single?!*/
 			for (Position p : this.sudoku.positions) {
 				BitSet b = this.sudoku.getCurrentCandidates(p);
-				if (b.cardinality() == 1) {
+				if (b.cardinality() == 1) { //we found a field where only one note remains
 					if (!this.sudoku.hasBranch()) {
-						solution.setAction(new SolveActionFactory().createAction(b.nextSetBit(0),
-								this.sudoku.getField(p)));
+						//if there are no branches create solution-object
+						solution.setAction(new SolveActionFactory().createAction(b.nextSetBit(0), this.sudoku.getField(p)));
+
 						SolveDerivation deriv = new SolveDerivation();
-						deriv.addDerivationField(new DerivationField(p, (BitSet) b.clone(), new BitSet()));
+						deriv.addDerivationField(new DerivationField(p, (BitSet) b.clone(), new BitSet())); //since only one bit set, complement is an empty set
 						solution.addDerivation(deriv);
 						solvedField = true;
 					} else {
-						this.sudoku.setSolution(p, b.nextSetBit(0));
+						this.sudoku.setSolution(p, b.nextSetBit(0)); //set solution that can be removed again (in case it's the wrong branch)
 						didUpdate = true;
 					}
 				}
@@ -177,21 +173,18 @@ public class Solver {
 
 			// According to their priority use the helpers until one of them can
 			// be applied
-			if (!solvedField && !didUpdate && !isIncorrect) {
-				for (SolveHelper hel : helper) {
+			if (!solvedField && !didUpdate && !isIncorrect)
+				for (SolveHelper hel : helper)
 					if (hel.update(true)) {
-						solution.addDerivation(hel.getDerivation());
+						solution.addDerivation(hel.getDerivation());//we don't check whether branches exist here?!
 						didUpdate = true;
 						break;
 					}
-				}
-			}
 		}
 
 		// Apply solution if wanted
-		if (!isIncorrect && solvedField && applySolution) {
+		if (!isIncorrect && solvedField && applySolution)
 			solution.getAction().execute();
-		}
 
 		return (!isIncorrect && solvedField) ? solution : null;
 	}
@@ -209,20 +202,26 @@ public class Solver {
 	 * @return true, falls das Sudoku gelöst werden konnte, false falls nicht
 	 */
 	public boolean solveAll(boolean buildDerivation, boolean applySolutions) {
-		boolean solved = false;
-		PositionMap<Integer> copy = new PositionMap<Integer>(this.sudoku.getSudokuType().getSize());
+		System.out.println("start of solveAll2");
+		print9x9(sudoku);
+
+		PositionMap<Integer> copy = new PositionMap<>(this.sudoku.getSudokuType().getSize());
 		for (Position p : this.sudoku.positions) {
 			copy.put(p, this.sudoku.getField(p).getCurrentValue());
 		}
 
-		solved = solveAll(buildDerivation, false, false);
+		boolean solved = solveAll(buildDerivation, false, false);
 
-		// Restore old state if solutions shell not be applied or if sudoku could not be solved
+		System.out.println("solved: "+solved);
+		print9x9(sudoku);
+
+		// Restore old state if solutions shall not be applied or if sudoku could not be solved
 		if (!applySolutions || !solved) {
 			for (Position p : this.sudoku.positions) {
 				this.sudoku.getField(p).setCurrentValue(copy.get(p), false);
 			}
 		}
+
 
 		return solved;
 	}
@@ -250,8 +249,7 @@ public class Solver {
 	 * @param solution
 	 *            In diese Map wird die ermittelte Lösung geschrieben
 	 * @param in
-	 *            TODO
-	 * @param in
+	 *            if false, {@code solution} is filled otherwise not TODO further investigation
 	 *            Spezifiziert, ob die solution Ein- oder Ausgabe ist
 	 * @return Ein ComplexityRelation-Objekt, welches die Constraint-gemäße Lösbarkeit beschreibt
 	 */
@@ -269,8 +267,7 @@ public class Solver {
 			solved = true;
 			// store the correct solution
 			if (solution != null) {
-				for (int i = 0; i < this.sudoku.positions.size(); i++) {
-					Position p = this.sudoku.positions.get(i);
+				for (Position p: this.sudoku.positions) {
 					int curVal = this.sudoku.getField(p).getCurrentValue();
 					if (!in) {
 						solution.put(p, curVal);
@@ -283,7 +280,7 @@ public class Solver {
 
 		if (this.sudoku.hasBranch()) {
 			this.sudoku.killCurrentBranch();
-			if (solved && solveAll(false, false, true))
+			if (solved && solveAll(false, false, true))//why is it invalid if solved and another solve?
 				invalid = true;
 		}
 
@@ -293,20 +290,19 @@ public class Solver {
 
 
 		// depending on the result, return an int
+		int complexity = this.sudoku.getComplexityValue();
+		int minimumComplextiy = complConstr.getMinComplexityIdentifier();
+		int maximumComplextiy = complConstr.getMaxComplexityIdentifier();
+
 		if (!invalid && solved) {
-			if (this.sudoku.getComplexityValue() > complConstr.getMaxComplexityIdentifier()) {
-				if (this.sudoku.getComplexityValue() > complConstr.getMaxComplexityIdentifier() * 1.2)
-					result = ComplexityRelation.MUCH_TO_DIFFICULT;
-				else
-					result = ComplexityRelation.TO_DIFFICULT;
-			} else if (this.sudoku.getComplexityValue() < complConstr.getMinComplexityIdentifier()) {
-				if (this.sudoku.getComplexityValue() < complConstr.getMinComplexityIdentifier() * 0.8)
-					result = ComplexityRelation.MUCH_TO_EASY;
-				else
-					result = ComplexityRelation.TO_EASY;
-			} else {
-				result = ComplexityRelation.CONSTRAINT_SATURATION;
-			}
+
+			if      (maximumComplextiy * 1.2 < complexity                                          ) result = ComplexityRelation.MUCH_TO_DIFFICULT;
+			else if (maximumComplextiy       < complexity && complexity <= maximumComplextiy * 1.2 ) result = ComplexityRelation.TO_DIFFICULT;
+			else if (minimumComplextiy       < complexity && complexity <= maximumComplextiy       ) result = ComplexityRelation.CONSTRAINT_SATURATION;
+			else if (minimumComplextiy * 0.8 < complexity && complexity <= minimumComplextiy       ) result = ComplexityRelation.TO_EASY;
+			else if (                                        complexity <= minimumComplextiy * 0.8 ) result = ComplexityRelation.MUCH_TO_EASY;
+			
+				
 		}
 
 		// System.out.println(sudoku.getComplexityValue() + "(" + sudoku.getComplexity() + ") " + result);
@@ -317,7 +313,7 @@ public class Solver {
 	/**
 	 * Löst das gesamte spezifizierte Sudoku. Die Lösung wird als Liste von Solution-Objekten zurückgeliefert, deren
 	 * Reihenfolge die Reihenfolge der Lösungsschritte des Algorithmus, realisiert durch die SolveHelper, repräsentiert.
-	 * Ist das Sudoku invalide und kann somit nicht eindeutig gelöst werden, so wird null zurückgegeben.
+	 * Ist das Sudoku invalid und kann somit nicht eindeutig gelöst werden, so wird null zurückgegeben.
 	 * 
 	 * @param buildDerivation
 	 *            Bestimmt, ob die Herleitung der Lösung oder lediglich eine leere Liste zurückgegeben werden soll
@@ -372,8 +368,9 @@ public class Solver {
 
 			if (!solved && isInvalid()) {
 				/*
-				 * if sudoku is invalid, has no branches and no solution was found, it is invalid if there was already a
-				 * solution there is no further one, so it is solved correct if there is a branch, make a backstep
+				 * if sudoku is invalid, has no branches and no solution was found,
+				 * it is invalid if there was already a solution
+				 * there is no further one, so it is solved correct if there is a branch, make a backstep
 				 */
 				if (!this.sudoku.hasBranch()) {
 					isIncorrect = true;
@@ -421,9 +418,9 @@ public class Solver {
 			}
 
 			// UNCOMMENT THE FOLLOWING TO PRINT THE WHOLE SUDOKU AFTER EACH LOOP
-			if(sudoku.getSudokuType().getEnumType() == SudokuTypes.samurai){
-				print();
-			}
+			//if(sudoku.getSudokuType().getEnumType() == SudokuTypes.samurai){
+				//print9x9(sudoku);
+			//}
 		}
 
 		if (!solved) {
@@ -436,31 +433,12 @@ public class Solver {
 		return solved;
 	}
 
-	private void print(){
-		StringBuilder sb = new StringBuilder();
-		for (int j = 0; j < sudoku.getSudokuType().getSize().getY(); j++) {
-		for (int i = 0; i < sudoku.getSudokuType().getSize().getX(); i++) {
-			Field f = sudoku.getField(new Position(i, j));
-			String op; 
-			if (f != null){//feld existiert
-				int value = f.getCurrentValue();
-				op = value + "";
-				if (value < 10)
-					op = "" + value;
-				if (value == -1)
-					op = "x";
-				sb.append(op + " ");
-			}else{
-				sb.append("  ");
-				
-			}
-		}
-		sb.append("\n");
-		}
-		System.out.println(sb);
+	public static void print9x9(Sudoku sudoku){
+
+		System.out.println(sudoku);
 	}
-	
-	boolean failed = false;
+
+	boolean failed = false; //TODO that cant be right...
 
 	/**
 	 * Sucht nach NakedSingles und trägt diese daraufhin als Lösung für das jeweilige Feld ein. Gibt zurück, ob ein
@@ -512,17 +490,12 @@ public class Solver {
 	 * @return true, falls das Sudoku aktuell invalide ist, false falls nicht
 	 */
 	private boolean isInvalid() {
-		boolean invalid = false;
-		for (Position p : this.sudoku.positions) {
-			if (this.sudoku.getCurrentCandidates(p).cardinality() == 0
-			 && this.sudoku.getField(p).isEmpty()) {
-				invalid = true;
-			}
-		}
+		for (Position p : this.sudoku.positions)
+		    /* look for no solution entered && no candidates left */
+			if (this.sudoku.getCurrentCandidates(p).isEmpty() && this.sudoku.getField(p).isEmpty() )
+				return true;
 
-		return invalid;
-
-
+		return false;
 	}
 
 	/**
@@ -532,14 +505,15 @@ public class Solver {
 	 * @return true, falls das Sudoku gelöst ist, false andernfalls
 	 */
 	private boolean isSolved() {
-		boolean solved = true;
+
+		//return sudoku.positions.forall( p => !sudoku.getField(p).isEmpty())
+		//return sudoku.positions.map(sudoku.getField).forall(f=>!f.isEmpty())
+		//return !sudoku.positions.map(sudoku.getField).exists(f=>f.isEmpty())
 
 		for (Position p : this.sudoku.positions)
 			if (this.sudoku.getField(p).isEmpty())
-				solved = false;
+				return false;
 
-		return solved;
-
+		return true;
 	}
-
 }

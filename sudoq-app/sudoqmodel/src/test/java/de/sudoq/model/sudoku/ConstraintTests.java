@@ -9,14 +9,6 @@ import java.util.Iterator;
 
 import org.junit.Test;
 
-import de.sudoq.model.sudoku.Constraint;
-import de.sudoq.model.sudoku.ConstraintType;
-import de.sudoq.model.sudoku.Position;
-import de.sudoq.model.sudoku.PositionMap;
-import de.sudoq.model.sudoku.Sudoku;
-import de.sudoq.model.sudoku.SumConstraintBehavior;
-import de.sudoq.model.sudoku.UniqueConstraintBehavior;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType9x9;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;

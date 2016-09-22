@@ -1,24 +1,21 @@
 package de.sudoq.model.sudoku.sudokuTypes;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.BitSet;
 
 import org.junit.Test;
 
-
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraintTests;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType4x4;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.sudoku.sudokuTypes.TypeBasic;
 
 public class StandardSudokuType4x4Tests {
 
-	TypeBasic sst44 = new StandardSudokuType4x4();
+	SudokuType sst44 = TypeBuilder.getType(SudokuTypes.standard4x4);
 
 	@Test
 	public void constraintsTest() {
@@ -73,7 +70,7 @@ public class StandardSudokuType4x4Tests {
 
 	@Test
 	public void buildComplexityConstraintTest() {
-		TypeBasic standard4x4 = new StandardSudokuType4x4();
+		SudokuType standard4x4 = TypeBuilder.getType(SudokuTypes.standard4x4);
 
 		ComplexityConstraint comCo = standard4x4.buildComplexityConstraint(Complexity.easy);
 		ComplexityConstraintTests.returnsValues(comCo, Complexity.easy, 12, 100, 130, 2);
@@ -90,7 +87,7 @@ public class StandardSudokuType4x4Tests {
 		comCo = standard4x4.buildComplexityConstraint(Complexity.arbitrary);
 		ComplexityConstraintTests.returnsValues(comCo, Complexity.arbitrary, 10, 1, Integer.MAX_VALUE, Integer.MAX_VALUE);
 
-		assertTrue(standard4x4.buildComplexityConstraint(null) == null);
+		assertNull(standard4x4.buildComplexityConstraint(null));
 
 	}
 }

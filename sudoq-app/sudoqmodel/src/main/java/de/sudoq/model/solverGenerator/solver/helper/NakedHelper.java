@@ -16,6 +16,10 @@ import de.sudoq.model.sudoku.Position;
  * entspricht dem level des Helpers). Kommen in n Feldern lediglich dieselben n Kandidaten vor, so können diese
  * Kandidaten aus den anderen Listen des Constraints entfernt werden. Tauchen n Kandidaten lediglich in n Feldern auf,
  * so können in diesen Feldern die restlichen Kandidaten entfernt werden.
+ *
+ * If there are n fields with only n distinct candidates in them, those candidates can't appear anywhere else.
+ *
+ *
  */
 public class NakedHelper extends SubsetHelper {
 
@@ -34,6 +38,26 @@ public class NakedHelper extends SubsetHelper {
 	 */
 	public NakedHelper(SolverSudoku sudoku, int level, int complexity) throws IllegalArgumentException {
 		super(sudoku, level, complexity);
+	}
+
+	/**
+	 * collect all candidates appearing in fields with maximum {@code level} candidates.
+	 * This is 'naked'-specific code for the template method in superclass
+	 * @param sudoku
+	 * @param constraint
+	 * @return
+	 */
+	@Override
+	protected BitSet collectPossibleCandidates(SolverSudoku sudoku, Constraint constraint) {
+		BitSet constraintSet = new BitSet();
+
+		for (Position pos : constraint.getPositions()) {
+			BitSet currentCandidates = this.sudoku.getCurrentCandidates(pos);
+			if (currentCandidates.cardinality() <= this.level) //we only want up to n candidates per field
+				constraintSet.or(currentCandidates);
+		}
+		//now we have constraintSet of all candidates in the constraint
+		return constraintSet;
 	}
 
 	/**
@@ -80,17 +104,17 @@ public class NakedHelper extends SubsetHelper {
 			foundSubset = false;
 			boolean foundOne = false;
 			if (subsetCount == this.level) {
-				for (int posNum = 0; posNum < positions.size(); posNum++) {
+				for (Position pos : positions) {
 					foundOne = false;
 					for (int i = 0; i < subsetCount; i++) {
-						if (positions.get(posNum) == subsetPositions[i])
+						if (pos == subsetPositions[i])
 							foundOne = true;
 					}
 					if (!foundOne) {
 						localCopy.clear();
-						localCopy.or(this.sudoku.getCurrentCandidates(positions.get(posNum)));
-						this.sudoku.getCurrentCandidates(positions.get(posNum)).andNot(currentSet);
-						if (!this.sudoku.getCurrentCandidates(positions.get(posNum)).equals(localCopy)) {
+						localCopy.or(this.sudoku.getCurrentCandidates(pos));
+						this.sudoku.getCurrentCandidates(pos).andNot(currentSet);
+						if (!this.sudoku.getCurrentCandidates(pos).equals(localCopy)) {
 							// If something changed, a field could be updated,
 							// so the helper is applied
 							// If the derivation shell be returned, add the
@@ -102,10 +126,8 @@ public class NakedHelper extends SubsetHelper {
 								}
 								BitSet relevantCandidates = localCopy;
 								relevantCandidates.and(currentSet);
-								BitSet irrelevantCandidates = (BitSet) this.sudoku.getCurrentCandidates(
-										positions.get(posNum)).clone();
-								DerivationField field = new DerivationField(positions.get(posNum), relevantCandidates,
-										irrelevantCandidates);
+								BitSet irrelevantCandidates = (BitSet) this.sudoku.getCurrentCandidates(pos).clone();
+								DerivationField field = new DerivationField(pos, relevantCandidates, irrelevantCandidates);
 								lastDerivation.addDerivationField(field);
 							}
 							foundSubset = true;
