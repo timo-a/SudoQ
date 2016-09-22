@@ -24,6 +24,7 @@ lint.xml
 sudoq-model/bin
 test-model/bin
 sudoq-app/bin
+sudoq-app/build
 sudoq-app/gen
 sudoq-app/assets
 sudoq-app/libs/model.jar
@@ -33,3 +34,4 @@ test-app/gen
 test-app/coverage/
 tmp
 .metadata/
+*apk

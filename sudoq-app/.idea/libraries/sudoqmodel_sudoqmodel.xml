@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="sudoqmodel.sudoqmodel">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/sudoqmodel/build/libs/sudoqmodel.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
