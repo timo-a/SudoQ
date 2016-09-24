@@ -599,23 +599,22 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 	 * Zeigt einen Dialog mit den verfügbaren Hilfestellungen an.
 	 */
 	private void showAssistancesDialog() {
-		CharSequence[] temp_items = null;
+		final CharSequence[] items;
 		if (this.sudokuView.getCurrentFieldView() != null
-				&& this.sudokuView.getCurrentFieldView().getField().isEmpty()) {
-			temp_items = new CharSequence[] { getString(R.string.sf_sudoku_assistances_solve_surrender),
-					getString(R.string.sf_sudoku_assistances_back_to_valid_state),
-					getString(R.string.sf_sudoku_assistances_back_to_bookmark),
-					getString(R.string.sf_sudoku_assistances_check),
-					getString(R.string.sf_sudoku_assistances_solve_random),
-					getString(R.string.sf_sudoku_assistances_solve_specific) };
+		 && this.sudokuView.getCurrentFieldView().getField().isEmpty()) {
+			items = new CharSequence[] { getString(R.string.sf_sudoku_assistances_solve_surrender)
+			                           , getString(R.string.sf_sudoku_assistances_back_to_valid_state)
+			                           , getString(R.string.sf_sudoku_assistances_back_to_bookmark)
+			                           , getString(R.string.sf_sudoku_assistances_check)
+			                           , getString(R.string.sf_sudoku_assistances_solve_random)
+			                           , getString(R.string.sf_sudoku_assistances_solve_specific) };
 		} else {
-			temp_items = new CharSequence[] { getString(R.string.sf_sudoku_assistances_solve_surrender),
-					getString(R.string.sf_sudoku_assistances_back_to_valid_state),
-					getString(R.string.sf_sudoku_assistances_back_to_bookmark),
-					getString(R.string.sf_sudoku_assistances_check),
-					getString(R.string.sf_sudoku_assistances_solve_random) };
+			items = new CharSequence[] { getString(R.string.sf_sudoku_assistances_solve_surrender)
+			                           , getString(R.string.sf_sudoku_assistances_back_to_valid_state)
+			                           , getString(R.string.sf_sudoku_assistances_back_to_bookmark)
+			                           , getString(R.string.sf_sudoku_assistances_check)
+			                           , getString(R.string.sf_sudoku_assistances_solve_random) };
 		}
-		final CharSequence[] items = temp_items;
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(getString(R.string.sf_sudoku_assistances_title));
@@ -647,8 +646,8 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 					}
 					break;
 				case 5:
-					if (SudokuActivity.this.sudokuView.getCurrentFieldView() != null
-							&& !SudokuActivity.this.sudokuController.onSolveCurrent(SudokuActivity.this.sudokuView.getCurrentFieldView().getField())) {
+					if (    SudokuActivity.this.sudokuView.getCurrentFieldView() != null
+					    && !SudokuActivity.this.sudokuController.onSolveCurrent(SudokuActivity.this.sudokuView.getCurrentFieldView().getField())) {
 						Toast.makeText(SudokuActivity.this, R.string.toast_solved_wrong, Toast.LENGTH_SHORT).show();
 					}
 					break;
@@ -756,19 +755,17 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 		time /= 60;
 		
 		int hours   = time % 24;
-		
-		int days = time /= 60;
+		time /= 24;
+
+		int days = time;
 		
 		StringBuilder pattern = new StringBuilder("");
 		
-		if(days > 0)
+		if( days > 0)
 			pattern.append(days).append(" ");
-		if(hours > 0){
-			//padding only if days entry
-			if(days > 0 && hours > 9)
-				pattern.append('0');
-			pattern.append(hours).append(":");
-		}
+		if(hours > 0)
+			pattern.append(String.format("%02d:", hours));
+
 		pattern.append(String.format("%02d:%02d", minutes, seconds));
 		
 		return pattern.toString();
