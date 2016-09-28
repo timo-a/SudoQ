@@ -4,6 +4,9 @@ import org.junit.Test;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Stack;
+
+import de.sudoq.model.sudoku.Position;
 
 import static org.junit.Assert.assertEquals;
 
@@ -21,12 +24,35 @@ public class SudokuActivityTests {
         assertEquals( "1 03:46:40", SudokuActivity.getTimeString(  100_000));
         assertEquals("11 13:46:40", SudokuActivity.getTimeString(1_000_000));
 
+        Stack<String> itemStack= new Stack<>();
+
+        Position g=null;
+        a(g);
+        System.out.println(g!=null);
+
+        final String a = "a";
+        final String b = "b";
+
+        itemStack.add(a);
+        itemStack.add(b);
+
+        String[] item0 = new String[0];
+        final String [] ss = itemStack.toArray(item0);
+
+        System.out.println(ss.length);
+
+         String[] items = (String []) (itemStack.toArray());
+
         /*assertEquals(      "00:25", reference(       25));
         assertEquals(      "01:40", reference(      100));
         assertEquals(      "16:40", reference(    1_000));
         assertEquals(   "02:46:40", reference(   10_000));
         assertEquals( "1 03:46:40", reference(  100_000));
         assertEquals("11 13:46:40", reference(1_000_000));*/
+    }
+
+    private static void a(Position pos){
+        pos = new Position(9,8);
     }
 
     private static Date D = new Date();

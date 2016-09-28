@@ -48,10 +48,8 @@ public class GameSettings implements Xmlable{
 	 *            Die Hilfestellung die gesetzt werden soll
 	 */
 	public void setAssistance(Assistances assistance) {
-		if (assistance == null)
-			return;
-
-		this.assistances.set((int) Math.pow(2, assistance.ordinal() + 1));
+		if (assistance != null)
+			this.assistances.set((int) Math.pow(2, assistance.ordinal() + 1)); //TODO that looks wrong...
 	}
 
 	/**
@@ -62,10 +60,8 @@ public class GameSettings implements Xmlable{
 	 *            Die Hilfestellung die gelöscht werden soll
 	 */
 	public void clearAssistance(Assistances assistance) {
-		if (assistance == null)
-			return;
-
-		this.assistances.clear((int) Math.pow(2, assistance.ordinal() + 1));
+		if (assistance != null)
+			this.assistances.clear((int) Math.pow(2, assistance.ordinal() + 1));
 	}
 
 	/**
@@ -118,10 +114,10 @@ public class GameSettings implements Xmlable{
 	@Override
 	public XmlTree toXmlTree() {
         XmlTree representation = new XmlTree("gameSettings");
-        representation.addAttribute(new XmlAttribute("assistances", this.convertAssistancesToString()));
-        representation.addAttribute(new XmlAttribute("gestures",   "" + gestures));
-        representation.addAttribute(new XmlAttribute("left",   "" + lefthandMode));
-        representation.addAttribute(new XmlAttribute("helper", "" + helper));
+        representation.addAttribute(new XmlAttribute("assistances", this.convertAssistancesToString()));//TODO scrap that, representation as 0,1 is ugly -> save all with name, then make all of the boolean assistances enums
+        representation.addAttribute(new XmlAttribute("gestures", gestures));
+        representation.addAttribute(new XmlAttribute("left",     lefthandMode));
+        representation.addAttribute(new XmlAttribute("helper",   helper));
         representation.addChild(wantedSudokuTypes.toXmlTree());
 		return representation;
 	}
@@ -150,13 +146,9 @@ public class GameSettings implements Xmlable{
 	 */
 	private String convertAssistancesToString() {
 		StringBuilder bitstring = new StringBuilder();
-		for (Assistances assist : Assistances.values()) {
-			if (getAssistance(assist)) {
-				bitstring.append("1");
-			} else {
-				bitstring.append("0");
-			}
-		}
+		for (Assistances assist : Assistances.values())
+			bitstring.append( getAssistance(assist) ? "1" : "0");
+
 		return bitstring.toString();
 	}
 
@@ -171,6 +163,7 @@ public class GameSettings implements Xmlable{
 	 *             AssistanceSet generiert werden kann.
 	 */
 	private void AssistancesfromString(String representation) throws IllegalArgumentException {
+
 		int i = 0;
 		for (Assistances assist : Assistances.values()) {
 			try {

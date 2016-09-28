@@ -14,10 +14,13 @@ public class XmlAttributeTests {
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
+	private String returnNull(){return null;}
+
 	@Test
 	public void testConstructorStringStringIllegalArgumentException1() {
 		thrown.expect(IllegalArgumentException.class);
-		new XmlAttribute("name", null);
+		String value = returnNull();
+		new XmlAttribute("name", value);
 	}
 
 	@Test

@@ -80,7 +80,7 @@ public class SudokuController implements AssistanceRequestListener, ActionListen
 	 * {@inheritDoc}
 	 */
 	public void onNoteDelete(Field field, int value) {
-		game.addAndExecute(new NoteActionFactory().createAction(value, field));
+		game.addAndExecute(new NoteActionFactory().createAction(value, field)); //TODO same code as onNoteAdd why?
 	}
 
 	/**
@@ -159,26 +159,22 @@ public class SudokuController implements AssistanceRequestListener, ActionListen
 	 */
 	private void updateStatistics() {
 		switch (game.getSudoku().getComplexity()) {
-		case infernal:
-			Profile.getInstance().setStatistic(Statistics.playedInfernalSudokus, Profile.getInstance().getStatistic(Statistics.playedInfernalSudokus) + 1);
-			break;
-		case difficult:
-			Profile.getInstance().setStatistic(Statistics.playedDifficultSudokus, Profile.getInstance().getStatistic(Statistics.playedDifficultSudokus) + 1);
-			break;
-		case medium:
-			Profile.getInstance().setStatistic(Statistics.playedMediumSudokus, Profile.getInstance().getStatistic(Statistics.playedMediumSudokus) + 1);
-			break;
-		case easy:
-			Profile.getInstance().setStatistic(Statistics.playedEasySudokus, Profile.getInstance().getStatistic(Statistics.playedEasySudokus) + 1);
-			break;
+			case infernal:  incrementStatistic(Statistics.playedInfernalSudokus);  break;
+			case difficult: incrementStatistic(Statistics.playedDifficultSudokus); break;
+			case medium:    incrementStatistic(Statistics.playedMediumSudokus);    break;
+			case easy:      incrementStatistic(Statistics.playedEasySudokus);      break;
 		}
-		Profile.getInstance().setStatistic(Statistics.playedSudokus, Profile.getInstance().getStatistic(Statistics.playedSudokus) + 1);
+		incrementStatistic(Statistics.playedSudokus);
 		if (Profile.getInstance().getStatistic(Statistics.fastestSolvingTime) > game.getTime()) {
 			Profile.getInstance().setStatistic(Statistics.fastestSolvingTime, game.getTime());
 		}
 		if (Profile.getInstance().getStatistic(Statistics.maximumPoints) < game.getScore()) {
 			Profile.getInstance().setStatistic(Statistics.maximumPoints, game.getScore());
 		}
+	}
+
+	private void incrementStatistic(Statistics s){ //TODO this should probably be in model...
+		Profile.getInstance().setStatistic(s,  Profile.getInstance().getStatistic(s) + 1);
 	}
 
 }

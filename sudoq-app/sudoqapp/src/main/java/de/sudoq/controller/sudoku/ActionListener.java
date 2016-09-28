@@ -39,7 +39,7 @@ public interface ActionListener {
 	public void onNoteAdd(Field field, int value);
 	
 	/**
-	 * Wird aufgerufen, falls der Benutzer eine Notiz entfernd.
+	 * Wird aufgerufen, falls der Benutzer eine Notiz entfernt.
 	 * 
 	 * @param field
 	 *            Das Feld, dessen Notiz entfernd werden soll

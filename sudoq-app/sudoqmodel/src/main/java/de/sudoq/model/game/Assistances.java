@@ -38,12 +38,6 @@ public enum Assistances {
 	 */
 	autoAdjustNotes;
 
-	/**
-	 * Konstante für Antworten im Multiplayer auf Requests
-	 */
-	public static final int YES = 1;
-	/**
-	 * Konstante für Antworten im Multiplayer auf Requests
-	 */
-	public static final int NO = 0;
+
+
 }

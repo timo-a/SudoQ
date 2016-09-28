@@ -45,19 +45,6 @@ public class NewSudokuConfigurationActivity extends SudoqActivitySherlock {
 
 	/** Attributes */
 
-	/**
-	 * Konstante für den Wert des Game Typs
-	 */
-	public static final int NO_GAME_TYPE = 0;
-	/**
-	 * Konstante für den Wert des Game Typs
-	 */
-	public static final int LOCAL_GAME = 1;
-	/**
-	 * Konstante für den Wert des Game Typs
-	 */
-	public static final int MULTIPLAYER_GAME = 2;
-
 	private static final String LOG_TAG = NewSudokuConfigurationActivity.class.getSimpleName();
 
 	private SudokuTypes sudokuType;
@@ -120,9 +107,9 @@ public class NewSudokuConfigurationActivity extends SudoqActivitySherlock {
 
 		/** complexity spinner **/
 		Spinner complexitySpinner = (Spinner) findViewById(R.id.spinner_sudokucomplexity);
-		
+
 		ArrayAdapter<CharSequence> complexityAdapter = ArrayAdapter.createFromResource(this,
-																					R.array.sudokucomplexity_values, 
+																					R.array.sudokucomplexity_values,
 																					android.R.layout.simple_spinner_item);
 		complexityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		complexitySpinner.setAdapter(complexityAdapter);

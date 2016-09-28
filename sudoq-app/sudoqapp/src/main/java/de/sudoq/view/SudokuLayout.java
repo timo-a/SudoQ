@@ -16,8 +16,11 @@ import android.graphics.Paint;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
+
 import de.sudoq.controller.sudoku.FieldInteractionListener;
 import de.sudoq.controller.sudoku.FieldViewPainter;
+import de.sudoq.controller.sudoku.HintPainter;
 import de.sudoq.controller.sudoku.ObservableFieldInteraction;
 import de.sudoq.controller.sudoku.SudokuActivity;
 import de.sudoq.model.game.Assistances;
@@ -86,6 +89,11 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	private static int spacing = 2;
 
 	/**
+	 *
+	 */
+	private HintPainter hintPainter;
+
+	/**
 	 * Instanziiert eine neue SudokuView in dem spezifizierten Kontext.
 	 * 
 	 * @param context
@@ -100,14 +108,18 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 		this.zoomFactor = 1.0f;
 		// this.currentFieldViewSize = this.defaultFieldViewSize;
 		this.setWillNotDraw(false);
-
+		FieldViewPainter.getInstance().setSudokuLayout(this);
+		this.hintPainter = new HintPainter(context, this);
 		inflateSudoku();
+		Log.d(LOG_TAG, "End of Constructor.");
 	}
 
 	/**
 	 * Erstellt die Anzeige des Sudokus.
+	 * doesn't draw anything
 	 */
 	private void inflateSudoku() {
+		Log.d(LOG_TAG, "SudokuLayout.inflateSudoku()");
 		FieldViewPainter.getInstance().flushMarkings();
 		this.removeAllViews();
 
@@ -118,16 +130,17 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 			for (int y = 0; y <= sudokuType.getSize().getY(); y++) {
 				Field field = sudoku.getField(Position.get(x, y));
 				if (field != null) {
-					RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams((int) this.getCurrentFieldViewSize(), (int) this.defaultFieldViewSize);
-					params.topMargin = (y * (int) this.getCurrentFieldViewSize()) + y;
-					params.leftMargin = (x * (int) this.getCurrentFieldViewSize()) + x;
+					LayoutParams params = new LayoutParams(this.getCurrentFieldViewSize(), this.defaultFieldViewSize);
+					params.topMargin  = (y *  this.getCurrentFieldViewSize()) + y;
+					params.leftMargin = (x *  this.getCurrentFieldViewSize()) + x;
 					this.sudokuFieldViews[x][y] = new SudokuFieldView(context, game, field, this.game.isAssistanceAvailable(Assistances.markWrongSymbol));
 					field.registerListener(this.sudokuFieldViews[x][y]);
-					this.addView(this.sudokuFieldViews[x][y], params);
-				} else if (sudoku.getSudokuType().getSize().getX() == x && sudoku.getSudokuType().getSize().getY() == y) {
-					RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams((int) this.getCurrentFieldViewSize(), (int) this.defaultFieldViewSize);
-					params.topMargin = ((y - 1) * (int) this.getCurrentFieldViewSize()) + (y - 1) + getCurrentTopMargin();
-					params.leftMargin = ((x - 1) * (int) this.getCurrentFieldViewSize()) + (x - 1) + getCurrentLeftMargin();
+					this.addView(          this.sudokuFieldViews[x][y], params);
+				} else if (sudoku.getSudokuType().getSize().getX() == x //why????
+						&& sudoku.getSudokuType().getSize().getY() == y) {
+					LayoutParams params = new LayoutParams( this.getCurrentFieldViewSize(), this.defaultFieldViewSize);
+					params.topMargin  = ((y - 1) *  this.getCurrentFieldViewSize()) + (y - 1) + getCurrentTopMargin();
+					params.leftMargin = ((x - 1) *  this.getCurrentFieldViewSize()) + (x - 1) + getCurrentLeftMargin();
 					this.sudokuFieldViews[x][y] = new SudokuFieldView(context, game, this.game.getSudoku().getField(Position.get(x - 1, y - 1)), this.game.isAssistanceAvailable(Assistances.markWrongSymbol));
 					this.addView(this.sudokuFieldViews[x][y], params);
 					this.sudokuFieldViews[x][y].setVisibility(INVISIBLE);
@@ -138,9 +151,9 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 		ArrayList<Constraint> allConstraints = this.game.getSudoku().getSudokuType().getConstraints();
 		ArrayList<Position> positions;
 		if (this.game.isAssistanceAvailable(Assistances.markRowColumn)) {
-			for (int constrNum = 0; constrNum < allConstraints.size(); constrNum++) {
-				if (allConstraints.get(constrNum).getType().equals(ConstraintType.LINE)) {
-					positions = allConstraints.get(constrNum).getPositions();
+			for (Constraint c : allConstraints) {
+				if (c.getType().equals(ConstraintType.LINE)) {
+					positions = c.getPositions();
 					for (int i = 0; i < positions.size(); i++) {
 						for (int k = 0; k < positions.size(); k++) {
 							if (i != k){
@@ -154,6 +167,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 				}
 			}
 		}
+		Log.d(LOG_TAG, "SudokuLayout.inflateSudoku()-end");
 	}
 
 	/**
@@ -162,7 +176,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	 * 
 	 * @return Das aktuelle Spacing
 	 */
-	private int getCurrentSpacing() {
+	public int getCurrentSpacing() {
 		return (int) (spacing * this.zoomFactor);
 	}
 
@@ -190,6 +204,8 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	 * Aktualisiert die Sudoku-Anzeige bzw. der enthaltenen Felder.
 	 */
 	private void refresh() {
+		Log.d(LOG_TAG, "SudokuLayout.refresh()");
+
 		if (this.sudokuFieldViews != null) {
 			Position typeSize = this.game.getSudoku().getSudokuType().getSize();
 			//Iterate over all positions within the size 
@@ -198,21 +214,21 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 				for (int y = 0; y <= typeSize.getY(); y++) {
 					if (game.getSudoku().getField(Position.get(x, y)) != null) {
 						//Position is not null. This check is important for samurai sudokus 
-						RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) this.sudokuFieldViews[x][y].getLayoutParams();
-						params.width  = (int) this.getCurrentFieldViewSize();
-						params.height = (int) this.getCurrentFieldViewSize();
-						params.topMargin =  (int) (getCurrentTopMargin()  + (y * (this.getCurrentFieldViewSize() + getCurrentSpacing())));
-						params.leftMargin = (int) (getCurrentLeftMargin() + (x * (this.getCurrentFieldViewSize() + getCurrentSpacing())));
+						LayoutParams params = (LayoutParams) this.sudokuFieldViews[x][y].getLayoutParams();
+						params.width  =  this.getCurrentFieldViewSize();
+						params.height =  this.getCurrentFieldViewSize();
+						params.topMargin =  (getCurrentTopMargin()  + (y * (this.getCurrentFieldViewSize() + getCurrentSpacing())));
+						params.leftMargin = (getCurrentLeftMargin() + (x * (this.getCurrentFieldViewSize() + getCurrentSpacing())));
 						this.sudokuFieldViews[x][y].setLayoutParams(params);
 						this.sudokuFieldViews[x][y].invalidate();
 					} else if (x == typeSize.getX() && 
 							   y == typeSize.getY() ) {
-						//both x and y are over the limit. Why do we go there?
-						RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams((int) this.getCurrentFieldViewSize(), (int) this.defaultFieldViewSize);
-						params.width  = (int) this.getCurrentFieldViewSize();
-						params.height = (int) this.getCurrentFieldViewSize();
-						params.topMargin =  (int) (2 * getCurrentTopMargin()  + ((y - 1) * (this.getCurrentFieldViewSize() + getCurrentSpacing())));
-						params.leftMargin = (int) (2 * getCurrentLeftMargin() + ((x - 1) * (this.getCurrentFieldViewSize() + getCurrentSpacing())));
+						//both x and y are over the limit. Why do we go there? we could just do it outside the loop, why was it ever put it in there?!
+						LayoutParams params = new LayoutParams( this.getCurrentFieldViewSize(), this.defaultFieldViewSize);
+						params.width  = this.getCurrentFieldViewSize();
+						params.height = this.getCurrentFieldViewSize();
+						params.topMargin =  (2 * getCurrentTopMargin()  + ((y - 1) * (this.getCurrentFieldViewSize() + getCurrentSpacing())));
+						params.leftMargin = (2 * getCurrentLeftMargin() + ((x - 1) * (this.getCurrentFieldViewSize() + getCurrentSpacing())));
 						this.sudokuFieldViews[x][y].setLayoutParams(params);
 						this.sudokuFieldViews[x][y].invalidate();
 					}
@@ -220,7 +236,19 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 			}
 		}
 		invalidate();
+		Log.d(LOG_TAG, "SudokuLayout.refresh()-end");
 	}
+
+	private int getCol(int i){
+		switch (i){
+		case 0: return Color.BLACK;
+		case 1: return Color.GREEN;
+		case 2: return Color.MAGENTA;
+		case 3: return Color.YELLOW;
+		default: return getCol(i-4);
+		}
+	}
+
 
 	@Override
 	/**
@@ -230,160 +258,193 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	 */
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
+		Log.d(LOG_TAG, "SudokuLayout.onDraw()");
+
 		float edgeRadius = getCurrentFieldViewSize() / 20.0f;
 		Paint paint = new Paint();
 		paint.setColor(Color.BLACK);
 		for (Constraint c: this.game.getSudoku().getSudokuType()) {
 			if (c.getType().equals(ConstraintType.BLOCK)) {
-				for (Position p: c) {
+				/* for position p in block c */
+				outlineConstraint(c, canvas, edgeRadius, paint, false);
+			}
+		}
+
+		int i=0;
+		Paint p = new Paint();
+		p.setColor(Color.RED);
+		for (Constraint c: this.game.getSudoku().getSudokuType())
+			if (c.getType().equals(ConstraintType.LINE)) {
+				if (i > 2) {
+					outlineConstraint(c, canvas, edgeRadius, p, true);
+					break;
+				}
+				i++;
+			}
+
+
+		//hintPainter.drawConstraints(canvas);
+		Log.d(LOG_TAG, "SudokuLayout.onDraw()-end");
+	}
+
+	private void outlineConstraint(Constraint c, Canvas canvas, float edgeRadius, Paint paint, boolean thick){
+		for (Position p: c) {
 					/* determine whether the position p is in the (right|left|top|bottom) border of its block constraint.
 					 * test for 0 to avoid illegalArgExc for neg. vals
 					 * careful when trying to optimize this definition: blocks can be squiggly (every additional compound to row/col but extra as in hypersudoku is s.th. different)
 					 * */
-					boolean isLeft   = p.getX() == 0 || !c.includes(Position.get(p.getX() - 1, p.getY()    ));
-					boolean isRight  =                  !c.includes(Position.get(p.getX() + 1, p.getY()    ));
-					boolean isTop    = p.getY() == 0 || !c.includes(Position.get(p.getX(),     p.getY() - 1));
-					boolean isBottom =                  !c.includes(Position.get(p.getX(),     p.getY() + 1));
+			boolean isLeft   = p.getX() == 0 || !c.includes(Position.get(p.getX() - 1, p.getY()    ));
+			boolean isRight  =                  !c.includes(Position.get(p.getX() + 1, p.getY()    ));
+			boolean isTop    = p.getY() == 0 || !c.includes(Position.get(p.getX(),     p.getY() - 1));
+			boolean isBottom =                  !c.includes(Position.get(p.getX(),     p.getY() + 1));
 					/* apparently:
-					 *   00 10 20 30 ...  
+					 *   00 10 20 30 ...
 					 *   01 11
 					 *   02    xy
 					 *   .
 					 *   .
 					 * */
-					
-					
-					for (int i = 1; i <= getCurrentSpacing(); i++) {//?
-						//deklariert hier, weil wir es nicht früher brauchen, effizienter wäre weiter oben
-						int fieldSizeAndSpacing = this.getCurrentFieldViewSize() + getCurrentSpacing();
+
+			int from,to;
+			int scale = 3;
+			if(thick){
+				from = -getCurrentSpacing()*scale;
+				to   =  getCurrentSpacing()*scale;
+			}else{
+				from = 1;
+				to   = getCurrentSpacing();
+			}
+
+
+			for (int i = from; i <= to; i++) {//?
+				//deklariert hier, weil wir es nicht früher brauchen, effizienter wäre weiter oben
+				int fieldSizeAndSpacing = this.getCurrentFieldViewSize() + getCurrentSpacing();
 						/* these first 4 seem similar. drawing the black line around?*/
 						/* fields that touch the edge: Paint your edge but leave space at the corners*/
-						//paint.setColor(Color.TRANSPARENT);
+				//paint.setColor(Color.GREEN);
 
-						if (isLeft) {
-							float startX = getCurrentLeftMargin() + p.getX() * (int) (fieldSizeAndSpacing) - i;
-							float stopX = startX;
-							
-							float startY = getCurrentTopMargin()  +  p.getY()      * (int) (fieldSizeAndSpacing) + edgeRadius;
-							float stopY  = getCurrentTopMargin()  + (p.getY() + 1) * (int) (fieldSizeAndSpacing) - edgeRadius - getCurrentSpacing();
-							canvas.drawLine(startX, startY,	stopX, stopY, paint);
-						}
-						if (isRight) {
-							float startX = getCurrentLeftMargin() + (p.getX() + 1) * (int) (fieldSizeAndSpacing) - getCurrentSpacing() - 1 + i;
-							float stopX  = startX;
-							
-							float startY = getCurrentTopMargin()  +  p.getY()      * (int) (fieldSizeAndSpacing) + edgeRadius;
-							float stopY  = getCurrentTopMargin()  + (p.getY() + 1) * (int) (fieldSizeAndSpacing) - edgeRadius - getCurrentSpacing();
-							canvas.drawLine(startX, startY,	stopX, stopY, paint);
-						}
-						if (isTop) {
-							float startX = getCurrentLeftMargin() +  p.getX()      * (int) (fieldSizeAndSpacing) + edgeRadius;
-							float stopX  = getCurrentLeftMargin() + (p.getX() + 1) * (int) (fieldSizeAndSpacing) - edgeRadius - getCurrentSpacing();
-							
-							float startY = getCurrentTopMargin()  + p.getY() * (int) (fieldSizeAndSpacing) - i;
-							float stopY  = startY;
-							canvas.drawLine(startX, startY,	stopX, stopY, paint);
-						}
-						if (isBottom) {
-							float startX = getCurrentLeftMargin() +  p.getX()      * (int) (fieldSizeAndSpacing) + edgeRadius;
-							float stopX  = getCurrentLeftMargin() + (p.getX() + 1) * (int) (fieldSizeAndSpacing) - edgeRadius - getCurrentSpacing();
-							float startY = getCurrentTopMargin()  + (p.getY() + 1) * (int) (fieldSizeAndSpacing) - getCurrentSpacing() - 1 + i;
-							float stopY  = startY;
-							canvas.drawLine(startX, startY,	stopX, stopY, paint);
-						}
+				if (isLeft) {
+					float x = getCurrentLeftMargin() + p.getX() *  fieldSizeAndSpacing - i;
+
+					float startY = getCurrentTopMargin()  +  p.getY()      * fieldSizeAndSpacing + edgeRadius;
+					float  stopY = getCurrentTopMargin()  + (p.getY() + 1) * fieldSizeAndSpacing - edgeRadius - getCurrentSpacing();
+					canvas.drawLine(x, startY,     x, stopY, paint);
+				}
+				if (isRight) {
+					float x = getCurrentLeftMargin() + (p.getX() + 1) * fieldSizeAndSpacing - getCurrentSpacing() - 1 + i;
+
+					float startY = getCurrentTopMargin()  +  p.getY()      * fieldSizeAndSpacing + edgeRadius;
+					float  stopY = getCurrentTopMargin()  + (p.getY() + 1) * fieldSizeAndSpacing - edgeRadius - getCurrentSpacing();
+					canvas.drawLine(x, startY,     x, stopY, paint);
+				}
+				if (isTop) {
+					float startX = getCurrentLeftMargin() +  p.getX()      * fieldSizeAndSpacing + edgeRadius;
+					float stopX  = getCurrentLeftMargin() + (p.getX() + 1) * fieldSizeAndSpacing - edgeRadius - getCurrentSpacing();
+
+					float y = getCurrentTopMargin()  + p.getY() * fieldSizeAndSpacing - i;
+					canvas.drawLine(startX, y,    stopX, y, paint);
+				}
+				if (isBottom) {
+					float startX = getCurrentLeftMargin() +  p.getX()      * fieldSizeAndSpacing + edgeRadius;
+					float stopX  = getCurrentLeftMargin() + (p.getX() + 1) * fieldSizeAndSpacing - edgeRadius - getCurrentSpacing();
+
+					float y = getCurrentTopMargin()  + (p.getY() + 1) * fieldSizeAndSpacing - getCurrentSpacing() - 1 + i;
+					canvas.drawLine(startX, y,    stopX, y, paint);
+				}
 
 						/* Fields at corners of their block draw a circle for a round circumference*/
 						/*TopLeft*/
-						if (isLeft && isTop) {
-							//paint.setColor(Color.MAGENTA);
-							canvas.drawCircle(
-									getCurrentLeftMargin() + p.getX() * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) + edgeRadius,
-									getCurrentTopMargin()  + p.getY() * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) + edgeRadius,
-									edgeRadius + i, 
-									paint);
-						}	
-						
+				if (isLeft && isTop) {
+					//paint.setColor(Color.MAGENTA);
+					canvas.drawCircle(
+							getCurrentLeftMargin() + p.getX() * fieldSizeAndSpacing + edgeRadius, //center-x
+							getCurrentTopMargin()  + p.getY() * fieldSizeAndSpacing + edgeRadius, //center-y
+							edgeRadius + i,                                                                                          //radius
+							paint);
+				}
+
 						/* Top Right*/
-						if (isRight && isTop) {
-							//paint.setColor(Color.BLUE);
-							canvas.drawCircle(
-									getCurrentLeftMargin() + (p.getX() + 1) * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) - getCurrentSpacing() - edgeRadius,
-									getCurrentTopMargin()  + p.getY()       * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) + edgeRadius,
-									edgeRadius + i, 
-									paint);
-						}
+				if (isRight && isTop) {
+					//paint.setColor(Color.BLUE);
+					canvas.drawCircle(
+							getCurrentLeftMargin() + (p.getX() + 1) * fieldSizeAndSpacing - getCurrentSpacing() - edgeRadius,
+							getCurrentTopMargin()  +  p.getY()      * fieldSizeAndSpacing + edgeRadius,
+							edgeRadius + i,
+							paint);
+				}
 
 						/*Bottom Left*/
-						if (isLeft && isBottom) {
-							//paint.setColor(Color.CYAN);
-							canvas.drawCircle(
-									getCurrentLeftMargin() + p.getX() *       (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) + edgeRadius,
-									getCurrentTopMargin()  + (p.getY() + 1) * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) - edgeRadius - getCurrentSpacing(),
-									edgeRadius + i, 
-									paint);
-						}
-						
+				if (isLeft && isBottom) {
+					//paint.setColor(Color.CYAN);
+					canvas.drawCircle(
+							getCurrentLeftMargin() +  p.getX()      * fieldSizeAndSpacing + edgeRadius,
+							getCurrentTopMargin()  + (p.getY() + 1) * fieldSizeAndSpacing - edgeRadius - getCurrentSpacing(),
+							edgeRadius + i,
+							paint);
+				}
+
 						/*BottomRight*/
-						if (isRight && isBottom) {
-							//paint.setColor(Color.RED);
-							canvas.drawCircle(
-									getCurrentLeftMargin() + (p.getX() + 1) * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) - edgeRadius - getCurrentSpacing(),
-									getCurrentTopMargin()  + (p.getY() + 1) * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) - edgeRadius - getCurrentSpacing(),
-									edgeRadius + i, 
-									paint);
-						}
-						
-						
-						
-						/*Now filling the edges*/
-						boolean belowRightMember = c.includes(Position.get(p.getX() + 1, p.getY() + 1));
+				if (isRight && isBottom) {
+					//paint.setColor(Color.RED);
+					canvas.drawCircle(
+							getCurrentLeftMargin() + (p.getX() + 1) * fieldSizeAndSpacing - edgeRadius - getCurrentSpacing(),
+							getCurrentTopMargin()  + (p.getY() + 1) * fieldSizeAndSpacing - edgeRadius - getCurrentSpacing(),
+							edgeRadius + i,
+							paint);
+				}
+
+
+				//paint.setColor(Color.YELLOW);
+						/*Now filling the edges (if there's no corner we still leave a gap. that gap is being filled now ) */
+				boolean belowRightMember = c.includes(Position.get(p.getX() + 1, p.getY() + 1));
 						/*For a field on the right border, initializeWith edge to neighbour below
-						 * 
+						 *
 						 * !isBottom excludes:      corner to the left -> no neighbour directly below i.e. unwanted filling
 						 *  3rd condition excludes: corner to the right-> member below right          i.e. unwanted filling
-						 * 
+						 *
 						 * */
-						if (isRight && !isBottom && !belowRightMember) {
-							canvas.drawLine(
-									getCurrentLeftMargin() + (p.getX() + 1) * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) - getCurrentSpacing() - 1 + i,
-									getCurrentTopMargin()  + (p.getY() + 1) * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) - getCurrentSpacing() - edgeRadius,
-									getCurrentLeftMargin() + (p.getX() + 1) * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) - getCurrentSpacing() - 1 + i,
-									getCurrentTopMargin()  + (p.getY() + 1) * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) + edgeRadius,
-									paint);
-						}
+				if (isRight && !isBottom && !belowRightMember) {
+					canvas.drawLine(
+							getCurrentLeftMargin() + (p.getX() + 1) * fieldSizeAndSpacing - getCurrentSpacing() - 1 + i,
+							getCurrentTopMargin()  + (p.getY() + 1) * fieldSizeAndSpacing - getCurrentSpacing() - edgeRadius,
+							getCurrentLeftMargin() + (p.getX() + 1) * fieldSizeAndSpacing - getCurrentSpacing() - 1 + i,
+							getCurrentTopMargin()  + (p.getY() + 1) * fieldSizeAndSpacing + edgeRadius,
+							paint);
+				}
 						/*For a field at the bottom, initializeWith edge to right neighbour */
-						if (isBottom && !isRight && !belowRightMember) {
-							canvas.drawLine(
-									getCurrentLeftMargin() + (p.getX() + 1) * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) - edgeRadius - getCurrentSpacing(),
-									getCurrentTopMargin()  + (p.getY() + 1) * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) - getCurrentSpacing() - 1 + i,
-									getCurrentLeftMargin() + (p.getX() + 1) * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) + edgeRadius,
-									getCurrentTopMargin()  + (p.getY() + 1) * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) - getCurrentSpacing() - 1 + i,
-									paint);
-						}
-						
+				if (isBottom && !isRight && !belowRightMember) {
+					canvas.drawLine(
+							getCurrentLeftMargin() + (p.getX() + 1) * fieldSizeAndSpacing - edgeRadius - getCurrentSpacing(),
+							getCurrentTopMargin()  + (p.getY() + 1) * fieldSizeAndSpacing - getCurrentSpacing() - 1 + i,
+							getCurrentLeftMargin() + (p.getX() + 1) * fieldSizeAndSpacing + edgeRadius,
+							getCurrentTopMargin()  + (p.getY() + 1) * fieldSizeAndSpacing - getCurrentSpacing() - 1 + i,
+							paint);
+				}
+
 						/*For a field on the left border, initializeWith edge to upper neighbour*/
-						if (isLeft && !isTop && (p.getX() == 0 || !c.includes(Position.get(p.getX() - 1, p.getY() - 1)))) {
-							canvas.drawLine(
-									getCurrentLeftMargin() + p.getX() * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) - i,
-									getCurrentTopMargin()  + p.getY() * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) - getCurrentSpacing() - edgeRadius,
-									getCurrentLeftMargin() + p.getX() * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) - i,
-									getCurrentTopMargin()  + p.getY() * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) + edgeRadius,
-									paint);
-						}
+				if (isLeft && !isTop && (p.getX() == 0 || !c.includes(Position.get(p.getX() - 1, p.getY() - 1)))) {
+					canvas.drawLine(
+							getCurrentLeftMargin() + p.getX() * fieldSizeAndSpacing - i,
+							getCurrentTopMargin()  + p.getY() * fieldSizeAndSpacing - getCurrentSpacing() - edgeRadius,
+							getCurrentLeftMargin() + p.getX() * fieldSizeAndSpacing - i,
+							getCurrentTopMargin()  + p.getY() * fieldSizeAndSpacing + edgeRadius,
+							paint);
+				}
 						/*For a field at the top initializeWith to the left*/
-						if (isTop && !isLeft && (p.getY() == 0 || !c.includes(Position.get(p.getX() - 1, p.getY() - 1)))) {
-							canvas.drawLine(
-									getCurrentLeftMargin() + p.getX() * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) - edgeRadius - getCurrentSpacing(),
-									getCurrentTopMargin()  + p.getY() * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) - i,
-									getCurrentLeftMargin() + p.getX() * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) + edgeRadius,
-									getCurrentTopMargin()  + p.getY() * (int) (this.getCurrentFieldViewSize() + getCurrentSpacing()) - i,
-									paint);
-						}
-					}
+				if (isTop && !isLeft && (p.getY() == 0 || !c.includes(Position.get(p.getX() - 1, p.getY() - 1)))) {
+					canvas.drawLine(
+							getCurrentLeftMargin() + p.getX() * fieldSizeAndSpacing - edgeRadius - getCurrentSpacing(),
+							getCurrentTopMargin()  + p.getY() * fieldSizeAndSpacing - i,
+							getCurrentLeftMargin() + p.getX() * fieldSizeAndSpacing + edgeRadius,
+							getCurrentTopMargin()  + p.getY() * fieldSizeAndSpacing - i,
+							paint);
 				}
 			}
 		}
+
+
 	}
+
 
 	/**
 	 * Zoom so heraus, dass ein diese View optimal in ein Layout der
@@ -397,18 +458,20 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	public void optiZoom(int width, int height) {
 		Log.d(LOG_TAG, "SudokuView height intern: " + this.getMeasuredHeight());
 		SudokuType sudokuType = this.game.getSudoku().getSudokuType();
-		int size = width < height ? width : height;
-		int numberOfFields = width < height ? sudokuType.getSize().getX() : sudokuType.getSize().getY();
+		int size           = width < height ? width
+		                                    : height;
+		int numberOfFields = width < height ? sudokuType.getSize().getX()
+		                                    : sudokuType.getSize().getY();
 		this.defaultFieldViewSize = (size - (numberOfFields + 1) * spacing) / numberOfFields;
 		// this.currentFieldViewSize = this.defaultFieldViewSize;
 
-		this.leftMargin = (int) (width - sudokuType.getSize().getX() *
+		this.leftMargin = (width - sudokuType.getSize().getX() *
 				(this.getCurrentFieldViewSize() + spacing) + spacing)
 				/ 2;
-		this.topMargin = (int) (height - sudokuType.getSize().getY() *
+		this.topMargin = (height - sudokuType.getSize().getY() *
 				(this.getCurrentFieldViewSize() + spacing) + spacing)
 				/ 2;
-		Log.d(LOG_TAG, "Sudoku width: " + width);
+		Log.d(LOG_TAG, "Sudoku width: "  + width);
 		Log.d(LOG_TAG, "Sudoku height: " + height);
 		this.refresh();
 	}
@@ -420,6 +483,10 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	public boolean onTouchEvent(MotionEvent event) {
 		return false;
 
+	}
+
+	public HintPainter getHintPainter(){
+		return hintPainter;
 	}
 
 	/**
@@ -467,7 +534,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	 * 
 	 * @return die aktuelle Größe einer FieldView
 	 */
-	private int getCurrentFieldViewSize() {
+	int getCurrentFieldViewSize() {
 		return (int) (this.defaultFieldViewSize * zoomFactor);
 	}
 
@@ -495,9 +562,8 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	 */
 	public void removeListener(FieldInteractionListener listener) {
 		SudokuType sudokuType = this.game.getSudoku().getSudokuType();
-		for (Position p: sudokuType.getValidPositions()){
+		for (Position p: sudokuType.getValidPositions())
 			this.sudokuFieldViews[p.getX()][p.getY()].removeListener(listener);
-		}
 	}
 
 	/**

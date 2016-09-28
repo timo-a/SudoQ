@@ -13,8 +13,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.Set;
+import java.util.Stack;
 
+import android.content.Context;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -52,6 +55,8 @@ import de.sudoq.model.game.Assistances;
 import de.sudoq.model.game.Game;
 import de.sudoq.model.game.GameManager;
 import de.sudoq.model.profile.Profile;
+import de.sudoq.model.solverGenerator.solution.SolveDerivation;
+import de.sudoq.model.solvingAssistant.SolvingAssistant;
 import de.sudoq.model.sudoku.Field;
 import de.sudoq.view.FullScrollLayout;
 import de.sudoq.view.SudokuFieldView;
@@ -599,58 +604,89 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 	 * Zeigt einen Dialog mit den verfügbaren Hilfestellungen an.
 	 */
 	private void showAssistancesDialog() {
-		final CharSequence[] items;
-		if (this.sudokuView.getCurrentFieldView() != null
-		 && this.sudokuView.getCurrentFieldView().getField().isEmpty()) {
-			items = new CharSequence[] { getString(R.string.sf_sudoku_assistances_solve_surrender)
-			                           , getString(R.string.sf_sudoku_assistances_back_to_valid_state)
-			                           , getString(R.string.sf_sudoku_assistances_back_to_bookmark)
-			                           , getString(R.string.sf_sudoku_assistances_check)
-			                           , getString(R.string.sf_sudoku_assistances_solve_random)
-			                           , getString(R.string.sf_sudoku_assistances_solve_specific) };
-		} else {
-			items = new CharSequence[] { getString(R.string.sf_sudoku_assistances_solve_surrender)
-			                           , getString(R.string.sf_sudoku_assistances_back_to_valid_state)
-			                           , getString(R.string.sf_sudoku_assistances_back_to_bookmark)
-			                           , getString(R.string.sf_sudoku_assistances_check)
-			                           , getString(R.string.sf_sudoku_assistances_solve_random) };
-		}
+
+		Stack<CharSequence> itemStack= new Stack<>();
+		itemStack.addAll(Arrays.asList( getString(R.string.sf_sudoku_assistances_solve_surrender)
+		                              , getString(R.string.sf_sudoku_assistances_back_to_valid_state)
+		                              , getString(R.string.sf_sudoku_assistances_back_to_bookmark)
+		                              , getString(R.string.sf_sudoku_assistances_check)
+		                              , getString(R.string.sf_sudoku_assistances_solve_random)));
+
+		SudokuFieldView v = this.sudokuView.getCurrentFieldView();
+		if (v != null && v.getField().isEmpty())
+			itemStack.add(getString(R.string.sf_sudoku_assistances_solve_specific));
+
+		if (Profile.getInstance().getAssistances().isHelperSet())
+			itemStack.add(getString(R.string.sf_sudoku_assistances_give_hint));
+
+		// TODO why this no work? final CharSequence[] items = (CharSequence[]) itemStack.toArray();
+		CharSequence[] tmp   = new CharSequence[0];
+		final CharSequence[] items = itemStack.toArray(tmp);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(getString(R.string.sf_sudoku_assistances_title));
 
 		builder.setItems(items, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int item) {
+
 				switch (item) {
-				case 0:
-					if (!SudokuActivity.this.sudokuController.onSolveAll()) {
+					case 0:
+						if (!SudokuActivity.this.sudokuController.onSolveAll())
+							Toast.makeText(SudokuActivity.this, R.string.toast_solved_wrong, Toast.LENGTH_SHORT).show();
+						break;
+					case 1:
+						SudokuActivity.this.game.goToLastCorrectState();
+						break;
+					case 2:
+						SudokuActivity.this.game.goToLastBookmark();
+						break;
+					case 3:
+						if (SudokuActivity.this.game.checkSudoku())
+							Toast.makeText(SudokuActivity.this, R.string.toast_solved_correct, Toast.LENGTH_SHORT).show();
+						 else
+							Toast.makeText(SudokuActivity.this, R.string.toast_solved_wrong, Toast.LENGTH_LONG).show();
+						break;
+					case 4:
+						if (!SudokuActivity.this.sudokuController.onSolveOne())
+							Toast.makeText(SudokuActivity.this, R.string.toast_solved_wrong, Toast.LENGTH_SHORT).show();
+						break;
+				}
+
+				if (items[item] == getString(R.string.sf_sudoku_assistances_solve_specific)){
+					if (!SudokuActivity.this.sudokuController.onSolveCurrent(SudokuActivity.this.sudokuView.getCurrentFieldView().getField())) {
 						Toast.makeText(SudokuActivity.this, R.string.toast_solved_wrong, Toast.LENGTH_SHORT).show();
 					}
-					break;
-				case 1:
-					SudokuActivity.this.game.goToLastCorrectState();
-					break;
-				case 2:
-					SudokuActivity.this.game.goToLastBookmark();
-					break;
-				case 3:
-					if (SudokuActivity.this.game.checkSudoku()) {
-						Toast.makeText(SudokuActivity.this, R.string.toast_solved_correct, Toast.LENGTH_SHORT).show();
-					} else {
-						Toast.makeText(SudokuActivity.this, R.string.toast_solved_wrong, Toast.LENGTH_LONG).show();
-					}
-					break;
-				case 4:
-					if (!SudokuActivity.this.sudokuController.onSolveOne()) {
-						Toast.makeText(SudokuActivity.this, R.string.toast_solved_wrong, Toast.LENGTH_SHORT).show();
-					}
-					break;
-				case 5:
-					if (    SudokuActivity.this.sudokuView.getCurrentFieldView() != null
-					    && !SudokuActivity.this.sudokuController.onSolveCurrent(SudokuActivity.this.sudokuView.getCurrentFieldView().getField())) {
-						Toast.makeText(SudokuActivity.this, R.string.toast_solved_wrong, Toast.LENGTH_SHORT).show();
-					}
-					break;
+
+				}else if (items[item] == getString(R.string.sf_sudoku_assistances_give_hint)){
+					SolveDerivation sd = SolvingAssistant.giveAHint(game.getSudoku());
+					View panelControll = (View) findViewById(R.id.controlPanel);
+					panelControll.setVisibility(View.GONE);
+
+					View panelHint = (View) findViewById(R.id.hintPanel);
+					panelHint.setVisibility(View.VISIBLE);
+
+					TextView tv = (TextView) findViewById(R.id.hintText);
+					tv.setText(sd.toString());
+
+					getSudokuLayout().getHintPainter().realizeHint(sd);
+
+					Button b = (Button) findViewById(R.id.hintOkButton);
+					b.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View view) {
+
+							View panelHint = (View) findViewById(R.id.hintPanel);
+							panelHint.setVisibility(View.GONE);
+							View panelControll = (View) findViewById(R.id.controlPanel);
+							panelControll.setVisibility(View.VISIBLE);
+
+							getSudokuLayout().getHintPainter().deleteAll();
+							getSudokuLayout().invalidate();
+						}
+					});
+
+
+					//Toast.makeText(SudokuActivity.this, "a hint was requested: "+sd, Toast.LENGTH_LONG).show();
 				}
 				updateButtons();
 			}
@@ -804,12 +840,12 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 	 * @return Die Spielstatistik als String
 	 */
 	private String getStatisticsString() {
-		String stat="";
-		stat += getString(R.string.dialog_won_statistics) + ":\n";
-		stat += "\n";
-		stat += getString(R.string.dialog_won_timeneeded) + ": " + getGameTimeString() + "\n";
-		stat += getString(R.string.dialog_won_score)      + ": " + game.getScore();
-		return stat;
+		StringBuilder stat= new StringBuilder("");
+		stat.append(getString(R.string.dialog_won_statistics) + ":\n");
+		stat.append("\n");
+		stat.append(getString(R.string.dialog_won_timeneeded) + ": " + getGameTimeString() + "\n");
+		stat.append(getString(R.string.dialog_won_score)      + ": " + game.getScore());
+		return stat.toString();
 	}
 	
 	@Override
@@ -838,26 +874,23 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 			timeView.setTextColor(getResources().getColor(R.color.text1));
 
 
-			if(timeView != null ) {
-				
-				/* for easy formatting, we display both: time and penalty on one element separated by \n
-				 * this is not  perfect since we padd with whitespace and the font is not 'mono-style'(=not all letters same width)
-				 * solution would be: create custom xml for action bar, but as of now I see no way how to make this easy. 
-				 * to save computing time we cache the offset*/
-				String t = getGameTimeString();
-				String p = " (+ " + getAssistancesTimeString() + ")";
-				int d = t.length() - p.length();
-				while(offset.length() > Math.abs(d)){offset = offset.substring(1);}
-				while(offset.length() < Math.abs(d)){offset = " " + offset;}
-				if(d > 0){
-					p = offset + p;	 
-				}
-				if(d < 0){
-					t = offset + t;
-				}
-				timeView.setText(t + "\n" + p);
+			/* for easy formatting, we display both: time and penalty on one element separated by \n
+			 * this is not  perfect since we padd with whitespace and the font is not 'mono-style'(=not all letters same width)
+			 * solution would be: create custom xml for action bar, but as of now I see no way how to make this easy.
+			 * to save computing time we cache the offset*/
+			String t = getGameTimeString();
+			String p = " (+ " + getAssistancesTimeString() + ")";
+			int d = t.length() - p.length();
+			while(offset.length() > Math.abs(d)){offset = offset.substring(1);}
+			while(offset.length() < Math.abs(d)){offset = " " + offset;}
+			if(d > 0){
+				p = offset + p;
 			}
-			
+			if(d < 0){
+				t = offset + t;
+			}
+			timeView.setText(t + "\n" + p);
+
 			timeHandler.postDelayed(this, 1000);
 		}
 	};

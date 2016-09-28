@@ -14,11 +14,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.View;
+
+import de.sudoq.view.SudokuLayout;
 
 /**
  * Stellt eine Klasse zur Verfügung, welche für Animationen bzw. Markierungen
- * von Feldern zuständig ist.
+ * von Feldern zuständig ist. TODO does it have to be singleton?
  */
 public class FieldViewPainter {
 	/** Attributes */
@@ -56,6 +59,11 @@ public class FieldViewPainter {
 		return instance;
 	}
 
+	private SudokuLayout sl;
+	public void setSudokuLayout(SudokuLayout sl){
+		this.sl=sl;
+	}
+
 	/** Methods */
 
 	/**
@@ -77,6 +85,7 @@ public class FieldViewPainter {
 	 */
 	public void markField(Canvas canvas, View field, String symbol, boolean justText, boolean darken) {
 		FieldViewStates fieldState = this.markings.get(field);
+		if(true){}else //to suppress fielddrawing TODO remove again
 		if (fieldState != null && !justText) {
 			switch (fieldState) {
 			case SELECTED_INPUT_BORDER:
@@ -170,6 +179,15 @@ public class FieldViewPainter {
 				break;
 			}
 		}
+		Paint p = new Paint();
+		p.setStrokeWidth(20);
+		canvas.drawLine(0,0,100,100,p);
+		Log.d("FieldPainter", "stroke drawn");
+		//sl.getHintPainter().debug(canvas);//invalidate();
+		sl.getHintPainter().drawConstraints(canvas);//invalidate();
+		//sl.getHintPainter().
+
+
 	}
 
 	/**

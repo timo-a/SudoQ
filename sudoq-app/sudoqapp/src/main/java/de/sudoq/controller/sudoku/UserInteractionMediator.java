@@ -174,13 +174,17 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 	void updateKeyboard() {
 		SudokuFieldView currentField = this.sudokuView.getCurrentFieldView();
 		for (int i = 0; i < this.game.getSudoku().getSudokuType().getNumberOfSymbols(); i++) {
-			if (currentField != null && i == currentField.getField().getCurrentValue() && !this.noteMode) {
-				this.virtualKeyboard.markField(i, FieldViewStates.SELECTED_INPUT_BORDER);
-			} else if (currentField != null && currentField.getField().isNoteSet(i) && this.noteMode) {
-				this.virtualKeyboard.markField(i, FieldViewStates.SELECTED_NOTE_BORDER);
-			} else {
-				this.virtualKeyboard.markField(i, FieldViewStates.DEFAULT_BORDER);
-			}
+			FieldViewStates state;
+			if      (currentField != null && i == currentField.getField().getCurrentValue() && !this.noteMode)
+				state = FieldViewStates.SELECTED_INPUT_BORDER;
+
+			else if (currentField != null &&      currentField.getField().isNoteSet(i)      && this.noteMode)
+				state = FieldViewStates.SELECTED_NOTE_BORDER;
+
+			else
+				state = FieldViewStates.DEFAULT_BORDER;
+
+			this.virtualKeyboard.markField(i, state);
 		}
 
 		this.virtualKeyboard.invalidate();

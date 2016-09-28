@@ -13,6 +13,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import de.sudoq.controller.sudoku.FieldInteractionListener;
@@ -26,6 +27,7 @@ import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.ConstraintType;
 import de.sudoq.model.sudoku.Field;
 import de.sudoq.model.sudoku.Position;
+import de.sudoq.model.sudoku.Sudoku;
 
 /**
  * Diese Subklasse des von der Android API bereitgestellten Views stellt ein
@@ -35,6 +37,8 @@ import de.sudoq.model.sudoku.Position;
 public class SudokuFieldView extends View implements ModelChangeListener<Field>, ObservableFieldInteraction {
 
 	/** Attributes */
+
+	private static final String LOG_TAG = SudokuFieldView.class.getSimpleName();
 
 	/**
 	 * Das Feld, das von diesem View representiert wird
@@ -122,11 +126,11 @@ public class SudokuFieldView extends View implements ModelChangeListener<Field>,
 		this.isInExtraConstraint = false;
 
 		ArrayList<Constraint> constraints = game.getSudoku().getSudokuType().getConstraints();
-		for (int i = 0; i < constraints.size(); i++) {
-			if (constraints.get(i).getType().equals(ConstraintType.EXTRA) &&
-					constraints.get(i).includes(game.getSudoku().getPosition(field.getId()))) {
-				this.isInExtraConstraint = true;
-				break;
+		for (Constraint c : constraints) {
+			if (c.getType().equals(ConstraintType.EXTRA) &&
+				c.includes(game.getSudoku().getPosition(field.getId()))) {
+					this.isInExtraConstraint = true;
+					break;
 			}
 		}
 
@@ -148,6 +152,11 @@ public class SudokuFieldView extends View implements ModelChangeListener<Field>,
 	@Override
 	public void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
+		Paint dp = new Paint();
+		dp.setColor(Color.CYAN);
+		dp.setStrokeWidth(50);
+		canvas.drawLine(0,80,120,80,dp);
+		Log.d(LOG_TAG, "SudokuFieldView.onDraw()");
 
 		this.symbol = Symbol.getInstance().getMapping(this.field.getCurrentValue());
 		FieldViewPainter.getInstance().markField(canvas, this, this.symbol, false, this.isInExtraConstraint && !this.selected);
@@ -301,45 +310,29 @@ public class SudokuFieldView extends View implements ModelChangeListener<Field>,
 	 * Aktualisiert die Markierungen dieser FieldView
 	 */
 	private void updateMarking() {
-		if (this.connected) {
-			if (this.field.isEditable()) {
-				if (this.markWrongSymbol && !this.field.isNotWrong() && checkConstraint()) {
-					FieldViewPainter.getInstance().setMarking(this, FieldViewStates.CONNECTED_WRONG);
-				} else {
-					FieldViewPainter.getInstance().setMarking(this, FieldViewStates.CONNECTED);
-				}
-			} else {
-				FieldViewPainter.getInstance().setMarking(this, FieldViewStates.SELECTED_FIXED);
-			}
-		} else if (this.selected) {
-			if (this.field.isEditable()) {
-				if (!this.noteMode) {
-					if (this.markWrongSymbol && !this.field.isNotWrong() && checkConstraint()) {
-						FieldViewPainter.getInstance().setMarking(this, FieldViewStates.SELECTED_INPUT_WRONG);
-					} else {
-						FieldViewPainter.getInstance().setMarking(this, FieldViewStates.SELECTED_INPUT);
-					}
-				} else {
-					if (this.markWrongSymbol && !this.field.isNotWrong() && checkConstraint()) {
-						FieldViewPainter.getInstance().setMarking(this, FieldViewStates.SELECTED_NOTE_WRONG);
-					} else {
-						FieldViewPainter.getInstance().setMarking(this, FieldViewStates.SELECTED_NOTE);
-					}
-				}
-			} else {
-				FieldViewPainter.getInstance().setMarking(this, FieldViewStates.SELECTED_FIXED);
-			}
-		} else {
-			if (this.field.isEditable()) {
-				if (this.markWrongSymbol && !this.field.isNotWrong() && checkConstraint()) {
-					FieldViewPainter.getInstance().setMarking(this, FieldViewStates.DEFAULT_WRONG);
-				} else {
-					FieldViewPainter.getInstance().setMarking(this, FieldViewStates.DEFAULT);
-				}
-			} else {
-				FieldViewPainter.getInstance().setMarking(this, FieldViewStates.FIXED);
-			}
-		}
+		boolean editable = this.field.isEditable();
+		//TODO no idea what 'wrong' is doing, i just etracted it for clarity
+		boolean wrong    = this.markWrongSymbol && !this.field.isNotWrong() && checkConstraint();
+		FieldViewStates state;
+		if (this.connected) 
+			state = editable ?                  wrong ? FieldViewStates.CONNECTED_WRONG
+			                                          : FieldViewStates.CONNECTED
+			    
+			                 : FieldViewStates.SELECTED_FIXED;
+			
+		else if (this.selected) 
+			state = editable ? this.noteMode ?  wrong ? FieldViewStates.SELECTED_NOTE_WRONG
+				                                      : FieldViewStates.SELECTED_NOTE
+				                             :  wrong ? FieldViewStates.SELECTED_INPUT_WRONG
+				                                      : FieldViewStates.SELECTED_INPUT
+			                 : FieldViewStates.SELECTED_FIXED;
+			
+		else
+			state = editable ?                  wrong ? FieldViewStates.DEFAULT_WRONG
+			                                          : FieldViewStates.DEFAULT
+			                 : FieldViewStates.FIXED;
+		
+		FieldViewPainter.getInstance().setMarking(this, state);
 		invalidate();
 	}
 
@@ -354,13 +347,13 @@ public class SudokuFieldView extends View implements ModelChangeListener<Field>,
 	private boolean checkConstraint() {
 		ArrayList<Constraint> constraints = this.game.getSudoku().getSudokuType().getConstraints();
 		ArrayList<Position> positions;
-		for (int i = 0; i < constraints.size(); i++) {
-			if (constraints.get(i).includes(this.game.getSudoku().getPosition(this.field.getId()))) {
-				if (constraints.get(i).hasUniqueBehavior()) {
-					positions = constraints.get(i).getPositions();
-					for (int k = 0; k < positions.size(); k++) {
-						if (positions.get(k) != this.game.getSudoku().getPosition(this.field.getId())
-								&& this.game.getSudoku().getField(positions.get(k)).getCurrentValue() == this.field.getCurrentValue()) {
+		Sudoku sudoku = this.game.getSudoku();
+		for (Constraint c : constraints) {
+			if (c.includes(sudoku.getPosition(this.field.getId()))) {
+				if (c.hasUniqueBehavior()) {
+					for (Position pos : c.getPositions()) {
+						if (pos != sudoku.getPosition(this.field.getId())
+							&& sudoku.getField(pos).getCurrentValue() == this.field.getCurrentValue()) {
 							return true;
 						}
 					}

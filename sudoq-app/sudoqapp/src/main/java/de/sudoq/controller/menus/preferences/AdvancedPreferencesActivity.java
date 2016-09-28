@@ -7,7 +7,9 @@
  */
 package de.sudoq.controller.menus.preferences;
 
+import android.content.DialogInterface;
 import android.support.v7.app.ActionBar;
+import android.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -83,6 +85,24 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 	 */
 	public void selectTypesToRestrict(View view) {
 		startActivity(new Intent(this, RestrictTypesActivity.class));
+	}
+
+	public void helperSelected(final View view){
+		AlertDialog deleteAlert = new AlertDialog.Builder(this).create();
+		deleteAlert.setTitle("This feature is still in development. Are you sure you want to activate it?");
+
+		deleteAlert.setButton(getString(R.string.dialog_yes), new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				CheckBox cb = (CheckBox)view;
+				cb.setChecked(true);
+			}
+		});
+		deleteAlert.setButton2(getString(R.string.dialog_no), new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				// Dummy: clicking no means staying in the game
+			}
+		});
+		deleteAlert.show();
 	}
 
 

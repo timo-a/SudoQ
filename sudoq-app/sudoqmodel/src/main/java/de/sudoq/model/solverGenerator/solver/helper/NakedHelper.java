@@ -7,6 +7,7 @@ import de.sudoq.model.solverGenerator.solution.DerivationBlock;
 import de.sudoq.model.solverGenerator.solution.DerivationField;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
+import de.sudoq.model.solvingAssistant.HintTypes;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
 
@@ -23,6 +24,8 @@ import de.sudoq.model.sudoku.Position;
  */
 public class NakedHelper extends SubsetHelper {
 
+	protected HintTypes hintType;
+
 	/**
 	 * Erzeugt einen neuen NakedHelper für das spezifizierte Suduoku mit dem spezifizierten level. Der level entspricht
 	 * dabei der Größe der Symbolmenge nach der gesucht werden soll.
@@ -38,6 +41,11 @@ public class NakedHelper extends SubsetHelper {
 	 */
 	public NakedHelper(SolverSudoku sudoku, int level, int complexity) throws IllegalArgumentException {
 		super(sudoku, level, complexity);
+		switch(level){
+			case 1 : hintType = HintTypes.NakedSingle; break;
+			case 2 : hintType = HintTypes.NakedPair;   break;
+			case 3 : hintType = HintTypes.NakedTriple; break;
+		}
 	}
 
 	/**

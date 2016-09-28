@@ -47,6 +47,12 @@ public class XmlAttribute {
 		this.value = value;
 	}
 
+	public XmlAttribute(String name, Boolean value) throws IllegalArgumentException {
+		this(name, ""+value);
+	}
+
+
+
 	/** Methods */
 
 	/**

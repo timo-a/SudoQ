@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import de.sudoq.model.solvingAssistant.HintTypes;
+
 /**
  * Ein Objekt dieser Klasse stellt einen Herleitungsschritt für die Lösung eines
  * Sudoku-Feldes dar. Dazu enthält es eine Liste von DerivationFields und
@@ -16,7 +18,7 @@ public class SolveDerivation {
 	/**
 	 * A string holding the name of the technique that led to this derivation
 	 */
-	private String technique;
+	private HintTypes technique;
 
 	/**
 	 * A textual illustration of this solution step
@@ -41,13 +43,17 @@ public class SolveDerivation {
 	 * Initiiert ein neues SolveDerivation-Objekt.
 	 */
 	public SolveDerivation() {
-		this("unknown");
+		this(null);
 	}
 
-	public SolveDerivation(String technique) {
+	public SolveDerivation(HintTypes technique) {
 		this.technique = technique;
 		this.fields = new ArrayList<DerivationField>();
 		this.blocks = new ArrayList<DerivationBlock>();
+	}
+
+	public HintTypes getType(){
+		return technique;
 	}
 
 
@@ -108,6 +114,10 @@ public class SolveDerivation {
 	 */
 	public Iterator<DerivationBlock> getBlockIterator() {
 		return blocks.iterator();
+	}
+
+	public List<DerivationBlock> getDerivationBlocks(){
+		return blocks;
 	}
 
 	public String toString(){

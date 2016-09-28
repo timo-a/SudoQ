@@ -34,19 +34,23 @@
             </de.sudoq.view.FullScrollLayout>
         </LinearLayout>
 
-        <!-- is is the former annoying white stripe. I dont' know why it is there, but ichanged it to gray to better blend in -->
+        <!-- is is the former annoying white stripe. I dont' know why it is there, but I changed it to gray to better blend in -->
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="5dp"
             android:orientation="vertical"
-            android:background="@drawable/background_serious" />
-    
+            android:background="@color/red" /> <!-- drawable/background_serious" -->
+
+
+        <!-- controll panel -->
         <LinearLayout
+           android:id="@+id/controlPanel"
            android:layout_width="fill_parent"
            android:layout_height="fill_parent"
            android:layout_weight="2.5"
            android:orientation="horizontal"
-           android:background="#282828" >
+           android:background="#282828"
+           android:visibility="visible">
     
            <!--Buttons-->
            <LinearLayout 
@@ -73,6 +77,43 @@
            </de.sudoq.view.VirtualKeyboardLayout>
                        
         </LinearLayout>
+
+        <!-- hint panel. replaces the controll panel if hints are requested -->
+        <LinearLayout
+            android:id="@+id/hintPanel"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="2.5"
+            android:orientation="horizontal"
+            android:background="#282828"
+            android:visibility="gone">
+
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="ok"
+                android:id="@+id/hintOkButton" />
+            <ScrollView
+                android:id="@+id/SCROLLER_ID"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"
+                android:fillViewport="true"
+                android:layout_marginLeft="3dp">
+
+        <TextView
+        android:id="@+id/hintText"
+        android:text="uzg uzg ug iutf zd rd tse st  u g zuz  tft rd rdrdrdr seses\n 1uzg uzg ug iutf zd rd tse st  u g zuz  tft rd rdrdrdr seses\n 2uzg uzg ug iutf zd rd tse st  u g zuz  tft rd rdrdrdr seses\n 3uzg uzg ug iutf zd rd tse st  u g zuz  tft rd rdrdrdr seses\n"
+        android:textColor="@color/white"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1.0"/>
+
+    </ScrollView>
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <include layout="@layout/actiontree_portrait"/>
