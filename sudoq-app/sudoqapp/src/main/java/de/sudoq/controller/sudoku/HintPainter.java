@@ -8,13 +8,10 @@
 package de.sudoq.controller.sudoku;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.util.Log;
 import android.view.View;
 
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
 
@@ -34,17 +31,12 @@ public class HintPainter {
 	Vector<View> viewList;
 	private Context context;
 	private SudokuLayout sl;
-	private Canvas canvas;
 	/** Constructors */
 
-	/**
-	 * Privater Konstruktor, da diese Klasse statisch ist.
-	 */
-	public HintPainter(Context context, SudokuLayout sl/*, Canvas canvas*/) {
+	public HintPainter(SudokuLayout sl) {
 		this.viewList = new Vector<>();
-		this.context  = context;
+		this.context  = sl.getContext();
 		this.sl = sl;
-//		this.canvas = canvas;
 	}
 
 	public void realizeHint(SolveDerivation sd){
@@ -52,51 +44,22 @@ public class HintPainter {
 			case LastDigit: List<DerivationBlock> db = sd.getDerivationBlocks();
 			                View v = new HighlightedConstraintView(context, sl, db.get(0).getBlock(), Color.BLUE);
 			                viewList.add(v);
-							sl.addView(v);
+					        sl.addView(v, sl.getLayoutParams());
 			                break;
 
 
 		}//		hintPainter.drawConstraints(canvas);
-		sl.invalidate();
+		//invalidateAll();
+		//sl.invalidate();
 	}
 
 	/** Methods */
 
-	public void addView(View v){
-		viewList.add(v);
-	}
+	public void invalidateAll(){
+		Log.d(LOG_TAG, viewList.size()+" hints to be drawn");
 
-	public void debug(Canvas canvas){
-		Paint p = new Paint();
-		p.setColor(Color.GREEN);
-		p.setStrokeWidth(20);
-		canvas.drawLine(0, 100, 100, 0, p);
-	}
-
-	/**
-	 * Draws all constraints
-	 * 
-	 * @param canvas
-	 *            Das Canvas
-	 */
-	public void drawConstraints(Canvas canvas) {
-		Log.d(LOG_TAG, "HintPainter.drawConstraints()");
-
-		View vi = new View(context){
-			@Override
-			protected void onDraw(Canvas canvas) {
-				super.onDraw(canvas);
-				debug(canvas);
-			}
-		};
-		vi.draw(canvas);
-
-		for (View v : viewList) {
-			v.draw(canvas);
-			v.bringToFront();
-			//v.getParent().requestLayout();
-			//v.getParent().invalidate();
-		}
+		for (View v : viewList)
+			v.invalidate();
 	}
 
 

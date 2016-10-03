@@ -85,7 +85,7 @@ public class FieldViewPainter {
 	 */
 	public void markField(Canvas canvas, View field, String symbol, boolean justText, boolean darken) {
 		FieldViewStates fieldState = this.markings.get(field);
-		if(true){}else //to suppress fielddrawing TODO remove again
+		/*if(true){}else //to suppress fielddrawing TODO remove again*/
 		if (fieldState != null && !justText) {
 			switch (fieldState) {
 			case SELECTED_INPUT_BORDER:
@@ -179,13 +179,8 @@ public class FieldViewPainter {
 				break;
 			}
 		}
-		Paint p = new Paint();
-		p.setStrokeWidth(20);
-		canvas.drawLine(0,0,100,100,p);
-		Log.d("FieldPainter", "stroke drawn");
-		//sl.getHintPainter().debug(canvas);//invalidate();
-		sl.getHintPainter().drawConstraints(canvas);//invalidate();
-		//sl.getHintPainter().
+		Log.d("FieldPainter", "Field drawn");
+		sl.getHintPainter().invalidateAll();//invalidate();
 
 
 	}

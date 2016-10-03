@@ -109,7 +109,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 		// this.currentFieldViewSize = this.defaultFieldViewSize;
 		this.setWillNotDraw(false);
 		FieldViewPainter.getInstance().setSudokuLayout(this);
-		this.hintPainter = new HintPainter(context, this);
+		this.hintPainter = new HintPainter(this);
 		inflateSudoku();
 		Log.d(LOG_TAG, "End of Constructor.");
 	}
@@ -270,7 +270,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 			}
 		}
 
-		int i=0;
+		/*int i=0;
 		Paint p = new Paint();
 		p.setColor(Color.RED);
 		for (Constraint c: this.game.getSudoku().getSudokuType())
@@ -284,7 +284,8 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 
 
 		//hintPainter.drawConstraints(canvas);
-		Log.d(LOG_TAG, "SudokuLayout.onDraw()-end");
+		Log.d(LOG_TAG, "SudokuLayout.onDraw()-end");*/
+		hintPainter.invalidateAll();
 	}
 
 	private void outlineConstraint(Constraint c, Canvas canvas, float edgeRadius, Paint paint, boolean thick){

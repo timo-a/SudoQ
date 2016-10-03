@@ -669,6 +669,7 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 					tv.setText(sd.toString());
 
 					getSudokuLayout().getHintPainter().realizeHint(sd);
+					getSudokuLayout().getHintPainter().invalidateAll();
 
 					Button b = (Button) findViewById(R.id.hintOkButton);
 					b.setOnClickListener(new OnClickListener() {

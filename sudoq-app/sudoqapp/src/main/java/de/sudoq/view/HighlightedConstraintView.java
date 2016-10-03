@@ -11,6 +11,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -98,6 +99,10 @@ public class HighlightedConstraintView extends View {
 		paint.setColor(marginColor);
 		paint.setStrokeWidth(20);
 		Constraint c = this.constraint;
+		Log.d("HighlightCV", "This is happening!");
+
+		canvas.drawLine(0, 0, 600, 600, paint);
+
 		for (Position p : c) {
 					/* determine whether the position p is in the (right|left|top|bottom) border of its block constraint.
 					 * test for 0 to avoid illegalArgExc for neg. vals
