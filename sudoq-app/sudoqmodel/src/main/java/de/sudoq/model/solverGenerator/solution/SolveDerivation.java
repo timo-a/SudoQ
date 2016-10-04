@@ -18,7 +18,7 @@ public class SolveDerivation {
 	/**
 	 * A string holding the name of the technique that led to this derivation
 	 */
-	private HintTypes technique;
+	protected HintTypes technique;
 
 	/**
 	 * A textual illustration of this solution step

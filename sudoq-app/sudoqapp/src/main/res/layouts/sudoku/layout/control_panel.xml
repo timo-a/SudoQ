@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/controlPanel"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:layout_weight="2.5"
+android:orientation="horizontal"
+android:background="#282828"
+android:visibility="visible">
+
+<!--Buttons-->
+<LinearLayout
+    android:id="@+id/controls"
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal">
+
+    <!-- help, actiontree -->
+    <include layout="@layout/control_panel_big_buttons"/>
+
+    <!-- undo, redo, toggle -->
+    <include layout="@layout/control_panel_smaller_buttons"/>
+
+</LinearLayout>
+
+<de.sudoq.view.VirtualKeyboardLayout
+    android:id="@+id/virtual_keyboard"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="5dp" >
+</de.sudoq.view.VirtualKeyboardLayout>
+
+</LinearLayout>

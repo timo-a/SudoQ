@@ -9,6 +9,7 @@ public enum HintTypes {
     NakedPair,
     NakedTriple,
     LockedCandidatesExternal,
-    XWing;
+    XWing,
+    Backtracking;
 
 }

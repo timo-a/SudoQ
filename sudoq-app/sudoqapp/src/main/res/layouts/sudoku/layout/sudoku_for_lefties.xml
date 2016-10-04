@@ -42,6 +42,7 @@
             android:background="@drawable/background_serious" />
     
         <LinearLayout
+           android:id="@+id/controlPanel"
            android:layout_width="fill_parent"
            android:layout_height="fill_parent"
            android:layout_weight="2.5"
@@ -66,15 +67,15 @@
                android:orientation="horizontal">
 
                <!-- undo, redo, toggle -->
-               <include layout="@layout/sudoku_smaller_buttons"/>
+               <include layout="@layout/control_panel_smaller_buttons"/>
 
                <!-- help, actiontree -->
-               <include layout="@layout/sudoku_big_buttons"/>
+               <include layout="@layout/control_panel_big_buttons"/>
                         
             </LinearLayout>
-          
                        
       </LinearLayout>
+      <include layout="@layout/hint_panel" android:visibility="gone"/>
     </LinearLayout>
 
     <include layout="@layout/actiontree_portrait"/>

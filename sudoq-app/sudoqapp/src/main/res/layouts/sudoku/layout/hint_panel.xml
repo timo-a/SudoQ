@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/hintPanel"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:layout_weight="2.5"
+android:orientation="horizontal"
+android:background="#282828"
+android:visibility="gone">
+
+
+<Button
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:text="ok"
+    android:id="@+id/hintOkButton" />
+<ScrollView
+    android:id="@+id/SCROLLER_ID"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="vertical"
+    android:fillViewport="true"
+    android:layout_marginLeft="3dp">
+
+    <TextView
+        android:id="@+id/hintText"
+        android:text="uzg uzg ug iutf zd rd tse st  u g zuz  tft rd rdrdrdr seses\n 1uzg uzg ug iutf zd rd tse st  u g zuz  tft rd rdrdrdr seses\n 2uzg uzg ug iutf zd rd tse st  u g zuz  tft rd rdrdrdr seses\n 3uzg uzg ug iutf zd rd tse st  u g zuz  tft rd rdrdrdr seses\n"
+        android:textColor="@color/white"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1.0"/>
+
+</ScrollView>
+
+</LinearLayout>

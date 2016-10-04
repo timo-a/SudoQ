@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="shape_accusative_determined">
+        <item>@string/constraintshape_row_accusative_determined</item>
+        <item>@string/constraintshape_column_accusative_determined</item>
+        <item>@string/constraintshape_diagonal_accusative_determined</item>
+        <item>@string/constraintshape_block_accusative_determined</item>
+        <item>@string/constraintshape_other_accusative_determined</item>
+    </string-array>
+
+
+    <!--Row,Column,Diagonal,Block,Other-->
+    <string-array name="shape_gender_values">
+        <item>@string/gender_neutral</item>
+        <item>@string/gender_neutral</item>
+        <item>@string/gender_neutral</item>
+        <item>@string/gender_neutral</item>
+        <item>@string/gender_neutral</item>
+    </string-array>
+
+</resources>

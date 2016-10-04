@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/controlPanel"
 android:layout_weight="2.5"
 android:layout_width="fill_parent"
 android:layout_height="fill_parent"

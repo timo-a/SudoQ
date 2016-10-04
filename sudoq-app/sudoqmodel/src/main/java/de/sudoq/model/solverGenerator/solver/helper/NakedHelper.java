@@ -5,6 +5,7 @@ import java.util.BitSet;
 
 import de.sudoq.model.solverGenerator.solution.DerivationBlock;
 import de.sudoq.model.solverGenerator.solution.DerivationField;
+import de.sudoq.model.solverGenerator.solution.NakedSetDerivation;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.solvingAssistant.HintTypes;
@@ -45,6 +46,7 @@ public class NakedHelper extends SubsetHelper {
 			case 1 : hintType = HintTypes.NakedSingle; break;
 			case 2 : hintType = HintTypes.NakedPair;   break;
 			case 3 : hintType = HintTypes.NakedTriple; break;
+			default: throw new IllegalArgumentException("we can't handle a level > 3 yet.");
 		}
 	}
 
@@ -129,7 +131,7 @@ public class NakedHelper extends SubsetHelper {
 							// updated field to the derivation object
 							if (buildDerivation) {
 								if (!foundSubset) {
-									lastDerivation = new SolveDerivation();
+									lastDerivation = new NakedSetDerivation(hintType);
 									lastDerivation.addDerivationBlock(new DerivationBlock(constraint));
 								}
 								BitSet relevantCandidates = localCopy;

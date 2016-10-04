@@ -57,10 +57,10 @@
     <string name="statistics_title">Statistics</string>
     <string name="statistics_counters">Counters</string>
     <string name="statistics_played_sudokus">Played sudokus</string>
-    <string name="statistics_played_easy_sudokus">Played easy sudokus</string>
+    <string name="statistics_played_easy_sudokus"  >Played easy sudokus</string>
     <string name="statistics_played_medium_sudokus">Played medium sudokus</string>
     <string name="statistics_played_difficult_sudokus">Played difficult sudokus</string>
-    <string name="statistics_played_infernal_sudokus">Played infernal sudokus</string>    
+    <string name="statistics_played_infernal_sudokus" >Played infernal sudokus</string>
 	<string name="statistics_records">Records</string>
 	<string name="statistics_score">Highscore</string>
 	<string name="statistics_fastest_solving_time">Fastest solving time</string>
@@ -195,5 +195,31 @@
     <string name="menu_settings" translatable="false">MENU_SETTINGS</string>
     <string name="fab_go_back">Click to delete.\nClick button again to stop deleting</string>
     <string name="sf_sudokuloading_title">Saved Sudokus</string>
+
+    <!-- Hints -->
+
+    <string name="hint_lastdigit">Look at the highlighted {shape}! There\'s only one field left.</string>
+
+
+    <string name="constraintshape_row_accusative_determined"     >row</string>
+    <string name="constraintshape_column_accusative_determined"  >column</string>
+    <string name="constraintshape_diagonal_accusative_determined">diagonal</string>
+    <string name="constraintshape_block_accusative_determined"   >block</string>
+    <string name="constraintshape_other_accusative_determined"   >group</string>
+
+    <string name="gender_maskulin">m</string>
+    <string name="gender_feminin">f</string>
+    <string name="gender_neutral">n</string>
+
+    <string name="feminine_accusative_determiner">die</string>
+    <string name="maskuline_accusative_determiner">den</string>
+    <string name="neutral_accusative_determiner">das</string>
+
+    <string name="feminine_accusative_suffix"></string> <!-- only used in german -->
+    <string name="maskuline_accusative_suffix"></string>
+    <string name="neutral_accusative_suffix"></string>
+
+    <string name="hint_backtracking">As said, I\'m still in development. So I\'m out of ideas and my best advice is to set a bookmark and guess a field.</string>
+
 
 </resources>

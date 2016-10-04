@@ -2,13 +2,21 @@ package de.sudoq.controller.menus;
 
 import android.content.Context;
 import de.sudoq.R;
+import de.sudoq.model.sudoku.Constraint;
+import de.sudoq.model.sudoku.Utils;
+import de.sudoq.model.sudoku.Utils.ConstraintShape;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
 public class Utility {
 
+	public static <T extends Enum> String enum2String(String[] typeStrings, T e){
+		int index = e.ordinal();
+		return index >= typeStrings.length ? null : typeStrings[index];
+	}
 
-	private static String[] getSudokuTypeValues(Context context){
+	/* SudokuTypes */
+	private static String[] getSudokuTypeValues(Context context){//we need a method because of the context...
 		String[] typeStrings = new String[SudokuTypes.values().length];
 		typeStrings[SudokuTypes.standard4x4.  ordinal()] = context.getString(R.string.sudoku_type_standard_4x4);
 		typeStrings[SudokuTypes.standard6x6.  ordinal()] = context.getString(R.string.sudoku_type_standard_6x6);
@@ -40,7 +48,7 @@ public class Utility {
 
 
 	
-	
+	/* Complexities */
 	private static String[] getComplexityValues(Context context){
 		String[] typeStrings = new String[Complexity.values().length];
 		typeStrings[Complexity.easy.     ordinal()] = context.getString(R.string.complexity_easy);
@@ -65,6 +73,48 @@ public class Utility {
 		return index >= complexityStrings.length ? null : complexityStrings[index];
 	}
 
-	
-	
+
+	/* Shapes */
+	private static String[] getConstraintShapeValuesAccusativeDetermined(Context context){
+		String[] typeStrings = new String[Utils.ConstraintShape.values().length];
+		typeStrings[ConstraintShape.Row     .ordinal()] = context.getString(R.string.constraintshape_row_accusative_determined);
+		typeStrings[ConstraintShape.Column  .ordinal()] = context.getString(R.string.constraintshape_column_accusative_determined);
+		typeStrings[ConstraintShape.Diagonal.ordinal()] = context.getString(R.string.constraintshape_diagonal_accusative_determined);
+		typeStrings[ConstraintShape.Block   .ordinal()] = context.getString(R.string.constraintshape_block_accusative_determined);
+		return typeStrings;
+	}
+
+
+	public static String constraintShapeAccDet2string(Context context, ConstraintShape cs){
+		String[] shapeStrings = getConstraintShapeValuesAccusativeDetermined(context);
+		return enum2String(shapeStrings, cs);
+	}
+
+	/*  */
+	private static String[] getConstraintShapeGender(Context context){
+		return context.getResources().getStringArray(R.array.shape_gender_values);
+	}
+
+	public static String getGender(Context context, ConstraintShape cs){ return enum2String(getConstraintShapeGender(context), cs); }
+
+	public static String gender2AccDeterminer(Context context, String gender){
+		switch (gender){
+			case "m":	return context.getString(R.string.maskuline_accusative_determiner);
+			case "f":	return context.getString(R.string. feminine_accusative_determiner);
+			case "n":	return context.getString(R.string.  neutral_accusative_determiner);
+			default:    return null;
+		}
+	}
+
+	public static String gender2AccSufix(Context context, String gender){
+		switch (gender){
+			case "m":	return context.getString(R.string.maskuline_accusative_suffix);
+			case "f":	return context.getString(R.string. feminine_accusative_suffix);
+			case "n":	return context.getString(R.string.  neutral_accusative_suffix);
+			default:    return null;
+		}
+	}
+
+
+
 }

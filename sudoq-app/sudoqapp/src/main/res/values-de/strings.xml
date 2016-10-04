@@ -173,4 +173,20 @@
     <string name="sf_sudokuloading_title">Gespeicherte Sudokus</string>
     <string name="profile_preference_title_intelligent_assistant">Intelligenter Assistent</string>
 
+    <string name="hint_lastdigit">Schau dir mal {determiner} hervorgehoben{suffix} {shape} an! Da ist nur noch ein Feld übrig.</string>
+
+    <string name="constraintshape_block_accusative_determined">Block</string>
+    <string name="constraintshape_column_accusative_determined">Spalte</string>
+    <string name="constraintshape_diagonal_accusative_determined">Diagonale</string>
+    <string name="constraintshape_row_accusative_determined">Zeile</string>
+    <string name="constraintshape_other_accusative_determined">Gruppe</string>
+
+    <string name="feminine_accusative_determiner">die</string>
+    <string name="maskuline_accusative_determiner">den</string>
+    <string name="neutral_accusative_determiner">das</string>
+
+    <string name="feminine_accusative_suffix">e</string>
+    <string name="maskuline_accusative_suffix">en</string>
+    <string name="neutral_accusative_suffix">e</string>
+
 </resources>

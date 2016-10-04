@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.Stack;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -160,6 +161,10 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 	 */
 	private boolean actionTreeShown;
 
+
+	private enum Mode {Regular, HintMode};
+	private Mode mode=Mode.Regular;//TODO see that this gets saved in oninstancesaved and restored so hint persitst orientation change
+
 	/**
 	 * Der Handler für die Zeit
 	 */
@@ -183,31 +188,18 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 
 	private void initializeSymbolSet(){
 		switch (this.game.getSudoku().getSudokuType().getNumberOfSymbols()) {
-		case 4:
-			Symbol.createSymbol(Symbol.MAPPING_NUMBERS_FOUR);
-			currentSymbolSet = Symbol.MAPPING_NUMBERS_FOUR;
-			break;
+			case 4:		currentSymbolSet = Symbol.MAPPING_NUMBERS_FOUR;			break;
 
-		case 6:
-			Symbol.createSymbol(Symbol.MAPPING_NUMBERS_SIX);
-			currentSymbolSet = Symbol.MAPPING_NUMBERS_SIX;
-			break;
+			case 6:		currentSymbolSet = Symbol.MAPPING_NUMBERS_SIX;			break;
 
-		case 9:
-			Symbol.createSymbol(Symbol.MAPPING_NUMBERS_NINE);
-			currentSymbolSet = Symbol.MAPPING_NUMBERS_NINE;
-			break;
+			case 9:		currentSymbolSet = Symbol.MAPPING_NUMBERS_NINE;			break;
 
-		case 16:
-			Symbol.createSymbol(Symbol.MAPPING_NUMBERS_HEX_LETTERS);
-			currentSymbolSet = Symbol.MAPPING_NUMBERS_HEX_LETTERS;
-			break;
+			case 16:	currentSymbolSet = Symbol.MAPPING_NUMBERS_HEX_LETTERS;	break;
 
-		default:
-			Symbol.createSymbol(Symbol.MAPPING_NUMBERS_HEX_LETTERS);
-			currentSymbolSet = Symbol.MAPPING_NUMBERS_HEX_LETTERS;
-			break;
+			default:	currentSymbolSet = Symbol.MAPPING_NUMBERS_HEX_LETTERS;	break;
 		}
+		Symbol.createSymbol(currentSymbolSet);
+
 	}
 	
 	/**
@@ -238,7 +230,7 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 			initializeSymbolSet();
 /*			if (game.isLefthandedModeActive()){
 				setContentView(R.layout.sudoku_for_lefties);
-				
+
 			}
 			else {
 				setContentView(R.layout.sudoku);
@@ -345,6 +337,11 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 			this.mediator.onFieldSelected(this.sudokuView.getCurrentFieldView());
 		}
 
+		if(mode==Mode.HintMode) {
+			findViewById(R.id.controlPanel).setVisibility(View.GONE);
+			findViewById(R.id.   hintPanel).setVisibility(View.VISIBLE);
+		}
+
 		Log.d(LOG_TAG, "Restored state");
 	}
 
@@ -352,30 +349,12 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 	 * Setzt den Text für Typ und Schwierigkeit des aktuellen Sudokus.
 	 */
 	private void setTypeText() {
-		
-		
-		String type = Utility.type2string(this, this.game.getSudoku().getSudokuType().getEnumType());
+
+		String type = Utility.      type2string(this, this.game.getSudoku().getSudokuType().getEnumType());
 		String comp = Utility.complexity2string(this, this.game.getSudoku().getComplexity());
-		/*int st;
-		switch (this.game.getSudoku().getComplexity()) {
-		case easy:
-			st = R.string.complexity_easy;
-			break;
-		case medium:
-			st = R.string.complexity_medium;
-			break;	
-		case difficult:
-			st = R.string.complexity_difficult;
-			break;
-		case infernal:
-			st = R.string.complexity_infernal;
-			break;
-		default:
-			st= R.string.complexity_infernal;//s.o.
-		}*/
+
 		ActionBar ab = getSupportActionBar();
 		ab.setTitle(type);
-        //ab.setSubtitle(getString(st));
         ab.setSubtitle(comp);
 
     }
@@ -435,13 +414,13 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 		this.sudokuView.setGravity(Gravity.CENTER);
 		this.sudokuScrollView.addView(this.sudokuView);
 
-		Buttons.redoButton = (ImageButton) findViewById(R.id.button_sudoku_redo);
-		Buttons.undoButton = (ImageButton) findViewById(R.id.button_sudoku_undo);
-		Buttons.actionTreeButton = (ImageButton) findViewById(R.id.button_sudoku_actionTree);
-		Buttons.gestureButton = (ImageButton) findViewById(R.id.button_sudoku_toggle_gesture);
+		Buttons.       redoButton = (ImageButton) findViewById(R.id.button_sudoku_redo);
+		Buttons.       undoButton = (ImageButton) findViewById(R.id.button_sudoku_undo);
+		Buttons. actionTreeButton = (ImageButton) findViewById(R.id.button_sudoku_actionTree);
+		Buttons.    gestureButton = (ImageButton) findViewById(R.id.button_sudoku_toggle_gesture);
 		Buttons.assistancesButton = (ImageButton) findViewById(R.id.button_sudoku_help);
-		Buttons.bookmarkButton = (Button) findViewById(R.id.sudoku_action_tree_button_bookmark);
-		Buttons.closeButton = (Button) findViewById(R.id.sudoku_action_tree_button_close);
+		Buttons.   bookmarkButton = (Button) findViewById(R.id.sudoku_action_tree_button_bookmark);
+		Buttons.      closeButton = (Button) findViewById(R.id.sudoku_action_tree_button_close);
 
 		LinearLayout currentControlsView;/* = (LinearLayout) findViewById(R.id.sudoku_time_border);
 		FieldViewPainter.getInstance().setMarking(currentControlsView, FieldViewStates.CONTROLS);*/
@@ -458,13 +437,9 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 	 * Schaltet den ActionTree an bzw. aus.
 	 */
 	public void toogleActionTree() {
-		if (actionTreeShown) {
-			this.actionTreeController.setVisibility(false);
-			actionTreeShown = false;
-		} else {
-			this.actionTreeController.setVisibility(true);
-			actionTreeShown = true;
-		}
+		actionTreeShown = !actionTreeShown;//toggle value
+		this.actionTreeController.setVisibility(actionTreeShown);//update AT-Controller
+
 		updateButtons();
 	}
 
@@ -600,6 +575,19 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 	}
 
+	public void setModeHint(){
+		findViewById(R.id.controlPanel).setVisibility(View.GONE);
+		findViewById(R.id.hintPanel).setVisibility(View.VISIBLE);
+		mode=Mode.HintMode;
+	}
+
+	public void setModeRegular(){
+		findViewById(R.id.   hintPanel).setVisibility(View.GONE);
+		findViewById(R.id.controlPanel).setVisibility(View.VISIBLE);
+		mode=Mode.Regular;
+	}
+
+
 	/**
 	 * Zeigt einen Dialog mit den verfügbaren Hilfestellungen an.
 	 */
@@ -659,14 +647,10 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 
 				}else if (items[item] == getString(R.string.sf_sudoku_assistances_give_hint)){
 					SolveDerivation sd = SolvingAssistant.giveAHint(game.getSudoku());
-					View panelControll = (View) findViewById(R.id.controlPanel);
-					panelControll.setVisibility(View.GONE);
-
-					View panelHint = (View) findViewById(R.id.hintPanel);
-					panelHint.setVisibility(View.VISIBLE);
 
 					TextView tv = (TextView) findViewById(R.id.hintText);
-					tv.setText(sd.toString());
+					tv.setText(HintFormulator.getText(getBaseContext(),  sd));
+					SudokuActivity.this.setModeHint();
 
 					getSudokuLayout().getHintPainter().realizeHint(sd);
 					getSudokuLayout().getHintPainter().invalidateAll();
@@ -676,13 +660,11 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 						@Override
 						public void onClick(View view) {
 
-							View panelHint = (View) findViewById(R.id.hintPanel);
-							panelHint.setVisibility(View.GONE);
-							View panelControll = (View) findViewById(R.id.controlPanel);
-							panelControll.setVisibility(View.VISIBLE);
+							SudokuActivity.this.setModeRegular();
 
 							getSudokuLayout().getHintPainter().deleteAll();
 							getSudokuLayout().invalidate();
+							getSudokuLayout().getHintPainter().invalidateAll();
 						}
 					});
 

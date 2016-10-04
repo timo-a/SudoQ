@@ -5,7 +5,7 @@ import de.sudoq.controller.menus.NewSudokuConfigurationActivity;
 import de.sudoq.controller.sudoku.SudokuActivity;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.Field;
-import de.sudoq.view.SudokuFieldView;
+import de.sudoq.view.CircleView;
 import de.sudoq.view.VirtualKeyboardLayout;
 
 public class SudokuInteractionTest extends SudoqTestCase {
@@ -18,7 +18,7 @@ public class SudokuInteractionTest extends SudoqTestCase {
 		solo.assertCurrentActivity("should be in sudoku", SudokuActivity.class);
 
 		SudokuActivity a = (SudokuActivity) solo.getCurrentActivity();
-		SudokuFieldView[][] views = SudokuUtilities.getViewArray(a);
+		CircleView[][] views = SudokuUtilities.getViewArray(a);
 		solo.clickOnView(views[5][3]);
 		assertTrue(a.getCurrentFieldView() == views[5][3]);
 
@@ -90,7 +90,7 @@ public class SudokuInteractionTest extends SudoqTestCase {
 		solo.assertCurrentActivity("should be in sudoku", SudokuActivity.class);
 
 		SudokuActivity a = (SudokuActivity) solo.getCurrentActivity();
-		SudokuFieldView[][] views = SudokuUtilities.getViewArray(a);
+		CircleView[][] views = SudokuUtilities.getViewArray(a);
 
 		int x = -1;
 		int y = -1;

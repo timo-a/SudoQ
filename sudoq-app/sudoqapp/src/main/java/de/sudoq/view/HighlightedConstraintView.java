@@ -101,7 +101,7 @@ public class HighlightedConstraintView extends View {
 		Constraint c = this.constraint;
 		Log.d("HighlightCV", "This is happening!");
 
-		canvas.drawLine(0, 0, 600, 600, paint);
+		//canvas.drawLine(0, 0, 600, 600, paint);
 
 		for (Position p : c) {
 					/* determine whether the position p is in the (right|left|top|bottom) border of its block constraint.
@@ -121,7 +121,7 @@ public class HighlightedConstraintView extends View {
 					 * */
 
 
-			int scale = 3;
+			int scale = 1;
 			int from = -sl.getCurrentSpacing() * scale;
 			int to   =  sl.getCurrentSpacing() * scale;
 

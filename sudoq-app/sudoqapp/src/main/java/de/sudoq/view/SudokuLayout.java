@@ -235,6 +235,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 				}
 			}
 		}
+		hintPainter.updateLayout();
 		invalidate();
 		Log.d(LOG_TAG, "SudokuLayout.refresh()-end");
 	}
@@ -270,21 +271,6 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 			}
 		}
 
-		/*int i=0;
-		Paint p = new Paint();
-		p.setColor(Color.RED);
-		for (Constraint c: this.game.getSudoku().getSudokuType())
-			if (c.getType().equals(ConstraintType.LINE)) {
-				if (i > 2) {
-					outlineConstraint(c, canvas, edgeRadius, p, true);
-					break;
-				}
-				i++;
-			}
-
-
-		//hintPainter.drawConstraints(canvas);
-		Log.d(LOG_TAG, "SudokuLayout.onDraw()-end");*/
 		hintPainter.invalidateAll();
 	}
 

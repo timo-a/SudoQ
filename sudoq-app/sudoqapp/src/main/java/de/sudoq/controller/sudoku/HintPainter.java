@@ -11,6 +11,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import java.util.List;
 import java.util.Vector;
@@ -44,13 +45,12 @@ public class HintPainter {
 			case LastDigit: List<DerivationBlock> db = sd.getDerivationBlocks();
 			                View v = new HighlightedConstraintView(context, sl, db.get(0).getBlock(), Color.BLUE);
 			                viewList.add(v);
-					        sl.addView(v, sl.getLayoutParams());
+					        sl.addView(v, sl.getHeight(), sl.getWidth());
 			                break;
 
 
-		}//		hintPainter.drawConstraints(canvas);
-		//invalidateAll();
-		//sl.invalidate();
+
+		}
 	}
 
 	/** Methods */
@@ -64,10 +64,19 @@ public class HintPainter {
 
 
 	/**
-	 * Löscht alle hinzugefügten Markierungen auf Default.
+	 * Delete all hints from object-internal storage as well as from the SudokuLayout
 	 */
 	public void deleteAll() {
+		for (View v : viewList)
+			sl.removeView(v);
 		this.viewList.clear();
+	}
+
+	public void updateLayout(){
+		for (View v : viewList) {
+			v.getLayoutParams().height = sl.getHeight();
+			v.getLayoutParams().width  = sl.getWidth();
+		}
 	}
 
 }

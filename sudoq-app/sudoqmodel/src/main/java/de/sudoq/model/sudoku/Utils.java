@@ -52,9 +52,9 @@ public class Utils {
         else
             return ConstraintShape.Block;
     }
-
+    /** Shapes of the constraints as the user would classify them */
     public enum ConstraintShape {
-        Row,Column,Diagonal,Block,Other
+        Row,Column,Diagonal,Block,Other //Never change the order!!! string-arrays in the xml-values depend on it!
 
 
     }
@@ -62,27 +62,23 @@ public class Utils {
     public static Boolean isRow(List<Position> list){
         assert list.size() >=2;
 
-        boolean row = true;
-
         int ycoord = list.get(0).getY();
         for (Position pos : list)
             if (pos.getY() != ycoord)
-                row=false;
+                return false;
 
-        return row;
+        return true;
     }
 
     public static Boolean isColumn(List<Position> list){
         assert list.size() >=2;
 
-        boolean col = true;
-
         int xcoord = list.get(0).getX();
         for (Position pos : list)
             if (pos.getX() != xcoord)
-                col=false;
+                return false;
 
-        return col;
+        return true;
     }
 
     public static Boolean isDiagonal(List<Position> list){

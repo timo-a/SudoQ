@@ -7,6 +7,7 @@ import java.util.Vector;
 
 import de.sudoq.model.solverGenerator.solution.DerivationBlock;
 import de.sudoq.model.solverGenerator.solution.DerivationField;
+import de.sudoq.model.solverGenerator.solution.LastDigitDerivation;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.solvingAssistant.HintTypes;
@@ -84,7 +85,7 @@ public class LastDigitHelper extends SolveHelper {
 
                         if(buildDerivation){
 
-                            lastDerivation = new SolveDerivation(HintTypes.LastDigit);
+                            lastDerivation = new LastDigitDerivation(HintTypes.LastDigit, c, solutionField, solutionValue);
                             BitSet relevant = new BitSet();
                             relevant.set(solutionValue); //set solution to 1
                             BitSet irrelevant = new BitSet();

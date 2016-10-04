@@ -5,8 +5,8 @@
 <!-- This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.  -->
 <resources>
     <string-array name="sudokutype_values">
-	    <item >@string/sudoku_type_standard_9x9</item>
-	    <item >@string/sudoku_type_standard_4x4</item>
+	    <item>@string/sudoku_type_standard_9x9</item>
+	    <item>@string/sudoku_type_standard_4x4</item>
 	    <item>@string/sudoku_type_standard_6x6</item>
 	    <item>@string/sudoku_type_standard_16x16</item>
         <item>@string/sudoku_type_squiggly_a_9x9</item>
@@ -16,11 +16,14 @@
 	    <item>@string/sudoku_type_hyper</item> 
 	    <item>@string/sudoku_type_xsudoku</item> 
 	</string-array>
-    
+
 	<string-array name="sudokucomplexity_values">
-	    <item>@string/complexity_easy</item>
-	    <item>@string/complexity_medium</item>
-	    <item>@string/complexity_difficult</item>
-	    <item>@string/complexity_infernal</item>
+		<item>@string/complexity_easy</item>
+		<item>@string/complexity_medium</item>
+		<item>@string/complexity_difficult</item>
+		<item>@string/complexity_infernal</item>
 	</string-array>
+
+
+
 </resources>
