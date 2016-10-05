@@ -156,7 +156,7 @@ public class SudokuFieldView extends View implements ModelChangeListener<Field>,
 		dp.setColor(Color.CYAN);
 		dp.setStrokeWidth(50);
 		canvas.drawLine(0,80,120,80,dp);
-		Log.d(LOG_TAG, "SudokuFieldView.onDraw()");
+		//Log.d(LOG_TAG, "SudokuFieldView.onDraw()");
 
 		this.symbol = Symbol.getInstance().getMapping(this.field.getCurrentValue());
 		FieldViewPainter.getInstance().markField(canvas, this, this.symbol, false, this.isInExtraConstraint && !this.selected);
@@ -358,7 +358,7 @@ public class SudokuFieldView extends View implements ModelChangeListener<Field>,
 						}
 					}
 				} else {
-					return true;
+					return true;//if no unique-constraint -> automatically satisfied
 				}
 			}
 		}

@@ -56,7 +56,7 @@ public class HintPainter {
 	/** Methods */
 
 	public void invalidateAll(){
-		Log.d(LOG_TAG, viewList.size()+" hints to be drawn");
+		//Log.d(LOG_TAG, viewList.size()+" hints to be drawn");
 
 		for (View v : viewList)
 			v.invalidate();

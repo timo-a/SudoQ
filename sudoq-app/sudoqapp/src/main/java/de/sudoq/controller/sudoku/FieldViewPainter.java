@@ -179,7 +179,7 @@ public class FieldViewPainter {
 				break;
 			}
 		}
-		Log.d("FieldPainter", "Field drawn");
+		//Log.d("FieldPainter", "Field drawn");
 		sl.getHintPainter().invalidateAll();//invalidate();
 
 

@@ -167,7 +167,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 				}
 			}
 		}
-		Log.d(LOG_TAG, "SudokuLayout.inflateSudoku()-end");
+		//Log.d(LOG_TAG, "SudokuLayout.inflateSudoku()-end");
 	}
 
 	/**
@@ -237,7 +237,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 		}
 		hintPainter.updateLayout();
 		invalidate();
-		Log.d(LOG_TAG, "SudokuLayout.refresh()-end");
+		//Log.d(LOG_TAG, "SudokuLayout.refresh()-end");
 	}
 
 	private int getCol(int i){
@@ -558,7 +558,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	 */
 	@Override
 	public float getMinZoomFactor() {
-		return 1.0f;
+		return 0.5f/*TODO revert 1.0f*/;
 	}
 
 	/**

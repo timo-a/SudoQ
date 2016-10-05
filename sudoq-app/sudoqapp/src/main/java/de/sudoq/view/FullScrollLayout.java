@@ -97,7 +97,7 @@ public class FullScrollLayout extends LinearLayout {
 			this.zoomFactor = 1.0f;
 		}
 
-		this.verticalScrollView = new VerticalScroll(getContext());
+		this.  verticalScrollView = new   VerticalScroll(getContext());
 		this.horizontalScrollView = new HorizontalScroll(getContext());
 
 		this.verticalScrollView.addView(this.horizontalScrollView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
@@ -294,14 +294,15 @@ public class FullScrollLayout extends LinearLayout {
 	}
 
 	private class ScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+		int debugCounter=0;
 		@Override
 		public boolean onScale(ScaleGestureDetector detector) {
 			float scaleFactor = detector.getScaleFactor();
 			float newZoom = zoomFactor * scaleFactor;
 
-			// Don't let the object get too large.
-			newZoom = Math.max(Math.min(newZoom, childView.getMaxZoomFactor()),//what are the semantics here!? 
-					                             childView.getMinZoomFactor());//make descriptive variables!
+			// Don't let the object get too large/small.
+			newZoom = Math.min(newZoom, childView.getMaxZoomFactor());//respect upper limit
+			newZoom = Math.max(newZoom, childView.getMinZoomFactor());//respect lower limit
 			
 			if (!childView.zoom(newZoom)) {
 				return false;
@@ -309,12 +310,23 @@ public class FullScrollLayout extends LinearLayout {
 			
 			zoomFactor = newZoom;
 			
+
 			currentX += detector.getFocusX() - detector.getFocusX() / scaleFactor;
 			currentY += detector.getFocusY() - detector.getFocusY() / scaleFactor;
 
-			scrollTo((int) currentX + getWidth() / 2, (int) currentY + getHeight() / 2);
 
-			Log.d(LOG_TAG, "Scaled");
+
+			int sym = 0;//getWidth()/2;
+			//int sym = (int) (2000*zoomFactor);
+			//scrollTo(sym, sym);
+			//scrollTo(debugCounter*100, debugCounter*100);
+			//debugCounter++;
+
+			currentX = sym;
+			currentY = sym;
+
+			scrollTo((int) currentX + getWidth() / 2, (int) currentY + getHeight() / 2);//nullifying
+			//Log.d(LOG_TAG, "Scaled to: "+sym+","+sym);
 			return true;
 		}
 	}
