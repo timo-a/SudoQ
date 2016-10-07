@@ -8,6 +8,7 @@
 package de.sudoq.view;
 
 import android.content.Context;
+import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -125,13 +126,11 @@ public class FullScrollLayout extends LinearLayout {
 	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		this.horizontalScrollView.performTouch(event);
-		this.verticalScrollView.performTouch(event);
-		
-		if (event.getPointerCount() > 1) {
-			if (this.childView != null) {
-				this.scaleGestureDetector.onTouchEvent(event);
-			}
+		if (event.getPointerCount() == 1) {//just one finger -> scroll
+			this.horizontalScrollView.performTouch(event);
+			this.  verticalScrollView.performTouch(event);
+		} else if (this.childView != null) {//2 or more fingers
+			this.scaleGestureDetector.onTouchEvent(event);
 		}
 		return true;
 	}
@@ -142,8 +141,8 @@ public class FullScrollLayout extends LinearLayout {
 	@Override
 	public void scrollTo(int x, int y) {
 		// Has to be changed because the tree algo uses different coords.
-		currentX = x - getWidth() / 2;
-		currentY = y - getHeight() / 2;
+		currentX = x /*- getWidth() / 2*/;
+		currentY = y /*- getHeight() / 2*/;
 
 		this.verticalScrollView.post(new Runnable() {
 			public void run() {
@@ -294,40 +293,56 @@ public class FullScrollLayout extends LinearLayout {
 	}
 
 	private class ScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-		int debugCounter=0;
+
+		float focusX, focusY;
+
 		@Override
 		public boolean onScale(ScaleGestureDetector detector) {
+
+			if(detector.getScaleFactor()< 0.01) return false;
+
 			float scaleFactor = detector.getScaleFactor();
 			float newZoom = zoomFactor * scaleFactor;
 
 			// Don't let the object get too large/small.
-			newZoom = Math.min(newZoom, childView.getMaxZoomFactor());//respect upper limit
-			newZoom = Math.max(newZoom, childView.getMinZoomFactor());//respect lower limit
+			float lowerLimit = childView.getMinZoomFactor();
+			float upperLimit = childView.getMaxZoomFactor();
+			newZoom = Math.max(Math.min(newZoom, upperLimit), lowerLimit);//ensure newZoom € [lowerLim,upperLim]
 			
-			if (!childView.zoom(newZoom)) {
-				return false;
-			}
+			if (!childView.zoom(newZoom/*/zoomFactor*/)) {	return false; }
 			
 			zoomFactor = newZoom;
-			
+
 
 			currentX += detector.getFocusX() - detector.getFocusX() / scaleFactor;
 			currentY += detector.getFocusY() - detector.getFocusY() / scaleFactor;
 
-
+			float focalShiftX = focusX * zoomFactor - focusX;
+			float focalShiftY = focusY * zoomFactor - focusY;
 
 			int sym = 0;//getWidth()/2;
-			//int sym = (int) (2000*zoomFactor);
-			//scrollTo(sym, sym);
-			//scrollTo(debugCounter*100, debugCounter*100);
-			//debugCounter++;
 
-			currentX = sym;
-			currentY = sym;
+			currentX = focalShiftX;
+			currentY = focalShiftY;
 
-			scrollTo((int) currentX + getWidth() / 2, (int) currentY + getHeight() / 2);//nullifying
-			//Log.d(LOG_TAG, "Scaled to: "+sym+","+sym);
+			scrollTo((int) currentX, (int) currentY);
+			Log.d(LOG_TAG, "Scaled to: "+(int)currentX+","+(int)currentY+"    "
+					      +"Focus: "    +(int)focusX+","+(int)focusY+"   "
+					      +"zoom: "+zoomFactor);
 			return true;
+		}
+
+		@Override
+		public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
+			Log.d(LOG_TAG, "On scale begin-------------------------(");
+			focusX = scaleGestureDetector.getFocusX();
+			focusY = scaleGestureDetector.getFocusY();
+			return true;
+		}
+
+		@Override
+		public void onScaleEnd(ScaleGestureDetector scaleGestureDetector) {Log.d(LOG_TAG, "On scale end----------------)");
+
 		}
 	}
 }

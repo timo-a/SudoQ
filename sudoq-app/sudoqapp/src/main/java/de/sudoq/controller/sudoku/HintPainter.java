@@ -72,10 +72,15 @@ public class HintPainter {
 		this.viewList.clear();
 	}
 
+	/**
+	 * Have this Object update all its views layouts from the changed sudokulayout object
+	 * */
 	public void updateLayout(){
+		int newHeight = sl.getHeight();
+		int newWidth  = sl.getWidth();
 		for (View v : viewList) {
-			v.getLayoutParams().height = sl.getHeight();
-			v.getLayoutParams().width  = sl.getWidth();
+			v.getLayoutParams().height = newHeight;
+			v.getLayoutParams().width  = newWidth;
 		}
 	}
 

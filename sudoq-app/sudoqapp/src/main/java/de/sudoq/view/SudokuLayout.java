@@ -240,16 +240,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 		//Log.d(LOG_TAG, "SudokuLayout.refresh()-end");
 	}
 
-	private int getCol(int i){
-		switch (i){
-		case 0: return Color.BLACK;
-		case 1: return Color.GREEN;
-		case 2: return Color.MAGENTA;
-		case 3: return Color.YELLOW;
-		default: return getCol(i-4);
-		}
-	}
-
+	private Canvas canvas;
 
 	@Override
 	/**
@@ -260,9 +251,12 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		Log.d(LOG_TAG, "SudokuLayout.onDraw()");
+		//if(softDraw){onDraw2(canvas);}
+		//else{
+		this.canvas = canvas;
 
 		float edgeRadius = getCurrentFieldViewSize() / 20.0f;
-		Paint paint = new Paint();
+		Paint paint = new Paint();//Todo reset() instead
 		paint.setColor(Color.BLACK);
 		for (Constraint c: this.game.getSudoku().getSudokuType()) {
 			if (c.getType().equals(ConstraintType.BLOCK)) {
@@ -271,7 +265,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 			}
 		}
 
-		hintPainter.invalidateAll();
+		hintPainter.invalidateAll(); //}
 	}
 
 	private void outlineConstraint(Constraint c, Canvas canvas, float edgeRadius, Paint paint, boolean thick){
@@ -493,9 +487,17 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	 */
 	public boolean zoom(float factor) {
 		this.zoomFactor = factor;
+//		//this.canvas.scale(factor,factor);
 		refresh();
+		//zoomy = factor;
+		//softDraw=true;
+		//invalidate();
+
 		return true;
 	}
+/*	boolean softDraw;
+	float zoomy=1.0f;
+	private void onDraw2(Canvas canvas){		canvas.scale(zoomy,zoomy);	}*/
 
 	/**
 	 * Gibt die aktuell aktive SudokuFieldView dieser View zurück.
@@ -558,7 +560,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	 */
 	@Override
 	public float getMinZoomFactor() {
-		return 0.5f/*TODO revert 1.0f*/;
+		return 1.0f;
 	}
 
 	/**
