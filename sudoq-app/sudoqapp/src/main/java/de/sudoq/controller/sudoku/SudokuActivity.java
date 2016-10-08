@@ -59,6 +59,7 @@ import de.sudoq.model.profile.Profile;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solvingAssistant.SolvingAssistant;
 import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Position;
 import de.sudoq.view.FullScrollLayout;
 import de.sudoq.view.SudokuFieldView;
 import de.sudoq.view.SudokuLayout;
@@ -330,7 +331,8 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 			});
 		}
 		if (state.getInt(SAVE_FIELD_X + "") != -1) {
-			this.sudokuView.getSudokuFieldViews()[state.getInt(SAVE_FIELD_X + "")][state.getInt(SAVE_FIELD_Y + "")].onTouchEvent(null);
+			this.sudokuView.getSudokuFieldView(Position.get(state.getInt(SAVE_FIELD_X + "")
+			                                               ,state.getInt(SAVE_FIELD_Y + ""))).onTouchEvent(null);
 		}
 
 		if (state.getBoolean(SAVE_GESTURE_ACTIVE + "")) {

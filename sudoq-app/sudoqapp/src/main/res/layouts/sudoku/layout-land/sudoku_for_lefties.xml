@@ -41,11 +41,11 @@
             	</de.sudoq.view.FullScrollLayout>
         	</LinearLayout>
 
-			<LinearLayout
+			<!--LinearLayout
 	            android:layout_width="5dp"
             	android:layout_height="fill_parent"
             	android:orientation="horizontal"
-            	android:background="@drawable/background_serious" />
+            	android:background="@drawable/background_serious" /-->
             
     	</LinearLayout>
     </LinearLayout>

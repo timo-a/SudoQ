@@ -92,7 +92,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	 *
 	 */
 	private HintPainter hintPainter;
-
+	private Paint paint;
 	/**
 	 * Instanziiert eine neue SudokuView in dem spezifizierten Kontext.
 	 * 
@@ -110,6 +110,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 		this.setWillNotDraw(false);
 		FieldViewPainter.getInstance().setSudokuLayout(this);
 		this.hintPainter = new HintPainter(this);
+		paint = new Paint();
 		inflateSudoku();
 		Log.d(LOG_TAG, "End of Constructor.");
 	}
@@ -147,21 +148,20 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 				}
 			}
 		}
-
-		ArrayList<Constraint> allConstraints = this.game.getSudoku().getSudokuType().getConstraints();
-		ArrayList<Position> positions;
+		/* In case highlighting of current row and col is activated,
+		   pass each pos its constraint-mates */
 		if (this.game.isAssistanceAvailable(Assistances.markRowColumn)) {
+			ArrayList<Position> positions;
+			ArrayList<Constraint> allConstraints = this.game.getSudoku().getSudokuType().getConstraints();
 			for (Constraint c : allConstraints) {
 				if (c.getType().equals(ConstraintType.LINE)) {
 					positions = c.getPositions();
 					for (int i = 0; i < positions.size(); i++) {
-						for (int k = 0; k < positions.size(); k++) {
-							if (i != k){
-								Position pos_i = positions.get(i);
-								Position pos_k = positions.get(k);
-								this.sudokuFieldViews[pos_i.getX()][pos_i.getY()].addConnectedField(
-										this.sudokuFieldViews[pos_k.getX()][pos_k.getY()]);
-							}
+						for (int k = i+1; k < positions.size(); k++) {
+							SudokuFieldView fvI = getSudokuFieldView(positions.get(i));
+							SudokuFieldView fvK = getSudokuFieldView(positions.get(k));
+							fvI.addConnectedField(fvK);
+							fvK.addConnectedField(fvI);
 						}
 					}
 				}
@@ -200,6 +200,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 		return (int) (this.leftMargin * this.zoomFactor);
 	}
 
+
 	/**
 	 * Aktualisiert die Sudoku-Anzeige bzw. der enthaltenen Felder.
 	 */
@@ -208,6 +209,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 
 		if (this.sudokuFieldViews != null) {
 			Position typeSize = this.game.getSudoku().getSudokuType().getSize();
+			int fieldPlusSpacing = (this.getCurrentFieldViewSize() + getCurrentSpacing());
 			//Iterate over all positions within the size 
 			//and one more! why do we go 0 to limit, why <= ?
 			for (    int x = 0; x <= typeSize.getX(); x++) {
@@ -217,8 +219,8 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 						LayoutParams params = (LayoutParams) this.sudokuFieldViews[x][y].getLayoutParams();
 						params.width  =  this.getCurrentFieldViewSize();
 						params.height =  this.getCurrentFieldViewSize();
-						params.topMargin =  (getCurrentTopMargin()  + (y * (this.getCurrentFieldViewSize() + getCurrentSpacing())));
-						params.leftMargin = (getCurrentLeftMargin() + (x * (this.getCurrentFieldViewSize() + getCurrentSpacing())));
+						params.topMargin =  (getCurrentTopMargin()  + (y * fieldPlusSpacing));
+						params.leftMargin = (getCurrentLeftMargin() + (x * fieldPlusSpacing));
 						this.sudokuFieldViews[x][y].setLayoutParams(params);
 						this.sudokuFieldViews[x][y].invalidate();
 					} else if (x == typeSize.getX() && 
@@ -227,8 +229,8 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 						LayoutParams params = new LayoutParams( this.getCurrentFieldViewSize(), this.defaultFieldViewSize);
 						params.width  = this.getCurrentFieldViewSize();
 						params.height = this.getCurrentFieldViewSize();
-						params.topMargin =  (2 * getCurrentTopMargin()  + ((y - 1) * (this.getCurrentFieldViewSize() + getCurrentSpacing())));
-						params.leftMargin = (2 * getCurrentLeftMargin() + ((x - 1) * (this.getCurrentFieldViewSize() + getCurrentSpacing())));
+						params.topMargin =  (2 * getCurrentTopMargin()  + ((y - 1) * fieldPlusSpacing));
+						params.leftMargin = (2 * getCurrentLeftMargin() + ((x - 1) * fieldPlusSpacing));
 						this.sudokuFieldViews[x][y].setLayoutParams(params);
 						this.sudokuFieldViews[x][y].invalidate();
 					}
@@ -240,8 +242,6 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 		//Log.d(LOG_TAG, "SudokuLayout.refresh()-end");
 	}
 
-	private Canvas canvas;
-
 	@Override
 	/**
 	 * Draws all black borders for the sudoku, nothing else
@@ -251,21 +251,16 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		Log.d(LOG_TAG, "SudokuLayout.onDraw()");
-		//if(softDraw){onDraw2(canvas);}
-		//else{
-		this.canvas = canvas;
 
 		float edgeRadius = getCurrentFieldViewSize() / 20.0f;
-		Paint paint = new Paint();//Todo reset() instead
+		paint.reset();
 		paint.setColor(Color.BLACK);
-		for (Constraint c: this.game.getSudoku().getSudokuType()) {
-			if (c.getType().equals(ConstraintType.BLOCK)) {
-				/* for position p in block c */
-				outlineConstraint(c, canvas, edgeRadius, paint, false);
-			}
-		}
+		for (Constraint c: this.game.getSudoku().getSudokuType()) //for every constraint
+			if (c.getType().equals(ConstraintType.BLOCK))         //which is a Block
+				outlineConstraint(c, canvas, edgeRadius, paint, false); //paint the outline
 
-		hintPainter.invalidateAll(); //}
+
+		hintPainter.invalidateAll();
 	}
 
 	private void outlineConstraint(Constraint c, Canvas canvas, float edgeRadius, Paint paint, boolean thick){
@@ -446,12 +441,11 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 		this.defaultFieldViewSize = (size - (numberOfFields + 1) * spacing) / numberOfFields;
 		// this.currentFieldViewSize = this.defaultFieldViewSize;
 
-		this.leftMargin = (width - sudokuType.getSize().getX() *
-				(this.getCurrentFieldViewSize() + spacing) + spacing)
-				/ 2;
-		this.topMargin = (height - sudokuType.getSize().getY() *
-				(this.getCurrentFieldViewSize() + spacing) + spacing)
-				/ 2;
+		int fieldSizeX = sudokuType.getSize().getX() * this.getCurrentFieldViewSize() + (sudokuType.getSize().getX() -1) * spacing;
+		int fieldSizeY = sudokuType.getSize().getY() * this.getCurrentFieldViewSize() + (sudokuType.getSize().getY() -1) * spacing;
+
+		this.leftMargin = ( width - fieldSizeX) / 2;
+		this. topMargin = (height - fieldSizeY)	/ 2;
 		Log.d(LOG_TAG, "Sudoku width: "  + width);
 		Log.d(LOG_TAG, "Sudoku height: " + height);
 		this.refresh();
@@ -471,12 +465,10 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	}
 
 	/**
-	 * Gibt das Array der SudokuFieldViews zurück.
-	 * 
-	 * @return Das Array der SudokuFieldViews
+	 *  returns the FieldView at Position p.
 	 */
-	public SudokuFieldView[][] getSudokuFieldViews() {
-		return this.sudokuFieldViews;
+	public SudokuFieldView getSudokuFieldView(Position p){
+		return sudokuFieldViews[p.getX()][p.getY()];
 	}
 
 	/**
@@ -489,15 +481,10 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 		this.zoomFactor = factor;
 //		//this.canvas.scale(factor,factor);
 		refresh();
-		//zoomy = factor;
-		//softDraw=true;
 		//invalidate();
 
 		return true;
 	}
-/*	boolean softDraw;
-	float zoomy=1.0f;
-	private void onDraw2(Canvas canvas){		canvas.scale(zoomy,zoomy);	}*/
 
 	/**
 	 * Gibt die aktuell aktive SudokuFieldView dieser View zurück.
@@ -543,7 +530,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	public void registerListener(FieldInteractionListener listener) {
 		SudokuType sudokuType = this.game.getSudoku().getSudokuType();
 		for (Position p: sudokuType.getValidPositions())
-			this.sudokuFieldViews[p.getX()][p.getY()].registerListener(listener);
+			this.getSudokuFieldView(p).registerListener(listener);
 	}
 
 	/**
@@ -552,7 +539,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	public void removeListener(FieldInteractionListener listener) {
 		SudokuType sudokuType = this.game.getSudoku().getSudokuType();
 		for (Position p: sudokuType.getValidPositions())
-			this.sudokuFieldViews[p.getX()][p.getY()].removeListener(listener);
+			this.getSudokuFieldView(p).removeListener(listener);
 	}
 
 	/**

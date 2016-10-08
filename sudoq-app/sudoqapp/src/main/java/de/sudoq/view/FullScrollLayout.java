@@ -126,6 +126,7 @@ public class FullScrollLayout extends LinearLayout {
 	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
+		Log.d(LOG_TAG,"onTouchEvent! childV==null?"+(this.childView == null));
 		if (event.getPointerCount() == 1) {//just one finger -> scroll
 			this.horizontalScrollView.performTouch(event);
 			this.  verticalScrollView.performTouch(event);
@@ -141,8 +142,8 @@ public class FullScrollLayout extends LinearLayout {
 	@Override
 	public void scrollTo(int x, int y) {
 		// Has to be changed because the tree algo uses different coords.
-		currentX = x /*- getWidth() / 2*/;
-		currentY = y /*- getHeight() / 2*/;
+		currentX = x - getWidth() / 2;
+		currentY = y - getHeight() / 2; //so apparently "tree algo" needs this... it is parameter are passed with inverse transformation in onscale, to even it out
 
 		this.verticalScrollView.post(new Runnable() {
 			public void run() {
@@ -309,22 +310,21 @@ public class FullScrollLayout extends LinearLayout {
 			float upperLimit = childView.getMaxZoomFactor();
 			newZoom = Math.max(Math.min(newZoom, upperLimit), lowerLimit);//ensure newZoom € [lowerLim,upperLim]
 			
-			if (!childView.zoom(newZoom/*/zoomFactor*/)) {	return false; }
+			if (!childView.zoom(newZoom)) {	return false; }
 			
 			zoomFactor = newZoom;
 
-
-			currentX += detector.getFocusX() - detector.getFocusX() / scaleFactor;
-			currentY += detector.getFocusY() - detector.getFocusY() / scaleFactor;
+			//currentX += detector.getFocusX() - detector.getFocusX() / scaleFactor;
+			//currentY += detector.getFocusY() - detector.getFocusY() / scaleFactor;
 
 			float focalShiftX = focusX * zoomFactor - focusX;
 			float focalShiftY = focusY * zoomFactor - focusY;
 
-			int sym = 0;//getWidth()/2;
-
 			currentX = focalShiftX;
 			currentY = focalShiftY;
-
+			/* even out the transformation on scrollTo */
+			currentX += getWidth()  / 2;
+			currentY += getHeight() / 2;
 			scrollTo((int) currentX, (int) currentY);
 			Log.d(LOG_TAG, "Scaled to: "+(int)currentX+","+(int)currentY+"    "
 					      +"Focus: "    +(int)focusX+","+(int)focusY+"   "
@@ -341,8 +341,8 @@ public class FullScrollLayout extends LinearLayout {
 		}
 
 		@Override
-		public void onScaleEnd(ScaleGestureDetector scaleGestureDetector) {Log.d(LOG_TAG, "On scale end----------------)");
-
+		public void onScaleEnd(ScaleGestureDetector scaleGestureDetector) {
+			Log.d(LOG_TAG, "On scale end----------------)");
 		}
 	}
 }

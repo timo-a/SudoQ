@@ -37,11 +37,11 @@
             	</de.sudoq.view.FullScrollLayout>
         	</LinearLayout>
 			<!-- is is the former annoying white stripe. I don't know why it is there, but I changed it to gray to better blend in -->
-			<LinearLayout
+			<!-- LinearLayout
 	            android:layout_width="5dp"
             	android:layout_height="fill_parent"
             	android:orientation="horizontal"
-            	android:background="@drawable/background_serious" />
+            	android:background="@drawable/background_serious" /-->
             <!--inputboard i.e. buttons for assistances but also numbers -->
 			<include layout="@layout/buttons" />
 			<!-- hint panel. replaces the controll panel if hints are requested -->

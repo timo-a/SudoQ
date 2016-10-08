@@ -35,11 +35,11 @@
         </LinearLayout>
 
         <!-- is is the former annoying white stripe. I dont' know why it is there, but ichanged it to gray to better blend in -->
-        <LinearLayout
+        <!--LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="5dp"
             android:orientation="vertical"
-            android:background="@drawable/background_serious" />
+            android:background="@drawable/background_serious" /-->
     
         <LinearLayout
            android:id="@+id/controlPanel"

@@ -13,7 +13,17 @@ android {
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
     }
 
-
+    sourceSets {
+        main {
+            res.srcDirs =
+            [
+                    'src/main/res/layouts/sudoku',
+                    'src/main/res/layouts/tutorial',
+                    'src/main/res/layout',
+                    'src/main/res'
+            ]
+        }
+    }
 
 
     buildTypes {

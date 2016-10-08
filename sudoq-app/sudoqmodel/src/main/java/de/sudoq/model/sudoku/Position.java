@@ -129,7 +129,7 @@ public class Position implements Xmlable {
 			return false;
 		} else {
 			Position other = (Position) obj;
-			return this.x == other.getX() && this.y == other.getY();
+			return this.x == other.x && this.y == other.y;
 		}
 	}
 
