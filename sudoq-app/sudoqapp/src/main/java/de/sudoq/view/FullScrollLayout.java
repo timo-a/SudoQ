@@ -48,7 +48,7 @@ public class FullScrollLayout extends LinearLayout {
 	/**
 	 * Aktueller X- und Y-Wert der ScrollViews.
 	 */
-	private float currentX, currentY;
+	private Point current=new Point(0,0);
 
 	/**
 	 * Der Zoom-Gesten-Detektor
@@ -126,7 +126,6 @@ public class FullScrollLayout extends LinearLayout {
 	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		Log.d(LOG_TAG,"onTouchEvent! childV==null?"+(this.childView == null));
 		if (event.getPointerCount() == 1) {//just one finger -> scroll
 			this.horizontalScrollView.performTouch(event);
 			this.  verticalScrollView.performTouch(event);
@@ -142,19 +141,19 @@ public class FullScrollLayout extends LinearLayout {
 	@Override
 	public void scrollTo(int x, int y) {
 		// Has to be changed because the tree algo uses different coords.
-		currentX = x - getWidth() / 2;
-		currentY = y - getHeight() / 2; //so apparently "tree algo" needs this... it is parameter are passed with inverse transformation in onscale, to even it out
+		current.x = x - getWidth()  / 2;
+		current.y = y - getHeight() / 2; //so apparently "tree algo" needs this... it is parameter are passed with inverse transformation in onscale, to even it out
 
 		this.verticalScrollView.post(new Runnable() {
 			public void run() {
-				verticalScrollView.scrollTo((int) currentX, (int) currentY);
-				currentY = verticalScrollView.getScrollY();
+				verticalScrollView.scrollTo((int) current.x, (int) current.y);
+				current.y = verticalScrollView.getScrollY();
 			}
 		});
 		this.horizontalScrollView.post(new Runnable() {
 			public void run() {
-				horizontalScrollView.scrollTo((int) currentX, (int) currentY);
-				currentX = horizontalScrollView.getScrollX();
+				horizontalScrollView.scrollTo((int) current.x, (int) current.y);
+				current.x = horizontalScrollView.getScrollX();
 			}
 		});
 	}
@@ -194,7 +193,7 @@ public class FullScrollLayout extends LinearLayout {
 	 */
 	public float getScrollValueX()
 	{
-		return this.currentX;
+		return this.current.x;
 	}
 
 	/**
@@ -204,7 +203,7 @@ public class FullScrollLayout extends LinearLayout {
 	 */
 	public float getScrollValueY()
 	{
-		return this.currentY;
+		return this.current.y;
 	}
 
 	/**
@@ -241,7 +240,7 @@ public class FullScrollLayout extends LinearLayout {
 				event.getX();
 				event.getY();
 				super.onTouchEvent(event);
-				currentY = this.getScrollY();
+				current.y = this.getScrollY();
 			} catch (Exception e) {
 				// Old android versions sometimes throw an exception when
 				// putting and Event of one view in the onTouch of
@@ -284,7 +283,7 @@ public class FullScrollLayout extends LinearLayout {
 				event.getX();
 				event.getY();
 				super.onTouchEvent(event);
-				currentX = this.getScrollX();
+				current.x = this.getScrollX();
 			} catch (Exception e) {
 				// Old android versions sometimes throw an exception when
 				// putting and Event of one view in the onTouch of
@@ -295,39 +294,40 @@ public class FullScrollLayout extends LinearLayout {
 
 	private class ScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
 
-		float focusX, focusY;
-
+		Point focus;
 		@Override
 		public boolean onScale(ScaleGestureDetector detector) {
+			/* TODO still buggy, if sudokuLayout.maxzoom is unrestrained focuspoint appears ~1 field next to where it is supposed to be. try out by painting focus point in hintpainter */
+			if(detector.getScaleFactor() < 0.01) return false;
 
-			if(detector.getScaleFactor()< 0.01) return false;
-
+			/* compute the new absolute zoomFactor (∈ [1,2]) by multiplying the old one with the scale Factor*/
 			float scaleFactor = detector.getScaleFactor();
 			float newZoom = zoomFactor * scaleFactor;
 
 			// Don't let the object get too large/small.
 			float lowerLimit = childView.getMinZoomFactor();
 			float upperLimit = childView.getMaxZoomFactor();
-			newZoom = Math.max(Math.min(newZoom, upperLimit), lowerLimit);//ensure newZoom € [lowerLim,upperLim]
+			newZoom = Math.max(Math.min(newZoom, upperLimit), lowerLimit);//ensure newZoom ∈ [lowerLim,upperLim]
 			
 			if (!childView.zoom(newZoom)) {	return false; }
 			
 			zoomFactor = newZoom;
 
-			//currentX += detector.getFocusX() - detector.getFocusX() / scaleFactor;
-			//currentY += detector.getFocusY() - detector.getFocusY() / scaleFactor;
-
-			float focalShiftX = focusX * zoomFactor - focusX;
-			float focalShiftY = focusY * zoomFactor - focusY;
-
-			currentX = focalShiftX;
-			currentY = focalShiftY;
+			/* NB: we scale in comparison to the case zoom = 1.0, not in comparison to the current one
+			 * if we just scale everything on the canvas, fp (focusPoint) and tl (i.e. topleft corner of window) are out of sync.
+			 * especially tl is initially 0,0 so it doesn't scale anywhere...
+			 *
+			 * in the normalized case fp-tl is fp (bec tl==0)
+			 * we want that distance to be kept so we subtract it from the scaled value for fp namely fp* zoom.
+			 * hence lt = focus * zoom - focus
+			 * */
+			current.x = focus.x * zoomFactor - focus.x;
+			current.y = focus.y * zoomFactor - focus.y;
 			/* even out the transformation on scrollTo */
-			currentX += getWidth()  / 2;
-			currentY += getHeight() / 2;
-			scrollTo((int) currentX, (int) currentY);
-			Log.d(LOG_TAG, "Scaled to: "+(int)currentX+","+(int)currentY+"    "
-					      +"Focus: "    +(int)focusX+","+(int)focusY+"   "
+			transform(current);
+			scrollTo2(current);
+			Log.d(LOG_TAG, "Scaled to: "+current.toString()+"    "
+					      +"Focus: "    +focus  .toString()+"   "
 					      +"zoom: "+zoomFactor);
 			return true;
 		}
@@ -335,8 +335,10 @@ public class FullScrollLayout extends LinearLayout {
 		@Override
 		public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
 			Log.d(LOG_TAG, "On scale begin-------------------------(");
-			focusX = scaleGestureDetector.getFocusX();
-			focusY = scaleGestureDetector.getFocusY();
+			focus = new Point(scaleGestureDetector.getFocusX()
+			                 ,scaleGestureDetector.getFocusY());
+			((SudokuLayout)childView).focusX = focus.x;//only for debug
+			((SudokuLayout)childView).focusY = focus.y;
 			return true;
 		}
 
@@ -344,5 +346,29 @@ public class FullScrollLayout extends LinearLayout {
 		public void onScaleEnd(ScaleGestureDetector scaleGestureDetector) {
 			Log.d(LOG_TAG, "On scale end----------------)");
 		}
+
+		/* transform to even out inverse transformation in scrollTo(x,y). A trafo exists there because of "tree algo" */
+		private void transform(Point p){
+			p.x += getWidth()  / 2;
+			p.y += getHeight() / 2;
+		}
+
+		private void scrollTo2(Point p){
+			/* save for log */
+			current.x = p.x;
+			current.y = p.y;
+			scrollTo((int)p.x, (int)p.y);
+		}
+
+
+
+	}
+	private class Point{
+		float x,y;
+		public Point(float x, float y){
+			this.x=x;
+			this.y=y;
+		}
+		public String toString(){return (int)x+","+(int)y;}
 	}
 }

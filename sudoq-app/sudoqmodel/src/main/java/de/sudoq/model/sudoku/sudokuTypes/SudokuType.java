@@ -180,7 +180,8 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 	}
 	
 	/**
-	 * Returns an iterator over all positions in this type
+	 * Returns an iterator over all valid positions in this type.
+	 * valid meaning a position that appears in a constraint
 	 */
 	public Iterable<Position> getValidPositions() {
 		//return positions.iterator();
