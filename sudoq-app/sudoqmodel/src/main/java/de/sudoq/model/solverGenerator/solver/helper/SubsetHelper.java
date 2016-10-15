@@ -2,6 +2,8 @@ package de.sudoq.model.solverGenerator.solver.helper;
 
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.List;
+import java.util.Stack;
 
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.sudoku.Constraint;
@@ -30,7 +32,7 @@ public abstract class SubsetHelper extends SolveHelper {
 	/**
 	 * Die Positionen, welche zum aktuell untersuchten Subset gehören. Aus Performancegründen nicht lokal definiert.
 	 */
-	protected Position[] subsetPositions;
+	protected List<Position> subsetPositions; //TODO make Stack? might be far more readable
 
 	/**
 	 * Ein BitSet für lokale Kopien zum vergleichen. Aus Performancegründen nicht lokal definiert.
@@ -66,14 +68,14 @@ public abstract class SubsetHelper extends SolveHelper {
 		this.allConstraints  = this.sudoku.getSudokuType().getConstraints();
 		this.constraintSet   = new BitSet();
 		this.currentSet      = new BitSet();
-		this.subsetPositions = new Position[this.level];
+		this.subsetPositions = new Stack<>();
 		this.localCopy       = new BitSet();
 	}
 
 	/** Methods */
 
 	/**
-	 * Sucht so lange nach einem NakedSubset mit der im Konstruktor spezifizierten Größe level, bis entweder eines
+	 * Sucht so lange nach einem Subset mit der im Konstruktor spezifizierten Größe level, bis entweder eines
 	 * gefunden wird oder alle Möglichkeiten abgearbeitet sind. Wird ein Subset gefunden, werden die entsprechenden
 	 * Kandidatenlisten upgedatet.
 	 * 
@@ -97,12 +99,10 @@ public abstract class SubsetHelper extends SolveHelper {
 		for (Constraint constraint : allConstraints) {
 			if (constraint.hasUniqueBehavior()) {
 
-				constraintSet = collectPossibleCandidates(this.sudoku, constraint);
+				constraintSet = collectPossibleCandidates(constraint);
 
 				//if we find 'level' or more candidates
 				if (constraintSet.cardinality() >= this.level) {
-					// Initialize the current set to check for naked subset by
-					// selecting the first candidates in this constraint
 
 					//initializeWith currentSet with the first 'level' candidates in constraintSet
 					//TODO is there a better, clearer way?
@@ -131,7 +131,7 @@ public abstract class SubsetHelper extends SolveHelper {
 		return found;
 	}
 
-	protected abstract BitSet collectPossibleCandidates(SolverSudoku sudoku, Constraint constraint);
+	protected abstract BitSet collectPossibleCandidates(Constraint constraint);
 
 	/**
 	 * Berechnet das nächste Subset des spezifizierten BitSets mit der im Konstruktor definierten Größe "level",

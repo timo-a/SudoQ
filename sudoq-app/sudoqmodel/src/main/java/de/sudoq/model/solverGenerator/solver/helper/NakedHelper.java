@@ -1,12 +1,12 @@
 package de.sudoq.model.solverGenerator.solver.helper;
 
-import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.List;
+import java.util.Stack;
 
 import de.sudoq.model.solverGenerator.solution.DerivationBlock;
 import de.sudoq.model.solverGenerator.solution.DerivationField;
 import de.sudoq.model.solverGenerator.solution.NakedSetDerivation;
-import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.solvingAssistant.HintTypes;
 import de.sudoq.model.sudoku.Constraint;
@@ -18,154 +18,154 @@ import de.sudoq.model.sudoku.Position;
  * entspricht dem level des Helpers). Kommen in n Feldern lediglich dieselben n Kandidaten vor, so können diese
  * Kandidaten aus den anderen Listen des Constraints entfernt werden. Tauchen n Kandidaten lediglich in n Feldern auf,
  * so können in diesen Feldern die restlichen Kandidaten entfernt werden.
- *
+ * <p/>
  * If there are n fields with only n distinct candidates in them, those candidates can't appear anywhere else.
- *
- *
  */
 public class NakedHelper extends SubsetHelper {
 
-	protected HintTypes hintType;
+    protected HintTypes hintType;
 
-	/**
-	 * Erzeugt einen neuen NakedHelper für das spezifizierte Suduoku mit dem spezifizierten level. Der level entspricht
-	 * dabei der Größe der Symbolmenge nach der gesucht werden soll.
-	 * 
-	 * @param sudoku
-	 *            Das Sudoku auf dem dieser Helper operieren soll
-	 * @param level
-	 *            Das Größe der Symbolmenge auf die der Helper hin überprüft
-	 * @param complexity
-	 *            Die Schwierigkeit der Anwendung dieser Vorgehensweise
-	 * @throws IllegalArgumentException
-	 *             Wird geworfen, falls das Sudoku null oder das level oder die complexity kleiner oder gleich 0 ist
-	 */
-	public NakedHelper(SolverSudoku sudoku, int level, int complexity) throws IllegalArgumentException {
-		super(sudoku, level, complexity);
-		switch(level){
-			case 1 : hintType = HintTypes.NakedSingle; break;
-			case 2 : hintType = HintTypes.NakedPair;   break;
-			case 3 : hintType = HintTypes.NakedTriple; break;
-			default: throw new IllegalArgumentException("we can't handle a level > 3 yet.");
-		}
-	}
+    private NakedSetDerivation derivation;
 
-	/**
-	 * collect all candidates appearing in fields with maximum {@code level} candidates.
-	 * This is 'naked'-specific code for the template method in superclass
-	 * @param sudoku
-	 * @param constraint
-	 * @return
-	 */
-	@Override
-	protected BitSet collectPossibleCandidates(SolverSudoku sudoku, Constraint constraint) {
-		BitSet constraintSet = new BitSet();
+    /**
+     * Erzeugt einen neuen NakedHelper für das spezifizierte Suduoku mit dem spezifizierten level. Der level entspricht
+     * dabei der Größe der Symbolmenge nach der gesucht werden soll.
+     *
+     * @param sudoku     Das Sudoku auf dem dieser Helper operieren soll
+     * @param level      Das Größe der Symbolmenge auf die der Helper hin überprüft
+     * @param complexity Die Schwierigkeit der Anwendung dieser Vorgehensweise
+     * @throws IllegalArgumentException Wird geworfen, falls das Sudoku null oder das level oder die complexity kleiner oder gleich 0 ist
+     */
+    public NakedHelper(SolverSudoku sudoku, int level, int complexity) throws IllegalArgumentException {
+        super(sudoku, level, complexity);
+        HintTypes types[] = {HintTypes.NakedSingle
+                            ,HintTypes.NakedPair
+                            ,HintTypes.NakedTriple
+                            ,HintTypes.NakedQuadruple
+                            ,HintTypes.NakedQuintuple
+                            };
+        if(level<= 5)
+            hintType = types[level-1];
+        else
+            throw new IllegalArgumentException("we can't handle a level > 3 yet.");
 
-		for (Position pos : constraint.getPositions()) {
-			BitSet currentCandidates = this.sudoku.getCurrentCandidates(pos);
-			if (currentCandidates.cardinality() <= this.level) //we only want up to n candidates per field
-				constraintSet.or(currentCandidates);
-		}
-		//now we have constraintSet of all candidates in the constraint
-		return constraintSet;
-	}
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected boolean updateNext(Constraint constraint, boolean buildDerivation) {
-		boolean nextSetExists = true;
-		boolean foundSubset = false;
-		int subsetCount = 0;
+    /**
+     * collect all candidates appearing in fields with maximum {@code level} candidates.
+     * This is 'naked'-specific code for the template method in superclass
+     *
+     * @param constraint Constraint whose candidates are to be filtered
+     * @return
+     */
+    @Override
+    protected BitSet collectPossibleCandidates(Constraint constraint) {
+        BitSet possibleCandidates = new BitSet();
 
-		ArrayList<Position> positions = constraint.getPositions();
-		while (nextSetExists) {
-			nextSetExists = false;
-			foundSubset = false;
-			// Count and save all the positions whose candidates are a subset of
-			// the one to be checked for,
-			// look if one of the other positions would be updated to prevent
-			// from finding one subset again
-			subsetCount = 0;
-			for (Position pos : positions) {
-				BitSet currentCandidates = this.sudoku.getCurrentCandidates(pos);
-				if (0 < currentCandidates.cardinality()
-				     && currentCandidates.cardinality() <= this.level) {
-					localCopy.clear();
-					localCopy.or(currentCandidates);
-					localCopy.and(currentSet);
-					if (currentCandidates.equals(localCopy)) {
-						if (subsetCount < this.level) {
-							subsetPositions[subsetCount] = pos;
-							subsetCount++;
-						} else {
-							subsetCount++;
-							break;
-						}
-					}
-				}
-			}
+        for (Position pos : constraint.getPositions()) {
+            BitSet currentCandidates = this.sudoku.getCurrentCandidates(pos);
+            if (currentCandidates.cardinality() <= this.level) //we only want up to n candidates per field
+                possibleCandidates.or(currentCandidates);
+        }
+        //now we have constraintSet of all candidates in the constraint
+        return possibleCandidates;
+    }
 
-			// If a subset was found, update the other candidates and look if
-			// something changed.
-			// If something changed, return this as update, otherwise continue
-			// searching
-			foundSubset = false;
-			boolean foundOne = false;
-			if (subsetCount == this.level) {
-				for (Position pos : positions) {
-					foundOne = false;
-					for (int i = 0; i < subsetCount; i++) {
-						if (pos == subsetPositions[i])
-							foundOne = true;
-					}
-					if (!foundOne) {
-						localCopy.clear();
-						localCopy.or(this.sudoku.getCurrentCandidates(pos));
-						this.sudoku.getCurrentCandidates(pos).andNot(currentSet);
-						if (!this.sudoku.getCurrentCandidates(pos).equals(localCopy)) {
-							// If something changed, a field could be updated,
-							// so the helper is applied
-							// If the derivation shell be returned, add the
-							// updated field to the derivation object
-							if (buildDerivation) {
-								if (!foundSubset) {
-									lastDerivation = new NakedSetDerivation(hintType);
-									lastDerivation.addDerivationBlock(new DerivationBlock(constraint));
-								}
-								BitSet relevantCandidates = localCopy;
-								relevantCandidates.and(currentSet);
-								BitSet irrelevantCandidates = (BitSet) this.sudoku.getCurrentCandidates(pos).clone();
-								DerivationField field = new DerivationField(pos, relevantCandidates, irrelevantCandidates);
-								lastDerivation.addDerivationField(field);
-							}
-							foundSubset = true;
-						}
-					}
-				}
-			}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected boolean updateNext(Constraint constraint, boolean buildDerivation) {
+        boolean foundSubset = false;
 
-			// System.out.println("N: " + constraint + ": " + set + ", " +
-			// subset + " (NI: " + (foundSubset) +
-			// "), (Count: " + (subsetCount)+ ")");
+        Stack<Position> positions = new Stack<>();
+        for(Position p: constraint.getPositions())
+            if(sudoku.getField(p).isEmpty())
+                positions.add(p);
 
-			if (!foundSubset && constraintSet.cardinality() > this.level) {
-				nextSetExists = getNextSubset();
-			}
-		}
 
-		// If the derivation shell be returned, add the subset fields to the
-		// derivation object
-		if (foundSubset && buildDerivation) {
-			for (int i = 0; i < subsetCount; i++) {
-				Position p = subsetPositions[i];
-				BitSet relevantCandidates = (BitSet) this.sudoku.getCurrentCandidates(p).clone();
-				DerivationField field = new DerivationField(p, relevantCandidates, new BitSet());
-				lastDerivation.addDerivationField(field);
-			}
-		}
+        do {
 
-		return foundSubset;
-	}
+            int subsetCount = filterForSubsets(positions); //subsetPositions = {p | p ∈ positions, p.candidates ⊆ currentSet}
+
+            if (subsetCount == this.level) {
+                List<Position> externalPositions = (List<Position>) positions.clone();
+                externalPositions.removeAll(subsetPositions);
+
+                for (Position pos : externalPositions) {
+
+                    BitSet currentPosCandidates = this.sudoku.getCurrentCandidates(pos);
+                    if (currentPosCandidates.intersects(currentSet)) {
+                        //save original candidates
+                        localCopy.clear();
+                        localCopy.or(currentPosCandidates);
+
+                        //delete all candidates that appear in currentSet
+                        currentPosCandidates.andNot(currentSet);
+
+						/* We found a subset that does delete candidates,
+                           initialize derivation obj. and fill it during remaining cycles of pos  */
+                        if (buildDerivation) {
+                            if (!foundSubset) {
+                                derivation = new NakedSetDerivation(hintType);
+                                derivation.addDerivationBlock(new DerivationBlock(constraint));
+                                derivation.setSubsetCandidates(currentSet);
+                                for (Position p : subsetPositions) {
+                                    BitSet relevantCandidates = (BitSet) this.sudoku.getCurrentCandidates(p).clone();
+                                    DerivationField field = new DerivationField(p, relevantCandidates, new BitSet());
+                                    derivation.addSubsetField(field);
+                                }
+                            }
+                            //what was deleted?
+                            BitSet relevant = (BitSet) localCopy.clone();
+                            BitSet irrelevant = (BitSet) localCopy.clone();
+                            relevant.and(currentSet);
+                            irrelevant.andNot(currentSet);
+                            DerivationField field = new DerivationField(pos, relevant, irrelevant);
+                            derivation.addExternalField(field);
+                        }
+                        foundSubset = true;
+                    }
+                }
+
+            }
+
+        }while(!foundSubset && constraintSet.cardinality() > this.level && getNextSubset());
+
+        if (foundSubset && buildDerivation)
+            lastDerivation = derivation;
+
+        return foundSubset;
+    }
+
+
+    /*
+     * counts the number of Positions whose candidates are a subset of currentSet -> eligible
+     * stores the first 'level' of those in subsetPositions
+     */
+    private int filterForSubsets(List<Position> positions) {
+        subsetPositions.clear();
+        for (Position pos : positions) {
+            BitSet currentCandidates = this.sudoku.getCurrentCandidates(pos);
+            int nrCandidates = currentCandidates.cardinality();
+            if (nrCandidates <= this.level)
+                if (isSubsetOfCurrentSet(currentCandidates))
+                    subsetPositions.add(pos);
+
+        }
+        //assert subsetCount == subsetPositions.size();
+        return subsetPositions.size();
+    }
+
+    /*
+    * determines whether bs is a subset of CurrentSet, i.e. ∀ i: bs_i == 1  =>  CurrentSet_i == 1
+    * */
+    private synchronized boolean isSubsetOfCurrentSet(BitSet bs) {//TODO make decorator of BitSet so we can just bs.isSubsetOf(Current)
+        /* localCopy := currentCandidates & currentSet */
+        localCopy.clear();
+        localCopy.or(bs); //copy bs into localCopy
+        localCopy.and(currentSet);
+        return bs.equals(localCopy); // => bs == bs & currentSet => bs ⊆ currentSetf
+    }
+
 }

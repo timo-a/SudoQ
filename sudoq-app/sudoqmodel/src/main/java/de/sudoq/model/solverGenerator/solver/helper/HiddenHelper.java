@@ -44,12 +44,12 @@ public class HiddenHelper extends SubsetHelper {
 	/**
 	 * Collect all candidates appearing in this constraint.
  	 * This is 'hidden'-specific code for the template method in superclass
-	 * @param sudoku
+	 *
 	 * @param constraint
      * @return
      */
 	@Override
-	protected BitSet collectPossibleCandidates(SolverSudoku sudoku, Constraint constraint) {
+	protected BitSet collectPossibleCandidates(Constraint constraint) {
 		BitSet constraintSet = new BitSet();
 		for (Position pos : constraint.getPositions()) {
 				constraintSet.or(this.sudoku.getCurrentCandidates(pos));
@@ -76,11 +76,12 @@ public class HiddenHelper extends SubsetHelper {
 			// look if one of the other positions would be updated to prevent <- where does this happen?
 			// from finding one subset again
 			subsetCount = 0;
+			subsetPositions.clear();
 			for (Position pos : positions) {
 				BitSet currentCandidates = this.sudoku.getCurrentCandidates(pos);
 				if (!currentCandidates.isEmpty() && currentCandidates.intersects(currentSet)) {//TODO why check for empty??
 					if (subsetCount < this.level) {
-						subsetPositions[subsetCount] = pos;
+						subsetPositions.add(pos);
 						subsetCount++;
 					} else {
 						subsetCount++;

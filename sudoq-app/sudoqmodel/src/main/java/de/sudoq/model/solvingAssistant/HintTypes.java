@@ -8,6 +8,8 @@ public enum HintTypes {
     NakedSingle,
     NakedPair,
     NakedTriple,
+    NakedQuadruple,
+    NakedQuintuple,
     LockedCandidatesExternal,
     XWing,
     Backtracking;

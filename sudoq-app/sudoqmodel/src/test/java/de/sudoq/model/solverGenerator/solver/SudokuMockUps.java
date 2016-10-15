@@ -1,10 +1,17 @@
 package de.sudoq.model.solverGenerator.solver;
 
+import java.util.List;
+import java.util.Stack;
+
+import de.sudoq.model.sudoku.Constraint;
+import de.sudoq.model.sudoku.ConstraintType;
 import de.sudoq.model.sudoku.Field;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
+import de.sudoq.model.sudoku.UniqueConstraintBehavior;
 import de.sudoq.model.sudoku.complexity.Complexity;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
 /**
@@ -12,9 +19,14 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
  */
 public class SudokuMockUps {
 
-    public static Sudoku getLockedCandidates1(){
+    public static Sudoku stringTo9x9Sudoku(String pattern){
         Sudoku s = new SudokuBuilder(SudokuTypes.standard9x9).createSudoku();
-		s.setComplexity(Complexity.arbitrary);
+        s.setComplexity(Complexity.arbitrary);
+        return transform(s, pattern);
+    }
+
+
+    public static Sudoku getLockedCandidates1(){
         //http://hodoku.sourceforge.net/en/tech_intersections.php
         String pattern = "9    8     4       ¹²   ¹²⁷  ³⁶       ¹³⁵  ⁶⁷   ⁵⁷    \n"
                        + "³⁷   ⁶⁷    2       5    ¹⁷⁸  ³⁶       ¹³⁹  4    ⁷⁸⁹   \n"
@@ -28,13 +40,11 @@ public class SudokuMockUps {
                        + "4    2     7       3    5    1        8    9    6     \n"
                        + "6    3     8       ²⁴   ²⁴   9        7    5    1     \n";
 
-        return transform(s, pattern);
+        return stringTo9x9Sudoku(pattern);
     }
 
 
     public static Sudoku getXWing(){
-        Sudoku s = new SudokuBuilder(SudokuTypes.standard9x9).createSudoku();
-        s.setComplexity(Complexity.arbitrary);
         String pattern = "⁵⁸ 4  1    7   2   9     ⁶⁸ 3  ⁵⁶ \n"
                        + "7  6  9    ¹⁸  ¹⁵⁸ 3     4  ⁵⁸ 2  \n"
                        + "⁵⁸ 3  2    6   4   ⁵⁸    7  1  9  \n"
@@ -47,7 +57,7 @@ public class SudokuMockUps {
                        + "3  7  6    ²⁸  9   ²⁸    5  4  1  \n"
                        + "9  5  8    4   3   1     2  6  7  \n";
 
-        return transform(s, pattern);
+        return stringTo9x9Sudoku(pattern);
     }
 
 
@@ -58,21 +68,56 @@ public class SudokuMockUps {
             for(int x=0; x<9; x++){
                 String gu = candidates[9*y+x];
                 Field f =  sudoku.getField(Position.get(x, y));
-                for(int i = 0; i< sudoku.getSudokuType().getNumberOfSymbols(); i++)
-                    if(f.isNoteSet(i))
-                        f.toggleNote(i);
+                clearCandidates(f,sudoku);
 
                 switch (gu.length()){
                     case 0: break;
                     case 1: f.setCurrentValue(Integer.parseInt(gu)-1);
-                            break;
+                        break;
                     default:
-                            for(Character c:gu.toCharArray())
-                              f.toggleNote(Character.getNumericValue(c));
+                        for(Character c:gu.toCharArray())
+                            f.toggleNote(Character.getNumericValue(c));
 
 
                 }
             }
+        return sudoku;
+    }
+
+    private static void clearCandidates(Field f, Sudoku sudoku){
+        for(int i = 0; i< sudoku.getSudokuType().getNumberOfSymbols(); i++)
+            if(f.isNoteSet(i))
+                f.toggleNote(i);
+    }
+
+    /* untested */
+    private static Sudoku transform1Constraint(String pattern){
+        pattern = "2 4 5 ²⁴³ ⁶";
+        String[] candidates = pattern.split("\\s+");
+        List<Position> posList = new Stack<>();
+        for(int i=0; i< candidates.length; i++)
+            posList.add(Position.get(i,0));
+
+        Constraint c = new Constraint(new UniqueConstraintBehavior(), ConstraintType.LINE);
+        for(Position p:posList)
+            c.addPosition(p);
+
+        SudokuType t = new SudokuType();
+        t.addConstraint(c);
+        t.setDimensions(Position.get(candidates.length, 1));
+        Sudoku sudoku = new Sudoku(t);
+        for(Position p: posList){
+            String filling = candidates[p.getX()];
+            Field f =  sudoku.getField(p);
+            switch (filling.length()){
+                case 0: break;
+                case 1: f.setCurrentValue(Integer.parseInt(filling)-1);
+                    break;
+                default:
+                    for(Character ch:filling.toCharArray())
+                        f.toggleNote(Character.getNumericValue(ch));
+            }
+        }
         return sudoku;
     }
 }
