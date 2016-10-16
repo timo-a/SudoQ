@@ -11,10 +11,12 @@ import de.sudoq.model.solverGenerator.solver.helper.NakedHelper;
 import de.sudoq.model.solverGenerator.solver.helper.SubsetHelper;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
@@ -45,6 +47,22 @@ public class NakedHelperTests extends NakedHelper {
             fail("No IllegalArgumentException thrown, altough complexity was too low");
         } catch (IllegalArgumentException e) {
         }
+    }
+
+    @Test
+    public void NakedSingleTest(){
+        String pattern = "¹²³⁴ ¹²³⁴  ¹²³⁴ ¹ \n"
+                       + "1    2     3    4 \n"
+
+                       + "1    2     3    4 \n"
+                       + "1    2     3    4 \n";
+
+        Sudoku        s = SudokuMockUps.stringToSudoku(SudokuTypes.standard4x4, pattern);
+        SolverSudoku ss = new SolverSudoku(s, SolverSudoku.Initialization.USE_EXISTING);
+        NakedHelper nh = new NakedHelper (ss,1,0);
+        assertTrue(nh.update(true));
+
+
     }
 
 

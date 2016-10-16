@@ -56,6 +56,8 @@ public class SolverSudoku extends Sudoku {
 	 */
 	private int complexityValue;
 
+	public  enum Initialization {NEW_CANDIDATES, USE_EXISTING};
+
 	/**
 	 * Instanziiert ein neues SolverSudoku, welches sich auf das spezifizierte Sudoku bezieht.
 	 * 
@@ -64,18 +66,26 @@ public class SolverSudoku extends Sudoku {
 	 */
 	public SolverSudoku(Sudoku sudoku) {
 		super(sudoku.getSudokuType());
+		initializeSolverSudoku(sudoku, Initialization.NEW_CANDIDATES);
+	}
+
+	public SolverSudoku(Sudoku sudoku, Initialization mode) {
+		super(sudoku.getSudokuType());
+		initializeSolverSudoku(sudoku, mode);
+	}
+
+	public void initializeSolverSudoku(Sudoku sudoku, Initialization mode) {
 		this.setComplexity(sudoku.getComplexity());//transfer complexity as well
 
 		// initialize the list of positions
 		//this.positions = new ArrayList<>(fields.keySet());
 		this.positions = new ArrayList<Position>();//for debugging we need the same as once
-		for (Position p : fields.keySet()) {
+		for (Position p : fields.keySet())
 			this.positions.add(p);
-		}
+
 
 		/** For debugging, we need predictable order */
-		this.positions = Generator.getPositions(sudoku);
-		//TODO remove again
+		this.positions = Generator.getPositions(sudoku);//TODO remove again
 
 
 		// initialize new SolverSudoku with the fields of the specified one
@@ -85,7 +95,7 @@ public class SolverSudoku extends Sudoku {
 
 		// initialize the constraints lists for each position and the initial
 		// candidates for each field
-		this.constraints = new PositionMap<ArrayList<Constraint>>(this.getSudokuType().getSize());
+		this.constraints = new PositionMap<>(this.getSudokuType().getSize());
 		for (Position p: positions)
 			this.constraints.put(p, new ArrayList<Constraint>());
 
@@ -107,7 +117,22 @@ public class SolverSudoku extends Sudoku {
 
 		// initialize the candidate lists and branchings
 		this.branchings = new Stack<>();
-		this.resetCandidates();
+
+		switch(mode) {
+			case NEW_CANDIDATES:
+				resetCandidates();
+				break;
+			case USE_EXISTING:
+				//solverSudoku's fields take the candidates/notes from sudoku
+				for (Position p : positions)
+					if(sudoku.getField(p).isEmpty())
+						for(int i=0; i<getSudokuType().getNumberOfSymbols(); i++)
+							if(sudoku.getField(p).isNoteSet(i) != currentCandidates.get(p).get(i))
+								currentCandidates.get(p).flip(i);
+
+		}
+
+
 	}
 
 	/**

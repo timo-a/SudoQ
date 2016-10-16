@@ -64,7 +64,8 @@ public class NakedHelper extends SubsetHelper {
 
         for (Position pos : constraint.getPositions()) {
             BitSet currentCandidates = this.sudoku.getCurrentCandidates(pos);
-            if (currentCandidates.cardinality() <= this.level) //we only want up to n candidates per field
+            byte nrCandidates = (byte)currentCandidates.cardinality();
+            if (0 < nrCandidates && nrCandidates <= this.level) //we only want up to n candidates per field
                 possibleCandidates.or(currentCandidates);
         }
         //now we have constraintSet of all candidates in the constraint
@@ -82,7 +83,6 @@ public class NakedHelper extends SubsetHelper {
         for(Position p: constraint.getPositions())
             if(sudoku.getField(p).isEmpty())
                 positions.add(p);
-
 
         do {
 
@@ -108,7 +108,7 @@ public class NakedHelper extends SubsetHelper {
                         if (buildDerivation) {
                             if (!foundSubset) {
                                 derivation = new NakedSetDerivation(hintType);
-                                derivation.addDerivationBlock(new DerivationBlock(constraint));
+                                derivation.setConstraint(constraint);
                                 derivation.setSubsetCandidates(currentSet);
                                 for (Position p : subsetPositions) {
                                     BitSet relevantCandidates = (BitSet) this.sudoku.getCurrentCandidates(p).clone();
@@ -148,7 +148,7 @@ public class NakedHelper extends SubsetHelper {
         for (Position pos : positions) {
             BitSet currentCandidates = this.sudoku.getCurrentCandidates(pos);
             int nrCandidates = currentCandidates.cardinality();
-            if (nrCandidates <= this.level)
+            if (0 < nrCandidates && nrCandidates <= this.level)
                 if (isSubsetOfCurrentSet(currentCandidates))
                     subsetPositions.add(pos);
 

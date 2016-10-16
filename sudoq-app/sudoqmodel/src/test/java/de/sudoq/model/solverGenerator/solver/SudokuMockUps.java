@@ -62,6 +62,31 @@ public class SudokuMockUps {
 
 
 
+    public static Sudoku stringToSudoku(SudokuTypes type, String pattern){
+        Sudoku sudoku = new SudokuBuilder(type).createSudoku();
+        sudoku.setComplexity(Complexity.arbitrary);
+        int yLim = sudoku.getSudokuType().getSize().getY();
+        int xLim = sudoku.getSudokuType().getSize().getX();
+
+        String[] candidates = pattern.split("\\s+");
+        for(int y=0; y<yLim; y++)
+            for(int x=0; x<xLim; x++){
+                String gu = candidates[xLim*y+x];
+                Field f =  sudoku.getField(Position.get(x, y));
+                clearCandidates(f,sudoku);
+
+                if("0123456789".contains(gu))
+                    f.setCurrentValue(Integer.parseInt(gu)-1);
+                else
+                    for(Character c:gu.toCharArray())
+                        f.toggleNote(Character.getNumericValue(c));
+
+
+
+            }
+        return sudoku;
+    }
+
     private static Sudoku transform(Sudoku sudoku, String pattern){
         String[] candidates = pattern.split("\\s+");
         for(int y=0; y<9; y++)

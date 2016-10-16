@@ -641,7 +641,7 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 							Toast.makeText(SudokuActivity.this, R.string.toast_solved_wrong, Toast.LENGTH_SHORT).show();
 						break;
 				}
-
+				/* not inside switch, because they are at variable positions */
 				if (items[item] == getString(R.string.sf_sudoku_assistances_solve_specific)){
 					if (!SudokuActivity.this.sudokuController.onSolveCurrent(SudokuActivity.this.sudokuView.getCurrentFieldView().getField())) {
 						Toast.makeText(SudokuActivity.this, R.string.toast_solved_wrong, Toast.LENGTH_SHORT).show();

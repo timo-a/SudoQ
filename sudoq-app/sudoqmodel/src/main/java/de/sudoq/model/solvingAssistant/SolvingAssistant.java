@@ -16,10 +16,14 @@ import de.sudoq.model.sudoku.Sudoku;
  */
 public class SolvingAssistant {
     public static SolveDerivation giveAHint(Sudoku sudoku){
-        SolverSudoku s = new SolverSudoku(sudoku);
+        SolverSudoku s = new SolverSudoku(sudoku, SolverSudoku.Initialization.USE_EXISTING);
         Queue<SolveHelper> helpers = new LinkedList<>();
         helpers.add(new LastDigitHelper(s,  0));
         helpers.add(new NakedHelper    (s,1,0));
+        helpers.add(new NakedHelper    (s,2,0));
+        helpers.add(new NakedHelper    (s,3,0));
+        helpers.add(new NakedHelper    (s,4,0));
+        helpers.add(new NakedHelper    (s,5,0));
 
         for (SolveHelper sh : helpers)
             if(sh.update(true))

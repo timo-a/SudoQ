@@ -8,17 +8,14 @@
 package de.sudoq.controller.sudoku;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.util.Log;
 import android.view.View;
-import android.widget.RelativeLayout;
 
-import java.util.List;
 import java.util.Vector;
 
-import de.sudoq.model.solverGenerator.solution.DerivationBlock;
+import de.sudoq.model.solverGenerator.solution.NakedSetDerivation;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
-import de.sudoq.view.HighlightedConstraintView;
+import de.sudoq.view.Hints.LastDigitView;
+import de.sudoq.view.Hints.NakedSetView;
 import de.sudoq.view.SudokuLayout;
 
 /**
@@ -41,16 +38,25 @@ public class HintPainter {
 	}
 
 	public void realizeHint(SolveDerivation sd){
+		View v=null;
 		switch(sd.getType()){
-			case LastDigit: List<DerivationBlock> db = sd.getDerivationBlocks();
-			                View v = new HighlightedConstraintView(context, sl, db.get(0).getBlock(), Color.BLUE);
-			                viewList.add(v);
-					        sl.addView(v, sl.getHeight(), sl.getWidth());
-			                break;
+			case LastDigit:   v = new LastDigitView(context, sl, sd);
+			                  break;
 
+			case NakedSingle:
+			case NakedPair:
+			case NakedTriple:
+			case NakedQuadruple:
+			case NakedQuintuple:   v = new NakedSetView(context, sl, (NakedSetDerivation)sd);
+			                       break;
 
 
 		}
+		if(v!=null) {
+			viewList.add(v);
+			sl.addView(v, sl.getHeight(), sl.getWidth());
+		}
+
 	}
 
 	/** Methods */

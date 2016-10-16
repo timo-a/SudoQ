@@ -5,7 +5,7 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
  * You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.sudoq.view;
+package de.sudoq.view.Hints;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -19,6 +19,7 @@ import de.sudoq.controller.sudoku.Symbol;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Field;
 import de.sudoq.model.sudoku.Position;
+import de.sudoq.view.SudokuLayout;
 
 /**
  * Diese Subklasse des von der Android API bereitgestellten Views stellt ein
@@ -82,7 +83,7 @@ public class HighlightedConstraintView extends View {
 		float edgeRadius = sl.getCurrentFieldViewSize() / 20.0f;
 		paint.reset();
 		paint.setColor(marginColor);
-		int thickness = 20;
+		int thickness = 10;
 		paint.setStrokeWidth(thickness*sl.getCurrentSpacing());
 		Constraint c = this.constraint;
 		//Log.d("HighlightCV", "This is happening!");
