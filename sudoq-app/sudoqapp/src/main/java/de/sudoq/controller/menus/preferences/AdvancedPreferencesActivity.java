@@ -7,20 +7,19 @@
  */
 package de.sudoq.controller.menus.preferences;
 
-import android.content.DialogInterface;
-import android.support.v7.app.ActionBar;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
-
 import android.widget.Button;
 import android.widget.CheckBox;
+
 import de.sudoq.R;
 import de.sudoq.model.game.GameSettings;
 import de.sudoq.model.profile.Profile;

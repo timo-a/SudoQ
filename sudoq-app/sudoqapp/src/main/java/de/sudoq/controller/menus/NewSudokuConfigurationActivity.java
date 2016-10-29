@@ -7,10 +7,6 @@
  */
 package de.sudoq.controller.menus;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -22,13 +18,18 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import de.sudoq.R;
 import de.sudoq.controller.SudoqActivitySherlock;
 import de.sudoq.controller.menus.preferences.NewSudokuPreferencesActivity;
 import de.sudoq.controller.sudoku.SudokuActivity;
-import de.sudoq.model.game.GameSettings;
 import de.sudoq.model.game.Game;
 import de.sudoq.model.game.GameManager;
+import de.sudoq.model.game.GameSettings;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;

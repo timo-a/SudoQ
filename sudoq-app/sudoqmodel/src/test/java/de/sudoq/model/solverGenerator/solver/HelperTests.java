@@ -15,6 +15,7 @@ import org.junit.Test;
 
 import de.sudoq.model.files.FileManagerTests;
 import de.sudoq.model.solverGenerator.solution.DerivationField;
+import de.sudoq.model.solverGenerator.solution.LockedCandidatesDerivation;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.solverGenerator.solver.helper.HiddenHelper;
@@ -64,29 +65,21 @@ public class HelperTests {
 
 		List<SolveDerivation> sdlist = new ArrayList();
 
+		assertTrue(sudoku.getCurrentCandidates(Position.get(6,2)).isSet(4));
+
 		while (helper.update(true)){
 			sdlist.add(helper.getDerivation());
 			System.out.println("print derivation:");
 			System.out.println(sdlist.get(sdlist.size()-1));
 
 		}
+		/* make sure the solution where "5" is removed from field "7,3" is among the found solutions */
+		assertFalse(sudoku.getCurrentCandidates(Position.get(6,2)).isSet(4));
+
 		boolean twoFindings = sdlist.size()==2;
 
-		/* make sure the solution where "5" is removed from field "7,3" is among the found solutions */
-		boolean found=false;
-		for(SolveDerivation sd: sdlist) {
-			Iterator<DerivationField> i = sd.getFieldIterator();
-			while (i.hasNext()){
-				DerivationField curr = i.next();
-				Position p = curr.getPosition();
-				if(p.equals(Position.get(6,2)) && curr.getRelevantCandidates().get(4))
-					found=true;
-				else
-					System.out.println(p+"instead");
-			}
+		assertTrue(twoFindings);
 
-		}
-		assertTrue(twoFindings && found);
 	}
 
 	@Test
@@ -97,6 +90,9 @@ public class HelperTests {
 
 		List<SolveDerivation> sdlist = new ArrayList();
 
+		assertTrue(sudoku.getCurrentCandidates(Position.get(4,3)).get(4));
+
+
 		while (helper.update(true)){
 			sdlist.add(helper.getDerivation());
 			System.out.println("print derivation:");
@@ -105,20 +101,12 @@ public class HelperTests {
 		}
 		System.out.println("sdlist "+sdlist.size());
 
+		assertTrue(sdlist.size() >= 1);
+
+		assertFalse(sudoku.getCurrentCandidates(Position.get(4,3)).get(4));
+
+
 		/* make sure the solution where "5" is removed from field "5,4" is among the found solutions */
-		boolean found=false;
-		for(SolveDerivation sd: sdlist) {
-			Iterator<DerivationField> i = sd.getFieldIterator();
-			while (i.hasNext()){
-				DerivationField curr = i.next();
-				Position p = curr.getPosition();
-				if(p.equals(Position.get(4,3)) && curr.getRelevantCandidates().get(4))
-					found=true;
-				else
-					System.out.println(p+"instead");
-			}
-		}
-		assertTrue(found);
 
 	}
 

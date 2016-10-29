@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+
 import de.sudoq.R;
 import de.sudoq.controller.SudoqActivitySherlock;
 import de.sudoq.controller.menus.preferences.PlayerPreferencesActivity;

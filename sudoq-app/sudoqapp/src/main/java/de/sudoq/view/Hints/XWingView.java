@@ -8,15 +8,12 @@
 package de.sudoq.view.Hints;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.view.View;
 
-import java.util.List;
-import java.util.Stack;
-
-import de.sudoq.model.solverGenerator.solution.DerivationField;
-import de.sudoq.model.solverGenerator.solution.NakedSetDerivation;
+import de.sudoq.model.solverGenerator.solution.LockedCandidatesDerivation;
+import de.sudoq.model.solverGenerator.solution.XWingDerivation;
+import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.view.SudokuLayout;
 
 /**
@@ -24,7 +21,7 @@ import de.sudoq.view.SudokuLayout;
  * einzelnes Feld innerhalb eines Sudokus dar. Es erweitert den Android View um
  * Funktionalität zur Benutzerinteraktion und Färben.
  */
-public class NakedSetView extends HintView {
+public class XWingView extends HintView {
 
 	/**
 	 * Erstellt einen SudokuFieldView und initialisiert die Attribute der
@@ -33,15 +30,18 @@ public class NakedSetView extends HintView {
 	 * @param context    der Applikationskontext
 	 * @throws IllegalArgumentException Wird geworfen, falls eines der Argumente null ist
 	 */
-	public NakedSetView(Context context, SudokuLayout sl, NakedSetDerivation d) {
+	public XWingView(Context context, SudokuLayout sl, XWingDerivation d) {
 		super(context, sl, d);
 
-		View constraintV = new HighlightedConstraintView(context, sl, d.getConstraint(), Color.BLUE);
-		highlightedObjects.add(constraintV);
-
-		for(DerivationField df: d.getSubsetMembers()){
-			highlightedObjects.add(new HighlightedFieldView(context, sl, df.getPosition(), Color.GREEN));
+		for (Constraint c: d.getLockedConstraints()) {
+			View lockedConstraintV = new HighlightedConstraintView(context, sl, c, Color.BLUE);
+			highlightedObjects.add(lockedConstraintV);
 		}
-	}
 
+		for (Constraint c: d.getReducibleConstraints()) {
+			View reducibleConstraintV = new HighlightedConstraintView(context, sl, c, Color.BLUE);
+			highlightedObjects.add(reducibleConstraintV);
+		}
+
+	}
 }

@@ -7,13 +7,14 @@
  */
 package de.sudoq.view;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TableLayout.LayoutParams;
+
+import java.util.ArrayList;
+
 import de.sudoq.controller.sudoku.FieldViewPainter;
 import de.sudoq.controller.sudoku.FieldViewStates;
 import de.sudoq.controller.sudoku.InputListener;

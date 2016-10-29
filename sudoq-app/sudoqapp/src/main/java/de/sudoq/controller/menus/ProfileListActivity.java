@@ -7,13 +7,15 @@
  */
 package de.sudoq.controller.menus;
 
-import java.util.ArrayList;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+
+import java.util.ArrayList;
+
 import de.sudoq.R;
 import de.sudoq.controller.SudoqListActivity;
 import de.sudoq.model.profile.Profile;

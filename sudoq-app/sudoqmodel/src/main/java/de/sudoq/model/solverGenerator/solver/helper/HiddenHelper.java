@@ -2,11 +2,14 @@ package de.sudoq.model.solverGenerator.solver.helper;
 
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.List;
 
 import de.sudoq.model.solverGenerator.solution.DerivationBlock;
 import de.sudoq.model.solverGenerator.solution.DerivationField;
+import de.sudoq.model.solverGenerator.solution.HiddenSetDerivation;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
+import de.sudoq.model.solvingAssistant.HintTypes;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
 
@@ -24,6 +27,17 @@ import de.sudoq.model.sudoku.Position;
  */
 public class HiddenHelper extends SubsetHelper {
 
+	static {
+	         labels = new HintTypes[5];
+	         labels[0] = HintTypes.HiddenSingle;
+	         labels[1] = HintTypes.HiddenPair;
+	         labels[2] = HintTypes.HiddenTriple;
+	         labels[3] = HintTypes.HiddenQuadruple;
+	         labels[4] = HintTypes.HiddenQuintuple;
+	}
+
+	private HiddenSetDerivation derivation;
+
 	/**
 	 * Erzeugt einen neuen HiddenHelper für das spezifizierte Suduoku mit dem spezifizierten level. Der level entspricht
 	 * dabei der Größe der Symbolmenge nach der gesucht werden soll.
@@ -39,6 +53,8 @@ public class HiddenHelper extends SubsetHelper {
 	 */
 	public HiddenHelper(SolverSudoku sudoku, int level, int complexity) {
 		super(sudoku, level, complexity);
+
+
 	}
 
 	/**
@@ -63,56 +79,36 @@ public class HiddenHelper extends SubsetHelper {
 	 * {@inheritDoc}
 	 */
 	protected boolean updateNext(Constraint constraint, boolean buildDerivation) {
-		boolean nextSetExists = true;
-		boolean foundSubset = false;
-		int subsetCount = 0;
-
+		boolean foundSubset;
+		derivation=null;
 		ArrayList<Position> positions = constraint.getPositions();
-		while (nextSetExists) {
-			nextSetExists = false;
-			foundSubset = false;
-			// Count and save all the positions whose candidates are a subset of
-			// the one to be checked for,
-			// look if one of the other positions would be updated to prevent <- where does this happen?
-			// from finding one subset again
-			subsetCount = 0;
-			subsetPositions.clear();
-			for (Position pos : positions) {
-				BitSet currentCandidates = this.sudoku.getCurrentCandidates(pos);
-				if (!currentCandidates.isEmpty() && currentCandidates.intersects(currentSet)) {//TODO why check for empty??
-					if (subsetCount < this.level) {
-						subsetPositions.add(pos);
-						subsetCount++;
-					} else {
-						subsetCount++;
-						break;
-					}
-				}
-			}
 
-			// If a subset was found, update the other candidates and look if
-			// something changed.
-			// If something changed, return this as update, otherwise continue
-			// searching
+		do {
+
+			// Count and save all the positions whose candidates are a subset of
+			// currentSet i.e. the one to be checked for,
+			int subsetCount = filterForSubsets(positions);
+			//subsetPositions = {p | p ∈ positions, p.candidates ⊆ currentSet && p.candidates ∩ currentSet ≠ ø }
+
+			// If a subset was found, look through all fields in the subset whether there is one that has more candidates than currentSet -> something can be removed
 			foundSubset = false;
 			if (subsetCount == this.level) {
 				for (Position pos: subsetPositions) {
-					BitSet currerntCandidates = this.sudoku.getCurrentCandidates(pos);
-					localCopy.clear();
-					localCopy.or(currerntCandidates);// localCopy <- currentCand...
-					currerntCandidates.and(currentSet);
-					if (!currerntCandidates.equals(localCopy)) {
+					BitSet currentCandidates = this.sudoku.getCurrentCandidates(pos);
+					localCopy.assignWith(currentCandidates);// localCopy <- currentCand...
+					currentCandidates.and(currentSet);
+					if (!currentCandidates.equals(localCopy)) {
 						// If something changed, a field could be updated, so
 						// the helper is applied
 						// If the derivation shall be returned, add the updated
 						// field to the derivation object
 						if (buildDerivation) {
-							if (!foundSubset) {
-								lastDerivation = new SolveDerivation();
-								lastDerivation.addDerivationBlock(new DerivationBlock(constraint));
+							if (derivation==null) {
+								derivation = initializeDerivation(constraint);
+								lastDerivation = derivation;
 							}
 
-							BitSet relevantCandidates = (BitSet) currerntCandidates.clone();
+							BitSet relevantCandidates = (BitSet) currentCandidates.clone();
 							BitSet irrelevantCandidates = localCopy;
 							irrelevantCandidates.andNot(currentSet);
 							DerivationField field = new DerivationField(pos, relevantCandidates, irrelevantCandidates);
@@ -123,34 +119,37 @@ public class HiddenHelper extends SubsetHelper {
 				}
 			}
 
-			// System.out.println("H: " + constraint + ": " + set + ", " +
-			// subset + " (NI: " + (foundSubset) +
-			// "), (Count: " + (subsetCount)+ ")");
-
-			if (!foundSubset && constraintSet.cardinality() > this.level) {
-				nextSetExists = getNextSubset();
-			}
-		}
-
-		// If the derivation shall be returned, add the subset fields to the
-		// derivation object
-		if (foundSubset && buildDerivation) {
-			boolean foundOne;
-			for (Position pos : positions) {
-				foundOne = false;
-				for (Position pSub: subsetPositions)
-					if(pos == pSub)
-						foundOne = true;
-
-				if (!foundOne) {
-					BitSet irrelevantCandidates = (BitSet) this.sudoku.getCurrentCandidates(pos).clone();
-					DerivationField field = new DerivationField(pos, new BitSet(), irrelevantCandidates);
-					lastDerivation.addDerivationField(field);
-				}
-			}
-		}
+		}while(!foundSubset && constraintSet.cardinality() > this.level && getNextSubset());
 
 		return foundSubset;
 	}
 
+	/*
+     * counts the number of Positions whose candidates are a subset of currentSet -> eligible
+     * stores the first 'level' of those in subsetPositions
+     */
+	private int filterForSubsets(List<Position> positions) {
+
+		subsetPositions.clear();
+		for (Position pos : positions) {
+			BitSet currentCandidates = this.sudoku.getCurrentCandidates(pos);
+			if (!currentCandidates.isEmpty() && currentCandidates.intersects(currentSet)) //TODO why check for empty??
+					subsetPositions.add(pos);
+
+		}
+		return subsetPositions.size();
+	}
+
+	private HiddenSetDerivation initializeDerivation(Constraint constraint){
+		HiddenSetDerivation derivation = new HiddenSetDerivation(hintType);
+		derivation.setConstraint(constraint);
+		derivation.setSubsetCandidates(currentSet);
+		for (Position p : subsetPositions) {
+			BitSet relevantCandidates = (BitSet) this.sudoku.getCurrentCandidates(p).clone();
+			relevantCandidates.and(currentSet);
+			DerivationField field = new DerivationField(p, relevantCandidates, new BitSet());
+			derivation.addSubsetField(field);
+		}
+		return derivation;
+	}
 }

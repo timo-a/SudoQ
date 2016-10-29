@@ -12,9 +12,14 @@ import android.view.View;
 
 import java.util.Vector;
 
+import de.sudoq.model.solverGenerator.solution.HiddenSetDerivation;
+import de.sudoq.model.solverGenerator.solution.LockedCandidatesDerivation;
 import de.sudoq.model.solverGenerator.solution.NakedSetDerivation;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
+import de.sudoq.view.Hints.HiddenSetView;
+import de.sudoq.view.Hints.LastCandidateView;
 import de.sudoq.view.Hints.LastDigitView;
+import de.sudoq.view.Hints.LockedCandidatesView;
 import de.sudoq.view.Hints.NakedSetView;
 import de.sudoq.view.SudokuLayout;
 
@@ -35,6 +40,7 @@ public class HintPainter {
 		this.viewList = new Vector<>();
 		this.context  = sl.getContext();
 		this.sl = sl;
+
 	}
 
 	public void realizeHint(SolveDerivation sd){
@@ -43,6 +49,9 @@ public class HintPainter {
 			case LastDigit:   v = new LastDigitView(context, sl, sd);
 			                  break;
 
+			case LastCandidate: v = new LastCandidateView(context, sl, sd);
+			                    break;
+
 			case NakedSingle:
 			case NakedPair:
 			case NakedTriple:
@@ -50,11 +59,21 @@ public class HintPainter {
 			case NakedQuintuple:   v = new NakedSetView(context, sl, (NakedSetDerivation)sd);
 			                       break;
 
+			case HiddenSingle:
+			case HiddenPair:
+			case HiddenTriple:
+			case HiddenQuadruple:
+			case HiddenQuintuple:  v = new HiddenSetView(context, sl, (HiddenSetDerivation)sd);
+			                       break;
+
+			case LockedCandidatesExternal: v = new LockedCandidatesView(context, sl, (LockedCandidatesDerivation)sd);
+				                           break;
+
 
 		}
 		if(v!=null) {
 			viewList.add(v);
-			sl.addView(v, sl.getHeight(), sl.getWidth());
+			sl.addView(v, sl.getWidth(), sl.getHeight());
 		}
 
 	}

@@ -13,11 +13,8 @@ import android.graphics.Color;
 import android.view.View;
 
 import java.util.List;
-import java.util.Stack;
 
 import de.sudoq.model.solverGenerator.solution.DerivationBlock;
-import de.sudoq.model.solverGenerator.solution.DerivationField;
-import de.sudoq.model.solverGenerator.solution.NakedSetDerivation;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.view.SudokuLayout;
 
@@ -26,12 +23,8 @@ import de.sudoq.view.SudokuLayout;
  * einzelnes Feld innerhalb eines Sudokus dar. Es erweitert den Android View um
  * Funktionalität zur Benutzerinteraktion und Färben.
  */
-public class LastDigitView extends View {
+public class LastDigitView extends HintView {
 
-	/** Attributes */
-	private SudokuLayout sl;
-
-	private View constraintV;
 
 	/**
 	 * Erstellt einen LastDigitView
@@ -40,29 +33,10 @@ public class LastDigitView extends View {
 	 * @throws IllegalArgumentException Wird geworfen, falls eines der Argumente null ist
 	 */
 	public LastDigitView(Context context, SudokuLayout sl, SolveDerivation d) {
-		super(context);
-		if (context == null) throw new IllegalArgumentException();
+		super(context, sl, d);
 
 		List<DerivationBlock> db = d.getDerivationBlocks();
-		constraintV = new HighlightedConstraintView(context, sl, db.get(0).getBlock(), Color.BLUE);
-
-		this.sl = sl;
-	}
-
-	/** Methods */
-
-	/**
-	 * Zeichnet den Inhalt des Feldes auf das Canvas dieses SudokuFieldViews.
-	 * Sollte den AnimationHandler nutzen um vorab Markierungen/Färbung an dem
-	 * Canvas Objekt vorzunehmen.
-	 *
-	 * @param canvas Das Canvas Objekt auf das gezeichnet wird
-	 * @throws IllegalArgumentException Wird geworfen, falls das übergebene Canvas null ist
-	 */
-	@Override
-	public void onDraw(Canvas canvas) {
-		super.onDraw(canvas);
-
-		constraintV.draw(canvas);
+		View constraintV = new HighlightedConstraintView(context, sl, db.get(0).getBlock(), Color.BLUE);
+		highlightedObjects.add(constraintV);
 	}
 }

@@ -12,6 +12,7 @@ import android.content.res.Configuration;
 import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
+
 import de.sudoq.R;
 import de.sudoq.model.ModelChangeListener;
 import de.sudoq.model.actionTree.ActionTreeElement;

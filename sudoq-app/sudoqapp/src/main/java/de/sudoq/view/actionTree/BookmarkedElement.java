@@ -10,6 +10,7 @@ package de.sudoq.view.actionTree;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+
 import de.sudoq.controller.sudoku.ActionTreeController;
 import de.sudoq.model.actionTree.ActionTreeElement;
 

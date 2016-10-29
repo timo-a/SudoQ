@@ -9,6 +9,7 @@ import de.sudoq.model.solverGenerator.solution.DerivationField;
 import de.sudoq.model.solverGenerator.solution.NakedSetDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.solvingAssistant.HintTypes;
+import de.sudoq.model.sudoku.CandidateSet;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
 
@@ -23,7 +24,14 @@ import de.sudoq.model.sudoku.Position;
  */
 public class NakedHelper extends SubsetHelper {
 
-    protected HintTypes hintType;
+    static {
+             labels = new HintTypes[5];
+             labels[0] = HintTypes.NakedSingle;
+             labels[1] = HintTypes.NakedPair;
+             labels[2] = HintTypes.NakedTriple;
+             labels[3] = HintTypes.NakedQuadruple;
+             labels[4] = HintTypes.NakedQuintuple;
+    }
 
     private NakedSetDerivation derivation;
 
@@ -38,17 +46,6 @@ public class NakedHelper extends SubsetHelper {
      */
     public NakedHelper(SolverSudoku sudoku, int level, int complexity) throws IllegalArgumentException {
         super(sudoku, level, complexity);
-        HintTypes types[] = {HintTypes.NakedSingle
-                            ,HintTypes.NakedPair
-                            ,HintTypes.NakedTriple
-                            ,HintTypes.NakedQuadruple
-                            ,HintTypes.NakedQuintuple
-                            };
-        if(level<= 5)
-            hintType = types[level-1];
-        else
-            throw new IllegalArgumentException("we can't handle a level > 3 yet.");
-
     }
 
     /**
@@ -78,7 +75,7 @@ public class NakedHelper extends SubsetHelper {
     @Override
     protected boolean updateNext(Constraint constraint, boolean buildDerivation) {
         boolean foundSubset = false;
-
+        derivation=null;
         Stack<Position> positions = new Stack<>();
         for(Position p: constraint.getPositions())
             if(sudoku.getField(p).isEmpty())
@@ -86,7 +83,7 @@ public class NakedHelper extends SubsetHelper {
 
         do {
 
-            int subsetCount = filterForSubsets(positions); //subsetPositions = {p | p ∈ positions, p.candidates ⊆ currentSet}
+            int subsetCount = filterForSubsets(positions); //subsetPositions = {p | p ∈ positions, p.candidates ⊆ currentSet && |p.candidates| ∈ [1,level]}
 
             if (subsetCount == this.level) {
                 List<Position> externalPositions = (List<Position>) positions.clone();
@@ -97,8 +94,7 @@ public class NakedHelper extends SubsetHelper {
                     BitSet currentPosCandidates = this.sudoku.getCurrentCandidates(pos);
                     if (currentPosCandidates.intersects(currentSet)) {
                         //save original candidates
-                        localCopy.clear();
-                        localCopy.or(currentPosCandidates);
+                        localCopy.assignWith(currentPosCandidates);
 
                         //delete all candidates that appear in currentSet
                         currentPosCandidates.andNot(currentSet);
@@ -106,18 +102,12 @@ public class NakedHelper extends SubsetHelper {
 						/* We found a subset that does delete candidates,
                            initialize derivation obj. and fill it during remaining cycles of pos  */
                         if (buildDerivation) {
-                            if (!foundSubset) {
-                                derivation = new NakedSetDerivation(hintType);
-                                derivation.setConstraint(constraint);
-                                derivation.setSubsetCandidates(currentSet);
-                                for (Position p : subsetPositions) {
-                                    BitSet relevantCandidates = (BitSet) this.sudoku.getCurrentCandidates(p).clone();
-                                    DerivationField field = new DerivationField(p, relevantCandidates, new BitSet());
-                                    derivation.addSubsetField(field);
-                                }
+                            if (derivation==null) {//is this the first time?
+                                derivation = initializeDerivation(constraint);
+                                lastDerivation = derivation;
                             }
                             //what was deleted?
-                            BitSet relevant = (BitSet) localCopy.clone();
+                            BitSet   relevant = (BitSet) localCopy.clone();
                             BitSet irrelevant = (BitSet) localCopy.clone();
                             relevant.and(currentSet);
                             irrelevant.andNot(currentSet);
@@ -127,45 +117,41 @@ public class NakedHelper extends SubsetHelper {
                         foundSubset = true;
                     }
                 }
-
             }
-
         }while(!foundSubset && constraintSet.cardinality() > this.level && getNextSubset());
-
-        if (foundSubset && buildDerivation)
-            lastDerivation = derivation;
 
         return foundSubset;
     }
 
 
     /*
-     * counts the number of Positions whose candidates are a subset of currentSet -> eligible
-     * stores the first 'level' of those in subsetPositions
+     * stores all positions whose candidates are a subset of currentSet and have <= 'level' candidates -> eligible
+     * and returns their number.
+     * @return number of positions found
      */
     private int filterForSubsets(List<Position> positions) {
         subsetPositions.clear();
         for (Position pos : positions) {
-            BitSet currentCandidates = this.sudoku.getCurrentCandidates(pos);
+            CandidateSet currentCandidates = this.sudoku.getCurrentCandidates(pos);
             int nrCandidates = currentCandidates.cardinality();
             if (0 < nrCandidates && nrCandidates <= this.level)
-                if (isSubsetOfCurrentSet(currentCandidates))
+                if (currentCandidates.isSubsetOf(currentSet))
                     subsetPositions.add(pos);
 
         }
-        //assert subsetCount == subsetPositions.size();
         return subsetPositions.size();
     }
 
-    /*
-    * determines whether bs is a subset of CurrentSet, i.e. ∀ i: bs_i == 1  =>  CurrentSet_i == 1
-    * */
-    private synchronized boolean isSubsetOfCurrentSet(BitSet bs) {//TODO make decorator of BitSet so we can just bs.isSubsetOf(Current)
-        /* localCopy := currentCandidates & currentSet */
-        localCopy.clear();
-        localCopy.or(bs); //copy bs into localCopy
-        localCopy.and(currentSet);
-        return bs.equals(localCopy); // => bs == bs & currentSet => bs ⊆ currentSetf
+    private NakedSetDerivation initializeDerivation(Constraint constraint){
+        NakedSetDerivation derivation = new NakedSetDerivation(hintType);
+        derivation.setConstraint(constraint);
+        derivation.setSubsetCandidates(currentSet);
+        for (Position p : subsetPositions) {
+            BitSet relevantCandidates = (BitSet) this.sudoku.getCurrentCandidates(p).clone();
+            DerivationField field = new DerivationField(p, relevantCandidates, new BitSet());
+            derivation.addSubsetField(field);
+        }
+        return derivation;
     }
 
 }

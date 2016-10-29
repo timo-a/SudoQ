@@ -7,8 +7,6 @@
  */
 package de.sudoq.view;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -16,6 +14,8 @@ import android.graphics.Paint;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.RelativeLayout;
+
+import java.util.ArrayList;
 
 import de.sudoq.controller.sudoku.BoardPainter;
 import de.sudoq.controller.sudoku.FieldInteractionListener;
@@ -106,11 +106,12 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 		this.zoomFactor = 1.0f;
 		// this.currentFieldViewSize = this.defaultFieldViewSize;
 		this.setWillNotDraw(false);
+		paint = new Paint();
 		this.boardPainter = new BoardPainter(this, game.getSudoku().getSudokuType());
 		FieldViewPainter.getInstance().setSudokuLayout(this);
 		this.hintPainter = new HintPainter(this);
-		paint = new Paint();
 		inflateSudoku();
+
 		Log.d(LOG_TAG, "End of Constructor.");
 	}
 
@@ -170,6 +171,8 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 				}
 
 		}
+
+		this.hintPainter.updateLayout();
 		//Log.d(LOG_TAG, "SudokuLayout.inflateSudoku()-end");
 	}
 
@@ -235,6 +238,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 			params.leftMargin = (2 * getCurrentLeftMargin() + ((x - 1) * fieldPlusSpacing));
 			this.sudokuFieldViews[x][y].setLayoutParams(params);
 			this.sudokuFieldViews[x][y].invalidate();
+			//end strange thing
 
 		}
 		hintPainter.updateLayout();
@@ -251,7 +255,6 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		Log.d(LOG_TAG, "SudokuLayout.onDraw()");
-
 		float edgeRadius = getCurrentFieldViewSize() / 20.0f;
 		paint.reset();
 		paint.setColor(Color.BLACK);
@@ -398,7 +401,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	 */
 	@Override
 	public float getMaxZoomFactor() {
-		return this.game.getSudoku().getSudokuType().getSize().getX() / 2.0f;
+		return 10;//this.game.getSudoku().getSudokuType().getSize().getX() / 2.0f;
 	}
 
 }

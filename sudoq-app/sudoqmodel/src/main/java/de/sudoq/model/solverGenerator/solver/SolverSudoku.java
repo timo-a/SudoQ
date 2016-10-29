@@ -3,10 +3,12 @@ package de.sudoq.model.solverGenerator.solver;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import de.sudoq.model.solverGenerator.Generator;
 import de.sudoq.model.solverGenerator.solver.BranchingPool.Branching;
+import de.sudoq.model.sudoku.CandidateSet;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Field;
 import de.sudoq.model.sudoku.Position;
@@ -33,7 +35,7 @@ public class SolverSudoku extends Sudoku {
 	 * Mappt die Positionen auf ein BitSet, welches die Kandidaten für dieses Feld repräsentiert nach jedem
 	 * Branching-Schritt repräsentiert
 	 */
-	private PositionMap<BitSet> currentCandidates;
+	private PositionMap<CandidateSet> currentCandidates;
 
 	/**
 	 * Speichert die Positionen an denen gebrancht wurde. (implizit in den einzelnen branchings )
@@ -55,6 +57,8 @@ public class SolverSudoku extends Sudoku {
 	 * Die Summe der Schwierigkeit aller auf diesem Sudoku ausgeführten Operationen zum Lösen
 	 */
 	private int complexityValue;
+
+	private Map<Constraint, List<Constraint>> neighborDirectory;
 
 	public  enum Initialization {NEW_CANDIDATES, USE_EXISTING};
 
@@ -363,7 +367,7 @@ public class SolverSudoku extends Sudoku {
 	 * @throws IllegalArgumentException
 	 *             Wird geworfen, falls die spezifizierte Position ungültig ist
 	 */
-	public BitSet getCurrentCandidates(Position pos) {
+	public CandidateSet getCurrentCandidates(Position pos) {
 		return this.currentCandidates.get(pos);
 	}
 
@@ -405,12 +409,12 @@ public class SolverSudoku extends Sudoku {
 		/**
 		 * Eine Liste der erstellten, noch nicht vergebenen Maps
 		 */
-		private Stack<PositionMap<BitSet>> unusedMaps;
+		private Stack<PositionMap<CandidateSet>> unusedMaps;
 
 		/**
 		 * Ein Stack der erstellten und bereits vergebenen Maps
 		 */
-		private Stack<PositionMap<BitSet>> usedMaps;
+		private Stack<PositionMap<CandidateSet>> usedMaps;
 
 		/**
 		 * Die Größe der Verwalteten PositionMaps
@@ -435,8 +439,8 @@ public class SolverSudoku extends Sudoku {
 			this.positions = positions;
 			this.currentDimension = dimension;
 
-			usedMaps = new Stack<PositionMap<BitSet>>();
-			unusedMaps = new Stack<PositionMap<BitSet>>();
+			usedMaps = new Stack<PositionMap<CandidateSet>>();
+			unusedMaps = new Stack<PositionMap<CandidateSet>>();
 			unusedMaps.push(initialisePositionMap());
 			unusedMaps.push(initialisePositionMap());
 		}
@@ -447,12 +451,12 @@ public class SolverSudoku extends Sudoku {
 		 * 
 		 * @return Eine PositionMap entsprechend der aktuell gesetzten Größe
 		 */
-		public PositionMap<BitSet> getPositionMap() {
+		public PositionMap<CandidateSet> getPositionMap() {
 			if (unusedMaps.size() == 0) {
 				unusedMaps.add(this.initialisePositionMap());
 			}
 
-			PositionMap<BitSet> ret = unusedMaps.pop();
+			PositionMap<CandidateSet> ret = unusedMaps.pop();
 			usedMaps.push(ret);
 			return ret;
 		}
@@ -462,7 +466,7 @@ public class SolverSudoku extends Sudoku {
 		 */
 		public void returnPositionMap() {
 			if (!usedMaps.isEmpty()) {
-				PositionMap<BitSet> returnedMap = usedMaps.pop();
+				PositionMap<CandidateSet> returnedMap = usedMaps.pop();
 				for (Position pos : this.positions) {
 					returnedMap.get(pos).clear();
 				}
@@ -475,10 +479,10 @@ public class SolverSudoku extends Sudoku {
 		 * 
 		 * @return Eine neue PositionMap der im Konstruktor definierten Größe
 		 */
-		private PositionMap<BitSet> initialisePositionMap() {
-			PositionMap<BitSet> newMap = new PositionMap<BitSet>(currentDimension);
+		private PositionMap<CandidateSet> initialisePositionMap() {
+			PositionMap<CandidateSet> newMap = new PositionMap<CandidateSet>(currentDimension);
 			for (Position pos : this.positions) {
-				newMap.put(pos, new BitSet());
+				newMap.put(pos, new CandidateSet());
 			}
 
 			return newMap;
@@ -495,4 +499,21 @@ public class SolverSudoku extends Sudoku {
 
 	}
 
+
+	/**
+	 * Determines whether Lists a,b have a common(by equals) element
+	 * @param a
+	 * @param b
+	 * @param <T> any element in the list needs to have equals defined
+	 * @return true iff i.equals(j) == true for at least one i € a, j € b
+	 */
+	public static <T> boolean intersect(Iterable<T> a, Iterable<T> b){
+
+		for (T t1: a)
+			for (T t2: b)
+				if(t1.equals(t2))
+					return true;
+
+		return false;
+	}
 }

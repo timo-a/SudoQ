@@ -7,12 +7,13 @@
  */
 package de.sudoq.view.actionTree;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import android.view.View;
+
+import java.util.ArrayList;
+
 import de.sudoq.controller.sudoku.ActionTreeNavListener;
 import de.sudoq.model.actionTree.ActionTreeElement;
 

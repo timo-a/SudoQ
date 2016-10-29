@@ -23,6 +23,7 @@ public class BoardPainter {
     }
 
     public void paintBoard(Paint paint, Canvas canvas, float edgeRadius){
+
         for (Constraint c: type) //for every constraint
             if (c.getType().equals(ConstraintType.BLOCK))         //which is a Block
                 outlineConstraint(c, canvas, edgeRadius, paint); //paint the outline
@@ -45,13 +46,7 @@ public class BoardPainter {
             boolean isRight  =                  !c.includes(Position.get(p.getX() + 1, p.getY()    ));
             boolean isTop    = p.getY() == 0 || !c.includes(Position.get(p.getX(),     p.getY() - 1));
             boolean isBottom =                  !c.includes(Position.get(p.getX(),     p.getY() + 1));
-					/* apparently:
-					 *   00 10 20 30 ...
-					 *   01 11
-					 *   02    xy
-					 *   .
-					 *   .
-					 * */
+			// (0,0) is in the top left
 
             int from = 1;
             int to   = spacing;

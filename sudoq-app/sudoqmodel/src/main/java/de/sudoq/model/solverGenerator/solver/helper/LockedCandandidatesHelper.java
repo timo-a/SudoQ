@@ -6,6 +6,7 @@ import java.util.List;
 
 import de.sudoq.model.solverGenerator.solution.DerivationBlock;
 import de.sudoq.model.solverGenerator.solution.DerivationField;
+import de.sudoq.model.solverGenerator.solution.LockedCandidatesDerivation;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.solvingAssistant.HintTypes;
@@ -23,9 +24,6 @@ import de.sudoq.model.sudoku.Utils;
  * Created by timo on 07.06.16.
  */
 public class LockedCandandidatesHelper extends SolveHelper {
-
-    private static List a;
-    private static List b;
 
     /**
 	 * Erzeugt einen neuen HiddenHelper für das spezifizierte Suduoku mit dem spezifizierten level. Der level entspricht
@@ -51,8 +49,10 @@ public class LockedCandandidatesHelper extends SolveHelper {
         for(int i=0; i< constraints.size(); i++)
             for(int j=i+1; j<constraints.size(); j++){
                 /* if they intersect */
-                List<Position> positionsI = constraints.get(i).getPositions();
-                List<Position> positionsJ = constraints.get(j).getPositions();
+                Constraint constraintI = constraints.get(i);
+                Constraint constraintJ = constraints.get(j);
+                List<Position> positionsI = constraintI.getPositions();
+                List<Position> positionsJ = constraintJ.getPositions();
                 if(intersect(positionsI, positionsJ)){
                     // get disjunctive sets of positions:
                     List<Position> common  = intersection(positionsI, positionsJ);
@@ -73,8 +73,8 @@ public class LockedCandandidatesHelper extends SolveHelper {
                     BitSet removableNotes = (BitSet) inIntersectionButNotInI.clone();
                     removableNotes.and(cutoutJNotes);
                     List<Position> toBeRemovedFrom = cutoutJ;
-                    List<Position> GroupToBeRemovedFrom = positionsJ;
-                    List<Position> otherGroup           = positionsI;
+                    Constraint reducibleConstraint = constraintJ;
+                    Constraint lockedConstraint    = constraintI;
 
                     if(removableNotes.isEmpty()) {
                         //now do the other direction
@@ -87,48 +87,56 @@ public class LockedCandandidatesHelper extends SolveHelper {
                         removableNotes = (BitSet) inIntersectionButNotInJ.clone();
                         removableNotes.and(cutoutINotes);
                         toBeRemovedFrom = cutoutI;
-                        GroupToBeRemovedFrom = positionsI;
-                        otherGroup           = positionsJ;
+                        reducibleConstraint = constraintI;
+                        lockedConstraint    = constraintJ;
                     }
                     if(!removableNotes.isEmpty()) {
                         success = true;
-                        //remove first of all removable notes
-                        int first = removableNotes.nextSetBit(0);
 
                         if(buildDerivation){
-                            /* since the derivations seem to be never used, I'm a bit sloppy here...
-                            *  as Blocks the intersecting constraints are added
-                            *  as fields all fields that have a note removed are added*/
-
-                            lastDerivation = new SolveDerivation(HintTypes.LockedCandidatesExternal);
-                            lastDerivation.addDerivationBlock(new DerivationBlock(constraints.get(i)));
-                            lastDerivation.addDerivationBlock(new DerivationBlock(constraints.get(j)));
-                            BitSet relevantCandidates = new BitSet();
-                            relevantCandidates.set(first);
-                            for(Position p : toBeRemovedFrom)
-                                if(sudoku.getCurrentCandidates(p).get(first)){
-                                    BitSet irrelevantCandidates = (BitSet) sudoku.getCurrentCandidates(p).clone();
-                                    irrelevantCandidates.clear(first);
-                                    lastDerivation.addDerivationField(new DerivationField(p,relevantCandidates,irrelevantCandidates));
-                                }
-                            //Todo better: list fields where it is removed
-                            lastDerivation.setDescription("Note "+(first+1)+" can be removed in "+ Utils.classifyGroup(GroupToBeRemovedFrom)+".\n"+
-                                                          "It has to be in the intersection to "+Utils.classifyGroup(otherGroup) +" as it cannot appear anywhere else in that group.");
+                            buildDerivation(lockedConstraint, reducibleConstraint, removableNotes, toBeRemovedFrom);
                         }
 
+                        //remove first of all removable notes
+                        int first = removableNotes.nextSetBit(0);
 
                         for (Position p : toBeRemovedFrom)
                             sudoku.getCurrentCandidates(p).clear(first);
 
-                    }
-
-
-                    if(success)
                         return true;
+                    }
                 }
             }
         return false;
     }
+
+    private void buildDerivation(Constraint lockedConstraint, Constraint reducibleConstraint,
+                                 BitSet removableNotes, List<Position> toBeRemovedFrom){
+                            /* since the derivations seem to be never used, I'm a bit sloppy here...
+                            *  as Blocks the intersecting constraints are added
+                            *  as fields all fields that have a note removed are added*/
+
+        int first = removableNotes.nextSetBit(0);
+
+        LockedCandidatesDerivation lastDerivation = new LockedCandidatesDerivation();
+        lastDerivation.setLockedConstraint(lockedConstraint);
+        lastDerivation.setReducibleConstraint(reducibleConstraint);
+        lastDerivation.setRemovableNotes(removableNotes);
+        BitSet relevantCandidates = new BitSet();
+        relevantCandidates.set(first);
+        for(Position p : toBeRemovedFrom)
+            if(sudoku.getCurrentCandidates(p).get(first)){
+                BitSet irrelevantCandidates = (BitSet) sudoku.getCurrentCandidates(p).clone();
+                irrelevantCandidates.clear(first);
+                lastDerivation.addDerivationField(new DerivationField(p,relevantCandidates,irrelevantCandidates));
+            }
+        //Todo better: list fields where it is removed
+        lastDerivation.setDescription("Note "+(first+1) );
+        this.lastDerivation = lastDerivation;
+
+    }
+
+
 
     /**
      * Determines whether Lists a,b have a common(by equals) element
@@ -147,7 +155,7 @@ public class LockedCandandidatesHelper extends SolveHelper {
         return false;
     }
 
-    private static <T> List<T> intersection(List<T> a, List<T> b){
+    public static <T> List<T> intersection(List<T> a, List<T> b){
         List <T> intersection = new ArrayList<>();
         for (T t1: a)
             for (T t2: b)
@@ -164,16 +172,11 @@ public class LockedCandandidatesHelper extends SolveHelper {
     }
 
     private BitSet collectNotes(List<Position> l){
-        if(l.isEmpty())
-            return new BitSet();
-        else{
-            BitSet merged = new BitSet();
+        BitSet merged = new BitSet();
+        if(!l.isEmpty())
             for(Position p: l)
                 merged.or(sudoku.getCurrentCandidates(p));
-            return merged;
-        }
 
+        return merged;
     }
-
-
 }

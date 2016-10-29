@@ -12,6 +12,7 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
+
 import de.sudoq.controller.sudoku.FieldViewPainter;
 import de.sudoq.controller.sudoku.FieldViewStates;
 import de.sudoq.controller.sudoku.InputListener;

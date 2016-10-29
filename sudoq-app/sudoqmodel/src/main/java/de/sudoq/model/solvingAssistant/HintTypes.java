@@ -5,11 +5,21 @@ package de.sudoq.model.solvingAssistant;
  */
 public enum HintTypes {
     LastDigit,
+
+    LastCandidate,
+
     NakedSingle,
     NakedPair,
     NakedTriple,
     NakedQuadruple,
     NakedQuintuple,
+
+    HiddenSingle,
+    HiddenPair,
+    HiddenTriple,
+    HiddenQuadruple,
+    HiddenQuintuple,
+
     LockedCandidatesExternal,
     XWing,
     Backtracking;

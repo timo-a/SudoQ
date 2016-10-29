@@ -2,15 +2,17 @@ package de.sudoq.controller.sudoku;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 
 import java.util.BitSet;
 
 import de.sudoq.R;
 import de.sudoq.controller.menus.Utility;
 import de.sudoq.model.solverGenerator.solution.LastDigitDerivation;
+import de.sudoq.model.solverGenerator.solution.LockedCandidatesDerivation;
 import de.sudoq.model.solverGenerator.solution.NakedSetDerivation;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
+import de.sudoq.model.solverGenerator.solution.XWingDerivation;
+import de.sudoq.model.sudoku.CandidateSet;
 
 /**
  * Created by timo on 04.10.16.
@@ -20,43 +22,30 @@ public class HintFormulator {
         String text;
         Log.d("HintForm",sd.getType().toString());
         switch (sd.getType()){
-            case LastDigit:   text = lastDigitText(context, sd);    break;
+            case LastDigit:     text = lastDigitText(context, sd);     break;
 
-            case NakedSingle:{
-                BitSet bs = ((NakedSetDerivation) sd).getSubsetMembers().get(0).getRelevantCandidates();
-                int note = bs.nextSetBit(0)+1;
-                StringBuilder sb = new StringBuilder();
-                sb.append("Look there's a naked single! ");
-                sb.append(note);
-                sb.append(" is the only note left in the highlighted field. It can be set there and removed from all other Fields in this group");
-                text = sb.toString();}
-                break;
+            case LastCandidate: text = lastCandidateText(context, sd); break;
+
+            case NakedSingle:   text = nakedSingleText(context, sd);   break;
 
             case NakedPair:
             case NakedTriple:
             case NakedQuadruple:
-            case NakedQuintuple:
-                BitSet bs = ((NakedSetDerivation) sd).getSubsetCandidates();
+            case NakedQuintuple: text = nakedMultiple(context, sd);    break;
 
-                StringBuilder sb = new StringBuilder();
-                sb.append("Look there's a naked set! {");
+            case HiddenSingle:   text = hiddenSingleText(context, sd); break;
 
-                int i = bs.nextSetBit(0);
+            case HiddenPair:
+            case HiddenTriple:
+            case HiddenQuadruple:
+            case HiddenQuintuple: text = hiddenMultiple(context, sd);  break;
 
-                sb.append(i+1);
+            case LockedCandidatesExternal: text = lockedCandidates(context, sd);  break;
 
-                for (i=bs.nextSetBit(i+1); i >= 0; i = bs.nextSetBit(i+1)) {
-                    sb.append(',');
-                    sb.append(i+1);
-                }
-
-                sb.append("} will in some way be distributed among the highlighted fields. They can be removed from all other fields in this group");
-                text = sb.toString();
-                break;
+            case XWing: text = xWing(context, sd); break;
 
             case Backtracking:
-                text = context.getString(R.string.hint_backtracking);
-                break;
+                text = context.getString(R.string.hint_backtracking);  break;
             default:
                 text = "We found a hint, but did not implement a representation yet.";
         }
@@ -72,6 +61,81 @@ public class HintFormulator {
         return context.getString(R.string.hint_lastdigit).replace("{shape}"      ,shapeString)
                                                          .replace("{determiner}" ,shapeDeterminer)
                                                          .replace("{suffix}"     ,highlightSuffix);
+    }
+
+    private static String lastCandidateText(Context context, SolveDerivation sd){
+        StringBuilder sb = new StringBuilder();
+        sb.append("There's only one candidate left in the highlighted Field!");
+        return sb.toString();
+    }
+
+
+    private static String nakedSingleText(Context context, SolveDerivation sd){
+        BitSet bs = ((NakedSetDerivation) sd).getSubsetMembers().get(0).getRelevantCandidates();
+        int note = bs.nextSetBit(0)+1;
+        StringBuilder sb = new StringBuilder();
+        sb.append("Look there's a naked single! ");
+        sb.append(note);
+        sb.append(" is the only note left in the highlighted field. It can be set there and removed from all other Fields in this group");
+        return sb.toString();
+    }
+
+    private static String nakedMultiple(Context context, SolveDerivation sd){
+        BitSet bs = ((NakedSetDerivation) sd).getSubsetCandidates();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Look there's a naked set! {");
+
+        int i = bs.nextSetBit(0);
+
+        sb.append(i+1);
+
+        for (i=bs.nextSetBit(i+1); i >= 0; i = bs.nextSetBit(i+1)) {
+            sb.append(',');
+            sb.append(i+1);
+        }
+
+        sb.append("} will in some way be distributed among the highlighted fields. They can be removed from all other fields in this group");
+        return sb.toString();
+    }
+
+    private static String hiddenSingleText(Context context, SolveDerivation sd){//TODO this should never be used but already be taken by a special hit that just says: Look at this field, only one left can go;
+        BitSet bs = ((NakedSetDerivation) sd).getSubsetMembers().get(0).getRelevantCandidates();
+        int note = bs.nextSetBit(0)+1;
+        StringBuilder sb = new StringBuilder();
+        sb.append("Look there's a hidden single! ");
+        sb.append(note);
+        sb.append(" is the only note left in the highlighted field. It can be set there.");
+        return sb.toString();
+    }
+
+    private static String hiddenMultiple(Context context, SolveDerivation sd){
+        CandidateSet bs = ((NakedSetDerivation) sd).getSubsetCandidates();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Look there's a hidden set! {");
+
+        int[] setCandidates = bs.getSetBits();
+
+        sb.append(setCandidates[0]+1);
+
+        for (int i=1; i < setCandidates.length; i++) {
+            sb.append(',');
+            sb.append(setCandidates[i]+1);
+        }
+
+        sb.append("} will in some way be distributed among the highlighted fields. Therefore any other candidates in these fields can be removed.");
+        return sb.toString();
+    }
+
+    private static String lockedCandidates(Context context, SolveDerivation sd){
+        int note = ((LockedCandidatesDerivation) sd).getNote();
+        return "there's a locked candidate: "+note+" appears only once in the blue group. It can therefore be deleted in all other fields in the green row/col/block?.";
+    }
+
+    private static String xWing(Context context, SolveDerivation sd){
+        //int note = ((XWingDerivation) sd).getNote();
+        return "If you look at the intersections of green and blue groups some notes appear nowhere else in the lue groups. They can therefore be deleted in the green ones.";
     }
 
 }

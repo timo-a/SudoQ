@@ -5,8 +5,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.sudoq.model.Utility;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
@@ -26,6 +28,8 @@ public class SolverIntegrationTests {
 
 	@Before
 	public void before() {
+		Utility.copySudokus();
+
 		sudoku = new SudokuBuilder(SudokuTypes.standard9x9).createSudoku();
 		sudoku.setComplexity(Complexity.arbitrary);
 		solver = new Solver(sudoku);

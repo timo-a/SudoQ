@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.CheckBox;
+
 import de.sudoq.R;
 import de.sudoq.controller.menus.NewSudokuConfigurationActivity;
 import de.sudoq.model.game.Assistances;

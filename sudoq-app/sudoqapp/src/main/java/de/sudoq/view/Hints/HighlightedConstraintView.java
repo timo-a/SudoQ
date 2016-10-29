@@ -12,7 +12,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.util.Log;
 import android.view.View;
 
 import de.sudoq.controller.sudoku.Symbol;
@@ -90,6 +89,10 @@ public class HighlightedConstraintView extends View {
 
 		//canvas.drawLine(0, 0, 600, 600, paint);
 
+		int   topMargin = sl.getCurrentTopMargin();
+		int  leftMargin = sl.getCurrentLeftMargin();
+		int  spacing    = sl.getCurrentSpacing();
+
 		for (Position p : c) {
 					/* determine whether the position p is in the (right|left|top|bottom) border of its block constraint.
 					 * test for 0 to avoid illegalArgExc for neg. vals
@@ -99,46 +102,40 @@ public class HighlightedConstraintView extends View {
 			boolean isRight  =                  !c.includes(Position.get(p.getX() + 1, p.getY()));
 			boolean isTop    = p.getY() == 0 || !c.includes(Position.get(p.getX(), p.getY() - 1));
 			boolean isBottom =                  !c.includes(Position.get(p.getX(), p.getY() + 1));
-					/* apparently:
-					 *   00 10 20 30 ...
-					 *   01 11
-					 *   02    xy
-					 *   .
-					 *   .
-					 * */
+					// (0,0) is in the top right
 
 
 			//deklariert hier, weil wir es nicht früher brauchen, effizienter wäre weiter oben
-			int fieldSizeAndSpacing = sl.getCurrentFieldViewSize() + sl.getCurrentSpacing();
+			int fieldSizeAndSpacing = sl.getCurrentFieldViewSize() + spacing;
 					/* these first 4 seem similar. drawing the black line around?*/
 					/* fields that touch the edge: Paint your edge but leave space at the corners*/
 				//paint.setColor(Color.GREEN);
 
-			float  leftX = sl.getCurrentLeftMargin() +  p.getX()      * fieldSizeAndSpacing - sl.getCurrentSpacing()/2 ;
-			float rightX = sl.getCurrentLeftMargin() + (p.getX() + 1) * fieldSizeAndSpacing - sl.getCurrentSpacing()/2;
+			float  leftX = leftMargin +  p.getX()      * fieldSizeAndSpacing - spacing/2 ;
+			float rightX = leftMargin + (p.getX() + 1) * fieldSizeAndSpacing - spacing/2;
 
-			float    topY = sl.getCurrentTopMargin() +  p.getY()      * fieldSizeAndSpacing - sl.getCurrentSpacing()/2;
-			float bottomY = sl.getCurrentTopMargin() + (p.getY() + 1) * fieldSizeAndSpacing - sl.getCurrentSpacing()/2;
+			float    topY = topMargin +  p.getY()      * fieldSizeAndSpacing - spacing/2;
+			float bottomY = topMargin + (p.getY() + 1) * fieldSizeAndSpacing - spacing/2;
 
 			if (isLeft) {
-				float startY = sl.getCurrentTopMargin() +  p.getY()      * fieldSizeAndSpacing + edgeRadius;
-				float  stopY = sl.getCurrentTopMargin() + (p.getY() + 1) * fieldSizeAndSpacing - edgeRadius - sl.getCurrentSpacing();
+				float startY = topMargin +  p.getY()      * fieldSizeAndSpacing + edgeRadius;
+				float  stopY = topMargin + (p.getY() + 1) * fieldSizeAndSpacing - edgeRadius - spacing;
 				canvas.drawLine(leftX, startY, leftX, stopY, paint);
 			}
 			if (isRight) {
-				float startY = sl.getCurrentTopMargin() +  p.getY()      * fieldSizeAndSpacing + edgeRadius;
-				float  stopY = sl.getCurrentTopMargin() + (p.getY() + 1) * fieldSizeAndSpacing - edgeRadius - sl.getCurrentSpacing();
+				float startY = topMargin +  p.getY()      * fieldSizeAndSpacing + edgeRadius;
+				float  stopY = topMargin + (p.getY() + 1) * fieldSizeAndSpacing - edgeRadius - spacing;
 				canvas.drawLine(rightX, startY, rightX, stopY, paint);
 			}
 			if (isTop) {
-				float startX = sl.getCurrentLeftMargin() +  p.getX()      * fieldSizeAndSpacing + edgeRadius;
-				float  stopX = sl.getCurrentLeftMargin() + (p.getX() + 1) * fieldSizeAndSpacing - edgeRadius - sl.getCurrentSpacing();
+				float startX = leftMargin +  p.getX()      * fieldSizeAndSpacing + edgeRadius;
+				float  stopX = leftMargin + (p.getX() + 1) * fieldSizeAndSpacing - edgeRadius - spacing;
 
 				canvas.drawLine(startX, topY, stopX, topY, paint);
 			}
 			if (isBottom) {
-				float startX = sl.getCurrentLeftMargin() +  p.getX()      * fieldSizeAndSpacing + edgeRadius;
-				float  stopX = sl.getCurrentLeftMargin() + (p.getX() + 1) * fieldSizeAndSpacing - edgeRadius - sl.getCurrentSpacing();
+				float startX = leftMargin +  p.getX()      * fieldSizeAndSpacing + edgeRadius;
+				float  stopX = leftMargin + (p.getX() + 1) * fieldSizeAndSpacing - edgeRadius - spacing;
 
 				canvas.drawLine(startX, bottomY, stopX, bottomY, paint);
 			}
@@ -146,12 +143,12 @@ public class HighlightedConstraintView extends View {
 					/* Fields at corners of their block draw a circle for a round circumference*/
 
 			paint.setStyle(Paint.Style.FILL_AND_STROKE);
-			float radius  = edgeRadius +sl.getCurrentSpacing()/2;
+			float radius  = edgeRadius +spacing/2;
 			short angle = 90+10;
 			/*TopLeft*/
 			if (isLeft && isTop) {
-				float centerX = sl.getCurrentLeftMargin() + p.getX() * fieldSizeAndSpacing + edgeRadius;
-				float centerY = sl.getCurrentTopMargin()  + p.getY() * fieldSizeAndSpacing + edgeRadius;
+				float centerX = leftMargin + p.getX() * fieldSizeAndSpacing + edgeRadius;
+				float centerY = topMargin  + p.getY() * fieldSizeAndSpacing + edgeRadius;
 
 				oval.set( centerX - radius, centerY - radius, centerX + radius, centerY + radius);
 				canvas.drawArc(oval, 180 -5, angle, false, paint);
@@ -159,8 +156,8 @@ public class HighlightedConstraintView extends View {
 
 			/* Top Right*/
 			if (isRight && isTop) {
-				float centerX = sl.getCurrentLeftMargin() + (p.getX() + 1) * fieldSizeAndSpacing - sl.getCurrentSpacing() - edgeRadius;
-				float centerY = sl.getCurrentTopMargin()  +  p.getY()      * fieldSizeAndSpacing + edgeRadius;
+				float centerX = leftMargin + (p.getX() + 1) * fieldSizeAndSpacing - spacing - edgeRadius;
+				float centerY = topMargin  +  p.getY()      * fieldSizeAndSpacing + edgeRadius;
 
 				oval.set( centerX - radius, centerY - radius, centerX + radius, centerY + radius);
 				canvas.drawArc(oval, 270 -5, angle, false, paint);
@@ -168,8 +165,8 @@ public class HighlightedConstraintView extends View {
 
 					/*Bottom Left*/
 			if (isLeft && isBottom) {
-				float centerX = sl.getCurrentLeftMargin() +  p.getX()      * fieldSizeAndSpacing + edgeRadius;
-				float centerY = sl.getCurrentTopMargin()  + (p.getY() + 1) * fieldSizeAndSpacing - edgeRadius - sl.getCurrentSpacing();
+				float centerX = leftMargin +  p.getX()      * fieldSizeAndSpacing + edgeRadius;
+				float centerY = topMargin  + (p.getY() + 1) * fieldSizeAndSpacing - edgeRadius - spacing;
 
 				oval.set( centerX - radius, centerY - radius, centerX + radius, centerY + radius);
 				canvas.drawArc(oval, 90 -5, angle, false, paint);
@@ -178,8 +175,8 @@ public class HighlightedConstraintView extends View {
 
 					/*BottomRight*/
 			if (isRight && isBottom) {
-				float centerX = sl.getCurrentLeftMargin() + (p.getX() + 1) * fieldSizeAndSpacing - edgeRadius - sl.getCurrentSpacing();
-				float centerY = sl.getCurrentTopMargin()  + (p.getY() + 1) * fieldSizeAndSpacing - edgeRadius - sl.getCurrentSpacing();
+				float centerX = leftMargin + (p.getX() + 1) * fieldSizeAndSpacing - edgeRadius - spacing;
+				float centerY = topMargin  + (p.getY() + 1) * fieldSizeAndSpacing - edgeRadius - spacing;
 
 				oval.set( centerX - radius, centerY - radius, centerX + radius, centerY + radius);
 				canvas.drawArc(oval, 0 -5, angle, false, paint);
@@ -199,17 +196,17 @@ public class HighlightedConstraintView extends View {
 			if (isRight && !isBottom && !belowRightMember) {
 				canvas.drawLine(
 						rightX,
-						sl.getCurrentTopMargin()  + (p.getY() + 1) * fieldSizeAndSpacing - sl.getCurrentSpacing() - edgeRadius,
+						topMargin  + (p.getY() + 1) * fieldSizeAndSpacing - spacing - edgeRadius,
 						rightX,
-						sl.getCurrentTopMargin()  + (p.getY() + 1) * fieldSizeAndSpacing + edgeRadius,
+						topMargin  + (p.getY() + 1) * fieldSizeAndSpacing + edgeRadius,
 						paint);
 			}
 					/*For a field at the bottom, initializeWith edge to right neighbour */
 			if (isBottom && !isRight && !belowRightMember) {
 				canvas.drawLine(
-						sl.getCurrentLeftMargin() + (p.getX() + 1) * fieldSizeAndSpacing - edgeRadius - sl.getCurrentSpacing(),
+						leftMargin + (p.getX() + 1) * fieldSizeAndSpacing - edgeRadius - spacing,
 						bottomY,
-						sl.getCurrentLeftMargin() + (p.getX() + 1) * fieldSizeAndSpacing + edgeRadius,
+						leftMargin + (p.getX() + 1) * fieldSizeAndSpacing + edgeRadius,
 						bottomY,
 						paint);
 			}
@@ -217,17 +214,17 @@ public class HighlightedConstraintView extends View {
 			if (isLeft && !isTop && (p.getX() == 0 || !c.includes(Position.get(p.getX() - 1, p.getY() - 1)))) {
 				canvas.drawLine(
 				                leftX
-				               ,sl.getCurrentTopMargin()  + p.getY() * fieldSizeAndSpacing - sl.getCurrentSpacing() - edgeRadius
+				               ,topMargin  + p.getY() * fieldSizeAndSpacing - spacing - edgeRadius
 				               ,leftX
-				               ,sl.getCurrentTopMargin()  + p.getY() * fieldSizeAndSpacing + edgeRadius
+				               ,topMargin  + p.getY() * fieldSizeAndSpacing + edgeRadius
 				               ,paint);
 			}
 
 					/*For a field at the top initializeWith to the left*/
 			if (isTop && !isLeft && (p.getY() == 0 || !c.includes(Position.get(p.getX() - 1, p.getY() - 1)))) {
-				canvas.drawLine(sl.getCurrentLeftMargin() + p.getX() * fieldSizeAndSpacing - edgeRadius - sl.getCurrentSpacing()
+				canvas.drawLine(leftMargin + p.getX() * fieldSizeAndSpacing - edgeRadius - spacing
 				               ,topY
-				               ,sl.getCurrentLeftMargin() + p.getX() * fieldSizeAndSpacing + edgeRadius
+				               ,leftMargin + p.getX() * fieldSizeAndSpacing + edgeRadius
 				               ,topY
 				               ,paint
 				               );

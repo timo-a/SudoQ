@@ -7,16 +7,13 @@
  */
 package de.sudoq.controller;
 
-import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.widget.HeaderViewListAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;

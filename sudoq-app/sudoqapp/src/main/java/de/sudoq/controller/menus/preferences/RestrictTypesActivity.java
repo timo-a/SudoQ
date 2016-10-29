@@ -7,22 +7,19 @@
  */
 package de.sudoq.controller.menus.preferences;
 
-import java.util.List;
-
+import android.content.res.Configuration;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
-import android.content.res.Configuration;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.Toast;
+
 import de.sudoq.R;
 import de.sudoq.controller.SudoqListActivity;
 import de.sudoq.model.profile.Profile;

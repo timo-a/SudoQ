@@ -7,23 +7,6 @@
  */
 package de.sudoq.controller.sudoku;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.Stack;
-
-import android.content.Context;
-import android.graphics.Canvas;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.gesture.GestureOverlayView;
@@ -33,8 +16,12 @@ import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
@@ -47,6 +34,17 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.Stack;
+
 import de.sudoq.R;
 import de.sudoq.controller.SudoqActivitySherlock;
 import de.sudoq.controller.menus.Utility;
@@ -83,7 +81,7 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 	/**
 	 * Konstante für das Speichern der Game ID
 	 */
-	private static final int SAVE_GAME_ID = 0;
+	private static final int SAVE_GAME_ID = 0;//TODO make enum
 
 	/**
 	 * Konstante für das Speichern der X-Koordinate der ausgewählten FieldView
@@ -988,9 +986,9 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 	private void updateButtons() {
 		Buttons.redoButton.setEnabled(game.getStateHandler().canRedo() && !actionTreeShown);
 		Buttons.undoButton.setEnabled(game.getStateHandler().canUndo() && !actionTreeShown);
-		Buttons.actionTreeButton.setEnabled(!actionTreeShown);
+		Buttons. actionTreeButton.setEnabled(!actionTreeShown);
 		Buttons.assistancesButton.setEnabled(!actionTreeShown && !finished);
-		Buttons.gestureButton.setEnabled(!actionTreeShown);
+		Buttons.    gestureButton.setEnabled(!actionTreeShown);
 		this.mediator.setKeyboardState(!finished && this.sudokuView.getCurrentFieldView() != null);
 	}
 

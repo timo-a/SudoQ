@@ -7,9 +7,6 @@
  */
 package de.sudoq.controller.sudoku;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.gesture.Gesture;
 import android.gesture.GestureOverlayView;
 import android.gesture.GestureOverlayView.OnGesturePerformedListener;
@@ -21,6 +18,10 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import de.sudoq.R;
 import de.sudoq.model.game.Assistances;
 import de.sudoq.model.game.Game;

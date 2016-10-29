@@ -7,17 +7,16 @@
  */
 package de.sudoq.controller;
 
-import java.io.File;
-
-import android.support.v7.app.ActionBarActivity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
+import java.io.File;
+
 import de.sudoq.R;
 import de.sudoq.controller.tutorial.TutorialActivity;
 import de.sudoq.model.files.FileManager;

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Stack;
 
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
+import de.sudoq.model.solvingAssistant.HintTypes;
+import de.sudoq.model.sudoku.CandidateSet;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
 
@@ -27,7 +29,7 @@ public abstract class SubsetHelper extends SolveHelper {
 	/**
 	 * Das BitSet, welches das gerade untersuchte Subset darstellt. Aus Performancegründen nicht lokal definiert.
 	 */
-	protected BitSet currentSet;
+	protected CandidateSet currentSet;
 
 	/**
 	 * Die Positionen, welche zum aktuell untersuchten Subset gehören. Aus Performancegründen nicht lokal definiert.
@@ -37,12 +39,16 @@ public abstract class SubsetHelper extends SolveHelper {
 	/**
 	 * Ein BitSet für lokale Kopien zum vergleichen. Aus Performancegründen nicht lokal definiert.
 	 */
-	protected BitSet localCopy;
+	protected CandidateSet localCopy;
 
 	/**
 	 * Speichert alle Constraints des zugrundeliegenden Sudokus.
 	 */
 	protected ArrayList<Constraint> allConstraints;
+
+	protected HintTypes hintType;
+
+	protected static HintTypes labels[];
 
 	/** Constructors */
 
@@ -61,15 +67,18 @@ public abstract class SubsetHelper extends SolveHelper {
 	 */
 	protected SubsetHelper(SolverSudoku sudoku, int level, int complexity) {
 		super(sudoku, complexity);
-		if (level <= 0)
-			throw new IllegalArgumentException("level <= 0 : " + level);
+		if (level <= 0 || level > labels.length)
+			throw new IllegalArgumentException("level must be ∈ [1,"+labels.length+"] but is "+level);
+
+		hintType = labels[level-1];
+
 		this.level = level;
 
 		this.allConstraints  = this.sudoku.getSudokuType().getConstraints();
 		this.constraintSet   = new BitSet();
-		this.currentSet      = new BitSet();
+		this.currentSet      = new CandidateSet();
 		this.subsetPositions = new Stack<>();
-		this.localCopy       = new BitSet();
+		this.localCopy       = new CandidateSet();
 	}
 
 	/** Methods */
@@ -257,8 +266,8 @@ public abstract class SubsetHelper extends SolveHelper {
 		return denseSet;
 	}
 
-	public static BitSet inflate(BitSet denseSet, BitSet pattern){
-		BitSet sparseSet = new BitSet();
+	public static CandidateSet inflate(BitSet denseSet, BitSet pattern){
+		CandidateSet sparseSet = new CandidateSet();
 
 		int denseIndex;
 		int sparseIndex;

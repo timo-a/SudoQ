@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
+
 import de.sudoq.R;
 import de.sudoq.controller.SudoqActivitySherlock;
 import de.sudoq.controller.sudoku.SudokuActivity;

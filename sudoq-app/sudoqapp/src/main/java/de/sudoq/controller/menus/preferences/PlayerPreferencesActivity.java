@@ -7,20 +7,19 @@
  */
 package de.sudoq.controller.menus.preferences;
 
-import java.util.List;
-
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
-
 import android.widget.CheckBox;
 import android.widget.EditText;
+
+import java.util.List;
+
 import de.sudoq.R;
 import de.sudoq.controller.menus.ProfileListActivity;
 import de.sudoq.controller.menus.StatisticsActivity;

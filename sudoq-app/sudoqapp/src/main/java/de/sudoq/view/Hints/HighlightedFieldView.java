@@ -12,11 +12,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.util.Log;
 import android.view.View;
 
 import de.sudoq.controller.sudoku.Symbol;
-import de.sudoq.model.solverGenerator.solution.DerivationField;
-import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Field;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.view.SudokuLayout;
@@ -67,9 +66,9 @@ public class HighlightedFieldView extends View {
 		paint.setColor(marginColor);
 		int thickness = 10;
 		paint.setStrokeWidth(thickness*sl.getCurrentSpacing());
-
+		style = paint.getStyle();
 	}
-
+Paint.Style style;
 	/** Methods */
 
 	/**
@@ -84,29 +83,39 @@ public class HighlightedFieldView extends View {
 	public void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		//Todo use canvas.drawRoundRect();
+		drawNewMethod(position, canvas, marginColor);//red
+
+	}
+
+	private void drawOldMethod(Position p, Canvas canvas){
 		float edgeRadius = sl.getCurrentFieldViewSize() / 20.0f;
 		paint.reset();
-		Position p = position;
+		int thickness = 10;
+		paint.setStrokeWidth(thickness*sl.getCurrentSpacing());
+
 
 		//deklariert hier, weil wir es nicht früher brauchen, effizienter wäre weiter oben
 		int fieldSizeAndSpacing = sl.getCurrentFieldViewSize() + sl.getCurrentSpacing();
 		/* these first 4 seem similar. drawing the black line around?*/
 		/* fields that touch the edge: Paint your edge but leave space at the corners*/
-		//paint.setColor(Color.GREEN);
+
+		paint.reset();
+		paint.setStrokeWidth(thickness*sl.getCurrentSpacing());
+		paint.setColor(marginColor);
 
 		float leftX,rightX, topY, bottomY;
 
-		 leftX = sl.getCurrentLeftMargin() +  p.getX()      * fieldSizeAndSpacing - sl.getCurrentSpacing()/2;
+		leftX = sl.getCurrentLeftMargin() +  p.getX()      * fieldSizeAndSpacing - sl.getCurrentSpacing()/2;
 		rightX = sl.getCurrentLeftMargin() + (p.getX() + 1) * fieldSizeAndSpacing - sl.getCurrentSpacing()/2;
 
-		   topY = sl.getCurrentTopMargin() +  p.getY()      * fieldSizeAndSpacing - sl.getCurrentSpacing()/2;
+		topY = sl.getCurrentTopMargin() +  p.getY()      * fieldSizeAndSpacing - sl.getCurrentSpacing()/2;
 		bottomY = sl.getCurrentTopMargin() + (p.getY() + 1) * fieldSizeAndSpacing - sl.getCurrentSpacing()/2;
 
 		float startY, stopY, startX, stopX;
 
 		/* left edge */
 		startY = sl.getCurrentTopMargin() +  p.getY()      * fieldSizeAndSpacing + edgeRadius;
-		 stopY = sl.getCurrentTopMargin() + (p.getY() + 1) * fieldSizeAndSpacing - edgeRadius - sl.getCurrentSpacing();
+		stopY = sl.getCurrentTopMargin() + (p.getY() + 1) * fieldSizeAndSpacing - edgeRadius - sl.getCurrentSpacing();
 		canvas.drawLine(leftX, startY, leftX, stopY, paint);
 
 		/* right edge */
@@ -114,7 +123,7 @@ public class HighlightedFieldView extends View {
 
 		/* top edge */
 		startX = sl.getCurrentLeftMargin() +  p.getX()      * fieldSizeAndSpacing + edgeRadius;
-		 stopX = sl.getCurrentLeftMargin() + (p.getX() + 1) * fieldSizeAndSpacing - edgeRadius - sl.getCurrentSpacing();
+		stopX = sl.getCurrentLeftMargin() + (p.getX() + 1) * fieldSizeAndSpacing - edgeRadius - sl.getCurrentSpacing();
 		canvas.drawLine(startX, topY, stopX, topY, paint);
 
 		/* bottom edge */
@@ -156,10 +165,28 @@ public class HighlightedFieldView extends View {
 		oval.set( centerX - radius, centerY - radius, centerX + radius, centerY + radius);
 		canvas.drawArc(oval, 0 -5, angle, false, paint);
 
-		paint.setColor(Color.BLUE);
 	}
 
 
+	private void drawNewMethod(Position p, Canvas canvas, int color){
+		float edgeRadius = sl.getCurrentFieldViewSize() / 20.0f;
+		paint.reset();
+		paint.setColor(color);
+		paint.setStyle(Paint.Style.STROKE);
+		int thickness = 10;
+		paint.setStrokeWidth(thickness*sl.getCurrentSpacing());
+
+		int fieldSizeAndSpacing = sl.getCurrentFieldViewSize() + sl.getCurrentSpacing();
+
+		float left   = sl.getCurrentLeftMargin() +  p.getX()      * fieldSizeAndSpacing - sl.getCurrentSpacing()/2;
+		float top    = sl.getCurrentTopMargin()  +  p.getY()      * fieldSizeAndSpacing - sl.getCurrentSpacing()/2;
+		float right  = sl.getCurrentLeftMargin() + (p.getX() + 1) * fieldSizeAndSpacing - sl.getCurrentSpacing()/2;
+		float bottom = sl.getCurrentTopMargin()  + (p.getY() + 1) * fieldSizeAndSpacing - sl.getCurrentSpacing()/2;
+		canvas.drawRoundRect(new RectF(left, top, right, bottom)
+		                    ,edgeRadius +sl.getCurrentSpacing()/2
+		                    ,edgeRadius +sl.getCurrentSpacing()/2, paint);
+
+	}
 
 
 

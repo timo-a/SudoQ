@@ -7,13 +7,6 @@
  */
 package de.sudoq.controller.menus;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.TimeZone;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,6 +22,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.TimeZone;
+
 import de.sudoq.R;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.game.GameData;

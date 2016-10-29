@@ -7,13 +7,14 @@
  */
 package de.sudoq.controller;
 
-import de.sudoq.R;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import de.sudoq.R;
 import de.sudoq.controller.tutorial.TutorialActivity;
 import de.sudoq.model.files.FileManager;
 

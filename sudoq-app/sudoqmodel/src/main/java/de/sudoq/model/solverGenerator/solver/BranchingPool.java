@@ -5,6 +5,7 @@ import java.util.BitSet;
 import java.util.List;
 import java.util.Stack;
 
+import de.sudoq.model.sudoku.CandidateSet;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
 
@@ -101,7 +102,7 @@ class BranchingPool {
 		/**
 		 * Eine Map, welche für jede Position dessen Kandidaten vor dem Branchen speichert.
 		 */
-		PositionMap<BitSet> candidates;
+		PositionMap<CandidateSet> candidates;
 
 		/**
 		 * Der Komplexitätswert für diesen Branch

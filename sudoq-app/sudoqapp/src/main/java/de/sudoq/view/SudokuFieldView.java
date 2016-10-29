@@ -7,15 +7,15 @@
  */
 package de.sudoq.view;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import java.util.ArrayList;
+
 import de.sudoq.controller.sudoku.FieldInteractionListener;
 import de.sudoq.controller.sudoku.FieldViewPainter;
 import de.sudoq.controller.sudoku.FieldViewStates;
@@ -152,10 +152,6 @@ public class SudokuFieldView extends View implements ModelChangeListener<Field>,
 	@Override
 	public void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-		Paint dp = new Paint();
-		dp.setColor(Color.CYAN);
-		dp.setStrokeWidth(50);
-		canvas.drawLine(0,80,120,80,dp);
 		//Log.d(LOG_TAG, "SudokuFieldView.onDraw()");
 
 		this.symbol = Symbol.getInstance().getMapping(this.field.getCurrentValue());

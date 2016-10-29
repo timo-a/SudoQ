@@ -1,8 +1,8 @@
 package de.sudoq.controller.menus;
 
 import android.content.Context;
+
 import de.sudoq.R;
-import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Utils;
 import de.sudoq.model.sudoku.Utils.ConstraintShape;
 import de.sudoq.model.sudoku.complexity.Complexity;
