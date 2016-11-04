@@ -1,4 +1,4 @@
-package de.sudoq.controller.sudoku;
+package de.sudoq.controller.sudoku.hints;
 
 import android.content.Context;
 import android.util.Log;

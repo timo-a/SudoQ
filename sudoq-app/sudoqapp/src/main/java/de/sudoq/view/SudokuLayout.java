@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import de.sudoq.controller.sudoku.BoardPainter;
 import de.sudoq.controller.sudoku.FieldInteractionListener;
 import de.sudoq.controller.sudoku.FieldViewPainter;
-import de.sudoq.controller.sudoku.HintPainter;
+import de.sudoq.controller.sudoku.hints.HintPainter;
 import de.sudoq.controller.sudoku.ObservableFieldInteraction;
 import de.sudoq.controller.sudoku.SudokuActivity;
 import de.sudoq.model.game.Assistances;

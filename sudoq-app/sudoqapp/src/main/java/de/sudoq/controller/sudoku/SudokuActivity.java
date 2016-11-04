@@ -8,6 +8,7 @@
 package de.sudoq.controller.sudoku;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.gesture.GestureOverlayView;
 import android.gesture.GestureStore;
@@ -16,6 +17,8 @@ import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -48,6 +51,7 @@ import java.util.Stack;
 import de.sudoq.R;
 import de.sudoq.controller.SudoqActivitySherlock;
 import de.sudoq.controller.menus.Utility;
+import de.sudoq.controller.sudoku.hints.HintFormulator;
 import de.sudoq.model.actionTree.ActionTreeElement;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.game.Assistances;
@@ -293,6 +297,7 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 	 */
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
 		outState.putFloat(SAVE_ZOOM_FACTOR + "", this.sudokuScrollView.getZoomFactor());
 		outState.putFloat(SAVE_SCROLL_X + "", this.sudokuScrollView.getScrollValueX() - this.sudokuView.getCurrentLeftMargin());
 		outState.putFloat(SAVE_SCROLL_Y + "", this.sudokuScrollView.getScrollValueY() - this.sudokuView.getCurrentTopMargin());
@@ -587,11 +592,25 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 		mode=Mode.Regular;
 	}
 
+	public SudokuController getSudokuController(){
+		return sudokuController;
+	}
+
+	FragmentManager fm = getSupportFragmentManager();
 
 	/**
 	 * Zeigt einen Dialog mit den verfügbaren Hilfestellungen an.
 	 */
 	private void showAssistancesDialog() {
+
+		DialogFragment ad = new AssistancesDialogFragment();
+		ad.show(fm, "assistancesDialog");
+
+
+		/*
+		Bundle args = new Bundle();
+		args.p
+		//
 
 		Stack<CharSequence> itemStack= new Stack<>();
 		itemStack.addAll(Arrays.asList( getString(R.string.sf_sudoku_assistances_solve_surrender)
@@ -640,7 +659,7 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 						break;
 				}
 				/* not inside switch, because they are at variable positions */
-				if (items[item] == getString(R.string.sf_sudoku_assistances_solve_specific)){
+/*				if (items[item] == getString(R.string.sf_sudoku_assistances_solve_specific)){
 					if (!SudokuActivity.this.sudokuController.onSolveCurrent(SudokuActivity.this.sudokuView.getCurrentFieldView().getField())) {
 						Toast.makeText(SudokuActivity.this, R.string.toast_solved_wrong, Toast.LENGTH_SHORT).show();
 					}
@@ -676,6 +695,9 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 		});
 		AlertDialog alert = builder.create();
 		alert.show();
+
+
+		*/
 	}
 
 	/**
@@ -983,7 +1005,7 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 	 * Aktualisiert alle Buttons, also den Redo, Undo und ActionTree-Button,
 	 * sowie die Tastatur
 	 */
-	private void updateButtons() {
+	void updateButtons() {
 		Buttons.redoButton.setEnabled(game.getStateHandler().canRedo() && !actionTreeShown);
 		Buttons.undoButton.setEnabled(game.getStateHandler().canUndo() && !actionTreeShown);
 		Buttons. actionTreeButton.setEnabled(!actionTreeShown);
