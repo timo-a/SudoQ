@@ -98,7 +98,7 @@ public class AssistancesDialogFragment extends DialogFragment {
                 }else if (items[item] == getString(R.string.sf_sudoku_assistances_give_hint)){
                     hint(activity);
                 }
-                activity.updateButtons();
+                activity.getPanel().updateButtons();
             }
         });
 

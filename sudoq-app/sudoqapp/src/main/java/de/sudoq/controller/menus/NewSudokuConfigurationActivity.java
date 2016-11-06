@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import de.sudoq.R;
-import de.sudoq.controller.SudoqActivitySherlock;
+import de.sudoq.controller.SudoqCompatActivity;
 import de.sudoq.controller.menus.preferences.NewSudokuPreferencesActivity;
 import de.sudoq.controller.sudoku.SudokuActivity;
 import de.sudoq.model.game.Game;
@@ -42,7 +42,7 @@ import de.sudoq.model.xml.XmlTree;
  * 
  * Hauptmenü -> "neues Sudoku" führt hierher 
  */
-public class NewSudokuConfigurationActivity extends SudoqActivitySherlock {
+public class NewSudokuConfigurationActivity extends SudoqCompatActivity {
 
 	/** Attributes */
 

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.sudoq.R;
+import de.sudoq.controller.sudoku.board.FieldViewStates;
 import de.sudoq.model.game.Assistances;
 import de.sudoq.model.game.Game;
 import de.sudoq.model.profile.Profile;

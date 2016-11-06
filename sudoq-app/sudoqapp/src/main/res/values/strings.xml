@@ -182,7 +182,7 @@
     
 	<!-- File conventions -->
     <string name="profile_file_prefix"  translatable="false">profile_</string>
-    <string name="game_file_prefix"     translatable="false">game_</string>
+    <string name="game_file_prefix" translatable="false">game_</string>
     <string name="sudoku_file_prefix"   translatable="false">sudoku_</string>
     <string name="current_profile_file" translatable="false">current_profile</string>
     

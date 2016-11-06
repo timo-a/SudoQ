@@ -1,4 +1,4 @@
-package de.sudoq.controller.sudoku;
+package de.sudoq.controller.sudoku.board;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;

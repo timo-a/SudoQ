@@ -124,6 +124,7 @@
     <string name="sf_sudoku_assistances_solve_surrender">Abandonner</string>
     <string name="sf_sudoku_assistances_back_to_valid_state">Retourner au dernier état correct</string>
     <string name="sf_sudoku_assistances_back_to_bookmark">Retourner au dernier signet</string>
+    <string name="sf_sudoku_assistances_give_hint">Donner un indice</string>
     <string name="sf_sudoku_title_gesture_input">Entrée de l’icône par un geste</string>
     <string name="sf_sudoku_title_action_tree">Les dernières actions</string>
     
@@ -171,5 +172,31 @@
     <string name="fab_go_back">Cliquez sur pour supprimer.\nCliquez à nouveau sur le bouton pour arrêter la suppression</string>
     <string name="sf_sudokuloading_title">Sudoku Sauvegardé</string>
     <string name="profile_preference_title_intelligent_assistant">Assistant Intelligent</string>
+
+
+    <!-- Hints TODO TRANSLATE THESE DUMMYS -->
+
+    <string name="hint_lastdigit">Regardez la {forme} marquée! Il ne reste qu\'un seul champ.</string>
+
+
+    <string name="constraintshape_row_accusative_determined"     >row</string>
+    <string name="constraintshape_column_accusative_determined"  >column</string>
+    <string name="constraintshape_diagonal_accusative_determined">diagonal</string>
+    <string name="constraintshape_block_accusative_determined"   >block</string>
+    <string name="constraintshape_other_accusative_determined"   >group</string>
+
+    <string name="gender_maskulin">m</string>
+    <string name="gender_feminin">f</string>
+    <string name="gender_neutral">n</string>
+
+    <string name="feminine_accusative_determiner">die</string>
+    <string name="maskuline_accusative_determiner">den</string>
+    <string name="neutral_accusative_determiner">das</string>
+
+    <string name="feminine_accusative_suffix"></string> <!-- only used in german -->
+    <string name="maskuline_accusative_suffix"></string>
+    <string name="neutral_accusative_suffix"></string>
+
+    <string name="hint_backtracking">As said, I\'m still in development. So I\'m out of ideas and my best advice is to set a bookmark and guess a field.</string>
 
 </resources>

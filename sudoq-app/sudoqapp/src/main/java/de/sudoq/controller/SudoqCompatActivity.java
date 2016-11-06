@@ -21,11 +21,11 @@ import de.sudoq.R;
 import de.sudoq.controller.tutorial.TutorialActivity;
 import de.sudoq.model.files.FileManager;
 
-/** TODO RENAME
+/**
  * Eine Activity, welche die für einwandfreie Funktionalität der SudoQ-App
  * notwendigen Initialisierungsarbeiten ausführt.
  */
-public class SudoqActivitySherlock extends AppCompatActivity {
+public class SudoqCompatActivity extends AppCompatActivity {
 
 	/**
 	 * Initialisiert eine neue Activity, setzt dabei die für die App notwendigen

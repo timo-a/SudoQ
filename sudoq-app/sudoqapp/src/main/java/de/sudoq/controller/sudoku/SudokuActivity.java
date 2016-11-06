@@ -8,7 +8,6 @@
 package de.sudoq.controller.sudoku;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.gesture.GestureOverlayView;
 import android.gesture.GestureStore;
@@ -44,22 +43,19 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Arrays;
 import java.util.Set;
-import java.util.Stack;
 
 import de.sudoq.R;
-import de.sudoq.controller.SudoqActivitySherlock;
+import de.sudoq.controller.SudoqCompatActivity;
 import de.sudoq.controller.menus.Utility;
-import de.sudoq.controller.sudoku.hints.HintFormulator;
+import de.sudoq.controller.sudoku.board.FieldViewPainter;
+import de.sudoq.controller.sudoku.board.FieldViewStates;
 import de.sudoq.model.actionTree.ActionTreeElement;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.game.Assistances;
 import de.sudoq.model.game.Game;
 import de.sudoq.model.game.GameManager;
 import de.sudoq.model.profile.Profile;
-import de.sudoq.model.solverGenerator.solution.SolveDerivation;
-import de.sudoq.model.solvingAssistant.SolvingAssistant;
 import de.sudoq.model.sudoku.Field;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.view.FullScrollLayout;
@@ -73,7 +69,7 @@ import de.sudoq.view.VirtualKeyboardLayout;
  * Spielfeld zu reagieren. Die Klasse wird außerdem benutzt um zu verwalten,
  * welche Navigationselemente dem Nutzer angezeigt werden.
  */
-public class SudokuActivity extends SudoqActivitySherlock implements OnClickListener, ActionListener, ActionTreeNavListener {
+public class SudokuActivity extends SudoqCompatActivity implements OnClickListener, ActionListener, ActionTreeNavListener {
 
 	/** Attributes */
 
@@ -184,7 +180,7 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 	private UserInteractionMediator mediator;
 
 	private String[] currentSymbolSet;
-	
+
 	/** for time. YES IT IS USED!*/
 	private Menu mMenu;
 	/** Methods */
@@ -204,11 +200,13 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 		Symbol.createSymbol(currentSymbolSet);
 
 	}
-	
+
+	private ControlPanelFragment controlPanel;
+
 	/**
 	 * Wird beim ersten Aufruf der Activity aufgerufen. Setzt das Layout der
 	 * Activity und nimmt Initialisierungen vor.
-	 * 
+	 *
 	 * @param savedInstanceState
 	 *            Gespeicherte Daten eines vorigen Aufrufs dieser Activity
 	 */
@@ -229,25 +227,26 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 		}
 
 		if (game != null) {
+
+
 			/* Determine how many numbers are needed. 1-9 or 1-16 ? */
 			initializeSymbolSet();
-/*			if (game.isLefthandedModeActive()){
-				setContentView(R.layout.sudoku_for_lefties);
 
-			}
-			else {
-				setContentView(R.layout.sudoku);
-			}*/
-            setContentView(game.isLefthandedModeActive()? R.layout.sudoku_for_lefties : R.layout.sudoku);
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setContentView(game.isLefthandedModeActive() ? R.layout.sudoku_for_lefties
+					                                     : R.layout.sudoku);
+
+
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);//TODO subclass and put time, ... in it
             setSupportActionBar(toolbar);
 
 
             this.sudokuController = new SudokuController(this.game, this);
 			this.actionTreeController = new ActionTreeController(this);
 			Log.d(LOG_TAG, "Initialized");
+
 			inflateViewAndButtons();
-			Log.d(LOG_TAG, "Inflated view and buttons");
+
+			Log.d(LOG_TAG, "Inflated view and control_panel");
 			inflateGestures(savedInstanceState == null);
 			Log.d(LOG_TAG, "Inflated gestures");
 			// Scale SudokuView to LayoutSize, when inflating view is finished
@@ -282,7 +281,7 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 
 			setTypeText();
 			updateButtons();
-			Buttons.gestureButton.setSelected(Profile.getInstance().isGestureActive());
+			controlPanel.getGestureButton().setSelected(Profile.getInstance().isGestureActive());
 		}
 	}
 
@@ -291,7 +290,7 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 	 * Wiederherstellung der Activity nach einem Orientierungswechsel oder
 	 * aufgrund einer temporären Verdrängung durch Speicherknappheit den alten
 	 * Status wiederherzustellen.
-	 * 
+	 *
 	 * @param outState
 	 *            Der Status in den gespeichert wird
 	 */
@@ -316,7 +315,7 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 	/**
 	 * Stellt den Status der Activity wieder her, also insbesondere das
 	 * markierte Feld und den Status der Aktionsbaumes.
-	 * 
+	 *
 	 * @param state
 	 *            Der wiederherzustellende Status
 	 */
@@ -366,7 +365,7 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 
 	/**
 	 * Erzeugt die View für die Gesteneingabe
-	 * 
+	 *
 	 * @param firstStart
 	 *            Gibt an, ob dies der erste Start der Activity ist und somit
 	 *            Hinweise angezeigt werden sollen
@@ -412,20 +411,17 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 	 * Erstellt die Views und Buttons für diese Activity
 	 */
 	private void inflateViewAndButtons() {
-		
+
 		this.sudokuScrollView = (FullScrollLayout) findViewById(R.id.sudoku_field);
 		this.sudokuView = new SudokuLayout(this);
 		Log.d(LOG_TAG, "Inflated sudoku layout");
 		this.sudokuView.setGravity(Gravity.CENTER);
 		this.sudokuScrollView.addView(this.sudokuView);
 
-		Buttons.       redoButton = (ImageButton) findViewById(R.id.button_sudoku_redo);
-		Buttons.       undoButton = (ImageButton) findViewById(R.id.button_sudoku_undo);
-		Buttons. actionTreeButton = (ImageButton) findViewById(R.id.button_sudoku_actionTree);
-		Buttons.    gestureButton = (ImageButton) findViewById(R.id.button_sudoku_toggle_gesture);
-		Buttons.assistancesButton = (ImageButton) findViewById(R.id.button_sudoku_help);
-		Buttons.   bookmarkButton = (Button) findViewById(R.id.sudoku_action_tree_button_bookmark);
-		Buttons.      closeButton = (Button) findViewById(R.id.sudoku_action_tree_button_close);
+		controlPanel = (ControlPanelFragment) getSupportFragmentManager().findFragmentById(R.id.controlPanelFragment);
+		controlPanel.initialize();
+		controlPanel.inflateButtons();
+
 
 		LinearLayout currentControlsView;/* = (LinearLayout) findViewById(R.id.sudoku_time_border);
 		FieldViewPainter.getInstance().setMarking(currentControlsView, FieldViewStates.CONTROLS);*/
@@ -452,58 +448,20 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 	 * Behandelt die Klicks auf Buttons dieser Activity
 	 */
 	public void onClick(View v) {
-		if (v == Buttons.undoButton) {
-			this.sudokuController.onUndo();
-			this.mediator.updateKeyboard();
-		} else if (v == Buttons.redoButton) {
-			this.sudokuController.onRedo();
-			this.mediator.updateKeyboard();
-		} else if (v == Buttons.actionTreeButton) {
-			toogleActionTree();
-		} else if (v == Buttons.gestureButton) {
-			Profile profile = Profile.getInstance();
-			if (checkGesture()) {
-				/* toggle 'gesture active' 
-				 * toggle button icon as well */
-				profile.setGestureActive( !profile.isGestureActive() );
-				v.setSelected(profile.isGestureActive());
-			} else {
-				profile.setGestureActive(false);
-				v.setSelected(           false);
-				Toast.makeText(this, getString(R.string.error_gestures_not_complete), Toast.LENGTH_LONG).show();
-			}
-		} else if (v == Buttons.assistancesButton) {
-			showAssistancesDialog();
-		} else if (v == Buttons.bookmarkButton) {
-			this.game.markCurrentState();
-			this.actionTreeController.refresh();
-		} else if (v == Buttons.closeButton) {
-			toogleActionTree();
-		} else if (v == Buttons.switchSymbols) {
-			if (currentSymbolSet.length < 9) {
-				if (currentSymbolSet[10].equals("10")) {
-					currentSymbolSet = Symbol.MAPPING_NUMBERS_HEX_LETTERS;
-				} else {
-					currentSymbolSet = Symbol.MAPPING_NUMBERS_HEX_DIGGITS;
-				}
-				Symbol.createSymbol(currentSymbolSet);
-			} else {
-				Toast.makeText(this, getString(R.string.error_cant_switch_symbols), Toast.LENGTH_SHORT).show();
-			}
-		}
+		controlPanel.onClick(v);//TODO make directly
 		updateButtons();
 	}
 
-	/*
-	 * returns whether all Gestures are defined -> Gesture input possible */
-	private boolean checkGesture() {
+	/**
+	 * returns whether all Gestures are defined -> Gesture input possible
+	 * */
+	boolean checkGesture() {
 		Set<String> gestures = this.gestureStore.getGestureEntries();
 		boolean allGesturesSet = true;
-		for (int i = 0; i < Symbol.getInstance().getNumberOfSymbols(); i++) {
-			if (!gestures.contains(Symbol.getInstance().getMapping(i))) {
+		for (String s : Symbol.getInstance().getSymbolSet())
+			if (!gestures.contains(s))
 				allGesturesSet = false;
-			}
-		}
+
 		return allGesturesSet;
 	}
 
@@ -529,7 +487,7 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 		float prevZoomFactor = this.sudokuScrollView.getZoomFactor();
 		sudokuView.setDrawingCacheEnabled(true);
 		sudokuScrollView.resetZoom();
-		
+
 		// Restoring measurements after zomming out.
 		this.sudokuView.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
 		this.sudokuView.layout(0, 0, this.sudokuView.getMeasuredWidth(), this.sudokuView.getMeasuredHeight());
@@ -580,15 +538,20 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 	}
 
+	private View getControlPanel(){
+		return findViewById(game.isLefthandedModeActive() ?  R.id.controlPanelLeft
+				                                          :  R.id.controlPanel     );
+	}
+
 	public void setModeHint(){
-		findViewById(R.id.controlPanel).setVisibility(View.GONE);
+		getControlPanel().setVisibility(View.GONE);
 		findViewById(R.id.hintPanel).setVisibility(View.VISIBLE);
 		mode=Mode.HintMode;
 	}
 
 	public void setModeRegular(){
 		findViewById(R.id.   hintPanel).setVisibility(View.GONE);
-		findViewById(R.id.controlPanel).setVisibility(View.VISIBLE);
+		getControlPanel().setVisibility(View.VISIBLE);
 		mode=Mode.Regular;
 	}
 
@@ -601,108 +564,15 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 	/**
 	 * Zeigt einen Dialog mit den verfügbaren Hilfestellungen an.
 	 */
-	private void showAssistancesDialog() {
+	void showAssistancesDialog() {
 
 		DialogFragment ad = new AssistancesDialogFragment();
 		ad.show(fm, "assistancesDialog");
-
-
-		/*
-		Bundle args = new Bundle();
-		args.p
-		//
-
-		Stack<CharSequence> itemStack= new Stack<>();
-		itemStack.addAll(Arrays.asList( getString(R.string.sf_sudoku_assistances_solve_surrender)
-		                              , getString(R.string.sf_sudoku_assistances_back_to_valid_state)
-		                              , getString(R.string.sf_sudoku_assistances_back_to_bookmark)
-		                              , getString(R.string.sf_sudoku_assistances_check)
-		                              , getString(R.string.sf_sudoku_assistances_solve_random)));
-
-		SudokuFieldView v = this.sudokuView.getCurrentFieldView();
-		if (v != null && v.getField().isEmpty())
-			itemStack.add(getString(R.string.sf_sudoku_assistances_solve_specific));
-
-		if (Profile.getInstance().getAssistances().isHelperSet())
-			itemStack.add(getString(R.string.sf_sudoku_assistances_give_hint));
-
-		// TODO why this no work? final CharSequence[] items = (CharSequence[]) itemStack.toArray();
-		CharSequence[] tmp   = new CharSequence[0];
-		final CharSequence[] items = itemStack.toArray(tmp);
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(getString(R.string.sf_sudoku_assistances_title));
-
-		builder.setItems(items, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int item) {
-
-				switch (item) {
-					case 0:
-						if (!SudokuActivity.this.sudokuController.onSolveAll())
-							Toast.makeText(SudokuActivity.this, R.string.toast_solved_wrong, Toast.LENGTH_SHORT).show();
-						break;
-					case 1:
-						SudokuActivity.this.game.goToLastCorrectState();
-						break;
-					case 2:
-						SudokuActivity.this.game.goToLastBookmark();
-						break;
-					case 3:
-						if (SudokuActivity.this.game.checkSudoku())
-							Toast.makeText(SudokuActivity.this, R.string.toast_solved_correct, Toast.LENGTH_SHORT).show();
-						 else
-							Toast.makeText(SudokuActivity.this, R.string.toast_solved_wrong, Toast.LENGTH_LONG).show();
-						break;
-					case 4:
-						if (!SudokuActivity.this.sudokuController.onSolveOne())
-							Toast.makeText(SudokuActivity.this, R.string.toast_solved_wrong, Toast.LENGTH_SHORT).show();
-						break;
-				}
-				/* not inside switch, because they are at variable positions */
-/*				if (items[item] == getString(R.string.sf_sudoku_assistances_solve_specific)){
-					if (!SudokuActivity.this.sudokuController.onSolveCurrent(SudokuActivity.this.sudokuView.getCurrentFieldView().getField())) {
-						Toast.makeText(SudokuActivity.this, R.string.toast_solved_wrong, Toast.LENGTH_SHORT).show();
-					}
-
-				}else if (items[item] == getString(R.string.sf_sudoku_assistances_give_hint)){
-					SolveDerivation sd = SolvingAssistant.giveAHint(game.getSudoku());
-
-					TextView tv = (TextView) findViewById(R.id.hintText);
-					tv.setText(HintFormulator.getText(getBaseContext(),  sd));
-					SudokuActivity.this.setModeHint();
-
-					getSudokuLayout().getHintPainter().realizeHint(sd);
-					getSudokuLayout().getHintPainter().invalidateAll();
-
-					Button b = (Button) findViewById(R.id.hintOkButton);
-					b.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View view) {
-
-							SudokuActivity.this.setModeRegular();
-
-							getSudokuLayout().getHintPainter().deleteAll();
-							getSudokuLayout().invalidate();
-							getSudokuLayout().getHintPainter().invalidateAll();
-						}
-					});
-
-
-					//Toast.makeText(SudokuActivity.this, "a hint was requested: "+sd, Toast.LENGTH_LONG).show();
-				}
-				updateButtons();
-			}
-		});
-		AlertDialog alert = builder.create();
-		alert.show();
-
-
-		*/
 	}
 
 	/**
 	 * Gibt das aktuelle Game zurück.
-	 * 
+	 *
 	 * @return Das Game
 	 */
 	public Game getGame() {
@@ -711,7 +581,7 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 
 	/**
 	 * Gibt die aktuell ausgewählte FieldView zurück.
-	 * 
+	 *
 	 * @return Die aktuell ausgewählte FieldView
 	 */
 	public SudokuFieldView getCurrentFieldView() {
@@ -720,7 +590,7 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 
 	/**
 	 * Setzt die aktuelle FieldView auf die spezifizierte.
-	 * 
+	 *
 	 * @param fieldView
 	 *            Die als aktuell zu setzende FieldView
 	 */
@@ -730,7 +600,7 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 
 	/**
 	 * Gibt zurück, ob zurzeit der ActionTree angezeigt wird.
-	 * 
+	 *
 	 * @return true, falls der ActionTree gerade angezeigt wird, false falls
 	 *         nicht
 	 */
@@ -740,7 +610,7 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 
 	/**
 	 * Setzt dieses Spiel auf beendet.
-	 * 
+	 *
 	 * @param showWinDialog
 	 *            Spezifiziert, ob ein Gewinn-Dialog angezeigt werden soll
 	 * @param surrendered
@@ -768,19 +638,24 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 		this.timeHandler.removeCallbacks(timeUpdate);
 	}
 
+	protected boolean getFinished() {//TODO this.finished vs game.finished, which is what
+		return finished;
+	}
+
+
 	protected String getAssistancesTimeString() {
 		return getTimeString(game.getAssistancesTimeCost());
 	}
-	
+
 	/**
 	 * Gibt die vergangene Zeit als formatierten String zurück.
-	 * 
+	 *
 	 * @return Den String für die Zeitanzeige
 	 */
 	protected String getGameTimeString() {
 		return getTimeString(game.getTime());
 	}
-	
+
 	/**
 	 * Returns a string in the format "HH:mm:ss" implied by the specified time in seconds.
 	 * There is no zero-padding for Hours, instead the string is just shorter if hours is zero.
@@ -788,33 +663,33 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 	 * @return a string representing the specified time in format "D..D HH:mm:ss"
 	 */
 	public static String getTimeString(int time) {
-		
+
 		int seconds = time % 60;
 		time /= 60;
-		
+
 		int minutes = time % 60;
 		time /= 60;
-		
+
 		int hours   = time % 24;
 		time /= 24;
 
 		int days = time;
-		
+
 		StringBuilder pattern = new StringBuilder("");
-		
+
 		if( days > 0)
 			pattern.append(days).append(" ");
 		if(hours > 0)
 			pattern.append(String.format("%02d:", hours));
 
 		pattern.append(String.format("%02d:%02d", minutes, seconds));
-		
+
 		return pattern.toString();
 	}
 
 	/**
 	 * Zeigt einen Gewinndialog an, der fragt, ob das Spiel beendet werden soll.
-	 * 
+	 *
 	 * @param surrendered
 	 *            Gibt an, ob der Spieler aufgegeben hat
 	 */
@@ -841,7 +716,7 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 
 	/**
 	 * Gibt einen String mit der Spielstatistik zurück.
-	 * 
+	 *
 	 * @return Die Spielstatistik als String
 	 */
 	private String getStatisticsString() {
@@ -849,14 +724,14 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 		stat.append(getString(R.string.dialog_won_statistics) + ":\n");
 		stat.append("\n");
 		stat.append(getString(R.string.dialog_won_timeneeded) + ": " + getGameTimeString() + "\n");
-		stat.append(getString(R.string.dialog_won_score)      + ": " + game.getScore());
+		stat.append(getString(R.string.dialog_won_score)       + ": " + game.getScore());
 		return stat.toString();
 	}
-	
+
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {		
+	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.action_bar_sudoku, menu);    
+		inflater.inflate(R.menu.action_bar_sudoku, menu);
 		return true;
 	}
 
@@ -865,15 +740,15 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 		mMenu = menu;
 		return super.onPrepareOptionsMenu(menu);
 	}
-	
+
 	/**
 	 * Das Update-Runnable für die Zeit
 	 */
 	private Runnable timeUpdate = new Runnable() {
-		private String offset = "";
+		private StringBuilder offset = new StringBuilder("");
 		public void run() {
 			game.addTime(1);
-			
+
 			//getSupportActionBar().
 			final TextView timeView    = (TextView) findViewById (R.id.time);
 			timeView.setTextColor(getResources().getColor(R.color.text1));
@@ -883,67 +758,23 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 			 * this is not  perfect since we padd with whitespace and the font is not 'mono-style'(=not all letters same width)
 			 * solution would be: create custom xml for action bar, but as of now I see no way how to make this easy.
 			 * to save computing time we cache the offset*/
-			String t = getGameTimeString();
-			String p = " (+ " + getAssistancesTimeString() + ")";
-			int d = t.length() - p.length();
-			while(offset.length() > Math.abs(d)){offset = offset.substring(1);}
-			while(offset.length() < Math.abs(d)){offset = " " + offset;}
-			if(d > 0){
-				p = offset + p;
-			}
-			if(d < 0){
-				t = offset + t;
-			}
-			timeView.setText(t + "\n" + p);
+			String time     = getGameTimeString();
+			String penealty = " (+ " + getAssistancesTimeString() + ")";
+			int d = time.length() - penealty.length();
+			while(offset.length() > Math.abs(d)){offset.setLength(offset.length() - 1);}
+			while(offset.length() < Math.abs(d)){offset.append(' ');}
+			if(d > 0)
+				penealty = offset + penealty;
+
+			if(d < 0)
+				time = offset + time;
+
+			timeView.setText(time + "\n" + penealty);
 
 			timeHandler.postDelayed(this, 1000);
 		}
 	};
 
-	/**
-	 * Container-Klasse für die Buttons dieser Activity
-	 */
-	private static class Buttons {
-		/**
-		 * Der "Redo" Button
-		 */
-		protected static ImageButton redoButton;
-
-		/**
-		 * Der "Undo" Button
-		 */
-		protected static ImageButton undoButton;
-
-		/**
-		 * Der "ActionTree anzeigen" Button
-		 */
-		protected static ImageButton actionTreeButton;
-
-		/**
-		 * Der "Gesten umschalten" Button
-		 */
-		protected static ImageButton gestureButton;
-
-		/**
-		 * Der "Hilfestellungen anzeigen" Button
-		 */
-		protected static ImageButton assistancesButton;
-
-		/**
-		 * Der "Lesezeichen" Button des ActionTrees
-		 */
-		protected static Button bookmarkButton;
-
-		/**
-		 * Der "Schließen" Button des ActionTrees
-		 */
-		protected static Button closeButton;
-
-		/**
-		 * Der Button zum wechseln der Symbolsätze (HEX)
-		 */
-		protected static Button switchSymbols;
-	}
 
 	/**
 	 * {@inheritDoc}
@@ -1001,18 +832,20 @@ public class SudokuActivity extends SudoqActivitySherlock implements OnClickList
 		updateButtons();
 	}
 
-	/**
-	 * Aktualisiert alle Buttons, also den Redo, Undo und ActionTree-Button,
-	 * sowie die Tastatur
-	 */
-	void updateButtons() {
-		Buttons.redoButton.setEnabled(game.getStateHandler().canRedo() && !actionTreeShown);
-		Buttons.undoButton.setEnabled(game.getStateHandler().canUndo() && !actionTreeShown);
-		Buttons. actionTreeButton.setEnabled(!actionTreeShown);
-		Buttons.assistancesButton.setEnabled(!actionTreeShown && !finished);
-		Buttons.    gestureButton.setEnabled(!actionTreeShown);
-		this.mediator.setKeyboardState(!finished && this.sudokuView.getCurrentFieldView() != null);
+	private void updateButtons(){
+		controlPanel.updateButtons();
 	}
+
+
+	ActionTreeController getActionTreeController(){
+		return actionTreeController;
+	}
+
+	public UserInteractionMediator getMediator(){
+		return mediator;
+	}
+
+	ControlPanelFragment getPanel(){return controlPanel;}
 
 	/**
 	 * JUST FOR TESTING PURPOSE!

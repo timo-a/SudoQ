@@ -17,8 +17,8 @@ import android.view.View;
 import java.util.ArrayList;
 
 import de.sudoq.controller.sudoku.FieldInteractionListener;
-import de.sudoq.controller.sudoku.FieldViewPainter;
-import de.sudoq.controller.sudoku.FieldViewStates;
+import de.sudoq.controller.sudoku.board.FieldViewPainter;
+import de.sudoq.controller.sudoku.board.FieldViewStates;
 import de.sudoq.controller.sudoku.ObservableFieldInteraction;
 import de.sudoq.controller.sudoku.Symbol;
 import de.sudoq.model.ModelChangeListener;

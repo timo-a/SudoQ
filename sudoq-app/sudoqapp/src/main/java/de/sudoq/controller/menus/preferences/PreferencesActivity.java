@@ -5,13 +5,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 
-import de.sudoq.controller.SudoqActivitySherlock;
+import de.sudoq.controller.SudoqCompatActivity;
 import de.sudoq.controller.menus.GestureBuilder;
 import de.sudoq.model.ModelChangeListener;
 import de.sudoq.model.game.Assistances;
 import de.sudoq.model.profile.Profile;
 
-public abstract class PreferencesActivity extends SudoqActivitySherlock implements ModelChangeListener<Profile> {
+public abstract class PreferencesActivity extends SudoqCompatActivity implements ModelChangeListener<Profile> {
 	
 	CheckBox gesture;
 	CheckBox autoAdjustNotes;

@@ -33,9 +33,9 @@ import java.util.Iterator;
 import java.util.Set;
 
 import de.sudoq.R;
-import de.sudoq.controller.SudoqActivitySherlock;
-import de.sudoq.controller.sudoku.FieldViewPainter;
-import de.sudoq.controller.sudoku.FieldViewStates;
+import de.sudoq.controller.SudoqCompatActivity;
+import de.sudoq.controller.sudoku.board.FieldViewPainter;
+import de.sudoq.controller.sudoku.board.FieldViewStates;
 import de.sudoq.controller.sudoku.InputListener;
 import de.sudoq.controller.sudoku.Symbol;
 import de.sudoq.model.files.FileManager;
@@ -47,7 +47,7 @@ import de.sudoq.view.VirtualKeyboardLayout;
  * @author Anrion
  *
  */
-public class GestureBuilder extends SudoqActivitySherlock implements OnGesturePerformedListener, InputListener {
+public class GestureBuilder extends SudoqCompatActivity implements OnGesturePerformedListener, InputListener {
 
 	/**
 	 * Fängt Gesteneingaben des Benutzers ab

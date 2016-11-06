@@ -7,10 +7,13 @@
  */
 package de.sudoq.controller.sudoku;
 
+import java.util.Arrays;
+import java.util.Iterator;
+
 /**
  * Klasse zum Mapping der intern genutzen Zahlen auf darstellbare Zeichen
  */
-public class Symbol {
+public class Symbol implements Iterable<Integer> {
 	/**
 	 * Die Standardsymbole für 1-4 Sudokus
 	 */
@@ -29,7 +32,7 @@ public class Symbol {
 	/**
 	 * Die Standardsymbole für 1-16 Sudokus
 	 */
-	public static final String[] MAPPING_NUMBERS_HEX_LETTERS = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G" };
+	public static final String[] MAPPING_NUMBERS_HEX_LETTERS = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9",  "A",  "B",  "C",  "D",  "E",  "F",  "G" };
 	public static final String[] MAPPING_NUMBERS_HEX_DIGGITS = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
 
 	/**
@@ -117,6 +120,8 @@ public class Symbol {
 		return symbolSet.length;
 	}
 
+
+
 	/**
 	 * Gibt die Größe eines Feldes des Rasters für die Notizen innerhalb eines
 	 * Feldes zurück.
@@ -130,4 +135,28 @@ public class Symbol {
 			throw new IllegalStateException("No symbol set! Symbol not instanciated!");
 		}
 	}
+
+	/// for iterating over symbols
+	public Iterator<Integer> iterator() {
+		return new Iterator() {
+
+			int counter = 0;
+
+			@Override
+			public boolean hasNext() {
+				return counter < symbolSet.length;
+			}
+
+			@Override
+			public Object next() {
+				return counter++;
+			}
+
+			@Override
+			public void remove() { throw new UnsupportedOperationException(); }
+		};
+	}
+
+	public String[] getSymbolSet(){ return symbolSet; }
+
 }

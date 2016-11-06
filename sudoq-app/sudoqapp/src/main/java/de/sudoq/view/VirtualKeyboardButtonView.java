@@ -15,8 +15,8 @@ import android.widget.TableLayout.LayoutParams;
 
 import java.util.ArrayList;
 
-import de.sudoq.controller.sudoku.FieldViewPainter;
-import de.sudoq.controller.sudoku.FieldViewStates;
+import de.sudoq.controller.sudoku.board.FieldViewPainter;
+import de.sudoq.controller.sudoku.board.FieldViewStates;
 import de.sudoq.controller.sudoku.InputListener;
 import de.sudoq.controller.sudoku.ObservableInput;
 import de.sudoq.controller.sudoku.Symbol;

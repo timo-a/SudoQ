@@ -125,6 +125,7 @@
     <string name="sf_sudoku_assistances_solve_surrender">Aufgeben</string>
     <string name="sf_sudoku_assistances_back_to_valid_state">Zurück zum letzten korrekten Stand</string>
     <string name="sf_sudoku_assistances_back_to_bookmark">Zurück zum letzten Lesezeichen</string>
+    <string name="sf_sudoku_assistances_give_hint">Einen Tipp geben</string>
     <string name="sf_sudoku_title_gesture_input">Symboleingabe durch Geste</string>
     <string name="sf_sudoku_title_action_tree">Aktionsverlauf</string>
         
@@ -188,5 +189,13 @@
     <string name="feminine_accusative_suffix">e</string>
     <string name="maskuline_accusative_suffix">en</string>
     <string name="neutral_accusative_suffix">e</string>
+
+    <string name="hint_backtracking">As said, I\'m still in development. So I\'m out of ideas and my best advice is to set a bookmark and guess a field.</string>
+
+    <string name="gender_maskulin">m</string>
+    <string name="gender_feminin">f</string>
+    <string name="gender_neutral">n</string>
+
+
 
 </resources>

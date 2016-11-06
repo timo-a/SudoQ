@@ -40,42 +40,16 @@
             android:layout_height="5dp"
             android:orientation="vertical"
             android:background="@drawable/background_serious" /-->
-    
-        <LinearLayout
-           android:id="@+id/controlPanel"
-           android:layout_width="fill_parent"
-           android:layout_height="fill_parent"
-           android:layout_weight="2.5"
-           android:orientation="horizontal"
-           android:background="#282828" >
 
-	       <de.sudoq.view.VirtualKeyboardLayout
-				android:id="@+id/virtual_keyboard"
-                 android:layout_width="0dp"
-                 android:layout_height="fill_parent"
-                 android:layout_weight="1"
-                 android:gravity="left"
-                 android:orientation="vertical"
-                 android:padding="5dp" >
-           </de.sudoq.view.VirtualKeyboardLayout>
+        <fragment
+            android:name="de.sudoq.controller.sudoku.ControlPanelFragment"
+            android:id="@+id/controlPanelFragment"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="2.5" >
+        </fragment>
 
-           <!--Buttons-->
-           <LinearLayout 
-               android:id="@+id/controls"
-               android:layout_width="wrap_content"
-               android:layout_height="fill_parent"
-               android:orientation="horizontal">
 
-               <!-- undo, redo, toggle -->
-               <include layout="@layout/control_panel_smaller_buttons"/>
-
-               <!-- help, actiontree -->
-               <include layout="@layout/control_panel_big_buttons"/>
-                        
-            </LinearLayout>
-                       
-      </LinearLayout>
-      <include layout="@layout/hint_panel" android:visibility="gone"/>
     </LinearLayout>
 
     <include layout="@layout/actiontree_portrait"/>

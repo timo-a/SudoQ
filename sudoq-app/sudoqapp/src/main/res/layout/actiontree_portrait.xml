@@ -24,8 +24,8 @@
           android:layout_alignParentBottom="true" >
 
           <Button
-              android:id="@+id/sudoku_action_tree_button_bookmark"
-              android:layout_width="wrap_content"
+            android:id="@+id/sudoku_action_tree_button_bookmark"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
             android:background="@android:drawable/btn_default"
@@ -33,8 +33,8 @@
             android:text="@string/sf_sudoku_button_bookmark" />
 
           <Button
-              android:id="@+id/sudoku_action_tree_button_close"
-              android:layout_width="wrap_content"
+            android:id="@+id/sudoku_action_tree_button_close"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
             android:background="@android:drawable/btn_default"
@@ -44,7 +44,7 @@
       </LinearLayout>
 
       <de.sudoq.view.FullScrollLayout
-             android:id="@+id/sudoku_action_tree_scroll"
+          android:id="@+id/sudoku_action_tree_scroll"
           android:layout_width="fill_parent"
           android:layout_height="fill_parent"
           android:layout_above="@id/sudoku_action_tree_buttons"

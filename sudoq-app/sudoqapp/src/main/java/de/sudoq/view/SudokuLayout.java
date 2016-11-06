@@ -17,9 +17,9 @@ import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
-import de.sudoq.controller.sudoku.BoardPainter;
+import de.sudoq.controller.sudoku.board.BoardPainter;
 import de.sudoq.controller.sudoku.FieldInteractionListener;
-import de.sudoq.controller.sudoku.FieldViewPainter;
+import de.sudoq.controller.sudoku.board.FieldViewPainter;
 import de.sudoq.controller.sudoku.hints.HintPainter;
 import de.sudoq.controller.sudoku.ObservableFieldInteraction;
 import de.sudoq.controller.sudoku.SudokuActivity;

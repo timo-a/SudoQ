@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/bottomPanelLeft"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
+
+    <!--inputboard i.e. buttons for assistances but also numbers -->
+    <include layout="@layout/control_panel_left" />
+
+    <!-- hint panel. replaces the controll panel if hints are requested -->
+    <include layout="@layout/hint_panel"  />
+
+
+</LinearLayout>

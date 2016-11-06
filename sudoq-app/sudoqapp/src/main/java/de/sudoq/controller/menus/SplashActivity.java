@@ -25,7 +25,7 @@ import java.io.OutputStream;
 import java.util.Arrays;
 
 import de.sudoq.R;
-import de.sudoq.controller.SudoqActivitySherlock;
+import de.sudoq.controller.SudoqCompatActivity;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.complexity.Complexity;
@@ -36,7 +36,7 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
  * sowie den FileManager initialisiert und die Daten für den ersten Start
  * vorbereitet.
  */
-public class SplashActivity extends SudoqActivitySherlock {
+public class SplashActivity extends SudoqCompatActivity {
 	/**
 	 * Das Log-Tag für das LogCat.
 	 */

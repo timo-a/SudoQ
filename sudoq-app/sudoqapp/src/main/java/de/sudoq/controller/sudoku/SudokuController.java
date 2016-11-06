@@ -129,7 +129,6 @@ public class SudokuController implements AssistanceRequestListener, ActionListen
 	 * {@inheritDoc}
 	 */
 	public boolean onSolveAll() {
-		boolean res = false;
 
 		for (Field f : this.game.getSudoku()) {
 			if (!f.isNotWrong()) {
@@ -137,7 +136,7 @@ public class SudokuController implements AssistanceRequestListener, ActionListen
 			}
 		}
 
-		res = game.solveAll();
+		boolean res = game.solveAll();
 
 		if (res)
 			handleFinish(true);

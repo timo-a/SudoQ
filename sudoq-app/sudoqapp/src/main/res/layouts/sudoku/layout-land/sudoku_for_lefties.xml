@@ -20,9 +20,13 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="horizontal" >
-            <!--inputboard i.e. buttons for assistances but also numbers -->
-            <include layout="@layout/buttons"/>
-			<include layout="@layout/hint_panel" android:visibility="gone"/>
+            <!--inputboard i.e. control_panel for assistances but also numbers -->
+			<fragment
+				android:name="de.sudoq.controller.sudoku.ControlPanelFragment"
+				android:id="@+id/controlPanelFragment"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:layout_weight="2.5"  />
 
         	<LinearLayout
 	            android:id="@+id/sudoku_border"

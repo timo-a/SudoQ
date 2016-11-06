@@ -42,11 +42,14 @@
             	android:layout_height="fill_parent"
             	android:orientation="horizontal"
             	android:background="@drawable/background_serious" /-->
-            <!--inputboard i.e. buttons for assistances but also numbers -->
-			<include layout="@layout/buttons" />
-			<!-- hint panel. replaces the controll panel if hints are requested -->
-			<include layout="@layout/hint_panel" android:visibility="gone"/>
+			<fragment
+				android:name="de.sudoq.controller.sudoku.ControlPanelFragment"
+				android:id="@+id/controlPanelFragment"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:layout_weight="2.5" >
 
+			</fragment>
 
 		</LinearLayout>
     </LinearLayout>
