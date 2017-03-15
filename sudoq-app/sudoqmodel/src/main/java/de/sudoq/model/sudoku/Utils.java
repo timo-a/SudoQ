@@ -42,6 +42,10 @@ public class Utils {
     /**
      *
      * */
+    public static ConstraintShape getGroupShape(Constraint c) {
+        return getGroupShape(c.getPositions());
+    }
+
     public static ConstraintShape getGroupShape(List<Position> pList) {
         if     (isRow(pList))
             return ConstraintShape.Row;

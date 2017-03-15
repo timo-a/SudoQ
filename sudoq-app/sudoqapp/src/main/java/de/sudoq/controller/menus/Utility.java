@@ -1,6 +1,7 @@
 package de.sudoq.controller.menus;
 
 import android.content.Context;
+import android.util.SparseArray;
 
 import de.sudoq.R;
 import de.sudoq.model.sudoku.Utils;
@@ -84,9 +85,27 @@ public class Utility {
 		return typeStrings;
 	}
 
+	private static String[] getConstraintShapeValuesGenitiveDetermined(Context context){
+		String[] typeStrings = new String[Utils.ConstraintShape.values().length];
+		typeStrings[ConstraintShape.Row     .ordinal()] = context.getString(R.string.constraintshape_row_genitive_determined);
+		typeStrings[ConstraintShape.Column  .ordinal()] = context.getString(R.string.constraintshape_column_genitive_determined);
+		typeStrings[ConstraintShape.Diagonal.ordinal()] = context.getString(R.string.constraintshape_diagonal_genitive_determined);
+		typeStrings[ConstraintShape.Block   .ordinal()] = context.getString(R.string.constraintshape_block_genitive_determined);
+		return typeStrings;
+	}
 
+
+	/** returns shape in accusative e.g. look at the row
+	 * @param context Context(to access localized strings)
+	 * @return a string representation of the constraint shape passed as enum.
+	 * */
 	public static String constraintShapeAccDet2string(Context context, ConstraintShape cs){
 		String[] shapeStrings = getConstraintShapeValuesAccusativeDetermined(context);
+		return enum2String(shapeStrings, cs);
+	}
+
+	public static String constraintShapeGenDet2string(Context context, ConstraintShape cs){
+		String[] shapeStrings = getConstraintShapeValuesGenitiveDetermined(context);
 		return enum2String(shapeStrings, cs);
 	}
 
@@ -115,6 +134,19 @@ public class Utility {
 		}
 	}
 
+	public static String gender2inThe(Context context, String gender){
+		return parseStringArray(context,gender.charAt(0), R.array.gender2in_the);
+	}
+
+//http://stackoverflow.com/questions/3013655/creating-hashmap-map-from-xml-resources
+public static String parseStringArray(Context context, char gender, int stringArrayResourceId) {
+    String[] stringArray = context.getResources().getStringArray(stringArrayResourceId);
+    for (String entry : stringArray)
+        if(entry.charAt(0)==gender)
+			return entry.substring(2);
+
+    return null;
+}
 
 
 }

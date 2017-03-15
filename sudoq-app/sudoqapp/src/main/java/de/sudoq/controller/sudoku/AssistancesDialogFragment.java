@@ -107,7 +107,7 @@ public class AssistancesDialogFragment extends DialogFragment {
 
     private void hint(final SudokuActivity activity){
         SolveDerivation sd = SolvingAssistant.giveAHint(game.getSudoku());
-
+        if (sd == null) throw new AssertionError("derivation is null, maybe forgot to set lastDerivation = derivation?");
         TextView tv = (TextView) activity.findViewById(R.id.hintText);
         tv.setText(HintFormulator.getText(activity.getBaseContext(),  sd));
         activity.setModeHint();

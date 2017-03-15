@@ -13,6 +13,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import java.util.Iterator;
+
 import de.sudoq.controller.sudoku.board.FieldViewPainter;
 import de.sudoq.controller.sudoku.board.FieldViewStates;
 import de.sudoq.controller.sudoku.InputListener;
@@ -22,12 +24,38 @@ import de.sudoq.controller.sudoku.ObservableInput;
  * Dieses Layout stellt ein virtuelles Keyboard zur Verfügung, in dem sich die
  * Buttons möglichst quadratisch ausrichten.
  */
-public class VirtualKeyboardLayout extends LinearLayout implements ObservableInput {
+public class VirtualKeyboardLayout extends LinearLayout implements ObservableInput, Iterable<View> {
 
 	/**
 	 * Die Buttons des VirtualKeyboard
 	 */
 	private VirtualKeyboardButtonView[][] buttons;
+
+	private Iterable<VirtualKeyboardButtonView> buttonIterator = new Iterable<VirtualKeyboardButtonView>() {
+		@Override
+		public Iterator<VirtualKeyboardButtonView> iterator() {
+			return new Iterator<VirtualKeyboardButtonView>() {
+				int i=0;
+				int j=0;
+
+				@Override
+				public boolean hasNext() { return i < buttons.length; }
+
+				@Override
+				public VirtualKeyboardButtonView next() {
+					VirtualKeyboardButtonView current = buttons[i][j++];
+					if(j==buttons[i].length){
+						j=0;
+						i++;
+					}
+					return current;
+				}
+
+				@Override
+				public void remove() {}
+			};
+		}
+	};
 
 	/**
 	 * Beschreibt, ob die Tastatur deaktiviert ist.
@@ -38,9 +66,9 @@ public class VirtualKeyboardLayout extends LinearLayout implements ObservableInp
 	 * Instanziiert ein neues VirtualKeyboardLayout mit den gegebenen Parametern
 	 * 
 	 * @param context
-	 *            der Applikationskontext
+	 *			der Applikationskontext
 	 * @param attrs
-	 *            das Android AttributeSet
+	 *			das Android AttributeSet
 	 */
 	public VirtualKeyboardLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -52,7 +80,7 @@ public class VirtualKeyboardLayout extends LinearLayout implements ObservableInp
 	 * Buttons dargestellt werden.
 	 * 
 	 * @param numberOfButtons
-	 *            Die Anzahl der Buttons für dieses Keyboard
+	 *			Die Anzahl der Buttons für dieses Keyboard
 	 */
 	public void refresh(int numberOfButtons) {
 		if (numberOfButtons < 0)
@@ -65,7 +93,7 @@ public class VirtualKeyboardLayout extends LinearLayout implements ObservableInp
 	 * Inflatet das Keyboard.
 	 * 
 	 * @param numberOfButtons
-	 *            Anzahl der Buttons dieser Tastatur
+	 *			Anzahl der Buttons dieser Tastatur
 	 */
 	private void inflate(int numberOfButtons) {
 		this.removeAllViews();
@@ -102,17 +130,13 @@ public class VirtualKeyboardLayout extends LinearLayout implements ObservableInp
 	 * Aktiviert bzw. deaktiviert dieses Keyboard.
 	 * 
 	 * @param activated
-	 *            Spezifiziert, ob das Keyboard aktiviert oder deaktiviert sein
-	 *            soll
+	 *			Spezifiziert, ob das Keyboard aktiviert oder deaktiviert sein
+	 *			soll
 	 */
 	public void setActivated(boolean activated) {
-		for (VirtualKeyboardButtonView[] row: buttons)
-			for(VirtualKeyboardButtonView b: row)
-				if (activated) {
-					b.setVisibility(View.VISIBLE);
-				} else {
-					b.setVisibility(View.INVISIBLE);
-				}
+		for (VirtualKeyboardButtonView b: buttonIterator)
+				b.setVisibility(activated ? View.VISIBLE
+				                          : View.INVISIBLE);
 	}
 
 	/**
@@ -129,8 +153,7 @@ public class VirtualKeyboardLayout extends LinearLayout implements ObservableInp
 	 * {@inheritDoc}
 	 */
 	public void registerListener(InputListener listener) {
-		for (VirtualKeyboardButtonView[] row: buttons)
-			for (VirtualKeyboardButtonView b: row)
+		for (VirtualKeyboardButtonView b: buttonIterator)
 				b.registerListener(listener);
 	}
 
@@ -138,9 +161,8 @@ public class VirtualKeyboardLayout extends LinearLayout implements ObservableInp
 	 * {@inheritDoc}
 	 */
 	public void removeListener(InputListener listener) {
-        for (VirtualKeyboardButtonView[] row: buttons)
-            for (VirtualKeyboardButtonView b: row)
-                b.removeListener(listener);
+		for (VirtualKeyboardButtonView b: buttonIterator)
+			b.removeListener(listener);
 	}
 
 	/**
@@ -162,9 +184,8 @@ public class VirtualKeyboardLayout extends LinearLayout implements ObservableInp
 	 * Aktiviert alle Buttons dieses Keyboards.
 	 */
 	public void enableAllButtons() {
-        for (VirtualKeyboardButtonView[] row: buttons)
-            for (VirtualKeyboardButtonView b: row)
-                b.setEnabled(true);
+		for (VirtualKeyboardButtonView b: buttonIterator)
+			b.setEnabled(true);
 	}
 
 	/**
@@ -187,10 +208,9 @@ public class VirtualKeyboardLayout extends LinearLayout implements ObservableInp
 			return;
 		}
 
-        for (VirtualKeyboardButtonView[] row: buttons)
-            for (VirtualKeyboardButtonView b: row)
-                if (b != null)
-					b.invalidate();
+		for (VirtualKeyboardButtonView b: buttonIterator)
+			if (b != null)
+				b.invalidate();
 	}
 
 	/**
@@ -200,5 +220,28 @@ public class VirtualKeyboardLayout extends LinearLayout implements ObservableInp
 	 */
 	public boolean isActivated() {
 		return !deactivated;
+	}
+
+	@Override
+	public Iterator<View> iterator() {
+		return new Iterator<View>() {
+
+			int i=0;
+
+			@Override
+			public boolean hasNext() {
+				return i < getChildCount();
+			}
+
+			@Override
+			public View next() {
+				return getChildAt(i++);
+			}
+
+			@Override
+			public void remove() {
+
+			}
+		};
 	}
 }

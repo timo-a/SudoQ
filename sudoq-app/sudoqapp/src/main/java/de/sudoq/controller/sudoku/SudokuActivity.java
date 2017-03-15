@@ -107,7 +107,6 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 	 * Konstante für das Speichern des aktuellen Zoomfaktors
 	 */
 	private static final int SAVE_ZOOM_FACTOR = 5;
-
 	/**
 	 * Konstante für das Speichern des Scrollwertes in X-Richtung
 	 */

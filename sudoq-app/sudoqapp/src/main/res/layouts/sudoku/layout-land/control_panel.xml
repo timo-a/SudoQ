@@ -12,6 +12,7 @@ android:background="#282828" >
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <!-- big buttons (help, actiontree) -->
     <LinearLayout
         android:orientation="horizontal"
         android:gravity="center_horizontal"
@@ -42,6 +43,7 @@ android:background="#282828" >
             android:src="@drawable/action_tree" />
     </LinearLayout>
 
+    <!-- undo, redo, gesture -->
     <LinearLayout
         android:orientation="horizontal"
         android:layout_gravity="center_horizontal"

@@ -291,16 +291,16 @@ public class Solver {
 
 		// depending on the result, return an int
 		int complexity = this.sudoku.getComplexityValue();
-		int minimumComplextiy = complConstr.getMinComplexityIdentifier();
-		int maximumComplextiy = complConstr.getMaxComplexityIdentifier();
+		int minComplextiy = complConstr.getMinComplexityIdentifier();
+		int maxComplextiy = complConstr.getMaxComplexityIdentifier();
 
 		if (!invalid && solved) {
 
-			if      (maximumComplextiy * 1.2 < complexity                                          ) result = ComplexityRelation.MUCH_TO_DIFFICULT;
-			else if (maximumComplextiy       < complexity && complexity <= maximumComplextiy * 1.2 ) result = ComplexityRelation.TO_DIFFICULT;
-			else if (minimumComplextiy       < complexity && complexity <= maximumComplextiy       ) result = ComplexityRelation.CONSTRAINT_SATURATION;
-			else if (minimumComplextiy * 0.8 < complexity && complexity <= minimumComplextiy       ) result = ComplexityRelation.TO_EASY;
-			else if (                                        complexity <= minimumComplextiy * 0.8 ) result = ComplexityRelation.MUCH_TO_EASY;
+			if      (maxComplextiy * 1.2 < complexity                                      ) result = ComplexityRelation.MUCH_TO_DIFFICULT;
+			else if (maxComplextiy       < complexity && complexity <= maxComplextiy * 1.2 ) result = ComplexityRelation.TO_DIFFICULT;
+			else if (minComplextiy       < complexity && complexity <= maxComplextiy       ) result = ComplexityRelation.CONSTRAINT_SATURATION;
+			else if (minComplextiy * 0.8 < complexity && complexity <= minComplextiy       ) result = ComplexityRelation.TO_EASY;
+			else if (                                    complexity <= minComplextiy * 0.8 ) result = ComplexityRelation.MUCH_TO_EASY;
 			
 				
 		}

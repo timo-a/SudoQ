@@ -494,7 +494,7 @@ public class Generator {
 				fSudoku.setCurrentValue(fSolved.getSolution(), false);
 			}
 
-			int allocationFactor = (int)Math.pow(sudoku.getSudokuType().getNumberOfSymbols(), 2) / 20;
+			int allocationFactor = (int) Math.pow(sudoku.getSudokuType().getNumberOfSymbols(), 2) / 20;
 			allocationFactor = Math.max(1, allocationFactor);
 
 			ComplexityRelation rel = ComplexityRelation.INVALID;

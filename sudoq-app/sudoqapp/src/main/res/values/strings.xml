@@ -3,7 +3,9 @@
 <!-- Copyright (C) 2012  Haiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele -->
 <!-- This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.  -->
 <!-- This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.  -->
-<resources>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation" >
 
     <string name="app_name" translatable="false">SudoQ</string>
     
@@ -200,24 +202,41 @@
 
     <string name="hint_lastdigit">Look at the highlighted {shape}! There\'s only one field left.</string>
 
-
     <string name="constraintshape_row_accusative_determined"     >row</string>
     <string name="constraintshape_column_accusative_determined"  >column</string>
     <string name="constraintshape_diagonal_accusative_determined">diagonal</string>
     <string name="constraintshape_block_accusative_determined"   >block</string>
     <string name="constraintshape_other_accusative_determined"   >group</string>
 
+    <string name="constraintshape_row_genitive_determined"     >row</string>
+    <string name="constraintshape_column_genitive_determined"  >column</string>
+    <string name="constraintshape_diagonal_genitive_determined">diagonal</string>
+    <string name="constraintshape_block_genitive_determined"   >block</string>
+    <string name="constraintshape_other_genitive_determined"   >group</string>
+
+    <string name="constraintshape_row_dative_determined"     >rows</string>
+    <string name="constraintshape_column_dative_determined"  >columns</string>
+    <string name="constraintshape_diagonal_dative_determined">diagonals</string>
+    <string name="constraintshape_block_dative_determined"   >blocks</string>
+    <string name="constraintshape_other_dative_determined"   >groups</string>
+
     <string name="gender_maskulin">m</string>
     <string name="gender_feminin">f</string>
     <string name="gender_neutral">n</string>
 
-    <string name="feminine_accusative_determiner">die</string>
-    <string name="maskuline_accusative_determiner">den</string>
-    <string name="neutral_accusative_determiner">das</string>
+    <string name="feminine_accusative_determiner"></string>
+    <string name="maskuline_accusative_determiner"></string>
+    <string name="neutral_accusative_determiner"></string>
 
     <string name="feminine_accusative_suffix"></string> <!-- only used in german -->
     <string name="maskuline_accusative_suffix"></string>
     <string name="neutral_accusative_suffix"></string>
+
+    <string name="hint_lastcandidate">Look at the highlighted field. There\'s only one candidate left.</string>
+
+    <string name="hint_nakedsingle_look">Look there\'s a naked single!</string>
+    <string name="hint_nakedsingle_note">{note} is the only note left in the highlighted field.</string>
+    <string name="hint_nakedsingle_remove">It can be set there and removed from all other Fields in this {shape}.</string>
 
     <string name="hint_backtracking">As said, I\'m still in development. So I\'m out of ideas and my best advice is to set a bookmark and guess a field.</string>
 

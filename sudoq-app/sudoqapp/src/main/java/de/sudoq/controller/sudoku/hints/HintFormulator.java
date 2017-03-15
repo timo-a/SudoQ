@@ -13,6 +13,7 @@ import de.sudoq.model.solverGenerator.solution.NakedSetDerivation;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solution.XWingDerivation;
 import de.sudoq.model.sudoku.CandidateSet;
+import de.sudoq.model.sudoku.Utils;
 
 /**
  * Created by timo on 04.10.16.
@@ -65,18 +66,27 @@ public class HintFormulator {
 
     private static String lastCandidateText(Context context, SolveDerivation sd){
         StringBuilder sb = new StringBuilder();
-        sb.append("There's only one candidate left in the highlighted Field!");
+        sb.append(context.getString(R.string.hint_lastcandidate));
         return sb.toString();
     }
 
 
     private static String nakedSingleText(Context context, SolveDerivation sd){
-        BitSet bs = ((NakedSetDerivation) sd).getSubsetMembers().get(0).getRelevantCandidates();
+        NakedSetDerivation d = (NakedSetDerivation) sd;
+        BitSet bs = d.getSubsetMembers().get(0).getRelevantCandidates();
         int note = bs.nextSetBit(0)+1;
         StringBuilder sb = new StringBuilder();
-        sb.append("Look there's a naked single! ");
-        sb.append(note);
-        sb.append(" is the only note left in the highlighted field. It can be set there and removed from all other Fields in this group");
+        sb.append(context.getString(R.string.hint_nakedsingle_look));
+        sb.append(' ');
+        sb.append(context.getString(R.string.hint_nakedsingle_note).replace("{note}", note+""));
+        sb.append(' ');
+
+        String shapeString =  Utility.constraintShapeGenDet2string(context, Utils.getGroupShape(d.getConstraint()));
+        String shapePrepDet = Utility.getGender(context, Utils.getGroupShape(d.getConstraint()));
+        String prepDet      = Utility.gender2inThe(context, shapePrepDet);
+
+        sb.append(context.getString(R.string.hint_nakedsingle_remove).replace("{prep det}", prepDet)
+                                                                     .replace("{shape}",    shapeString));
         return sb.toString();
     }
 

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
 
     <string-array name="shape_accusative_determined">
         <item>@string/constraintshape_row_accusative_determined</item>
@@ -18,5 +20,15 @@
         <item>@string/gender_neutral</item>
         <item>@string/gender_neutral</item>
     </string-array>
+
+
+    <!---->
+    <string-array name="gender2in_the">
+        <item>m|im</item>
+        <item>f|in der</item>
+        <item>n|im</item>
+    </string-array>
+
+
 
 </resources>

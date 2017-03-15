@@ -43,6 +43,7 @@ public class LastCandidateHelper extends SolveHelper {
                         if (sudoku.getCurrentCandidates(p).cardinality() == 1) {
                             int lastNote = sudoku.getCurrentCandidates(p).nextSetBit(0);
                             derivation = new LastCandidateDerivation(HintTypes.LastCandidate, p, lastNote);
+                            lastDerivation = derivation;
                             return true;
                         }
                     }

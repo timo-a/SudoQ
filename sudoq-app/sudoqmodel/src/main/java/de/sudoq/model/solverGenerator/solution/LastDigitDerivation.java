@@ -32,7 +32,7 @@ public class LastDigitDerivation extends SolveDerivation {
     }
 
     public ConstraintShape getConstraintShape(){
-        return Utils.getGroupShape(constraint.getPositions());
+        return Utils.getGroupShape(constraint);
     }
 
 

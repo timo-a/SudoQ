@@ -176,26 +176,27 @@
 
     <!-- Hints TODO TRANSLATE THESE DUMMYS -->
 
-    <string name="hint_lastdigit">Regardez la {forme} marquée! Il ne reste qu\'un seul champ.</string>
+    <string name="hint_lastdigit">Regardez la {shape} marqué{suffix}! Il ne reste qu\'un seul champ.</string>
 
 
-    <string name="constraintshape_row_accusative_determined"     >row</string>
-    <string name="constraintshape_column_accusative_determined"  >column</string>
-    <string name="constraintshape_diagonal_accusative_determined">diagonal</string>
-    <string name="constraintshape_block_accusative_determined"   >block</string>
-    <string name="constraintshape_other_accusative_determined"   >group</string>
+    <string name="constraintshape_row_accusative_determined"     >ligne</string>
+    <string name="constraintshape_column_accusative_determined"  >colonne</string>
+    <string name="constraintshape_diagonal_accusative_determined">diagonale</string>
+    <string name="constraintshape_block_accusative_determined"   >bloc</string>
+    <string name="constraintshape_other_accusative_determined"   >groupe</string>
 
     <string name="gender_maskulin">m</string>
     <string name="gender_feminin">f</string>
     <string name="gender_neutral">n</string>
 
-    <string name="feminine_accusative_determiner">die</string>
-    <string name="maskuline_accusative_determiner">den</string>
-    <string name="neutral_accusative_determiner">das</string>
+    <string name="feminine_accusative_determiner">la</string>
+    <string name="maskuline_accusative_determiner">le</string>
 
-    <string name="feminine_accusative_suffix"></string> <!-- only used in german -->
+    <string name="feminine_accusative_suffix">e</string>
     <string name="maskuline_accusative_suffix"></string>
     <string name="neutral_accusative_suffix"></string>
+
+    <string name="hint_lastcandidate">Regardez le champ marqué. Il ne reste plus qu\'un candidat.</string>
 
     <string name="hint_backtracking">As said, I\'m still in development. So I\'m out of ideas and my best advice is to set a bookmark and guess a field.</string>
 
