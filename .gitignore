@@ -29,7 +29,9 @@ sudoq-app/gen
 sudoq-app/assets
 sudoq-app/libs/model.jar
 sudoq-app/sudoqapp/build/
+sudoq-app/sudoqmodel/build/libs/sudoqmodel.jar
 sudoq-app/.idea
+sudoq-app/.gradle
 test-app/bin
 test-app/gen
 test-app/coverage/

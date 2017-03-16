@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -87,21 +88,33 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 	}
 
 	public void helperSelected(final View view){
-		AlertDialog deleteAlert = new AlertDialog.Builder(this).create();
-		deleteAlert.setTitle("This feature is still in development. Are you sure you want to activate it?");
+		final CheckBox cb = (CheckBox)view;
 
-		deleteAlert.setButton(getString(R.string.dialog_yes), new DialogInterface.OnClickListener() {
+		if(cb.isChecked()){//if it is now, after click selected
+			askConfirmation(cb);
+		}
+	}
+
+	private void askConfirmation(final CheckBox cb) {
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+		builder.setPositiveButton(getString(R.string.dialog_yes), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
-				CheckBox cb = (CheckBox)view;
-				cb.setChecked(true);
+				// pass
 			}
 		});
-		deleteAlert.setButton2(getString(R.string.dialog_no), new DialogInterface.OnClickListener() {
+
+		builder.setNegativeButton(getString(R.string.dialog_no), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
-				// Dummy: clicking no means staying in the game
+				cb.setChecked(false);
 			}
 		});
-		deleteAlert.show();
+
+		builder.setMessage("This feature is still in development. Are you sure you want to activate it?");
+		AlertDialog alertDialog = builder.create();
+
+		alertDialog.show();
 	}
 
 

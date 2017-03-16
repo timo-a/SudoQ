@@ -24,6 +24,7 @@ import de.sudoq.view.SudokuLayout;
  */
 public class ControlPanelFragment extends Fragment {
 
+    private SudokuActivity activity;
     private SudokuLayout sl;
     private Game game;
     private SudokuController controller;
@@ -35,7 +36,7 @@ public class ControlPanelFragment extends Fragment {
     }
 
     public void initialize(){
-        SudokuActivity activity =  (SudokuActivity)getActivity();
+        activity =  (SudokuActivity)getActivity();
         sl   = activity.getSudokuLayout();
         game = activity.getGame();
         controller = activity.getSudokuController();
@@ -183,4 +184,17 @@ public class ControlPanelFragment extends Fragment {
         // Find your buttons in subview, set up onclicks, set up callbacks to your parent fragment or activity here.
     }
 
+
+    private View getControlPanel(){
+
+        Configuration conf = getResources().getConfiguration();
+        boolean portraitLeft = conf.orientation == conf.ORIENTATION_PORTRAIT && game.isLefthandedModeActive();
+
+        return activity.findViewById(portraitLeft ?  R.id.controlPanelLeft //sl.find... doesn't seem to work
+                                            :  R.id.controlPanel     );
+    }
+
+    public void hide(){getControlPanel().setVisibility(View.GONE);}
+
+    public void show(){getControlPanel().setVisibility(View.VISIBLE);}
 }

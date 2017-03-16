@@ -9,6 +9,7 @@ package de.sudoq.controller.sudoku;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.gesture.GestureOverlayView;
 import android.gesture.GestureStore;
 import android.graphics.Bitmap;
@@ -537,20 +538,17 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 	}
 
-	private View getControlPanel(){
-		return findViewById(game.isLefthandedModeActive() ?  R.id.controlPanelLeft
-				                                          :  R.id.controlPanel     );
-	}
+
 
 	public void setModeHint(){
-		getControlPanel().setVisibility(View.GONE);
+		controlPanel.hide();
 		findViewById(R.id.hintPanel).setVisibility(View.VISIBLE);
 		mode=Mode.HintMode;
 	}
 
 	public void setModeRegular(){
-		findViewById(R.id.   hintPanel).setVisibility(View.GONE);
-		getControlPanel().setVisibility(View.VISIBLE);
+		findViewById(R.id.hintPanel).setVisibility(View.GONE);
+		controlPanel.show();
 		mode=Mode.Regular;
 	}
 
