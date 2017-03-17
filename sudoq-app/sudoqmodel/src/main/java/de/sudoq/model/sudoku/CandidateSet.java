@@ -9,7 +9,7 @@ public class CandidateSet extends BitSet {
 
     private CandidateSet tmp;
 
-    private CandidateSet getTmp(){
+    private CandidateSet getTmp(){//creates a singleton tmp set, but is it really neccessary? We have gc after all.
         if (tmp==null)
             tmp = new CandidateSet();
         return tmp;
@@ -58,5 +58,12 @@ public class CandidateSet extends BitSet {
           }
         }
         return setBits;
+    }
+
+    public synchronized boolean hasCommonElement(BitSet bs){
+        CandidateSet tmp = getTmp();
+        tmp.assignWith(this);
+        tmp.and(bs);
+        return !tmp.isEmpty();
     }
 }

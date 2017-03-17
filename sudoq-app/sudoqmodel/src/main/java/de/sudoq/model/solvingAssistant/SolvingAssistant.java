@@ -9,6 +9,7 @@ import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.solverGenerator.solver.helper.HiddenHelper;
 import de.sudoq.model.solverGenerator.solver.helper.LastCandidateHelper;
 import de.sudoq.model.solverGenerator.solver.helper.LastDigitHelper;
+import de.sudoq.model.solverGenerator.solver.helper.LeftoverNoteHelper;
 import de.sudoq.model.solverGenerator.solver.helper.LockedCandandidatesHelper;
 import de.sudoq.model.solverGenerator.solver.helper.NakedHelper;
 import de.sudoq.model.solverGenerator.solver.helper.SolveHelper;
@@ -25,6 +26,7 @@ public class SolvingAssistant {
         Queue<SolveHelper> helpers = new LinkedList<>();
         helpers.add(new LastDigitHelper(s,  0));
         helpers.add(new LastCandidateHelper(s,  0));
+        helpers.add(new LeftoverNoteHelper(s,  0));
         //helpers.add(new NakedHelper    (s,1,0));
         helpers.add(new NakedHelper    (s,2,0));
         helpers.add(new NakedHelper    (s,3,0));

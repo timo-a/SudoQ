@@ -8,6 +8,8 @@ public enum HintTypes {
 
     LastCandidate,
 
+    LeftoverNote,
+
     NakedSingle,
     NakedPair,
     NakedTriple,

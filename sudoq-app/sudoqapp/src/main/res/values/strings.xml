@@ -233,6 +233,7 @@
     <string name="neutral_accusative_suffix"></string>
 
     <string name="hint_lastcandidate">Look at the highlighted field. There\'s only one candidate left.</string>
+    <string name="hint_leftovernote">Look at the highlighted {shape}. As {note} is set, any notes of it can be removed.</string>
 
     <string name="hint_nakedsingle_look">Look there\'s a naked single!</string>
     <string name="hint_nakedsingle_note">{note} is the only note left in the highlighted field.</string>

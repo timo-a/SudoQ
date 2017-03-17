@@ -71,17 +71,17 @@ public class SudokuMockUps {
         String[] candidates = pattern.split("\\s+");
         for(int y=0; y<yLim; y++)
             for(int x=0; x<xLim; x++){
-                String gu = candidates[xLim*y+x];
+                String currentEntry = candidates[xLim*y+x];
                 Field f =  sudoku.getField(Position.get(x, y));
-                clearCandidates(f,sudoku);
+                clearCandidates(f, sudoku);
 
-                if("0123456789".contains(gu))
-                    f.setCurrentValue(Integer.parseInt(gu)-1);
+                if("0123456789".contains(currentEntry))
+                    f.setCurrentValue(Integer.parseInt(currentEntry)-1);
+                else if(currentEntry.equals("."))
+                    ;//pass -> completely empty
                 else
-                    for(Character c:gu.toCharArray())
-                        f.toggleNote(Character.getNumericValue(c));
-
-
+                    for(Character c:currentEntry.toCharArray())
+                        f.toggleNote(Character.getNumericValue(c)-1);
 
             }
         return sudoku;
@@ -97,11 +97,14 @@ public class SudokuMockUps {
 
                 switch (gu.length()){
                     case 0: break;
-                    case 1: f.setCurrentValue(Integer.parseInt(gu)-1);
-                        break;
+                    case 1: if(gu.equals('.'))
+                                ;//pass '.' -> kein eintrag, keine notien
+                            else
+                                f.setCurrentValue(Integer.parseInt(gu)-1);
+                            break;
                     default:
                         for(Character c:gu.toCharArray())
-                            f.toggleNote(Character.getNumericValue(c));
+                            f.toggleNote(Character.getNumericValue(c)-1);
 
 
                 }

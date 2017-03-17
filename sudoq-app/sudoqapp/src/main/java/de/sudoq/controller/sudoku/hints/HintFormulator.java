@@ -8,6 +8,7 @@ import java.util.BitSet;
 import de.sudoq.R;
 import de.sudoq.controller.menus.Utility;
 import de.sudoq.model.solverGenerator.solution.LastDigitDerivation;
+import de.sudoq.model.solverGenerator.solution.LeftoverNoteDerivation;
 import de.sudoq.model.solverGenerator.solution.LockedCandidatesDerivation;
 import de.sudoq.model.solverGenerator.solution.NakedSetDerivation;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
@@ -26,6 +27,8 @@ public class HintFormulator {
             case LastDigit:     text = lastDigitText(context, sd);     break;
 
             case LastCandidate: text = lastCandidateText(context, sd); break;
+
+            case LeftoverNote:  text = leftoverNoteText(context, sd); break;
 
             case NakedSingle:   text = nakedSingleText(context, sd);   break;
 
@@ -70,6 +73,14 @@ public class HintFormulator {
         return sb.toString();
     }
 
+    private static String leftoverNoteText(Context context, SolveDerivation sd){
+        LeftoverNoteDerivation d = (LeftoverNoteDerivation) sd;
+
+        String shapeString =  Utility.constraintShapeAccDet2string(context, Utils.getGroupShape(d.getConstraint()));
+
+        return context.getString(R.string.hint_leftovernote).replace("{note}",  d.getNote()+1+"")
+                                                            .replace("{shape}", shapeString)   ;
+    }
 
     private static String nakedSingleText(Context context, SolveDerivation sd){
         NakedSetDerivation d = (NakedSetDerivation) sd;

@@ -13,12 +13,14 @@ import android.view.View;
 import java.util.Vector;
 
 import de.sudoq.model.solverGenerator.solution.HiddenSetDerivation;
+import de.sudoq.model.solverGenerator.solution.LeftoverNoteDerivation;
 import de.sudoq.model.solverGenerator.solution.LockedCandidatesDerivation;
 import de.sudoq.model.solverGenerator.solution.NakedSetDerivation;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.view.Hints.HiddenSetView;
 import de.sudoq.view.Hints.LastCandidateView;
 import de.sudoq.view.Hints.LastDigitView;
+import de.sudoq.view.Hints.LeftoverNoteView;
 import de.sudoq.view.Hints.LockedCandidatesView;
 import de.sudoq.view.Hints.NakedSetView;
 import de.sudoq.view.SudokuLayout;
@@ -51,6 +53,9 @@ public class HintPainter {
 
 			case LastCandidate: v = new LastCandidateView(context, sl, sd);
 			                    break;
+
+			case LeftoverNote:  v = new LeftoverNoteView(context, sl, (LeftoverNoteDerivation)sd);
+				                break;
 
 			case NakedSingle:
 			case NakedPair:
