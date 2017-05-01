@@ -158,7 +158,7 @@ public class SudokuFieldView extends View implements ModelChangeListener<Field>,
 		FieldViewPainter.getInstance().markField(canvas, this, this.symbol, false, this.isInExtraConstraint && !this.selected);
 
 		// Draw notes if field has no value
-		if (this.field.isEmpty()) {
+		if (this.field.isNotSolved()) {
 			drawNotes(canvas);
 		}
 	}

@@ -81,4 +81,7 @@ public abstract class Action {
 		return false;
 	}
 
+	public abstract boolean inverse(Action a);
+
+
 }

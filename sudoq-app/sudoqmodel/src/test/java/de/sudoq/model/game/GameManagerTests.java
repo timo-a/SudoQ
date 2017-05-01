@@ -7,11 +7,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
@@ -84,7 +80,7 @@ public class GameManagerTests {
 		assertFalse(game.isFinished());
 		int count = 0;
 		for (Field f : game.getSudoku()) {
-			if (f.isEmpty()) {
+			if (f.isNotSolved()) {
 				if (count == 0) {
 					game.solveField(f);
 					assertTrue(f.isSolvedCorrect());
@@ -94,7 +90,7 @@ public class GameManagerTests {
 		}
 		game.solveField();
 		for (Field f : game.getSudoku()) {
-			if (f.isEmpty()) {
+			if (f.isNotSolved()) {
 				count--;
 			}
 		}
@@ -147,7 +143,7 @@ public class GameManagerTests {
 		int id = game.getId();
 		Field field = null;
 		for (Field f : game.getSudoku()) {
-			if (f.isEmpty()) {
+			if (f.isNotSolved()) {
 				field = f;
 				break;
 			}

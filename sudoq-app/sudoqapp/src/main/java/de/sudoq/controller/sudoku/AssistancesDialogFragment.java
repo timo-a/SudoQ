@@ -51,7 +51,7 @@ public class AssistancesDialogFragment extends DialogFragment {
                 , getString(R.string.sf_sudoku_assistances_solve_random)));
 
         SudokuFieldView v = ((SudokuActivity)getActivity()).getCurrentFieldView();
-        if (v != null && v.getField().isEmpty())
+        if (v != null && v.getField().isNotSolved())
             itemStack.add(getString(R.string.sf_sudoku_assistances_solve_specific));
 
         if (Profile.getInstance().getAssistances().isHelperSet())
@@ -109,7 +109,7 @@ public class AssistancesDialogFragment extends DialogFragment {
         SolveDerivation sd = SolvingAssistant.giveAHint(game.getSudoku());
         if (sd == null) throw new AssertionError("derivation is null, maybe forgot to set lastDerivation = derivation?");
         TextView tv = (TextView) activity.findViewById(R.id.hintText);
-        tv.setText(HintFormulator.getText(activity.getBaseContext(),  sd));
+        tv.setText(HintFormulator.getText(activity,  sd));
         activity.setModeHint();
 
         sl.getHintPainter().realizeHint(sd);

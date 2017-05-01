@@ -363,7 +363,7 @@ public class Game implements Xmlable {
         this.assistancesCost += 3;
 
         for (Field f : this.sudoku) {
-            if (f.isEmpty()) {
+            if (f.isNotSolved()) {
                 this.addAndExecute(new SolveActionFactory().createAction(f.getSolution(), f));
                 break;
             }
@@ -387,7 +387,7 @@ public class Game implements Xmlable {
 
         List<Field> unsolvedFields = new ArrayList<Field>();
         for (Field f : this.sudoku) {
-            if (f.isEmpty()) {
+            if (f.isNotSolved()) {
                 unsolvedFields.add(f);
             }
         }

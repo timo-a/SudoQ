@@ -256,7 +256,7 @@ public class Generator {
 				positions = c.getPositions();
 				emptyOne = false;
 				for (Position p:positions) {
-					if (sudoku.getField(p).isEmpty()) {
+					if (sudoku.getField(p).isNotSolved()) {
 						emptyOne = true;
 						break;
 					}
@@ -343,7 +343,7 @@ public class Generator {
 					currentPos = Position.get(x, y);
 					int value = solvedSudoku.getField(currentPos).getSolution();
 					sudokuBuilder.addSolution(currentPos, value);
-					if (!sudoku.getField(currentPos).isEmpty())
+					if (!sudoku.getField(currentPos).isNotSolved())
 						sudokuBuilder.setFixed(currentPos);
 				}
 			}
@@ -523,7 +523,7 @@ public class Generator {
 			for(Position p : getPositions(solvedSudoku)){
 					int value = solvedSudoku.getField(p).getSolution();
 					suBi.addSolution(p, value);
-					if (!sudoku.getField(p).isEmpty())
+					if (!sudoku.getField(p).isNotSolved())
 						suBi.setFixed(p);
 
 			}

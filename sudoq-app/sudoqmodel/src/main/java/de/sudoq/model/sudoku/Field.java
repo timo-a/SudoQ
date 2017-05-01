@@ -189,12 +189,20 @@ public class Field extends ObservableModelImpl<Field> {
 	}
 
 	/**
-	 * Gibt zurück, ob dieses Feld leer ist.
+	 * Checks whether the field is occupied with any solution
 	 * 
-	 * @return true, falls dieses Feld leer ist, false falls nicht
+	 * @return true, if the current solution is 'empty'
 	 */
-	public boolean isEmpty() {
+	public boolean isNotSolved() {
 		return this.currentVal == EMPTYVAL;
+	}
+
+	/**
+	 * Checks wherther no solution nor notice flags are set.
+	 * @return
+	 */
+	public boolean isCompletelyEmpty(){
+		return isNotSolved() && noticeFlags.isEmpty();
 	}
 
 	/**

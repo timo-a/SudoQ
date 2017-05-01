@@ -47,4 +47,10 @@ public class SolveAction extends Action {
 		field.setCurrentValue(field.getCurrentValue() - diff);
 	}
 
+
+	public boolean inverse(Action a){
+		if(a instanceof SolveAction)
+			return field.equals(a.field) && diff+a.diff == 0;
+		return false;
+	}
 }

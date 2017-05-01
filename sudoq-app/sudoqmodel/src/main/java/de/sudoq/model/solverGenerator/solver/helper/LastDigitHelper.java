@@ -8,7 +8,6 @@ import java.util.Vector;
 import de.sudoq.model.solverGenerator.solution.DerivationBlock;
 import de.sudoq.model.solverGenerator.solution.DerivationField;
 import de.sudoq.model.solverGenerator.solution.LastDigitDerivation;
-import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.solvingAssistant.HintTypes;
 import de.sudoq.model.sudoku.Constraint;
@@ -36,7 +35,7 @@ public class LastDigitHelper extends SolveHelper {
         Position candidate = null;
         remaining.clear();
         for(Position p : positions)
-            if(sudoku.getField(p).isEmpty()){
+            if(sudoku.getField(p).isNotSolved()){
                 if(candidate==null)//found empty
                     candidate = p;
                 else{

@@ -48,4 +48,10 @@ public class NoteAction extends Action {
 		field.toggleNote(diff);
 	}
 
+	//as we just toggle, inverse means field and diff same on a
+	public boolean inverse(Action a){
+		if(a instanceof NoteAction)
+			return equals(a);
+		return false;
+	}
 }

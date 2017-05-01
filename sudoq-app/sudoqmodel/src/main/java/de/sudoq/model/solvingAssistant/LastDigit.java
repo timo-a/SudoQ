@@ -3,15 +3,10 @@ package de.sudoq.model.solvingAssistant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-import java.util.logging.StreamHandler;
 
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.Position;
-import de.sudoq.model.sudoku.Utils;
-
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by timo on 27.04.16.
@@ -25,7 +20,7 @@ public class LastDigit {
             if(c.hasUniqueBehavior()) {
                 Vector<Position> v = new Vector<>();
                 for(Position p : c.getPositions())
-                    if(sudoku.getField(p).isEmpty())
+                    if(sudoku.getField(p).isNotSolved())
                         v.add(p);
                 if(v.size() == 1){
                     /* We found an instance where only one field is empty */

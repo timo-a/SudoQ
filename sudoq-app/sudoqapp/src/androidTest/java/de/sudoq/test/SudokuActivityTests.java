@@ -1,6 +1,5 @@
 package de.sudoq.test;
 
-import android.util.Log;
 import android.view.View;
 import de.sudoq.R;
 import de.sudoq.controller.menus.NewSudokuConfigurationActivity;
@@ -77,7 +76,7 @@ public class SudokuActivityTests extends SudoqTestCase {
 		boolean found = false;
 		for (int row = 0; row < views.length; row++) {
 			for (int colum = 0; colum < views[row].length - 1; colum++) {
-				if (views[row][colum].getField().isEmpty() && views[row][colum + 1].getField().isEmpty()) {
+				if (views[row][colum].getField().isNotSolved() && views[row][colum + 1].getField().isNotSolved()) {
 					solo.clickOnView(views[row][colum]);
 					solo.clickOnView(SudokuUtilities.getKeyboardButton(sudokuActivity, 1));
 					solo.clickOnView(views[row][colum + 1]);

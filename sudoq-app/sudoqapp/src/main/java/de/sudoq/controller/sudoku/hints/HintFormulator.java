@@ -7,6 +7,7 @@ import java.util.BitSet;
 
 import de.sudoq.R;
 import de.sudoq.controller.menus.Utility;
+import de.sudoq.controller.sudoku.SudokuActivity;
 import de.sudoq.model.solverGenerator.solution.LastDigitDerivation;
 import de.sudoq.model.solverGenerator.solution.LeftoverNoteDerivation;
 import de.sudoq.model.solverGenerator.solution.LockedCandidatesDerivation;
@@ -14,6 +15,8 @@ import de.sudoq.model.solverGenerator.solution.NakedSetDerivation;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solution.XWingDerivation;
 import de.sudoq.model.sudoku.CandidateSet;
+import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.Utils;
 
 /**
@@ -23,35 +26,61 @@ public class HintFormulator {
     public static String getText(Context context, SolveDerivation sd){
         String text;
         Log.d("HintForm",sd.getType().toString());
-        switch (sd.getType()){
-            case LastDigit:     text = lastDigitText(context, sd);     break;
+        switch (sd.getType()) {
+            case LastDigit:
+                text = lastDigitText(context, sd);
+                break;
 
-            case LastCandidate: text = lastCandidateText(context, sd); break;
+            case LastCandidate:
+                text = lastCandidateText(context, sd);
+                break;
 
-            case LeftoverNote:  text = leftoverNoteText(context, sd); break;
+            case LeftoverNote:
+                text = leftoverNoteText(context, sd);
+                break;
 
-            case NakedSingle:   text = nakedSingleText(context, sd);   break;
+            case NakedSingle:
+                text = nakedSingleText(context, sd);
+                break;
 
             case NakedPair:
             case NakedTriple:
             case NakedQuadruple:
-            case NakedQuintuple: text = nakedMultiple(context, sd);    break;
+            case NakedQuintuple:
+                text = nakedMultiple(context, sd);
+                break;
 
-            case HiddenSingle:   text = hiddenSingleText(context, sd); break;
+            case HiddenSingle:
+                text = hiddenSingleText(context, sd);
+                break;
 
             case HiddenPair:
             case HiddenTriple:
             case HiddenQuadruple:
-            case HiddenQuintuple: text = hiddenMultiple(context, sd);  break;
+            case HiddenQuintuple:
+                text = hiddenMultiple(context, sd);
+                break;
 
-            case LockedCandidatesExternal: text = lockedCandidates(context, sd);  break;
+            case LockedCandidatesExternal:
+                text = lockedCandidates(context, sd);
+                break;
 
-            case XWing: text = xWing(context, sd); break;
+            case XWing:
+                text = xWing(context, sd);
+                break;
 
             case Backtracking:
-                text = context.getString(R.string.hint_backtracking);  break;
+                text = context.getString(R.string.hint_backtracking);
+                Sudoku sudoku = ((SudokuActivity) context).getGame().getSudoku();
+                for (Field f : sudoku)
+                    if (f.isCompletelyEmpty()){
+                        text += context.getString(R.string.hint_fill_out_notes);
+                        break;
+                    }
+
+                break;
             default:
-                text = "We found a hint, but did not implement a representation yet.";
+                text = "We found a hint, but did not implement a representation yet. That's a bug!";
         }
         return text;
     }

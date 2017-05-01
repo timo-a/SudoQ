@@ -492,7 +492,7 @@ public class Solver {
 	private boolean isInvalid() {
 		for (Position p : this.sudoku.positions)
 		    /* look for no solution entered && no candidates left */
-			if (this.sudoku.getCurrentCandidates(p).isEmpty() && this.sudoku.getField(p).isEmpty() )
+			if (this.sudoku.getCurrentCandidates(p).isEmpty() && this.sudoku.getField(p).isNotSolved() )
 				return true;
 
 		return false;
@@ -506,12 +506,12 @@ public class Solver {
 	 */
 	private boolean isSolved() {
 
-		//return sudoku.positions.forall( p => !sudoku.getField(p).isEmpty())
-		//return sudoku.positions.map(sudoku.getField).forall(f=>!f.isEmpty())
-		//return !sudoku.positions.map(sudoku.getField).exists(f=>f.isEmpty())
+		//return sudoku.positions.forall( p => !sudoku.getField(p).isNotSolved())
+		//return sudoku.positions.map(sudoku.getField).forall(f=>!f.isNotSolved())
+		//return !sudoku.positions.map(sudoku.getField).exists(f=>f.isNotSolved())
 
 		for (Position p : this.sudoku.positions)
-			if (this.sudoku.getField(p).isEmpty())
+			if (this.sudoku.getField(p).isNotSolved())
 				return false;
 
 		return true;

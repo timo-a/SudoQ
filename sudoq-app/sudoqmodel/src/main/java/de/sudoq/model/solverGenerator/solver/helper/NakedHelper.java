@@ -4,7 +4,6 @@ import java.util.BitSet;
 import java.util.List;
 import java.util.Stack;
 
-import de.sudoq.model.solverGenerator.solution.DerivationBlock;
 import de.sudoq.model.solverGenerator.solution.DerivationField;
 import de.sudoq.model.solverGenerator.solution.NakedSetDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
@@ -78,7 +77,7 @@ public class NakedHelper extends SubsetHelper {
         derivation=null;
         Stack<Position> positions = new Stack<>();
         for(Position p: constraint.getPositions())
-            if(sudoku.getField(p).isEmpty())
+            if(sudoku.getField(p).isNotSolved())
                 positions.add(p);
 
         do {

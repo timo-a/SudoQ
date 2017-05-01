@@ -129,7 +129,7 @@ public class SolverSudoku extends Sudoku {
 			case USE_EXISTING:
 				//solverSudoku's fields take the candidates/notes from sudoku
 				for (Position p : positions)
-					if(sudoku.getField(p).isEmpty())
+					if(sudoku.getField(p).isNotSolved())
 						for(int i=0; i<getSudokuType().getNumberOfSymbols(); i++)
 							if(sudoku.getField(p).isNoteSet(i) != currentCandidates.get(p).get(i))
 								currentCandidates.get(p).flip(i);
@@ -155,13 +155,13 @@ public class SolverSudoku extends Sudoku {
 		this.currentCandidates = this.positionPool.getPositionMap();
 		// set the candidate lists of all fields to maximum
 		for (Position p: this.positions)
-			if (fields.get(p).isEmpty())
+			if (fields.get(p).isNotSolved())
 				this.currentCandidates.get(p).set(0, getSudokuType().getNumberOfSymbols());
 			
 		
 
 		/*this.positions.stream()
-						.filter(p -> fields.get(p).isEmpty())
+						.filter(p -> fields.get(p).isNotSolved())
 						.forEach(p -> this.currentCandidates.get(p).set(0, getSudokuType().getNumberOfSymbols()));
 		functional*/
 		updateCandidates();
@@ -235,7 +235,7 @@ public class SolverSudoku extends Sudoku {
 		boolean isInvalid = false;
 
 		for (Position position : positions) {
-			if (!isInvalid && !getField(position).isEmpty()) {
+			if (!isInvalid && !getField(position).isNotSolved()) {
 				// Update fields in unique constraints
 				updatedConstraints = this.constraints.get(position);
 				for (Constraint uConstraint : updatedConstraints) {
@@ -245,7 +245,7 @@ public class SolverSudoku extends Sudoku {
 							Position updatedPosition = updatedPositions.get(up);
 							this.currentCandidates.get(updatedPosition).clear(getField(position).getCurrentValue());
 							if (this.currentCandidates.get(updatedPosition).isEmpty()
-							 && getField(updatedPosition).isEmpty())
+							 && getField(updatedPosition).isNotSolved())
 								isInvalid = true;
 						}
 					}
@@ -304,7 +304,7 @@ public class SolverSudoku extends Sudoku {
 		for (Constraint constr: updatedConstraints) {
 			updatedPositions = constr.getPositions();
 			for (Position uPos : updatedPositions)
-				if (this.fields.get(uPos).isEmpty())
+				if (this.fields.get(uPos).isNotSolved())
 					if (constr.hasUniqueBehavior())
 						this.currentCandidates.get(uPos).clear(candidate);
 					else {

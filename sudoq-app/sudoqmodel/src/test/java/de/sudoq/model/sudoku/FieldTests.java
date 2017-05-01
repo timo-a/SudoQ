@@ -7,8 +7,6 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import de.sudoq.model.sudoku.Field;
-
 public class FieldTests {
 
 	@Test
@@ -133,10 +131,10 @@ public class FieldTests {
 		Field f = new Field(true, 3, -1, 9);
 		f.setCurrentValue(5);
 		assertEquals(f.getCurrentValue(), 5);
-		assertTrue(!f.isEmpty());
+		assertTrue(!f.isNotSolved());
 		f.clearCurrentValue();
 		assertEquals(f.getCurrentValue(), Field.EMPTYVAL);
-		assertTrue(f.isEmpty());
+		assertTrue(f.isNotSolved());
 	}
 
 	@Test(expected = IllegalArgumentException.class)

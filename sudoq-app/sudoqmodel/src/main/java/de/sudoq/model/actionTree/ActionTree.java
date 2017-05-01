@@ -65,23 +65,17 @@ public class ActionTree extends ObservableModelImpl<ActionTreeElement> implement
 		if (rootElement != null && mountingElement == null) {
 				throw new IllegalArgumentException(); //There'a a root but no mounting el? -> throw exception 
 		}
-		
-		/* check if action already in Tree, i.e. we went back in actionTree but are doing same steps again */
-		boolean redundandAction = false;
-		ActionTreeElement ate = null;
-		if (mountingElement != null) {
-			ArrayList<ActionTreeElement> children = mountingElement.getChildrenList();
-			for(ActionTreeElement ateI : children)
-				if(ateI.actionEquals(action)){
-					ate = ateI;
-					redundandAction = true;
-					break;
-				}
-		}		
-		
+		ActionTreeElement ate;
 		/* */
-		if(!redundandAction)
+		if(isActionRedundant(mountingElement, action))
 		{
+			ate = findExistingChildren(mountingElement, action).get(0);
+		}else if(isActionAStepBack(mountingElement, action)){
+			ate = mountingElement;
+		}else if(isActionOnSameField(mountingElement, action)){
+			ate = new ActionTreeElement(idCounter, action, mountingElement.getParent());
+			idCounter++;
+		}else{
 			ate = new ActionTreeElement(idCounter, action, mountingElement);
 			idCounter++;
 		}
@@ -96,8 +90,36 @@ public class ActionTree extends ObservableModelImpl<ActionTreeElement> implement
 		return ate;
 		
 	}
-	
-	
+
+
+
+	/* check if action already in Tree,
+	      i.e. we went back in actionTree but are doing same steps again */
+	private boolean isActionRedundant(ActionTreeElement mountingElement, Action action){
+
+		return !findExistingChildren(mountingElement, action).isEmpty();
+	}
+
+	private List<ActionTreeElement> findExistingChildren(ActionTreeElement mountingElement, Action action){
+		List<ActionTreeElement> l = new Stack<>();
+
+		if (mountingElement != null) {
+			for(ActionTreeElement ateI : mountingElement.getChildrenList())
+				if(ateI.actionEquals(action))
+					l.add(ateI);
+
+		}
+		return l;
+	}
+
+	private boolean isActionAStepBack(ActionTreeElement mountingElement, Action action) {
+		return mountingElement.getAction().inverse(action);
+	}
+
+	private boolean isActionOnSameField(ActionTreeElement mountingElement, Action action) {
+		return mountingElement.getAction().field.equals(action.field);
+	}
+
 
 	/**
 	 * Diese Methode durchsucht den Baum nach dem Element mit der gegebenen id.
@@ -154,7 +176,7 @@ public class ActionTree extends ObservableModelImpl<ActionTreeElement> implement
 	 * 
 	 * @return true falls der Baum konsistent ist, andernfalls false
 	 */
-	public boolean isConsitent() {
+	public boolean isConsistent() {
 		LinkedList<ActionTreeElement> elements = new LinkedList<ActionTreeElement>();
 		for (ActionTreeElement ate : this) {
 			if (elements.contains(ate)) {

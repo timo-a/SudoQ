@@ -26,6 +26,7 @@ public class ActionTreeElement extends ObservableModelImpl<ActionTreeElement> im
 	 * Eine eindeutige identifikationsnummer für dieses Element
 	 */
 	private int id;
+
 	/**
 	 * Die Aktion dieses Elements
 	 */
@@ -102,7 +103,9 @@ public class ActionTreeElement extends ObservableModelImpl<ActionTreeElement> im
 	 *             Wird geworfen, falls die ID ungültig oder die Action null ist.
 	 */
 	public ActionTreeElement(int id, Action action, ActionTreeElement parent) {
-		if (action != null) {
+		if (action == null) {
+			throw new IllegalArgumentException();
+		} else {
 			this.id = id;
 			this.action = action;
 			this.marked = false;
@@ -115,9 +118,11 @@ public class ActionTreeElement extends ObservableModelImpl<ActionTreeElement> im
 			}
 
 			following = new ArrayList<ActionTreeElement>();
-		} else {
-			throw new IllegalArgumentException();
 		}
+	}
+
+	public Action getAction() {
+		return action;
 	}
 
 	/**
@@ -302,7 +307,7 @@ public class ActionTreeElement extends ObservableModelImpl<ActionTreeElement> im
 		}
 		return false;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
