@@ -9,6 +9,7 @@ import de.sudoq.controller.SudoqCompatActivity;
 import de.sudoq.controller.menus.GestureBuilder;
 import de.sudoq.model.ModelChangeListener;
 import de.sudoq.model.game.Assistances;
+import de.sudoq.model.game.GameSettings;
 import de.sudoq.model.profile.Profile;
 
 public abstract class PreferencesActivity extends SudoqCompatActivity implements ModelChangeListener<Profile> {
@@ -19,8 +20,8 @@ public abstract class PreferencesActivity extends SudoqCompatActivity implements
 	CheckBox markWrongSymbol;
 	CheckBox restrictCandidates;
 	
-	CheckBox helper;
-	CheckBox lefthand;
+	//CheckBox helper;
+	//CheckBox lefthand;
 	Button   restricttypes;
 	
 	
@@ -64,31 +65,17 @@ public abstract class PreferencesActivity extends SudoqCompatActivity implements
 		this.refreshValues();
 	}
 	
-	protected void saveToProfile() {
-		Profile p = Profile.getInstance();
-		p.setGestureActive(gesture.isChecked());
-		if(helper != null)
-			p.setHelperActive(helper.isChecked());
-		if(lefthand != null)
-			p.setLefthandActive(lefthand.isChecked());
-		saveAssistance(Assistances.autoAdjustNotes,    autoAdjustNotes);
-		saveAssistance(Assistances.markRowColumn,      markRowColumn  );
-		saveAssistance(Assistances.markWrongSymbol,    markWrongSymbol);
-		saveAssistance(Assistances.restrictCandidates, restrictCandidates);
-		Profile.getInstance().saveChanges();
-	}
+	abstract protected void saveToProfile();
 	
-	private void saveAssistance(Assistances a, CheckBox c){
+	protected void saveAssistance(Assistances a, CheckBox c){
 		Profile.getInstance().setAssistance(a, c.isChecked());
 	}
 	
-	/* parameter View only needed to be foud by xml who clicks this*/
-	public void switchToAdvancedPreferences(View view){
-		
-		Intent advIntent = new Intent(this, AdvancedPreferencesActivity.class);
-		AdvancedPreferencesActivity.myCaller=this;
-		startActivity(advIntent);
 
+	protected void saveCheckbox(CheckBox cb, Assistances a, GameSettings gs){
+		if(cb.isChecked())
+			gs.setAssistance(a);
+		else
+			gs.clearAssistance(a);
 	}
-		
 }

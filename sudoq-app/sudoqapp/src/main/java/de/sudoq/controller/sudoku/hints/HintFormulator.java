@@ -71,12 +71,9 @@ public class HintFormulator {
 
             case Backtracking:
                 text = context.getString(R.string.hint_backtracking);
-                Sudoku sudoku = ((SudokuActivity) context).getGame().getSudoku();
-                for (Field f : sudoku)
-                    if (f.isCompletelyEmpty()){
-                        text += context.getString(R.string.hint_fill_out_notes);
-                        break;
-                    }
+                if(aFieldIsEmpty((SudokuActivity) context))
+                    text += context.getString(R.string.hint_fill_out_notes);
+
 
                 break;
             default:
@@ -84,6 +81,17 @@ public class HintFormulator {
         }
         return text;
     }
+
+    private static boolean aFieldIsEmpty(SudokuActivity sActivity){
+        Sudoku sudoku = sActivity.getGame().getSudoku();
+        for (Field f : sudoku)
+            if (f.isCompletelyEmpty()){
+                return true;
+            }
+        return false;
+    }
+
+
 
     private static String lastDigitText(Context context, SolveDerivation sd){
         LastDigitDerivation d = (LastDigitDerivation) sd;

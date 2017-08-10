@@ -15,6 +15,7 @@ import java.util.Stack;
 
 import de.sudoq.model.ModelChangeListener;
 import de.sudoq.model.ObservableModelImpl;
+import de.sudoq.model.sudoku.Field;
 
 /**
  * Diese Klasse repräsentiert die Menge aller Züge auf einem Sudoku. Sie erlaubt
@@ -33,6 +34,10 @@ public class ActionTree extends ObservableModelImpl<ActionTreeElement> implement
 	 */
 	private int idCounter;
 
+	public enum InsertStrategy {redundant, undo, upwards, regular, none};
+	private InsertStrategy lastStrategy = InsertStrategy.none;
+	public InsertStrategy getLastInsertStrategy(){return lastStrategy;}
+	private List<Action> actionSequence = new ArrayList<>();
 	/** Constructors */
 
 	/**
@@ -40,7 +45,12 @@ public class ActionTree extends ObservableModelImpl<ActionTreeElement> implement
 	 */
 	public ActionTree() {
 		idCounter = 1;
-		rootElement = null;
+		Action mockAction = new Action(0, new Field(-1, 1)) {
+			public void undo() { }
+			public void execute() { }
+			public boolean inverse(Action a){ return false; }
+		};
+		rootElement = new ActionTreeElement(idCounter++, mockAction, rootElement);
 	}
 
 	/** Methods */
@@ -65,60 +75,26 @@ public class ActionTree extends ObservableModelImpl<ActionTreeElement> implement
 		if (rootElement != null && mountingElement == null) {
 				throw new IllegalArgumentException(); //There'a a root but no mounting el? -> throw exception 
 		}
+
 		ActionTreeElement ate;
 		/* */
-		if(isActionRedundant(mountingElement, action))
-		{
-			ate = findExistingChildren(mountingElement, action).get(0);
-		}else if(isActionAStepBack(mountingElement, action)){
-			ate = mountingElement;
-		}else if(isActionOnSameField(mountingElement, action)){
-			ate = new ActionTreeElement(idCounter, action, mountingElement.getParent());
-			idCounter++;
-		}else{
-			ate = new ActionTreeElement(idCounter, action, mountingElement);
-			idCounter++;
-		}
-		
+		ate = new ActionTreeElement(idCounter, action, mountingElement);
+		idCounter++;
+
 		
 		if (rootElement==null) {
-			rootElement = ate;  //if there's no root, ate is root
+			rootElement = ate;  //if there's no root, ate is root TODO as of now theres never a null root right?
 		}
 		
 		notifyListeners(ate);
-		
+		//actionSequence.clear();
 		return ate;
 		
 	}
 
 
 
-	/* check if action already in Tree,
-	      i.e. we went back in actionTree but are doing same steps again */
-	private boolean isActionRedundant(ActionTreeElement mountingElement, Action action){
 
-		return !findExistingChildren(mountingElement, action).isEmpty();
-	}
-
-	private List<ActionTreeElement> findExistingChildren(ActionTreeElement mountingElement, Action action){
-		List<ActionTreeElement> l = new Stack<>();
-
-		if (mountingElement != null) {
-			for(ActionTreeElement ateI : mountingElement.getChildrenList())
-				if(ateI.actionEquals(action))
-					l.add(ateI);
-
-		}
-		return l;
-	}
-
-	private boolean isActionAStepBack(ActionTreeElement mountingElement, Action action) {
-		return mountingElement.getAction().inverse(action);
-	}
-
-	private boolean isActionOnSameField(ActionTreeElement mountingElement, Action action) {
-		return mountingElement.getAction().field.equals(action.field);
-	}
 
 
 	/**
@@ -152,14 +128,6 @@ public class ActionTree extends ObservableModelImpl<ActionTreeElement> implement
 		return idCounter - 1;
 	}
 
-	/**
-	 * Gibt zurück ob der Baum leer ist
-	 * 
-	 * @return true falls er leer ist, false falls Elemente enthalten sind
-	 */
-	public boolean isEmpty() {
-		return idCounter == 1;
-	}
 
 	/**
 	 * Gibt das Wurzelelemtn dieses Baums zurueck
@@ -207,6 +175,8 @@ public class ActionTree extends ObservableModelImpl<ActionTreeElement> implement
 			return new LinkedList<ActionTreeElement>();
 		}
 
+
+
 		// Ways from Start or End Element to the tree root
 		LinkedList<ActionTreeElement> startToRoot = new LinkedList<ActionTreeElement>();
 		LinkedList<ActionTreeElement> endToRoot = new LinkedList<ActionTreeElement>();
@@ -223,12 +193,9 @@ public class ActionTree extends ObservableModelImpl<ActionTreeElement> implement
 			path = false;
 		}
 
-		while (startToRoot.isEmpty() || endToRoot.isEmpty()
-				|| (startToRoot.getLast() != endToRoot.getLast()
-				&& (startToRoot.getLast().getParent() != null
-				|| endToRoot.getLast().getParent() != null))) {
+		while (conditionA(startToRoot, endToRoot)) {//I wish I knew what they do
 
-			while (current != null && (other == null || current.getId() >= other.getId())) {
+			while (conditionB(current,other)) {
 				(path ? startToRoot : endToRoot).addLast(current);
 				current = current.getParent();
 			}
@@ -264,6 +231,24 @@ public class ActionTree extends ObservableModelImpl<ActionTreeElement> implement
 
 		return startToRoot;
 	}
+
+	private static boolean conditionA(LinkedList<ActionTreeElement> startToRoot, LinkedList<ActionTreeElement> endToRoot){
+		boolean eitherListEmpty = startToRoot.isEmpty() || endToRoot.isEmpty();
+
+		return eitherListEmpty || (
+				                   startToRoot.getLast() != endToRoot.getLast() //last elements differ
+										   &&
+								   startToRoot.getLast().getParent() != null || endToRoot.getLast().getParent() != null
+		                          );
+		/* mangels laziness kann ich leider nicht alles abkürzen*/
+	}
+
+	private static boolean conditionB(ActionTreeElement current, ActionTreeElement other){
+
+		return current != null && (other == null || current.getId() >= other.getId());
+	}
+
+
 
 	/**
 	 * Gibt einen Iterator für die ActionTreeElemente zurück.

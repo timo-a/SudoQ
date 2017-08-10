@@ -73,6 +73,8 @@ public abstract class XmlHandler<T extends Xmlable> {
 			obj.fillFromXml(helper.loadXml(getFileFor(obj)));
 		} catch (IOException e) {
 			throw new IllegalArgumentException("Something went wrong when reading xml " + getFileFor(obj), e);
+		} catch (IllegalArgumentException e){
+			throw new IllegalArgumentException("Something went wrong when filling obj from xml ", e);
 		}
 		return obj;
 	}

@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import de.sudoq.R;
 import de.sudoq.controller.SudoqCompatActivity;
@@ -74,34 +76,15 @@ public class SplashActivity extends SudoqCompatActivity {
 
 	private final static String HEAD_DIRECTORY = "sudokus";
 
-	private final static String INIIALIZED_TAG = "Initialized";
+	private final static String INITIALIZED_TAG = "Initialized";
 
 	private final static String VERSION_TAG = "version";
 	private final static String NO_VERSION_YET = "0.0.0";
-	private final static String NEWEST_ASSET_VERSION = "1.0.6";
+	protected final static String NEWEST_ASSET_VERSION = "1.0.6";
 
-	private static String currentVersionValue = "";
+	private static String currentVersionName = "";
 
-	/* is version a older than b? 
-	 * a,b = "x.y.z"  */
-	boolean older(String a, String b){
-		String[] aTokenized = a.split("[.]");
-		String[] bTokenized = b.split("[.]");
-		assert aTokenized.length == bTokenized.length;
-				
-		for(int i=0; i< aTokenized.length; i++){
-			int aTok = Integer.parseInt(aTokenized[i]);
-			int bTok = Integer.parseInt(bTokenized[i]);
-			
-			if(aTok < bTok)
-				return true;
-			else if(aTok > bTok)
-				return false;
-		}
-		
-		return false;
-	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -129,42 +112,19 @@ public class SplashActivity extends SudoqCompatActivity {
 		SharedPreferences settings = getSharedPreferences("Prefs", 0);
 
 		/* get version value */
-		try
-		{
-			currentVersionValue = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
-		} catch (NameNotFoundException e)
-		{
+		try {
+			currentVersionName = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
+		} catch (NameNotFoundException e) {
 			Log.v(LOG_TAG, e.getMessage());
 		}
 
 		/* is this a new version? */
 		String oldVersionName = settings.getString(VERSION_TAG, NO_VERSION_YET);
-		/* Specifies whether this is a regular start or an assets-update, i.e. version has changed and assets have to be copied*/
-		Boolean updateSituation = older(oldVersionName, NEWEST_ASSET_VERSION);
 
-		if (updateSituation && !this.startedCopying) {
+		if (updateSituation(oldVersionName) && !this.startedCopying) {
 				
 			/*hint*/
-			try {
-				String[] l = getAssets().list("");
-                boolean foundSudokusinAssetfolder = Arrays.asList(l).contains(HEAD_DIRECTORY);
-                //TODO make this work:
-				//boolean fsaf = Stream.of(l).anyMatch(s -> s.equals(HEAD_DIRECTORY));
-				if(!foundSudokusinAssetfolder){
-					String msg =  "This app will probably crash once you try to start a new sudoku. "+
-					              "This is because the person who compiled this app forgot about the 'assets' folder. "+
-					              "Please tell him that!";
-					Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-					Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-					Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-				}
-				//Toast.makeText(this, l[0].equals(HEAD_DIRECTORY)+"", Toast.LENGTH_SHORT).show();
-				
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			/*end of hint*/
+			alertIfNoAssetFolder();
 			
 			Log.v(LOG_TAG, "we will do an initialization");
 			new Initialization().execute(null, null, null);
@@ -191,6 +151,87 @@ public class SplashActivity extends SudoqCompatActivity {
 		};
 		splashThread.start();
 	}
+
+	/* Specifies whether this is a regular start or an assets-update,
+	 * i.e. version has changed and assets have to be copied
+	 *
+	 * 'protected' for unit test
+	 */
+	protected boolean updateSituation(String oldVersionName) {
+		Boolean updateSituation;
+		try {
+			updateSituation = older(oldVersionName, NEWEST_ASSET_VERSION);
+		}catch(Exception e){
+			updateSituation = true; //when in doubt DO an update!
+		}
+		return updateSituation;
+	}
+
+
+	/** is version a older than b?
+     * a,b = "12.68.87(abc..)"  **/
+	boolean older(String a, String b) throws Exception {
+		int[] aTokenized = versionToNumbers(a);
+		int[] bTokenized = versionToNumbers(b);
+		assert aTokenized.length == bTokenized.length;
+
+		for(int i=0; i< aTokenized.length; i++){
+			int aTok = aTokenized[i];
+			int bTok = bTokenized[i];
+
+			if(aTok < bTok)
+				return true;
+			else if(aTok > bTok)
+				return false;
+		}
+
+		return false;
+	}
+
+	private int[] versionToNumbers (String version) throws Exception {
+		String pattern = "(\\d+)[.](\\d+)[.](\\d+)([a-z]?)";
+		Pattern r = Pattern.compile(pattern);
+		Matcher m = r.matcher(version);
+		m.find();
+
+		int[] result = new int[4];
+
+		if (m.groupCount()==4) {
+			String letter = m.group(4);
+			if (letter.length() == 1)
+				result[3] = letter.charAt(0) - 'a' + 1;
+		}
+
+		for(int i : new int[]{1, 2, 3})
+			result[i-1] = Integer.parseInt(m.group(i));
+
+
+		return result;
+	}
+
+
+	private void alertIfNoAssetFolder(){
+		try {
+			String[] l = getAssets().list("");
+			boolean foundSudokusInAssetfolder = Arrays.asList(l).contains(HEAD_DIRECTORY);
+			//TODO make this work:
+			//boolean fsaf = Stream.of(l).anyMatch(s -> s.equals(HEAD_DIRECTORY));
+			if(!foundSudokusInAssetfolder){
+				String msg =  "This app will probably crash once you try to start a new sudoku. "+
+						"This is because the person who compiled this app forgot about the 'assets' folder. "+
+						"Please tell him that!";
+				Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+				Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+				Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+			}
+			//Toast.makeText(this, l[0].equals(HEAD_DIRECTORY)+"", Toast.LENGTH_SHORT).show();
+
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+
 
 	/**
 	 * Speichert die bereits im Splash gewartete Zeit.
@@ -259,8 +300,8 @@ public class SplashActivity extends SudoqCompatActivity {
 		@Override
 		public void onPostExecute(Void v) {
 			SharedPreferences settings = getSharedPreferences("Prefs", 0);
-			settings.edit().putBoolean(INIIALIZED_TAG, true).commit();
-			settings.edit().putString(VERSION_TAG, currentVersionValue).commit();
+			settings.edit().putBoolean(INITIALIZED_TAG, true).commit();
+			settings.edit().putString(VERSION_TAG, currentVersionName).commit();
 			Log.d(LOG_TAG, "Assets completely copied");
 		}
 

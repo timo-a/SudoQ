@@ -42,11 +42,11 @@ import de.sudoq.model.xml.XmlTree;
  * 
  * Hauptmenü -> "neues Sudoku" führt hierher 
  */
-public class NewSudokuConfigurationActivity extends SudoqCompatActivity {
+public class NewSudokuActivity extends SudoqCompatActivity {
 
 	/** Attributes */
 
-	private static final String LOG_TAG = NewSudokuConfigurationActivity.class.getSimpleName();
+	private static final String LOG_TAG = NewSudokuActivity.class.getSimpleName();
 
 	private SudokuTypes sudokuType;
 

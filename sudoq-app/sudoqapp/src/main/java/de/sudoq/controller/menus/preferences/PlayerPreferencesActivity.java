@@ -157,11 +157,21 @@ public class PlayerPreferencesActivity extends PreferencesActivity {
 		saveToProfile();
 	}
 
+	protected void saveToProfile() {
+		Profile p = Profile.getInstance();
+		p.setGestureActive(gesture.isChecked());
+		saveAssistance(Assistances.autoAdjustNotes,    autoAdjustNotes);
+		saveAssistance(Assistances.markRowColumn,      markRowColumn  );
+		saveAssistance(Assistances.markWrongSymbol,    markWrongSymbol);
+		saveAssistance(Assistances.restrictCandidates, restrictCandidates);
+		Profile.getInstance().saveChanges();
+	}
+
 	/* parameter View only needed to be found by xml who clicks this */
 	public void switchToAdvancedPreferences(View view){
 		
 		Intent advIntent = new Intent(this, AdvancedPreferencesActivity.class);
-		AdvancedPreferencesActivity.myCaller=this;
+		AdvancedPreferencesActivity.caller= AdvancedPreferencesActivity.ParentActivity.PROFILE;
 		//AdvancedPreferencesActivity.gameSettings = this.gameSettings;
 		startActivity(advIntent);
 

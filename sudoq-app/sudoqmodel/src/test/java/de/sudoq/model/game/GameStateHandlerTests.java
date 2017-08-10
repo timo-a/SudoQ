@@ -29,7 +29,7 @@ public class GameStateHandlerTests {
 
 		stateHandler.addAndExecute(af.createAction(5, field));
 		assertEquals(field.getCurrentValue(), 5);
-		assertTrue(!stateHandler.getActionTree().isEmpty());
+		assertTrue(stateHandler.getActionTree().getSize() !=0);
 	}
 
 	@Test
@@ -77,18 +77,44 @@ public class GameStateHandlerTests {
 	}
 
 	@Test
+	public void testTapSameSymbol4Times() {
+		/* regression for: press three times '3' on same field.
+		 * first 2 beheave as expected, 3rd does nothing and 4 crashes */
+		GameStateHandler stateHandler = new GameStateHandler();
+		ActionFactory af = new SolveActionFactory();
+		Field field1 = new Field(-1, 9);
+
+		stateHandler.addAndExecute(af.createAction(3, field1));
+		assertEquals(3, field1.getCurrentValue());
+
+		stateHandler.addAndExecute(af.createAction(-1, field1));
+		assertEquals(-1, field1.getCurrentValue());
+
+		stateHandler.addAndExecute(af.createAction(3, field1));
+		assertEquals(3, field1.getCurrentValue());
+
+		stateHandler.addAndExecute(af.createAction(-1, field1));
+		assertEquals(-1, field1.getCurrentValue());
+
+	}
+
+
+	@Test
 	public void testGoTo() {
 		GameStateHandler stateHandler = new GameStateHandler();
 		ActionFactory af = new SolveActionFactory();
 		Field field = new Field(-1, 9);
 
+		//add 5, undo test if undo successful
 		int value = field.getCurrentValue();
 		stateHandler.addAndExecute(af.createAction(5, field));
 		stateHandler.goToState(stateHandler.getCurrentState());
 		stateHandler.undo();
 		assertEquals(value, field.getCurrentValue());
+
+		//redo the 5,
 		stateHandler.redo();
-		ActionTreeElement first = stateHandler.getCurrentState();
+		ActionTreeElement first = stateHandler.getCurrentState();// first <- 5
 		stateHandler.addAndExecute(af.createAction(7, field));
 		ActionTreeElement branch = stateHandler.getCurrentState();
 		stateHandler.goToState(first);
@@ -114,22 +140,25 @@ public class GameStateHandlerTests {
 	public void testEmptyUndoStack() {
 		GameStateHandler stateHandler = new GameStateHandler();
 		ActionFactory af = new SolveActionFactory();
-		Field field = new Field(-1, 9);
+		Field f_1 = new Field(-1, 9);
+		Field f_2 = new Field(-2, 9);
+		Field f_3 = new Field(-3, 9);
+		Field f_4 = new Field(-4, 9);
 
-		stateHandler.addAndExecute(af.createAction(1, field));
+		stateHandler.addAndExecute(af.createAction(1, f_1));
 		ActionTreeElement b1 = stateHandler.getCurrentState();
 		stateHandler.redo();
 		assertTrue(b1.equals(stateHandler.getCurrentState()));
 		stateHandler.undo();
 		ActionTreeElement start = stateHandler.getCurrentState();
 		assertNotNull(start);
-		stateHandler.addAndExecute(af.createAction(2, field));
+		stateHandler.addAndExecute(af.createAction(2, f_2));
 		ActionTreeElement b2 = stateHandler.getCurrentState();
 		stateHandler.goToState(start);
 		assertTrue(stateHandler.canRedo());
 		stateHandler.redo();
 		assertTrue(b2.equals(stateHandler.getCurrentState()));
-		stateHandler.addAndExecute(af.createAction(3, field));
+		stateHandler.addAndExecute(af.createAction(3, f_3));
 		ActionTreeElement b3 = stateHandler.getCurrentState();
 		stateHandler.goToState(b1);
 		stateHandler.goToState(b2);
@@ -137,7 +166,7 @@ public class GameStateHandlerTests {
 		stateHandler.redo();
 		assertTrue(b3.equals(stateHandler.getCurrentState()));
 		stateHandler.goToState(b2);
-		stateHandler.addAndExecute(af.createAction(4, field));
+		stateHandler.addAndExecute(af.createAction(4, f_4));
 		stateHandler.goToState(b1);
 		stateHandler.goToState(b2);
 		assertFalse(stateHandler.canRedo());

@@ -2,7 +2,7 @@ package de.sudoq.test;
 
 import android.view.View;
 import de.sudoq.R;
-import de.sudoq.controller.menus.NewSudokuConfigurationActivity;
+import de.sudoq.controller.menus.NewSudokuActivity;
 import de.sudoq.controller.sudoku.SudokuActivity;
 import de.sudoq.view.SudokuFieldView;
 
@@ -11,7 +11,7 @@ public class SudokuActivityTests extends SudoqTestCase {
 	// AT20
 	public void testSudokuSolveHelp() {
 		solo.clickOnText(solo.getCurrentActivity().getString(R.string.sf_mainmenu_new_sudoku));
-		solo.assertCurrentActivity("should be sudokupreferences", NewSudokuConfigurationActivity.class);
+		solo.assertCurrentActivity("should be sudokupreferences", NewSudokuActivity.class);
 		solo.clickOnText(solo.getCurrentActivity().getString(R.string.sf_sudokupreferences_start));
 		solo.assertCurrentActivity("should be in sudoku", SudokuActivity.class);
 
@@ -27,7 +27,7 @@ public class SudokuActivityTests extends SudoqTestCase {
 	// AT 40
 	public void testSudokuTime() {
 		solo.clickOnText(solo.getCurrentActivity().getString(R.string.sf_mainmenu_new_sudoku));
-		solo.assertCurrentActivity("should be sudokupreferences", NewSudokuConfigurationActivity.class);
+		solo.assertCurrentActivity("should be sudokupreferences", NewSudokuActivity.class);
 		solo.clickOnText(solo.getCurrentActivity().getString(R.string.sf_sudokupreferences_start));
 		solo.assertCurrentActivity("should be in sudoku", SudokuActivity.class);
 
@@ -66,7 +66,7 @@ public class SudokuActivityTests extends SudoqTestCase {
 	// AT80
 	public void testIsValidToast() {
 		solo.clickOnText(solo.getCurrentActivity().getString(R.string.sf_mainmenu_new_sudoku));
-		solo.assertCurrentActivity("should be sudokupreferences", NewSudokuConfigurationActivity.class);
+		solo.assertCurrentActivity("should be sudokupreferences", NewSudokuActivity.class);
 		solo.clickOnText(solo.getCurrentActivity().getString(R.string.sf_sudokupreferences_start));
 		solo.assertCurrentActivity("should be in sudoku", SudokuActivity.class);
 

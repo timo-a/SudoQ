@@ -15,7 +15,7 @@ import android.view.View;
 import android.widget.CheckBox;
 
 import de.sudoq.R;
-import de.sudoq.controller.menus.NewSudokuConfigurationActivity;
+import de.sudoq.controller.menus.NewSudokuActivity;
 import de.sudoq.model.game.Assistances;
 import de.sudoq.model.game.GameSettings;
 import de.sudoq.model.profile.Profile;
@@ -25,7 +25,7 @@ import de.sudoq.model.profile.Profile;
  */
 public class NewSudokuPreferencesActivity extends PreferencesActivity {
 
-	/* shortcut for NewSudokuConfigurationActivity.gameSettings */
+	/* shortcut for NewSudokuActivity.gameSettings */
 	GameSettings confSettings;
 	
 	/**
@@ -51,8 +51,8 @@ public class NewSudokuPreferencesActivity extends PreferencesActivity {
 		markWrongSymbol =    (CheckBox) findViewById(R.id.checkbox_markWrongSymbol);
 		restrictCandidates = (CheckBox) findViewById(R.id.checkbox_restrictCandidates);
 
-		confSettings = NewSudokuConfigurationActivity.gameSettings;
-		gesture.           setChecked(confSettings.isGesturesSet());
+		confSettings = NewSudokuActivity.gameSettings;
+        gesture.           setChecked(confSettings.isGesturesSet());
 		autoAdjustNotes.   setChecked(confSettings.getAssistance(Assistances.autoAdjustNotes));
 		markRowColumn.     setChecked(confSettings.getAssistance(Assistances.markRowColumn));
 		markWrongSymbol.   setChecked(confSettings.getAssistance(Assistances.markWrongSymbol));
@@ -77,32 +77,22 @@ public class NewSudokuPreferencesActivity extends PreferencesActivity {
 
 
 	/**
-	 * Speichert die Werte der Views in gameSettings
+	 * Saves currend state of buttons/checkboxes to gameSettings
 	 */
 	protected void adjustValuesAndSave() {
-		NewSudokuConfigurationActivity.gameSettings.setGestures(gesture.isChecked());
-		saveCheckbox(autoAdjustNotes, Assistances.autoAdjustNotes);
-		saveCheckbox(markRowColumn, Assistances.markRowColumn);
-		saveCheckbox(markWrongSymbol, Assistances.markWrongSymbol);
-		saveCheckbox(restrictCandidates, Assistances.restrictCandidates);
-		if(lefthand != null && helper != null){
-			confSettings.setLefthandMode(lefthand.isChecked());
-			confSettings.setHelper(helper.isChecked());
-		}
+		confSettings.setGestures(gesture.isChecked());
+		saveCheckbox(autoAdjustNotes,    Assistances.autoAdjustNotes, confSettings);
+		saveCheckbox(markRowColumn,      Assistances.markRowColumn,   confSettings);
+		saveCheckbox(markWrongSymbol,    Assistances.markWrongSymbol, confSettings);
+		saveCheckbox(restrictCandidates, Assistances.restrictCandidates, confSettings);
 		
 		Profile.getInstance().saveChanges();
 	}
 	
-	private void saveCheckbox(CheckBox cb, Assistances a){
-		if(cb.isChecked())
-			confSettings.setAssistance(a);
-		else
-			confSettings.clearAssistance(a);
-	}
+
 
 	/**
-	 * Speichert die Profiländerungen.
-	 * TODO make it so: save it in the profile
+	 * Speichert die Profiländerungen
 	 * @param view
 	 *            unbenutzt
 	 */
@@ -111,12 +101,27 @@ public class NewSudokuPreferencesActivity extends PreferencesActivity {
 		onBackPressed();//go back to parent activity
 	}
 
+    protected void saveToProfile() {
+        Profile p = Profile.getInstance();
+
+        p.setGestureActive(gesture.isChecked());
+		saveAssistance(Assistances.autoAdjustNotes,    autoAdjustNotes);
+		saveAssistance(Assistances.markRowColumn,      markRowColumn  );
+		saveAssistance(Assistances.markWrongSymbol,    markWrongSymbol);
+		saveAssistance(Assistances.restrictCandidates, restrictCandidates);
+
+        p.setHelperActive(confSettings.isHelperSet());
+        p.setLefthandActive(confSettings.isLefthandModeSet());
+
+        //restrict types is automatically saved to profile...
+        Profile.getInstance().saveChanges();
+    }
 
 	/* parameter View only needed to be foud by xml who clicks this*/
 	public void switchToAdvancedPreferences(View view){
 		
 		Intent advIntent = new Intent(this, AdvancedPreferencesActivity.class);
-		AdvancedPreferencesActivity.myCaller=this;
+        AdvancedPreferencesActivity.caller= AdvancedPreferencesActivity.ParentActivity.NEW_SUDOKU;
 		startActivity(advIntent);
 
 	}

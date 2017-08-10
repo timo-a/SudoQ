@@ -18,6 +18,7 @@ import de.sudoq.R;
 import de.sudoq.controller.SudoqCompatActivity;
 import de.sudoq.controller.menus.preferences.PlayerPreferencesActivity;
 import de.sudoq.controller.sudoku.SudokuActivity;
+import de.sudoq.model.game.GameManager;
 import de.sudoq.model.profile.Profile;
 
 /**
@@ -65,8 +66,10 @@ public class MainActivity extends SudoqCompatActivity {
 		Button continueButton = (Button) findViewById(R.id.button_mainmenu_continue);
 		continueButton.setEnabled(p.getCurrentGame() > Profile.NO_GAME);
 
+
+		GameManager gm = GameManager.getInstance();
 		Button loadButton = (Button) findViewById(R.id.button_mainmenu_load_sudoku);
-		loadButton.setEnabled(p.getCurrentGame() > Profile.NO_GAME);
+		loadButton.setEnabled(!gm.getGameList().isEmpty());
 
 	}
 
@@ -80,7 +83,7 @@ public class MainActivity extends SudoqCompatActivity {
 	public void switchActivity(View button) {
 		switch (button.getId()) {
 		case R.id.button_mainmenu_new_sudoku:
-			Intent newSudokuIntent = new Intent(this, NewSudokuConfigurationActivity.class);
+			Intent newSudokuIntent = new Intent(this, NewSudokuActivity.class);
 			startActivity(newSudokuIntent);
 			break;
 
@@ -101,13 +104,4 @@ public class MainActivity extends SudoqCompatActivity {
 			break;
 		}
 	}
-
-	/*
-	 * {@inheritDoc}
-	 */
-	// @Override
-	// public void onConfigurationChanged(Configuration newConfig) {
-	// super.onConfigurationChanged(newConfig);
-	// setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-	// }
 }

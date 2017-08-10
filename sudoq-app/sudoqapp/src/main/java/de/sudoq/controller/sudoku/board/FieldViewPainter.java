@@ -179,8 +179,29 @@ public class FieldViewPainter {
 			}
 		}
 		//Log.d("FieldPainter", "Field drawn");
-		sl.getHintPainter().invalidateAll();//invalidate();
 
+		try {
+			sl.getHintPainter().invalidateAll();//invalidate();
+		}catch(NullPointerException e){
+			/*
+			I don't see how this happens but a nullpointer exception was reported, so I made a try-catch-block here:
+			reported at version 20
+			This happens when 'gesture' is clicked in profile without playing a game first. sl is then null
+			java.lang.NullPointerException:
+			at de.sudoq.controller.sudoku.board.FieldViewPainter.markField (FieldViewPainter.java:182)
+			at de.sudoq.view.VirtualKeyboardButtonView.onDraw (VirtualKeyboardButtonView.java:104)
+		        at android.view.View.draw (View.java:17469)
+			at android.view.View.updateDisplayListIfDirty (View.java:16464)
+			at android.view.View.draw (View.java:17238)
+			at android.view.ViewGroup.drawChild (ViewGroup.java:3921)
+			at android.view.ViewGroup.dispatchDraw (ViewGroup.java:3711)
+			at android.view.View.updateDisplayListIfDirty (View.java:16459)
+			at android.view.View.draw (View.java:17238)
+			at android.view.ViewGroup.drawChild (ViewGroup.java:3921)
+			at android.view.ViewGroup.dispatchDraw (ViewGroup.java:3711)
+            ...
+            */
+		}
 
 	}
 

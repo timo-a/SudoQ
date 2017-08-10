@@ -73,6 +73,8 @@ public class XmlAttribute {
 		return value;
 	}
 
+	public String toString() { return name+": "+value; }
+
 	/**
 	 * Setzt falls der Parameter nicht null ist value auf diesen
 	 * 

@@ -5,8 +5,8 @@
 <!-- This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.sudoq"
-    android:versionCode="18"
-    android:versionName="1.0.10b"
+    android:versionCode="21"
+    android:versionName="1.0.11c"
     android:installLocation="auto" >
 
     <uses-sdk android:minSdkVersion="8" />
@@ -26,7 +26,7 @@
         </activity>
         <activity android:name=".controller.SudoqCompatActivity" />
         <activity android:name=".controller.menus.MainActivity" />
-        <activity android:name=".controller.menus.NewSudokuConfigurationActivity"           android:label="@string/sf_sudokupreferences_title"/>
+        <activity android:name=".controller.menus.NewSudokuActivity"           android:label="@string/sf_sudokupreferences_title"/>
         <activity android:name=".controller.menus.preferences.NewSudokuPreferencesActivity" android:label="@string/sf_sudokupreferences_title"/>
         <activity android:name=".controller.menus.SudokuLoadingActivity"  android:label="@string/sf_sudokuloading_title"
                                                                           android:noHistory="true"

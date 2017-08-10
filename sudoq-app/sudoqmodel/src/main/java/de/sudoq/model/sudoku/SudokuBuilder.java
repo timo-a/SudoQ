@@ -73,7 +73,7 @@ public class SudokuBuilder {
 	 */
 	public void addSolution(Position pos, int value) {
 		if (value < 0 || value >= type.getNumberOfSymbols()) {
-			throw new IllegalArgumentException("Unvalid value for given Sudoku Type");
+			throw new IllegalArgumentException("Invalid value for given Sudoku Type");
 		}
 		solutions.put(pos, value);
 	}

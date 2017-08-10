@@ -13,7 +13,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,8 +21,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 
 import de.sudoq.R;
+import de.sudoq.controller.menus.NewSudokuActivity;
+import de.sudoq.model.game.Assistances;
 import de.sudoq.model.game.GameSettings;
 import de.sudoq.model.profile.Profile;
+
+import static de.sudoq.controller.menus.preferences.AdvancedPreferencesActivity.ParentActivity.NOT_SPECIFIED;
 
 /**
  * Activity um Profile zu bearbeiten und zu verwalten
@@ -32,11 +35,18 @@ import de.sudoq.model.profile.Profile;
 public class AdvancedPreferencesActivity extends PreferencesActivity {
 	/** Attributes */
 	private static final String LOG_TAG = AdvancedPreferencesActivity.class.getSimpleName();
-	
-	/*this is a hack! activity can be called in sudoku-pref and in profile, but has different behaviours*/
-	public static PreferencesActivity myCaller;
-	//public static GameSettings    gameSettings;
-	
+
+	public enum ParentActivity{PROFILE,NEW_SUDOKU,NOT_SPECIFIED};
+
+    /*this is still a hack! this activity can be called in newSudoku-pref and in player(profile)Pref, but has different behaviours*/
+    public static ParentActivity caller= NOT_SPECIFIED;
+
+	public static GameSettings    gameSettings;
+
+	CheckBox helper;
+	CheckBox lefthand;
+	Button   restricttypes;
+
 	/**
 	 * Wird aufgerufen, falls die Activity zum ersten Mal gestartet wird. Läd
 	 * die Preferences anhand der zur Zeit aktiven Profil-ID.
@@ -54,13 +64,22 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 		ab.setDisplayShowTitleEnabled(true);
 
 
-		myCaller.helper        = (CheckBox) findViewById(R.id.checkbox_hints_provider);
-		myCaller.lefthand      = (CheckBox) findViewById(R.id.checkbox_lefthand_mode);
-		myCaller.restricttypes = (Button)   findViewById(R.id.button_provide_restricted_set_of_types);
-		
-		GameSettings a = Profile.getInstance().getAssistances();
-		myCaller.helper.       setChecked(a.isHelperSet());
-		myCaller.lefthand.     setChecked(a.isLefthandModeSet());
+		helper        = (CheckBox) findViewById(R.id.checkbox_hints_provider);
+		lefthand      = (CheckBox) findViewById(R.id.checkbox_lefthand_mode);
+		restricttypes = (Button)   findViewById(R.id.button_provide_restricted_set_of_types);
+		gameSettings = NewSudokuActivity.gameSettings;
+		GameSettings profileGameSettings = Profile.getInstance().getAssistances();
+
+        switch (caller){
+            case NEW_SUDOKU:
+                helper.  setChecked(gameSettings.isHelperSet());
+		        lefthand.setChecked(gameSettings.isLefthandModeSet());
+                break;
+            case PROFILE:
+            case NOT_SPECIFIED://not specified souldn't happen, but you never know
+                helper.  setChecked(profileGameSettings.isHelperSet());
+                lefthand.setChecked(profileGameSettings.isLefthandModeSet());
+        }
 		//myCaller.restricttypes.setChecked(a.isreHelperSet());
 		
 		Profile.getInstance().registerListener(this);
@@ -78,8 +97,9 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 	}
 
 	/**
-	 * Wird beim Buttonklick aufgerufen und erstellt ein neues Profil
-	 * 
+	 * Selected by click on button (specified in layout file)
+	 * Starts new activity that lets user choose which types are offered in 'new sudoku' menu
+	 *
 	 * @param view
 	 *            von android xml übergebene View
 	 */
@@ -117,8 +137,37 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 		alertDialog.show();
 	}
 
+	@Override
+	protected void adjustValuesAndSave() {
+        switch(caller){
+            case NEW_SUDOKU://TODO just have 2 subclasses, one to be called from playerpref, one from newSudokuPref
+	            saveToGameSettings();
+                break;
+            case PROFILE:
+                saveToProfile();
+                break;
+        }
+	}
 
-	// ///////////////////////////////////////optionsMenue
+	private void saveToGameSettings(){
+        if(lefthand != null && helper != null){
+            gameSettings.setLefthandMode(lefthand.isChecked());
+            gameSettings.setHelper(helper.isChecked());
+        }
+    }
+
+    protected void saveToProfile() {
+        Profile p = Profile.getInstance();
+        if(helper != null)
+            p.setHelperActive(helper.isChecked());
+        if(lefthand != null)
+            p.setLefthandActive(lefthand.isChecked());
+        //restrict types is automatically saved to profile...
+        Profile.getInstance().saveChanges();
+    }
+
+
+    // ///////////////////////////////////////optionsMenue
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {		
@@ -145,6 +194,5 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 		return true;
 	}
 
-	@Override
-	protected void adjustValuesAndSave() {}
+
 }

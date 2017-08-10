@@ -9,7 +9,7 @@ import de.sudoq.R;
 import de.sudoq.controller.menus.MainActivity;
 import de.sudoq.controller.menus.StatisticsActivity;
 import de.sudoq.controller.menus.SudokuLoadingActivity;
-import de.sudoq.controller.menus.NewSudokuConfigurationActivity;
+import de.sudoq.controller.menus.NewSudokuActivity;
 import de.sudoq.controller.menus.preferences.PlayerPreferencesActivity;
 import de.sudoq.controller.sudoku.SudokuActivity;
 
@@ -32,7 +32,7 @@ public class MenuTest extends SudoqTestCase {
 		assertTrue(solo.searchText(profile));
 		
 		solo.clickOnText(newSudoku);
-		solo.assertCurrentActivity("should be sudokupreferences", NewSudokuConfigurationActivity.class);
+		solo.assertCurrentActivity("should be sudokupreferences", NewSudokuActivity.class);
 		assertTrue(solo.searchText(a.getString(R.string.complexity_easy)));
 		assertTrue(solo.searchText(a.getString(R.string.sudoku_type_standard_9x9)));
 		assertTrue(solo.searchText(a.getString(R.string.sf_sudokupreferences_start)));
@@ -63,7 +63,7 @@ public class MenuTest extends SudoqTestCase {
 	public void testAssistanceBeforeSudoku() {
 		solo.sleep(2000);
 		solo.clickOnText(solo.getCurrentActivity().getString(R.string.sf_mainmenu_new_sudoku));
-		solo.assertCurrentActivity("should be sudokupreferences", NewSudokuConfigurationActivity.class);
+		solo.assertCurrentActivity("should be sudokupreferences", NewSudokuActivity.class);
 
 		solo.clickOnText(solo.getCurrentActivity().getString(R.string.sf_sudokupreferences_assistances));
 		// solo.assertCurrentActivity("should be playerpreferences",
@@ -74,7 +74,7 @@ public class MenuTest extends SudoqTestCase {
 		// solo.clickOnCheckBox(checkBox.getId());
 		// solo.clickOnCheckBox(checkBox.getId());
 		solo.clickOnText(solo.getCurrentActivity().getString(R.string.profile_preference_button_save));
-		solo.assertCurrentActivity("should be sudokupreferences", NewSudokuConfigurationActivity.class);
+		solo.assertCurrentActivity("should be sudokupreferences", NewSudokuActivity.class);
 
 		solo.clickOnText(solo.getCurrentActivity().getString(R.string.sf_sudokupreferences_start));
 		solo.assertCurrentActivity("should be in sudoku", SudokuActivity.class);
@@ -105,7 +105,7 @@ public class MenuTest extends SudoqTestCase {
 		Activity a = solo.getCurrentActivity();
 
 		solo.clickOnText(a.getString(R.string.sf_mainmenu_new_sudoku));
-		solo.assertCurrentActivity("should be sudokupreferences", NewSudokuConfigurationActivity.class);
+		solo.assertCurrentActivity("should be sudokupreferences", NewSudokuActivity.class);
 		solo.clickOnText(solo.getCurrentActivity().getString(R.string.sf_sudokupreferences_start));
 		solo.assertCurrentActivity("should be in sudoku", SudokuActivity.class);
 		solo.goBack();

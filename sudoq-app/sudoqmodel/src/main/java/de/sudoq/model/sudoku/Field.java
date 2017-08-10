@@ -137,7 +137,7 @@ public class Field extends ObservableModelImpl<Field> {
 	public void setCurrentValue(int value) {
 		if (isEditable()) {
 			if ((value < 0 && value != EMPTYVAL) || value > maxValue) {
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("value is "+value);
 			}
 
 			this.currentVal = value;

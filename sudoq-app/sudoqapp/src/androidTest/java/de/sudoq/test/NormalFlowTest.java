@@ -2,7 +2,7 @@ package de.sudoq.test;
 
 import android.app.Activity;
 import de.sudoq.R;
-import de.sudoq.controller.menus.NewSudokuConfigurationActivity;
+import de.sudoq.controller.menus.NewSudokuActivity;
 import de.sudoq.controller.sudoku.SudokuActivity;
 
 /**
@@ -16,7 +16,7 @@ public class NormalFlowTest extends SudoqTestCase {
 		Activity a = getActivity();
 
 		solo.clickOnText(a.getString(R.string.sf_mainmenu_new_sudoku));
-		solo.assertCurrentActivity("should be sudokupreferences", NewSudokuConfigurationActivity.class);
+		solo.assertCurrentActivity("should be sudokupreferences", NewSudokuActivity.class);
 		assertTrue(solo.searchText(a.getString(R.string.complexity_easy)));
 		assertTrue(solo.searchText(a.getString(R.string.sudoku_type_standard_9x9)));
 		assertTrue(solo.searchText(a.getString(R.string.sf_sudokupreferences_start)));

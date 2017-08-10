@@ -53,4 +53,12 @@ public class SolveAction extends Action {
 			return field.equals(a.field) && diff+a.diff == 0;
 		return false;
 	}
+
+	/** in case we want to move an action up one level (field stays the same) we need to add the diffs
+	 * TODO refactor this, break with diffs entirely maybe?
+	 * */
+	public SolveAction add(SolveAction action){
+
+		return new SolveAction(diff+action.diff,field);
+	}
 }

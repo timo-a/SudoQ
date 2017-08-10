@@ -22,7 +22,7 @@ import de.sudoq.model.xml.XmlTree;
 import de.sudoq.model.xml.Xmlable;
 
 /**
- * Diese statische Klasse ist ein Wrapper für das aktuell geladene und durch
+ * Diese statische Klasse ist ein Wrapper für das aktuell geladene und durch  TODO splitt into profile handler and profile
  * SharedPreferences von der Android-API verwaltete Spielerprofil.
  * 
  */

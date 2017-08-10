@@ -72,12 +72,12 @@ public class PositionMap<T> implements Cloneable {
 	 * @return Das BitSet, welches der spezifizierten Position zugeordnet wurde oder null, falls keines zugewiesen wurde
 	 */
 	public T get(Position pos) {
-		/*if (pos == null)
+		if (pos == null)
 			throw new IllegalArgumentException("pos was null");
 		if (pos.getX() > this.dimension.getX())
 			throw new IllegalArgumentException("x coordinate of pos was > " + this.dimension.getX() + ": " + pos.getX());
 		if (pos.getY() > this.dimension.getY())
-			throw new IllegalArgumentException("y coordinate of pos was > " + this.dimension.getY() + ": " + pos.getY());*/
+			throw new IllegalArgumentException("y coordinate of pos was > " + this.dimension.getY() + ": " + pos.getY());
 		assert pos != null;
 		assert pos.getX() < this.dimension.getX();
 		assert pos.getY() < this.dimension.getY();

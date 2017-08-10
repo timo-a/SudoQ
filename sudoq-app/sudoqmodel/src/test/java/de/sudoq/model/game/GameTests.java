@@ -55,7 +55,7 @@ public class GameTests {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testNullInstanciation() {
+	public void testNullInstantiation() {
 		new Game(2, null);
 	}
 
@@ -65,24 +65,25 @@ public class GameTests {
 
 		Position pos = Position.get(1, 1);
 		ActionTreeElement start = game.getCurrentState();
-
-		game.addAndExecute(new SolveActionFactory().createAction(3, game.getSudoku().getField(pos)));
-		game.addAndExecute(new SolveActionFactory().createAction(4, game.getSudoku().getField(pos)));
+        Field f = game.getSudoku().getField(pos);
+		game.addAndExecute(new SolveActionFactory().createAction(3, f));//setze 3
+		game.addAndExecute(new SolveActionFactory().createAction(4, f));//setze 4
 		assertFalse(game.isMarked(game.getCurrentState()));
-		game.addAndExecute(new SolveActionFactory().createAction(5, game.getSudoku().getField(pos)));
-		assertEquals(game.getSudoku().getField(pos).getCurrentValue(), 5);
+		game.addAndExecute(new SolveActionFactory().createAction(5, f));//setze 5
+		assertEquals(5, game.getSudoku().getField(pos).getCurrentValue());
 		game.markCurrentState();
 		assertTrue(game.isMarked(game.getCurrentState()));
 
 		game.goToState(start);
-		assertEquals(game.getSudoku().getField(pos).getCurrentValue(), Field.EMPTYVAL);
+		assertEquals(Field.EMPTYVAL, f.getCurrentValue());
 		assertFalse(game.isFinished());
 
 		game.redo();
 		game.redo();
-		assertEquals(game.getSudoku().getField(pos).getCurrentValue(), 4);
+		assertEquals(5, f.getCurrentValue());//schlägt fehl
 		game.undo();
-		assertEquals(game.getSudoku().getField(pos).getCurrentValue(), 3);
+		assertEquals(Field.EMPTYVAL, f.getCurrentValue());
+		game.redo();
 		assertFalse(game.checkSudoku());
 
 		game.addTime(23);

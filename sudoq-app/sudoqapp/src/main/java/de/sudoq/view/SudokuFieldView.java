@@ -179,7 +179,10 @@ public class SudokuFieldView extends View implements ModelChangeListener<Field>,
 		for (int i = 0; i < Symbol.getInstance().getNumberOfSymbols(); i++) {
 			if (this.field.isNoteSet(i)) {
 				String note = Symbol.getInstance().getMapping(i);
-				canvas.drawText(note + "", (i % Symbol.getInstance().getRasterSize()) * noteTextSize + noteTextSize / 2, (i / Symbol.getInstance().getRasterSize()) * noteTextSize + noteTextSize, notePaint);
+				canvas.drawText(note + "",
+						        (i % Symbol.getInstance().getRasterSize()) * noteTextSize + noteTextSize / 2,
+						        (i / Symbol.getInstance().getRasterSize()) * noteTextSize + noteTextSize,
+						        notePaint);
 			}
 		}
 	}

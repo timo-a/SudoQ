@@ -120,7 +120,7 @@ public class GameManager {
 	 *             falls keine Spiel mit der entsprechenden id existiert
 	 */
 	public Game load(int id) {
-		if (id <= 0) throw new IllegalArgumentException("unvalid id");
+		if (id <= 0) throw new IllegalArgumentException("invalid id");
 		Game game = new Game();
 		// throws IllegalArgumentException
 		new GameXmlHandler(id).createObjectFromXml(game);

@@ -56,11 +56,11 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 
 	private List<GameData> games;
 
-	protected static MenuItem menuDeleteFinished;
+/*	protected static MenuItem menuDeleteFinished;
 	private static final int MENU_DELETE_FINISHED = 0;
 
 	protected static MenuItem menuDeleteSpecific;
-	private static final int MENU_DELETE_SPECIFIC = 1;
+	private static final int MENU_DELETE_SPECIFIC = 1; commented out to make sure it's not needed*/
 
 	private enum FAB_STATES { DELETE, INACTIVE, GO_BACK};
 
@@ -185,6 +185,8 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 	public void onContentChanged() {
 		super.onContentChanged();
 		initialiseGames();
+		Profile.getInstance().setCurrentGame(adapter.isEmpty() ? -1
+				                                               : adapter.getItem(0).getId());
 	}
 
 	

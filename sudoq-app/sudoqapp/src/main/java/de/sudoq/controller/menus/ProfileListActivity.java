@@ -51,7 +51,7 @@ public class ProfileListActivity extends SudoqListActivity implements OnItemClic
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-setContentView(R.layout.profilelist);
+		setContentView(R.layout.profilelist);
 		this.setTitle(this.getString(R.string.action_switch_profile));
 
 		profileIds = Profile.getInstance().getProfilesIdList();

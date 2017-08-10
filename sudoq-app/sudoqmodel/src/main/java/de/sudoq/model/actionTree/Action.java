@@ -68,6 +68,9 @@ public abstract class Action {
 	public int getFieldId() {
 		return field.getId();
 	}
+	public Field getField() {
+		return field;
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -82,6 +85,5 @@ public abstract class Action {
 	}
 
 	public abstract boolean inverse(Action a);
-
 
 }

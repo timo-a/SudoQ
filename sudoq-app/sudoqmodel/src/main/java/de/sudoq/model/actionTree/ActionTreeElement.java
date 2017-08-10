@@ -117,13 +117,14 @@ public class ActionTreeElement extends ObservableModelImpl<ActionTreeElement> im
 				parent.addChild(this);
 			}
 
-			following = new ArrayList<ActionTreeElement>();
+			following = new ArrayList<>();
 		}
 	}
 
 	public Action getAction() {
 		return action;
 	}
+
 
 	/**
 	 * Diese Methode führt die Aktion dieses Elementes aus.
@@ -189,8 +190,8 @@ public class ActionTreeElement extends ObservableModelImpl<ActionTreeElement> im
 	 * 
 	 * @return Die Liste aller Kindelemente.
 	 */
-	// ja, package scope
-	ArrayList<ActionTreeElement> getChildrenList() {
+	// ja, package scope TODO refactor and make package scope again
+	public ArrayList<ActionTreeElement> getChildrenList() {
 		return following;
 	}
 

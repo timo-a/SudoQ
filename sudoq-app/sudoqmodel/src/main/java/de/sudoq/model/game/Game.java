@@ -275,6 +275,8 @@ public class Game implements Xmlable {
      *             Wird geworfen, falls das übergebene ActionTreeElement null ist
      */
     public void goToState(ActionTreeElement ate) {
+        if(ate == null)
+            throw new IllegalArgumentException();
         stateHandler.goToState(ate);
     }
 
@@ -525,8 +527,8 @@ public class Game implements Xmlable {
                 sudoku = SudokuManager.getEmptySudokuToFillWithXml();
                 sudoku.fillFromXml(sub);
             }else if(sub.getName().equals("gameSettings")){
-            	gameSettings = new GameSettings();
-            	gameSettings.fillFromXml(sub);
+                gameSettings = new GameSettings();
+                gameSettings.fillFromXml(sub);
             }
         }
         stateHandler = new GameStateHandler();
@@ -536,20 +538,22 @@ public class Game implements Xmlable {
                 int diff = Integer.parseInt(sub.getAttributeValue(ActionTreeElement.DIFF));
 
                 // put the action to the parent action
-                goToState(stateHandler.getActionTree().getElement(
-                        Integer.parseInt(sub.getAttributeValue(ActionTreeElement.PARENT))));
+                String attributeValue =  sub.getAttributeValue(ActionTreeElement.PARENT);
+                int parentID = Integer.parseInt(attributeValue);
+                ActionTreeElement parent = stateHandler.getActionTree().getElement(parentID);
+                goToState(parent);
                 // if(!sub.getAttributeValue(ActionTreeElement.PARENT).equals(""))
                 // is not necessary since the root action comes from the gsh so
+
                 // every element has e parent
 
                 int field_id = Integer.parseInt(sub.getAttributeValue(ActionTreeElement.FIELD_ID));
-
+                Field f = sudoku.getField(field_id);
                 if (sub.getAttributeValue(ActionTreeElement.ACTION_TYPE).equals(SolveAction.class.getSimpleName())) {
-                    this.stateHandler.addAndExecute(new SolveActionFactory().createAction(sudoku.getField(field_id)
-                            .getCurrentValue() + diff, sudoku.getField(field_id)));
+                    this.stateHandler.addAndExecute(new SolveActionFactory().createAction(f.getCurrentValue() + diff,
+                                                                                          f));
                 } else { // if(sub.getAttributeValue(ActionTreeElement.ACTION_TYPE).equals(NoteAction.class.getSimpleName()))
-                    this.stateHandler.addAndExecute(new NoteActionFactory().createAction(diff,
-                            sudoku.getField(field_id)));
+                    this.stateHandler.addAndExecute(new NoteActionFactory().createAction(diff, f));
                 }
 
                 if (Boolean.parseBoolean(sub.getAttributeValue(ActionTreeElement.MARKED))) {

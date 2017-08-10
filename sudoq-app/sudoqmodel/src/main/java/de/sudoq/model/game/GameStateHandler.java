@@ -14,6 +14,7 @@ import de.sudoq.model.ObservableModelImpl;
 import de.sudoq.model.actionTree.Action;
 import de.sudoq.model.actionTree.ActionTree;
 import de.sudoq.model.actionTree.ActionTreeElement;
+import de.sudoq.model.actionTree.SolveAction;
 import de.sudoq.model.sudoku.Field;
 
 /**
@@ -51,23 +52,14 @@ public class GameStateHandler extends ObservableModelImpl<ActionTreeElement> {
 		actionTree = new ActionTree();
 		undoStack = new Stack<ActionTreeElement>();
 
-		currentState = actionTree.add(new Action(0, new Field(-1, 1)) {
-			// Empty Action - do nothing
-			@Override
-			public void undo() {
-			}
-
-			@Override
-			public void execute() {
-			}
-		}, currentState);
+		currentState = actionTree.getRoot();
 
 		locked = false;
 	}
 
 	/**
 	 * Die Methode gibt den ActionTree zurück.
-	 * 
+	 *
 	 * @return Der ActionTree
 	 */
 	public ActionTree getActionTree() {
@@ -76,7 +68,7 @@ public class GameStateHandler extends ObservableModelImpl<ActionTreeElement> {
 
 	/**
 	 * Die Methode gibt den aktuellen Zustand zurück.
-	 * 
+	 *
 	 * @return Das ActionTreeElement mit dem aktuellen Zustand
 	 */
 	public ActionTreeElement getCurrentState() {
@@ -85,24 +77,89 @@ public class GameStateHandler extends ObservableModelImpl<ActionTreeElement> {
 
 	/**
 	 * Fügt die gegebene Aktion dem ActionTree hinzu und führt sie aus.
-	 * 
-	 * @param action
-	 *            Die auszuführende Aktion
-	 * @throws IllegalArgumentException
-	 *             falls Action null ist
+	 *
+	 * @param action Die auszuführende Aktion
+	 * @throws IllegalArgumentException falls Action null ist
 	 */
 	public void addAndExecute(Action action) {
 		// if another change is in progress dont execute!
 		if (!locked) {
 			locked = true;
 
-			currentState = actionTree.add(action, currentState);
-			currentState.execute();
+			addStrategic(action);
+
 			notifyListeners(currentState);
 
 			locked = false;
 		}
 	}
+
+	//private
+	private void addStrategic(Action action){
+		if(isActionRedundant(currentState, action)) {
+			currentState = findExistingChildren(currentState, action).get(0);
+			action.execute();
+
+		}else if(isActionAStepBack(currentState, action)) {
+			currentState = currentState.getParent();
+			action.execute();
+
+		}else if(isSolveOnSameField(action)) {
+
+			SolveAction intended = (SolveAction) action;
+			SolveAction above = (SolveAction) currentState.getAction();
+			SolveAction liftedAction = intended.add(above);
+			currentState.undo();
+			currentState = currentState.getParent();
+			addStrategic(liftedAction);
+			return;
+		} else	{
+			currentState = actionTree.add(action, currentState);
+			currentState.execute();
+		}
+
+	}
+
+
+
+	/* check if action already in Tree,
+	      i.e. we went back in actionTree but are doing same steps again */
+	public boolean isActionRedundant(ActionTreeElement mountingElement, Action action){
+
+		return !findExistingChildren(mountingElement, action).isEmpty();
+	}
+
+	private List<ActionTreeElement> findExistingChildren(ActionTreeElement mountingElement, Action action){
+		List<ActionTreeElement> l = new Stack<>();
+
+		if (mountingElement != null) {
+			for(ActionTreeElement ateI : mountingElement.getChildrenList())
+				if(ateI.actionEquals(action))
+					l.add(ateI);
+		}
+		return l;
+	}
+
+	private boolean isActionAStepBack(ActionTreeElement mountingElement, Action action) {
+		return mountingElement.getAction().inverse(action);
+	}
+
+	private boolean isSolveOnSameField(Action action){
+		return currentState != actionTree.getRoot() && bothSolveActions(currentState, action) && isActionOnSameField(currentState, action);
+	}
+
+	private boolean bothSolveActions(ActionTreeElement mountingElement, Action action) {
+		Action actionAbove = mountingElement.getAction();
+		return (action instanceof SolveAction) && (actionAbove instanceof SolveAction);
+	}
+
+	private boolean isActionOnSameField(ActionTreeElement mountingElement, Action action) {
+
+		boolean sameField = mountingElement.getAction().getField().equals(action.getField());
+		return (action instanceof SolveAction) && sameField;
+	}
+
+
 
 	/**
 	 * Führt alle nötigen Aktionen aus, damit das Sudoku nach Ausführung dieser Methode wieder im gleichen Zustand wie
@@ -122,7 +179,7 @@ public class GameStateHandler extends ObservableModelImpl<ActionTreeElement> {
 		listWay.toArray(way);
 
 		for (int i = 1; i < way.length; i++) {
-			if (way[i - 1].getParent() == way[i]) {
+			if (way[i - 1].getParent() == way[i]) {//are we going backwards?
 				way[i - 1].undo();
 				if (way[i].isSplitUp()) {
 					undoStack.push(way[i - 1]);
