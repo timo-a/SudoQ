@@ -42,7 +42,7 @@
 			android:onClick="helperSelected"
 			android:text="@string/profile_preference_title_intelligent_assistant"
 			android:textColor="@android:color/black"
-			android:visibility="gone" />
+			android:visibility="visible" />
 
 	</LinearLayout>
 </ScrollView>

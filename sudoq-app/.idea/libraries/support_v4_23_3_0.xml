@@ -1,12 +1,9 @@
 <component name="libraryTable">
   <library name="support-v4-23.3.0">
-    <ANNOTATIONS>
-      <root url="jar://$PROJECT_DIR$/sudoqapp/build/intermediates/exploded-aar/com.android.support/support-v4/23.3.0/annotations.zip!/" />
-    </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/sudoqapp/build/intermediates/exploded-aar/com.android.support/support-v4/23.3.0/jars/libs/internal_impl-23.3.0.jar!/" />
-      <root url="jar://$PROJECT_DIR$/sudoqapp/build/intermediates/exploded-aar/com.android.support/support-v4/23.3.0/jars/classes.jar!/" />
-      <root url="file://$PROJECT_DIR$/sudoqapp/build/intermediates/exploded-aar/com.android.support/support-v4/23.3.0/res" />
+      <root url="file://$USER_HOME$/.android/build-cache/41baf112dda4ec270cc6d13389cac36d7eecc762/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/41baf112dda4ec270cc6d13389cac36d7eecc762/output/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/41baf112dda4ec270cc6d13389cac36d7eecc762/output/jars/libs/internal_impl-23.3.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

@@ -15,7 +15,6 @@ import de.sudoq.model.solverGenerator.solver.helper.NakedHelper;
 import de.sudoq.model.solverGenerator.solver.helper.SolveHelper;
 import de.sudoq.model.solverGenerator.solver.helper.XWingHelper;
 import de.sudoq.model.sudoku.Sudoku;
-import sun.rmi.runtime.Log;
 
 /**
  * Created by timo on 25.09.16.

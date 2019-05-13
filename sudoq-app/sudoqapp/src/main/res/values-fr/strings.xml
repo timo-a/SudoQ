@@ -197,7 +197,26 @@
     <string name="neutral_accusative_suffix"></string>
 
     <string name="hint_lastcandidate">Regardez le champ marqué. Il ne reste plus qu\'un candidat.</string>
+    <string name="hint_leftovernote">Regardez le {shape} marqué{suffix}. Puisque {note} est entré, toutes les notes qui lui correspondent peuvent être supprimées</string>
 
-    <string name="hint_backtracking">As said, I\'m still in development. So I\'m out of ideas and my best advice is to set a bookmark and guess a field.</string>
+    
+    <string name="hint_nakedsingle_look">Il y a une « naked single »!</string>
+    <string name="hint_nakedsingle_note">{note} est la seule note dans le champ marqué.</string>
+    <string name="hint_nakedsingle_remove">Il peut être entré en tant que solution là-bas et retiré de tous les autres champs {prep det} {shape}.</string>
+    
+    <string name="hint_nakedset">Il y a une « naked set »! {symbols} seront en quelque sorte répartis entre les champs marqués. Ils peuvent être supprimés de tous les autres champs de ce groupe.</string>
 
+    
+    <string name="hint_hiddensingle">Il y a une « hidden single »! {note} est la seule note dans le champ marqué. Il peut être entré comme solution là-bas.</string>
+
+    <string name="hint_hiddenset">Il y a une « hidden set »! {symbols} seront en quelque sorte répartis entre les champs marqués. Par conséquent, tout autre candidat dans ces champs peut être supprimé.</string>
+
+
+    <string name="hint_lockedcandidates">Il y a une « locked candidate »! {note} n\'apparaît qu\'une seule fois dans le groupe bleu. Il peut donc être supprimé dans tous les autres champs du groupe vert.</string>
+
+    <string name="hint_xWing">Il y a une « X-Wing »! Regardez les intersections des groupes verts et bleus. Certaines notes apparaissent nulle part ailleurs dans les groupes bleus. Ils peuvent donc être supprimés dans les verts.</string>
+
+    
+    <string name="hint_backtracking">Comme je l\'ai dit, je suis encore en développement. Je n\'ai aucune suggestion. Mon meilleur conseil est de définir un marque-page et de deviner une solution pour un champ.</string>
+    <string name="hint_fill_out_notes"> Au fait, il y a un champ qui est complètement vide. Si je ne vois pas une note dans un champ, je suppose que vous l\'avez exclu. Je travaille mieux si tous les nombres encore considérés comme possibles sont définis comme des notes dans un champ.</string>
 </resources>

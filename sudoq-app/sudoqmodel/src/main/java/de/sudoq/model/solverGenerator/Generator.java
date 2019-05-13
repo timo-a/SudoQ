@@ -388,7 +388,7 @@ public class Generator {
 	}
 
 	/**
-	 * Bietet die Möglichkeit Sudokus zu genrieren.
+	 * Bietet die Möglichkeit Sudokus zu generieren.
 	 * Die Klasse implementiert das {@link Runnable} interface
 	 * und kann daher in einem eigenen Thread ausgeführt werden.
 	 */

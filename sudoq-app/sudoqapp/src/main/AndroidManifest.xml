@@ -5,12 +5,10 @@
 <!-- This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.sudoq"
-    android:versionCode="21"
-    android:versionName="1.0.11c"
+    android:versionCode="22"
+    android:versionName="1.1.0"
     android:installLocation="auto" >
 
-    <uses-sdk android:minSdkVersion="8" />
-	    
     <application
         android:icon="@drawable/launcher"
         android:label="@string/app_name" android:allowClearUserData="true"

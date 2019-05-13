@@ -33,15 +33,17 @@ public class XWingView extends HintView {
 	public XWingView(Context context, SudokuLayout sl, XWingDerivation d) {
 		super(context, sl, d);
 
-		for (Constraint c: d.getLockedConstraints()) {
+
+		for (Constraint c: d.getReducibleConstraints()) { //'note' appears not only in intersection
+			View reducibleConstraintV = new HighlightedConstraintView(context, sl, c, Color.GREEN);
+			highlightedObjects.add(reducibleConstraintV);
+		}
+
+		for (Constraint c: d.getLockedConstraints()) {//'note' appears only in intersection. this is painted after the blue ones so people don't mistakenly remove notes of the intersection cause the field is green
 			View lockedConstraintV = new HighlightedConstraintView(context, sl, c, Color.BLUE);
 			highlightedObjects.add(lockedConstraintV);
 		}
 
-		for (Constraint c: d.getReducibleConstraints()) {
-			View reducibleConstraintV = new HighlightedConstraintView(context, sl, c, Color.BLUE);
-			highlightedObjects.add(reducibleConstraintV);
-		}
 
 	}
 }

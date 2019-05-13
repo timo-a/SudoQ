@@ -7,8 +7,7 @@ The SDK -> http://developer.android.com/sdk/index.html
 
 SETUP
 
-Since all sub-directories are eclipse-projects you can import them as such.
-Eclipse -> http://www.eclipse.org/
+Import with Android-Studio should go seamlessly.
 
 To run the app on the emulator or a phone you have to … 
 … compile to the target SDK (Not min SDK) otherwise you'll get compile errors.

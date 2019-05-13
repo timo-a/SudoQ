@@ -311,27 +311,12 @@ public class SplashActivity extends SudoqCompatActivity {
 		private void copyAssets() {
 			/* sudoku types*/
 			SudokuTypes[] types = SudokuTypes.values();
-			/* swap sudoku9x9 with whatever comes at 0th position.
-			 * -> sudoku9x9 will be finished first.
-			 * Reason: people will probably want to play 9x9 first */
-			//TODO superfluous, since 9x9 always first?
-			for (int i = 0; i < types.length; i++)
-				if (types[i] == SudokuTypes.standard9x9) {
-					types[i] = types[0];
-					types[0] = SudokuTypes.standard9x9;
-					break;
-				}
+			/* ensure sudoku9x9 is first element ->  will be finished first.
+			 * Reason: people will probably want to play 9x9 first
+			 * kind of unnecessary because 9x9 is declared first in SudokuTypes, but maybe that will change*/
+			types = swap99tothefront(types);
 			
 			/* actual copying*/
-			//apache FileUtils.copyDirectory does not work!
-            /*try {
-                FileUtils.copyDirectory(new File(HEAD_DIRECTORY), FileManager.getSudokuDir().getAbsoluteFile());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
-
-			//for(File f : new File(HEAD_DIRECTORY).listFiles())
-
             for (SudokuTypes t : types) {
 
 				String sourceType = HEAD_DIRECTORY                               + File.separator + t.toString() + File.separator; // e.g. .../standard9x9/
@@ -356,36 +341,26 @@ public class SplashActivity extends SudoqCompatActivity {
 			}
 		}
 
+		private SudokuTypes[] swap99tothefront(SudokuTypes[] types){
+			if(types[0]!=SudokuTypes.standard9x9) {
+				/* find index */
+				int pos9x9;
+				for (pos9x9=0; pos9x9 < types.length; pos9x9++)
+					if (types[pos9x9] == SudokuTypes.standard9x9)
+						break;
 
-		/** apache scheint hier wirklich nicht zu funktionieren...
-		* @deprecated is is only here to keep you from implementing it and wasting your time
-		*/
-		/*private void copyFileApacheStyle(String source, String target){
-			try {
-				FileUtils.copyFile(new File(source), new File(target));
-
-			} catch (IOException e) {
-				Log.e(LOG_TAG, "ichbins"+e.getMessage());
+				/* swap */
+				types[pos9x9] = types[0];
+				types[0] = SudokuTypes.standard9x9;
 			}
+			return types;
 		}
 
-		private void copySubfiles(File source, File target){
-			for(File f: source.listFiles()){
-				source = new File(source,f.getName());
-				target = new File(target,f.getName());
-				if(f.isFile())
-					try {
-						FileUtils.copyFile(source, target);
-					} catch (IOException e) {
-						Log.e(LOG_TAG, "apache!"+e.getMessage());
-					}
-				else
-					copySubfiles(source, target);
-			}
-		}*/
+
+		/** apache FileUtils.copyFile does not work!!! */
 
 
-				/* get all files/directories in relPath */
+		/* get all files/directories in relPath */
 		private String[] getSubfiles(String relPath) {
 			String[] files = null;
 			try {
@@ -423,7 +398,7 @@ public class SplashActivity extends SudoqCompatActivity {
 		}
 
 		/**
-		 * Kopiert die Dateie zwischen den angegeben Streams
+		 * Kopiert die Dateien zwischen den angegeben Streams
 		 * 
 		 * @param in
 		 *            Der Eingabestream

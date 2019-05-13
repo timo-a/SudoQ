@@ -77,7 +77,7 @@ public class HintFormulator {
 
                 break;
             default:
-                text = "We found a hint, but did not implement a representation yet. That's a bug!";
+                text = "We found a hint, but did not implement a representation yet. That's a bug! Please send us a screenshot so we can fix it!";
         }
         return text;
     }
@@ -90,7 +90,6 @@ public class HintFormulator {
             }
         return false;
     }
-
 
 
     private static String lastDigitText(Context context, SolveDerivation sd){
@@ -141,59 +140,54 @@ public class HintFormulator {
     private static String nakedMultiple(Context context, SolveDerivation sd){
         BitSet bs = ((NakedSetDerivation) sd).getSubsetCandidates();
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("Look there's a naked set! {");
-
+        StringBuilder seq = new StringBuilder();
+        seq.append("{");
         int i = bs.nextSetBit(0);
 
-        sb.append(i+1);
+        seq.append(i+1);
 
         for (i=bs.nextSetBit(i+1); i >= 0; i = bs.nextSetBit(i+1)) {
-            sb.append(',');
-            sb.append(i+1);
+            seq.append(", ");
+            seq.append(i+1);
         }
 
-        sb.append("} will in some way be distributed among the highlighted fields. They can be removed from all other fields in this group");
-        return sb.toString();
+        seq.append("}");
+        return context.getString(R.string.hint_nakedset).replace("{symbols}",seq.toString());
     }
 
     private static String hiddenSingleText(Context context, SolveDerivation sd){//TODO this should never be used but already be taken by a special hit that just says: Look at this field, only one left can go;
         BitSet bs = ((NakedSetDerivation) sd).getSubsetMembers().get(0).getRelevantCandidates();
-        int note = bs.nextSetBit(0)+1;
-        StringBuilder sb = new StringBuilder();
-        sb.append("Look there's a hidden single! ");
-        sb.append(note);
-        sb.append(" is the only note left in the highlighted field. It can be set there.");
-        return sb.toString();
+        String note = (bs.nextSetBit(0)+1)+"";
+        return context.getString(R.string.hint_hiddensingle).replace("{note}", note);
     }
 
     private static String hiddenMultiple(Context context, SolveDerivation sd){
         CandidateSet bs = ((NakedSetDerivation) sd).getSubsetCandidates();
 
         StringBuilder sb = new StringBuilder();
-        sb.append("Look there's a hidden set! {");
+        sb.append("{");
 
         int[] setCandidates = bs.getSetBits();
 
         sb.append(setCandidates[0]+1);
 
         for (int i=1; i < setCandidates.length; i++) {
-            sb.append(',');
+            sb.append(", ");
             sb.append(setCandidates[i]+1);
         }
+        sb.append("}");
 
-        sb.append("} will in some way be distributed among the highlighted fields. Therefore any other candidates in these fields can be removed.");
-        return sb.toString();
+        return context.getString(R.string.hint_hiddenset).replace("{symbols}",sb.toString());
     }
 
     private static String lockedCandidates(Context context, SolveDerivation sd){
-        int note = ((LockedCandidatesDerivation) sd).getNote();
-        return "there's a locked candidate: "+note+" appears only once in the blue group. It can therefore be deleted in all other fields in the green row/col/block?.";
+        String note = ((LockedCandidatesDerivation) sd).getNote() +"";
+        return context.getString(R.string.hint_lockedcandidates).replace("{note}", note);
     }
 
     private static String xWing(Context context, SolveDerivation sd){
         //int note = ((XWingDerivation) sd).getNote();
-        return "If you look at the intersections of green and blue groups some notes appear nowhere else in the lue groups. They can therefore be deleted in the green ones.";
+        return context.getString(R.string.hint_xWing);
     }
 
 }

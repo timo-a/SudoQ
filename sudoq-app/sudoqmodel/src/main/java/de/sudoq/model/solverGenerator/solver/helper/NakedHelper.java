@@ -85,7 +85,7 @@ public class NakedHelper extends SubsetHelper {
             int subsetCount = filterForSubsets(positions); //subsetPositions = {p | p ∈ positions, p.candidates ⊆ currentSet && |p.candidates| ∈ [1,level]}
 
             if (subsetCount == this.level) {
-                List<Position> externalPositions = (List<Position>) positions.clone();
+                List<Position> externalPositions = new Stack<>(); externalPositions.addAll(positions);
                 externalPositions.removeAll(subsetPositions);
 
                 for (Position pos : externalPositions) {

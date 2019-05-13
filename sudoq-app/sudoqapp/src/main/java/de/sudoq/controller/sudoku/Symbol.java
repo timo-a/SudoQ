@@ -7,7 +7,6 @@
  */
 package de.sudoq.controller.sudoku;
 
-import java.util.Arrays;
 import java.util.Iterator;
 
 /**
@@ -138,23 +137,21 @@ public class Symbol implements Iterable<Integer> {
 
 	/// for iterating over symbols
 	public Iterator<Integer> iterator() {
-		return new Iterator() {
+		return new Iterator<Integer>(){
 
-			int counter = 0;
+            final int N = symbolSet.length;
 
-			@Override
-			public boolean hasNext() {
-				return counter < symbolSet.length;
-			}
+            int counter = 0;
 
-			@Override
-			public Object next() {
-				return counter++;
-			}
+            @Override
+            public boolean hasNext() {return counter < N;	}
 
-			@Override
-			public void remove() { throw new UnsupportedOperationException(); }
-		};
+            @Override
+	        public Integer next() {return counter++;}
+
+            @Override
+            public void remove() { throw new UnsupportedOperationException(); }
+    };
 	}
 
 	public String[] getSymbolSet(){ return symbolSet; }

@@ -206,14 +206,27 @@
 
 
     <string name="hint_lastcandidate">Schau dir mal das hervorgehobene Feld an. Dort ist nur noch ein Kandidat übrig.</string>
+    <string name="hint_leftovernote">Schau dir mal {determiner} hervorgehoben{suffix} {shape} an! Da {note} gesetzt ist können alle Notizen dazu entfernt werden.</string>
 
     <string name="hint_nakedsingle_look">Es gibt ein „naked single“!</string>
     <string name="hint_nakedsingle_note">Im hervorgehobenen Feld is nur noch {note} übrig.</string>
     <string name="hint_nakedsingle_remove">Es kann in diesen Feld also als Lösung eingetragen werden und überall sonst {prep det} {shape} entfernt werden.</string>
 
+    <string name="hint_nakedset">Es gibt ein „naked set“: {symbols} werden sich irgendwie auf die hervorgehobenen Felder verteilen. In allen anderen Feldern dieser Gruppe können Sie entfernt werden. </string>
 
+    <string name="hint_hiddensingle">Es gibt ein „hidden single“! {note} ist einzige Notiz die für das hervorgehobene Feld übrig ist und kann daher als Lösung eingetragen werden.</string>
 
+    <string name="hint_hiddenset">Es gibt ein „hidden set“! {symbols} verteilen sich irgendwie über die hervorgehobenen Felder. Daher können andere Notitzen in diesen Feldern entfernt werden. </string>
+
+    
+    <string name="hint_lockedcandidates">Es gibt einen „locked candidate“: {note} kommt in der blauen Gruppe nur einmal vor. Deshalb kann es überall in der grünen Gruppe entfernt werden.</string>
+
+    <string name="hint_xWing">Es gibt einen „X-Wing“: Manche Notizen kommen in allen Schnittfeldern vor, jedoch nirgends sonst in den blauen gruppen. Die Notizen sind deshalb auf diese Schnittfelder festgelegt und können im grünen Bereich gelöscht werden.</string>
+    
     <string name="hint_backtracking">As said, I\'m still in development. So I\'m out of ideas and my best advice is to set a bookmark and guess a field.</string>
+    <string name="hint_fill_out_notes"> Übrigens einige Felder sind komplett leer. Ich gehe im Zweifel davon aus, dass Zahlen die nicht eingetragen sind bereits ausgeschossen wurden. Ich arbeite am besten wenn alle Zahlen die für ein Feld noch möglich sind dort auch als Notiz eingetragen sind.</string>
+
+
 
     <string name="gender_maskulin">m</string>
     <string name="gender_feminin">f</string>

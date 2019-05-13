@@ -224,12 +224,12 @@
     <string name="gender_feminin">f</string>
     <string name="gender_neutral">n</string>
 
-    <string name="feminine_accusative_determiner"></string>
     <string name="maskuline_accusative_determiner"></string>
+    <string name="feminine_accusative_determiner"></string>
     <string name="neutral_accusative_determiner"></string>
 
-    <string name="feminine_accusative_suffix"></string> <!-- only used in german -->
-    <string name="maskuline_accusative_suffix"></string>
+    <string name="maskuline_accusative_suffix"></string> <!-- only used in german -->
+    <string name="feminine_accusative_suffix"></string>
     <string name="neutral_accusative_suffix"></string>
 
     <string name="hint_lastcandidate">Look at the highlighted field. There\'s only one candidate left.</string>
@@ -239,8 +239,21 @@
     <string name="hint_nakedsingle_note">{note} is the only note left in the highlighted field.</string>
     <string name="hint_nakedsingle_remove">It can be set there and removed from all other Fields in this {shape}.</string>
 
+    <string name="hint_nakedset">Look there\'s a naked set! {symbols} will in some way be distributed among the highlighted fields. They can be removed from all other fields in this group.</string>
+
+    
+    <string name="hint_hiddensingle">Look there\'s a hidden single! {note} is the only note left in the highlighted field. It can be set there.</string>
+
+    <string name="hint_hiddenset">Look there\'s a hidden set! {symbols} will in some way be distributed among the highlighted fields. Therefore any other candidates in these fields can be removed.</string>
+
+    
+    <string name="hint_lockedcandidates">There\'s a locked candidate: {note} appears only once in the blue group. It can therefore be deleted in all other fields in the green group.</string>
+
+    <string name="hint_xWing">If you look at the intersections of green and blue groups some notes appear nowhere else in the blue groups. They can therefore be deleted in the green ones.</string>
+
+    
     <string name="hint_backtracking">As said, I\'m still in development. So I\'m out of ideas and my best advice is to set a bookmark and guess a field.</string>
-    <string name="hint_fill_out_notes"> By the way, there\'s a field that is completely empty. If I don\'t see a note in a field I assume that you\'ve ruled it out. I work best if all numbers that are still considered possible are set in a field.</string>
+    <string name="hint_fill_out_notes"> By the way, there\'s a field that has no notes in it. If I don\'t see a note in a field I assume that you\'ve ruled it out. I work best if all numbers that are still considered possible are set as notes in a field.</string>
 
 
 </resources>

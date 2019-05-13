@@ -276,7 +276,7 @@ public class Game implements Xmlable {
      */
     public void goToState(ActionTreeElement ate) {
         if(ate == null)
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("ate is null");
         stateHandler.goToState(ate);
     }
 
