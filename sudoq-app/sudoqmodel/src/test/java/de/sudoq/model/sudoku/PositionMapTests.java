@@ -71,19 +71,19 @@ public class PositionMapTests {
 		try {
 			map.get(null);
 			fail("No IllegalArgumentException was thrown, altough the Position was null");
-		} catch (AssertionError e) {// assertions need to be enabled
+		} catch (IllegalArgumentException e) {// assertions need to be enabled
 		}
 
 		try {
 			map.get(Position.get(10, 9));
 			fail("No IllegalArgumentException was thrown, altough the Position was invalid");
-		} catch (AssertionError e) {
+		} catch (IllegalArgumentException e) {
 		}
 
 		try {
 			map.get(Position.get(9, 10));
 			fail("No IllegalArgumentException was thrown, altough the Position was invalid");
-		} catch (AssertionError e) {
+		} catch (IllegalArgumentException e) {
 		}
 	}
 

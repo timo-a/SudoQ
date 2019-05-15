@@ -806,6 +806,7 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 	 */
 	public void onNoteAdd(Field field, int value) {
 		updateButtons();
+		saveActionTree();
 	}
 
 	/**
@@ -813,6 +814,7 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 	 */
 	public void onNoteDelete(Field field, int value) {
 		updateButtons();
+		saveActionTree();
 	}
 
 	/**
@@ -820,6 +822,7 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 	 */
 	public void onAddEntry(Field field, int value) {
 		updateButtons();
+		saveActionTree();
 	}
 
 	/**
@@ -827,12 +830,17 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 	 */
 	public void onDeleteEntry(Field field) {
 		updateButtons();
+		saveActionTree();
 	}
 
 	private void updateButtons(){
 		controlPanel.updateButtons();
 	}
 
+    /** saves the whole game, purpose: save the action tree so a spontaneous crash doesn't lose us actions record */
+	private void saveActionTree() {
+		GameManager.getInstance().save(this.game);
+	}
 
 	ActionTreeController getActionTreeController(){
 		return actionTreeController;

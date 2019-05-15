@@ -43,6 +43,7 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 
 	public static GameSettings    gameSettings;
 
+	CheckBox crasher;
 	CheckBox helper;
 	CheckBox lefthand;
 	Button   restricttypes;
@@ -64,6 +65,7 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 		ab.setDisplayShowTitleEnabled(true);
 
 
+		crasher       = (CheckBox) findViewById(R.id.checkbox_crash_trigger);
 		helper        = (CheckBox) findViewById(R.id.checkbox_hints_provider);
 		lefthand      = (CheckBox) findViewById(R.id.checkbox_lefthand_mode);
 		restricttypes = (Button)   findViewById(R.id.button_provide_restricted_set_of_types);
@@ -72,11 +74,13 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 
         switch (caller){
             case NEW_SUDOKU:
-                helper.  setChecked(gameSettings.isHelperSet());
+				crasher. setChecked(gameSettings.isCrashSet());
+				helper.  setChecked(gameSettings.isHelperSet());
 		        lefthand.setChecked(gameSettings.isLefthandModeSet());
                 break;
             case PROFILE:
             case NOT_SPECIFIED://not specified souldn't happen, but you never know
+				crasher. setChecked(profileGameSettings.isCrashSet());
                 helper.  setChecked(profileGameSettings.isHelperSet());
                 lefthand.setChecked(profileGameSettings.isLefthandModeSet());
         }
@@ -150,16 +154,19 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 	}
 
 	private void saveToGameSettings(){
-        if(lefthand != null && helper != null){
+        if(lefthand != null && helper != null && crasher != null){//todo warum und???
             gameSettings.setLefthandMode(lefthand.isChecked());
             gameSettings.setHelper(helper.isChecked());
+            gameSettings.setCrash(crasher.isChecked());
         }
     }
 
     protected void saveToProfile() {
         Profile p = Profile.getInstance();
-        if(helper != null)
-            p.setHelperActive(helper.isChecked());
+		if(crasher != null)
+			p.setCrasherActive(crasher.isChecked());
+		if(helper != null)
+			p.setHelperActive(helper.isChecked());
         if(lefthand != null)
             p.setLefthandActive(lefthand.isChecked());
         //restrict types is automatically saved to profile...

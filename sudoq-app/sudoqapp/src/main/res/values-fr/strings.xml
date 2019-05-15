@@ -59,26 +59,6 @@
     <string name="statistics_fastest_solving_time">Temps de résolution le plus rapide</string>
 
     <!-- Profile preference titles und textviews -->
-    <string name="profile_preference_title">Paramètres</string>
-    <string name="profile_preference_title_name">Nom</string>
-    <string name="profile_preference_title_gesture">Entrée de gestes</string>
-    <string name="profile_preference_title_left_hand_mode">mode gaucher</string>
-	<string name="profile_preference_title_cat_profile">Paramètres du profil</string>
-    <string name="profile_preference_title_cat_assistances">Aide</string>
-    <string name="profile_preference_title_assistance_markRowColumn">Séléctionner la ligne/ la colonne</string>
-    <string name="profile_preference_title_assistance_markWrongSymbol">Séléctionner les symboles faux</string>
-    <string name="profile_preference_title_assistance_restrictCandidates">Aide de saisie</string>
-    <string name="profile_preference_title_assistance_allowSolveSpecificField">Résoudre la case choisie</string>
-    <string name="profile_preference_title_assistance_allowSolveRandomField">Résoudre une case au hasard</string>
-    <string name="profile_preference_title_assistance_allowGetHint">Conseils</string>
-    <string name="profile_preference_title_assistance_autoAdjustNotes">Adapter les remarques automatiquement</string>
-    <string name="profile_preference_title_profile">Profil</string>
-    <string name="profile_preference_button_statistics">Statistiques</string>
-    <string name="profile_preference_button_gesture_builder">définir des gestes</string>
-	<string name="profile_preference_button_save">Sauvegarder</string>
-    <string name="profile_preference_button_advanced_preferences">paramètres avancés</string>
-    <string name="profile_preference_button_provide_restricted_set_of_types">Sélectionnez les types sont proposés</string>
-    <string name="profile_preference_new_profile">nouveau profil</string>
 
     <!-- Profile list -->
     <string name="profile_list_profile_changed">Profil changé</string>
@@ -113,7 +93,7 @@
     <string name="sf_sudokupreferences_copying">Les modèles sont en train d’être copiés. Veuillez patienter.</string>
     <string name="sf_sudokupreferences_all_disabled_1">Vous avez désactivé tous les types de sudoku…</string>
     <string name="sf_sudokupreferences_all_disabled_2">Activer les dans les paramètres avancés.</string>
-    
+
     <!-- SudokuActivity -->
     <string name="sf_sudoku_button_bookmark">Marque-page</string>
     <string name="sf_sudoku_button_close">Fermer</string>
@@ -125,9 +105,10 @@
     <string name="sf_sudoku_assistances_back_to_valid_state">Retourner au dernier état correct</string>
     <string name="sf_sudoku_assistances_back_to_bookmark">Retourner au dernier signet</string>
     <string name="sf_sudoku_assistances_give_hint">Donner un indice</string>
+    <string name="sf_sudoku_assistances_crash">crasher l\'application</string>
     <string name="sf_sudoku_title_gesture_input">Entrée de l’icône par un geste</string>
     <string name="sf_sudoku_title_action_tree">Les dernières actions</string>
-    
+
     <!-- Titles -->
     <string name="title_mainmenu">SudoQ</string>
     <string name="title_gametypeselection">Nouveau sudoku</string>
@@ -171,7 +152,6 @@
     <string name="default_user_name">Profil 1</string>
     <string name="fab_go_back">Cliquez sur pour supprimer.\nCliquez à nouveau sur le bouton pour arrêter la suppression</string>
     <string name="sf_sudokuloading_title">Sudoku Sauvegardé</string>
-    <string name="profile_preference_title_intelligent_assistant">Assistant Intelligent</string>
 
 
     <!-- Hints TODO TRANSLATE THESE DUMMYS -->

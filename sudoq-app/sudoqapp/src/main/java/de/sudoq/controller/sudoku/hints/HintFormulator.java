@@ -8,6 +8,7 @@ import java.util.BitSet;
 import de.sudoq.R;
 import de.sudoq.controller.menus.Utility;
 import de.sudoq.controller.sudoku.SudokuActivity;
+import de.sudoq.model.solverGenerator.solution.HiddenSetDerivation;
 import de.sudoq.model.solverGenerator.solution.LastDigitDerivation;
 import de.sudoq.model.solverGenerator.solution.LeftoverNoteDerivation;
 import de.sudoq.model.solverGenerator.solution.LockedCandidatesDerivation;
@@ -162,7 +163,7 @@ public class HintFormulator {
     }
 
     private static String hiddenMultiple(Context context, SolveDerivation sd){
-        CandidateSet bs = ((NakedSetDerivation) sd).getSubsetCandidates();
+        CandidateSet bs = ((HiddenSetDerivation) sd).getSubsetCandidates();
 
         StringBuilder sb = new StringBuilder();
         sb.append("{");

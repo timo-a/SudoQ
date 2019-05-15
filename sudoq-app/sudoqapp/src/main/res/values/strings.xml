@@ -68,28 +68,7 @@
 	<string name="statistics_fastest_solving_time">Fastest solving time</string>
         
 	<!-- Profile preference titles und textviews -->
-	<string name="profile_preference_title">User Preferences</string>
-	<string name="profile_preference_title_name">Name</string>
-	<string name="profile_preference_title_gesture">Gesture Input</string>
-	<string name="profile_preference_title_intelligent_assistant">Intelligent Assistant</string>
-	<string name="profile_preference_title_left_hand_mode">Left-handed mode</string>
-	<string name="profile_preference_title_cat_profile">Profile-Settings</string>
-	<string name="profile_preference_title_cat_assistances">Assistances</string>
-	<string name="profile_preference_title_assistance_markRowColumn">Mark Row/Column</string>
-	<string name="profile_preference_title_assistance_markWrongSymbol">Mark wrong Symbols</string>
-	<string name="profile_preference_title_assistance_restrictCandidates">Input Assistance</string>
-	<string name="profile_preference_title_assistance_allowSolveSpecificField">Solve Specific Field</string>
-	<string name="profile_preference_title_assistance_allowSolveRandomField">Solve Random Field</string>
-	<string name="profile_preference_title_assistance_allowGetHint">Hint For Easy Field</string>
-	<string name="profile_preference_title_assistance_autoAdjustNotes">Auto Adjust Notices</string>
-	<string name="profile_preference_title_profile">Profile</string>
-	<string name="profile_preference_button_statistics">Statistics</string>
-	<string name="profile_preference_button_gesture_builder">Gesture Builder</string>
-	<string name="profile_preference_button_save">Save</string>
-	<string name="profile_preference_button_advanced_preferences">Advanced Settings</string>
-	<string name="profile_preference_button_provide_restricted_set_of_types">Select which types are offered</string>
-	<string name="profile_preference_new_profile">unnamed</string>
-	    
+
 	<!-- Profile list -->
 	<string name="profile_list_profile_changed">Profile changed to</string>
 	    
@@ -136,7 +115,8 @@
     <string name="sf_sudoku_assistances_give_hint">give a hint</string>
     <string name="sf_sudoku_title_gesture_input">Input symbol via gesture</string>
     <string name="sf_sudoku_title_action_tree">Action History</string>
-	        
+    <string name="sf_sudoku_assistances_crash">crash the app</string>
+
     <!-- Titles -->
     <string name="title_mainmenu">SudoQ</string>
     <string name="title_gametypeselection">New Sudoku</string>

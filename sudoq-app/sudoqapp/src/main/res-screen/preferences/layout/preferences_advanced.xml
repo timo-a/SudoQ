@@ -44,5 +44,16 @@
 			android:textColor="@android:color/black"
 			android:visibility="visible" />
 
+
+		<CheckBox
+			android:id="@+id/checkbox_crash_trigger"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="5dp"
+			android:onClick="helperSelected"
+			android:text="@string/profile_preference_title_crash_trigger"
+			android:textColor="@android:color/black"
+			android:visibility="gone" />
+
 	</LinearLayout>
 </ScrollView>

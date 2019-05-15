@@ -85,7 +85,8 @@ public class NewSudokuPreferencesActivity extends PreferencesActivity {
 		saveCheckbox(markRowColumn,      Assistances.markRowColumn,   confSettings);
 		saveCheckbox(markWrongSymbol,    Assistances.markWrongSymbol, confSettings);
 		saveCheckbox(restrictCandidates, Assistances.restrictCandidates, confSettings);
-		
+		//confSettings.setHelper();
+		//confSettings.setCrash();
 		Profile.getInstance().saveChanges();
 	}
 	
@@ -110,8 +111,9 @@ public class NewSudokuPreferencesActivity extends PreferencesActivity {
 		saveAssistance(Assistances.markWrongSymbol,    markWrongSymbol);
 		saveAssistance(Assistances.restrictCandidates, restrictCandidates);
 
-        p.setHelperActive(confSettings.isHelperSet());
-        p.setLefthandActive(confSettings.isLefthandModeSet());
+		p.setHelperActive(confSettings.isHelperSet());
+		p.setCrasherActive(confSettings.isCrashSet());
+		p.setLefthandActive(confSettings.isLefthandModeSet());
 
         //restrict types is automatically saved to profile...
         Profile.getInstance().saveChanges();

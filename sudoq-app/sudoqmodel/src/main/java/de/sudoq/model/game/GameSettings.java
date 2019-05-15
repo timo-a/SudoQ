@@ -27,6 +27,7 @@ public class GameSettings implements Xmlable{
 	private BitSet assistances;
 	private boolean lefthandMode;
 	private boolean helper;
+	private boolean crash;
 	private boolean gestures;
 	private SudokuTypesList wantedSudokuTypes;
 	
@@ -104,7 +105,16 @@ public class GameSettings implements Xmlable{
 	public boolean isHelperSet(){
 		return helper;
 	}
-	
+
+	public void setCrash(boolean value) {
+		this.crash = value;
+	}
+
+	public boolean isCrashSet() {
+		return crash;
+	}
+
+
 	public SudokuTypesList getWantedTypesList(){
 		return wantedSudokuTypes;
 	}
@@ -117,8 +127,9 @@ public class GameSettings implements Xmlable{
         representation.addAttribute(new XmlAttribute("assistances", this.convertAssistancesToString()));//TODO scrap that, representation as 0,1 is ugly -> save all with name, then make all of the boolean assistances enums
         representation.addAttribute(new XmlAttribute("gestures", gestures));
         representation.addAttribute(new XmlAttribute("left",     lefthandMode));
-        representation.addAttribute(new XmlAttribute("helper",   helper));
-        representation.addChild(wantedSudokuTypes.toXmlTree());
+		representation.addAttribute(new XmlAttribute("helper",   helper));
+		representation.addAttribute(new XmlAttribute("crash",    crash));
+		representation.addChild(wantedSudokuTypes.toXmlTree());
 		return representation;
 	}
 	
@@ -129,7 +140,8 @@ public class GameSettings implements Xmlable{
 		AssistancesfromString(xmlTreeRepresentation.getAttributeValue("assistances"));
 		gestures     = Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("gestures"));
 		lefthandMode = Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("left"));
-        helper       = Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("helper"));
+		helper       = Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("helper"));
+		crash        = Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("crash"));
 		for(XmlTree xt: xmlTreeRepresentation)
         	if(xt.getName().equals(SudokuTypesList.ROOT_NAME))
         		wantedSudokuTypes.fillFromXml(xt);

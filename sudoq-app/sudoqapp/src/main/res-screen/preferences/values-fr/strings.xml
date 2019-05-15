@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_preference_title">Paramètres</string>
+    <string name="profile_preference_title_name">Nom</string>
+    <string name="profile_preference_title_gesture">Entrée de gestes</string>
+    <string name="profile_preference_title_left_hand_mode">mode gaucher</string>
+    <string name="profile_preference_title_cat_profile">Paramètres du profil</string>
+    <string name="profile_preference_title_cat_assistances">Aide</string>
+    <string name="profile_preference_title_assistance_markRowColumn">Séléctionner la ligne/ la colonne</string>
+    <string name="profile_preference_title_assistance_markWrongSymbol">Séléctionner les symboles faux</string>
+    <string name="profile_preference_title_assistance_restrictCandidates">Aide de saisie</string>
+    <string name="profile_preference_title_assistance_allowSolveSpecificField">Résoudre la case choisie</string>
+    <string name="profile_preference_title_assistance_allowSolveRandomField">Résoudre une case au hasard</string>
+    <string name="profile_preference_title_assistance_allowGetHint">Conseils</string>
+    <string name="profile_preference_title_assistance_autoAdjustNotes">Adapter les remarques automatiquement</string>
+    <string name="profile_preference_title_profile">Profil</string>
+    <string name="profile_preference_button_statistics">Statistiques</string>
+    <string name="profile_preference_button_gesture_builder">définir des gestes</string>
+    <string name="profile_preference_button_save">Sauvegarder</string>
+    <string name="profile_preference_button_advanced_preferences">paramètres avancés</string>
+    <string name="profile_preference_button_provide_restricted_set_of_types">Sélectionnez les types sont proposés</string>
+    <string name="profile_preference_new_profile">nouveau profil</string>
+
+
+    <string name="profile_preference_title_crash_trigger">crasher l\'application</string>
+    <string name="profile_preference_title_intelligent_assistant">Assistant Intelligent</string>
+
+</resources>

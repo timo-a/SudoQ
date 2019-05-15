@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_preference_title">Benutzereinstellungen</string>
+    <string name="profile_preference_title_name">Name</string>
+    <string name="profile_preference_title_gesture">Gesteneingabe</string>
+    <string name="profile_preference_title_left_hand_mode">Linkshänder-Modus</string>
+    <string name="profile_preference_title_cat_profile">Profileinstellungen</string>
+    <string name="profile_preference_title_cat_assistances">Hilfestellungen</string>
+    <string name="profile_preference_title_assistance_markRowColumn">Zeile/Spalte markieren</string>
+    <string name="profile_preference_title_assistance_markWrongSymbol">Falsche Symbole markieren</string>
+    <string name="profile_preference_title_assistance_restrictCandidates">Eingabehilfe</string>
+    <string name="profile_preference_title_assistance_allowSolveSpecificField">Ausgewähltes Feld lösen</string>
+    <string name="profile_preference_title_assistance_allowSolveRandomField">Zufälliges Feld lösen</string>
+    <string name="profile_preference_title_assistance_allowGetHint">Tipps</string>
+    <string name="profile_preference_title_assistance_autoAdjustNotes">Notizen automatisch anpassen</string>
+    <string name="profile_preference_title_profile">Profil</string>
+    <string name="profile_preference_button_statistics">Statistik</string>
+    <string name="profile_preference_button_gesture_builder">Gesten definieren</string>
+    <string name="profile_preference_button_save">Speichern</string>
+    <string name="profile_preference_button_advanced_preferences">Erweiterte Einstellungen</string>
+    <string name="profile_preference_button_provide_restricted_set_of_types">Auswahl der Typen beschränken</string>
+
+    <string name="profile_preference_new_profile">unbennant</string>
+
+    <string name="profile_preference_title_crash_trigger">App abstürzen lassen</string>
+    <string name="profile_preference_title_intelligent_assistant">Intelligenter Assistent</string>
+
+
+</resources>

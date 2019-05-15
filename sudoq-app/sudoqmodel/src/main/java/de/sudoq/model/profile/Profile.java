@@ -339,11 +339,15 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 	public void setLefthandActive(boolean value) {
 		this.gameSettings.setLefthandMode(value);
 	}
-	
+
 	public void setHelperActive(boolean value) {
 		this.gameSettings.setHelper(value);
 	}
-	
+
+	public void setCrasherActive(boolean value) {
+		this.gameSettings.setCrash(value);
+	}
+
 	/**
 	 * Gibt eine String Liste mit allen Profilnamen zurück.
 	 * 

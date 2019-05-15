@@ -57,6 +57,9 @@ public class AssistancesDialogFragment extends DialogFragment {
         if (Profile.getInstance().getAssistances().isHelperSet())
             itemStack.add(getString(R.string.sf_sudoku_assistances_give_hint));
 
+        if (Profile.getInstance().getAssistances().isCrashSet())
+            itemStack.add(getString(R.string.sf_sudoku_assistances_crash));
+
         // TODO why this no work? final CharSequence[] items = (CharSequence[]) itemStack.toArray();
         CharSequence[] tmp   = new CharSequence[0];
         final CharSequence[] items = itemStack.toArray(tmp);
@@ -97,6 +100,9 @@ public class AssistancesDialogFragment extends DialogFragment {
 
                 }else if (items[item] == getString(R.string.sf_sudoku_assistances_give_hint)){
                     hint(activity);
+                }
+                else if (items[item] == getString(R.string.sf_sudoku_assistances_crash)){
+                    throw new RuntimeException("This is a crash the user requested");
                 }
                 activity.getPanel().updateButtons();
             }

@@ -60,28 +60,7 @@
 	<string name="statistics_fastest_solving_time">Schnellste Lösezeit</string>
         
 	<!-- Profile preference titles und textviews -->
-	<string name="profile_preference_title">Benutzereinstellungen</string>
-	<string name="profile_preference_title_name">Name</string>
-	<string name="profile_preference_title_gesture">Gesteneingabe</string>
-	<string name="profile_preference_title_left_hand_mode">Linkshänder-Modus</string>
-	<string name="profile_preference_title_cat_profile">Profileinstellungen</string>
-	<string name="profile_preference_title_cat_assistances">Hilfestellungen</string>
-	<string name="profile_preference_title_assistance_markRowColumn">Zeile/Spalte markieren</string>
-	<string name="profile_preference_title_assistance_markWrongSymbol">Falsche Symbole markieren</string>
-	<string name="profile_preference_title_assistance_restrictCandidates">Eingabehilfe</string>
-	<string name="profile_preference_title_assistance_allowSolveSpecificField">Ausgewähltes Feld lösen</string>
-	<string name="profile_preference_title_assistance_allowSolveRandomField">Zufälliges Feld lösen</string>
-	<string name="profile_preference_title_assistance_allowGetHint">Tipps</string>
-	<string name="profile_preference_title_assistance_autoAdjustNotes">Notizen automatisch anpassen</string>
-	<string name="profile_preference_title_profile">Profil</string>
-	<string name="profile_preference_button_statistics">Statistik</string>
-	<string name="profile_preference_button_gesture_builder">Gesten definieren</string>
-	<string name="profile_preference_button_save">Speichern</string>
-	<string name="profile_preference_button_advanced_preferences">Erweiterte Einstellungen</string>
-    <string name="profile_preference_button_provide_restricted_set_of_types">Auswahl der Typen beschränken</string>
 
-	<string name="profile_preference_new_profile">unbennant</string>
-		    
 	<!-- Profile list -->
 	<string name="profile_list_profile_changed">Profil geändert zu</string>
 	
@@ -128,7 +107,9 @@
     <string name="sf_sudoku_assistances_give_hint">Einen Tipp geben</string>
     <string name="sf_sudoku_title_gesture_input">Symboleingabe durch Geste</string>
     <string name="sf_sudoku_title_action_tree">Aktionsverlauf</string>
-        
+    <string name="sf_sudoku_assistances_crash">App abstürzen lassen</string>
+
+
     <!-- Titles -->
     <string name="title_mainmenu">SudoQ</string>
     <string name="title_gametypeselection">Neues Sudoku</string>
@@ -172,7 +153,6 @@
     <string name="default_user_name">Profil 1</string>
     <string name="fab_go_back">Geklickte Sudokus werden gelöscht.\nUm aufzuhören nochmal auf den Button klicken</string>
     <string name="sf_sudokuloading_title">Gespeicherte Sudokus</string>
-    <string name="profile_preference_title_intelligent_assistant">Intelligenter Assistent</string>
 
     <!-- hints -->
     <string name="hint_lastdigit">Schau dir mal {determiner} hervorgehoben{suffix} {shape} an! Da ist nur noch ein Feld übrig.</string>

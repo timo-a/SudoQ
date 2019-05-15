@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Stack;
 
 import de.sudoq.model.solvingAssistant.HintTypes;
+import de.sudoq.model.sudoku.CandidateSet;
 import de.sudoq.model.sudoku.Constraint;
 
 /**
@@ -15,7 +16,7 @@ public class HiddenSetDerivation extends SolveDerivation {
 
     private Constraint constraint;
     private List<DerivationField> subsetMembers;
-    private BitSet subsetCandidates;
+    private CandidateSet subsetCandidates;
 
     public HiddenSetDerivation(HintTypes technique) {
         super(technique);
@@ -23,7 +24,7 @@ public class HiddenSetDerivation extends SolveDerivation {
     }
 
     public void setSubsetCandidates(BitSet bs){
-        subsetCandidates = (BitSet) bs.clone();
+        subsetCandidates = (CandidateSet) bs.clone();
     }
 
     public void setConstraint(Constraint c){ constraint = c; }
@@ -33,7 +34,7 @@ public class HiddenSetDerivation extends SolveDerivation {
     }
 
 
-    public BitSet getSubsetCandidates(){ return subsetCandidates; }
+    public CandidateSet getSubsetCandidates(){ return subsetCandidates; }
 
     public Constraint getConstraint(){ return constraint; }
 
