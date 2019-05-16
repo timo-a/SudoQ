@@ -57,7 +57,7 @@ public class AssistancesDialogFragment extends DialogFragment {
         if (Profile.getInstance().getAssistances().isHelperSet())
             itemStack.add(getString(R.string.sf_sudoku_assistances_give_hint));
 
-        if (Profile.getInstance().getAssistances().isCrashSet())
+        if (Profile.getInstance().isDebugSet())
             itemStack.add(getString(R.string.sf_sudoku_assistances_crash));
 
         // TODO why this no work? final CharSequence[] items = (CharSequence[]) itemStack.toArray();

@@ -22,4 +22,5 @@
     <string name="profile_preference_button_provide_restricted_set_of_types">Select which types are offered</string>
     <string name="profile_preference_new_profile">unnamed</string>
     <string name="profile_preference_title_crash_trigger">crash app</string>
+    <string name="profile_preference_title_debug">debug</string>
 </resources>

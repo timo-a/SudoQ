@@ -112,7 +112,6 @@ public class NewSudokuPreferencesActivity extends PreferencesActivity {
 		saveAssistance(Assistances.restrictCandidates, restrictCandidates);
 
 		p.setHelperActive(confSettings.isHelperSet());
-		p.setCrasherActive(confSettings.isCrashSet());
 		p.setLefthandActive(confSettings.isLefthandModeSet());
 
         //restrict types is automatically saved to profile...

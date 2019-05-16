@@ -27,7 +27,6 @@ public class GameSettings implements Xmlable{
 	private BitSet assistances;
 	private boolean lefthandMode;
 	private boolean helper;
-	private boolean crash;
 	private boolean gestures;
 	private SudokuTypesList wantedSudokuTypes;
 	
@@ -106,14 +105,6 @@ public class GameSettings implements Xmlable{
 		return helper;
 	}
 
-	public void setCrash(boolean value) {
-		this.crash = value;
-	}
-
-	public boolean isCrashSet() {
-		return crash;
-	}
-
 
 	public SudokuTypesList getWantedTypesList(){
 		return wantedSudokuTypes;
@@ -128,7 +119,6 @@ public class GameSettings implements Xmlable{
         representation.addAttribute(new XmlAttribute("gestures", gestures));
         representation.addAttribute(new XmlAttribute("left",     lefthandMode));
 		representation.addAttribute(new XmlAttribute("helper",   helper));
-		representation.addAttribute(new XmlAttribute("crash",    crash));
 		representation.addChild(wantedSudokuTypes.toXmlTree());
 		return representation;
 	}
@@ -141,7 +131,6 @@ public class GameSettings implements Xmlable{
 		gestures     = Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("gestures"));
 		lefthandMode = Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("left"));
 		helper       = Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("helper"));
-		crash        = Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("crash"));
 		for(XmlTree xt: xmlTreeRepresentation)
         	if(xt.getName().equals(SudokuTypesList.ROOT_NAME))
         		wantedSudokuTypes.fillFromXml(xt);
@@ -167,9 +156,10 @@ public class GameSettings implements Xmlable{
 	/**
 	 * Füllt aus einer String Repräsentation der aktivierten Hilfestellungen
 	 * durch 0en und 1en das AssistanceSet
-	 * 
+	 *
 	 * @param representation
 	 *            String Repräsentation der Hilfestellungen
+	 *
 	 * @throws IllegalArgumentException
 	 *             Wird geworfen, wenn aus dem angegebenen String kein
 	 *             AssistanceSet generiert werden kann.

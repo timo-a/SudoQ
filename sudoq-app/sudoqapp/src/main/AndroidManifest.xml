@@ -40,6 +40,19 @@
         <activity android:name=".controller.menus.ProfileListActivity" android:theme="@style/Theme.DesignDemo.Dialog"/>
 
         <activity android:name=".controller.tutorial.TutorialActivity" android:label="@string/sf_tutorial_sudoku_title"/>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="de.sudoq.fileprovider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+
+
+
     </application>
 
 </manifest>

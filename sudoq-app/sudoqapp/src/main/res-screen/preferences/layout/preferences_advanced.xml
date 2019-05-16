@@ -22,8 +22,9 @@
 	        android:text="@string/profile_preference_title_left_hand_mode"
 	   		android:layout_margin="5dp"
 	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content" 
-	        android:textColor="@android:color/black"/>
+	        android:layout_height="wrap_content"
+			android:onClick="count"
+			android:textColor="@android:color/black"/>
 	    
 	    <Button
 	        android:id="@+id/button_provide_restricted_set_of_types"
@@ -46,12 +47,11 @@
 
 
 		<CheckBox
-			android:id="@+id/checkbox_crash_trigger"
+			android:id="@+id/checkbox_debug"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_margin="5dp"
-			android:onClick="helperSelected"
-			android:text="@string/profile_preference_title_crash_trigger"
+			android:text="@string/profile_preference_title_debug"
 			android:textColor="@android:color/black"
 			android:visibility="gone" />
 

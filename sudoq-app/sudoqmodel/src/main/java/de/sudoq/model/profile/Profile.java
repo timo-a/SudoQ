@@ -65,6 +65,7 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 	 * AssistanceSet mit den Hilfestellungen
 	 */
 	private GameSettings gameSettings = new GameSettings();
+	private AppSettings  appSettings  = new AppSettings();
 
 	int[] statistics;
 
@@ -228,6 +229,7 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 		this.gameSettings = new GameSettings();
 		this.gameSettings.setAssistance(Assistances.markRowColumn);
 //		this.gameSettings.setGestures(false);
+		//this.appSettings.setDebug(false);
 		this.statistics = new int[Statistics.values().length];
 		this.statistics[Statistics.fastestSolvingTime.ordinal()] = INITIAL_TIME_RECORD;
 		notifyListeners(this);
@@ -323,6 +325,10 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 		return this.gameSettings.isGesturesSet();
 	}
 
+	public boolean isDebugSet() {
+		return this.appSettings.isDebugSet();
+	}
+
 	/*Advanced Settings*/
 	
 	/**
@@ -344,8 +350,8 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 		this.gameSettings.setHelper(value);
 	}
 
-	public void setCrasherActive(boolean value) {
-		this.gameSettings.setCrash(value);
+	public void setDebugActive(boolean value) {
+		this.appSettings.setDebug(value);
 	}
 
 	/**
@@ -418,6 +424,8 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 		for (Statistics stat : Statistics.values()) {
 			representation.addAttribute(new XmlAttribute(stat.name(), getStatistic(stat) + ""));
 		}
+		representation.addChild(appSettings.toXmlTree());
+
 		return representation;
 	}
 
@@ -430,9 +438,13 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 		
 		for(XmlTree sub: xmlTreeRepresentation){
 			if(sub.getName().equals("gameSettings")){
-            	gameSettings = new GameSettings();
-            	gameSettings.fillFromXml(sub);
-            }
+				gameSettings = new GameSettings();
+				gameSettings.fillFromXml(sub);
+			}
+			if(sub.getName().equals("appSettings")){
+				appSettings = new AppSettings();
+				appSettings.fillFromXml(sub);
+			}
 		}
 		
 		this.statistics = new int[Statistics.values().length];

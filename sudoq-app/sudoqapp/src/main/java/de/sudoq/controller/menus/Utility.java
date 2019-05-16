@@ -1,7 +1,14 @@
 package de.sudoq.controller.menus;
 
 import android.content.Context;
+import android.util.Log;
 import android.util.SparseArray;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import de.sudoq.R;
 import de.sudoq.model.sudoku.Utils;
@@ -147,6 +154,26 @@ public static String parseStringArray(Context context, char gender, int stringAr
 
     return null;
 }
+
+
+	/**
+	 * Kopiert die Dateien zwischen den angegeben Streams
+	 *
+	 * @param in
+	 *            Der Eingabestream
+	 * @param out
+	 *            Der Ausgabestream
+	 * @throws IOException
+	 *             Wird geworfen, falls beim Lesen/Schreiben der Streams ein
+	 *             Fehler auftritt
+	 */
+	public static void copyFileOnStreamLevel(InputStream in, OutputStream out) throws IOException {
+		byte[] buffer = new byte[1024];
+		int read;
+		while ((read = in.read(buffer)) != -1) {
+			out.write(buffer, 0, read);
+		}
+	}
 
 
 }

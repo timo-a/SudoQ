@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 
 import de.sudoq.R;
 import de.sudoq.controller.SudoqCompatActivity;
+import de.sudoq.controller.menus.Utility;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.complexity.Complexity;
@@ -373,13 +374,13 @@ public class SplashActivity extends SudoqCompatActivity {
 
 		/**TODO  do shorter with library
 		 * Copies content from sourcePath to destination
-		 * 
+		 *
 		 * @param sourcePath
 		 * @param destinationPath
 		 */
 		private void copyFile(String sourcePath, String destinationPath) {
-            new File(destinationPath).getParentFile().mkdirs();
-			
+			new File(destinationPath).getParentFile().mkdirs();
+
 			File destination = new File(destinationPath);
 			InputStream in;
 			OutputStream out;
@@ -387,32 +388,13 @@ public class SplashActivity extends SudoqCompatActivity {
 				in = getAssets().open(sourcePath);
 				String abs = destination.getAbsolutePath();
 				out = new FileOutputStream(abs);
-				copyFileOnStreamLevel(in, out);
+				Utility.copyFileOnStreamLevel(in, out);
 				in.close();
 				out.flush();
 				out.close();
 			} catch (Exception e) {
 				Log.e(LOG_TAG, e.getMessage());
 				Log.e(LOG_TAG, "there seems to be an exception");
-			}
-		}
-
-		/**
-		 * Kopiert die Dateien zwischen den angegeben Streams
-		 * 
-		 * @param in
-		 *            Der Eingabestream
-		 * @param out
-		 *            Der Ausgabestream
-		 * @throws IOException
-		 *             Wird geworfen, falls beim Lesen/Schreiben der Streams ein
-		 *             Fehler auftritt
-		 */
-		private void copyFileOnStreamLevel(InputStream in, OutputStream out) throws IOException {
-			byte[] buffer = new byte[1024];
-			int read;
-			while ((read = in.read(buffer)) != -1) {
-				out.write(buffer, 0, read);
 			}
 		}
 

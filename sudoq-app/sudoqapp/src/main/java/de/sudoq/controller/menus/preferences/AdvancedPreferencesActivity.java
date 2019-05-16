@@ -22,7 +22,6 @@ import android.widget.CheckBox;
 
 import de.sudoq.R;
 import de.sudoq.controller.menus.NewSudokuActivity;
-import de.sudoq.model.game.Assistances;
 import de.sudoq.model.game.GameSettings;
 import de.sudoq.model.profile.Profile;
 
@@ -43,10 +42,12 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 
 	public static GameSettings    gameSettings;
 
-	CheckBox crasher;
-	CheckBox helper;
 	CheckBox lefthand;
 	Button   restricttypes;
+	CheckBox helper;
+	CheckBox debug;
+
+	Byte debugCounter = 0;
 
 	/**
 	 * Wird aufgerufen, falls die Activity zum ersten Mal gestartet wird. Läd
@@ -65,22 +66,30 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 		ab.setDisplayShowTitleEnabled(true);
 
 
-		crasher       = (CheckBox) findViewById(R.id.checkbox_crash_trigger);
-		helper        = (CheckBox) findViewById(R.id.checkbox_hints_provider);
 		lefthand      = (CheckBox) findViewById(R.id.checkbox_lefthand_mode);
 		restricttypes = (Button)   findViewById(R.id.button_provide_restricted_set_of_types);
+		helper        = (CheckBox) findViewById(R.id.checkbox_hints_provider);
+		debug         = (CheckBox) findViewById(R.id.checkbox_debug);
+		//exporter      = (CheckBox) findViewById(R.id.checkbox_exportcrash_trigger);
+
 		gameSettings = NewSudokuActivity.gameSettings;
 		GameSettings profileGameSettings = Profile.getInstance().getAssistances();
 
         switch (caller){
             case NEW_SUDOKU:
-				crasher. setChecked(gameSettings.isCrashSet());
+				debug.   setChecked(Profile.getInstance().isDebugSet());
+				if(debug.isChecked()){
+					debug.setVisibility(View.VISIBLE);
+				}
 				helper.  setChecked(gameSettings.isHelperSet());
 		        lefthand.setChecked(gameSettings.isLefthandModeSet());
                 break;
             case PROFILE:
             case NOT_SPECIFIED://not specified souldn't happen, but you never know
-				crasher. setChecked(profileGameSettings.isCrashSet());
+				if(debug.isChecked()){
+					debug.setVisibility(View.VISIBLE);
+				}
+				debug.   setChecked(Profile.getInstance().isDebugSet());
                 helper.  setChecked(profileGameSettings.isHelperSet());
                 lefthand.setChecked(profileGameSettings.isLefthandModeSet());
         }
@@ -119,6 +128,13 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 		}
 	}
 
+	public void count(View view) {
+		debugCounter++;
+		if(debugCounter >= 10)
+			debug.setVisibility(View.VISIBLE);
+
+	}
+
 	private void askConfirmation(final CheckBox cb) {
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -146,6 +162,8 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
         switch(caller){
             case NEW_SUDOKU://TODO just have 2 subclasses, one to be called from playerpref, one from newSudokuPref
 	            saveToGameSettings();
+	            if(debug != null)
+	                 Profile.getInstance().setDebugActive(debug.isChecked());
                 break;
             case PROFILE:
                 saveToProfile();
@@ -154,17 +172,16 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 	}
 
 	private void saveToGameSettings(){
-        if(lefthand != null && helper != null && crasher != null){//todo warum und???
+        if(lefthand != null && helper != null){
             gameSettings.setLefthandMode(lefthand.isChecked());
             gameSettings.setHelper(helper.isChecked());
-            gameSettings.setCrash(crasher.isChecked());
         }
     }
 
     protected void saveToProfile() {
         Profile p = Profile.getInstance();
-		if(crasher != null)
-			p.setCrasherActive(crasher.isChecked());
+		if(debug != null)
+			p.setDebugActive(debug.isChecked());
 		if(helper != null)
 			p.setHelperActive(helper.isChecked());
         if(lefthand != null)

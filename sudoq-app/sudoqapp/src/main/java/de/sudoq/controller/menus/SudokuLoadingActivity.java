@@ -13,9 +13,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -29,11 +31,23 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import de.sudoq.R;
 import de.sudoq.controller.SudoqListActivity;
 import de.sudoq.controller.sudoku.SudokuActivity;
+import de.sudoq.model.files.FileManager;
 import de.sudoq.model.game.GameData;
 import de.sudoq.model.game.GameManager;
 import de.sudoq.model.profile.Profile;
@@ -62,7 +76,7 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 	protected static MenuItem menuDeleteSpecific;
 	private static final int MENU_DELETE_SPECIFIC = 1; commented out to make sure it's not needed*/
 
-	private enum FAB_STATES { DELETE, INACTIVE, GO_BACK};
+	private enum FAB_STATES { DELETE, INACTIVE, GO_BACK}; //Floating Action Button
 
     private FAB_STATES fabstate=FAB_STATES.INACTIVE;
 
@@ -224,15 +238,19 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 		Log.d(LOG_TAG, "LongClick on "+ position + "");
 		
 		/*gather all options */
-		CharSequence[] temp_items = null;
+		ArrayList temp_items = new ArrayList<CharSequence>();
 		boolean specialcase = false;
 		if (specialcase) { } 
 		else {
-			temp_items = new CharSequence[2];
-			temp_items[0]= getString(R.string.sudokuloading_dialog_play);
-			temp_items[1]= getString(R.string.sudokuloading_dialog_delete);
+			temp_items.add(getString(R.string.sudokuloading_dialog_play));
+			temp_items.add(getString(R.string.sudokuloading_dialog_delete));
+
+			if(Profile.getInstance().isDebugSet()){
+				temp_items.add("export as text");
+				temp_items.add("export as file");
+			}
 		}
-		final CharSequence[] items = temp_items;
+		final CharSequence[] items = (CharSequence[]) temp_items.toArray(new CharSequence[0]);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		
@@ -249,6 +267,79 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 					GameManager.getInstance().deleteGame(adapter.getItem(position).getId());
 					onContentChanged();
 					break;
+				case 2://export as text
+					int gameID = adapter.getItem(position).getId();
+					File gameFile = FileManager.getGameFile(gameID);
+
+					String str = "there was an error reading the file, sorry";
+					FileInputStream fis = null;
+					try {
+						fis = new FileInputStream(gameFile);
+						byte[] data = new byte[(int) gameFile.length()];
+						fis.read(data);
+						fis.close();
+						str = new String(data, "UTF-8");
+
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+
+					Intent sendIntent = new Intent();
+					sendIntent.setAction(Intent.ACTION_SEND);//
+					//sendIntent.putExtra(Intent.EXTRA_FROM_STORAGE, gameFile);
+					sendIntent.putExtra(Intent.EXTRA_TEXT, str);
+					sendIntent.setType("text/plain");
+					startActivity(sendIntent);
+					break;
+
+				case 3://export as file
+					//already defined under 2
+					/*int */ gameID = adapter.getItem(position).getId();
+					/*File*/ gameFile = FileManager.getGameFile(gameID);
+					/* we can only copy from 'files' subdir, so we have to move the file there first */
+					File tmpFile = new File(getFilesDir(),gameFile.getName());
+
+					InputStream in;
+					OutputStream out;
+					try {
+						in = new FileInputStream(gameFile);
+						out = new FileOutputStream(tmpFile);
+						Utility.copyFileOnStreamLevel(in, out);
+						in.close();
+						out.flush();
+						out.close();
+					} catch (Exception e) {
+						Log.e(LOG_TAG, e.getMessage());
+						Log.e(LOG_TAG, "there seems to be an exception");
+					}
+
+
+
+
+
+					Log.v("file-share", "tmpfile: "+tmpFile.getAbsolutePath());
+
+					Log.v("file-share", "gamefile is null? "+(gameFile==null));
+					Log.v("file-share", "gamefile getPath "+gameFile.getPath());
+					Log.v("file-share", "gamefile getAbsolutePath "+gameFile.getAbsolutePath());
+					Log.v("file-share", "gamefile getName "+gameFile.getName());
+					Log.v("file-share", "gamefile getParent "+gameFile.getParent());
+
+					Uri fileUri = FileProvider.getUriForFile(SudokuLoadingActivity.this,
+                            "de.sudoq.fileprovider", tmpFile);
+					Log.v("file-share", "uri is null? "+(fileUri==null));
+					/*Intent*/ sendIntent = new Intent();
+					sendIntent.setAction(Intent.ACTION_SEND);//
+					//sendIntent.putExtra(Intent.EXTRA_FROM_STORAGE, gameFile);
+					sendIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+					sendIntent.setType("text/plain");
+					sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+					//startActivity(Intent.createChooser(sendIntent, "Share to"));
+					startActivity(sendIntent);
+
+					break;
 				}
 			}
 		});
@@ -256,7 +347,10 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 		alert.show();		
 		
 		return true;//prevent itemclick from fire-ing as well
-	}	
+	}
+
+
+
 
 	private void initialiseGames() {
 		games = GameManager.getInstance().getGameList();
