@@ -31,16 +31,9 @@ import de.sudoq.model.xml.SudokuXmlHandler;
 
 public class FileManagerTests {
 
-	private static File sudokus;
-	private static File profiles;
-
-    private static String real = "sudokus";
-
 	@BeforeClass
 	public static void init() {
         Utility.copySudokus();
-		sudokus  = Utility.sudokus;
-		profiles = Utility.profiles;
 
 	}
 
@@ -55,17 +48,17 @@ public class FileManagerTests {
 		java.lang.reflect.Field p = Profile.class.getDeclaredField("instance");
 		p.setAccessible(true);
 		p.set(null, null);
-		FileManager.deleteDir(profiles);
-		FileManager.deleteDir(sudokus);
+		FileManager.deleteDir(Utility.profiles);
+		FileManager.deleteDir(Utility.sudokus);
 	}
 
 	@Test
 	public void testInit() {
-		assertTrue(sudokus.exists());
-		assertTrue(profiles.exists());
-		assertTrue(FileManager.getProfilesDir().getAbsolutePath().equals(profiles.getAbsolutePath()));
-		assertTrue(FileManager.getSudokuDir().getAbsolutePath().equals(sudokus.getAbsolutePath()));
-		assertTrue(sudokus.list().length > 0);
+		assertTrue(Utility.sudokus.exists());
+		assertTrue(Utility.profiles.exists());
+		assertTrue(FileManager.getProfilesDir().getAbsolutePath().equals(Utility.profiles.getAbsolutePath()));
+		assertTrue(FileManager.getSudokuDir().getAbsolutePath().equals(Utility.sudokus.getAbsolutePath()));
+		assertTrue(Utility.sudokus.list().length > 0);
 	}
 
 	@Test
@@ -88,7 +81,7 @@ public class FileManagerTests {
 			// fine
 		}
 		try {
-            FileManager.initialize(profiles, tmp);
+            FileManager.initialize(Utility.profiles, tmp);
 			fail("No Exception");
 		} catch (IllegalArgumentException e) {
 			// fine
@@ -126,7 +119,7 @@ public class FileManagerTests {
 	@Test
 	public void testSudokuManagement() {
         //assure empty directory
-        String p=StringUtils.join(new String[]{"res","tmp_suds","standard16x16","difficult"},File.separator);
+        String p=StringUtils.join(new String[]{Utility.RES,"tmp_suds","standard16x16","difficult"},File.separator);
         try {
             FileUtils.cleanDirectory(new File(p));
         } catch (IOException e) {
@@ -154,7 +147,7 @@ public class FileManagerTests {
 	@Test
 	public void testLoadingOfNonexistentSudoku() {
         //assure empty directory
-        String p=StringUtils.join(new String[]{"res","tmp_suds","samurai","difficult"},File.separator);
+        String p=StringUtils.join(new String[]{Utility.RES,"tmp_suds","samurai","difficult"},File.separator);
         try {
             FileUtils.cleanDirectory(new File(p));
         } catch (IOException e) {

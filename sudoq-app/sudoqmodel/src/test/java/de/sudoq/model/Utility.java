@@ -20,18 +20,21 @@ public abstract class Utility {
     public static File sudokus;
     public static File profiles;
 
+    public static final String SUDOQ_LOCATION = "/home/t/Code/SudoQ/";
+    public static final String RES = SUDOQ_LOCATION + "sudoq-app/sudoqapp/src/main/" + "res" + File.separator;
+
     /*
     * Copy files from assets to temporary dir for testing
     * also init Filemanager
     * */
     public static void copySudokus() {
-        String res = "res" + File.separator;
-        sudokus = new File(res  + "tmp_suds");
+        String res = RES;
+        sudokus  = new File(res + "tmp_suds");
         profiles = new File(res + "tmp_profiles");
         sudokus.mkdir();
 
         try {
-            String path = "sudoqapp/src/main/assets/sudokus/".replaceAll("/",File.separator);
+            String path = SUDOQ_LOCATION + "sudoq-app/" + "sudoqapp/src/main/assets/sudokus/".replaceAll("/",File.separator);
             FileUtils.copyDirectory(new File(path), sudokus);
             System.out.println("path:");
             System.out.println((new File(res)).getAbsolutePath());

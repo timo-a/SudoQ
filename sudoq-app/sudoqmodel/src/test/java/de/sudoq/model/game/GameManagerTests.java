@@ -15,6 +15,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.sudoq.model.Utility;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.Field;
@@ -28,17 +29,7 @@ public class GameManagerTests {
 
 	@BeforeClass
 	public static void init() throws IOException {
-        String res = "res" + File.separator;
-        sudokus  = new File(res + "tmp_suds");
-        profiles = new File(res + "tmp_profiles");
-
-        try {
-            FileUtils.copyDirectory(new File(res + "sudokus" + File.separator), sudokus);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-		profiles.mkdir();
-		FileManager.initialize(profiles, sudokus);
+		Utility.copySudokus();
 		Profile.getInstance();
 	}
 
@@ -54,8 +45,8 @@ public class GameManagerTests {
         java.lang.reflect.Field p = Profile.class.getDeclaredField("instance");
         p.setAccessible(true);
         p.set(null, null);
-        FileManager.deleteDir(profiles);
-        FileManager.deleteDir(sudokus);
+        FileManager.deleteDir(Utility.profiles);
+        FileManager.deleteDir(Utility.sudokus);
     }
 
 	@Test
