@@ -805,33 +805,35 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 	 * {@inheritDoc}
 	 */
 	public void onNoteAdd(Field field, int value) {
-		updateButtons();
-		saveActionTree();
+		onInputAction();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void onNoteDelete(Field field, int value) {
-		updateButtons();
-		saveActionTree();
+		onInputAction();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void onAddEntry(Field field, int value) {
-		updateButtons();
-		saveActionTree();
+		onInputAction();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void onDeleteEntry(Field field) {
+		onInputAction();
+	}
+
+	public void onInputAction(){
 		updateButtons();
 		saveActionTree();
 	}
+
 
 	private void updateButtons(){
 		controlPanel.updateButtons();

@@ -37,7 +37,8 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 	/** Attributes */
 
 	protected SudokuTypes typeName;
-	
+
+	/** The ratio of fields that are to be allocated i.e. already filled when starting  a sudoku game */
 	protected float standardAllocationFactor;
 	
 	/**

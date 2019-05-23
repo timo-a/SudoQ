@@ -70,13 +70,15 @@ public class HintFormulator {
                 text = xWing(context, sd);
                 break;
 
+            case NoNotes:
+                text = context.getString(R.string.hint_backtracking);
+                text += context.getString(R.string.hint_fill_out_notes);
+                break;
+
             case Backtracking:
                 text = context.getString(R.string.hint_backtracking);
-                if(aFieldIsEmpty((SudokuActivity) context))
-                    text += context.getString(R.string.hint_fill_out_notes);
-
-
                 break;
+
             default:
                 text = "We found a hint, but did not implement a representation yet. That's a bug! Please send us a screenshot so we can fix it!";
         }
@@ -157,7 +159,7 @@ public class HintFormulator {
     }
 
     private static String hiddenSingleText(Context context, SolveDerivation sd){//TODO this should never be used but already be taken by a special hit that just says: Look at this field, only one left can go;
-        BitSet bs = ((NakedSetDerivation) sd).getSubsetMembers().get(0).getRelevantCandidates();
+        BitSet bs = ((HiddenSetDerivation) sd).getSubsetMembers().get(0).getRelevantCandidates();
         String note = (bs.nextSetBit(0)+1)+"";
         return context.getString(R.string.hint_hiddensingle).replace("{note}", note);
     }

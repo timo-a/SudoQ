@@ -187,7 +187,7 @@
     <string name="hint_nakedset">Il y a une « naked set »! {symbols} seront en quelque sorte répartis entre les champs marqués. Ils peuvent être supprimés de tous les autres champs de ce groupe.</string>
 
     
-    <string name="hint_hiddensingle">Il y a une « hidden single »! {note} est la seule note dans le champ marqué. Il peut être entré comme solution là-bas.</string>
+    <string name="hint_hiddensingle">Il y a une « hidden single »! De tous les champs de la forme en surbrillance « {note} » n\'apparaît que dans le champ en surbrillance. Il peut être réglé à cet endroit.</string>
 
     <string name="hint_hiddenset">Il y a une « hidden set »! {symbols} seront en quelque sorte répartis entre les champs marqués. Par conséquent, tout autre candidat dans ces champs peut être supprimé.</string>
 

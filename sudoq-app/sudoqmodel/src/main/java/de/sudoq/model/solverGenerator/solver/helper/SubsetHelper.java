@@ -48,7 +48,7 @@ public abstract class SubsetHelper extends SolveHelper {
 
 	protected HintTypes hintType;
 
-	protected static HintTypes labels[];
+	//protected static HintTypes labels[];
 
 	/** Constructors */
 
@@ -67,10 +67,8 @@ public abstract class SubsetHelper extends SolveHelper {
 	 */
 	protected SubsetHelper(SolverSudoku sudoku, int level, int complexity) {
 		super(sudoku, complexity);
-		if (level <= 0 || level > labels.length)
-			throw new IllegalArgumentException("level must be ∈ [1,"+labels.length+"] but is "+level);
 
-		hintType = labels[level-1];
+		//hintType = labels[level-1];
 
 		this.level = level;
 
@@ -103,7 +101,7 @@ public abstract class SubsetHelper extends SolveHelper {
 		lastDerivation = null;
 		boolean found = false;
 
-		ArrayList<Position> positions;
+		//ArrayList<Position> positions;
 		//iterate over all 'unique'-Constraints
 		for (Constraint constraint : allConstraints) {
 			if (constraint.hasUniqueBehavior()) {
@@ -142,6 +140,7 @@ public abstract class SubsetHelper extends SolveHelper {
 
 	protected abstract BitSet collectPossibleCandidates(Constraint constraint);
 
+	//todo make this an iterator?
 	/**
 	 * Berechnet das nächste Subset des spezifizierten BitSets mit der im Konstruktor definierten Größe "level",
 	 * ausgehend von demjenigen Subset, welches die niederwertigsten Kandidaten gesetzt hat. Das übergebene Subset muss
@@ -210,7 +209,7 @@ public abstract class SubsetHelper extends SolveHelper {
 		if(lastElement)
 			return false; // we're done
 		else {
-			//advance to net combination, project back to our candidates
+			//advance to next combination, project back to our candidates
 			BitSet nextOne = step(current, constraintSet.cardinality(), currentSet.cardinality());
 			currentSet = inflate(nextOne, constraintSet);
 			return true;

@@ -222,7 +222,7 @@
     <string name="hint_nakedset">Look there\'s a naked set! {symbols} will in some way be distributed among the highlighted fields. They can be removed from all other fields in this group.</string>
 
     
-    <string name="hint_hiddensingle">Look there\'s a hidden single! {note} is the only note left in the highlighted field. It can be set there.</string>
+    <string name="hint_hiddensingle">Look there\'s a hidden single! Of all the fields in the highlighted shape \"{note}\" appears only in the highlighted field. It can be set there.</string>
 
     <string name="hint_hiddenset">Look there\'s a hidden set! {symbols} will in some way be distributed among the highlighted fields. Therefore any other candidates in these fields can be removed.</string>
 

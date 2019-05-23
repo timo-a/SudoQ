@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import de.sudoq.model.actionTree.Action;
 import de.sudoq.model.solvingAssistant.HintTypes;
+import de.sudoq.model.sudoku.Sudoku;
 
 /**
  * Ein Objekt dieser Klasse stellt einen Herleitungsschritt für die Lösung eines
@@ -12,7 +14,7 @@ import de.sudoq.model.solvingAssistant.HintTypes;
  * DerivationBlocks, die Informationenen über die entsprechend relevanten
  * Blöcke, sowie Kandidaten in den beteiligten Feldern enthalten.
  */
-public class SolveDerivation {
+public /*abstract*/ class SolveDerivation {
 	/** Attributes */
 
 	/**
@@ -36,6 +38,8 @@ public class SolveDerivation {
 	 * sind
 	 */
 	private List<DerivationBlock> blocks;
+
+	protected boolean hasActionListCapability = false;
 
 	/** Constructors */
 
@@ -118,6 +122,15 @@ public class SolveDerivation {
 
 	public List<DerivationBlock> getDerivationBlocks(){
 		return blocks;
+	}
+
+	public boolean hasActionListCapability(){
+		return hasActionListCapability;
+	}
+
+	public List<Action> getActionList(Sudoku sudoku) {
+		List al = new ArrayList<>();
+    	return al;
 	}
 
 	public String toString(){

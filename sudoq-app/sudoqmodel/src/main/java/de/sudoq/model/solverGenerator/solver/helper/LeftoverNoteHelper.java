@@ -19,29 +19,6 @@ public class LeftoverNoteHelper extends SolveHelper {
         super(sudoku, complexity);
     }
 
-    /**
-     * Finds out if {@code positions} has only one empty field. if so return {@code position} and fill {@code remaining} with all other positions respectively
-     * @param positions
-     * @param remaining
-     * @return
-     */
-    private Position onlyOneLeft(List<Position> positions, List<Position> remaining){
-        Position candidate = null;
-        remaining.clear();
-        for(Position p : positions)
-            if(sudoku.getField(p).isNotSolved()){
-                if(candidate==null)//found empty
-                    candidate = p;
-                else{
-                    candidate = null;//found 2nd empty -> break
-                    break;
-                }
-            }
-            else//found
-                remaining.add(p);
-
-        return candidate;
-    }
 
 
     @Override
@@ -60,6 +37,7 @@ public class LeftoverNoteHelper extends SolveHelper {
                 if(buildDerivation){
                    lastDerivation = new LeftoverNoteDerivation(c, leftover);
                 }
+                break;
             }
 
         return foundOne;

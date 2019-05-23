@@ -7,6 +7,7 @@
  */
 package de.sudoq.controller.sudoku;
 
+import de.sudoq.model.actionTree.Action;
 import de.sudoq.model.actionTree.NoteActionFactory;
 import de.sudoq.model.actionTree.SolveActionFactory;
 import de.sudoq.model.game.Game;
@@ -53,6 +54,18 @@ public class SudokuController implements AssistanceRequestListener, ActionListen
 		this.context = context;
 	}
 
+	/**
+	 * Debugging
+	 *
+	 * @throws IllegalArgumentException
+	 *             Wird geworfen, falls null übergeben wird
+	 */
+	private void getsucc(boolean illegal){
+		if (illegal)
+			throw new IllegalArgumentException("tu");
+	}
+
+
 	/** Methods */
 
 	/**
@@ -88,6 +101,14 @@ public class SudokuController implements AssistanceRequestListener, ActionListen
 	 */
 	public void onAddEntry(Field field, int value) {
 		game.addAndExecute(new SolveActionFactory().createAction(value, field));
+		if (this.game.isFinished()) {
+			updateStatistics();
+			handleFinish(false);
+		}
+	}
+
+	public void onHintAction(Action a) {
+		game.addAndExecute(a);
 		if (this.game.isFinished()) {
 			updateStatistics();
 			handleFinish(false);

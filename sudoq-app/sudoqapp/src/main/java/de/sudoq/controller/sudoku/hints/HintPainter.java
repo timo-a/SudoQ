@@ -16,6 +16,7 @@ import de.sudoq.model.solverGenerator.solution.HiddenSetDerivation;
 import de.sudoq.model.solverGenerator.solution.LeftoverNoteDerivation;
 import de.sudoq.model.solverGenerator.solution.LockedCandidatesDerivation;
 import de.sudoq.model.solverGenerator.solution.NakedSetDerivation;
+import de.sudoq.model.solverGenerator.solution.NoNotesDerivation;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solution.XWingDerivation;
 import de.sudoq.view.Hints.HiddenSetView;
@@ -24,6 +25,7 @@ import de.sudoq.view.Hints.LastDigitView;
 import de.sudoq.view.Hints.LeftoverNoteView;
 import de.sudoq.view.Hints.LockedCandidatesView;
 import de.sudoq.view.Hints.NakedSetView;
+import de.sudoq.view.Hints.NoNotesView;
 import de.sudoq.view.Hints.XWingView;
 import de.sudoq.view.SudokuLayout;
 
@@ -78,6 +80,9 @@ public class HintPainter {
 
 			case XWing: v = new XWingView(context, sl, (XWingDerivation)sd);
 			            break;
+
+			case NoNotes: v = new NoNotesView(context, sl, (NoNotesDerivation) sd);
+			              break;
 
 
 		}

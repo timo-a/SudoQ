@@ -16,7 +16,11 @@ public class CandidateSet extends BitSet {
     }
 
 
-
+    public static CandidateSet fromBitSet(BitSet bs){
+        CandidateSet cs = new CandidateSet();
+        cs.or(bs);
+        return cs;
+    }
 
 
 

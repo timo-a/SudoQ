@@ -10,10 +10,16 @@ android:visibility="gone">
 
 
 <Button
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:text="ok"
-    android:id="@+id/hintOkButton" />
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="@string/hint_panel_continue"
+        android:id="@+id/hintOkButton" />
+<Button
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="@string/hint_panel_execute"
+        android:id="@+id/hintExecuteButton"
+        android:visibility="gone"  />
 <ScrollView
     android:id="@+id/SCROLLER_ID"
     android:layout_width="fill_parent"

@@ -190,7 +190,16 @@ public class Field extends ObservableModelImpl<Field> {
 
 	/**
 	 * Checks whether the field is occupied with any solution
-	 * 
+	 *
+	 * @return true, if the current solution is not 'empty'
+	 */
+	public boolean isSolved() {
+		return this.currentVal != EMPTYVAL;
+	}
+
+	/**
+	 * Checks whether the field is occupied with any solution
+	 *
 	 * @return true, if the current solution is 'empty'
 	 */
 	public boolean isNotSolved() {

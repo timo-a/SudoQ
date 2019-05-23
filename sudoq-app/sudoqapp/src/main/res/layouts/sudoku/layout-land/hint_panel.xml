@@ -26,12 +26,19 @@ android:visibility="gone">
         android:layout_height="match_parent"/>
 
 </ScrollView>
-<Button
-    android:id="@+id/hintOkButton"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:text="ok"
-    android:layout_gravity="end"/>
+    <Button
+        android:id="@+id/hintOkButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hint_panel_continue"
+        android:layout_gravity="end"/>
+    <Button
+        android:id="@+id/hintExecuteButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hint_panel_execute"
+        android:layout_gravity="end"
+        android:visibility="gone"  />
 
 
 </LinearLayout>

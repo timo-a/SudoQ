@@ -182,7 +182,7 @@ public class HighlightedConstraintView extends View {
 				canvas.drawArc(oval, 0 -5, angle, false, paint);
 			}
 
-			paint.setColor(Color.BLUE);
+			paint.setColor(marginColor);
 
 					/*Now filling the edges (if there's no corner we still leave a gap. that gap is being filled now ) */
 			boolean belowRightMember = c.includes(Position.get(p.getX() + 1, p.getY() + 1));

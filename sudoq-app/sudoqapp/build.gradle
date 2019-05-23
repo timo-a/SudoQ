@@ -20,7 +20,8 @@ android {
                     'src/main/res/layouts/tutorial',
                     'src/main/res/layout',
                     'src/main/res',
-                    'src/main/res-screen/preferences/'
+                    'src/main/res-screen/preferences/',
+                    'src/main/res-screen/hints/'
             ]
         }
     }

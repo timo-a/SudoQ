@@ -15,10 +15,15 @@ import java.util.Stack;
 
 import de.sudoq.R;
 import de.sudoq.controller.sudoku.hints.HintFormulator;
+import de.sudoq.model.actionTree.Action;
+import de.sudoq.model.game.Assistances;
 import de.sudoq.model.game.Game;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solvingAssistant.SolvingAssistant;
+import de.sudoq.model.sudoku.Constraint;
+import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.view.SudokuFieldView;
 import de.sudoq.view.SudokuLayout;
 
@@ -112,7 +117,7 @@ public class AssistancesDialogFragment extends DialogFragment {
     }
 
     private void hint(final SudokuActivity activity){
-        SolveDerivation sd = SolvingAssistant.giveAHint(game.getSudoku());
+        final SolveDerivation sd = SolvingAssistant.giveAHint(game.getSudoku());
         if (sd == null) throw new AssertionError("derivation is null, maybe forgot to set lastDerivation = derivation?");
         TextView tv = (TextView) activity.findViewById(R.id.hintText);
         tv.setText(HintFormulator.getText(activity,  sd));
@@ -121,6 +126,8 @@ public class AssistancesDialogFragment extends DialogFragment {
         sl.getHintPainter().realizeHint(sd);
         sl.getHintPainter().invalidateAll();
 
+
+        /* user pressed `continue`, game is resumed*/
         Button b = (Button) activity.findViewById(R.id.hintOkButton);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,10 +141,72 @@ public class AssistancesDialogFragment extends DialogFragment {
             }
         });
 
+        Button bExecute = (Button) activity.findViewById(R.id.hintExecuteButton);
+        bExecute.setVisibility(sd.hasActionListCapability() ? View.VISIBLE : View.GONE);
+
+        /* user pressed `make it so` so we execute the action for him*/
+        bExecute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                activity.setModeRegular();
+
+                sl.getHintPainter().deleteAll();
+                sl.invalidate();
+                sl.getHintPainter().invalidateAll();
+
+                for (Action a : sd.getActionList(game.getSudoku())){
+
+                    controller.onHintAction(a);
+                    activity.onInputAction();
+                    /* in case we delete a note in the focussed field */
+                    activity.getMediator().restrictCandidates();
+                }
+            }
+        });
+
 
         //Toast.makeText(SudokuActivity.this, "a hint was requested: "+sd, Toast.LENGTH_LONG).show();
 
     }
+
+//    private void restrictCandidates() {
+//		this.virtualKeyboard.enableAllButtons();
+//
+//		Field currentField = this.sudokuView.getCurrentFieldView().getField();
+//		SudokuType type = this.game.getSudoku().getSudokuType();
+//		/* only if assistance 'input assistance' if enabled */
+//		if (this.game.isAssistanceAvailable(Assistances.restrictCandidates)) {
+//
+//			/* save val of current view */
+//			int save = currentField.getCurrentValue();
+//
+//			/* iterate over all symbols e.g. 0-8 */
+//			for (int i = 0; i < type.getNumberOfSymbols(); i++) {
+//				/* set fieldval to current symbol */
+//				currentField.setCurrentValue(i, false);
+//				/* for every constraint */
+//				for (Constraint c : type) {
+//					/* if constraint not satisfied -> disable*/
+//					boolean constraintViolated = !c.isSaturated(this.game.getSudoku());
+//
+//					/* Github Issue #116
+//					 * it would be stupid if we were in the mode where notes are set
+//					 * and would disable a note that has been set.
+//					 * Because then, it can't be unset by the user*/
+//					boolean noteNotSet = ! (noteMode && currentField.isNoteSet(i));
+//
+//					if (constraintViolated && noteNotSet) {
+//						this.virtualKeyboard.disableButton(i);
+//						break;
+//					}
+//				}
+//				currentField.setCurrentValue(Field.EMPTYVAL, false);
+//			}
+//			currentField.setCurrentValue(save, false);
+//
+//		}
+//	}
 
     @Override
     public void onDestroyView() {

@@ -14,10 +14,12 @@ import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
 
 /**
- * Dieser konkrete SolveHelper implementiert eine Vorgehensweise zum Lösen eines Sudokus. Der SubsetHelper sucht
- * innerhalb der Constraints eines Sudokus nach n Kandidaten, die lediglich noch in denselben n Feldern vorkommen. (n
- * entspricht dem level des Helpers). Ist dies der Fall, müssen diese n Kandidaten in den n Feldern in irgendeiner
- * Kombination eingetragen werden und können somit aus den restlichen Kandidatnelisten entfernt werden.
+ * Dieser konkrete SolveHelper implementiert eine Vorgehensweise zum Lösen eines Sudokus.
+ * Der HiddenHelper sucht innerhalb der Constraints eines Sudokus nach n Kandidaten,
+ * die lediglich noch in denselben n Feldern vorkommen.
+ * (n entspricht dem level des Helpers).
+ * Ist dies der Fall, müssen diese n Kandidaten in den n Feldern in irgendeiner
+ * Kombination eingetragen werden und daher können alle übrigen symbole aus diesen n feldern entfert werden.
  *
  * [¹²³⁴][¹²³⁴][³..][³..] -> [¹²][¹²][³..][³..]
  * Looks for a constraint and a set of n candidates(i.e. distinct symbols that are not a solution).
@@ -27,14 +29,11 @@ import de.sudoq.model.sudoku.Position;
  */
 public class HiddenHelper extends SubsetHelper {
 
-	static {
-	         labels = new HintTypes[5];
-	         labels[0] = HintTypes.HiddenSingle;
-	         labels[1] = HintTypes.HiddenPair;
-	         labels[2] = HintTypes.HiddenTriple;
-	         labels[3] = HintTypes.HiddenQuadruple;
-	         labels[4] = HintTypes.HiddenQuintuple;
-	}
+	private HintTypes[] labels = new HintTypes[] { HintTypes.HiddenSingle,
+	                                               HintTypes.HiddenPair,
+	                                               HintTypes.HiddenTriple,
+	                                               HintTypes.HiddenQuadruple,
+	                                               HintTypes.HiddenQuintuple};
 
 	private HiddenSetDerivation derivation;
 
@@ -53,7 +52,10 @@ public class HiddenHelper extends SubsetHelper {
 	 */
 	public HiddenHelper(SolverSudoku sudoku, int level, int complexity) {
 		super(sudoku, level, complexity);
+        if (level <= 0 || level > labels.length)
+            throw new IllegalArgumentException("level must be ∈ [1,"+labels.length+"] but is "+level);
 
+        hintType = labels[level-1];
 
 	}
 

@@ -13,24 +13,21 @@ import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
 
 /**
- * Dieser konkrete SolveHelper implementiert eine Vorgehensweise zum Lösen eines Sudokus. Der SubsetHelper sucht
- * innerhalb der Constraints eines Sudokus nach n elementigen Teilmengen der Kandidaten, die in n Feldern vorkommen. (n
+ * Dieser konkrete SolveHelper implementiert eine Vorgehensweise zum Lösen eines Sudokus.
+ * Der NakedHelper sucht innerhalb der Constraints eines Sudokus nach n elementigen Teilmengen der Kandidaten, die in n Feldern vorkommen. (n
  * entspricht dem level des Helpers). Kommen in n Feldern lediglich dieselben n Kandidaten vor, so können diese
- * Kandidaten aus den anderen Listen des Constraints entfernt werden. Tauchen n Kandidaten lediglich in n Feldern auf,
- * so können in diesen Feldern die restlichen Kandidaten entfernt werden.
+ * Kandidaten aus den anderen Listen des Constraints entfernt werden.
  * <p/>
  * If there are n fields with only n distinct candidates in them, those candidates can't appear anywhere else.
  */
 public class NakedHelper extends SubsetHelper {
 
-    static {
-             labels = new HintTypes[5];
-             labels[0] = HintTypes.NakedSingle;
-             labels[1] = HintTypes.NakedPair;
-             labels[2] = HintTypes.NakedTriple;
-             labels[3] = HintTypes.NakedQuadruple;
-             labels[4] = HintTypes.NakedQuintuple;
-    }
+
+    private HintTypes[] labels = new HintTypes[] { HintTypes.NakedSingle,
+                                                   HintTypes.NakedPair,
+                                                   HintTypes.NakedTriple,
+                                                   HintTypes.NakedQuadruple,
+                                                   HintTypes.NakedQuintuple};
 
     private NakedSetDerivation derivation;
 
@@ -45,6 +42,10 @@ public class NakedHelper extends SubsetHelper {
      */
     public NakedHelper(SolverSudoku sudoku, int level, int complexity) throws IllegalArgumentException {
         super(sudoku, level, complexity);
+        if (level <= 0 || level > labels.length)
+            throw new IllegalArgumentException("level must be ∈ [1,"+labels.length+"] but is "+level);
+
+        hintType = labels[level-1];
     }
 
     /**
@@ -85,12 +86,14 @@ public class NakedHelper extends SubsetHelper {
             int subsetCount = filterForSubsets(positions); //subsetPositions = {p | p ∈ positions, p.candidates ⊆ currentSet && |p.candidates| ∈ [1,level]}
 
             if (subsetCount == this.level) {
+                /* store all fields other than the n fields of the subset in externalPositions */
                 List<Position> externalPositions = new Stack<>(); externalPositions.addAll(positions);
                 externalPositions.removeAll(subsetPositions);
 
                 for (Position pos : externalPositions) {
 
                     BitSet currentPosCandidates = this.sudoku.getCurrentCandidates(pos);
+                    /* if currentPosCandidates contains candidates from the current subset i.e. something can be deleted */
                     if (currentPosCandidates.intersects(currentSet)) {
                         //save original candidates
                         localCopy.assignWith(currentPosCandidates);
@@ -108,8 +111,8 @@ public class NakedHelper extends SubsetHelper {
                             //what was deleted?
                             BitSet   relevant = (BitSet) localCopy.clone();
                             BitSet irrelevant = (BitSet) localCopy.clone();
-                            relevant.and(currentSet);
-                            irrelevant.andNot(currentSet);
+                            relevant.and(currentSet);       //deleted notes
+                            irrelevant.andNot(currentSet);  //remaining notes
                             DerivationField field = new DerivationField(pos, relevant, irrelevant);
                             derivation.addExternalField(field);
                         }

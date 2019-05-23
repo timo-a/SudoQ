@@ -194,7 +194,7 @@
 
     <string name="hint_nakedset">Es gibt ein „naked set“: {symbols} werden sich irgendwie auf die hervorgehobenen Felder verteilen. In allen anderen Feldern dieser Gruppe können Sie entfernt werden. </string>
 
-    <string name="hint_hiddensingle">Es gibt ein „hidden single“! {note} ist einzige Notiz die für das hervorgehobene Feld übrig ist und kann daher als Lösung eingetragen werden.</string>
+    <string name="hint_hiddensingle">Es gibt ein „hidden single“! Im hervorgehobenen Bereich kommt \"{note}\" nur im hervorgehobenen Feld vor und kann daher als Lösung eingetragen werden.</string>
 
     <string name="hint_hiddenset">Es gibt ein „hidden set“! {symbols} verteilen sich irgendwie über die hervorgehobenen Felder. Daher können andere Notitzen in diesen Feldern entfernt werden. </string>
 

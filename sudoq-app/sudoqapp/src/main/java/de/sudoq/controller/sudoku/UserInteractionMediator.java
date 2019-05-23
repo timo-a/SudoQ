@@ -20,7 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import de.sudoq.R;
 import de.sudoq.controller.sudoku.board.FieldViewStates;
@@ -29,6 +31,7 @@ import de.sudoq.model.game.Game;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.view.SudokuFieldView;
 import de.sudoq.view.SudokuLayout;
@@ -112,7 +115,9 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 			if (this.noteMode) {
 				if (currentField.getField().isNoteSet(symbol)) {
 					listener.onNoteDelete(currentField.getField(), symbol);
-					restrictCandidates();//because github issue #116 see below					
+					restrictCandidates();//because github issue #116 see below
+					                     //in case we deleted a now impossible,
+					                     // we immediately restrict so it cant be selected again
 				} else {
 					listener.onNoteAdd(currentField.getField(), symbol);
 				}
@@ -272,42 +277,80 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 	/**
 	 * Schränkt die Kandidaten auf der Tastatur ein.
 	 */
-	private void restrictCandidates() {
+	void restrictCandidates() {
 		this.virtualKeyboard.enableAllButtons();
-		
-		Field currentField = this.sudokuView.getCurrentFieldView().getField();
+		SudokuFieldView currectFieldView = this.sudokuView.getCurrentFieldView();
+		if (currectFieldView == null)
+			return;//maybe there is no focus, then pass
+
+		Field currentField = currectFieldView.getField();
 		SudokuType type = this.game.getSudoku().getSudokuType();
 		/* only if assistance 'input assistance' if enabled */
 		if (this.game.isAssistanceAvailable(Assistances.restrictCandidates)) {
-			
-			/* save val of current view */
-			int save = currentField.getCurrentValue();
-			
-			/* iterate over all symbols e.g. 0-8 */
-			for (int i = 0; i < type.getNumberOfSymbols(); i++) {
-				/* set fieldval to current symbol */
-				currentField.setCurrentValue(i, false);
-				/* for every constraint */
-				for (Constraint c : type) {
-					/* if constraint not satisfied -> disable*/
-					boolean constraintViolated =! c.isSaturated(this.game.getSudoku());
-					
-					/* Github Issue #116
-					 * it would be stupid if we were in the mode where notes are set 
-					 * and would disable a note that has been set.
-					 * Because then, it can't be unset by the user*/
-					boolean noteNotSet = ! (noteMode && currentField.isNoteSet(i));
-					
-					if (constraintViolated && noteNotSet) {
-						this.virtualKeyboard.disableButton(i);
-						break;
-					}
-				}
-				currentField.setCurrentValue(Field.EMPTYVAL, false);
-			}
-			currentField.setCurrentValue(save, false);
-			
+
+			Set<Integer> allPossible = getRestrictedSymbolSet(this.game.getSudoku(), currentField, noteMode);
+
+			for (int i = 0; i < type.getNumberOfSymbols(); i++)
+				if (!allPossible.contains(i))
+					this.virtualKeyboard.disableButton(i);
+
 		}
+	}
+
+
+    /* compute the symbols that the keyboard offers if `input assistance`
+          i.e. "grey out values that apprear in the same constraint" is selected.
+       caution
+          */
+	private synchronized Set<Integer> getRestrictedSymbolSet(Sudoku s, Field currentField,
+																      boolean noteMode){
+		Set<Integer> restrictedSet = new HashSet<>();
+        SudokuType type = s.getSudokuType();
+		List<Constraint> relevantConstraints = new ArrayList<>();
+		for (Constraint c : type)
+			if(c.getPositions().contains(s.getPosition(currentField.getId())))
+				relevantConstraints.add(c);
+
+		/* save val of current view */
+		int save = currentField.getCurrentValue();
+
+		/* iterate over all symbols e.g. 0-8 */
+		for (int i = 0; i < type.getNumberOfSymbols(); i++) {
+
+			/* set fieldval to current symbol */
+			currentField.setCurrentValue(i, false);
+
+			boolean possible = true;
+			/* for every constraint */
+			for (Constraint c : relevantConstraints) {
+
+				/* if constraint not satisfied -> disable */
+				if (!c.isSaturated(s)) {
+					possible = false;
+					break;
+				}
+			}
+
+			if (possible)
+				restrictedSet.add(i);
+
+			currentField.setCurrentValue(Field.EMPTYVAL, false); // unneccessary
+		}
+		currentField.setCurrentValue(save, false);
+
+		/* Github Issue #116
+		 * it would be stupid if we were in the mode where notes are set
+		 * and would disable a now impossible note that had been set by user.
+		 * Because then, it can't be unset by the user */
+		Set<Integer> setNotes =	new HashSet<>();
+		if (noteMode)
+			for (int i = 0; i < type.getNumberOfSymbols(); i++)
+				if (currentField.isNoteSet(i))
+					setNotes.add(i);
+
+
+		restrictedSet.addAll(setNotes);
+		return restrictedSet;
 	}
 
 }

@@ -39,7 +39,7 @@ public class LockedCandidatesDerivation extends SolveDerivation {
     }
 
     public int getNote() {
-        return note;
+        return note + 1;
     }
 
 }

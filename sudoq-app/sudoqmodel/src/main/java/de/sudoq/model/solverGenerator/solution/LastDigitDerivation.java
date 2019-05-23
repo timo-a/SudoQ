@@ -1,8 +1,15 @@
 package de.sudoq.model.solverGenerator.solution;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import de.sudoq.model.actionTree.Action;
+import de.sudoq.model.actionTree.SolveActionFactory;
 import de.sudoq.model.solvingAssistant.HintTypes;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
+import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.Utils;
 import de.sudoq.model.sudoku.Utils.ConstraintShape;
 
@@ -13,26 +20,28 @@ public class LastDigitDerivation extends SolveDerivation {
 
     private Constraint constraint;
     private Position   emptyPosition;
-    private int        remainingNote;
+    private int        solution;
 
-
-    public LastDigitDerivation(HintTypes technique, Constraint constraint, Position emptyPosition, int remainingNote) {
+    public LastDigitDerivation(HintTypes technique, Constraint constraint, Position emptyPosition, int solution) {
         super(technique);
         this.constraint = constraint;
         this.emptyPosition = emptyPosition;
-        this.remainingNote = remainingNote;
+        this.solution = solution;
+        hasActionListCapability = true;
     }
 
     public Constraint getConstraint() {
         return constraint;
     }
 
-    public Position getEmptyPosition() {
-        return emptyPosition;
-    }
-
     public ConstraintShape getConstraintShape(){
         return Utils.getGroupShape(constraint);
+    }
+
+    @Override
+    public List<Action> getActionList(Sudoku sudoku){
+        SolveActionFactory af = new SolveActionFactory();
+        return Arrays.asList(af.createAction(solution, sudoku.getField(emptyPosition)));
     }
 
 
