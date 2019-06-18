@@ -291,4 +291,18 @@ public class Field extends ObservableModelImpl<Field> {
 		return String.valueOf(this.currentVal);
 	}
 
+	/**  creates another object with the same values.
+	 *   the created object is a perfect clone: even the id attribute is cloned
+	 *
+	 */
+	@Override
+	public Object clone(){
+		Field clone = new Field(this.isEditable(),
+			                    this.getSolution(),
+			                    this.getId(),
+			                    this.getNumberOfValues());
+		clone.setCurrentValue(this.currentVal);
+		clone.noticeFlags = (BitSet) this.noticeFlags.clone();
+		return clone;
+	}
 }

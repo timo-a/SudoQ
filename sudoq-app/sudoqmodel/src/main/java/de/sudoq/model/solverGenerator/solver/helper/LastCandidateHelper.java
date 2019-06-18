@@ -26,6 +26,7 @@ public class LastCandidateHelper extends SolveHelper {
 
     public LastCandidateHelper(SolverSudoku sudoku, int complexity) throws IllegalArgumentException {
         super(sudoku, complexity);
+        hintType = HintTypes.LastCandidate;
     }
 
 
@@ -42,7 +43,7 @@ public class LastCandidateHelper extends SolveHelper {
 
                         if (sudoku.getCurrentCandidates(p).cardinality() == 1) {
                             int lastNote = sudoku.getCurrentCandidates(p).nextSetBit(0);
-                            derivation = new LastCandidateDerivation(HintTypes.LastCandidate, p, lastNote);
+                            derivation = new LastCandidateDerivation(p, lastNote);
                             lastDerivation = derivation;
                             return true;
                         }

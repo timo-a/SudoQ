@@ -38,9 +38,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,7 +73,7 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 	protected static MenuItem menuDeleteSpecific;
 	private static final int MENU_DELETE_SPECIFIC = 1; commented out to make sure it's not needed*/
 
-	private enum FAB_STATES { DELETE, INACTIVE, GO_BACK}; //Floating Action Button
+	private enum FAB_STATES { DELETE, INACTIVE, GO_BACK} //Floating Action Button
 
     private FAB_STATES fabstate=FAB_STATES.INACTIVE;
 
@@ -93,7 +90,7 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.sudokuloading);
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
         final ActionBar ab = getSupportActionBar();
         ab.setHomeAsUpIndicator(R.drawable.launcher);
@@ -101,7 +98,7 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
         ab.setDisplayShowTitleEnabled(true);
 
         final Context ctx = this;
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = findViewById(R.id.fab);
 
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -238,7 +235,7 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 		Log.d(LOG_TAG, "LongClick on "+ position + "");
 		
 		/*gather all options */
-		ArrayList temp_items = new ArrayList<CharSequence>();
+		List<CharSequence> temp_items = new ArrayList<CharSequence>();
 		boolean specialcase = false;
 		if (specialcase) { } 
 		else {
@@ -360,10 +357,10 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 		getListView().setOnItemClickListener(this);
 		getListView().setOnItemLongClickListener(this);
 
-		TextView noGamesTextView =   (TextView) findViewById(R.id.no_games_text_view);
+		TextView noGamesTextView = findViewById(R.id.no_games_text_view);
 		if(games.isEmpty()) {
             noGamesTextView.setVisibility(View.VISIBLE);
-            final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            final FloatingActionButton fab = findViewById(R.id.fab);
             fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_arrow_back_white_24dp));
             fabstate=FAB_STATES.GO_BACK;
         }else{

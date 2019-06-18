@@ -9,6 +9,7 @@ import java.util.List;
 import de.sudoq.model.solverGenerator.solution.DerivationField;
 import de.sudoq.model.solverGenerator.solution.XWingDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
+import de.sudoq.model.solvingAssistant.HintTypes;
 import de.sudoq.model.sudoku.CandidateSet;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
@@ -38,9 +39,10 @@ public class XWingHelper extends SolveHelper {
      */
 	public XWingHelper(SolverSudoku sudoku, int complexity) {
 		super(sudoku, complexity);
+        hintType = HintTypes.XWing;
 	}
 
-    private void separateIntoRowColumn(List<Constraint> pool, List<Constraint> rows, List<Constraint> cols){
+    private void separateIntoRowColumn(Iterable<Constraint> pool, List<Constraint> rows, List<Constraint> cols){
         for(Constraint c: pool) {
             switch (Utils.getGroupShape(c.getPositions())) {
                 case Row:
@@ -57,7 +59,7 @@ public class XWingHelper extends SolveHelper {
     @Override
     public boolean update(boolean buildDerivation) {
 
-        List<Constraint> constraints = sudoku.getSudokuType().getConstraints();
+        Iterable<Constraint> constraints = sudoku.getSudokuType();
 
         /* collect rows / cols */
         List<Constraint> rows = new ArrayList<>();

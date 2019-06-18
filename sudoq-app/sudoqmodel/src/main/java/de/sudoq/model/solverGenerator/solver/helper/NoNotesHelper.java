@@ -30,6 +30,7 @@ public class NoNotesHelper extends SolveHelper {
 
     public NoNotesHelper(SolverSudoku sudoku, int complexity) throws IllegalArgumentException {
         super(sudoku, complexity);
+        hintType = HintTypes.NoNotes;
     }
 
 
@@ -49,7 +50,7 @@ public class NoNotesHelper extends SolveHelper {
             //create map from pos to constraint
             Set<Position> emptyPosSet = new HashSet<>(emptyPos);
             Map<Position, List<Constraint>> cmap = new HashMap<>();
-            for(Constraint c : sudoku.getSudokuType().getConstraints())
+            for(Constraint c : sudoku.getSudokuType())
                 if(c.hasUniqueBehavior())
                     for(Position p :c.getPositions())
                         if(emptyPosSet.contains(p))
@@ -61,10 +62,10 @@ public class NoNotesHelper extends SolveHelper {
 
 
 
-            lastDerivation = new NoNotesDerivation(HintTypes.NoNotes);
-            Set<Integer> allSymbbols = new HashSet<Integer>();
-            for(int i = 0; i < sudoku.getSudokuType().getNumberOfSymbols(); i++)
-                allSymbbols.add(i);
+            lastDerivation = new NoNotesDerivation();
+            Set<Integer> allSymbbols = new HashSet<Integer>((ArrayList)sudoku.getSudokuType().getSymbolIterator());
+            //for(int i : sudoku.getSudokuType().getSymbolIterator())
+            //    allSymbbols.add(i);
 
             for(Position p : emptyPos) {
                 Set<Integer> allCandidates = new HashSet<Integer>(allSymbbols);

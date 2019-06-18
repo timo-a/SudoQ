@@ -22,8 +22,8 @@ public class LastDigitDerivation extends SolveDerivation {
     private Position   emptyPosition;
     private int        solution;
 
-    public LastDigitDerivation(HintTypes technique, Constraint constraint, Position emptyPosition, int solution) {
-        super(technique);
+    public LastDigitDerivation(Constraint constraint, Position emptyPosition, int solution) {
+        super(HintTypes.LastDigit);
         this.constraint = constraint;
         this.emptyPosition = emptyPosition;
         this.solution = solution;

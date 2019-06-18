@@ -9,6 +9,7 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -17,6 +18,7 @@ import de.sudoq.model.Utility;
 import de.sudoq.model.ModelChangeListener;
 import de.sudoq.model.solverGenerator.Generator;
 import de.sudoq.model.solverGenerator.GeneratorCallback;
+import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
@@ -39,6 +41,11 @@ public class SudokuTests {
 		new Generator().generate(SudokuTypes.standard4x4, Complexity.easy, new GeneratorCallback() {
 			@Override
 			public void generationFinished(Sudoku sudoku) {
+				SudokuTests.sudoku = sudoku;
+			}
+
+			@Override
+			public void generationFinished(Sudoku sudoku, List<Solution> sl) {
 				SudokuTests.sudoku = sudoku;
 			}
 		});

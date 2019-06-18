@@ -74,7 +74,7 @@ public final class FileManager {
 	 * Setzt die id des aktuellen Profils für den FileManager, sodass die Pfade
 	 * zur Verfügung stehen
 	 * 
-	 * @param id
+	 * @param id new value for currentProfileId
 	 */
 	public static void setCurrentProfile(int id) {
 		currentProfileId = id;
@@ -106,8 +106,16 @@ public final class FileManager {
 	 * @return die Anzahl der Profile
 	 */
 	public static int getNumberOfProfiles() {
-		int count = profiles.list().length;
-		if (getProfilesFile().exists()) {
+		if(!profiles.exists())
+			return 0;
+
+		/*System.out.println("getnrp");
+		for(String s: profiles.list())
+			System.out.println(profiles.list());
+		System.out.println("getnrpEND");*/
+
+		int count = profiles.list().length;//one folder for each profile + file listing all profiles
+		if (getProfilesFile().exists()) {  //if profiles.xml exists subtract it fro count
 			count--;
 		}
 		return count;
@@ -175,7 +183,7 @@ public final class FileManager {
 		try {
 			new XmlHelper().saveXml(new XmlTree("games"), games);
 		} catch (IOException e) {
-			throw new IllegalStateException("Unvalid Profil", e);
+			throw new IllegalStateException("Invalid Profil", e);
 		}
 	}
 

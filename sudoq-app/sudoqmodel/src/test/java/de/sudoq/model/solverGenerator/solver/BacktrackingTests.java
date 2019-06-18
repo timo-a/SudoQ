@@ -50,7 +50,7 @@ public class BacktrackingTests {
 	public void testInitialisation() {
 		SolverSudoku sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
 		Backtracking back = new Backtracking(sudoku, 10);
-		assertEquals(back.getComplexity(), 10);
+		assertEquals(back.getComplexityScore(), 10);
 	}
 
 	@Test

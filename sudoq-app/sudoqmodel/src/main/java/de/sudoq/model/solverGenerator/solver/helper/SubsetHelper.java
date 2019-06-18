@@ -44,13 +44,12 @@ public abstract class SubsetHelper extends SolveHelper {
 	/**
 	 * Speichert alle Constraints des zugrundeliegenden Sudokus.
 	 */
-	protected ArrayList<Constraint> allConstraints;
+	protected ArrayList<Constraint> allConstraints; //TODO see if it can be replaced by iterator or just the sudokutype, because we dont want to modify the list of constraints!!!
 
-	protected HintTypes hintType;
 
 	//protected static HintTypes labels[];
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Erzeugt einen neuen NakedHelper für das spezifizierte Suduoku mit dem spezifizierten level. Der level entspricht
@@ -79,7 +78,7 @@ public abstract class SubsetHelper extends SolveHelper {
 		this.localCopy       = new CandidateSet();
 	}
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Sucht so lange nach einem Subset mit der im Konstruktor spezifizierten Größe level, bis entweder eines

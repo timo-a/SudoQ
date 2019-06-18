@@ -125,7 +125,7 @@ public class SudokuFieldView extends View implements ModelChangeListener<Field>,
 		this.noteMode = false;
 		this.isInExtraConstraint = false;
 
-		ArrayList<Constraint> constraints = game.getSudoku().getSudokuType().getConstraints();
+		Iterable<Constraint> constraints = game.getSudoku().getSudokuType();
 		for (Constraint c : constraints) {
 			if (c.getType().equals(ConstraintType.EXTRA) &&
 				c.includes(game.getSudoku().getPosition(field.getId()))) {
@@ -344,8 +344,7 @@ public class SudokuFieldView extends View implements ModelChangeListener<Field>,
 	 *         oder sich in einem anderen ConstraintTyp befindet, false sonst
 	 */
 	private boolean checkConstraint() {
-		ArrayList<Constraint> constraints = this.game.getSudoku().getSudokuType().getConstraints();
-		ArrayList<Position> positions;
+		Iterable<Constraint> constraints = this.game.getSudoku().getSudokuType();
 		Sudoku sudoku = this.game.getSudoku();
 		for (Constraint c : constraints) {
 			if (c.includes(sudoku.getPosition(this.field.getId()))) {

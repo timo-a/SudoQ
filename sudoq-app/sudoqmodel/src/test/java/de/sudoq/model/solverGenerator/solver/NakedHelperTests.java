@@ -1,11 +1,17 @@
 package de.sudoq.model.solverGenerator.solver;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
+import de.sudoq.model.Utility;
+import de.sudoq.model.files.FileManager;
+import de.sudoq.model.profile.Profile;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.helper.NakedHelper;
 import de.sudoq.model.solverGenerator.solver.helper.SubsetHelper;
@@ -23,6 +29,29 @@ import static org.junit.Assert.fail;
  * Created by timo on 15.10.16.
  */
 public class NakedHelperTests extends NakedHelper {
+
+
+    @BeforeClass
+	public static void init() {
+		Utility.copySudokus();
+		Profile.getInstance();
+	}
+
+	@AfterClass
+	public static void clean() throws IOException, SecurityException, NoSuchFieldException, IllegalArgumentException,
+			IllegalAccessException {
+        java.lang.reflect.Field f = FileManager.class.getDeclaredField("profiles");
+        f.setAccessible(true);
+        f.set(null, null);
+        java.lang.reflect.Field s = FileManager.class.getDeclaredField("sudokus");
+        s.setAccessible(true);
+        s.set(null, null);
+        java.lang.reflect.Field p = Profile.class.getDeclaredField("instance");
+        p.setAccessible(true);
+        p.set(null, null);
+        FileManager.deleteDir(Utility.profiles);
+        FileManager.deleteDir(Utility.sudokus);
+	}
 
     public NakedHelperTests(){
         super(new SolverSudoku(new Sudoku(TypeBuilder.get99())),4,0 );
@@ -95,7 +124,7 @@ public class NakedHelperTests extends NakedHelper {
 
 
         SubsetHelper helper = new NakedHelper(sudoku, 2, 21);
-        assertEquals(helper.getComplexity(), 21);
+        assertEquals(helper.getComplexityScore(), 21);
 
         assertEquals(2, getNumberOfNotes(sudoku,2, 1));//2 candidates each are expected as all others are set in the constraint.
         assertEquals(2, getNumberOfNotes(sudoku,2, 2));

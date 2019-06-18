@@ -2,8 +2,11 @@ package de.sudoq.model.solverGenerator.solver;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.sudoq.model.Utility;
 import de.sudoq.model.solverGenerator.solver.helper.HiddenHelper;
 import de.sudoq.model.solverGenerator.solver.helper.SubsetHelper;
 import de.sudoq.model.sudoku.Position;
@@ -14,6 +17,12 @@ public class SubsetHelperTests extends HiddenHelper{
 
 	public SubsetHelperTests(){
 		super(new SolverSudoku(new Sudoku(TypeBuilder.get99())),4,0 );
+	}
+
+    @BeforeClass
+	public static void init() {
+		Utility.copySudokus();
+		//Profile.getInstance();
 	}
 
 	@Test
@@ -63,7 +72,7 @@ public class SubsetHelperTests extends HiddenHelper{
 		sudoku.resetCandidates();
 
 		SubsetHelper helper = new HiddenHelper(sudoku, 2, 22);
-		assertEquals(helper.getComplexity(), 22);
+		assertEquals(helper.getComplexityScore(), 22);
 
 		assertEquals(getCardinality(sudoku, 1, 0), 2);
 		assertEquals(getCardinality(sudoku, 1, 1), 2);
@@ -106,7 +115,7 @@ public class SubsetHelperTests extends HiddenHelper{
 		sudoku.resetCandidates();
 
 		SubsetHelper helper = new HiddenHelper(sudoku, 2, 22);
-		assertEquals(helper.getComplexity(), 22);
+		assertEquals(helper.getComplexityScore(), 22);
 
 		assertEquals(getCardinality(sudoku, 1, 0), 2);
 		assertEquals(getCardinality(sudoku, 1, 1), 2);

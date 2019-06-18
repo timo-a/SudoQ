@@ -156,7 +156,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 		   pass each pos its constraint-mates */
 		if (this.game.isAssistanceAvailable(Assistances.markRowColumn)) {
 			ArrayList<Position> positions;
-			ArrayList<Constraint> allConstraints = this.game.getSudoku().getSudokuType().getConstraints();
+			Iterable<Constraint> allConstraints = this.game.getSudoku().getSudokuType();
 			for (Constraint c : allConstraints)
 				if (c.getType().equals(ConstraintType.LINE)) {
 					positions = c.getPositions();

@@ -69,7 +69,7 @@ public class Solution {
 	 *            werden soll
 	 */
 	public void addDerivation(SolveDerivation derivation) {
-		if (action != null)
+		if (derivation != null)
 			derivations.add(derivation);
 	}
 

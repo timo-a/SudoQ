@@ -21,6 +21,7 @@ public class XWingDerivation extends SolveDerivation {
         super(HintTypes.XWing);
         lockedConstraints    = new Stack<>();
         reducibleConstraints = new Stack<>();
+        setDescription("XWing");
     }
 
     public void setLockedConstraints(Constraint c1, Constraint c2){

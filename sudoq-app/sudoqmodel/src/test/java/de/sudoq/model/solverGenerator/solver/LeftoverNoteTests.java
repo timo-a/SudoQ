@@ -1,11 +1,13 @@
 package de.sudoq.model.solverGenerator.solver;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
+import de.sudoq.model.Utility;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.helper.LeftoverNoteHelper;
 import de.sudoq.model.solverGenerator.solver.helper.NakedHelper;
@@ -31,6 +33,13 @@ public class LeftoverNoteTests extends LeftoverNoteHelper {
     public LeftoverNoteTests(){
         super(new SolverSudoku(new Sudoku(TypeBuilder.get99())),  0 );
     }
+
+    @BeforeClass
+	public static void init() {
+		Utility.copySudokus();
+		//Profile.getInstance();
+	}
+
 
     @Test
     public void testIllegalArguments() {

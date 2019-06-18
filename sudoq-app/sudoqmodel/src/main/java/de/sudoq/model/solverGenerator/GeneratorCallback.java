@@ -7,6 +7,9 @@
  */
 package de.sudoq.model.solverGenerator;
 
+import java.util.List;
+
+import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.sudoku.Sudoku;
 
 /**
@@ -28,4 +31,6 @@ public interface GeneratorCallback {
 	 *            Das vom Generator erzeugte, valide Sudoku
 	 */
 	public void generationFinished(Sudoku sudoku);
+
+	public void generationFinished(Sudoku sudoku, List<Solution> s);
 }

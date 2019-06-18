@@ -10,6 +10,11 @@ public enum ComplexityRelation {
 	INVALID,
 
 	/**
+	 * Das Sudoku lässt mehrere Lösungen zu
+	 */
+	AMBIGUOUS,
+
+	/**
 	 * Das Sudoku ist innerhalb der Constraints lösbar
 	 */
 	CONSTRAINT_SATURATION,
@@ -17,20 +22,20 @@ public enum ComplexityRelation {
 	/**
 	 * Das Sudoku ist einfacher als die Constraints erlauben
 	 */
-	TO_EASY,
+	TOO_EASY,
 
 	/**
 	 * Das Sudoku ist viel einfacher als die Constraints erlauben
 	 */
-	MUCH_TO_EASY,
+	MUCH_TOO_EASY,
 
 	/**
 	 * Das Sudoku ist schwieriger als die Constraints erlauben
 	 */
-	TO_DIFFICULT,
+	TOO_DIFFICULT,
 
 	/**
 	 * Das Sudoku ist viel schwieriger als die Constraints erlauben
 	 */
-	MUCH_TO_DIFFICULT
+	MUCH_TOO_DIFFICULT
 }

@@ -7,11 +7,13 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 import java.io.IOException;
+import java.util.List;
 
 import de.sudoq.model.Utility;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.solverGenerator.GeneratorCallback;
+import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.transformations.Transformer;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
@@ -303,6 +305,12 @@ public class TransformerTests implements GeneratorCallback {
 
 	@Override
 	public void generationFinished(Sudoku sudoku) {
+		assertTrue(validSudoku(sudoku));
+		// printSudoku9x9(sudoku, 9);
+		notifyAll();
+	}
+	@Override
+	public void generationFinished(Sudoku sudoku, List<Solution> sl) {
 		assertTrue(validSudoku(sudoku));
 		// printSudoku9x9(sudoku, 9);
 		notifyAll();

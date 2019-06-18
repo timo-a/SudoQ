@@ -8,15 +8,19 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.sudoq.model.Utility;
 import de.sudoq.model.actionTree.ActionTreeElement;
 import de.sudoq.model.actionTree.NoteActionFactory;
 import de.sudoq.model.actionTree.SolveActionFactory;
+import de.sudoq.model.profile.Profile;
 import de.sudoq.model.solverGenerator.Generator;
 import de.sudoq.model.solverGenerator.GeneratorCallback;
+import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.sudoku.Field;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
@@ -32,11 +36,19 @@ public class GameTests {
 
 	@BeforeClass
 	public static void beforeClass() {
+		Utility.copySudokus();
+		Profile.getInstance();
+
 		TypeBuilder.get99(); //just to force initialization of filemanager
 		
 		GeneratorCallback gc = new GeneratorCallback() {
 			@Override
 			public void generationFinished(Sudoku sudoku) {
+				GameTests.sudoku = sudoku;
+			}
+
+			@Override
+			public void generationFinished(Sudoku sudoku, List<Solution> sl) {
 				GameTests.sudoku = sudoku;
 			}
 		};

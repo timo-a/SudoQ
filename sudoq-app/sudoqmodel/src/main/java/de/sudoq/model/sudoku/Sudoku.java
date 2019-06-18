@@ -8,11 +8,10 @@
 package de.sudoq.model.sudoku;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.sudoq.model.ModelChangeListener;
 import de.sudoq.model.ObservableModelImpl;
@@ -333,7 +332,7 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 				Field field = new Field(editable, solution, fieldId, type.getNumberOfSymbols());
 				field.registerListener(this);
 				fields.put(pos, field);
-				fieldPositions.put(Integer.valueOf(fieldId), pos);
+				fieldPositions.put(fieldId, pos);
 				fieldIdCounter++;
 			}
 		}
@@ -421,5 +420,27 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 		}
 		sb.delete(sb.length() - 1, sb.length());
 		return sb.toString();
+	}
+
+	/**
+	 * creates a perfect clone,
+	 */
+	@Override
+	public Object clone(){
+		Sudoku clone = new Sudoku(this.type);
+		clone.id             = this.id;
+		clone.transformCount = this.transformCount;
+		clone.fields = new HashMap<>();
+
+		for(Map.Entry<Position, Field> e : this.fields.entrySet())
+			clone.fields.put(e.getKey(), (Field) e.getValue().clone());
+
+		clone.fieldIdCounter = this.fieldIdCounter;
+
+		clone.fieldPositions = new HashMap<>(this.fieldPositions);
+
+		clone.complexity = this.complexity;
+
+		return clone;
 	}
 }

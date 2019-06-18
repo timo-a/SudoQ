@@ -184,7 +184,7 @@ public class SolverTests {
 	@Test(expected = IllegalArgumentException.class)
 	public void solveAllIllegalComplexity() {
 		solver.sudoku.setComplexity(null);
-		solver.validate(null, false);
+		solver.validate(null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -327,7 +327,7 @@ public class SolverTests {
 
 		sudoku16x16.setComplexity(Complexity.arbitrary);
 		Solver solver = new Solver(sudoku16x16);
-		ComplexityRelation cr = solver.validate(solution16x16, false); 
+		ComplexityRelation cr = solver.validate(solution16x16);
 		assertEquals(cr, ComplexityRelation.CONSTRAINT_SATURATION);
 
 		// copy solution to current value
@@ -470,7 +470,7 @@ public class SolverTests {
 
 		sudoku16x16.setComplexity(Complexity.arbitrary);
 		Solver solver = new Solver(sudoku16x16);
-		assertEquals(solver.validate(solution16x16, false), ComplexityRelation.CONSTRAINT_SATURATION);
+		assertEquals(solver.validate(solution16x16), ComplexityRelation.CONSTRAINT_SATURATION);
 
 		// copy solution to current value
 		for (int j = 0; j < sudoku16x16.getSudokuType().getSize().getY(); j++) {
@@ -511,7 +511,7 @@ public class SolverTests {
 
 		sudoku.setComplexity(Complexity.arbitrary);
 		Solver solver = new Solver(sudoku);
-		assertEquals(solver.validate(null, false), ComplexityRelation.INVALID);
+		assertEquals(solver.validate(null), ComplexityRelation.INVALID);
 	}
 
 }

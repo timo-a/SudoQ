@@ -313,10 +313,10 @@
 <PermutationProperty permutationNr="9"></PermutationProperty>
 </SetOfPermutationProperties>
 <ComplexityConstraintBuilder>
-<complexityConstraint complexity="3" averageFields="27" minComplexity="2400" maxComplexity="25000" numberOfAllowedHelpers="2147483647"></complexityConstraint>
-<complexityConstraint complexity="2" averageFields="28" minComplexity="1600" maxComplexity="3000" numberOfAllowedHelpers="2147483647"></complexityConstraint>
-<complexityConstraint complexity="1" averageFields="32" minComplexity="1100" maxComplexity="2050" numberOfAllowedHelpers="3"></complexityConstraint>
 <complexityConstraint complexity="0" averageFields="40" minComplexity="600" maxComplexity="1100" numberOfAllowedHelpers="2"></complexityConstraint>
+<complexityConstraint complexity="1" averageFields="32" minComplexity="1100" maxComplexity="2050" numberOfAllowedHelpers="3"></complexityConstraint>
+<complexityConstraint complexity="2" averageFields="28" minComplexity="1600" maxComplexity="3000" numberOfAllowedHelpers="2147483647"></complexityConstraint>
+<complexityConstraint complexity="3" averageFields="27" minComplexity="2400" maxComplexity="25000" numberOfAllowedHelpers="2147483647"></complexityConstraint>
 <complexityConstraint complexity="4" averageFields="32" minComplexity="1" maxComplexity="2147483647" numberOfAllowedHelpers="2147483647"></complexityConstraint>
 </ComplexityConstraintBuilder>
 </sudokutype>

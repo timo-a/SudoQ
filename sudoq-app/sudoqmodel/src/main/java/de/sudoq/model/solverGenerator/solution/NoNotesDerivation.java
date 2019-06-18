@@ -22,8 +22,8 @@ public class NoNotesDerivation extends SolveDerivation {
 
     private List<Action> actionlist;
 
-    public NoNotesDerivation(HintTypes technique) {
-        super(technique);
+    public NoNotesDerivation() {
+        super(HintTypes.NoNotes);
         this.actionlist = new ArrayList<>();
         hasActionListCapability = true;
     }

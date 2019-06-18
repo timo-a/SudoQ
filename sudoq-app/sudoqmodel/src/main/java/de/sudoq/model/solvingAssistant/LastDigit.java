@@ -16,7 +16,7 @@ public class LastDigit {
     public static SolveAction findOne(Sudoku sudoku){
         /* for every constraint */
 
-        for (Constraint c : sudoku.getSudokuType().getConstraints())
+        for (Constraint c : sudoku.getSudokuType())
             if(c.hasUniqueBehavior()) {
                 Vector<Position> v = new Vector<>();
                 for(Position p : c.getPositions())
@@ -33,7 +33,7 @@ public class LastDigit {
                             otherSolutions.add(sudoku.getField(p).getCurrentValue());
                     //make list with all possible values
                     List<Integer> possibleSolutions = new ArrayList<>();
-                    for(int i = 0; i< sudoku.getSudokuType().getNumberOfSymbols(); i++)
+                    for(int i : sudoku.getSudokuType().getSymbolIterator())
                         possibleSolutions.add(i);
                     /* cut away all other solutions */
                     possibleSolutions.removeAll(otherSolutions);

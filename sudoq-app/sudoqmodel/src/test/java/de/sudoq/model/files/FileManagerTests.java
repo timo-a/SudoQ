@@ -2,6 +2,7 @@ package de.sudoq.model.files;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -33,7 +34,16 @@ public class FileManagerTests {
 
 	@BeforeClass
 	public static void init() {
-        Utility.copySudokus();
+		Utility.copySudokus();
+		System.out.println("hu - HA!");
+		//Profile.getInstance();
+        /*try {
+			FileManager.deleteDir(Utility.profiles);
+		} catch (IOException e) {
+        	//e.printStackTrace();
+        	fail("ioexception");
+		}*/
+
 
 	}
 
@@ -57,7 +67,7 @@ public class FileManagerTests {
 		assertTrue(Utility.sudokus.exists());
 		assertTrue(Utility.profiles.exists());
 		assertTrue(FileManager.getProfilesDir().getAbsolutePath().equals(Utility.profiles.getAbsolutePath()));
-		assertTrue(FileManager.getSudokuDir().getAbsolutePath().equals(Utility.sudokus.getAbsolutePath()));
+		assertTrue(FileManager.getSudokuDir().  getAbsolutePath().equals(Utility.sudokus.getAbsolutePath()));
 		assertTrue(Utility.sudokus.list().length > 0);
 	}
 
@@ -99,8 +109,13 @@ public class FileManagerTests {
         FileManager.initialize(foo, foo);
 	}
 
-	@Test
+    @Test
 	public void testProfiles() {
+		if (FileManager.getProfilesDir().exists())
+			for (File f : FileManager.getProfilesDir().listFiles())
+				f.delete();
+
+
 		assertFalse(FileManager.getProfilesFile().exists());
 		assertEquals(0, FileManager.getNumberOfProfiles());
 		Profile.getInstance();
@@ -110,13 +125,13 @@ public class FileManagerTests {
 		assertEquals(1, FileManager.getNumberOfProfiles());
 		assertEquals(1, Integer.parseInt(profile.getParentFile().getName().substring(8)));
 
-        FileManager.createProfileFiles(2);
+		FileManager.createProfileFiles(2);
 		assertEquals(2, FileManager.getNumberOfProfiles());
-        FileManager.deleteProfile(2);
+		FileManager.deleteProfile(2);
 		assertEquals(1, FileManager.getNumberOfProfiles());
 	}
 
-	@Test
+    @Test
 	public void testSudokuManagement() {
         //assure empty directory
         String p=StringUtils.join(new String[]{Utility.RES,"tmp_suds","standard16x16","difficult"},File.separator);
@@ -159,8 +174,13 @@ public class FileManagerTests {
 		assertNull(f);
 	}
 
+
 	@Test
 	public void getGameThumbnailFile() throws IOException {
+
+
+		Profile.getInstance(); //needs to be called first otherwise it failes as an indiviidual and sometimes as part of all the tests in this class
+
 		assertEquals(1, FileManager.getNextFreeGameId());//currentProfileID==-1
 		assertTrue(FileManager.getGamesFile().exists());
 		File game  = FileManager.getGameFile(1);
@@ -177,7 +197,8 @@ public class FileManagerTests {
 		assertTrue(FileManager.getCurrentGestureFile() != null);
 	}
 
-	@Test
+	/* Filemanager now creates a new file in `createProfilesFile`
+	   and getProfilesFile() returns a new file-object, so setting it (un)writeable has no effect
 	public void testUnwritableProfilesFile() {
         FileManager.getProfilesFile().setWritable(false);
 		assertFalse(FileManager.getProfilesFile().canWrite());
@@ -189,7 +210,7 @@ public class FileManagerTests {
 		}
         FileManager.getProfilesFile().setWritable(true);
 		assertTrue(FileManager.getProfilesFile().canWrite());
-	}
+	}*/
 
 	@Test
 	public void testUnwritableProfileFile() {

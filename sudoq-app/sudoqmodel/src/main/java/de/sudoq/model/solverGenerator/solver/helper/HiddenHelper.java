@@ -33,7 +33,15 @@ public class HiddenHelper extends SubsetHelper {
 	                                               HintTypes.HiddenPair,
 	                                               HintTypes.HiddenTriple,
 	                                               HintTypes.HiddenQuadruple,
-	                                               HintTypes.HiddenQuintuple};
+	                                               HintTypes.HiddenQuintuple,
+			                                       HintTypes.Hidden__6_tuple,
+                                                   HintTypes.Hidden__7_tuple,
+                                                   HintTypes.Hidden__8_tuple,
+                                                   HintTypes.Hidden__9_tuple,
+                                                   HintTypes.Hidden_10_tuple,
+                                                   HintTypes.Hidden_11_tuple,
+                                                   HintTypes.Hidden_12_tuple,
+                                                   HintTypes.Hidden_13_tuple};
 
 	private HiddenSetDerivation derivation;
 
@@ -63,8 +71,8 @@ public class HiddenHelper extends SubsetHelper {
 	 * Collect all candidates appearing in this constraint.
  	 * This is 'hidden'-specific code for the template method in superclass
 	 *
-	 * @param constraint
-     * @return
+	 * @param constraint Constraint object
+     * @return BitSet of all candidates in the constraint
      */
 	@Override
 	protected BitSet collectPossibleCandidates(Constraint constraint) {
@@ -144,6 +152,7 @@ public class HiddenHelper extends SubsetHelper {
 
 	private HiddenSetDerivation initializeDerivation(Constraint constraint){
 		HiddenSetDerivation derivation = new HiddenSetDerivation(hintType);
+		derivation.setDescription("hidden helper (" + hintType + ")");
 		derivation.setConstraint(constraint);
 		derivation.setSubsetCandidates(currentSet);
 		for (Position p : subsetPositions) {

@@ -180,7 +180,7 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 	 */
 	void updateKeyboard() {
 		SudokuFieldView currentField = this.sudokuView.getCurrentFieldView();
-		for (int i = 0; i < this.game.getSudoku().getSudokuType().getNumberOfSymbols(); i++) {
+		for (int i : this.game.getSudoku().getSudokuType().getSymbolIterator()) {
 			FieldViewStates state;
 			if      (currentField != null && i == currentField.getField().getCurrentValue() && !this.noteMode)
 				state = FieldViewStates.SELECTED_INPUT_BORDER;
@@ -290,7 +290,7 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 
 			Set<Integer> allPossible = getRestrictedSymbolSet(this.game.getSudoku(), currentField, noteMode);
 
-			for (int i = 0; i < type.getNumberOfSymbols(); i++)
+			for (int i : type.getSymbolIterator())
 				if (!allPossible.contains(i))
 					this.virtualKeyboard.disableButton(i);
 
@@ -315,7 +315,7 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 		int save = currentField.getCurrentValue();
 
 		/* iterate over all symbols e.g. 0-8 */
-		for (int i = 0; i < type.getNumberOfSymbols(); i++) {
+		for (int i : type.getSymbolIterator()) {
 
 			/* set fieldval to current symbol */
 			currentField.setCurrentValue(i, false);
@@ -344,7 +344,7 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 		 * Because then, it can't be unset by the user */
 		Set<Integer> setNotes =	new HashSet<>();
 		if (noteMode)
-			for (int i = 0; i < type.getNumberOfSymbols(); i++)
+			for (int i : type.getSymbolIterator())
 				if (currentField.isNoteSet(i))
 					setNotes.add(i);
 

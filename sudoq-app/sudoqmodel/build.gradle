@@ -1,11 +1,34 @@
 apply plugin: 'java'
 
+/*plugins {//test
+    // Apply the java-library plugin to add support for Java Library
+    id 'java-library'
+}*///test end
+
 targetCompatibility = '1.7'
 sourceCompatibility = '1.7'
 
+//* for debug of creating jar
 dependencies {
-    testCompile 'junit:junit:4.7'
-    testCompile 'org.apache.directory.studio:org.apache.commons.io:2.4'
-    testCompile 'org.kie.modules:org-apache-commons-lang3:6.3.0.CR1'
+testCompile 'junit:junit:4.7'
+testCompile 'org.apache.directory.studio:org.apache.commons.io:2.4'
+testCompile 'org.kie.modules:org-apache-commons-lang3:6.3.0.CR1'
+//*/
     /*compile 'com.google.code.gson:gson:2.2.4'*/
+}//*/
+
+
+/* //https://stackoverflow.com/a/35431416/3014199
+task deleteJar(type: Delete) {
+    delete 'libs/jars/sudoqmodel.jar'
 }
+
+task createJar(type: Copy) {
+    from('build/libs/')
+    into('.')
+    include('classes.jar')
+    rename('classes.jar', 'sudoqmodel.jar')
+}
+
+createJar.dependsOn(deleteJar)
+*/

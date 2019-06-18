@@ -58,7 +58,7 @@ public class SolverSudoku extends Sudoku {
 	 */
 	private int complexityValue;
 
-	private Map<Constraint, List<Constraint>> neighborDirectory;
+	private Map<Constraint, List<Constraint>> neighborDirectory; //better to have that static in the type
 
 	public  enum Initialization {NEW_CANDIDATES, USE_EXISTING};
 
@@ -67,17 +67,32 @@ public class SolverSudoku extends Sudoku {
 	 * 
 	 * @param sudoku
 	 *            Das Sudoku das zu dem dieses SolverSudoku gehört
+	 *            Parameter and created object will be different objects with indepentent values,
+	 *            can be modified independently
 	 */
 	public SolverSudoku(Sudoku sudoku) {
 		super(sudoku.getSudokuType());
 		initializeSolverSudoku(sudoku, Initialization.NEW_CANDIDATES);
 	}
 
+	/**
+	 * Instanziiert ein neues SolverSudoku, welches sich auf das spezifizierte Sudoku bezieht.
+	 *
+	 * @param sudoku
+	 *            Das Sudoku das zu dem dieses SolverSudoku gehört
+	 *            Parameter and created object will be different objects with indepentent values,
+	 *            can be modified independently
+	 */
 	public SolverSudoku(Sudoku sudoku, Initialization mode) {
 		super(sudoku.getSudokuType());
 		initializeSolverSudoku(sudoku, mode);
 	}
 
+	/* Initializes this object according to the passed sudoku
+	 * the passed sudoku is neither modified nor stored
+	 *
+	 *
+	 */
 	public void initializeSolverSudoku(Sudoku sudoku, Initialization mode) {
 		this.setComplexity(sudoku.getComplexity());//transfer complexity as well
 
@@ -94,8 +109,7 @@ public class SolverSudoku extends Sudoku {
 
 		// initialize new SolverSudoku with the fields of the specified one
 		for (Position p : this.positions)
-			if (fields.remove(p) != null) //!?
-				fields.put(p, sudoku.getField(p));
+			fields.put(p, (Field) sudoku.getField(p).clone());
 
 		// initialize the constraints lists for each position and the initial
 		// candidates for each field
@@ -109,7 +123,7 @@ public class SolverSudoku extends Sudoku {
 		//this.positions.stream().forEach(p -> this.constraints.put(p, new ArrayList<>()));
 
 		// add the constraints each position belongs to to the list
-		ArrayList<Constraint> allConstraints = sudoku.getSudokuType().getConstraints();
+		Iterable<Constraint> allConstraints = sudoku.getSudokuType();
 		for (Constraint constr : allConstraints)
 			for (Position pos : constr.getPositions())
 				this.constraints.get(pos).add(constr);
@@ -129,11 +143,11 @@ public class SolverSudoku extends Sudoku {
 			case USE_EXISTING:
 				//solverSudoku's fields take the candidates/notes from sudoku
 				for (Position p : positions)
-					if(sudoku.getField(p).isNotSolved())
-						for(int i=0; i<getSudokuType().getNumberOfSymbols(); i++)
-							if(sudoku.getField(p).isNoteSet(i) != currentCandidates.get(p).get(i))
+					if(sudoku.getField(p).isNotSolved()) {
+						for (int i : getSudokuType().getSymbolIterator())
+							if (sudoku.getField(p).isNoteSet(i) != currentCandidates.get(p).get(i))
 								currentCandidates.get(p).flip(i);
-
+					}
 		}
 
 
@@ -182,15 +196,16 @@ public class SolverSudoku extends Sudoku {
 			throw new IllegalArgumentException("Position was null or does not exist in this sudoku.");
 
 		// initialize a new branch and copy candidate lists of current branch
-		Branching branch = this.branchPool.getBranching(pos, candidate);
-		branch.candidates = currentCandidates;
-		this.currentCandidates = this.positionPool.getPositionMap();
+		Branching branch = this.branchPool.getBranching(pos, candidate);//create new branch
+		branch.candidates = currentCandidates;                          //store current candidates there
+		this.currentCandidates = this.positionPool.getPositionMap();    //current candidates in a new (empty) PositionMap
 
 		for (Position p : this.positions)
-			this.currentCandidates.get(p).or(branch.candidates.get(p));
+			this.currentCandidates.get(p).or(branch.candidates.get(p)); //fill currentCandidates with candidates from before branching
 
-		this.branchings.push(branch);
+		this.branchings.push(branch);//put branch (i.e. a backup of what we had before this method was called) on branchings (which seems to be identical to branchpool.branchesinactiveuse)
 
+        //the candidate given as parameter is entered as a (user solution)
 		this.currentCandidates.get(pos).clear();
 		this.currentCandidates.get(pos).set(candidate);
 	}
@@ -200,29 +215,45 @@ public class SolverSudoku extends Sudoku {
 	 * Branching genutzt wurde. Alles Änderungen in dem Zweig werden zurückgesetzt. Ist kein aktueller Zweig vorhanden,
 	 * so wird nichts getan.
 	 */
-	Position killCurrentBranch() {
-		// if there is no branch, return
-		if (this.branchings.isEmpty())
-			return null;
+	public void killCurrentBranch() {
+		// there is a slight chance that we work with an unsolvable sudoku
+        // then we might backtrack to a point where there are no branches left
+        // and in that case returning null is better than failing
+		//if(this.branchings.isEmpty())
+		//    return null;
+
+		/* We're talking about two branches here:
+		   B the current branch at the start of the method
+		   A that which was before B (possibly another branch) */
 
 		// delete old branch and remove the candidate used for branching from
 		// candidates list
+
 		Branching lastBranching = this.branchings.pop();
-		currentCandidates = lastBranching.candidates;
+		currentCandidates = lastBranching.candidates;//override current branch B with A
 		for (Position p : lastBranching.solutionsSet)
-			fields.get(p).setCurrentValue(Field.EMPTYVAL, false);
+			fields.get(p).setCurrentValue(Field.EMPTYVAL, false);//remove solutions added in B
 
-		this.complexityValue -= lastBranching.complexityValue;
+		this.complexityValue -= lastBranching.complexityValue;//substract cmplx scores of techniques that are not used after all
 
-		BitSet branchCandidates = this.currentCandidates.get(lastBranching.position);
-		branchCandidates.clear(lastBranching.candidate);//guessing this candidate led to failure -> it is not part of solution, we need to delete it
+		BitSet branchCandidates = this.currentCandidates.get(lastBranching.position);//candidates of A at critical pos of A
+		branchCandidates.clear(lastBranching.candidate);//since we're deleting B, guessing this candidate led to failure -> it is not part of solution, we need to delete it
 		this.branchPool.recycleLastBranching();
 		this.positionPool.returnPositionMap();
 		if (branchCandidates.isEmpty()) {
-			return killCurrentBranch();
+		    //no candidate was applicable -> backtrack even further
+			/*return*/ killCurrentBranch();
 		} else {
-			return lastBranching.position;
+			//return lastBranching.position; //return
 		}
+	}
+
+	public Branching getCurrentBranch(){
+		return this.branchings.peek();
+	}
+
+	public Position getFirstBranchPosition(){
+		return this.branchings.peek().position;
 	}
 
 	/**
@@ -354,7 +385,7 @@ public class SolverSudoku extends Sudoku {
 	 * 
 	 * @return true, falls auf diesem Sudoku ein Branch erzeugt wurde, false falls nicht
 	 */
-	boolean hasBranch() {
+	public boolean hasBranch() {
 		return !branchings.isEmpty();
 	}
 
@@ -393,7 +424,7 @@ public class SolverSudoku extends Sudoku {
 	 * 
 	 * @return Die Schwierigkeit dieses Sudokus
 	 */
-	int getComplexityValue() {
+	public int getComplexityValue() {
 		return this.complexityValue;
 	}
 
@@ -516,4 +547,27 @@ public class SolverSudoku extends Sudoku {
 
 		return false;
 	}
+
+	/**
+	 * creates a perfect clone,
+
+	@Override
+	public Object clone(){
+		SolverSudoku clone = new SolverSudoku(this.type);
+		clone.id             = this.id;
+		clone.transformCount = this.transformCount;
+		clone.fields = new HashMap<>();
+
+		for(Map.Entry<Position, Field> e : this.fields.entrySet())
+			clone.fields.put(e.getKey(), (Field) e.getValue().clone());
+
+		clone.fieldIdCounter = this.fieldIdCounter;
+
+		clone.fieldPositions = new HashMap<>(this.fieldPositions);
+
+		clone.complexity = this.complexity;
+
+		return clone;
+	}*/
+
 }

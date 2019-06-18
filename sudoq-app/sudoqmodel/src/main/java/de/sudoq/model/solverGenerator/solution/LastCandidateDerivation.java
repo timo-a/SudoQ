@@ -26,8 +26,8 @@ public class LastCandidateDerivation extends SolveDerivation {
     private List<Action> actionlist;
 
 
-    public LastCandidateDerivation(HintTypes technique, Position pos, int remainingNote) {
-        super(technique);
+    public LastCandidateDerivation(Position pos, int remainingNote) {
+        super(HintTypes.LastCandidate);
         this.pos = pos;
         this.remainingNote = remainingNote;
         this.actionlist = new ArrayList<>();

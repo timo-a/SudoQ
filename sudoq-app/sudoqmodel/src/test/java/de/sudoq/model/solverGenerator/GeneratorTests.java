@@ -3,6 +3,7 @@ package de.sudoq.model.solverGenerator;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 
 import org.junit.Before;
@@ -15,6 +16,7 @@ import de.sudoq.model.files.FileManager;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.solverGenerator.Generator;
 import de.sudoq.model.solverGenerator.GeneratorCallback;
+import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solver.ComplexityRelation;
 import de.sudoq.model.solverGenerator.solver.Solver;
 import de.sudoq.model.solverGenerator.transformations.Transformer;
@@ -56,9 +58,16 @@ public class GeneratorTests implements GeneratorCallback {
 
 	@Override
 	public synchronized void generationFinished(Sudoku sudoku) {
-		assertEquals(new Solver(sudoku).validate(null, false), ComplexityRelation.CONSTRAINT_SATURATION);
+		assertEquals(new Solver(sudoku).validate(null), ComplexityRelation.CONSTRAINT_SATURATION);
 		this.notifyAll();
 	}
+
+	@Override
+	public synchronized void generationFinished(Sudoku sudoku, List<Solution> s) {
+		assertEquals(new Solver(sudoku).validate(null), ComplexityRelation.CONSTRAINT_SATURATION);
+		this.notifyAll();
+	}
+
 	@Test
 	public void testGenerationDeb() {
 		Random rnd = new Random(0);

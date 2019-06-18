@@ -7,9 +7,12 @@
  */
 package de.sudoq.model.sudoku;
 
+import java.util.List;
+
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.solverGenerator.Generator;
 import de.sudoq.model.solverGenerator.GeneratorCallback;
+import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.transformations.Transformer;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
@@ -32,6 +35,11 @@ public class SudokuManager implements GeneratorCallback {
 	 * Das Callback fuer den Generator
 	 */
 	public void generationFinished(Sudoku sudoku) {
+		new SudokuXmlHandler().saveAsXml(sudoku);
+		FileManager.deleteSudoku(used);
+	}
+
+	public void generationFinished(Sudoku sudoku, List<Solution> sl) {
 		new SudokuXmlHandler().saveAsXml(sudoku);
 		FileManager.deleteSudoku(used);
 	}

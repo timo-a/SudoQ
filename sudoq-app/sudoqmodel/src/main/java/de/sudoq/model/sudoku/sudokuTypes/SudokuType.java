@@ -10,6 +10,7 @@ package de.sudoq.model.sudoku.sudokuTypes;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -201,6 +202,24 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 	}
 
 	/**
+	 * returns a (monotone) Iterable over all symbols in this type starting at 0, for use in for each loops
+	 * @return a (monotone) Iterable over all symbols in this type starting at 0
+	 */
+	public Iterable<Integer> getSymbolIterator(){
+		return new AbstractList<Integer>() {
+			@Override
+			public Integer get(int index) {
+				return index;
+			}
+
+			@Override
+			public int size() {
+				return numberOfSymbols;
+			}
+		};
+	}
+
+	/**
 	 * Gibt einen ComplexityContraint für eine Schwierigkeit complexity zurück.
 	 * 
 	 * @param complexity
@@ -254,6 +273,7 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 	}
 
 	/**
+	 * @deprecated
 	 * Gibt eine Liste der Constraints, welche zu diesem Sudokutyp gehören zurück. Hinweis: Wenn möglich stattdessen den
 	 * Iterator benutzen.
 	 * 

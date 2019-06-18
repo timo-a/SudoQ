@@ -13,7 +13,7 @@ import de.sudoq.model.xml.Xmlable;
 
 /**
  * Eine Position repräsentiert eine zweidimensionale, kartesische Koordinate.
- * implementiert als Flyweight
+ * implementiert als Flyweight (not quite, but Position.get(x,y) gives memoized objects)
  */
 public class Position implements Xmlable {
 	/** Attributes */

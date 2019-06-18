@@ -234,7 +234,7 @@ public final class TransformationUtilities {
 														// bleiben
 
 		boolean success;
-		for (int i = 0; i < numberOfSymbols; i++) {
+		for (int i : sudoku.getSudokuType().getSymbolIterator()) {
 			success = false;
 			for (int j = 0; j < tries && !success; j++) {
 

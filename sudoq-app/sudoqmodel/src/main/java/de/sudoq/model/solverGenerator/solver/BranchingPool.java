@@ -1,7 +1,6 @@
 package de.sudoq.model.solverGenerator.solver;
 
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.List;
 import java.util.Stack;
 
@@ -9,16 +8,20 @@ import de.sudoq.model.sudoku.CandidateSet;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
 
+/**
+ * BranchinigPool maintains active branchings and recycles old objects
+ *
+ */
 class BranchingPool {
 	/**
 	 * Stores discarded branching objects ready to be reused (we want to save on object instantiation for performance)
 	 */
-	private Stack<Branching> recycledBranchings;
+	private Stack<Branching> branchingsReservoir;
 
 	/**
 	 * Ein Stack der erstellten und bereits vergebenen Maps
 	 */
-	private Stack<Branching> usedBranchings;
+	private Stack<Branching> branchingsInUse;
 
 
 	/**
@@ -26,8 +29,8 @@ class BranchingPool {
 	 * 
 	 */
 	BranchingPool() {
-		    usedBranchings = new Stack<>();
-		recycledBranchings = new Stack<>();
+		    branchingsInUse = new Stack<>();
+		branchingsReservoir = new Stack<>();
 	}
 
 	/**
@@ -45,14 +48,14 @@ class BranchingPool {
 		/* fetch a new Branching. Preferrably recycle one from unused */
 		Branching ret;
 		/* if no unused Branchings ready */
-		if (recycledBranchings.isEmpty()) {
+		if (branchingsReservoir.isEmpty()) {
 			ret = new Branching(p,candidate);
 		}else{
-			ret = recycledBranchings.pop();
+			ret = branchingsReservoir.pop();
 			ret.initializeWith(p,candidate);
 		}
 
-		usedBranchings.push(ret); //store it among the used
+		branchingsInUse.push(ret); //store it among the used
 		return ret;
 	}
 
@@ -60,10 +63,10 @@ class BranchingPool {
 	 * Recycles most recent branching
 	 */
 	void recycleLastBranching() {
-		if (!usedBranchings.isEmpty()) {
-			Branching returnedMap = usedBranchings.pop();
-			returnedMap.solutionsSet.clear();
-			recycledBranchings.push(returnedMap);
+		if (!branchingsInUse.isEmpty()) {
+			Branching returnedMap = branchingsInUse.pop(); //get last branching
+			returnedMap.solutionsSet.clear();              //clear values
+			branchingsReservoir.push(returnedMap);         //move to reservoir
 		}
 	}
 
@@ -71,7 +74,7 @@ class BranchingPool {
 	 * Recycles all branchings
 	 */
 	void recycleAllBranchings () {
-		while (!this.usedBranchings.isEmpty()) {
+		while (!this.branchingsInUse.isEmpty()) {
 			recycleLastBranching();
 		}
 	}

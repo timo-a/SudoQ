@@ -95,7 +95,7 @@ public class Constraint implements Iterable<Position>, Xmlable {
 
 	/** Methods */
 
-	/**
+	/** @deprecated mostly used in tests TODO make those tests sublasses and set method to private
 	 * Diese Methode fügt diesem Constraint-Objekt die spezifizierte Position hinzu. Ist diese null, so wird nichts
 	 * getan.
 	 * 

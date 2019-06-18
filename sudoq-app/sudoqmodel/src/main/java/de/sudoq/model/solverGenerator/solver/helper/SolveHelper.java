@@ -2,6 +2,7 @@ package de.sudoq.model.solverGenerator.solver.helper;
 
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
+import de.sudoq.model.solvingAssistant.HintTypes;
 
 /**
  * Dieses Interface definiert eine einheitliche Schnittstelle für verschiedene Vorgehensweisen zum Lösen eines Sudokus.
@@ -18,36 +19,34 @@ public abstract class SolveHelper {
 	protected SolverSudoku sudoku;
 
 	/**
-	 * Die Schwierigkeit der Anwendbarkeit dieses Lösungshelfers
+	 * Difficulty score of this helper e.g. 1 for `naked single` and 100 for `xwing` added up they give a score for the difficulty of a sudoku
 	 */
-	private int complexity;
+	private int complexityScore;
 
 	/**
 	 * Die Herleitung des letzten update-Schrittes;
 	 */
 	protected SolveDerivation lastDerivation;
 
+	public HintTypes hintType; //public only for debugging
+
+
 	/** Constructors */
 
 	/**
-	 * Erzeugt einen neues SolveHelper für das spezifizierte Sudoku mit der angegebenen Schwierigkeit.
+	 * Creates a new SolveHelper for the specified Sudoku with the specified complexity.
 	 * 
 	 * @param sudoku
-	 *            Das Sudoku auf dem operiert werden soll
+	 *            sudoku to find a helper for. Mustn't be null
 	 * @param complexity
-	 *            Die Schwierigkeit der Anwendbarkeit dieses Helfers (muss >= 0 sein)
-	 * @throws IllegalArgumentException
-	 *             Wird geworfen, falls das spezifizierte Sudoku null oder die angegebene Schwierigkeit kleiner als 0
-	 *             ist
+	 *            desired complexity for the final sudoku. Must be >= 0.
 	 */
 	protected SolveHelper(SolverSudoku sudoku, int complexity) {
-		if (sudoku == null)
-			throw new IllegalArgumentException("sudoku was null");
-		if (complexity < 0)
-			throw new IllegalArgumentException("complexity < 0 : " + complexity);
+		assert sudoku != null;
+		assert complexity >= 0 : "complexity < 0 : " + complexity;
 
 		this.sudoku = sudoku;
-		this.complexity = complexity;
+		this.complexityScore = complexity;
 	}
 
 	/** Methods */
@@ -79,9 +78,12 @@ public abstract class SolveHelper {
 	/**
 	 * Gibt die Schwierigkeit der Anwendbarkeit dieses Helfers zurück. Dieser ist mit dem Konstruktor zu setzen.
 	 * 
-	 * @return Die Schwierigkeit der Anwendbarkeit dieses Helfers
+	 * @return difficulty score of this helper
+	 *
 	 */
-	public int getComplexity() {
-		return this.complexity;
+	public int getComplexityScore() {
+		return this.complexityScore;
 	}
+
+	public HintTypes getHintType(){return hintType;}
 }

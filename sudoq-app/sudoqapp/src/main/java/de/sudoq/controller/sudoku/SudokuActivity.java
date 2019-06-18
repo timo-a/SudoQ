@@ -9,7 +9,6 @@ package de.sudoq.controller.sudoku;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.res.Configuration;
 import android.gesture.GestureOverlayView;
 import android.gesture.GestureStore;
 import android.graphics.Bitmap;
@@ -31,9 +30,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -236,7 +233,7 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 					                                     : R.layout.sudoku);
 
 
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);//TODO subclass and put time, ... in it
+            Toolbar toolbar = findViewById(R.id.toolbar);//TODO subclass and put time, ... in it
             setSupportActionBar(toolbar);
 
 
@@ -271,7 +268,7 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 					obs.removeGlobalOnLayoutListener(this);
 				}
 			});
-			VirtualKeyboardLayout keyboardView = (VirtualKeyboardLayout) findViewById(R.id.virtual_keyboard);
+			VirtualKeyboardLayout keyboardView = findViewById(R.id.virtual_keyboard);
 			this.mediator = new UserInteractionMediator(keyboardView, this.sudokuView, this.game, this.gestureOverlay, this.gestureStore);
 			this.mediator.registerListener(this.sudokuController);
 			this.mediator.registerListener(this);
@@ -403,7 +400,7 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 		this.gestureOverlay.getBackground().setAlpha(127);
 		this.gestureOverlay.setVisibility(View.INVISIBLE);
 
-		FrameLayout frameLayout = (FrameLayout) findViewById(R.id.sudoku_frame_layout);
+		FrameLayout frameLayout = findViewById(R.id.sudoku_frame_layout);
 		frameLayout.addView(this.gestureOverlay);
 	}
 
@@ -412,7 +409,7 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 	 */
 	private void inflateViewAndButtons() {
 
-		this.sudokuScrollView = (FullScrollLayout) findViewById(R.id.sudoku_field);
+		this.sudokuScrollView = findViewById(R.id.sudoku_field);
 		this.sudokuView = new SudokuLayout(this);
 		Log.d(LOG_TAG, "Inflated sudoku layout");
 		this.sudokuView.setGravity(Gravity.CENTER);
@@ -425,11 +422,11 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 
 		LinearLayout currentControlsView;/* = (LinearLayout) findViewById(R.id.sudoku_time_border);
 		FieldViewPainter.getInstance().setMarking(currentControlsView, FieldViewStates.CONTROLS);*/
-		currentControlsView = (LinearLayout) findViewById(R.id.sudoku_border);
+		currentControlsView = findViewById(R.id.sudoku_border);
 		FieldViewPainter.getInstance().setMarking(currentControlsView, FieldViewStates.SUDOKU);
-		currentControlsView = (LinearLayout) findViewById(R.id.controls);
+		currentControlsView = findViewById(R.id.controls);
 		FieldViewPainter.getInstance().setMarking(currentControlsView, FieldViewStates.KEYBOARD);
-		VirtualKeyboardLayout keyboardView = (VirtualKeyboardLayout) findViewById(R.id.virtual_keyboard);
+		VirtualKeyboardLayout keyboardView = findViewById(R.id.virtual_keyboard);
 		FieldViewPainter.getInstance().setMarking(keyboardView, FieldViewStates.KEYBOARD);
 		keyboardView.refresh(this.game.getSudoku().getSudokuType().getNumberOfSymbols());
 	}
@@ -620,7 +617,7 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 		if (this.sudokuView.getCurrentFieldView() != null)
 			this.sudokuView.getCurrentFieldView().select(this.game.isAssistanceAvailable(Assistances.markRowColumn));
 
-		VirtualKeyboardLayout keyView = (VirtualKeyboardLayout) findViewById(R.id.virtual_keyboard);
+		VirtualKeyboardLayout keyView = findViewById(R.id.virtual_keyboard);
 		for (int i = 0; i < keyView.getChildCount(); i++) {
 			keyView.getChildAt(i).setLayoutParams(new VirtualKeyboardLayout.LayoutParams(1, 1));
 		}
@@ -672,7 +669,7 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 
 		int days = time;
 
-		StringBuilder pattern = new StringBuilder("");
+		StringBuilder pattern = new StringBuilder();
 
 		if( days > 0)
 			pattern.append(days).append(" ");
@@ -717,12 +714,10 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 	 * @return Die Spielstatistik als String
 	 */
 	private String getStatisticsString() {
-		StringBuilder stat= new StringBuilder("");
-		stat.append(getString(R.string.dialog_won_statistics) + ":\n");
-		stat.append("\n");
-		stat.append(getString(R.string.dialog_won_timeneeded) + ": " + getGameTimeString() + "\n");
-		stat.append(getString(R.string.dialog_won_score)       + ": " + game.getScore());
-		return stat.toString();
+		return  getString(R.string.dialog_won_statistics) + ":\n"
+		      + "\n"
+		      + getString(R.string.dialog_won_timeneeded) + ": " + getGameTimeString() + "\n"
+		      + getString(R.string.dialog_won_score)       + ": " + game.getScore();
 	}
 
 	@Override
@@ -742,12 +737,12 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 	 * Das Update-Runnable für die Zeit
 	 */
 	private Runnable timeUpdate = new Runnable() {
-		private StringBuilder offset = new StringBuilder("");
+		private StringBuilder offset = new StringBuilder();
 		public void run() {
 			game.addTime(1);
 
 			//getSupportActionBar().
-			final TextView timeView    = (TextView) findViewById (R.id.time);
+			final TextView timeView    = findViewById (R.id.time);
 			timeView.setTextColor(getResources().getColor(R.color.text1));
 
 

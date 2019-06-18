@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.sudoq.model.solverGenerator.solution.LeftoverNoteDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
+import de.sudoq.model.solvingAssistant.HintTypes;
 import de.sudoq.model.sudoku.CandidateSet;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
@@ -17,6 +18,7 @@ public class LeftoverNoteHelper extends SolveHelper {
 
     public LeftoverNoteHelper(SolverSudoku sudoku, int complexity) throws IllegalArgumentException {
         super(sudoku, complexity);
+        hintType = HintTypes.LeftoverNote;
     }
 
 
@@ -25,7 +27,7 @@ public class LeftoverNoteHelper extends SolveHelper {
     public boolean update(boolean buildDerivation) {
         boolean foundOne = false;
 
-        for (Constraint c : sudoku.getSudokuType().getConstraints())
+        for (Constraint c : sudoku.getSudokuType())
             if(c.hasUniqueBehavior() && hasLeftoverNotes(c)) {
 
                 foundOne=true;
@@ -48,9 +50,9 @@ public class LeftoverNoteHelper extends SolveHelper {
         CandidateSet notes  = new CandidateSet();
         for(Position p: c){
             if(sudoku.getField(p).isNotSolved())
-                notes.or(sudoku.getCurrentCandidates(p));
+                notes.or(sudoku.getCurrentCandidates(p)); //collect all notes
             else
-                filled.set(sudoku.getField(p).getCurrentValue());
+                filled.set(sudoku.getField(p).getCurrentValue()); //collect all entered solution
         }
 
         return filled.hasCommonElement(notes);

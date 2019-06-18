@@ -19,6 +19,8 @@ import de.sudoq.model.solverGenerator.solution.LockedCandidatesDerivation;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.solverGenerator.solver.helper.HiddenHelper;
+import de.sudoq.model.solverGenerator.solver.helper.LastDigitHelper;
+import de.sudoq.model.solverGenerator.solver.helper.LeftoverNoteHelper;
 import de.sudoq.model.solverGenerator.solver.helper.LockedCandandidatesHelper;
 import de.sudoq.model.solverGenerator.solver.helper.NakedHelper;
 import de.sudoq.model.solverGenerator.solver.helper.SolveHelper;
@@ -105,6 +107,50 @@ public class HelperTests {
 
 		assertFalse(sudoku.getCurrentCandidates(Position.get(4,3)).get(4));
 
+
+		/* make sure the solution where "5" is removed from field "5,4" is among the found solutions */
+
+	}
+
+	/* test if xwing is really the first helper that can be applied */
+	@Test
+	public void testXWing2(){
+		SolverSudoku sudoku = new SolverSudoku(SudokuMockUps.getXWing());
+
+		List<SolveHelper> helperList = new ArrayList<>();
+		helperList.add(new LastDigitHelper   (sudoku, 1));
+		helperList.add(new LeftoverNoteHelper(sudoku, 1));
+		helperList.add(new NakedHelper(sudoku, 1,1));
+		helperList.add(new NakedHelper(sudoku, 2,1));
+		helperList.add(new NakedHelper(sudoku, 3,1));
+		helperList.add(new NakedHelper(sudoku, 4,1));
+		helperList.add(new HiddenHelper(sudoku, 1,1));
+		helperList.add(new HiddenHelper(sudoku, 2,1));
+		helperList.add(new HiddenHelper(sudoku, 3,1));
+		helperList.add(new HiddenHelper(sudoku, 4,1));
+		helperList.add(new LockedCandandidatesHelper(sudoku, 1));
+		helperList.add(new XWingHelper(sudoku, 1));
+
+		List<SolveDerivation> sdlist = new ArrayList();
+
+		assertTrue(sudoku.getCurrentCandidates(Position.get(4,3)).get(4));
+
+		for(SolveHelper sh: helperList)
+			if (sh.update(true)) {
+				System.out.println(""+sh.getDerivation().getType() + sh.getDerivation());
+			}
+		/*while (helper.update(true)){
+			sdlist.add(helper.getDerivation());
+			System.out.println("print derivation:");
+			System.out.println(sdlist.get(sdlist.size()-1));
+
+		}
+		System.out.println("sdlist "+sdlist.size());
+
+		assertTrue(sdlist.size() >= 1);
+
+		assertFalse(sudoku.getCurrentCandidates(Position.get(4,3)).get(4));
+        */
 
 		/* make sure the solution where "5" is removed from field "5,4" is among the found solutions */
 

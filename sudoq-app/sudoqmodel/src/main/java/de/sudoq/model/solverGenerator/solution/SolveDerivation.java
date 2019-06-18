@@ -52,8 +52,8 @@ public /*abstract*/ class SolveDerivation {
 
 	public SolveDerivation(HintTypes technique) {
 		this.technique = technique;
-		this.fields = new ArrayList<DerivationField>();
-		this.blocks = new ArrayList<DerivationBlock>();
+		this.fields = new ArrayList<>();
+		this.blocks = new ArrayList<>();
 	}
 
 	public HintTypes getType(){
@@ -64,6 +64,10 @@ public /*abstract*/ class SolveDerivation {
 
 	/** Methods */
 
+	/**
+	 * Accepts a string description of what this derivation does
+	 * @param descrip String that describes the derivation
+	 */
 	public void setDescription(String descrip){
 		this.description = descrip;
 	}
@@ -116,7 +120,7 @@ public /*abstract*/ class SolveDerivation {
 	 * @return Ein Iterator, mit dem über die DerivationBlocks dieses
 	 *         SolveDerivation-Objektes iteriert werden kann
 	 */
-	public Iterator<DerivationBlock> getBlockIterator() {
+	Iterator<DerivationBlock> getBlockIterator() {
 		return blocks.iterator();
 	}
 
@@ -129,8 +133,7 @@ public /*abstract*/ class SolveDerivation {
 	}
 
 	public List<Action> getActionList(Sudoku sudoku) {
-		List al = new ArrayList<>();
-    	return al;
+		return new ArrayList<>();
 	}
 
 	public String toString(){

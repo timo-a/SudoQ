@@ -1,0 +1,11 @@
+apply plugin: 'java-library'
+
+dependencies {
+
+    implementation project(':sudoqmodel')
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+sourceCompatibility = "7"
+targetCompatibility = "7"

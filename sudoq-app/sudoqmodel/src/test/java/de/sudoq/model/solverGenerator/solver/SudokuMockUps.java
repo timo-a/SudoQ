@@ -113,7 +113,7 @@ public class SudokuMockUps {
     }
 
     private static void clearCandidates(Field f, Sudoku sudoku){
-        for(int i = 0; i< sudoku.getSudokuType().getNumberOfSymbols(); i++)
+        for(int i : sudoku.getSudokuType().getSymbolIterator())
             if(f.isNoteSet(i))
                 f.toggleNote(i);
     }

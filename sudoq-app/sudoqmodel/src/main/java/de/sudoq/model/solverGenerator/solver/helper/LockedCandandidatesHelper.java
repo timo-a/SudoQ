@@ -38,13 +38,17 @@ public class LockedCandandidatesHelper extends SolveHelper {
 	 */
 	public LockedCandandidatesHelper(SolverSudoku sudoku, int complexity) {
 		super(sudoku, complexity);
+        hintType = HintTypes.LockedCandidatesExternal;
 	}
 
     @Override
     public boolean update(boolean buildDerivation) {
         boolean success=false;
 
-        List<Constraint> constraints = sudoku.getSudokuType().getConstraints();
+        List<Constraint> constraints = new ArrayList<Constraint>();
+        for (Constraint c:sudoku.getSudokuType()) {
+            constraints.add(c);
+        }
         /* compare all constraints */
         for(int i=0; i< constraints.size(); i++)
             for(int j=i+1; j<constraints.size(); j++){

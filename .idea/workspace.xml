@@ -1,272 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cd6963d0-9ccb-4c09-b124-0ef5538ceb01" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="c6656658-39aa-41c9-b8d3-02163859a781" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/sudoq-app/ExperimentsOnPC/ExperimentsOnPC.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sudoq-app/Playaround/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sudoq-app/Playaround/Playaround.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sudoq-app/Playaround/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sudoq-app/Playaround/src/main/java/de/sudoq/playaround/GenerateSomeSudokus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sudoq-app/Playaround/src/main/java/de/sudoq/playaround/MyClass.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/solverGenerator/solver/SolverTests2.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/sudoku/sudokuTypes/SymbolIteratorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README" beforeDir="false" afterPath="$PROJECT_DIR$/README" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/.idea/libraries/animated_vector_drawable_23_3_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/.idea/libraries/animated_vector_drawable_23_3_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/.idea/libraries/appcompat_v7_23_3_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/.idea/libraries/appcompat_v7_23_3_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/.idea/libraries/cardview_v7_23_3_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/.idea/libraries/cardview_v7_23_3_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/.idea/libraries/commons_io_2_4.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/.idea/libraries/commons_io_2_4.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/.idea/libraries/design_23_3_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/.idea/libraries/design_23_3_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/.idea/libraries/recyclerview_v7_23_3_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/.idea/libraries/recyclerview_v7_23_3_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/.idea/libraries/sudoqmodel_sudoqmodel.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/.idea/libraries/support_v4_23_3_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/.idea/libraries/support_v4_23_3_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/.idea/libraries/support_vector_drawable_23_3_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/.idea/libraries/support_vector_drawable_23_3_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apks/release/output.json" beforeDir="false" afterPath="$PROJECT_DIR$/apks/release/output.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sudoq-app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/gradlew" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/gradlew.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/res/compromised.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/res/compromised.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/res/game.dtd" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/res/game.dtd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/res/game_example.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/res/game_example.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/res/games.dtd" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/res/games.dtd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/res/games_example.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/res/games_example.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/res/profile.dtd" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/res/profile.dtd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/res/profiles.dtd" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/res/profiles.dtd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/res/sudoku.dtd" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/res/sudoku.dtd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/res/sudoku_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/res/sudoku_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/res/sudoku_example.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/res/sudoku_example.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/res/tmp.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/res/tmp.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/res/tmp2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/res/tmp2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqapp/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqapp/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/java/de/sudoq/controller/menus/SplashActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/java/de/sudoq/controller/menus/SplashActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/java/de/sudoq/controller/sudoku/Symbol.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/java/de/sudoq/controller/sudoku/Symbol.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/java/de/sudoq/controller/sudoku/hints/HintFormulator.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/java/de/sudoq/controller/sudoku/hints/HintFormulator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/java/de/sudoq/controller/sudoku/hints/HintPainter.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/java/de/sudoq/controller/sudoku/hints/HintPainter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/java/de/sudoq/view/Hints/XWingView.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/java/de/sudoq/view/Hints/XWingView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/res/layout/preferences_advanced.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/res/layout/preferences_advanced.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/res/values-de/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/res/values-de/strings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/res/values-fr/hint_grammar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/res/values-fr/hint_grammar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/res/values-fr/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/res/values-fr/strings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/assets/sudokus/HyperSudoku/HyperSudoku.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/assets/sudokus/HyperSudoku/HyperSudoku.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/assets/sudokus/standard9x9/standard9x9.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/assets/sudokus/standard9x9/standard9x9.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/java/de/sudoq/controller/menus/SudokuLoadingActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/java/de/sudoq/controller/menus/SudokuLoadingActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/java/de/sudoq/controller/sudoku/SudokuActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/java/de/sudoq/controller/sudoku/SudokuActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/java/de/sudoq/controller/sudoku/UserInteractionMediator.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/java/de/sudoq/controller/sudoku/UserInteractionMediator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqapp/sudoqapp.iml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqapp/sudoqapp.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/res/compromised.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/res/compromised.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/res/game.dtd" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/res/game.dtd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/res/game_example.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/res/game_example.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/res/games.dtd" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/res/games.dtd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/res/games_example.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/res/games_example.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/res/profile.dtd" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/res/profile.dtd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/res/profiles.dtd" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/res/profiles.dtd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/res/sudoku.dtd" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/res/sudoku.dtd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/res/sudoku_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/res/sudoku_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/res/sudoku_example.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/res/sudoku_example.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/res/tmp.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/res/tmp.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/res/tmp2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/res/tmp2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/game/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/files/FileManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/files/FileManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/Generator.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/Generator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/GeneratorCallback.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/GeneratorCallback.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/solution/SolveDerivation.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/solution/SolveDerivation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/solver/BranchingPool.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/solver/BranchingPool.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/solver/ComplexityRelation.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/solver/ComplexityRelation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/solver/Solver.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/solver/Solver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/solver/SolverSudoku.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/solver/SolverSudoku.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/solver/helper/Backtracking.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/solver/helper/Backtracking.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/solver/helper/HiddenHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/solver/helper/HiddenHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/solver/helper/LastDigitHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/solver/helper/LastDigitHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/solver/helper/LeftoverNoteHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/solver/helper/LeftoverNoteHelper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/solver/helper/NakedHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/solver/helper/NakedHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solvingAssistant/SolvingAssistant.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solvingAssistant/SolvingAssistant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/solver/helper/NoNotesHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/solver/helper/NoNotesHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/solver/helper/SolveHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/solver/helper/SolveHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/transformations/TransformationUtilities.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solverGenerator/transformations/TransformationUtilities.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solvingAssistant/HintTypes.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solvingAssistant/HintTypes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solvingAssistant/LastDigit.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/solvingAssistant/LastDigit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/sudoku/Position.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/sudoku/Position.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/sudoku/Sudoku.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/sudoku/Sudoku.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/sudoku/SudokuManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/sudoku/SudokuManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/sudoku/sudokuTypes/SudokuType.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/sudoku/sudokuTypes/SudokuType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/files/FileManagerTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/files/FileManagerTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/game/GameTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/game/GameTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/solverGenerator/GeneratorTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/solverGenerator/GeneratorTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/solverGenerator/GeneratorUnitTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/solverGenerator/GeneratorUnitTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/solverGenerator/TransformerTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/solverGenerator/TransformerTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/solverGenerator/solver/BacktrackingTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/solverGenerator/solver/BacktrackingTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/solverGenerator/solver/HelperTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/solverGenerator/solver/HelperTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/solverGenerator/solver/LeftoverNoteTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/solverGenerator/solver/LeftoverNoteTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/solverGenerator/solver/NakedHelperTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/solverGenerator/solver/NakedHelperTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/solverGenerator/solver/SolverIntegrationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/solverGenerator/solver/SolverIntegrationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/solverGenerator/solver/SubsetHelperTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/solverGenerator/solver/SubsetHelperTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/solverGenerator/solver/SudokuMockUps.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/solverGenerator/solver/SudokuMockUps.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/sudoku/SudokuTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/src/test/java/de/sudoq/model/sudoku/SudokuTests.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sudoq-app/sudoqmodel/sudoqmodel.iml" beforeDir="false" afterPath="$PROJECT_DIR$/sudoq-app/sudoqmodel/sudoqmodel.iml" afterDir="false" />
     </list>
-    <ignored path="SudoQ.iws" />
-    <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="CreatePatchCommitExecutor">
-    <option name="PATCH_PATH" value="" />
-  </component>
-  <component name="FavoritesManager">
-    <favorites_list name="SudoQ" />
-  </component>
-  <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/sudoku/Position.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="377">
-              <caret line="165" column="45" selection-start-line="165" selection-start-column="45" selection-end-line="165" selection-end-column="45" />
-              <folding>
-                <element signature="e#0#5570#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/java/de/sudoq/controller/sudoku/ActionListener.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="601">
-              <caret line="64" selection-start-line="64" selection-end-line="64" />
-              <folding>
-                <element signature="e#0#2734#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sudoq-app/sudoqmodel/build.gradle">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sudoq-app/build.gradle">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-    </leaf>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="137" />
-    <option name="y" value="96" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="81" />
+    <option name="y" value="27" />
     <option name="width" value="1216" />
     <option name="height" value="984" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="Scope" currentSubView="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope" proportions="" version="1">
+    <navigator currentView="ProjectPane" proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="SudoQ" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SudoQ" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SudoQ" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SudoQ" type="462c0819:PsiDirectoryNode" />
-              <item name="sudoq-app" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SudoQ" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SudoQ" type="462c0819:PsiDirectoryNode" />
-              <item name="sudoq-app" type="462c0819:PsiDirectoryNode" />
-              <item name="sudoqapp" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope">
-        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
-          <expand>
-            <path>
-              <item name="SudoQ" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-            </path>
-            <path>
-              <item name="SudoQ" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="sudoq-app" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="SudoQ" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="sudoq-app" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="sudoqapp" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="SudoQ" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="sudoq-app" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="sudoqapp" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="SudoQ" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="sudoq-app" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="sudoqapp" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="main" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="SudoQ" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="sudoq-app" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="sudoqapp" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="main" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="java" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="SudoQ" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="sudoq-app" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="sudoqapp" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="main" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="java" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="de" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="SudoQ" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="sudoq-app" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="sudoqapp" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="main" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="java" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="de" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="sudoq" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="SudoQ" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="sudoq-app" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="sudoqapp" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="main" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="java" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="de" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="sudoq" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="controller" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="SudoQ" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="sudoq-app" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="sudoqapp" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="main" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="java" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="de" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="sudoq" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="controller" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="sudoku" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="SudoQ" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="sudoq-app" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="sudoqmodel" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
+      <pane id="Scope" />
+      <pane id="ProjectPane" />
       <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="GoToClass.includeLibraries" value="false" />
-    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
-    <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="MemberChooser.sorted" value="false" />
-    <property name="MemberChooser.showClasses" value="true" />
-    <property name="MemberChooser.copyJavadoc" value="false" />
-    <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
-    <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="options.splitter.details.proportions" value="0.2" />
-    <property name="options.searchVisible" value="true" />
-    <property name="android.sdk.path" value="$USER_HOME$/tests/adt-bundle-linux-x86_64-20131030/sdk" />
-    <property name="android.project.structure.last.selected" value="SDK Location" />
-    <property name="android.project.structure.proportion" value="0.15" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="android.sdk.path" value="$USER_HOME$/Android/Sdk" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -280,139 +105,37 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
-    <configuration name="&lt;template&gt;" type="Applet" default="true" selected="false">
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-    </configuration>
-    <configuration default="true" type="JUnit" factoryName="JUnit">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <envs />
-      <patterns />
-      <method>
-        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
-      <Host>localhost</Host>
-      <Port>5050</Port>
-    </configuration>
-    <configuration name="&lt;template&gt;" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" default="true" selected="false">
-      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
-    </configuration>
-    <configuration default="true" type="Application" factoryName="Application">
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="TestNG">
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="cd6963d0-9ccb-4c09-b124-0ef5538ceb01" name="Default" comment="" />
-      <created>1441031898761</created>
+      <changelist id="c6656658-39aa-41c9-b8d3-02163859a781" name="Default Changelist" comment="" />
+      <created>1560338254039</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1441031898761</updated>
+      <updated>1560338254039</updated>
     </task>
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="25" width="1920" height="1055" extended-state="6" />
+    <frame x="81" y="27" width="1216" height="984" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15761729" />
-      <window_info id="Structure" order="1" weight="0.25" />
-      <window_info id="Palette&#9;" order="2" />
-      <window_info id="Favorites" order="3" side_tool="true" />
-      <window_info id="Image Layers" order="4" />
-      <window_info id="Capture Tool" order="5" />
-      <window_info id="Resources Explorer" order="6" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Terminal" order="8" />
-      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Gradle Console" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Application Servers" order="11" />
-      <window_info anchor="bottom" id="Messages" order="12" visible="true" weight="0.32937366" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Designer" order="3" />
-      <window_info anchor="right" id="Maven Projects" order="4" />
-      <window_info anchor="right" id="Theme Preview" order="5" />
-      <window_info anchor="right" id="Assistant" order="6" visible="true" weight="0.20597652" />
-      <window_info anchor="right" id="Capture Analysis" order="7" />
+      <window_info active="true" content_ui="combo" id="Project" visible="true" weight="0.32942164" />
+      <window_info id="Structure" side_tool="true" />
+      <window_info id="Image Layers" />
+      <window_info id="Designer" />
+      <window_info id="Resources Explorer" />
+      <window_info id="Capture Tool" />
+      <window_info id="Favorites" side_tool="true" />
+      <window_info id="Captures" order="0" weight="0.25" />
+      <window_info anchor="bottom" id="Version Control" />
+      <window_info anchor="bottom" id="TODO" />
+      <window_info anchor="bottom" id="Terminal" />
+      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="right" id="Capture Analysis" />
+      <window_info anchor="right" id="Theme Preview" />
+      <window_info anchor="right" id="Palette&#9;" />
     </layout>
-  </component>
-  <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/sudoq-app/import-summary.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sudoq-app/sudoqmodel/build.gradle">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sudoq-app/build.gradle">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sudoq-app/sudoqmodel/src/main/java/de/sudoq/model/sudoku/Position.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="377">
-          <caret line="165" column="45" selection-start-line="165" selection-start-column="45" selection-end-line="165" selection-end-column="45" />
-          <folding>
-            <element signature="e#0#5570#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sudoq-app/sudoqapp/src/main/java/de/sudoq/controller/sudoku/ActionListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="601">
-          <caret line="64" selection-start-line="64" selection-end-line="64" />
-          <folding>
-            <element signature="e#0#2734#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
   </component>
 </project>

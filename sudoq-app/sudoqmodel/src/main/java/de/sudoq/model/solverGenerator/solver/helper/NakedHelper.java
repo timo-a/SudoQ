@@ -27,7 +27,16 @@ public class NakedHelper extends SubsetHelper {
                                                    HintTypes.NakedPair,
                                                    HintTypes.NakedTriple,
                                                    HintTypes.NakedQuadruple,
-                                                   HintTypes.NakedQuintuple};
+                                                   HintTypes.NakedQuintuple,
+                                                   HintTypes.Naked__6_tuple,
+                                                   HintTypes.Naked__7_tuple,
+                                                   HintTypes.Naked__8_tuple,
+                                                   HintTypes.Naked__9_tuple,
+                                                   HintTypes.Naked_10_tuple,
+                                                   HintTypes.Naked_11_tuple,
+                                                   HintTypes.Naked_12_tuple,
+                                                   HintTypes.Naked_13_tuple,
+    };
 
     private NakedSetDerivation derivation;
 
@@ -146,6 +155,7 @@ public class NakedHelper extends SubsetHelper {
 
     private NakedSetDerivation initializeDerivation(Constraint constraint){
         NakedSetDerivation derivation = new NakedSetDerivation(hintType);
+        derivation.setDescription("naked helper (" + hintType + ")");
         derivation.setConstraint(constraint);
         derivation.setSubsetCandidates(currentSet);
         for (Position p : subsetPositions) {
