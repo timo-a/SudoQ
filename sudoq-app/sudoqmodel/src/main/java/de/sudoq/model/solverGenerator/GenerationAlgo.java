@@ -138,7 +138,7 @@ public class GenerationAlgo implements Runnable {
 		public void run() {
 			/* 1. Finde Totalbelegung */
 			solvedSudoku = createSudokuPattern();
-
+			System.out.println("pattern found");
 			while (!this.freeFields.isEmpty()) {
 				this.definedFields.add(this.freeFields.remove(0));
 			}//now all defined
@@ -166,36 +166,63 @@ public class GenerationAlgo implements Runnable {
 
 				}
 
-				if (plusminuscounter == 18)
-					System.exit(42);
-				System.out.println(plusminuscounter++);
+				//if (plusminuscounter == 71)
+				//	System.out.println("break");
+					//System.exit(42);
+				//System.out.print("pmc " + plusminuscounter + "  ");
+				plusminuscounter++;
 
-
-
+                int ambiguityCounter = 0;
 				while(AmbiguityChecker.isAmbiguous(sudoku)){
 					Solver solver = new Solver(sudoku);
 
-					if (plusminuscounter == 18) //
-						System.out.println("breakpoint");
-
+					/*
 					solver.solveAll(true, false, false);
 					Position p = solver.getSolverSudoku().getFirstBranchPosition();
+					*/
+
+
+					Position p = AmbiguityChecker.getFirstBranchPosition();
+
 					addDefinedField2(p);
-					System.out.print("cmplx in ambiguity loop: ");// + solver.getSolverSudoku().getComplexityValue());
+					/*System.out.print("cmplx in ambiguity loop "+ambiguityCounter+": ");// + solver.getSolverSudoku().getComplexityValue());
                     if (solver.getSolutions() != null) {
                         System.out.print(solver.getSolverSudoku().getComplexityValue() + "  -  ");
                         System.out.println(solver.getHintCountString());
-                    }
+                    }*/
+                    ambiguityCounter++;
 				}
 
+				/*if (plusminuscounter == 71+1) {
+					Solver debugsolver1 = new Solver(sudoku);
+					debugsolver1.solveAll(true, false, false);
+					System.out.println("deb:GenerationAlgo before " + debugsolver1.getHintScore());
+					System.out.println("deb:GenerationAlgo before " + debugsolver1.getSolverSudoku().getComplexityValue());
+					Solver debugsolver_ttf = new Solver(sudoku);
+					debugsolver_ttf.solveAll(true, true, false);
+					System.out.println("deb:GenerationAlgo before " + debugsolver_ttf.getHintScore());
+					System.out.println("deb:GenerationAlgo before " + debugsolver_ttf.getSolverSudoku().getComplexityValue());
+				}*/
 				solver = new Solver(sudoku);
 
 				rel = solver.validate(null);
+
+				/*if (plusminuscounter == 71+1) {
+					//System.out.println(solver.getHintScore());
+					System.out.println(solver.getSolverSudoku().getComplexityValue());
+					//System.out.println(solver.getSolutions());
+					Solver debugsolver2 = new Solver(sudoku);
+					debugsolver2.solveAll(true, false, false);
+					System.out.println("deb:GenerationAlgo after " + debugsolver2.getHintScore());
+					System.out.println("deb:GenerationAlgo after " + debugsolver2.getSolverSudoku().getComplexityValue());
+				}*/
+
+
 				//System.out.println("cmplx after validate:    " + solver.getSolverSudoku().getComplexityValue());
-				if (solver.getSolutions() != null) {
+				/*if (solver.getSolutions() != null) {
 					System.out.print(solver.getSolverSudoku().getComplexityValue() + "  -  ");
 					System.out.println(solver.getHintCountString());
-				}
+				}*/
 
 				/*
 				for (Solution s: solver.getSolutions())
@@ -215,7 +242,7 @@ public class GenerationAlgo implements Runnable {
 				System.out.println(reduceStringList(solutionslist));
                 */
 
-                System.out.print("Generator.run +/- loop. validate says " + rel);
+                //System.out.println("Generator.run +/- loop. validate says " + rel);
 				switch(rel){
 					case MUCH_TOO_EASY: removeDefinedFields(reallocationAmount);
 								   break;
@@ -226,10 +253,18 @@ public class GenerationAlgo implements Runnable {
 					case MUCH_TOO_DIFFICULT:
 						for (int i = 0; i < Math.min(reallocationAmount, freeFields.size()); i++) {
 							addDefinedField2();
+						}
+						break;
+					/*case CONSTRAINT_SATURATION://TODO take out again!!!
+						removeDefinedFields(reallocationAmount);
+						for (int i = 0; i < reallocationAmount; i++) {
+							addDefinedField2();
 
 						}
+						rel = ComplexityRelation.INVALID;*/
+
 				}
-				System.out.println(" #definedFields: " + definedFields.size());
+				//System.out.println(" #definedFields: " + definedFields.size());
 			}
 
 			// Call the callback
@@ -243,27 +278,19 @@ public class GenerationAlgo implements Runnable {
 
 			}
 			Sudoku res = suBi.createSudoku();
-			System.out.println("debug output: res created, is it null? - "+ (res==null));
 
 			//we want to know the solutions used, so quickly an additional solver
 			Solver quickSolver = new Solver(res);
-			quickSolver.solveAll(true, false, true);
+			quickSolver.solveAll(true, false, false);
 
 			res.setComplexity(sudoku.getComplexity());
 			if(callbackObject.toString().equals("experiment")){
-				System.out.println("solutions are null?:" + (quickSolver.getSolutions() == null));
 				callbackObject.generationFinished(res, quickSolver.getSolutions());
-				System.out.println("debug output: mark6.2a");
-
 			}
 			else{
-				System.out.println("doesn't equal exp??!!");
 				callbackObject.generationFinished(res);
-				System.out.println("debug output: mark6.2b");
 
 			}
-			System.out.println("debug output: mark7");
-
 		}
 
 		private Sudoku createSudokuPattern(){
@@ -273,23 +300,31 @@ public class GenerationAlgo implements Runnable {
 			//A mapping from position to solution
 			PositionMap<Integer> solution = new PositionMap<>(this.sudoku.getSudokuType().getSize());
 			int iteration=0;
-			System.out.println("Fields to define: "+fieldsToDefine);
+			//System.out.println("Fields to define: "+fieldsToDefine);
 
 			//define fields
 			for (int i = 0; i < fieldsToDefine; i++) {
 				Position p = addDefinedField();
 			}
 
+			int fieldsToDefineDynamic = fieldsToDefine;
+
 			/* until a solution is found, remove 5 random fields and add new ones */
-			while(!solver.solveAll(false, false)) {
-				System.out.println("Iteration: "+(iteration++)+", defined Fields: "+definedFields.size());
+			Solver solver = new Solver(sudoku);
+			while(!solver.solveAll(false, true)) {
+				//System.out.println("Iteration: "+(iteration++)+", defined Fields: "+definedFields.size());
 				// Remove some fields, because sudoku could not be validated
 				removeDefinedFields(5);
 
 				// Define average number of fields
-				while (definedFields.size() < fieldsToDefine)
+				while (definedFields.size() < fieldsToDefineDynamic)
 					if (addDefinedField() == null) //try to add field, if null returned i.e. nospace / invalid
 						removeDefinedFields(5); //remove 5 fields
+
+				if(fieldsToDefineDynamic > 0 && random.nextFloat() < 0.2)
+					fieldsToDefineDynamic--; //to avoid infinite loop slowly relax
+				System.out.println("ftdd: " + fieldsToDefineDynamic);
+				solver = new Solver(sudoku);
 			}
 
 			/* we found a solution i.e. a combination of nxn numbers that fulfill all constraints */
@@ -306,7 +341,9 @@ public class GenerationAlgo implements Runnable {
 
 			Complexity saveCompl = solver.getSolverSudoku().getComplexity();
 			solver.getSolverSudoku().setComplexity(Complexity.arbitrary);
-			solver.validate(solution); //solution is filled w/ correct solution
+			//solver.validate(solution); //solution is filled w/ correct solution
+			solution = solver.getSolutionsMap();
+
 			solver.getSolverSudoku().setComplexity(saveCompl);
 
 			/* We have (validated) filled `solution` with the right values */

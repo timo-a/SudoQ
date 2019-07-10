@@ -236,19 +236,19 @@ public class SolverSudoku extends Sudoku {
 
 		this.complexityValue -= lastBranching.complexityValue;//substract cmplx scores of techniques that are not used after all
 
-		BitSet branchCandidates = this.currentCandidates.get(lastBranching.position);//candidates of A at critical pos of A
-		branchCandidates.clear(lastBranching.candidate);//since we're deleting B, guessing this candidate led to failure -> it is not part of solution, we need to delete it
+		//BitSet branchCandidates = this.currentCandidates.get(lastBranching.position);//candidates of A at critical pos of A
+		//branchCandidates.clear(lastBranching.candidate);//since we're deleting B, guessing this candidate led to failure -> it is not part of solution, we need to delete it
 		this.branchPool.recycleLastBranching();
 		this.positionPool.returnPositionMap();
-		if (branchCandidates.isEmpty()) {
-		    //no candidate was applicable -> backtrack even further
-			/*return*/ killCurrentBranch();
-		} else {
-			//return lastBranching.position; //return
-		}
+		//if (branchCandidates.isEmpty()) {
+		//    //no candidate was applicable -> backtrack even further
+		//	/*return*/ killCurrentBranch();
+		//} else {
+		//	//return lastBranching.position; //return
+		//}
 	}
 
-	public Branching getCurrentBranch(){
+	public Branching getLastBranch(){
 		return this.branchings.peek();
 	}
 

@@ -1,9 +1,11 @@
 package de.sudoq.model.solverGenerator.solver;
 
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -14,6 +16,7 @@ import de.sudoq.model.solverGenerator.solution.DerivationField;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.helper.Backtracking;
+import de.sudoq.model.solverGenerator.solver.helper.Helpers;
 import de.sudoq.model.solverGenerator.solver.helper.HiddenHelper;
 import de.sudoq.model.solverGenerator.solver.helper.LastDigitHelper;
 import de.sudoq.model.solverGenerator.solver.helper.LeftoverNoteHelper;
@@ -22,6 +25,7 @@ import de.sudoq.model.solverGenerator.solver.helper.NakedHelper;
 import de.sudoq.model.solverGenerator.solver.helper.SolveHelper;
 import de.sudoq.model.solverGenerator.solver.helper.XWingHelper;
 import de.sudoq.model.solvingAssistant.HintTypes;
+import de.sudoq.model.sudoku.CandidateSet;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
@@ -52,11 +56,17 @@ public class Solver {
 
 	/**
 	 * Eine Liste der Lösungen des letzten solveAll-Aufrufes
+	 * TODO make stack
 	 */
 	private List<Solution> lastSolutions;
 
 	/**
-	 * Ein Stack von Branch-Punkten, damit bei einem Backtrack die Einträge aus der Herleitung gelöscht werden.
+	 * A stack of branch points to track backtracking derivations in the solutionslist.
+	 * Goal is to be able to delete solutions from the derivation in case of a backtrack.
+	 * Every saved integer is the size of the derivation before the backtrack.
+	 *
+	 * E.g.  lastSolutions = [NakedSingle, HiddenPair, Backtrack, lastDigit, Backtrack]
+	 *   ->  branchPoints  = [2,4]
 	 */
 	private Stack<Integer> branchPoints;
 
@@ -101,17 +111,25 @@ public class Solver {
 		int numberOfNakedHelpers = ( sudoku.getSudokuType().getNumberOfSymbols()) / 2;     //half if #symbols is even, less than half otherwise
 		int numberOfHiddenHelpers= sudoku.getSudokuType().getNumberOfSymbols() - numberOfNakedHelpers - 1 ; //we don't need the complement -> one less
 
-		for (int i = 2; i <= numberOfNakedHelpers; i++) {//no naked single at this point, they're hardcoded later in the program
-			helpers.add(new NakedHelper(this.sudoku, i, i*10));
-		}
-		for (int i = 1; i <= numberOfHiddenHelpers; i++) {
-			helpers.add(new HiddenHelper(this.sudoku, i, i*10));
+		//no naked single at this point, they're hardcoded later in the program
+		//TODO add naked single here and remove its extra loop in the solveX method
+
+		for (int i = 1; i <= numberOfHiddenHelpers && i == 1; i++) {
+			helpers.add(new HiddenHelper(this.sudoku, i, i*50 + 25));
 		}
 
-		helpers.add(new LockedCandandidatesHelper(this.sudoku, 70));
-		helpers.add(new XWingHelper(this.sudoku, 80));
+		for (int n=2, h=2; n <= numberOfNakedHelpers || h <= numberOfHiddenHelpers; n++, h++){
+			if (n <= numberOfNakedHelpers)
+				helpers.add(new NakedHelper(this.sudoku, n, n*50));
+			if (h <= numberOfHiddenHelpers)
+				helpers.add(new HiddenHelper(this.sudoku, h, h*50 + 25));
+		}
 
-		helpers.add(new Backtracking(this.sudoku, 100));
+
+		helpers.add(new LockedCandandidatesHelper(this.sudoku, 600));
+		helpers.add(new XWingHelper(this.sudoku, 2000));
+
+		helpers.add(new Backtracking(this.sudoku, 10000));
         return helpers;
 	}
 
@@ -230,7 +248,7 @@ public class Solver {
 
 		boolean solved = solveAll(buildDerivation, false, false);
 
-		System.out.println("solved: "+solved);
+		//System.out.println("solved: "+solved);
 		//print9x9(sudoku);
 
 		// Restore old state if solutions shall not be applied or if sudoku could not be solved
@@ -279,24 +297,26 @@ public class Solver {
 	}
 
 	public String getHintCountString(){
-		Map<HintTypes, Integer> em = getHintCounts();
+		Map<HintTypes, Integer> em;
+		try {
+			em = getHintCounts();
+		}catch (IllegalStateException ise){
+			return "lastSolutions is zero";
+		}
 		String counts = "";
 		for (HintTypes h : em.keySet())
 			counts += "  " + em.get(h) + ' ' + h;
 
-		///calc  score based on hints  alone
-		counts += " " + getHintScore();
-		///would
 
-		return counts.length() > 2 ? counts.substring(2)
-				                   : counts;
+		if (counts.length() > 2)
+			counts=counts.substring(2);
 
-
+		return counts;
 	}
 
 	private static Map<HintTypes, Integer> hintscores = new HashMap<>();
 
-	private int getHintScore(){
+	public int getHintScore(){
 		Map<HintTypes, Integer> em = getHintCounts();
 		int checkscore = 0;
 		for (HintTypes h : em.keySet())
@@ -319,6 +339,7 @@ public class Solver {
 
 
 	/**
+	 * This method changes the complexity value!!! amd maybe lastSolutions! use AmbiguityChecker instead.
 	 * Überprüft das gegebene Sudoku auf Validität entpsrechend dem spezifizierten ComplexityConstraint. Es wird
 	 * versucht das Sudoku mithilfe der im ComplexityConstraint für die im Sudoku definierte Schwierigkeit definierten
 	 * SolveHelper und Anzahl an Schritten versucht zu lösen. Das Ergbnis wird durch ein ComplexityRelation Objekt
@@ -343,6 +364,13 @@ public class Solver {
 			copy.put(p, this.sudoku.getField(p).getCurrentValue());
 		}
 
+		/////debug
+		//int q = this.sudoku.getComplexityValue();
+		//solveAll(true,false,false);
+		//int r = this.sudoku.getComplexityValue();
+		/////debug ende
+
+
 		//if a solution is found according to the complexity constraints
 		if (solveAll(true, true, false)) {
 			solved = true;
@@ -356,8 +384,14 @@ public class Solver {
 			}
 		}
 
+		//severalSolutionsExist() overwrites the complexity value, so we query it here already.
+		int complexity = this.sudoku.getComplexityValue();
+
+
+		//this overwrites the existing sudoku
 		if (solved && severalSolutionsExist()) //TODO maybe try to fix by adding fields and only then return invalid?
 			ambiguous = true;
+		//this.sudoku.complexityValue is overwritten by the attempt at finding a second solution
 
 		// restore initial state
 		for(Position p : this.sudoku.positions)
@@ -365,7 +399,6 @@ public class Solver {
 
 
 		// depending on the result, return an int
-		int complexity = this.sudoku.getComplexityValue();
 		int minComplextiy = complConstr.getMinComplexityIdentifier();
 		int maxComplextiy = complConstr.getMaxComplexityIdentifier();
 
@@ -388,21 +421,33 @@ public class Solver {
 	}
 
 	/**
+	 * Returns the solutions of the last `solve`-call. Undefined if last solve failed e.g. invalid.
+	 */
+	public PositionMap<Integer> getSolutionsMap(){
+		PositionMap<Integer> solutions = new PositionMap<Integer>(this.sudoku.getSudokuType().getSize());
+		for (Position p: this.sudoku.positions) {
+			int curVal = this.sudoku.getField(p).getCurrentValue();
+			solutions.put(p, curVal);
+		}
+		return solutions;
+	}
+
+	/**
 	 * Indicates whether further solutions exist for a sudoku where we've already found one.
 	 * (potentially) modifies sudoku.
 	 *
 	 * @return
 	 */
-	private boolean severalSolutionsExist(){
+	public boolean severalSolutionsExist(){
         //lastsolutions might be set to null, e.g. if we kill branch but dont find another solution
 		//if we want to call getSolutions later on we'll be interested in the first solution anyway
-		List<Solution> ls = lastSolutions;
-		while (this.sudoku.hasBranch()) {
-			this.sudoku.killCurrentBranch();//NB killing a branch is like a clockwork, we can't go back the same branches, bec we eliminate the candidate we chose last time
+
+		//List<Solution> ls = lastSolutions; //we just don't build a derivation, ls should be left unchanged
+		while (advanceBranching(false) == Branchresult.SUCCESS)
 			if (solveAll(false, false, true))//why is it invalid if solved and another solve?
 				return true;
-		}
-		lastSolutions = ls;
+
+		//lastSolutions = ls;
 		return false;
 
 
@@ -411,7 +456,7 @@ public class Solver {
 	/**
 	 * Solves the Löst das gesamte spezifizierte Sudoku. Die Lösung wird als Liste von Solution-Objekten zurückgeliefert, deren
 	 * Reihenfolge die Reihenfolge der Lösungsschritte des Algorithmus, realisiert durch die SolveHelper, repräsentiert.
-	 * Ist das Sudoku invalid und kann somit nicht eindeutig gelöst werden, so wird null zurückgegeben.
+	 * Ist das Sudoku invalid und kann somit nicht eindeutig gelöst werden, so wird false zurückgegeben.
 	 * 
 	 * @param buildDerivation
 	 *            Bestimmt, ob die Herleitung der Lösung oder lediglich eine leere Liste zurückgegeben werden soll
@@ -454,7 +499,6 @@ public class Solver {
 
 		if (buildDerivation) {
 			lastSolutions = new ArrayList<Solution>();
-			lastSolutions.add(new Solution());
 			branchPoints = new Stack<Integer>();
 		}
         int solver_counter = 0;
@@ -464,21 +508,25 @@ public class Solver {
 			didUpdate = false;
 
 			////////////////////////
-			if (solver_counter == 25) {
-				System.out.println("Breakpoint");
-			}
+			//if (solver_counter == 14 || solver_counter == 17 || solver_counter == 25) {
+			//	System.out.println("Breakpoint " + solver_counter);
+			//}
 
 
 			// try to solve the sudoku
 			solved = isFilledCompletely();
 
 			if (!solved && isInvalid()) {
+				if ( advanceBranching(buildDerivation) == Branchresult.SUCCESS)
+					didUpdate = true;
+				else
+					isUnsolvable = true;
 				/*
 				 * if sudoku is invalid, has no branches and no solution was found,
 				 * it is invalid if there was already a solution
 				 * there is no further one, so it is solved correct if there is a branch, make a backstep
 				 */
-				if (!this.sudoku.hasBranch()) {
+				/*if (!this.sudoku.hasBranch()) {
 					isUnsolvable = true;
 				} else {
 					if (buildDerivation) {
@@ -489,15 +537,8 @@ public class Solver {
 					}
 					this.sudoku.killCurrentBranch();
 					didUpdate = true;
-				}
+				}*/
 			}
-
-
-
-
-
-
-
 
 			// try to update naked singles
 			if (!solved && !didUpdate && !isUnsolvable) {
@@ -510,33 +551,102 @@ public class Solver {
 				didUpdate = true;
 			}
 
-			////////////////////////
-			if (this.lastSolutions != null){
-				if (this.lastSolutions.size() >= 13 ||
-					sudoku.getComplexityValue() != getHintScore())
-					System.out.println(getHintCountString() +
-							" " + sudoku.getComplexityValue() +
-							" sc: " + solver_counter);
-			}
-
 			solver_counter++;
 			////////////////////////
 
 			// UNCOMMENT THE FOLLOWING TO PRINT THE WHOLE SUDOKU AFTER EACH LOOP
-			//if(sudoku.getSudokuType().getEnumType() == SudokuTypes.samurai){
-				//print9x9(sudoku);
-			//}
+			if(solver_counter % 1000 == 0){
+				System.out.println("sc: "+ solver_counter + "   bf: "+ sudoku.branchings.size());
+				print9x9(sudoku);
+			}
 		}
 
 		if (!solved) {
 			lastSolutions = null;
-		} else if (buildDerivation) {
+		} /*else if (buildDerivation) {
 			lastSolutions.remove(lastSolutions.size() - 1); //TODO why remove last element???
-		}
+		}this was from when we made a new solution in advance -> we had to remove the last one*/
 
 		// depending on the result, return an int
 		return solved;
 	}
+
+//
+//  if (!solved && isInvalid()) {
+//         advanceBranching()
+//
+//  }
+//
+
+
+
+	enum Branchresult {SUCCESS, UNSOLVABLE};
+
+	/** if there is a branch, delete it and make a the next one:
+	 *                                 if there are more candidates, choose the next one
+	 *                                 otherwise, delete branches until there are
+	 */
+	private Branchresult advanceBranching(boolean buildDerivation){
+		if (!this.sudoku.hasBranch()) {
+			return Branchresult.UNSOLVABLE;         // possible output nr1: insolvable
+		} else {
+			Position branchingPos       = this.sudoku.getLastBranch().position;
+			int      branchingCandidate = this.sudoku.getLastBranch().candidate;
+
+			/* delete all solutions (including the backtracking-derivation) since the last branch */
+			if (buildDerivation) {
+
+				while (lastSolutions.size() > branchPoints.peek()) {
+					lastSolutions.remove(lastSolutions.size() - 1);
+				}
+				branchPoints.pop();
+			}
+			this.sudoku.killCurrentBranch();
+
+			CandidateSet candidates = this.sudoku.getCurrentCandidates(branchingPos);
+			int nextCandidate = candidates.nextSetBit(branchingCandidate+1);
+
+			if (nextCandidate != -1) {
+
+				//TODO new Backtracking(this.sudoku).update(tre)
+
+
+				this.sudoku.startNewBranch(branchingPos, nextCandidate);
+
+				if (buildDerivation) {
+					branchPoints.push(lastSolutions.size());
+					//copied from class Backtracking (because we need a custom candidate here).
+					SolveDerivation lastDerivation = new SolveDerivation(HintTypes.Backtracking);
+					BitSet irrelevantCandidates = candidates; //startNewBranch() deletes candidates in currendCandidates, and branchpool can't be accessed from here, so we need to use saved bitset
+					BitSet relevantCandidates = new BitSet();
+					relevantCandidates.set(nextCandidate);
+					irrelevantCandidates.clear(nextCandidate);
+					DerivationField derivField = new DerivationField(branchingPos,
+							                                         relevantCandidates,
+			                                                         irrelevantCandidates);
+					lastDerivation.addDerivationField(derivField);
+					lastDerivation.setDescription("Backtrack different candidate");
+				}
+
+
+				return Branchresult.SUCCESS;
+
+			} else {
+				//no candidate was applicable -> backtrack even further
+				return advanceBranching(buildDerivation);
+			}
+		}
+	}
+
+
+/*
+if there is another candidate -> advance
+            noother           -> backtrack i.e. killanother branch
+
+ */
+
+
+
 
 	/**
 	*  According to their priority use the helpers until one of them can
@@ -555,10 +665,11 @@ public class Solver {
 					if (!validation)
 						this.sudoku.addComplexityValue(hel.getComplexityScore(), !(hel instanceof Backtracking));
 					if (buildDerivation) {
-						lastSolutions.get(lastSolutions.size() - 1).addDerivation(hel.getDerivation());
+						Solution newSolution = new Solution();
+						newSolution.addDerivation(hel.getDerivation());
+						lastSolutions.add(newSolution);
 						if (hel instanceof Backtracking) {
-							branchPoints.push(lastSolutions.size());
-							lastSolutions.add(new Solution());
+							branchPoints.push(lastSolutions.size()-1);
 							//System.out.println("Backtracking!");
 						}
 
@@ -592,24 +703,27 @@ public class Solver {
 		boolean foundNakedSingle = false; //indicates that at least one was found
 		// Iterate trough the fields to look if each field has only one
 		// candidate left = solved
+		Solution newSolution = new Solution();
 		do {
 			hasNakedSingle = false;
 			for (Position p : this.sudoku.positions) {
 				BitSet b = this.sudoku.getCurrentCandidates(p);
 				if (b.cardinality() == 1) {
 					if (addDerivations) {
-						Solution sol = lastSolutions.get(lastSolutions.size() - 1);
 						SolveDerivation deriv = new SolveDerivation(HintTypes.NakedSingle);
 						deriv.addDerivationField(new DerivationField(p, (BitSet) b.clone(),
 						                                             new BitSet()));
 						deriv.setDescription("debug: naked single via Solver.updateNakedSingles");
-						SolveAction action = (SolveAction) new SolveActionFactory().createAction(b.nextSetBit(0),
+						/*
+						we dont do actions for the other helpers either and
+ -						several actions per solution would only ovewrite themselves
+ 						SolveAction action = (SolveAction) new SolveActionFactory().createAction(b.nextSetBit(0),
 								this.sudoku.getField(p));
-						sol.setAction(action);
-						sol.addDerivation(deriv);
+						sol.setAction(action);*/
+						newSolution.addDerivation(deriv);
 						//lastSolutions.add(new Solution());
 					}
-					sudoku.setSolution(p, b.nextSetBit(0));
+					sudoku.setSolution(p, b.nextSetBit(0));//execute, since only one candidate, take first
 					if (addComplexity) {
 						this.sudoku.addComplexityValue(10, true);
 					}
@@ -620,7 +734,7 @@ public class Solver {
 		} while(hasNakedSingle);
 
 		if(foundNakedSingle && addDerivations)
-			lastSolutions.add(new Solution());
+			lastSolutions.add(newSolution);
 
 		return foundNakedSingle;
 	}
@@ -658,4 +772,18 @@ public class Solver {
 
 		return true;
 	}
+
+
+	/**
+	 * intended for debugging only
+	 */
+	public Iterable<SolveHelper> helperIterator(){
+
+		return new Iterable<SolveHelper>(){
+			public Iterator<SolveHelper> iterator(){
+				return helper.iterator();
+			}
+		};
+	}
+
 }

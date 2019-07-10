@@ -25,6 +25,12 @@ public class SudokuMockUps {
         return transform(s, pattern);
     }
 
+    public static Sudoku stringTo16x16Sudoku(String pattern){
+        Sudoku s = new SudokuBuilder(SudokuTypes.standard16x16).createSudoku();
+        s.setComplexity(Complexity.arbitrary);
+        return transformX(16, s, pattern);
+    }
+
 
     public static Sudoku getLockedCandidates1(){
         //http://hodoku.sourceforge.net/en/tech_intersections.php
@@ -97,11 +103,11 @@ public class SudokuMockUps {
 
                 switch (gu.length()){
                     case 0: break;
-                    case 1: if(gu.equals('.'))
-                                ;//pass '.' -> kein eintrag, keine notien
-                            else
-                                f.setCurrentValue(Integer.parseInt(gu)-1);
-                            break;
+                    case 1: if(gu.charAt(0) == '.')
+                        ;//pass '.' -> kein eintrag, keine notizen
+                    else
+                        f.setCurrentValue(Integer.parseInt(gu)-1);
+                        break;
                     default:
                         for(Character c:gu.toCharArray())
                             f.toggleNote(Character.getNumericValue(c)-1);
@@ -112,9 +118,36 @@ public class SudokuMockUps {
         return sudoku;
     }
 
+    private static Sudoku transformX(int dim, Sudoku sudoku, String pattern){
+        String[] candidates = pattern.split("\\s+");
+        for(int y=0; y<dim; y++)
+            for(int x=0; x<dim; x++){
+                String gu = candidates[dim*y+x];
+                Field f =  sudoku.getField(Position.get(x, y));
+                clearCandidates(f,sudoku);
+
+                if (gu.equals(".")){
+                    //empty
+                }else if ('0' <= gu.charAt(0) &&
+                                 gu.charAt(0) <= '9'){
+                    f.setCurrentValue(Integer.parseInt(gu)-1);
+                }else
+                    for(Character c:gu.toCharArray())
+                            f.toggleNote(Character.getNumericValue(c)-1);
+                }
+
+        return sudoku;
+    }
+
     private static void clearCandidates(Field f, Sudoku sudoku){
         for(int i : sudoku.getSudokuType().getSymbolIterator())
             if(f.isNoteSet(i))
+                f.toggleNote(i);
+    }
+
+    private static void setCandidates(Field f, Sudoku sudoku){
+        for(int i : sudoku.getSudokuType().getSymbolIterator())
+            if(!f.isNoteSet(i))
                 f.toggleNote(i);
     }
 

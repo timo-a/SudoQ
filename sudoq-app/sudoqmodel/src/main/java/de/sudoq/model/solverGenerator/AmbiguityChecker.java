@@ -1,37 +1,37 @@
 package de.sudoq.model.solverGenerator;
 
-import java.util.List;
-
-import de.sudoq.model.solverGenerator.solution.Solution;
-import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.Solver;
-import de.sudoq.model.solverGenerator.solver.SolverSudoku;
-import de.sudoq.model.solvingAssistant.HintTypes;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
 
 public class AmbiguityChecker {
 
+    private static Position FirstBranchPosition;
 
+
+    /**
+     * Determines whether there are multiple solutions to the passed sudoku.
+     * @param sudoku Sudoku object to be tested for multiple solutions
+     * @return true if there are several solutions false otherwise
+     */
     public static boolean isAmbiguous(Sudoku sudoku){
         Solver solver = new Solver(sudoku);
 
 
-        solver.solveAll(false, false,false);
+        boolean result = solver.solveAll(false, false,false);
 
-        //lastsolutions might be set to null, e.g. if we kill branch but dont find another solution
-		//if we want to call getSolutions later on we'll be interested in the first solution anyway
-		List<Solution> ls = solver.getSolutions();
+        FirstBranchPosition = solver.getSolverSudoku().hasBranch() ? solver.getSolverSudoku().getFirstBranchPosition()
+                                                                   : null; //lest old values persist
 
-		while (solver.getSolverSudoku().hasBranch()) {
-			solver.getSolverSudoku().killCurrentBranch();//NB killing a branch is like a clockwork, we can't go back the same branches, bec we eliminate the candidate we chose last time
-            //solver stores all the candidates per cell so after deleting the one chosen at backtracking, we can explore alternate paths
-            //therefore validate must be true the second time! so the candidates don't get deleted and the same candidate isn't tried again.
-            //alternate approach could be, get critical position, iterate over candidates, return true if any one leads to a solution
-			if (solver.solveAll(false, false, true))//why is it invalid if solved and another solve?
-				return true;
-		}
-		return false;
+        return result && solver.severalSolutionsExist();
     }
 
+    /**
+     * If there are several solutions, this method holds the position of the first branch point.
+     * Call only after an `isAmbiguous` call that returned `true`. Otherwise it is null.
+     * @return position of the first branchingPoint, i.e. where backtracking was first applied or `null` if last call to `isAmbiguous` was unsuccessful.
+     */
+    public static Position getFirstBranchPosition() {
+        return FirstBranchPosition;
+    }
 }

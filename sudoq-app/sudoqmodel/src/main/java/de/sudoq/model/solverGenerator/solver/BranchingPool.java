@@ -80,11 +80,11 @@ class BranchingPool {
 	}
 
 	/**
-	 * Ein Branching-Objekt beschreibt einen Zweig der temporären Lösung mit dessen zugrundeliegender Einstiegsposition,
-	 * dem Kandidaten, der für den Einstieg gewählt wurde und einer Liste von Lösungen, die in diesem Branch eingetragen
-	 * wurden und nach dessen Entfernen zurückgesetzt werden müssen. Alle Attribute sind package scope verfügbar, um
-	 * diese direkt bearbeiten zu können. Aus Performancegründen wurde auf einen Zugriff durch Getter/Setter-Methoden
-	 * verzichtet.
+	 * A branching object holds all the branching position and the candidate with wich the branch was started.
+	 * It holds the candidates for every position BEFORE the branch took place in order to write them back if the branch is reverted
+	 * as well as all solutions that wee entered into the sudoku SINCE the branch took place in order to delete them from the sudoku if the branch is reverted
+	 * Alle Attribute sind package scope verfügbar, um diese direkt bearbeiten zu können.
+	 * Aus Performancegründen wurde auf einen Zugriff durch Getter/Setter-Methoden verzichtet.
 	 */
 	class Branching {
 		/**

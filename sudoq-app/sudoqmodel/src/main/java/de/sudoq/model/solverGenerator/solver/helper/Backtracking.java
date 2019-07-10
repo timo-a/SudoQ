@@ -68,7 +68,8 @@ public class Backtracking extends SolveHelper {
 		if (leastCandidatesPosition == null) //if none was found
 			return false;
 
-
+		/*  */
+		BitSet candidates = (BitSet) this.sudoku.getCurrentCandidates(leastCandidatesPosition).clone();
 		int chosenCandidate = this.sudoku.getCurrentCandidates(leastCandidatesPosition).nextSetBit(0);
 		this.sudoku.startNewBranch(leastCandidatesPosition, chosenCandidate);
 
@@ -80,12 +81,12 @@ public class Backtracking extends SolveHelper {
 
 		if (buildDerivation) {
 			lastDerivation = new SolveDerivation(HintTypes.Backtracking);
-			BitSet irrelevantCandidates = (BitSet) this.sudoku.getCurrentCandidates(leastCandidatesPosition).clone();
+			BitSet irrelevantCandidates = candidates; //startNewBranch() deletes candidates in currendCandidates, and branchpool can't be accessed from here, so we need to use saved bitset
 			BitSet relevantCandidates = new BitSet();
 			relevantCandidates.set(chosenCandidate);
 			irrelevantCandidates.clear(chosenCandidate);
 			DerivationField derivField = new DerivationField(leastCandidatesPosition, relevantCandidates,
-					irrelevantCandidates);
+			                                                 irrelevantCandidates);
 			lastDerivation.addDerivationField(derivField);
 			lastDerivation.setDescription("Backtrack");
 		}
@@ -112,7 +113,7 @@ public class Backtracking extends SolveHelper {
 
 			@Override
 			public int compare(Position p1, Position p2) {
-				return getCardinality(p2) - getCardinality(p1); //neg if cardinality(p1) < cardinality(p2), zero if eq, pos ...
+				return getCardinality(p1) - getCardinality(p2); //neg if cardinality(p1) < cardinality(p2), zero if eq, pos ...
 			}
 		};
 
