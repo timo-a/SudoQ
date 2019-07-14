@@ -8,6 +8,9 @@ public class FastSolverFactory {
     public static FastSolver getSolver(Sudoku s){
         switch (s.getSudokuType().getEnumType()){
             case standard16x16:
+            case samurai:
+            case Xsudoku:
+            case standard9x9:
                 return new DLXSolver(s);
             default:
                 return new BranchAndBoundSolver(s);

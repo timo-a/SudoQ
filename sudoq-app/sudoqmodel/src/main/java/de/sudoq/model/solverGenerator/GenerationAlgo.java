@@ -15,6 +15,8 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.Stack;
 
+import de.sudoq.model.solverGenerator.FastSolver.FastSolver;
+import de.sudoq.model.solverGenerator.FastSolver.FastSolverFactory;
 import de.sudoq.model.solverGenerator.solution.BacktrackingDerivation;
 import de.sudoq.model.solverGenerator.solution.DerivationField;
 import de.sudoq.model.solverGenerator.solution.Solution;
@@ -173,24 +175,17 @@ public class GenerationAlgo implements Runnable {
 				plusminuscounter++;
 
                 int ambiguityCounter = 0;
-				while(AmbiguityChecker.isAmbiguous(sudoku)){
-					Solver solver = new Solver(sudoku);
-
-					/*
-					solver.solveAll(true, false, false);
-					Position p = solver.getSolverSudoku().getFirstBranchPosition();
-					*/
+                FastSolver fs = FastSolverFactory.getSolver(sudoku);
+				while(fs.isAmbiguous()){
 
 
-					Position p = AmbiguityChecker.getFirstBranchPosition();
+					Position p = fs.getAmbiguousPos();
 
 					addDefinedField2(p);
-					/*System.out.print("cmplx in ambiguity loop "+ambiguityCounter+": ");// + solver.getSolverSudoku().getComplexityValue());
-                    if (solver.getSolutions() != null) {
-                        System.out.print(solver.getSolverSudoku().getComplexityValue() + "  -  ");
-                        System.out.println(solver.getHintCountString());
-                    }*/
-                    ambiguityCounter++;
+
+					ambiguityCounter++;
+
+                    fs = FastSolverFactory.getSolver(sudoku);
 				}
 
 				/*if (plusminuscounter == 71+1) {
@@ -310,8 +305,8 @@ public class GenerationAlgo implements Runnable {
 			int fieldsToDefineDynamic = fieldsToDefine;
 
 			/* until a solution is found, remove 5 random fields and add new ones */
-			Solver solver = new Solver(sudoku);
-			while(!solver.solveAll(false, true)) {
+			FastSolver fs = FastSolverFactory.getSolver(sudoku);
+			while(!fs.hasSolution()) {
 				//System.out.println("Iteration: "+(iteration++)+", defined Fields: "+definedFields.size());
 				// Remove some fields, because sudoku could not be validated
 				removeDefinedFields(5);
@@ -324,7 +319,7 @@ public class GenerationAlgo implements Runnable {
 				if(fieldsToDefineDynamic > 0 && random.nextFloat() < 0.2)
 					fieldsToDefineDynamic--; //to avoid infinite loop slowly relax
 				System.out.println("ftdd: " + fieldsToDefineDynamic);
-				solver = new Solver(sudoku);
+				fs = FastSolverFactory.getSolver(sudoku);
 			}
 
 			/* we found a solution i.e. a combination of nxn numbers that fulfill all constraints */
@@ -339,12 +334,8 @@ public class GenerationAlgo implements Runnable {
 
 			//PositionMap<Integer> solution2 = solver.getSudoku().getField();
 
-			Complexity saveCompl = solver.getSolverSudoku().getComplexity();
-			solver.getSolverSudoku().setComplexity(Complexity.arbitrary);
-			//solver.validate(solution); //solution is filled w/ correct solution
-			solution = solver.getSolutionsMap();
-
-			solver.getSolverSudoku().setComplexity(saveCompl);
+			//solution is filled with correct solution
+			solution = fs.getSolutions();
 
 			/* We have (validated) filled `solution` with the right values */
 
