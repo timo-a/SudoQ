@@ -6,6 +6,7 @@ import java.util.Random;
 
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.solverGenerator.GenerationAlgo;
+import de.sudoq.model.solverGenerator.solver.Solver;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
@@ -14,40 +15,63 @@ import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.solverGenerator.Generator;
 import de.sudoq.model.solverGenerator.GeneratorCallback;
 import de.sudoq.model.solverGenerator.solution.Solution;
+import de.sudoq.model.xml.SudokuXmlHandler;
 
 
 public class GenerateSomeSudokus {
 
     private static Sudoku sudoku;
     private static List<Solution> solutions;
+    private static Random random;
 
     String SUDOKU_LOCATION  = "/home/t/Code/SudoQ/DebugOnPC/sudokufiles";
+    String SUDOKU_LOCATION2 = "/home/t/Code/SudoQ/DebugOnPC/sudokufiles2";
     String PROFILE_LOCATION = "/home/t/Code/SudoQ/DebugOnPC/profilefiles";
 
-    public void setup() {
-        FileManager.initialize(new File(PROFILE_LOCATION), new File(SUDOKU_LOCATION));
+    public void setup(String profiles, String sudokus, long seed) {
+        FileManager.initialize(new File(profiles), new File(sudokus));
         //Profile.getInstance();
-        //SudokuType.getSudokuType(SudokuTypes.standard9x9);
+        random = new Random(seed);
+        //random = new Random(111398881573105l);
+
     }
 
-    public void generate1() {
-        setup();
+    public void setSeed(long s){
+        random = new Random(s);
+    }
 
-        GeneratorCallback gc = getCallbackObj();
+    public void setup() {
+        setup(PROFILE_LOCATION, SUDOKU_LOCATION2,0);
+    }
 
-        System.out.println("567"+gc);
+    public void changeSudokuFile(File f){FileManager.initialize(FileManager.getProfilesDir(), f);}
 
-        Generator g = new Generator();
-        g.generate(SudokuTypes.standard9x9, Complexity.infernal, gc);
-        Thread t = g.getLastThread();
-        try {
-            t.join(); //waits for thread to end before we continue. Otherwise we might get NullPointerExceptions because objects not created yet.
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+    public void generate10infernal(){
+        generate(Complexity.infernal, SudokuTypes.standard9x9, 10);
+    }
+    public void generate10easy(){
+        generate(Complexity.easy, SudokuTypes.standard9x9, 10);
+    }
+
+    public void generate(Complexity c, SudokuTypes st, int numberOfGenerated){
+        Solver ss;
+        for (int i = 0; i < numberOfGenerated; i++) {
+            generate(c, st);
+            ss = new Solver(sudoku);
+            ss.solveAll(true, false, false);
+            //System.out.println(ss.getHintCountString());
+
         }
-
     }
+
+    public void generate(Complexity c, SudokuTypes st){
+        Sudoku sudoku = new SudokuBuilder(st).createSudoku();
+		sudoku.setComplexity(c);
+
+		GenerationAlgo ga = new GenerationAlgo(sudoku, getCallbackObj(), random);
+		ga.run();
+    }
+
 
     private GeneratorCallback getCallbackObj(){
         return new GeneratorCallback() {
@@ -65,7 +89,8 @@ public class GenerateSomeSudokus {
                     System.out.println("sudoku received is null");
                 GenerateSomeSudokus.sudoku    = sudoku;
                 GenerateSomeSudokus.solutions = slist;
-                System.out.println("Callbackobj receives null for solutions: " + (slist == null));
+                if (slist == null)
+                    System.out.println("Callbackobj receives null for solutions: ");
             }
 
             @Override
@@ -76,19 +101,7 @@ public class GenerateSomeSudokus {
         };
     }
 
-    public void generate2(){
-        setup();
 
-        Complexity c  = Complexity.infernal;
-        SudokuTypes st = SudokuTypes.standard9x9;
-        Sudoku sudoku = new SudokuBuilder(st).createSudoku();
-		sudoku.setComplexity(c);
-
-		Random random = new Random(0);
-
-		GenerationAlgo ga = new GenerationAlgo(sudoku, getCallbackObj(), random);
-		ga.run();
-    }
 
     public Sudoku getSudoku() {
         return GenerateSomeSudokus.sudoku;
@@ -98,5 +111,24 @@ public class GenerateSomeSudokus {
     }
     public void printDebugMsg() {
         (new Generator()).printDebugMsg();
+    }
+
+    public  Random getRandom() {
+        return random;
+    }
+
+    public  void saveSudoku(String path){
+        File sudokuLocation = FileManager.getSudokuDir();
+        changeSudokuFile(new File(path));
+        new SudokuXmlHandler().saveAsXml(sudoku);
+        changeSudokuFile(sudokuLocation);
+    }
+
+    /* need to save a sudoku for debugging? just copy paste this ,method */
+    //careful: we need to ensure there is a folder structure path/type/complexity/
+    public  void saveSudokuAllInOne(String path, Sudoku sudoku){
+        File sudokuLocation = FileManager.getSudokuDir();
+        FileManager.initialize(FileManager.getProfilesDir(), new File(path));
+        new SudokuXmlHandler().saveAsXml(sudoku);
     }
 }

@@ -1,6 +1,9 @@
 package de.sudoq.model.solverGenerator.FastSolver;
 
 import org.junit.Test;
+
+import de.sudoq.model.solverGenerator.FastSolver.DLX1.DLXSudokuSamurai;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

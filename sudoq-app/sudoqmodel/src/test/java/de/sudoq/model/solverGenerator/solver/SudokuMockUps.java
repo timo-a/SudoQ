@@ -31,6 +31,29 @@ public class SudokuMockUps {
         return transformX(16, s, pattern);
     }
 
+    /* expects values in [1,9] */
+    public static Sudoku stringToSamuraiSudoku(String pattern){
+        Sudoku s = new SudokuBuilder(SudokuTypes.samurai).createSudoku();
+        s.setComplexity(Complexity.arbitrary);
+        int dim = 21;
+        for(int y=0; y<dim; y++)
+            for(int x=0; x<dim; x++){
+                char c = pattern.charAt(2*(dim*y+x));
+                Field f =  s.getField(Position.get(x, y));
+                if (f==null)
+                    ;//pass
+                else if (c == '.'){
+                    //empty
+                }else if ('0' < c && c <= '9'){
+                    f.setCurrentValue(c-'0' -1);
+                }else
+                    throw new IllegalArgumentException("parse error");
+            }
+
+
+        return s;
+    }
+
 
     public static Sudoku getLockedCandidates1(){
         //http://hodoku.sourceforge.net/en/tech_intersections.php
@@ -118,6 +141,9 @@ public class SudokuMockUps {
         return sudoku;
     }
 
+
+
+
     private static Sudoku transformX(int dim, Sudoku sudoku, String pattern){
         String[] candidates = pattern.split("\\s+");
         for(int y=0; y<dim; y++)
@@ -151,6 +177,20 @@ public class SudokuMockUps {
                 f.toggleNote(i);
     }
 
+
+    public static String increase9By1(String pattern){
+        return pattern.replace("8","9")
+                      .replace("7","8")
+                      .replace("6","7")
+                      .replace("5","6")
+                      .replace("4","5")
+                      .replace("3","4")
+                      .replace("2","3")
+                      .replace("1","2")
+                      .replace("0","1");
+    }
+
+
     /* untested */
     private static Sudoku transform1Constraint(String pattern){
         pattern = "2 4 5 ²⁴³ ⁶";
@@ -182,6 +222,7 @@ public class SudokuMockUps {
         return sudoku;
     }
 }
+
 
 /*
 0, 0 -> -1

@@ -331,10 +331,10 @@
 <PermutationProperty permutationNr="9"></PermutationProperty>
 </SetOfPermutationProperties>
 <ComplexityConstraintBuilder>
-<complexityConstraint complexity="3" averageFields="27" minComplexity="2500" maxComplexity="25000" numberOfAllowedHelpers="2147483647"></complexityConstraint>
-<complexityConstraint complexity="2" averageFields="28" minComplexity="1000" maxComplexity="2500" numberOfAllowedHelpers="2147483647"></complexityConstraint>
-<complexityConstraint complexity="1" averageFields="32" minComplexity="700" maxComplexity="1050" numberOfAllowedHelpers="3"></complexityConstraint>
-<complexityConstraint complexity="0" averageFields="40" minComplexity="450" maxComplexity="750" numberOfAllowedHelpers="2"></complexityConstraint>
+<complexityConstraint complexity="0" averageFields="40" minComplexity="450" maxComplexity="1100" numberOfAllowedHelpers="2"></complexityConstraint>
+<complexityConstraint complexity="1" averageFields="32" minComplexity="1100" maxComplexity="2000" numberOfAllowedHelpers="3"></complexityConstraint>
+<complexityConstraint complexity="2" averageFields="28" minComplexity="2000" maxComplexity="5400" numberOfAllowedHelpers="2147483647"></complexityConstraint>
+<complexityConstraint complexity="3" averageFields="27" minComplexity="5400" maxComplexity="25000" numberOfAllowedHelpers="2147483647"></complexityConstraint>
 <complexityConstraint complexity="4" averageFields="32" minComplexity="1" maxComplexity="2147483647" numberOfAllowedHelpers="2147483647"></complexityConstraint>
 </ComplexityConstraintBuilder>
 </sudokutype>

@@ -8,11 +8,11 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.xml.XmlHelper;
 
-public class File {
+public class Files {
 
 
 
-    private static Sudoku getSudoku(java.io.File dir, SudokuTypes st, Complexity c, int i){
+    public static Sudoku getSudoku(java.io.File dir, SudokuTypes st, Complexity c, int i){
         java.io.File f = new java.io.File(dir, st.toString()
                 + java.io.File.separator
                 + c.toString()

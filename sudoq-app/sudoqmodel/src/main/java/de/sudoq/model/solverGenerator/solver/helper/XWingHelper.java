@@ -79,12 +79,22 @@ public class XWingHelper extends SolveHelper {
                 for(int c2=c1+1; c2< cols.size(); c2++){
                     Constraint col2 = cols.get(c2);
 
+                    //avoid overlapping columns as can happen with samurai sudokus
+                    if (intersectionPoint(col1, col2) != null)
+                        continue;
+
                     Position topRight = intersectionPoint(row1, col2);
                     if(topRight==null || !sudoku.getField(topRight).isNotSolved())
                         continue;
 
                     for(int r2=r1+1; r2< rows.size(); r2++) {
                         Constraint row2 = rows.get(r2);
+
+                        //avoid overlapping columns as can happen with samurai sudokus
+                        if (intersectionPoint(row1, row2) != null)
+                            continue;
+
+
                         Position bottomRight = intersectionPoint(col2, row2);
                         Position bottomLeft  = intersectionPoint(row2, col1);
 

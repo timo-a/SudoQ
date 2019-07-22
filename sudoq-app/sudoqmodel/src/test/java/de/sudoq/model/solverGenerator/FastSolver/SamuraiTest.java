@@ -19,6 +19,7 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.xml.XmlHelper;
 
+import static org.junit.Assert.assertEquals;
 
 
 public class SamuraiTest {
@@ -30,39 +31,34 @@ public class SamuraiTest {
 
     @Test
 	public void testSolveSamurai() {
-        Sudoku s = getSudoku(FileManager.getSudokuDir(), SudokuTypes.samurai, Complexity.easy, 1);
-        System.out.println(s);
+        for (SudokuTypes st : SudokuTypes.values())
+            for (Complexity c : Complexity.playableValues())
+                for (int i = 1; i <= 10; i++) {
+                    Sudoku s = getSudoku(FileManager.getSudokuDir(), SudokuTypes.samurai, Complexity.easy, 1);
+                    testOneSudoku(s);
+                }
+    }
+
+
+    private void testOneSudoku(Sudoku s){
         FastSolver fs = FastSolverFactory.getSolver(s);
+
         if (fs.hasSolution()) {
             System.out.println("Fast finds solution");
+            /*//print
             PositionMap<Integer> solution = fs.getSolutions();
             SudokuBuilder sub = new SudokuBuilder(s.getSudokuType());
-			for(Position p : GenerationAlgo.getPositions(s)) {
-			    Integer v = solution.get(p);
-                if(v==null) {
-                    System.out.println(p+"macht null");
-                }else if (v < 0){
-                    System.out.println(p+"macht negativ");
-                }
-                else if (v >= 9){}
-                //System.out.println("hier");
-                else{
-                    sub.addSolution(p, solution.get(p));//fill in all solutions
-                }
-			}
-			Sudoku sudoku = sub.createSudoku();
+            Sudoku sudoku = sub.createSudoku();
             for (Position p: GenerationAlgo.getPositions(sudoku)) {
                 Field f = sudoku.getField(p);
-                f.setCurrentValue(f.getSolution());
+                f.setCurrentValue(solution.get(p));
             }
-			System.out.println(sudoku );
+            System.out.println(sudoku );*/
         }
-        System.out.println(fs.hasSolution());
 
-        fs = new BranchAndBoundSolver(s);
-        System.out.println(fs.hasSolution());
+        FastSolver bbs = new BranchAndBoundSolver(s);
 
-
+        assertEquals("dlx solver comes to same result as our solver", fs.hasSolution(), bbs.hasSolution());
     }
 
 

@@ -3,8 +3,10 @@ package de.sudoq.model.solverGenerator;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -86,7 +88,7 @@ public class GeneratorTests implements GeneratorCallback {
 
 
 	// Empirischer Test durch mehrfaches Generieren
-	@Test
+	@Test(timeout = 40*60*1000)
 	public void testGeneration() {
 		/* validate returns INVADILD. why?? - is this solved now? tests run through */
 		Random rnd = new Random(0);
@@ -134,7 +136,14 @@ public class GeneratorTests implements GeneratorCallback {
 			}
 		}
 		System.out.println("sqA done");
+	}
+
+	@Test(timeout = 10 * 60 * 1000)
+	public void testGenerationSamurai(){
 		//TODO fix this
+
+		//159145199318451
+		Random rnd = new Random(159145199318451l);
 		generator.setRandom(rnd);
 		Transformer.setRandom(rnd);
 		generator.generate(SudokuTypes.samurai, Complexity.difficult, this);
@@ -145,8 +154,26 @@ public class GeneratorTests implements GeneratorCallback {
 				e.printStackTrace();
 			}
 		}
-		
+
 		System.out.println("samurai done");
-		
+
+	}
+
+
+
+	private static long getSeed(Random r){
+
+		try
+		{
+			Field field = Random.class.getDeclaredField("seed");
+			field.setAccessible(true);
+			AtomicLong scrambledSeed = (AtomicLong) field.get(r);   //this needs to be XOR'd with 0x5DEECE66DL
+			return scrambledSeed.get() ^ 0x5DEECE66DL;
+		}
+		catch (Exception e)
+		{
+			throw new IllegalArgumentException("smth went wrong");
+			//handle exception
+		}
 	}
 }

@@ -156,14 +156,12 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 		if (sudoku == null)
 			return false;
 
-		boolean allSaturated = true;
-
 		for (Constraint c : this.constraints) {
 			if (!c.isSaturated(sudoku))
-				allSaturated = false;
+				return false;
 		}
 
-		return allSaturated;
+		return true;
 	}
 
 	/**
@@ -317,7 +315,6 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 		File f = FileManager.getSudokuDir();
 		for (File id : f.listFiles()) {
 			if (id.isDirectory()) {
-				System.out.println(id.getName());
 				ids.add(Integer.parseInt(id.getName()));
 			}
 		}

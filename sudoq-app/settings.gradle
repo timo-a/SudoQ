@@ -1,2 +1,2 @@
-include ':sudoqmodel', ':ExperimentsOnPC', ':Playaround'
+include ':sudoqmodel', ':ExperimentsOnPC', ':Playaround', ':external'
 include ':sudoqapp'

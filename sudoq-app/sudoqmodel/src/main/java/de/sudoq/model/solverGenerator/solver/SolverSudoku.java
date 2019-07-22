@@ -368,7 +368,7 @@ public class SolverSudoku extends Sudoku {
 	 * @param candidate
 	 *            Die temporäre Lösung, die eingetragen werden soll
 	 */
-	void setSolution(Position pos, int candidate) {
+    public void setSolution(Position pos, int candidate) {
 		if (pos == null || candidate < 0)
 			return;
 
@@ -388,6 +388,15 @@ public class SolverSudoku extends Sudoku {
 	public boolean hasBranch() {
 		return !branchings.isEmpty();
 	}
+
+	/**
+	 * Returns the number of branches the sudoku is currently in i.e. the number of guesses that are currently used.
+	 * If no branching has taken place, i.e. all logically derived, no guessing -> 0
+	 * 1 guess -> 1 is returned
+	 * if we guessed `4` at position `p`, then guessed `2` at position p' ran into a dead end,
+	 *       guessed `5` at position `p` -> 1 is returned
+	 */
+	public int getBranchLevel(){ return branchings.size();}
 
 	/**
 	 * Gibt die Kandidatenliste der spezifizierten Position zurück.
@@ -411,7 +420,7 @@ public class SolverSudoku extends Sudoku {
 	 * @param applyToBranch
 	 *            Gibt an, ob der Wert auf den aktuellen Branch oder das gesamte Sudoku angewendet werden soll
 	 */
-	void addComplexityValue(int value, boolean applyToBranch) {
+	public void addComplexityValue(int value, boolean applyToBranch) {
 		if (value > 0) {
 			if (branchings.size() > 0)
 				branchings.peek().complexityValue += value;

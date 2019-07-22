@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE sudoku SYSTEM "./sudoku.dtd">
 <sudoku transformCount="0" type="1" complexity="0" id="4">
-<fieldmap id="1" editable="false" solution="2">
+<fieldmap id="1" editable="false" solution="1">
 <position x="0" y="0"></position>
 </fieldmap>
-<fieldmap id="2" editable="false" solution="3">
-<position x="1" y="0"></position>
+<fieldmap id="6" editable="false" solution="2">
+<position x="1" y="1"></position>
 </fieldmap>
-<fieldmap id="7" editable="false" solution="2">
-<position x="2" y="1"></position>
-</fieldmap>
-<fieldmap id="12" editable="false" solution="0">
-<position x="3" y="2"></position>
-</fieldmap>
-<fieldmap id="3" editable="false" solution="0">
-<position x="2" y="0"></position>
-</fieldmap>
-<fieldmap id="4" editable="true" solution="1">
-<position x="3" y="0"></position>
-</fieldmap>
-<fieldmap id="8" editable="false" solution="3">
-<position x="3" y="1"></position>
-</fieldmap>
-<fieldmap id="13" editable="false" solution="0">
-<position x="0" y="3"></position>
-</fieldmap>
-<fieldmap id="14" editable="true" solution="1">
+<fieldmap id="14" editable="false" solution="0">
 <position x="1" y="3"></position>
 </fieldmap>
 <fieldmap id="9" editable="false" solution="3">
 <position x="0" y="2"></position>
 </fieldmap>
-<fieldmap id="15" editable="true" solution="3">
-<position x="2" y="3"></position>
+<fieldmap id="11" editable="true" solution="0">
+<position x="2" y="2"></position>
 </fieldmap>
-<fieldmap id="5" editable="true" solution="1">
-<position x="0" y="1"></position>
-</fieldmap>
-<fieldmap id="10" editable="false" solution="2">
-<position x="1" y="2"></position>
-</fieldmap>
-<fieldmap id="16" editable="true" solution="2">
+<fieldmap id="16" editable="false" solution="1">
 <position x="3" y="3"></position>
 </fieldmap>
-<fieldmap id="6" editable="false" solution="0">
-<position x="1" y="1"></position>
+<fieldmap id="12" editable="true" solution="2">
+<position x="3" y="2"></position>
 </fieldmap>
-<fieldmap id="11" editable="true" solution="1">
-<position x="2" y="2"></position>
+<fieldmap id="7" editable="true" solution="1">
+<position x="2" y="1"></position>
+</fieldmap>
+<fieldmap id="2" editable="false" solution="3">
+<position x="1" y="0"></position>
+</fieldmap>
+<fieldmap id="4" editable="true" solution="0">
+<position x="3" y="0"></position>
+</fieldmap>
+<fieldmap id="5" editable="false" solution="0">
+<position x="0" y="1"></position>
+</fieldmap>
+<fieldmap id="13" editable="true" solution="2">
+<position x="0" y="3"></position>
+</fieldmap>
+<fieldmap id="10" editable="false" solution="1">
+<position x="1" y="2"></position>
+</fieldmap>
+<fieldmap id="15" editable="false" solution="3">
+<position x="2" y="3"></position>
+</fieldmap>
+<fieldmap id="8" editable="true" solution="3">
+<position x="3" y="1"></position>
+</fieldmap>
+<fieldmap id="3" editable="false" solution="2">
+<position x="2" y="0"></position>
 </fieldmap>
 </sudoku>

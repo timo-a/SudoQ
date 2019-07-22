@@ -53,7 +53,6 @@ public class SudokuTest {
         }
 
 
-        System.out.println("mark");
         //fs = new BranchAndBoundSolver(s);
         //System.out.println(fs.hasSolution());
     }

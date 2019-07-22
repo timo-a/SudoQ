@@ -7,6 +7,8 @@
  */
 package de.sudoq.model.solverGenerator;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -15,6 +17,8 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.Stack;
 
+import de.sudoq.model.files.FileManager;
+import de.sudoq.model.solverGenerator.FastSolver.BranchAndBound.FastBranchAndBound;
 import de.sudoq.model.solverGenerator.FastSolver.FastSolver;
 import de.sudoq.model.solverGenerator.FastSolver.FastSolverFactory;
 import de.sudoq.model.solverGenerator.solution.BacktrackingDerivation;
@@ -36,6 +40,13 @@ import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
+import de.sudoq.model.xml.SudokuXmlHandler;
+import de.sudoq.model.xml.XmlAttribute;
+import de.sudoq.model.xml.XmlHelper;
+import de.sudoq.model.xml.XmlTree;
+
+import static de.sudoq.model.solverGenerator.solver.ComplexityRelation.INVALID;
+import static de.sudoq.model.solverGenerator.solver.ComplexityRelation.CONSTRAINT_SATURATION;
 
 /**
  * Abstrakte Klasse kapselt gemeinsamkeiten von {@link SudokuGenerationStandardType} und {@link SudokuGeneration}
@@ -140,127 +151,8 @@ public class GenerationAlgo implements Runnable {
 		public void run() {
 			/* 1. Finde Totalbelegung */
 			solvedSudoku = createSudokuPattern();
-			System.out.println("pattern found");
-			while (!this.freeFields.isEmpty()) {
-				this.definedFields.add(this.freeFields.remove(0));
-			}//now all defined
 
-			// Fill the sudoku being generated with template solutions
-			//TODO simplify: iterate over fields/positions
-
-			for (Position pos : getPositions(sudoku)) {
-				Field fSudoku =       sudoku.getField(pos);
-				Field fSolved = solvedSudoku.getField(pos);
-				fSudoku.setCurrentValue(fSolved.getSolution(), false);
-			}
-
-			int reallocationAmount = 2; //getReallocationAmount(sudoku.getSudokuType(), 0.05);
-
-			ComplexityRelation rel = ComplexityRelation.INVALID;
-			int plusminuscounter =0;
-			while (rel != ComplexityRelation.CONSTRAINT_SATURATION) {
-				if (plusminuscounter % 1000 == 0){
-					//every 1000 steps choose another random subset
-					removeDefinedFields(definedFields.size());
-					for (int i = 0; i < fieldsToDefine; i++) {
-						addDefinedField2();
-					}
-
-				}
-
-				//if (plusminuscounter == 71)
-				//	System.out.println("break");
-					//System.exit(42);
-				//System.out.print("pmc " + plusminuscounter + "  ");
-				plusminuscounter++;
-
-                int ambiguityCounter = 0;
-                FastSolver fs = FastSolverFactory.getSolver(sudoku);
-				while(fs.isAmbiguous()){
-
-
-					Position p = fs.getAmbiguousPos();
-
-					addDefinedField2(p);
-
-					ambiguityCounter++;
-
-                    fs = FastSolverFactory.getSolver(sudoku);
-				}
-
-				/*if (plusminuscounter == 71+1) {
-					Solver debugsolver1 = new Solver(sudoku);
-					debugsolver1.solveAll(true, false, false);
-					System.out.println("deb:GenerationAlgo before " + debugsolver1.getHintScore());
-					System.out.println("deb:GenerationAlgo before " + debugsolver1.getSolverSudoku().getComplexityValue());
-					Solver debugsolver_ttf = new Solver(sudoku);
-					debugsolver_ttf.solveAll(true, true, false);
-					System.out.println("deb:GenerationAlgo before " + debugsolver_ttf.getHintScore());
-					System.out.println("deb:GenerationAlgo before " + debugsolver_ttf.getSolverSudoku().getComplexityValue());
-				}*/
-				solver = new Solver(sudoku);
-
-				rel = solver.validate(null);
-
-				/*if (plusminuscounter == 71+1) {
-					//System.out.println(solver.getHintScore());
-					System.out.println(solver.getSolverSudoku().getComplexityValue());
-					//System.out.println(solver.getSolutions());
-					Solver debugsolver2 = new Solver(sudoku);
-					debugsolver2.solveAll(true, false, false);
-					System.out.println("deb:GenerationAlgo after " + debugsolver2.getHintScore());
-					System.out.println("deb:GenerationAlgo after " + debugsolver2.getSolverSudoku().getComplexityValue());
-				}*/
-
-
-				//System.out.println("cmplx after validate:    " + solver.getSolverSudoku().getComplexityValue());
-				/*if (solver.getSolutions() != null) {
-					System.out.print(solver.getSolverSudoku().getComplexityValue() + "  -  ");
-					System.out.println(solver.getHintCountString());
-				}*/
-
-				/*
-				for (Solution s: solver.getSolutions())
-					for (SolveDerivation sd :s.getDerivations())
-						if(sd.toString() == null)
-							System.out.println("Keine Description für " + sd.getType());
-
-				Stack<String> solutionslist = new Stack<>();
-				int printcounter = 0;
-				for (Solution s: solver.getSolutions()) {
-					//if (printcounter ==  33)
-					//	System.out.println("marker");
-					//System.out.println(printcounter++);
-					solutionslist.push(reduceStringList(gettypes(s.getDerivations())));
-				}
-
-				System.out.println(reduceStringList(solutionslist));
-                */
-
-                //System.out.println("Generator.run +/- loop. validate says " + rel);
-				switch(rel){
-					case MUCH_TOO_EASY: removeDefinedFields(reallocationAmount);
-								   break;
-					case TOO_EASY: removeDefinedFields(1);
-								   break;
-					case INVALID:  //freeFields ARE empty ?! hence infinite loop
-					case TOO_DIFFICULT:
-					case MUCH_TOO_DIFFICULT:
-						for (int i = 0; i < Math.min(reallocationAmount, freeFields.size()); i++) {
-							addDefinedField2();
-						}
-						break;
-					/*case CONSTRAINT_SATURATION://TODO take out again!!!
-						removeDefinedFields(reallocationAmount);
-						for (int i = 0; i < reallocationAmount; i++) {
-							addDefinedField2();
-
-						}
-						rel = ComplexityRelation.INVALID;*/
-
-				}
-				//System.out.println(" #definedFields: " + definedFields.size());
-			}
+			createAllocation(solvedSudoku);
 
 			// Call the callback
 			SudokuBuilder suBi = new SudokuBuilder(sudoku.getSudokuType());
@@ -318,7 +210,6 @@ public class GenerationAlgo implements Runnable {
 
 				if(fieldsToDefineDynamic > 0 && random.nextFloat() < 0.2)
 					fieldsToDefineDynamic--; //to avoid infinite loop slowly relax
-				System.out.println("ftdd: " + fieldsToDefineDynamic);
 				fs = FastSolverFactory.getSolver(sudoku);
 			}
 
@@ -347,6 +238,102 @@ public class GenerationAlgo implements Runnable {
 			return sub.createSudoku();
 		}
 
+		private void createAllocation(Sudoku pattern){
+
+			//ensure all fields are defined
+			while (!this.freeFields.isEmpty()) {
+				this.definedFields.add(this.freeFields.remove(0));
+			}
+
+
+			// Fill the sudoku being generated with template solutions
+			//TODO simplify: iterate over fields/positions
+
+			for (Position pos : getPositions(sudoku)) {
+				Field fSudoku =  sudoku.getField(pos);
+				Field fSolved = pattern.getField(pos);
+				fSudoku.setCurrentValue(fSolved.getSolution(), false);
+			}
+
+
+			int reallocationAmount = 2; //getReallocationAmount(sudoku.getSudokuType(), 0.05);
+
+			int plusminuscounter=0;
+			for(ComplexityRelation rel = INVALID;
+				rel != CONSTRAINT_SATURATION;
+				plusminuscounter++) {
+
+                //every 1000 steps choose another random subset
+                if (plusminuscounter % 1000 == 0 && plusminuscounter>0){
+					//while (!this.freeFields.isEmpty()) {
+					//	this.definedFields.add(this.freeFields.remove(0));
+					//}
+
+					removeDefinedFields(definedFields.size());
+					for (int i = 0; i < fieldsToDefine; i++) {
+						addDefinedField2();
+					}
+				}
+
+                sudoku = removeAmbiguity(sudoku);
+
+				//System.out.println(sudoku);
+
+				/*solver = new Solver(sudoku);
+				System.out.println("validate:");
+
+				rel = solver.validate(null);
+				System.out.println("validate says: " + rel);*/
+
+				//fast validation where after 10 branchpoints we return too diificult
+
+				FastBranchAndBound solver = new FastBranchAndBound(sudoku);
+				rel = solver.validate();
+
+				//System.out.println("Generator.run +/- loop. validate says " + rel);
+				switch(rel){
+					case MUCH_TOO_EASY: removeDefinedFields(reallocationAmount);
+						break;
+					case TOO_EASY: removeDefinedFields(1);
+						break;
+					case INVALID:  //freeFields ARE empty ?! hence infinite loop
+					case TOO_DIFFICULT:
+					case MUCH_TOO_DIFFICULT:
+						for (int i = 0; i < Math.min(reallocationAmount, freeFields.size()); i++) {
+							addDefinedField2();
+						}
+						break;
+
+				}
+				//System.out.println(" #definedFields: " + definedFields.size());
+			}
+
+		}
+
+
+	/*
+	 * While there are 2 solutions, add solution that is different in second sudoku
+	 * Careful! If looking for the 2nd solution takes longer than x min, sudoku is declared unambiguous
+	 */
+	private Sudoku removeAmbiguity(Sudoku sudoku){
+			FastSolver fs = FastSolverFactory.getSolver(sudoku);
+			//samurai take a long time -> try without uniqueness constraint
+			//if (sudoku.getSudokuType().getEnumType() != SudokuTypes.samurai)
+			while(fs.isAmbiguous()){
+
+				Position p = fs.getAmbiguousPos();
+
+				addDefinedField2(p);
+
+				fs = FastSolverFactory.getSolver(sudoku);
+			}
+			return sudoku;
+
+		}
+
+
+
+
 		private String reduceStringList(List<String> sl){
 			if (sl.size() == 0)
 				return "[]";
@@ -359,8 +346,6 @@ public class GenerationAlgo implements Runnable {
 			Iterator<String> i = sl.iterator();
 			int counter = 1;
 			String last = i.next();
-			if (last == null)
-				System.out.println("gleich krachts");
 			while(i.hasNext()){
 				String current = i.next();
 				if (last.equals(current))
@@ -568,8 +553,42 @@ public class GenerationAlgo implements Runnable {
 
 		return p;
 	}
+
+	/* debugging, remove when done */
 	public void printDebugMsg(){
 		System.out.println("This is the debug message from `Generator`");
 	}
+    public  void saveSudokuAllInOne(final String path, final String filename, Sudoku sudoku){
+        File sudokuLocation = FileManager.getSudokuDir();
+        FileManager.initialize(FileManager.getProfilesDir(), new File(path));
+		(new SudokuXmlHandler(){
+			@Override
+			protected File getFileFor(Sudoku s){
+				return new File(path+File.separator+filename);}
+			@Override
+			protected void modifySaveTree(XmlTree tree) {
+				tree.addAttribute(new XmlAttribute("id", "42"));
+			}
+
+		}).saveAsXml(sudoku);
+    }
+
+    public static Sudoku getSudoku(String path, SudokuTypes st){
+        FileManager.initialize(
+                 new File("/home/t/Code/SudoQ/DebugOnPC/profilefiles"),
+                 new File("/home/t/Code/SudoQ/sudoq-app/sudoqapp/src/main/assets/sudokus/"));
+        java.io.File f = new java.io.File(path);
+
+        Sudoku s = new Sudoku(SudokuType.getSudokuType(st));
+        try {
+            s.fillFromXml(new XmlHelper().loadXml(f));
+            s.setComplexity(Complexity.arbitrary);//justincase
+            return s;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 }

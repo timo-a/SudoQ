@@ -81,7 +81,7 @@ public class SplashActivity extends SudoqCompatActivity {
 
 	private final static String VERSION_TAG = "version";
 	private final static String NO_VERSION_YET = "0.0.0";
-	protected final static String NEWEST_ASSET_VERSION = "1.0.6";
+	protected final static String NEWEST_ASSET_VERSION = "1.1.0a";
 
 	private static String currentVersionName = "";
 

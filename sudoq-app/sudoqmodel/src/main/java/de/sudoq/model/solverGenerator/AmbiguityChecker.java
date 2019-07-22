@@ -21,10 +21,11 @@ public class AmbiguityChecker {
         boolean result = solver.solveAll(false, false,false);
 
         FirstBranchPosition = solver.getSolverSudoku().hasBranch() ? solver.getSolverSudoku().getFirstBranchPosition()
-                                                                   : null; //lest old values persist
+                : null; //lest old values persist
 
         return result && solver.severalSolutionsExist();
     }
+
 
     /**
      * If there are several solutions, this method holds the position of the first branch point.

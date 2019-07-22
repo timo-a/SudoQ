@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE sudokutype SYSTEM "./sudokutype.dtd">
-<sudokutype typename="4" numberOfSymbols="9" standardAllocationFactor="0.05">
+<sudokutype typename="4" numberOfSymbols="9" standardAllocationFactor="0.35">
 <size x="21" y="21"></size>
 <blockSize x="3" y="3"></blockSize>
 <constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 0" type="0">
@@ -1453,10 +1453,10 @@
 <PermutationProperty permutationNr="7"></PermutationProperty>
 </SetOfPermutationProperties>
 <ComplexityConstraintBuilder>
-<complexityConstraint complexity="3" averageFields="30" minComplexity="4000" maxComplexity="25000" numberOfAllowedHelpers="2147483647"></complexityConstraint>
-<complexityConstraint complexity="2" averageFields="40" minComplexity="2300" maxComplexity="4000" numberOfAllowedHelpers="2147483647"></complexityConstraint>
-<complexityConstraint complexity="1" averageFields="55" minComplexity="1500" maxComplexity="2300" numberOfAllowedHelpers="3"></complexityConstraint>
-<complexityConstraint complexity="0" averageFields="70" minComplexity="1000" maxComplexity="1500" numberOfAllowedHelpers="2"></complexityConstraint>
-<complexityConstraint complexity="4" averageFields="32" minComplexity="1" maxComplexity="2147483647" numberOfAllowedHelpers="2147483647"></complexityConstraint>
+<complexityConstraint complexity="0" averageFields="70" minComplexity="500"  maxComplexity="1200"  numberOfAllowedHelpers="5"></complexityConstraint>
+<complexityConstraint complexity="1" averageFields="65" minComplexity="1200"  maxComplexity="6000" numberOfAllowedHelpers="3"></complexityConstraint>
+<complexityConstraint complexity="2" averageFields="50" minComplexity="6000" maxComplexity="11000" numberOfAllowedHelpers="2147483647"></complexityConstraint>
+<complexityConstraint complexity="3" averageFields="40" minComplexity="11000" maxComplexity="250000" numberOfAllowedHelpers="2147483647"></complexityConstraint>
+<complexityConstraint complexity="4" averageFields="35" minComplexity="1" maxComplexity="2147483647" numberOfAllowedHelpers="2147483647"></complexityConstraint>
 </ComplexityConstraintBuilder>
 </sudokutype>

@@ -47,12 +47,12 @@ public class Solver {
 	/**
 	 * Eine Liste von SolveHelpern, welche zum Lösen des Sudokus genutzt werden
 	 */
-	private List<SolveHelper> helper;
+	protected List<SolveHelper> helper;
 
 	/**
 	 * Die Anzahl der verfügbaren Helfer;
 	 */
-	private int numberOfHelpers;
+	protected int numberOfHelpers;
 
 	/**
 	 * Eine Liste der Lösungen des letzten solveAll-Aufrufes
@@ -96,7 +96,7 @@ public class Solver {
 		numberOfHelpers = helper.size();
 	}
 
-	private List<SolveHelper> makeHelperList(){
+	protected List<SolveHelper> makeHelperList(){
 		// Initialize the helpers
 		List<SolveHelper> helpers = new ArrayList<SolveHelper>();
 
@@ -389,8 +389,8 @@ public class Solver {
 
 
 		//this overwrites the existing sudoku
-		if (solved && severalSolutionsExist()) //TODO maybe try to fix by adding fields and only then return invalid?
-			ambiguous = true;
+		//if (solved && severalSolutionsExist()) //TODO maybe try to fix by adding fields and only then return invalid?
+		//	ambiguous = true;
 		//this.sudoku.complexityValue is overwritten by the attempt at finding a second solution
 
 		// restore initial state
@@ -402,9 +402,9 @@ public class Solver {
 		int minComplextiy = complConstr.getMinComplexityIdentifier();
 		int maxComplextiy = complConstr.getMaxComplexityIdentifier();
 
-		if (ambiguous)
-			result = ComplexityRelation.AMBIGUOUS;
-		else if (solved) {
+		//if (ambiguous)
+		//	result = ComplexityRelation.AMBIGUOUS;
+		/*else*/ if (solved) {
 
 			if      (maxComplextiy * 1.2 < complexity                                      ) result = ComplexityRelation.MUCH_TOO_DIFFICULT;
 			else if (maxComplextiy       < complexity && complexity <= maxComplextiy * 1.2 ) result = ComplexityRelation.TOO_DIFFICULT;
@@ -507,10 +507,6 @@ public class Solver {
 				&& !isUnsolvable) { //if we found out there is no solution, no need to try further
 			didUpdate = false;
 
-			////////////////////////
-			//if (solver_counter == 14 || solver_counter == 17 || solver_counter == 25) {
-			//	System.out.println("Breakpoint " + solver_counter);
-			//}
 
 
 			// try to solve the sudoku
@@ -553,12 +549,11 @@ public class Solver {
 
 			solver_counter++;
 			////////////////////////
-
 			// UNCOMMENT THE FOLLOWING TO PRINT THE WHOLE SUDOKU AFTER EACH LOOP
-			if(solver_counter % 1000 == 0){
-				System.out.println("sc: "+ solver_counter + "   bf: "+ sudoku.branchings.size());
+			/*if(solver_counter % 10000 == 0){
+				System.out.println("sc: "+ solver_counter + "   bf: "+ sudoku.getBranchLevel());
 				print9x9(sudoku);
-			}
+			}*/
 		}
 
 		if (!solved) {
@@ -580,13 +575,13 @@ public class Solver {
 
 
 
-	enum Branchresult {SUCCESS, UNSOLVABLE};
+	protected enum Branchresult {SUCCESS, UNSOLVABLE};
 
 	/** if there is a branch, delete it and make a the next one:
 	 *                                 if there are more candidates, choose the next one
 	 *                                 otherwise, delete branches until there are
 	 */
-	private Branchresult advanceBranching(boolean buildDerivation){
+	protected Branchresult advanceBranching(boolean buildDerivation){
 		if (!this.sudoku.hasBranch()) {
 			return Branchresult.UNSOLVABLE;         // possible output nr1: insolvable
 		} else {
@@ -654,7 +649,7 @@ if there is another candidate -> advance
 	*
 	*  @returns true if any helper could be applied, false if no helper could be applied
 	*/
-	private boolean useHelper(boolean solved, boolean didUpdate, boolean isUnsolvable, boolean buildDerivation, boolean validation){
+	protected boolean useHelper(boolean solved, boolean didUpdate, boolean isUnsolvable, boolean buildDerivation, boolean validation){
 		if (!solved && !didUpdate && !isUnsolvable) {
 			for (int i = 0; i < numberOfHelpers; i++) {
 				SolveHelper hel = helper.get(i);
@@ -698,7 +693,7 @@ if there is another candidate -> advance
 	 *            Bestimmt, ob der Schwierigkeitswert beim Finden eines NakedSingles dem Sudoku hinzugefügt werden soll
 	 * @return Eine Liste der Herleitungen der Lösungen oder null, falls keine gefunden wurde
 	 */
-	private boolean updateNakedSingles(boolean addDerivations, boolean addComplexity) {
+	protected boolean updateNakedSingles(boolean addDerivations, boolean addComplexity) {
 		boolean hasNakedSingle;   //indicates that one was found in the last iteration -> continue to iterate
 		boolean foundNakedSingle = false; //indicates that at least one was found
 		// Iterate trough the fields to look if each field has only one
@@ -745,8 +740,9 @@ if there is another candidate -> advance
 	 * 
 	 * @return true, falls das Sudoku aktuell invalide ist, false falls nicht
 	 */
-	private boolean isInvalid() {
-		for (Position p : this.sudoku.positions)
+	protected boolean isInvalid() {
+		//for (Position p : this.sudoku.positions)
+		for (Position p : this.sudoku.getSudokuType().getValidPositions())
 		    /* look for no solution entered && no candidates left */
 			if (this.sudoku.getCurrentCandidates(p).isEmpty() && this.sudoku.getField(p).isNotSolved() )
 				return true;
@@ -760,7 +756,7 @@ if there is another candidate -> advance
 	 *
 	 * @return true, falls das Sudoku gelöst ist, false andernfalls
 	 */
-	private boolean isFilledCompletely() {
+	protected boolean isFilledCompletely() {
 
 		//return sudoku.positions.forall( p => !sudoku.getField(p).isNotSolved())
 		//return sudoku.positions.map(sudoku.getField).forall(f=>!f.isNotSolved())

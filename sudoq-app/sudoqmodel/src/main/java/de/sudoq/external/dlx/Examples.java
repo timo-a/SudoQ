@@ -1,10 +1,13 @@
 package de.sudoq.external.dlx;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 import java.util.*;
+
+import de.sudoq.model.solverGenerator.FastSolver.DLX1.DancingLinks;
+import de.sudoq.model.solverGenerator.FastSolver.DLX1.Sudoku16DLX;
+import de.sudoq.model.solverGenerator.FastSolver.DLX1.SudokuDLX;
 
 public class Examples{
 

@@ -46,7 +46,7 @@ public class SolvingAssistant {
 
         for (SolveHelper sh : helpers)
             if(sh.update(true)){
-                System.out.println("SolvingAssistant finds: " + sh.getClass());
+                //System.out.println("SolvingAssistant finds: " + sh.getClass());
                 return sh.getDerivation();}
 
         return new BacktrackingDerivation();

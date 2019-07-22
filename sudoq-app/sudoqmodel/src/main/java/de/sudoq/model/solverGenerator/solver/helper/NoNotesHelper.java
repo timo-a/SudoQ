@@ -3,6 +3,7 @@ package de.sudoq.model.solverGenerator.solver.helper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -63,7 +64,7 @@ public class NoNotesHelper extends SolveHelper {
 
 
             lastDerivation = new NoNotesDerivation();
-            Set<Integer> allSymbbols = new HashSet<Integer>((ArrayList)sudoku.getSudokuType().getSymbolIterator());
+            Set<Integer> allSymbbols = new HashSet<Integer>((Collection)sudoku.getSudokuType().getSymbolIterator());
             //for(int i : sudoku.getSudokuType().getSymbolIterator())
             //    allSymbbols.add(i);
 

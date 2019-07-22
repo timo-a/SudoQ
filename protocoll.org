@@ -17,11 +17,3 @@
                  continue/load are inactive
 
 
-              also continue after update, crashed the app . test before release!
-on the horizon:
- - extract clock functionality into toolbar
- - understand file/profile manager to get unit tests back running
-
-generator - mock up test external
-editor branch
-language branch
