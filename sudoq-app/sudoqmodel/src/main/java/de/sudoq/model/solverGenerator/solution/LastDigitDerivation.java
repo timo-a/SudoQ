@@ -1,6 +1,5 @@
 package de.sudoq.model.solverGenerator.solution;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

@@ -5,8 +5,8 @@
 <!-- This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.sudoq"
-    android:versionCode="24"
-    android:versionName="1.1.0a"
+    android:versionCode="26"
+    android:versionName="1.1.0c"
     android:installLocation="auto" >
 
     <application
@@ -42,7 +42,7 @@
         <activity android:name=".controller.tutorial.TutorialActivity" android:label="@string/sf_tutorial_sudoku_title"/>
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="de.sudoq.fileprovider"
             android:grantUriPermissions="true"
             android:exported="false">

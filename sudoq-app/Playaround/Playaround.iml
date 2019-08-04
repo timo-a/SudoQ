@@ -28,6 +28,5 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="sudoqmodel" exported="" />
-    <orderEntry type="module" module-name="sudoqmodel" exported="" />
   </component>
 </module>

@@ -1,6 +1,8 @@
 package de.sudoq.controller.sudoku.hints;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.util.Log;
 
 import java.util.BitSet;
@@ -19,11 +21,15 @@ import de.sudoq.model.sudoku.CandidateSet;
 import de.sudoq.model.sudoku.Field;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.Utils;
+import de.sudoq.model.sudoku.Utils.ConstraintShape;
 
 /**
  * Created by timo on 04.10.16.
  */
 public class HintFormulator {
+
+    private static final String LOG_TAG = "HintFormulator";
+
     public static String getText(Context context, SolveDerivation sd){
         String text;
         Log.d("HintForm",sd.getType().toString());
@@ -97,8 +103,10 @@ public class HintFormulator {
 
     private static String lastDigitText(Context context, SolveDerivation sd){
         LastDigitDerivation d = (LastDigitDerivation) sd;
-        String shapeString     = Utility.constraintShapeAccDet2string(context, d.getConstraintShape());
-        String shapeGender     = Utility.getGender(context,d.getConstraintShape());
+        ConstraintShape cs = d.getConstraintShape();
+
+        String shapeString     = Utility.constraintShapeAccDet2string(context, cs);
+        String shapeGender     = Utility.getGender(context, cs);
         String shapeDeterminer = Utility.gender2AccDeterminer(context, shapeGender);
         String highlightSuffix = Utility.gender2AccSufix(context, shapeGender);
         return context.getString(R.string.hint_lastdigit).replace("{shape}"      ,shapeString)
@@ -114,11 +122,28 @@ public class HintFormulator {
 
     private static String leftoverNoteText(Context context, SolveDerivation sd){
         LeftoverNoteDerivation d = (LeftoverNoteDerivation) sd;
+        ConstraintShape cs = d.getConstraintShape();
 
-        String shapeString =  Utility.constraintShapeAccDet2string(context, Utils.getGroupShape(d.getConstraint()));
+        String shapeString =  Utility.constraintShapeAccDet2string(context, cs);
+        String shapeGender     = Utility.getGender(context,cs);
+        String shapeDeterminer = Utility.gender2AccDeterminer(context, shapeGender);
+        String highlightSuffix = Utility.gender2AccSufix(context, shapeGender);
+
+
+        int versionNumber = -1;
+        try {
+            PackageInfo pinfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            versionNumber = pinfo.versionCode;
+
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        Log.d(LOG_TAG, "leftovernotetext is called. and versionNumber is: " + versionNumber);
 
         return context.getString(R.string.hint_leftovernote).replace("{note}",  d.getNote()+1+"")
-                                                            .replace("{shape}", shapeString)   ;
+                                                            .replace("{shape}", shapeString)
+                                                            .replace("{determiner}" ,shapeDeterminer)
+                                                            .replace("{suffix}"     ,highlightSuffix);
     }
 
     private static String nakedSingleText(Context context, SolveDerivation sd){

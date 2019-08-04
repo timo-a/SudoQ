@@ -157,10 +157,10 @@
     <!-- hints -->
     <string name="hint_lastdigit">Schau dir mal {determiner} hervorgehoben{suffix} {shape} an! Da ist nur noch ein Feld übrig.</string>
 
-    <string name="constraintshape_block_accusative_determined">Zeile</string>
+    <string name="constraintshape_row_accusative_determined">Zeile</string>
     <string name="constraintshape_column_accusative_determined">Spalte</string>
     <string name="constraintshape_diagonal_accusative_determined">Diagonale</string>
-    <string name="constraintshape_row_accusative_determined">Block</string>
+    <string name="constraintshape_block_accusative_determined">Block</string>
     <string name="constraintshape_other_accusative_determined">Gruppe</string>
 
     <string name="constraintshape_row_genitive_determined"     >Zeile</string>
@@ -186,7 +186,7 @@
 
 
     <string name="hint_lastcandidate">Schau dir mal das hervorgehobene Feld an. Dort ist nur noch ein Kandidat übrig.</string>
-    <string name="hint_leftovernote">Schau dir mal {determiner} hervorgehoben{suffix} {shape} an! Da {note} gesetzt ist können alle Notizen dazu entfernt werden.</string>
+    <string name="hint_leftovernote">Schau dir mal {determiner} hervorgehoben{suffix} {shape} an! Weil {note} gesetzt ist können alle Notizen dazu entfernt werden.</string>
 
     <string name="hint_nakedsingle_look">Es gibt ein „naked single“!</string>
     <string name="hint_nakedsingle_note">Im hervorgehobenen Feld is nur noch {note} übrig.</string>

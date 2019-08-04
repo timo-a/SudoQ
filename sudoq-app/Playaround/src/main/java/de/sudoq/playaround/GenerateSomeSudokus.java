@@ -109,9 +109,6 @@ public class GenerateSomeSudokus {
     public List<Solution> getSolutions(){
         return solutions;
     }
-    public void printDebugMsg() {
-        (new Generator()).printDebugMsg();
-    }
 
     public  Random getRandom() {
         return random;
