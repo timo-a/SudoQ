@@ -1,5 +1,6 @@
 package de.sudoq.model.profile;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -12,7 +13,7 @@ public class StatisticsTests {
 	public void test() {
 		Statistics[] types = Statistics.values();
 		for (Statistics type : types) {
-			assertTrue(Statistics.valueOf(type.toString()).equals(type));
+			assertEquals(Statistics.valueOf(type.toString()), type);
 		}
 	}
 

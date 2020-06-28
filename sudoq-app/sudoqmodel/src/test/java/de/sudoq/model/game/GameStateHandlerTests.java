@@ -148,7 +148,7 @@ public class GameStateHandlerTests {
 		stateHandler.addAndExecute(af.createAction(1, f_1));
 		ActionTreeElement b1 = stateHandler.getCurrentState();
 		stateHandler.redo();
-		assertTrue(b1.equals(stateHandler.getCurrentState()));
+		assertEquals(b1, stateHandler.getCurrentState());
 		stateHandler.undo();
 		ActionTreeElement start = stateHandler.getCurrentState();
 		assertNotNull(start);
@@ -157,21 +157,21 @@ public class GameStateHandlerTests {
 		stateHandler.goToState(start);
 		assertTrue(stateHandler.canRedo());
 		stateHandler.redo();
-		assertTrue(b2.equals(stateHandler.getCurrentState()));
+		assertEquals(b2, stateHandler.getCurrentState());
 		stateHandler.addAndExecute(af.createAction(3, f_3));
 		ActionTreeElement b3 = stateHandler.getCurrentState();
 		stateHandler.goToState(b1);
 		stateHandler.goToState(b2);
 		assertTrue(stateHandler.canRedo());
 		stateHandler.redo();
-		assertTrue(b3.equals(stateHandler.getCurrentState()));
+		assertEquals(b3, stateHandler.getCurrentState());
 		stateHandler.goToState(b2);
 		stateHandler.addAndExecute(af.createAction(4, f_4));
 		stateHandler.goToState(b1);
 		stateHandler.goToState(b2);
 		assertFalse(stateHandler.canRedo());
 		stateHandler.redo();
-		assertTrue(b2.equals(stateHandler.getCurrentState()));
+		assertEquals(b2, stateHandler.getCurrentState());
 	}
 
 	@Test
@@ -249,7 +249,7 @@ public class GameStateHandlerTests {
 		stateHandler.undo();
 		stateHandler.undo();
 		stateHandler.goToState(current);
-		assertTrue(current.equals(stateHandler.getCurrentState()));
+		assertEquals(current, stateHandler.getCurrentState());
 	}
 
 	@Test

@@ -1,32 +1,30 @@
 package de.sudoq.model;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.sudoq.model.ModelChangeListener;
-import de.sudoq.model.ObservableModel;
-import de.sudoq.model.ObservableModelImpl;
 
 public class ObservableModelTest {
 
-	@Test
-	public void test() {
-		ObservableModel<Void> observable = new ObservableModelImpl<Void>() {
-		};
-		Listener<Void> listener = new Listener<>();
+	static ObservableModel<Void> observable;
+	static Listener<Void> listener;
 
-		testNotification(observable, listener);
+	@BeforeClass
+	public static void initObservable() {
+		observable = new ObservableModelImpl<Void>() {};
+		listener = new Listener<>();
 	}
 
-	@SuppressWarnings("unchecked")
-	public void testNotification(@SuppressWarnings("rawtypes") ObservableModel observable, @SuppressWarnings("rawtypes") Listener listener) {
-		try {
-			observable.registerListener(null);
-			fail("No Exception thrown");
-		} catch (IllegalArgumentException e) {
-		}
+	// we can't use the newest method because we're constrained to language level 7...
+	@Test(expected = IllegalArgumentException.class)
+	public void testRegisterNull(){
+		observable.registerListener(null);
+	}
+
+	@Test
+	public void testNotification() {
 
 		observable.registerListener(listener);
 		assertTrue(listener.callCount == 0);
@@ -39,7 +37,7 @@ public class ObservableModelTest {
 		assertTrue(listener.callCount == 1);
 	}
 
-	class Listener<T> implements ModelChangeListener<T> {
+	static class Listener<T> implements ModelChangeListener<T> {
 		int callCount = 0;
 
 		@Override

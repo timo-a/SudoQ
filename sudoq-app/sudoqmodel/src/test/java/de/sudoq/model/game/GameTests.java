@@ -2,6 +2,7 @@ package de.sudoq.model.game;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -105,9 +106,9 @@ public class GameTests {
 	@Test
 	public void testEquals() {
 		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9).createSudoku());
-		assertTrue(game.equals(game));
+		assertEquals(game, game);
 		Game game2 = new Game(3, new SudokuBuilder(SudokuTypes.standard9x9).createSudoku());
-		assertFalse(game.equals(game2));
+		assertNotEquals(game, game2);
 
 		Position pos = Position.get(1, 1);
 		ActionTreeElement start = game.getCurrentState();
@@ -123,10 +124,10 @@ public class GameTests {
 		game.redo();
 		game.undo();
 
-		assertFalse(game.equals(game2));
-		assertTrue(game.equals(game));
+		assertNotEquals(game, game2);
+		assertEquals(game, game);
 
-		assertFalse(game.equals(new Object()));
+		assertNotEquals(game, new Object());
 	}
 
 	@Test
@@ -154,7 +155,7 @@ public class GameTests {
 
 		Game game2 = new Game();
 		game2.fillFromXml(game.toXmlTree());
-		assertTrue(game.equals(game2));
+		assertEquals(game, game2);
 	}
 
 	// Regression Test for Issue-89

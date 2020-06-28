@@ -13,31 +13,35 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
 public class GameDataTests {
 
-	
-	
+
 	protected final static String dateFormat = "yyyy:MM:dd HH:mm:ss";
-	
+
+	@Test(expected = IllegalArgumentException.class)
+	public void initTestA()	{
+		new GameData(0, null, true, SudokuTypes.squigglya, Complexity.difficult);
+		//apparently not yet implemented
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void initTestB()	{
+		new GameData(0, "hugo", true, SudokuTypes.squigglya, Complexity.difficult);
+		//apparently not yet implemented
+	}
+
+
 	@Test
 	public void initTest() {
 		GameData g;
-		try {
-			g = new GameData(0, null, true, SudokuTypes.squigglya, Complexity.difficult);
-			fail("Not yet implemented");
-		} catch (IllegalArgumentException e) {		}
-		try {
-			g = new GameData(0, "hugo", true, SudokuTypes.squigglya, Complexity.difficult);
-			fail("Not yet implemented");
-		} catch (IllegalArgumentException e) {		}
-		
+
 		Date d = new Date();
 		String s = new SimpleDateFormat(dateFormat).format(d);
 		
 		g = new GameData(0, s, true, SudokuTypes.squigglya, Complexity.difficult);
-		
-		assertTrue(g.getComplexity() == Complexity.difficult);
-		assertTrue(g.getType() == SudokuTypes.squigglya);
-		assertTrue(g.getId()==0);
-		assertTrue(g.getPlayedAt().toString().equals(d.toString()));
+
+		assertSame(g.getComplexity(), Complexity.difficult);
+		assertSame(g.getType(), SudokuTypes.squigglya);
+		assertTrue(g.getId() == 0);
+		assertEquals(g.getPlayedAt().toString(), d.toString());
 		assertTrue(g.isFinished());
 	}
 	
@@ -51,15 +55,15 @@ public class GameDataTests {
 		d2.setTime(400000);
 		String s2 = new SimpleDateFormat(dateFormat).format(d2);
 		GameData gd2 = new GameData(0, s2, false, SudokuTypes.squigglya, Complexity.difficult);
-		
-		assertTrue(gd1.compareTo(gd2) == -1);
+
+		assertEquals(gd1.compareTo(gd2), -1);
 		
 		gd2 =new GameData(0, s2, true, SudokuTypes.squigglya, Complexity.difficult);
-		assertTrue(gd1.compareTo(gd2) == 1);
+		assertEquals(1, gd1.compareTo(gd2));
 			
 		gd1 = new GameData(0, s, true, SudokuTypes.squigglya, Complexity.difficult);
 		gd2 = new GameData(0, s2, false, SudokuTypes.squigglya, Complexity.difficult);
-		assertTrue(gd1.compareTo(gd2) == -1);
+		assertEquals(gd1.compareTo(gd2), -1);
 		
 		
 	}

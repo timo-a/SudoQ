@@ -71,6 +71,13 @@ public class FileManagerTests {
 		assertTrue(Utility.sudokus.list().length > 0);
 	}
 
+
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testNullInit() {
+		FileManager.initialize(null, null);
+	}
+
 	@Test
 	public void testFalseInit() {
 		File tmp = new File("tmp");
@@ -78,12 +85,6 @@ public class FileManagerTests {
 		tmp.setWritable(false);
 		assertFalse(tmp.canWrite());
 
-		try {
-            FileManager.initialize(null, null);
-			fail("No Exception");
-		} catch (IllegalArgumentException e) {
-			// fine
-		}
 		try {
             FileManager.initialize(tmp, null);
 			fail("No Exception");
@@ -185,8 +186,8 @@ public class FileManagerTests {
 		assertTrue(FileManager.getGamesFile().exists());
 		File game  = FileManager.getGameFile(1);
 		File thumb = FileManager.getGameThumbnailFile(1);
-		assertTrue(game. getName().equals("game_1.xml"));
-		assertTrue(thumb.getName().equals("game_1.png"));
+		assertEquals(game.getName(),  "game_1.xml");
+		assertEquals(thumb.getName(), "game_1.png");
 		assertTrue(game. createNewFile());
 		assertTrue(thumb.createNewFile());
 		assertTrue(FileManager.deleteGame(1));
@@ -194,7 +195,7 @@ public class FileManagerTests {
 	
 	@Test
 	public void testGetCurrentGestureFile() {
-		assertTrue(FileManager.getCurrentGestureFile() != null);
+		assertNotNull(FileManager.getCurrentGestureFile());
 	}
 
 	/* Filemanager now creates a new file in `createProfilesFile`

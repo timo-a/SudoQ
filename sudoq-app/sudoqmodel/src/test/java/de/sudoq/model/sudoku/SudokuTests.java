@@ -2,6 +2,10 @@ package de.sudoq.model.sudoku;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -133,26 +137,26 @@ public class SudokuTests {
 	public void testGetField() {
 		Sudoku sudoku = new Sudoku(TypeBuilder.getType(SudokuTypes.standard9x9));
 
-		assertFalse(sudoku == null);
+		assertNotNull(sudoku);
 
-		assertTrue(sudoku.getField(null) == null);
+		assertNull(sudoku.getField(null));
 
-		assertTrue(sudoku.getField(Position.get(9, 10)) == null);
+		assertNull(sudoku.getField(Position.get(9, 10)));
 		Field f = sudoku.getField(Position.get(1, 2));
 
 		f.setCurrentValue(6);
 
-		assertTrue(sudoku.getField(Position.get(1, 2)).getCurrentValue() == 6);
+		assertEquals(6, sudoku.getField(Position.get(1, 2)).getCurrentValue());
 	}
 
 	@Test
 	public void testComplexity() {
 		Sudoku sudoku = new Sudoku(TypeBuilder.getType(SudokuTypes.standard9x9));
 
-		assertTrue(sudoku.getComplexity() == null);
+		assertNull(sudoku.getComplexity());
 		sudoku.setComplexity(Complexity.easy);
-		assertTrue(sudoku.getComplexity() == Complexity.easy);
-		assertFalse(sudoku.getComplexity() == null);
+		assertSame(sudoku.getComplexity(), Complexity.easy);
+		assertNotNull(sudoku.getComplexity());
 
 	}
 
@@ -259,23 +263,23 @@ public class SudokuTests {
 		Sudoku rebuilt = new Sudoku();
 		rebuilt.fillFromXml(tree);
 
-		assertTrue(sudoku.equals(rebuilt));
+		assertEquals(sudoku, rebuilt);
 	}
 
 	@Test
 	public void testNotEquals() {
 		Sudoku s1 = new Sudoku(TypeBuilder.getType(SudokuTypes.standard9x9  ));
 		Sudoku s2 = new Sudoku(TypeBuilder.getType(SudokuTypes.standard16x16));
-		assertFalse(s1.equals(s2));
-		assertFalse(s1.equals(null));
-		assertFalse(s1.equals(new Integer(0)));
+		assertNotEquals(s1, s2);
+		assertNotEquals(null, s1);
+		assertNotEquals(s1, 0);
 		s2 = new Sudoku(TypeBuilder.getType(SudokuTypes.standard9x9) );
 		s1.setComplexity(Complexity.easy);
 		s2.setComplexity(Complexity.medium);
-		assertFalse(s1.equals(s2));
+		assertNotEquals(s1, s2);
 		s2 = new Sudoku(TypeBuilder.getType(SudokuTypes.samurai));
 		s2.setComplexity(Complexity.easy);
-		assertFalse(s2.equals(s1));
+		assertNotEquals(s2, s1);
 	}
 
 	@Test

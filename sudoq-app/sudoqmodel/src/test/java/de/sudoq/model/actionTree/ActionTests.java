@@ -46,27 +46,26 @@ public class ActionTests {
 		assertTrue(field.getCurrentValue() == value);
 	}
 
-	@Test
-	public void testNullFieldInstanciation() {
-		try {
-			ActionFactory factory = new SolveActionFactory();
-			factory.createAction(5, null);
-			fail("No Exception thrown");
-		} catch (IllegalArgumentException e) {
-		}
+	@Test(expected = IllegalArgumentException.class)
+	public void testNullFieldInstantiationForSolveAction() {
+		ActionFactory factory = new SolveActionFactory();
+		factory.createAction(5, null);
+	}
 
-		try {
-			ActionFactory factory = new NoteActionFactory();
-			factory.createAction(5, null);
-			fail("No Exception thrown");
-		} catch (IllegalArgumentException e) {
-		}
+	@Test(expected = IllegalArgumentException.class)
+	public void testNullFieldInstantiationForNoteAction() {
+		ActionFactory factory = new NoteActionFactory();
+		factory.createAction(5, null);
+	}
 
-		try {
-			new NoteAction(5, null);
-			fail("No Exception thrown");
-		} catch (IllegalArgumentException e) {
-		}
+	@Test(expected = IllegalArgumentException.class)
+	public void testNullFieldInstantiationForSolveActionWithoutFactory() {
+		new SolveAction(5, null);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testNullFieldInstantiationForNoteActionWithoutFactory() {
+		new NoteAction(5, null);
 	}
 
 	@Test

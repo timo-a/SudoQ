@@ -35,7 +35,7 @@ public class ActionTreeTests {
 		ActionTreeElement ate = at.getRoot();//add(factory.createAction(1, field), null);
 		assertEquals(ate.getId(), 1);
 
-		try {
+		try {//TODO extract to own method
 			at.add(factory.createAction(2, field), null);
 			fail("No Exception thrown");
 		} catch (IllegalArgumentException e) {

@@ -37,7 +37,7 @@ public class ActionTreeIteratorTests {
 		int i = 0;
 		ArrayList<Integer> ids = new ArrayList<Integer>();
 		for (ActionTreeElement ate : at) {
-			assertFalse(ids.contains(new Integer(ate.getId())));
+			assertFalse(ids.contains(ate.getId()));
 			ids.add(ate.getId());
 			i++;
 		}
@@ -63,7 +63,7 @@ public class ActionTreeIteratorTests {
 		int i = 0;
 		ArrayList<Integer> ids = new ArrayList<Integer>();
 		for (ActionTreeElement ate : at) {
-			assertFalse(ids.contains(new Integer(ate.getId())));
+			assertFalse(ids.contains(ate.getId()));
 			ids.add(ate.getId());
 			i++;
 		}

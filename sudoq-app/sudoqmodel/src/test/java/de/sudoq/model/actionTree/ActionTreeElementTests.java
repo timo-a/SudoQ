@@ -33,13 +33,9 @@ public class ActionTreeElementTests {
 		assertFalse(ate1.isMistake());
 	}
 
-	@Test
+	@Test(expected = IllegalArgumentException.class)
 	public void testFailConstruction() {
-		try {
-			new ActionTreeElement(1, null, null);
-			fail("No Exception thrown");
-		} catch (IllegalArgumentException e) {
-		}
+		new ActionTreeElement(1, null, null);
 	}
 
 	@Test

@@ -1,5 +1,6 @@
 package de.sudoq.model.game;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -12,7 +13,7 @@ public class AssistancesTests {
 	public void test() {
 		Assistances[] types = Assistances.values();
 		for (Assistances type : types) {
-			assertTrue(Assistances.valueOf(type.toString()).equals(type));
+			assertEquals(Assistances.valueOf(type.toString()), type);
 		}
 	}
 
