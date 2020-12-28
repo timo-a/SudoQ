@@ -1,5 +1,13 @@
 apply plugin: 'com.android.application'
 
+allprojects {
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:deprecation"
+        }
+    }
+}
+
 android {
     compileSdkVersion 29
 
@@ -39,7 +47,7 @@ dependencies {
     implementation project(':sudoqmodel')
     implementation 'com.google.android.material:material:1.0.0'
     //implementation 'androidx.cardview:cardview:1.0.0'
-    //implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
     //implementation 'androidx.recyclerview:recyclerview:1.0.0'
 
 

@@ -5,6 +5,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
+import androidx.core.content.pm.PackageInfoCompat;
+
 import java.util.BitSet;
 
 import de.sudoq.R;
@@ -132,8 +134,10 @@ public class HintFormulator {
 
         int versionNumber = -1;
         try {
-            PackageInfo pinfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            versionNumber = pinfo.versionCode;
+            PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            long longVersionCode= PackageInfoCompat.getLongVersionCode(pInfo);
+            versionNumber = (int) longVersionCode;
+            //versionNumber = pinfo.versionCode;
 
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
