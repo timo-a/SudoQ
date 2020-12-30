@@ -49,10 +49,6 @@ import static de.sudoq.model.solverGenerator.solver.ComplexityRelation.INVALID;
 import static de.sudoq.model.solverGenerator.solver.ComplexityRelation.CONSTRAINT_SATURATION;
 
 /**
- * Abstrakte Klasse kapselt gemeinsamkeiten von {@link SudokuGenerationStandardType} und {@link SudokuGeneration}
- * Grund: wir hatten ursprünglich eine extra methode um 9x9 und 16x16 sudokus zu generieren.
- * Um diese Methode zu debuggen, habe ich alle Gemeinsamkeiten ausgelagert.
- * @author timo
  * Bietet die Möglichkeit Sudokus zu generieren.
  * Die Klasse implementiert das {@link Runnable} interface
  * und kann daher in einem eigenen Thread ausgeführt werden.

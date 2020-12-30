@@ -16,7 +16,7 @@ import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Utils;
 
 /**
- * Helper that searches for an `open Single`, a constraint in which exactly one field is not solved -> can be be solved by principle of exclusion.
+ * Helper that searches for an `open Single`, a constraint in which exactly one field is not solved {@literal ->} can be be solved by principle of exclusion.
  * (update does not modify the sudoku passed in the constructor)
  * Difference to Naked Single: Naked single looks at candidates, LastDigitHelper does not.
  *                             if candidates are constantly updated, naked single catches everything LastDigitHelper catches and more:

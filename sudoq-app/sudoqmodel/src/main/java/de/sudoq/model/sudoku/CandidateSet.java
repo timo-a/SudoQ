@@ -26,6 +26,7 @@ public class CandidateSet extends BitSet {
 
     /**
      * assigns the value of the parameter to itself
+     * @param bs bit set to assign itself with
      */
     public void assignWith(BitSet bs){
         clear();
@@ -44,7 +45,8 @@ public class CandidateSet extends BitSet {
 
     /**
      * This is a wrapper for @code{ get() } to make the code clearer. It does exactly the same thing!
-     * @returns true if bit at index i is set otherwise false
+     * @param i the bit index
+     * @return true if bit at index i is set otherwise false
      */
     public boolean isSet(int i){
         return get(i);

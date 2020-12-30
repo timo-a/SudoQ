@@ -56,6 +56,9 @@ public class SolveAction extends Action {
 
 	/** in case we want to move an action up one level (field stays the same) we need to add the diffs
 	 * TODO refactor this, break with diffs entirely maybe?
+	 *
+	 * @param action another action
+	 * @return a new SolveAction that sums up both actions diffs
 	 * */
 	public SolveAction add(SolveAction action){
 

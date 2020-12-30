@@ -212,9 +212,6 @@ public class FastBranchAndBound extends Solver {
      * Assumptions:
      *   - the sudoku has a solution
      *
-     * @param solution
-     *            In diese Map wird die ermittelte Lösung geschrieben
-     *
      * @return Ein ComplexityRelation-Objekt, welches die Constraint-gemäße Lösbarkeit beschreibt
      */
     public ComplexityRelation validate() {

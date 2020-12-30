@@ -422,6 +422,7 @@ public class Solver {
 
 	/**
 	 * Returns the solutions of the last `solve`-call. Undefined if last solve failed e.g. invalid.
+	 * @return the solutions of the last `solve`-call.
 	 */
 	public PositionMap<Integer> getSolutionsMap(){
 		PositionMap<Integer> solutions = new PositionMap<Integer>(this.sudoku.getSudokuType().getSize());
@@ -436,7 +437,7 @@ public class Solver {
 	 * Indicates whether further solutions exist for a sudoku where we've already found one.
 	 * (potentially) modifies sudoku.
 	 *
-	 * @return
+	 * @return true if another solution exists
 	 */
 	public boolean severalSolutionsExist(){
         //lastsolutions might be set to null, e.g. if we kill branch but dont find another solution
@@ -580,6 +581,9 @@ public class Solver {
 	/** if there is a branch, delete it and make a the next one:
 	 *                                 if there are more candidates, choose the next one
 	 *                                 otherwise, delete branches until there are
+	 *
+	 * @param buildDerivation indicates whether a derivation is to be constructed
+	 * @return the Branchresult
 	 */
 	protected Branchresult advanceBranching(boolean buildDerivation){
 		if (!this.sudoku.hasBranch()) {
@@ -644,11 +648,16 @@ if there is another candidate -> advance
 
 
 	/**
-	*  According to their priority use the helpers until one of them can
-	*  be applied.
-	*
-	*  @returns true if any helper could be applied, false if no helper could be applied
-	*/
+	 *  According to their priority use the helpers until one of them can
+	 *  be applied.
+	 *
+	 * @param solved is the sudoku already solved?
+	 * @param didUpdate was an update performed?
+	 * @param isUnsolvable is it unsolvable?
+	 * @param buildDerivation is a derivation to be built?
+	 * @param validation should difficulty scores be collected?
+	 * @return true if any helper could be applied, false if no helper could be applied
+	 */
 	protected boolean useHelper(boolean solved, boolean didUpdate, boolean isUnsolvable, boolean buildDerivation, boolean validation){
 		if (!solved && !didUpdate && !isUnsolvable) {
 			for (int i = 0; i < numberOfHelpers; i++) {
@@ -772,6 +781,7 @@ if there is another candidate -> advance
 
 	/**
 	 * intended for debugging only
+	 * @return the iterator for helper
 	 */
 	public Iterable<SolveHelper> helperIterator(){
 

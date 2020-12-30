@@ -21,7 +21,7 @@ import de.sudoq.model.sudoku.Position;
  * Ist dies der Fall, müssen diese n Kandidaten in den n Feldern in irgendeiner
  * Kombination eingetragen werden und daher können alle übrigen symbole aus diesen n feldern entfert werden.
  *
- * [¹²³⁴][¹²³⁴][³..][³..] -> [¹²][¹²][³..][³..]
+ * {@literal [¹²³⁴][¹²³⁴][³..][³..] -> [¹²][¹²][³..][³..]}
  * Looks for a constraint and a set of n candidates(i.e. distinct symbols that are not a solution).
  * For these candidates must hold that they exclusively appear in n unsolved fields.
  * In that case, they are all the solutions to these n fields (in some order) and all other candidates within these n fields can be removed

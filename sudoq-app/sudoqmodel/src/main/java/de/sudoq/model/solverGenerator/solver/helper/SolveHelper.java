@@ -39,7 +39,7 @@ public abstract class SolveHelper {
 	 * @param sudoku
 	 *            sudoku to find a helper for. Mustn't be null
 	 * @param complexity
-	 *            desired complexity for the final sudoku. Must be >= 0.
+	 *            desired complexity for the final sudoku. Must be {@code >= 0}.
 	 */
 	protected SolveHelper(SolverSudoku sudoku, int complexity) {
 		assert sudoku != null;

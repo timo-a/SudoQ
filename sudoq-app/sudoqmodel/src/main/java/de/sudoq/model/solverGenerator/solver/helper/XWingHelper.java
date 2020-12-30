@@ -26,7 +26,7 @@ public class XWingHelper extends SolveHelper {
      * Idea:
      *   We have a '#' of 2 rows+2columns.
      *   The 4 intersection fields all feature a common note n.
-     *   for the 2 rows (the 2 columns) the note appears only in the intersection i.e. is locked there -> they are the locked constraints
+     *   for the 2 rows (the 2 columns) the note appears only in the intersection i.e. is locked there {@literal ->} they are the locked constraints
      *   therefore the columns (the rows) have them in the intersection too and n can be deleted everywhere else.
 	 *
 	 * @param sudoku

@@ -65,7 +65,7 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 	protected List<Constraint> constraints;
 
 	/** 
-	 * Alle Positions die in Teil eines Constraints sind -> auf ein Feld verweisen
+	 * Alle Positions die in Teil eines Constraints sind d.h. auf ein Feld verweisen
 	 * (Bei Samurai sind das ja nicht alle) 
 	 * */
 	protected List<Position> positions;
@@ -182,6 +182,7 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 	/**
 	 * Returns an iterator over all valid positions in this type.
 	 * valid meaning a position that appears in a constraint
+	 * @return all positions
 	 */
 	public Iterable<Position> getValidPositions() {
 		//return positions.iterator();
@@ -400,6 +401,6 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 			for(Position p: c)
 				if(!positions.contains(p))
 					positions.add(p);
-		
+
 	}
 }

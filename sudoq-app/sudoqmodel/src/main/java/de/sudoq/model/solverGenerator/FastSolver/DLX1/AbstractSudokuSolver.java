@@ -23,9 +23,6 @@ public abstract class AbstractSudokuSolver{
         return solutions;
     }
 
-    /**
-     *
-     */
     public void solve(int[][] sudoku){
             int[][] cover = makeExactCoverGrid(sudoku);
             FastSudokuHandler fsh = new FastSudokuHandler(S, solutions);

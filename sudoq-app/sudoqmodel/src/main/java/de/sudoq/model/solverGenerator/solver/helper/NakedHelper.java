@@ -17,7 +17,7 @@ import de.sudoq.model.sudoku.Position;
  * Der NakedHelper sucht innerhalb der Constraints eines Sudokus nach n elementigen Teilmengen der Kandidaten, die in n Feldern vorkommen. (n
  * entspricht dem level des Helpers). Kommen in n Feldern lediglich dieselben n Kandidaten vor, so können diese
  * Kandidaten aus den anderen Listen des Constraints entfernt werden.
- * <p/>
+ * <p>
  * If there are n fields with only n distinct candidates in them, those candidates can't appear anywhere else.
  */
 public class NakedHelper extends SubsetHelper {
@@ -62,7 +62,7 @@ public class NakedHelper extends SubsetHelper {
      * This is 'naked'-specific code for the template method in superclass
      *
      * @param constraint Constraint whose candidates are to be filtered
-     * @return
+     * @return the possible candidates
      */
     @Override
     protected BitSet collectPossibleCandidates(Constraint constraint) {

@@ -282,9 +282,12 @@ public abstract class SubsetHelper extends SolveHelper {
 	}
 
 	/**
-	 * Sucht das nächste Subset der im Konstruktor definierten Größe {@code level} im spezifizierten {@link Constraint}
-	 * mit dem spezifizierten Kandidaten-Set {@code set}, sowie dem aktuellen Subset. Es werden alle mittels der
-	 * {@link this.getNextSubset}-Methode ab dem spezifizierten Subset ermittelten Kandidatenlisten überprüft.
+	 * Searches for the next subset of the size {@code level} (defined in constructor) in the passed
+	 * {@link de.sudoq.model.sudoku.Constraint} with the specified candidate-Set
+	 * {@code de.sudoq.model.solverGenerator.solver.helper.SubsetHelper#candidateSet}, as well as
+	 * the current Subset. All candidate lists are checked that have been found via
+	 * {@link de.sudoq.model.solverGenerator.solver.helper.SubsetHelper#getNextSubset()} from the
+	 * specified Subset on.
 	 * 
 	 * @param constraint
 	 *            Der Constraint, in dem ein NakedSubset gesucht werden soll

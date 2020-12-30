@@ -82,6 +82,8 @@ public class SolverSudoku extends Sudoku {
 	 *            Das Sudoku das zu dem dieses SolverSudoku gehört
 	 *            Parameter and created object will be different objects with indepentent values,
 	 *            can be modified independently
+	 * @param mode
+	 *            The initialization mode
 	 */
 	public SolverSudoku(Sudoku sudoku, Initialization mode) {
 		super(sudoku.getSudokuType());
@@ -188,6 +190,9 @@ public class SolverSudoku extends Sudoku {
 	 * 
 	 * @param pos
 	 *            Die Position an der gebrancht werden soll
+	 * @param candidate
+	 *            The candidate that is guessed as start of this branch
+	 *
 	 * @throws IllegalArgumentException
 	 *             Wird geworfen, falls die spezifizierte Position null oder nicht in dem Sudoku vorhanden ist
 	 */
@@ -392,11 +397,12 @@ public class SolverSudoku extends Sudoku {
 	}
 
 	/**
-	 * Returns the number of branches the sudoku is currently in i.e. the number of guesses that are currently used.
-	 * If no branching has taken place, i.e. all logically derived, no guessing -> 0
-	 * 1 guess -> 1 is returned
-	 * if we guessed `4` at position `p`, then guessed `2` at position p' ran into a dead end,
-	 *       guessed `5` at position `p` -> 1 is returned
+	 * Returns the number of branches the sudoku is currently in i.e. the number of guesses that are
+	 * currently used.
+	 * @return
+	 *    0 if no branching has taken place, i.e. all logically derived, no guessing
+	 *    1 if 1 guess (even if we guess 4 first, run into dead end and guess 5 that's one guess!)
+	 *    ...
 	 */
 	public int getBranchLevel(){ return branchings.size();}
 
@@ -544,8 +550,8 @@ public class SolverSudoku extends Sudoku {
 
 	/**
 	 * Determines whether Lists a,b have a common(by equals) element
-	 * @param a
-	 * @param b
+	 * @param a first list
+	 * @param b second list
 	 * @param <T> any element in the list needs to have equals defined
 	 * @return true iff i.equals(j) == true for at least one i € a, j € b
 	 */

@@ -127,40 +127,40 @@ public class Field extends ObservableModelImpl<Field> {
 	}
 
 	/**
-	 * Setzt den aktuellen Wert dieses Feldes auf den Spezifizierten. Falls editable false ist passiert nichts.
+	 * Sets the current value of the field to the specified and notifies listeners.
+	 * If the field is not editable, the parameter will be ignored and nothing will change.
 	 * 
 	 * @param value
-	 *            Der in dieses Feld als aktuell einzutragende Wert
+	 *            The new value for this field
 	 * @throws IllegalArgumentException
-	 *             Falls value < 0
+	 *             if {@code value < 0}
 	 */
 	public void setCurrentValue(int value) {
-		if (isEditable()) {
-			if ((value < 0 && value != EMPTYVAL) || value > maxValue) {
-				throw new IllegalArgumentException("value is "+value);
-			}
-
-			this.currentVal = value;
-			notifyListeners(this);
-		}
+		setCurrentValueP(value, true);
 	}
 
 	/**
-	 * Setzt den aktuellen Wert dieses Feldes auf den Spezifizierten. Falls editable false ist passiert nichts. Es
-	 * werden hierbei keine Listener benachrichtigt.
-	 * 
+	 * Sets the current value of the field to the specified and notifies listeners if requested.
+	 * If the field is not editable, the parameter will be ignored and listeners will not be
+	 * informed.
+	 *
 	 * @param value
-	 *            Der in dieses Feld als aktuell einzutragende Wert
+	 *            The new value for this field
 	 * @param notify
-	 *            gibt an ob die Listener benachrichtigt werden sollen
+	 *            if true listeners will be notified of change
 	 * @throws IllegalArgumentException
-	 *             Falls value < 0
+	 *             if {@code value < 0}
 	 */
+    public void setCurrentValue(int value, boolean notify) {//Todo refactor flag into name
+		setCurrentValueP(value, notify);
+	}
 
-	public void setCurrentValue(int value, boolean notify) {
+
+	private void setCurrentValueP(int value, boolean notify) {
 		if (isEditable()) {
 			if ((value < 0 && value != EMPTYVAL) || value > maxValue) {
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("maxValue is " + maxValue
+						+ " parameter value is " + value);
 			}
 
 			this.currentVal = value;
@@ -207,8 +207,8 @@ public class Field extends ObservableModelImpl<Field> {
 	}
 
 	/**
-	 * Checks wherther no solution nor notice flags are set.
-	 * @return
+	 * Checks whether no solution nor notice flags are set.
+	 * @return true iff no solution is filled in and no notes are set
 	 */
 	public boolean isCompletelyEmpty(){
 		return isNotSolved() && noticeFlags.isEmpty();

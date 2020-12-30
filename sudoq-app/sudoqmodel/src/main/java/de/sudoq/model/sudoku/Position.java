@@ -134,7 +134,7 @@ public class Position implements Xmlable {
 	}
 
 	/**
-	 * Generiert einen eindeutigen hashcode für Koordinaten < 65519
+	 * Generates a unique hashcode for coordinates {@code < 65519}
 	 */
 	public int hashCode() {
 		int p = 65519;
