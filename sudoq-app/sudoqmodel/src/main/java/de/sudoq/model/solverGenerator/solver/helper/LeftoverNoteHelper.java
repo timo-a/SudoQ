@@ -1,7 +1,5 @@
 package de.sudoq.model.solverGenerator.solver.helper;
 
-import java.util.List;
-
 import de.sudoq.model.solverGenerator.solution.LeftoverNoteDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.solvingAssistant.HintTypes;

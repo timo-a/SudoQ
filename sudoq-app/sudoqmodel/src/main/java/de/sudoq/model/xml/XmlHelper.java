@@ -30,7 +30,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public class XmlHelper {
 
-	/** Attributes */
+	/* Attributes */
 
 	/**
 	 * Unterstützte Typen von Xml Dateien
@@ -59,7 +59,7 @@ public class XmlHelper {
 	 */
 	private Stack<XmlTree> xmlReadStack;
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Diese Methode lädt den Inhalt einer Xml Datei in ein XmlTree Objekt.
@@ -86,25 +86,25 @@ public class XmlHelper {
 		return readXmlTree(new InputSource(xmlFile.getAbsolutePath()));
 	}
 
-	/**
-	 * Diese Methode generiert einen Xml-Baum aus einem String, der eine valide
-	 * Struktur besitzt.
-	 * 
-	 * @param structure
-	 *            Xml-Baum in einer String Repaesentation
-	 * @return XmlTree Repraesentation der Xml Struktur
-	 * @throws IllegalArgumentException
-	 *             Wird geworfen, wenn der gegebene Xml String eine invalide
-	 *             Struktur aufweist.
-	 */
-	// public XmlTree buildXmlTree(String structure) throws
-	// IllegalArgumentException {
-	// try {
-	// return readXmlTree(new InputSource(new StringReader(structure)));
-	// } catch (IOException exc) {
-	// throw new IllegalArgumentException();
-	// }
-	// }
+//	/**
+//	 * Diese Methode generiert einen Xml-Baum aus einem String, der eine valide
+//	 * Struktur besitzt.
+//	 *
+//	 * @param structure
+//	 *            Xml-Baum in einer String Repaesentation
+//	 * @return XmlTree Repraesentation der Xml Struktur
+//	 * @throws IllegalArgumentException
+//	 *             Wird geworfen, wenn der gegebene Xml String eine invalide
+//	 *             Struktur aufweist.
+//	 */
+//	 public XmlTree buildXmlTree(String structure) throws
+//	 IllegalArgumentException {
+//	 try {
+//	 return readXmlTree(new InputSource(new StringReader(structure)));
+//	 } catch (IOException exc) {
+//	 throw new IllegalArgumentException();
+//	 }
+//	 }
 
 	/**
 	 * Bereitet das Lesen einer Xml Quelle zu einem XmlTree Objekt vor und
@@ -113,7 +113,7 @@ public class XmlHelper {
 	private XmlTree readXmlTree(InputSource input) throws IllegalArgumentException, IOException {
 		XMLReader xr;
 		xmlReadTreeRoot = null;
-		xmlReadStack = new Stack<XmlTree>();
+		xmlReadStack = new Stack<>();
 		try {
 			xr = XMLReaderFactory.createXMLReader();
 			XmlSAXHandler handler = new XmlSAXHandler();

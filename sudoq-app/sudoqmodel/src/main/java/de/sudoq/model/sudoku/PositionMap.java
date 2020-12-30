@@ -78,7 +78,6 @@ public class PositionMap<T> implements Cloneable {
 			throw new IllegalArgumentException("x coordinate of pos was > " + this.dimension.getX() + ": " + pos.getX());
 		if (pos.getY() > this.dimension.getY())
 			throw new IllegalArgumentException("y coordinate of pos was > " + this.dimension.getY() + ": " + pos.getY());
-		assert pos != null;
 		assert pos.getX() < this.dimension.getX();
 		assert pos.getY() < this.dimension.getY();
 		assert pos.getX() >= 0;
@@ -94,7 +93,7 @@ public class PositionMap<T> implements Cloneable {
 	 */
 	@Override
 	public PositionMap<T> clone() {
-		PositionMap<T> result = new PositionMap<T>(this.dimension);
+		PositionMap<T> result = new PositionMap<>(this.dimension);
 		for (int i = 0; i < this.dimension.getX(); i++) {
 			for (int j = 0; j < this.dimension.getY(); j++) {
 				if (this.values[i][j] != null)

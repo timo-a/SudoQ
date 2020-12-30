@@ -1,7 +1,6 @@
 package de.sudoq.model.solverGenerator.FastSolver;
 
 import de.sudoq.model.solverGenerator.FastSolver.BranchAndBound.FastBranchAndBound;
-import de.sudoq.model.solverGenerator.solver.Solver;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
 

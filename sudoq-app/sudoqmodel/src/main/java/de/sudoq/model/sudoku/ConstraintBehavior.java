@@ -12,7 +12,7 @@ package de.sudoq.model.sudoku;
  * spezifiziertes Constraint ein bestimmtes Verhalten erfüllt.
  */
 public interface ConstraintBehavior {
-	/** Methods */
+    /* Methods */
 
 	/**
 	 * Diese Methode überprüft, ob ein bestimmtes (durch die Methode
@@ -28,5 +28,5 @@ public interface ConstraintBehavior {
 	 * @return true, falls das Constraint die Vorgaben erfüllt, false falls es
 	 *         dies nicht tut oder null ist
 	 */
-	public abstract boolean check(Constraint constraint, Sudoku sudoku);
+    boolean check(Constraint constraint, Sudoku sudoku);
 }

@@ -1,27 +1,13 @@
 package de.sudoq.model.solverGenerator.FastSolver.BranchAndBound;
 
-import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
-import java.util.Stack;
 
-import de.sudoq.model.solverGenerator.AmbiguityChecker;
-import de.sudoq.model.solverGenerator.solution.DerivationField;
-import de.sudoq.model.solverGenerator.solution.Solution;
-import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.ComplexityRelation;
 import de.sudoq.model.solverGenerator.solver.Solver;
 import de.sudoq.model.solverGenerator.solver.helper.Backtracking;
-import de.sudoq.model.solverGenerator.solver.helper.HiddenHelper;
-import de.sudoq.model.solverGenerator.solver.helper.LastDigitHelper;
-import de.sudoq.model.solverGenerator.solver.helper.LeftoverNoteHelper;
-import de.sudoq.model.solverGenerator.solver.helper.LockedCandandidatesHelper;
-import de.sudoq.model.solverGenerator.solver.helper.NakedHelper;
 import de.sudoq.model.solverGenerator.solver.helper.SolveHelper;
-import de.sudoq.model.solverGenerator.solver.helper.XWingHelper;
-import de.sudoq.model.solvingAssistant.HintTypes;
 import de.sudoq.model.sudoku.Position;
-import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
 

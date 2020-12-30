@@ -19,7 +19,7 @@ import java.io.IOException;
  */
 public abstract class XmlHandler<T extends Xmlable> {
 
-	/** Attributes */
+	/* Attributes */
 
 	/**
 	 * Helfer für das Speichern und Laden von XML Dateien
@@ -28,7 +28,7 @@ public abstract class XmlHandler<T extends Xmlable> {
 
 	protected File file;
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Dieser Konstruktor initialisiert einen neuen XmlHandler.
@@ -37,7 +37,7 @@ public abstract class XmlHandler<T extends Xmlable> {
 		helper = new XmlHelper();
 	}
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Speichert ein übegebenes Objekt, das das Xmlable Interface implementiert,

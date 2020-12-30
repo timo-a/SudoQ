@@ -1,15 +1,13 @@
 package de.sudoq.model.solverGenerator.FastSolver;
 
-import de.sudoq.model.solverGenerator.AmbiguityChecker;
 import de.sudoq.model.solverGenerator.FastSolver.BranchAndBound.FastBranchAndBound;
-import de.sudoq.model.solverGenerator.solver.Solver;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
 
 public class BranchAndBoundSolver implements FastSolver {
 
-    private Sudoku s;
+    private final Sudoku s;
 
 
     public BranchAndBoundSolver(Sudoku s){

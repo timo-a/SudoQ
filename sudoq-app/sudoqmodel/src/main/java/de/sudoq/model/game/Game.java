@@ -30,7 +30,7 @@ import de.sudoq.model.xml.Xmlable;
  * Diese Klasse repräsentiert ein Sudoku-Spiel. Bezüglich der Controller stellt das Game eine Fassade dar.
  */
 public class Game implements Xmlable {
-    /** Attributes */
+    /* Attributes */
 
     /**
      * Eine eindeutige Zahl, zur Identifikation
@@ -67,7 +67,7 @@ public class Game implements Xmlable {
      */
     private boolean finished;
 
-    /** Constructors */
+    /* Constructors */
 
     /**
      * Ein geschützter Konstruktor um die Instanziierung von Games außerhalb dieses Packages zu vermeiden. Wird er
@@ -102,7 +102,7 @@ public class Game implements Xmlable {
         id = -1;
     }
 
-    /** Methods */
+    /* Methods */
 
     /**
      * Diese Methode gibt die profilweit eindeutige id dieses Games zurück.
@@ -387,7 +387,7 @@ public class Game implements Xmlable {
         if (this.sudoku.hasErrors())
             return false;
 
-        List<Field> unsolvedFields = new ArrayList<Field>();
+        List<Field> unsolvedFields = new ArrayList<>();
         for (Field f : this.sudoku) {
             if (f.isNotSolved()) {
                 unsolvedFields.add(f);
@@ -493,7 +493,7 @@ public class Game implements Xmlable {
 
         representation.addChild(sudoku.toXmlTree());
 
-        ArrayList<ActionTreeElement> actionList = new ArrayList<ActionTreeElement>();
+        ArrayList<ActionTreeElement> actionList = new ArrayList<>();
         for (ActionTreeElement ate : stateHandler.getActionTree()) {
             actionList.add(ate);
         }

@@ -14,19 +14,19 @@ import de.sudoq.model.sudoku.Field;
  * rückwärts ausgeführt werden kann.
  */
 public abstract class Action {
-	/** Attributes */
+	/* Attributes */
 
 	/**
 	 * Der Wert diff speichert die Unterschiede zwischen altem und neuem Wert.
 	 */
-	protected int diff;
+	protected final int diff;
 
 	/**
 	 * Das Sudoku-Feld auf dem die Action ausgeführt wird
 	 */
 	protected Field field;
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Ein geschützter Konstruktor um die Instanziierung von Actions außerhalb

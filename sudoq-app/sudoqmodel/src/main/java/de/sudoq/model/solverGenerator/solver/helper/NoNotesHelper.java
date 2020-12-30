@@ -1,9 +1,9 @@
 package de.sudoq.model.solverGenerator.solver.helper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -11,16 +11,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-import de.sudoq.model.solverGenerator.solution.DerivationBlock;
 import de.sudoq.model.solverGenerator.solution.DerivationField;
-import de.sudoq.model.solverGenerator.solution.LastDigitDerivation;
 import de.sudoq.model.solverGenerator.solution.NoNotesDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.solvingAssistant.HintTypes;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Field;
 import de.sudoq.model.sudoku.Position;
-import de.sudoq.model.sudoku.Utils;
 
 /**
  * Created by timo on 25.09.16.
@@ -58,7 +55,7 @@ public class NoNotesHelper extends SolveHelper {
                             if(cmap.containsKey(p))
                                 cmap.get(p).add(c);
                             else
-                                cmap.put(p, new ArrayList<Constraint>(Arrays.asList(c)));
+                                cmap.put(p, new ArrayList<>(Collections.singletonList(c)));
 
 
 
@@ -69,7 +66,7 @@ public class NoNotesHelper extends SolveHelper {
             //    allSymbbols.add(i);
 
             for(Position p : emptyPos) {
-                Set<Integer> allCandidates = new HashSet<Integer>(allSymbbols);
+                Set<Integer> allCandidates = new HashSet<>(allSymbbols);
 
                 for(Constraint c : cmap.get(p)){
                     for (Position pi : c.getPositions()){

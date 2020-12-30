@@ -17,7 +17,7 @@ import de.sudoq.model.xml.Xmlable;
  * sowie die Anzahl der überhaupt notwendigen verschiedenen Vorgehensweisen.
  */
 public class ComplexityConstraint implements Cloneable, Xmlable {
-	/** Attributes */
+    /* Attributes */
 
 	/**
 	 * Der Schwierigkeitsgrade für den die Vorgaben gemacht werden
@@ -47,7 +47,7 @@ public class ComplexityConstraint implements Cloneable, Xmlable {
 	 */
 	private int numberOfAllowedHelpers;
 
-	/** Constructors */
+    /* Constructors */
 
 	/**
 	 * Instanziiert ein neues ComplexityConstraint-Objekt mit den spezifizierten Attributen.

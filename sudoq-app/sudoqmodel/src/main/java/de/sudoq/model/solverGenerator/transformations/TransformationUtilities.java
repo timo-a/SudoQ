@@ -226,7 +226,7 @@ public final class TransformationUtilities {
 	 * gibt eine Map mit einer Permutationsvorschrift zurück. Die Identität ist als Rückgabewert ausgeschlossen
 	 */
 	private static Map<Integer, Integer> createPermutation(Sudoku sudoku) {
-		Map<Integer, Integer> permutationRule = new HashMap<Integer, Integer>();
+		Map<Integer, Integer> permutationRule = new HashMap<>();
 		int numberOfSymbols = sudoku.getSudokuType().getNumberOfSymbols();
 		int tries = (int) Math.sqrt(numberOfSymbols); // wurzel(numberOfElements)
 														// versuche, damit wir

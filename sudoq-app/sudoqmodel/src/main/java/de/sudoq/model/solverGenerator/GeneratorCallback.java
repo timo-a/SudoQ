@@ -19,7 +19,7 @@ import de.sudoq.model.sudoku.Sudoku;
  * sobald er fertig ist.
  */
 public interface GeneratorCallback {
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Diese Methode wird vom Generator aufgerufen, nachdem er die Generierung
@@ -30,7 +30,7 @@ public interface GeneratorCallback {
 	 * @param sudoku
 	 *            Das vom Generator erzeugte, valide Sudoku
 	 */
-	public void generationFinished(Sudoku sudoku);
+    void generationFinished(Sudoku sudoku);
 
-	public void generationFinished(Sudoku sudoku, List<Solution> s);
+	void generationFinished(Sudoku sudoku, List<Solution> s);
 }

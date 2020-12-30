@@ -62,7 +62,7 @@ public class LastDigitHelper extends SolveHelper {
         boolean foundOne = false;
         Position candidate;
         Vector<Position> remaining = new Vector<>();
-        for (Constraint c : sudoku.getSudokuType().getConstraints())
+        for (Constraint c : sudoku.getSudokuType())
             if(c.hasUniqueBehavior()) {
                 remaining.clear();
                 candidate = onlyOneLeft(c.getPositions(), remaining);
@@ -78,7 +78,7 @@ public class LastDigitHelper extends SolveHelper {
                         otherSolutions.add(sudoku.getField(p).getCurrentValue());
 
                     //make list with all possible values
-                    List<Integer> possibleSolutions = new ArrayList<>((AbstractList)sudoku.getSudokuType().getSymbolIterator());
+                    List<Integer> possibleSolutions = new ArrayList<>((AbstractList<Integer>)sudoku.getSudokuType().getSymbolIterator());
 
                     /* cut away all other solutions */
                     possibleSolutions.removeAll(otherSolutions);

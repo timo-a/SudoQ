@@ -21,15 +21,9 @@ import de.sudoq.model.files.FileManager;
 import de.sudoq.model.solverGenerator.FastSolver.BranchAndBound.FastBranchAndBound;
 import de.sudoq.model.solverGenerator.FastSolver.FastSolver;
 import de.sudoq.model.solverGenerator.FastSolver.FastSolverFactory;
-import de.sudoq.model.solverGenerator.solution.BacktrackingDerivation;
-import de.sudoq.model.solverGenerator.solution.DerivationField;
-import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.ComplexityRelation;
 import de.sudoq.model.solverGenerator.solver.Solver;
-import de.sudoq.model.solverGenerator.solver.SolverSudoku;
-import de.sudoq.model.solverGenerator.transformations.Transformer;
-import de.sudoq.model.solvingAssistant.HintTypes;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Field;
 import de.sudoq.model.sudoku.Position;
@@ -55,7 +49,7 @@ import static de.sudoq.model.solverGenerator.solver.ComplexityRelation.CONSTRAIN
  *
  */
 public class GenerationAlgo implements Runnable {
-	/** Attributes */
+	/* Attributes */
 
 
 		/**
@@ -130,8 +124,8 @@ public class GenerationAlgo implements Runnable {
 			this.sudoku = sudoku;
 			this.callbackObject = callbackObject;
 			this.solver = new Solver(sudoku);
-			this.freeFields = new ArrayList<Position>();
-			this.definedFields = new ArrayList<Position>();
+			this.freeFields = new ArrayList<>();
+			this.definedFields = new ArrayList<>();
 			this.random = random;
 
 			this.desiredComplexityConstraint = sudoku.getSudokuType().buildComplexityConstraint(sudoku.getComplexity());
@@ -347,12 +341,12 @@ public class GenerationAlgo implements Runnable {
 				if (last.equals(current))
 					counter++;
 				else{
-					s += (", "+counter)+'*'+last;
+					s += ( ", " + counter ) + '*' + last;
 					last = current;
 					counter = 0;
 				}
 			}
-			s += (", "+counter)+'*'+last;
+			s += ( ", " + counter ) + '*' + last;
 
 			return '[' + s.substring(2) + ']';
 		}
@@ -444,7 +438,7 @@ public class GenerationAlgo implements Runnable {
 			//construct a list of symbols starting at arbitrary point. there is no short way to do this without '%' 
 			int numSym = sudoku.getSudokuType().getNumberOfSymbols();
 			int offset = random.nextInt(numSym);
-			Queue<Integer> symbols = new LinkedList<Integer>();
+			Queue<Integer> symbols = new LinkedList<>();
 			for (int i = 0; i < numSym; i++)
 				symbols.add(i);
 

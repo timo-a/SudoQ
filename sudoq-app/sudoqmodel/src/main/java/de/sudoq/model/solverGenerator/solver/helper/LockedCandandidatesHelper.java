@@ -4,15 +4,12 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
-import de.sudoq.model.solverGenerator.solution.DerivationBlock;
 import de.sudoq.model.solverGenerator.solution.DerivationField;
 import de.sudoq.model.solverGenerator.solution.LockedCandidatesDerivation;
-import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.solvingAssistant.HintTypes;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
-import de.sudoq.model.sudoku.Utils;
 
 /**Idea: We have 2 intersecting groups:
  *   I = I_only + intersection
@@ -45,7 +42,7 @@ public class LockedCandandidatesHelper extends SolveHelper {
     public boolean update(boolean buildDerivation) {
         boolean success=false;
 
-        List<Constraint> constraints = new ArrayList<Constraint>();
+        List<Constraint> constraints = new ArrayList<>();
         for (Constraint c:sudoku.getSudokuType()) {
             constraints.add(c);
         }

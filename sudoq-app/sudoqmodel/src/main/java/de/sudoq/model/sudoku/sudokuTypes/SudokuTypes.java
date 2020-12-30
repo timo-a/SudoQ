@@ -11,7 +11,7 @@ package de.sudoq.model.sudoku.sudokuTypes;
  * Dieses Enum definiert die verfügbaren Sudoku-Sorten.
  */
 public enum SudokuTypes {
-	/** Attributes */
+	/* Attributes */
 
 	/**
 	 * Ein Standard-Sudoku.

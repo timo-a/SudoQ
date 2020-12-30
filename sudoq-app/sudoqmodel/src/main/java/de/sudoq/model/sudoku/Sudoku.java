@@ -7,11 +7,9 @@
  */
 package de.sudoq.model.sudoku;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import de.sudoq.model.ModelChangeListener;
 import de.sudoq.model.ObservableModelImpl;
@@ -26,7 +24,7 @@ import de.sudoq.model.xml.Xmlable;
  * Diese Klasse repräsentiert ein Sudoku mit seinem Typ, seinen Feldern und seinem Schwierigkeitsgrad.
  */
 public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field>, Xmlable, ModelChangeListener<Field> {
-	/** Attributes */
+	/* Attributes */
 
 	/**
 	 * Eine Identifikationsnummer, die ein Sudoku eindeutig identifiziert
@@ -53,7 +51,7 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 	 */
 	private Complexity complexity;
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Instanziiert ein Sudoku-Objekt mit dem spezifizierten SudokuType. Ist dieser null, so wird eine
@@ -89,10 +87,10 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 		}
 
 		fieldIdCounter = 1;
-		fieldPositions = new HashMap<Integer, Position>();
+		fieldPositions = new HashMap<>();
 
 		this.type = type;
-		this.fields = new HashMap<Position, Field>();
+		this.fields = new HashMap<>();
 		this.complexity = null;
 
 		// iterate over the constraints of the type and create the fields
@@ -127,7 +125,7 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 		id = -1;
 	}
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Gibt die id dieses Sudokus zurueck
@@ -296,9 +294,9 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 		// initialisation
 
 		fieldIdCounter = 1;
-		fieldPositions = new HashMap<Integer, Position>();
+		fieldPositions = new HashMap<>();
 
-		fields = new HashMap<Position, Field>();
+		fields = new HashMap<>();
 
 		try {
 			id = Integer.parseInt(xmlTreeRepresentation.getAttributeValue("id"));

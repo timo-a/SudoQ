@@ -8,8 +8,6 @@
 package de.sudoq.model.sudoku.sudokuTypes;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -80,10 +78,10 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 	protected ComplexityConstraintBuilder ccb;
 	
 	public SudokuType(){
-		this.constraints = new ArrayList<Constraint>();
-		this.positions   = new ArrayList<Position>();
+		this.constraints = new ArrayList<>();
+		this.positions   = new ArrayList<>();
 		this.setOfPermutationProperties = new SetOfPermutationProperties();
-		this.helperList = new ArrayList<Helpers>();
+		this.helperList = new ArrayList<>();
 		this.ccb = new ComplexityConstraintBuilder();
 	}
 		
@@ -110,14 +108,14 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 		this.standardAllocationFactor = -1.0f;
 		this.numberOfSymbols = numberOfSymbols;
 		this.dimensions = Position.get(width, height);
-		this.constraints = new ArrayList<Constraint>();
-		this.positions   = new ArrayList<Position>();
+		this.constraints = new ArrayList<>();
+		this.positions   = new ArrayList<>();
 		this.setOfPermutationProperties = new SetOfPermutationProperties();
-		this.helperList = new ArrayList<Helpers>();
+		this.helperList = new ArrayList<>();
 		this.ccb = new ComplexityConstraintBuilder();
 	}
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Gibt die Größe eines Sudokus dieses Typs zurück. Die Größe wird durch ein Position-Objekt repräsentiert, wobei

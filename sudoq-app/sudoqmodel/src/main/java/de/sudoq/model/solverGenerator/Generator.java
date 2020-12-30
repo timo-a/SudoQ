@@ -33,7 +33,7 @@ public class Generator {
 
 	private Random random;
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Initiiert ein neues Generator-Objekt.
@@ -42,7 +42,7 @@ public class Generator {
 		random = new Random(0);
 	}//Todo remove 0 again
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * creates a sudoku of type @param{type} and difficulty @param{complexity} and appends it

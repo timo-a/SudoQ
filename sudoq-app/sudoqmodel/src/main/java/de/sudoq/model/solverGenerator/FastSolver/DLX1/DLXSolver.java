@@ -2,6 +2,7 @@ package de.sudoq.model.solverGenerator.FastSolver.DLX1;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -80,7 +81,7 @@ public class DLXSolver implements FastSolver {
             *
             * */
             ExecutorService executor = Executors.newSingleThreadExecutor();
-            Collection c = Arrays.asList(new AmbiguousTask());
+            Collection c = Collections.singletonList(new AmbiguousTask());
             try {
                 executor.invokeAll(c , 5, TimeUnit.MINUTES); // Timeout of 5 minutes.
             } catch (InterruptedException e) {

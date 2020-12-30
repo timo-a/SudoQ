@@ -19,7 +19,7 @@ import de.sudoq.model.sudoku.Sudoku;
  * Eine für den Lösungsalgorithmus optimierte und erweiterte Sudoku Klasse
  */
 public class SolverSudoku extends Sudoku {
-	/** Attributes */
+	/* Attributes */
 
 	/**
 	 * Eine Liste aller Positionen dieses Sudokus
@@ -60,7 +60,7 @@ public class SolverSudoku extends Sudoku {
 
 	private Map<Constraint, List<Constraint>> neighborDirectory; //better to have that static in the type
 
-	public  enum Initialization {NEW_CANDIDATES, USE_EXISTING};
+	public  enum Initialization {NEW_CANDIDATES, USE_EXISTING}
 
 	/**
 	 * Instanziiert ein neues SolverSudoku, welches sich auf das spezifizierte Sudoku bezieht.
@@ -100,12 +100,11 @@ public class SolverSudoku extends Sudoku {
 
 		// initialize the list of positions
 		//this.positions = new ArrayList<>(fields.keySet());
-		this.positions = new ArrayList<Position>();//for debugging we need the same as once
-		for (Position p : fields.keySet())
-			this.positions.add(p);
+		this.positions = new ArrayList<>();//for debugging we need the same as once
+		this.positions.addAll(fields.keySet());
 
 
-		/** For debugging, we need predictable order */
+		/* For debugging, we need predictable order */
 		this.positions = Generator.getPositions(sudoku);//TODO remove again
 
 
@@ -487,8 +486,8 @@ public class SolverSudoku extends Sudoku {
 			this.positions = positions;
 			this.currentDimension = dimension;
 
-			usedMaps = new Stack<PositionMap<CandidateSet>>();
-			unusedMaps = new Stack<PositionMap<CandidateSet>>();
+			usedMaps = new Stack<>();
+			unusedMaps = new Stack<>();
 			unusedMaps.push(initialisePositionMap());
 			unusedMaps.push(initialisePositionMap());
 		}
@@ -528,7 +527,7 @@ public class SolverSudoku extends Sudoku {
 		 * @return Eine neue PositionMap der im Konstruktor definierten Größe
 		 */
 		private PositionMap<CandidateSet> initialisePositionMap() {
-			PositionMap<CandidateSet> newMap = new PositionMap<CandidateSet>(currentDimension);
+			PositionMap<CandidateSet> newMap = new PositionMap<>(currentDimension);
 			for (Position pos : this.positions) {
 				newMap.put(pos, new CandidateSet());
 			}
@@ -565,26 +564,27 @@ public class SolverSudoku extends Sudoku {
 		return false;
 	}
 
-	/**
-	 * creates a perfect clone,
 
-	@Override
-	public Object clone(){
-		SolverSudoku clone = new SolverSudoku(this.type);
-		clone.id             = this.id;
-		clone.transformCount = this.transformCount;
-		clone.fields = new HashMap<>();
-
-		for(Map.Entry<Position, Field> e : this.fields.entrySet())
-			clone.fields.put(e.getKey(), (Field) e.getValue().clone());
-
-		clone.fieldIdCounter = this.fieldIdCounter;
-
-		clone.fieldPositions = new HashMap<>(this.fieldPositions);
-
-		clone.complexity = this.complexity;
-
-		return clone;
-	}*/
+//	/**
+//	 * 	creates a perfect clone
+// 	 */
+//	@Override
+//	public Object clone(){
+//		SolverSudoku clone = new SolverSudoku(this.type);
+//		clone.id             = this.id;
+//		clone.transformCount = this.transformCount;
+//		clone.fields = new HashMap<>();
+//
+//		for(Map.Entry<Position, Field> e : this.fields.entrySet())
+//			clone.fields.put(e.getKey(), (Field) e.getValue().clone());
+//
+//		clone.fieldIdCounter = this.fieldIdCounter;
+//
+//		clone.fieldPositions = new HashMap<>(this.fieldPositions);
+//
+//		clone.complexity = this.complexity;
+//
+//		return clone;
+//	}
 
 }

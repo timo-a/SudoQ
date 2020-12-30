@@ -15,7 +15,7 @@ package de.sudoq.model;
  *            der Typ des Objekts welches bei Änderungen mitgegeben wird
  */
 public interface ObservableModel<T> {
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Beim Aufruf dieser Methode werden alle beobachtenden Objekte
@@ -24,7 +24,7 @@ public interface ObservableModel<T> {
 	 * @param obj
 	 *            Das Objekt, das sich geaendert hat.
 	 */
-	public void notifyListeners(T obj);
+    void notifyListeners(T obj);
 
 	/**
 	 * Mit dieser Methode kann sich ein Objekt registrieren, um bei allen
@@ -35,7 +35,7 @@ public interface ObservableModel<T> {
 	 * @throws IllegalArgumentException
 	 *             Wird geworfen, falls der übergebene Listener null ist
 	 */
-	public void registerListener(ModelChangeListener<T> listener);
+    void registerListener(ModelChangeListener<T> listener);
 
 	/**
 	 * Mit diser Methode kann das gegebene Objekt aus der Beobachter-Liste
@@ -45,6 +45,6 @@ public interface ObservableModel<T> {
 	 * @param listener
 	 *            Das zu entfernende Objekt.
 	 */
-	public void removeListener(ModelChangeListener<T> listener);
+    void removeListener(ModelChangeListener<T> listener);
 
 }

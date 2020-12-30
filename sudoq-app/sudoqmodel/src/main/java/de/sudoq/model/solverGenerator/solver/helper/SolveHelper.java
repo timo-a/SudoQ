@@ -11,7 +11,7 @@ import de.sudoq.model.solvingAssistant.HintTypes;
  * anwenden können.
  */
 public abstract class SolveHelper {
-	/** Attributes */
+	/* Attributes */
 
 	/**
 	 * Das Sudoku, auf welches dieser SolveHelper seine Vorgehensweise anwendet
@@ -31,7 +31,7 @@ public abstract class SolveHelper {
 	public HintTypes hintType; //public only for debugging
 
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Creates a new SolveHelper for the specified Sudoku with the specified complexity.
@@ -49,7 +49,7 @@ public abstract class SolveHelper {
 		this.complexityScore = complexity;
 	}
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Versucht die entsprechende Vorgehensweise solange auf das im konkreten SolveHelper gespeicherte Sudoku

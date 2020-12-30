@@ -1,6 +1,5 @@
 package de.sudoq.model.solverGenerator.solver;
 
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.EnumMap;
@@ -10,13 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import de.sudoq.model.actionTree.SolveAction;
 import de.sudoq.model.actionTree.SolveActionFactory;
 import de.sudoq.model.solverGenerator.solution.DerivationField;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.helper.Backtracking;
-import de.sudoq.model.solverGenerator.solver.helper.Helpers;
 import de.sudoq.model.solverGenerator.solver.helper.HiddenHelper;
 import de.sudoq.model.solverGenerator.solver.helper.LastDigitHelper;
 import de.sudoq.model.solverGenerator.solver.helper.LeftoverNoteHelper;
@@ -37,7 +34,7 @@ import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
  * werden. Auch das Validieren eines Sudokus auf Lösbarkeit ist möglich.
  */
 public class Solver {
-	/** Attributes */
+	/* Attributes */
 
 	/**
 	 * Das Sudoku, welches von diesem Solver gelöst wird
@@ -75,7 +72,7 @@ public class Solver {
 	 */
 	private ComplexityConstraint complConstr;
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Creates a new solver for {@code sudoku}.
@@ -98,7 +95,7 @@ public class Solver {
 
 	protected List<SolveHelper> makeHelperList(){
 		// Initialize the helpers
-		List<SolveHelper> helpers = new ArrayList<SolveHelper>();
+		List<SolveHelper> helpers = new ArrayList<>();
 
 		helpers.add(new LastDigitHelper(this.sudoku, 1)); //only one field in
 		helpers.add(new LeftoverNoteHelper(this.sudoku, 1));
@@ -144,7 +141,7 @@ public class Solver {
 		return this.sudoku;
 	}
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Ermittelt die Lösung für ein Feld, sowie dessen Herleitung. Die Herleitung wird als Solution-Objekt
@@ -285,7 +282,7 @@ public class Solver {
 			for (SolveDerivation sd :s.getDerivations())
 				hist[sd.getType().ordinal()]++;
 
-		EnumMap<HintTypes, Integer> hm = new EnumMap<HintTypes, Integer>(HintTypes.class);
+		EnumMap<HintTypes, Integer> hm = new EnumMap<>(HintTypes.class);
 
 		for (int i = 0; i < hist.length; i++)
 			if (hist[i] > 0)
@@ -303,15 +300,15 @@ public class Solver {
 		}catch (IllegalStateException ise){
 			return "lastSolutions is zero";
 		}
-		String counts = "";
-		for (HintTypes h : em.keySet())
-			counts += "  " + em.get(h) + ' ' + h;
+		String separator = ""; //TODO switch to stringJoiner from (API 24) on
+		StringBuilder countsBuilder = new StringBuilder();
+		for (HintTypes h : em.keySet()) {
+			countsBuilder.append(separator)
+					     .append(em.get(h) + " " + h);
+			separator = "  ";//switch to separator after first element
+		}
 
-
-		if (counts.length() > 2)
-			counts=counts.substring(2);
-
-		return counts;
+		return countsBuilder.toString();
 	}
 
 	private static Map<HintTypes, Integer> hintscores = new HashMap<>();
@@ -359,7 +356,7 @@ public class Solver {
 		boolean ambiguous = false;
 
 		//map position -> value
-		PositionMap<Integer> copy = new PositionMap<Integer>(this.sudoku.getSudokuType().getSize());
+		PositionMap<Integer> copy = new PositionMap<>(this.sudoku.getSudokuType().getSize());
 		for (Position p : this.sudoku.positions) {
 			copy.put(p, this.sudoku.getField(p).getCurrentValue());
 		}
@@ -425,7 +422,7 @@ public class Solver {
 	 * @return the solutions of the last `solve`-call.
 	 */
 	public PositionMap<Integer> getSolutionsMap(){
-		PositionMap<Integer> solutions = new PositionMap<Integer>(this.sudoku.getSudokuType().getSize());
+		PositionMap<Integer> solutions = new PositionMap<>(this.sudoku.getSudokuType().getSize());
 		for (Position p: this.sudoku.positions) {
 			int curVal = this.sudoku.getField(p).getCurrentValue();
 			solutions.put(p, curVal);
@@ -499,8 +496,8 @@ public class Solver {
 		boolean isUnsolvable = false;
 
 		if (buildDerivation) {
-			lastSolutions = new ArrayList<Solution>();
-			branchPoints = new Stack<Integer>();
+			lastSolutions = new ArrayList<>();
+			branchPoints = new Stack<>();
 		}
         int solver_counter = 0;
 		while (!solved           //if `solved` we're done
@@ -576,7 +573,7 @@ public class Solver {
 
 
 
-	protected enum Branchresult {SUCCESS, UNSOLVABLE};
+	protected enum Branchresult {SUCCESS, UNSOLVABLE}
 
 	/** if there is a branch, delete it and make a the next one:
 	 *                                 if there are more candidates, choose the next one

@@ -7,10 +7,6 @@
  */
 package de.sudoq.model.profile;
 
-import java.util.BitSet;
-
-import de.sudoq.model.game.Assistances;
-import de.sudoq.model.xml.SudokuTypesList;
 import de.sudoq.model.xml.XmlAttribute;
 import de.sudoq.model.xml.XmlTree;
 import de.sudoq.model.xml.Xmlable;

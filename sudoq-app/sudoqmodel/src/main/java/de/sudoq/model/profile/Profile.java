@@ -71,7 +71,7 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 
 	private XmlHandler<Profile> xmlHandler = new ProfileXmlHandler();
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Da die Klasse statisch ist hat sie einen privaten Konstruktor.
@@ -93,7 +93,7 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 		return instance;
 	}
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Laed das aktuelle Profil aus der profiles.xml
@@ -122,7 +122,7 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 			XmlTree profiles = new XmlTree(oldProfiles.getName());
 
 			for (XmlTree profile : oldProfiles) {
-				if (Integer.valueOf((profile.getAttributeValue(ID))) != this.profileId) {
+				if (Integer.parseInt((profile.getAttributeValue(ID))) != this.profileId) {
 					profiles.addChild(profile);
 				}
 			}
@@ -189,7 +189,7 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 		xmlHandler.saveAsXml(this);
 		XmlTree profiles = getProfilesXml();
 		for (XmlTree profile : profiles) {
-			if (Integer.valueOf(profile.getAttributeValue(ID)) == this.getCurrentProfileID()) {
+			if (Integer.parseInt(profile.getAttributeValue(ID)) == this.getCurrentProfileID()) {
 				profile.updateAttribute(new XmlAttribute(NAME, this.getName()));
 			}
 		}
@@ -242,7 +242,7 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 	 * @return the new Profile ID
 	 */
 	public int getNewProfileID() {
-		ArrayList<Integer> used = new ArrayList<Integer>();
+		ArrayList<Integer> used = new ArrayList<>();
 		for (XmlTree profile : getProfilesXml()) {
 			used.add(Integer.parseInt(profile.getAttributeValue(ID)));
 		}
@@ -360,7 +360,7 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 	 * @return die Namensliste
 	 */
 	public ArrayList<String> getProfilesNameList() {
-		ArrayList<String> profilesList = new ArrayList<String>();
+		ArrayList<String> profilesList = new ArrayList<>();
 		XmlTree profiles = getProfilesXml();
 		for (XmlTree profile : profiles) {
 			profilesList.add(profile.getAttributeValue(NAME));
@@ -374,7 +374,7 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 	 * @return die Idliste
 	 */
 	public ArrayList<Integer> getProfilesIdList() {
-		ArrayList<Integer> profilesList = new ArrayList<Integer>();
+		ArrayList<Integer> profilesList = new ArrayList<>();
 		XmlTree profiles = getProfilesXml();
 		for (XmlTree profile : profiles) {
 			profilesList.add(Integer.valueOf(profile.getAttributeValue(ID)));

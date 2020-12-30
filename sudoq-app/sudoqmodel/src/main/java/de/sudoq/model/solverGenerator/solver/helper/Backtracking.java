@@ -3,7 +3,6 @@ package de.sudoq.model.solverGenerator.solver.helper;
 import java.util.BitSet;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
@@ -12,7 +11,6 @@ import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.solvingAssistant.HintTypes;
 import de.sudoq.model.sudoku.Position;
-import de.sudoq.model.sudoku.Sudoku;
 
 /**
  * Dieser konkrete SolverHelper implementiert eine Vorgehensweise zum Lösen eines Sudokus. Das Backtracking ist ein Trial and

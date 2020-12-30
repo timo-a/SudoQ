@@ -1,19 +1,13 @@
 package de.sudoq.model.solverGenerator.solution;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import de.sudoq.model.actionTree.Action;
-import de.sudoq.model.actionTree.NoteActionFactory;
 import de.sudoq.model.actionTree.SolveActionFactory;
 import de.sudoq.model.solvingAssistant.HintTypes;
-import de.sudoq.model.sudoku.CandidateSet;
-import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
-import de.sudoq.model.sudoku.Utils;
-import de.sudoq.model.sudoku.Utils.ConstraintShape;
 
 /**
  * Created by timo on 04.10.16.

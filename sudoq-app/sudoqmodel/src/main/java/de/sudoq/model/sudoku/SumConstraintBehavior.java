@@ -16,14 +16,14 @@ package de.sudoq.model.sudoku;
  * eine vorgegebene Summe haben muss.
  */
 public class SumConstraintBehavior implements ConstraintBehavior {
-	/** Attributes */
+	/* Attributes */
 
 	/**
 	 * Die Summe, auf welche das SumConstraintBehavior die Felder des Constraints auf dem Sudoku ueberprueft.
 	 */
 	private int sum;
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Instanziiert ein neues SumConstraintBehavior-Objekt, welches Constraints auf die spezifizierte Summe der
@@ -40,7 +40,7 @@ public class SumConstraintBehavior implements ConstraintBehavior {
 		}
 	}
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Überprüft, ob das spezifizierte Constraint dieses Verhalten auf dem uebergebenen Sudoku erfüllt. Dies bedeutet,

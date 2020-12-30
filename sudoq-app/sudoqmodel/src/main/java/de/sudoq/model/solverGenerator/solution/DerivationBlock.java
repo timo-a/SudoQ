@@ -7,7 +7,7 @@ import de.sudoq.model.sudoku.Constraint;
  * Lössungsschritt zum Lösen eines Sudoku-Feldes relevant ist.
  */
 public class DerivationBlock {
-	/** Attributes */
+	/* Attributes */
 
 	/**
 	 * Das Constraint, welches von diesem DerivationBlock als relevant für den
@@ -15,7 +15,7 @@ public class DerivationBlock {
 	 */
 	private Constraint block;
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Dies Methode initiiert einen neuen DerivationBlock für das
@@ -34,7 +34,7 @@ public class DerivationBlock {
 		this.block = block;
 	}
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Diese Methode gibt das Constraint zurück, welches diesem DerivationBlock

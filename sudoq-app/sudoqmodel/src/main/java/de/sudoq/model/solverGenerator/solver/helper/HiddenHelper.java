@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
-import de.sudoq.model.solverGenerator.solution.DerivationBlock;
 import de.sudoq.model.solverGenerator.solution.DerivationField;
 import de.sudoq.model.solverGenerator.solution.HiddenSetDerivation;
-import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.solvingAssistant.HintTypes;
 import de.sudoq.model.sudoku.Constraint;
@@ -29,19 +27,19 @@ import de.sudoq.model.sudoku.Position;
  */
 public class HiddenHelper extends SubsetHelper {
 
-	private HintTypes[] labels = new HintTypes[] { HintTypes.HiddenSingle,
-	                                               HintTypes.HiddenPair,
-	                                               HintTypes.HiddenTriple,
-	                                               HintTypes.HiddenQuadruple,
-	                                               HintTypes.HiddenQuintuple,
-			                                       HintTypes.Hidden__6_tuple,
-                                                   HintTypes.Hidden__7_tuple,
-                                                   HintTypes.Hidden__8_tuple,
-                                                   HintTypes.Hidden__9_tuple,
-                                                   HintTypes.Hidden_10_tuple,
-                                                   HintTypes.Hidden_11_tuple,
-                                                   HintTypes.Hidden_12_tuple,
-                                                   HintTypes.Hidden_13_tuple};
+    private final HintTypes[] labels = new HintTypes[] { HintTypes.HiddenSingle,
+                                                         HintTypes.HiddenPair,
+                                                         HintTypes.HiddenTriple,
+                                                         HintTypes.HiddenQuadruple,
+                                                         HintTypes.HiddenQuintuple,
+                                                         HintTypes.Hidden__6_tuple,
+                                                         HintTypes.Hidden__7_tuple,
+                                                         HintTypes.Hidden__8_tuple,
+                                                         HintTypes.Hidden__9_tuple,
+                                                         HintTypes.Hidden_10_tuple,
+                                                         HintTypes.Hidden_11_tuple,
+                                                         HintTypes.Hidden_12_tuple,
+                                                         HintTypes.Hidden_13_tuple};
 
 	private HiddenSetDerivation derivation;
 

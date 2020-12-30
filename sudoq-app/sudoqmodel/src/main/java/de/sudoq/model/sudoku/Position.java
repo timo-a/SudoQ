@@ -16,7 +16,7 @@ import de.sudoq.model.xml.Xmlable;
  * implementiert als Flyweight (not quite, but Position.get(x,y) gives memoized objects)
  */
 public class Position implements Xmlable {
-	/** Attributes */
+	/* Attributes */
 
 	
 	/**
@@ -39,7 +39,7 @@ public class Position implements Xmlable {
 	 */
 	private static Position[][] positions;
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Instanziiert ein neues Position-Objekt mit den spezifizierten x- und y-Koordinaten. Ist eine der Koordinaten
@@ -99,7 +99,7 @@ public class Position implements Xmlable {
 		}
 	}
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Gibt die x-Koordinate dieser Position zurück.

@@ -17,7 +17,7 @@ import de.sudoq.model.ObservableModelImpl;
  * OberservableModel und kann damit auf Veränderungen hinsichtlich aktuellem Wert und Notizen beobachtet werden.
  */
 public class Field extends ObservableModelImpl<Field> {
-	/** Attributes */
+	/* Attributes */
 
 	/**
 	 * Eine Sudokuweit eindeutige Nummer für dieses Feld
@@ -55,7 +55,7 @@ public class Field extends ObservableModelImpl<Field> {
 	 */
 	private int maxValue;
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Instanziiert ein neues Field-Objekt. Mit den Parametern wird spezifiziert, ob dieses Feld vom Spieler änderbar
@@ -97,7 +97,7 @@ public class Field extends ObservableModelImpl<Field> {
 		this(true, EMPTYVAL, id, numberOfValues);
 	}
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Gibt die id dieses Feldes zurück

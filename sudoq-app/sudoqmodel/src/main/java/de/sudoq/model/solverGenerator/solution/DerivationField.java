@@ -10,7 +10,7 @@ import de.sudoq.model.sudoku.Position;
  * dar.
  */
 public class DerivationField {
-	/** Attributes */
+    /* Attributes */
 
 	/**
 	 * Die Position des Feldes, dessen Kandidaten dieses DerivationField
@@ -30,7 +30,7 @@ public class DerivationField {
 	 */
 	private BitSet irrelevantCandidates;
 
-	/** Constructors */
+    /* Constructors */
 
 	/**
 	 * Dieser Konstruktor initiiert ein neues DerivationField, welches einen
@@ -59,7 +59,7 @@ public class DerivationField {
 		this.irrelevantCandidates = (BitSet) irrelevantCandidates.clone();
 	}
 
-	/** Methods */
+    /* Methods */
 
 	/**
 	 * Diese Methode gibt die Position des Sudoku-Feldes zurück, auf dass sich

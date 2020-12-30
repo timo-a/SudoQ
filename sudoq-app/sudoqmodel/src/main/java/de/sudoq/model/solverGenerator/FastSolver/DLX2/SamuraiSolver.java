@@ -1,7 +1,5 @@
 package de.sudoq.model.solverGenerator.FastSolver.DLX2;
 
-import java.util.List;
-
 import de.sudoq.model.solverGenerator.FastSolver.FastSolver;
 import de.sudoq.model.sudoku.Field;
 import de.sudoq.model.sudoku.Position;

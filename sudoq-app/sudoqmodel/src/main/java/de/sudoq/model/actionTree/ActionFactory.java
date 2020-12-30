@@ -28,6 +28,6 @@ public interface ActionFactory {
 	 *            Das von der Action zu bearbeitende Feld
 	 * @return Die erzeugt Aktion
 	 */
-	public Action createAction(int value, Field field);
+    Action createAction(int value, Field field);
 
 }

@@ -221,6 +221,7 @@ public class ActionTree extends ObservableModelImpl<ActionTreeElement> implement
 	 * 
 	 * @return einen Iterator für die ActionTreeElemente
 	 */
+	@Override
 	public Iterator<ActionTreeElement> iterator() {
 		return new ActionTreeIterator(this);
 	}

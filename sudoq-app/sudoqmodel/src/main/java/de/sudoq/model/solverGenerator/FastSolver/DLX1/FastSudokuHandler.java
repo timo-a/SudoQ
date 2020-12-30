@@ -4,7 +4,7 @@ import java.util.List;
 
 public class FastSudokuHandler extends SudokuHandler{
 
-    private List<int[][]> solutions;
+    private final List<int[][]> solutions;
 
     public FastSudokuHandler(int boardSize, List<int[][]> solutions) {
         super(boardSize);

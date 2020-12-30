@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class XmlTree implements Iterable<XmlTree> {
 
-	/** Attributes */
+	/* Attributes */
 
 	/**
 	 * Name des Xml Objektes
@@ -43,7 +43,7 @@ public class XmlTree implements Iterable<XmlTree> {
 	 */
 	private List<XmlTree> children;
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Dieser Konstruktor initialisiert einen neuen Xml Baum Objekt mit
@@ -85,7 +85,7 @@ public class XmlTree implements Iterable<XmlTree> {
 		this.content = content;
 	}
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Diese Methode gibt des Namen der Wurzel des Baumes zurück.

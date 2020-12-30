@@ -15,7 +15,7 @@ import de.sudoq.model.sudoku.Sudoku;
  * Blöcke, sowie Kandidaten in den beteiligten Feldern enthalten.
  */
 public /*abstract*/ class SolveDerivation {
-	/** Attributes */
+	/* Attributes */
 
 	/**
 	 * A string holding the name of the technique that led to this derivation
@@ -41,7 +41,7 @@ public /*abstract*/ class SolveDerivation {
 
 	protected boolean hasActionListCapability = false;
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Initiiert ein neues SolveDerivation-Objekt.
@@ -62,7 +62,7 @@ public /*abstract*/ class SolveDerivation {
 
 
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Accepts a string description of what this derivation does

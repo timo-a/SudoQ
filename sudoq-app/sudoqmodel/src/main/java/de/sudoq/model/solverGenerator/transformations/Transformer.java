@@ -19,10 +19,10 @@ import de.sudoq.model.sudoku.Sudoku;
  */
 public class Transformer {
 
-	static List<Permutation> elementaryList;
+	static final List<Permutation> elementaryList;
 
 	static {
-		elementaryList = new Vector<Permutation>();
+		elementaryList = new Vector<>();
 		elementaryList.add(new Rotate90());
 		elementaryList.add(new Rotate180());
 		elementaryList.add(new Rotate270());
@@ -32,10 +32,10 @@ public class Transformer {
 		elementaryList.add(new MirrorDiagonallyUp());
 	}
 
-	static List<Permutation> subtleList;
+	static final List<Permutation> subtleList;
 
 	static {
-		subtleList = new Vector<Permutation>();
+		subtleList = new Vector<>();
 		subtleList.add(new HorizontalBlockPermutation());
 		subtleList.add(new VerticalBlockPermutation());
 		subtleList.add(new InBlockColumnPermutation());
@@ -103,7 +103,7 @@ public class Transformer {
 	 *            das Sudoku dessen Felder permutiert werden
 	 */
 	private static void elementaryPermutation(Sudoku sudoku) {
-		List<Permutation> l = new Vector<Permutation>();
+		List<Permutation> l = new Vector<>();
 		for (Permutation p : elementaryList) {
 			if (sudoku.getSudokuType().getPermutationProperties().contains(p.getCondition())) {
 				l.add(p);
@@ -127,7 +127,7 @@ public class Transformer {
 	 */
 	private static void subtlePermutation(Sudoku sudoku) {
 		/* make sure only allowed permutations are executed by intersecting subtleList with properties of the sudoku */
-		List<Permutation> l = new Vector<Permutation>();
+		List<Permutation> l = new Vector<>();
 		for (Permutation p : subtleList)
 			if (sudoku.getSudokuType().getPermutationProperties().contains(p.getCondition()))
 				l.add(p);

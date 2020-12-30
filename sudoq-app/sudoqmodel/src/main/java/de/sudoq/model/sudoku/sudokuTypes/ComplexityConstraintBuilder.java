@@ -13,7 +13,7 @@ import de.sudoq.model.xml.Xmlable;
  */
 public class ComplexityConstraintBuilder implements Xmlable {
 
-	public Map<Complexity, ComplexityConstraint> specimen = new HashMap<Complexity, ComplexityConstraint>();
+	public Map<Complexity, ComplexityConstraint> specimen = new HashMap<>();
 	
 	public ComplexityConstraintBuilder(){
 		
@@ -44,7 +44,7 @@ public class ComplexityConstraintBuilder implements Xmlable {
 
 	@Override
 	public void fillFromXml(XmlTree xmlTreeRepresentation) throws IllegalArgumentException {
-		specimen = new HashMap<Complexity, ComplexityConstraint>();
+		specimen = new HashMap<>();
 		for (XmlTree sub : xmlTreeRepresentation) {
 			ComplexityConstraint cc = new ComplexityConstraint();
 			cc.fillFromXml(sub);

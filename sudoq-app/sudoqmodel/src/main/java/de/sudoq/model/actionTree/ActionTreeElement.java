@@ -20,7 +20,7 @@ import de.sudoq.model.xml.Xmlable;
  */
 public class ActionTreeElement extends ObservableModelImpl<ActionTreeElement> implements Comparable<ActionTreeElement>,
 		Iterable<ActionTreeElement> {
-	/** Attributes */
+	/* Attributes */
 
 	/**
 	 * Eine eindeutige identifikationsnummer für dieses Element
@@ -87,7 +87,7 @@ public class ActionTreeElement extends ObservableModelImpl<ActionTreeElement> im
 	 */
 	public static final String CORRECT = "correct";
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Erzeugt und instanziiert ein neues ActionTreeElement mit den gegebenen Parametern. Ist die ID ungültig oder das
@@ -267,10 +267,10 @@ public class ActionTreeElement extends ObservableModelImpl<ActionTreeElement> im
 		xml.addAttribute(new XmlAttribute(ACTION_TYPE, action.getClass().getSimpleName()));
 		xml.addAttribute(new XmlAttribute(MARKED, Boolean.toString(marked)));
 		if (mistake) {
-			xml.addAttribute(new XmlAttribute(MISTAKE, Boolean.toString(mistake)));
+			xml.addAttribute(new XmlAttribute(MISTAKE, Boolean.toString(true)));
 		} 
 		if (correct) {
-			xml.addAttribute(new XmlAttribute(CORRECT, Boolean.toString(correct)));			
+			xml.addAttribute(new XmlAttribute(CORRECT, Boolean.toString(true)));
 		}
 
 		return xml;
