@@ -12,7 +12,6 @@ import java.util.List;
 import de.sudoq.model.Utility;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.profile.Profile;
-import de.sudoq.model.solverGenerator.GeneratorCallback;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.transformations.Transformer;
 import de.sudoq.model.sudoku.Constraint;
@@ -282,7 +281,7 @@ public class TransformerTests implements GeneratorCallback {
 			for (int i = 0; i < c.getSize(); i++) {
 				elcount = 0;
 				for (Position p : c) {
-					if (sudoku.getField(p).getSolution() == i)
+					if (sudoku.getCell(p).getSolution() == i)
 						elcount++;
 				}
 				if (elcount != 1) {
@@ -297,7 +296,7 @@ public class TransformerTests implements GeneratorCallback {
 		System.out.println("tada:");
 		for (int y = 0; y < length; y++) {
 			for (int x = 0; x < length; x++)
-				System.out.print(" " + sudoku.getField(Position.get(x, y)).getSolution());
+				System.out.print(" " + sudoku.getCell(Position.get(x, y)).getSolution());
 			System.out.println();
 		}
 		System.out.println();

@@ -7,7 +7,7 @@
  */
 package de.sudoq.model.actionTree;
 
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 
 /**
  * Diese Klasse repräsentiert eine Aktion auf Eintrag eines Sudokufeldes.
@@ -22,13 +22,13 @@ public class SolveAction extends Action {
 	 * 
 	 * @param diff
 	 *            Der Unterschied zwischen altem und neuem Wert
-	 * @param field
+	 * @param cell
 	 *            Das zu bearbeitende Feld
 	 * @throws IllegalArgumentException
 	 *             Wird geworfen, falls das übergebene Field null ist
 	 */
-	protected SolveAction(int diff, Field field) {
-		super(diff, field);
+	protected SolveAction(int diff, Cell cell) {
+		super(diff, cell);
 	}
 
 	/**
@@ -36,7 +36,7 @@ public class SolveAction extends Action {
 	 */
 	@Override
 	public void execute() {
-		field.setCurrentValue(field.getCurrentValue() + diff);
+		cell.setCurrentValue(cell.getCurrentValue() + diff);
 	}
 
 	/**
@@ -44,13 +44,13 @@ public class SolveAction extends Action {
 	 */
 	@Override
 	public void undo() {
-		field.setCurrentValue(field.getCurrentValue() - diff);
+		cell.setCurrentValue(cell.getCurrentValue() - diff);
 	}
 
 
 	public boolean inverse(Action a){
 		if(a instanceof SolveAction)
-			return field.equals(a.field) && diff+a.diff == 0;
+			return cell.equals(a.cell) && diff+a.diff == 0;
 		return false;
 	}
 
@@ -62,6 +62,6 @@ public class SolveAction extends Action {
 	 * */
 	public SolveAction add(SolveAction action){
 
-		return new SolveAction(diff+action.diff,field);
+		return new SolveAction(diff+action.diff, cell);
 	}
 }

@@ -20,7 +20,7 @@ import de.sudoq.model.game.Game;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solvingAssistant.SolvingAssistant;
-import de.sudoq.view.SudokuFieldView;
+import de.sudoq.view.SudokuCellView;
 import de.sudoq.view.SudokuLayout;
 
 /**
@@ -51,8 +51,8 @@ public class AssistancesDialogFragment extends DialogFragment {
                 , getString(R.string.sf_sudoku_assistances_check)
                 , getString(R.string.sf_sudoku_assistances_solve_random)));
 
-        SudokuFieldView v = ((SudokuActivity)getActivity()).getCurrentFieldView();
-        if (v != null && v.getField().isNotSolved())
+        SudokuCellView v = ((SudokuActivity)getActivity()).getCurrentCellView();
+        if (v != null && v.getCell().isNotSolved())
             itemStack.add(getString(R.string.sf_sudoku_assistances_solve_specific));
 
         if (Profile.getInstance().getAssistances().isHelperSet())
@@ -95,7 +95,7 @@ public class AssistancesDialogFragment extends DialogFragment {
                 }
 				/* not inside switch, because they are at variable positions */
                 if (items[item] == getString(R.string.sf_sudoku_assistances_solve_specific)){
-                    if (!controller.onSolveCurrent(activity.getCurrentFieldView().getField())) {
+                    if (!controller.onSolveCurrent(activity.getCurrentCellView().getCell())) {
                         Toast.makeText(activity, R.string.toast_solved_wrong, Toast.LENGTH_SHORT).show();
                     }
 

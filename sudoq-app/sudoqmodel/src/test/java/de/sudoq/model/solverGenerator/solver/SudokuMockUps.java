@@ -3,9 +3,9 @@ package de.sudoq.model.solverGenerator.solver;
 import java.util.List;
 import java.util.Stack;
 
+import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.ConstraintType;
-import de.sudoq.model.sudoku.Field;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
@@ -39,7 +39,7 @@ public class SudokuMockUps {
         for(int y=0; y<dim; y++)
             for(int x=0; x<dim; x++){
                 char c = pattern.charAt(2*(dim*y+x));
-                Field f =  s.getField(Position.get(x, y));
+                Cell f =  s.getCell(Position.get(x, y));
                 if (f==null)
                     ;//pass
                 else if (c == '.'){
@@ -101,7 +101,7 @@ public class SudokuMockUps {
         for(int y=0; y<yLim; y++)
             for(int x=0; x<xLim; x++){
                 String currentEntry = candidates[xLim*y+x];
-                Field f =  sudoku.getField(Position.get(x, y));
+                Cell f =  sudoku.getCell(Position.get(x, y));
                 clearCandidates(f, sudoku);
 
                 if("0123456789".contains(currentEntry))
@@ -121,7 +121,7 @@ public class SudokuMockUps {
         for(int y=0; y<9; y++)
             for(int x=0; x<9; x++){
                 String gu = candidates[9*y+x];
-                Field f =  sudoku.getField(Position.get(x, y));
+                Cell f =  sudoku.getCell(Position.get(x, y));
                 clearCandidates(f,sudoku);
 
                 switch (gu.length()){
@@ -149,7 +149,7 @@ public class SudokuMockUps {
         for(int y=0; y<dim; y++)
             for(int x=0; x<dim; x++){
                 String gu = candidates[dim*y+x];
-                Field f =  sudoku.getField(Position.get(x, y));
+                Cell f =  sudoku.getCell(Position.get(x, y));
                 clearCandidates(f,sudoku);
 
                 if (gu.equals(".")){
@@ -165,13 +165,13 @@ public class SudokuMockUps {
         return sudoku;
     }
 
-    private static void clearCandidates(Field f, Sudoku sudoku){
+    private static void clearCandidates(Cell f, Sudoku sudoku){
         for(int i : sudoku.getSudokuType().getSymbolIterator())
             if(f.isNoteSet(i))
                 f.toggleNote(i);
     }
 
-    private static void setCandidates(Field f, Sudoku sudoku){
+    private static void setCandidates(Cell f, Sudoku sudoku){
         for(int i : sudoku.getSudokuType().getSymbolIterator())
             if(!f.isNoteSet(i))
                 f.toggleNote(i);
@@ -209,7 +209,7 @@ public class SudokuMockUps {
         Sudoku sudoku = new Sudoku(t);
         for(Position p: posList){
             String filling = candidates[p.getX()];
-            Field f =  sudoku.getField(p);
+            Cell f =  sudoku.getCell(p);
             switch (filling.length()){
                 case 0: break;
                 case 1: f.setCurrentValue(Integer.parseInt(filling)-1);

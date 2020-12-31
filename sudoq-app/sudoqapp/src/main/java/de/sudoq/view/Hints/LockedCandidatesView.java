@@ -11,8 +11,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
 
-import de.sudoq.model.solverGenerator.solution.DerivationField;
-import de.sudoq.model.solverGenerator.solution.HiddenSetDerivation;
 import de.sudoq.model.solverGenerator.solution.LockedCandidatesDerivation;
 import de.sudoq.view.SudokuLayout;
 

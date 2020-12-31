@@ -8,15 +8,11 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import de.sudoq.model.sudoku.Field;
-import de.sudoq.model.sudoku.Position;
-import de.sudoq.model.sudoku.Sudoku;
-import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
 public class SudokuBuilderTests {
 
-	Field field;
+	Cell cell;
 
 	static Map<SudokuTypes, Integer> specialParam = new HashMap<SudokuTypes, Integer>(4);
 	
@@ -44,9 +40,9 @@ public class SudokuBuilderTests {
 		Sudoku sudoku = new SudokuBuilder(t).createSudoku();
 		for (int i = 0; i < length; i++) {
 			for (int j = 0; j < length; j++) {
-				field = sudoku.getField(Position.get(i, j));
-				if (field != null)
-					assertEquals(field.getCurrentValue(), Field.EMPTYVAL);
+				cell = sudoku.getCell(Position.get(i, j));
+				if (cell != null)
+					assertEquals(cell.getCurrentValue(), Cell.EMPTYVAL);
 			}
 		}
 	}
@@ -59,10 +55,10 @@ public class SudokuBuilderTests {
 		sb.addSolution(Position.get(0, 1), 3);
 		Sudoku s = sb.createSudoku();
 
-		assertEquals(s.getField(Position.get(0, 0)).getSolution(), 5);
-		assertEquals(s.getField(Position.get(0, 0)).getCurrentValue(), 5);
-		assertEquals(s.getField(Position.get(0, 1)).getSolution(), 3);
-		assertEquals(s.getField(Position.get(0, 1)).getCurrentValue(), Field.EMPTYVAL);
+		assertEquals(s.getCell(Position.get(0, 0)).getSolution(), 5);
+		assertEquals(s.getCell(Position.get(0, 0)).getCurrentValue(), 5);
+		assertEquals(s.getCell(Position.get(0, 1)).getSolution(), 3);
+		assertEquals(s.getCell(Position.get(0, 1)).getCurrentValue(), Cell.EMPTYVAL);
 
 		try {
 			sb.addSolution(Position.get(1, 3), -5);

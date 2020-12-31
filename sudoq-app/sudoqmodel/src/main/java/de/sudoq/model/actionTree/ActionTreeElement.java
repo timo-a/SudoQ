@@ -69,7 +69,7 @@ public class ActionTreeElement extends ObservableModelImpl<ActionTreeElement> im
 	/**
 	 * Konstante für XmlAttribut
 	 */
-	public static final String FIELD_ID = "field_id";
+	public static final String FIELD_ID = "field_id";//corresponds to cell_id, left unchanged
 	/**
 	 * Konstante für XmlAttribut
 	 */
@@ -256,14 +256,14 @@ public class ActionTreeElement extends ObservableModelImpl<ActionTreeElement> im
 	 * @return den resultierenden XmlTree
 	 */
 	public XmlTree toXml() {
-		if (action.field.getId() <= 0)
+		if (action.cell.getId() <= 0)
 			return null;
 		XmlTree xml = new XmlTree("action");
 
 		xml.addAttribute(new XmlAttribute(ID, Integer.toString(getId())));
 		xml.addAttribute(new XmlAttribute(PARENT, previous == null ? "" : Integer.toString(previous.getId())));
 		xml.addAttribute(new XmlAttribute(DIFF, Integer.toString(action.diff)));
-		xml.addAttribute(new XmlAttribute(FIELD_ID, Integer.toString(action.field.getId())));
+		xml.addAttribute(new XmlAttribute(FIELD_ID, Integer.toString(action.cell.getId())));
 		xml.addAttribute(new XmlAttribute(ACTION_TYPE, action.getClass().getSimpleName()));
 		xml.addAttribute(new XmlAttribute(MARKED, Boolean.toString(marked)));
 		if (mistake) {

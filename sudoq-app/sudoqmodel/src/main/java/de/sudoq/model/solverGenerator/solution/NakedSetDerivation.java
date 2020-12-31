@@ -18,14 +18,14 @@ public class NakedSetDerivation extends SolveDerivation {
 
 
     private Constraint constraint;
-    private List<DerivationField> subsetMembers;
-    private List<DerivationField> externalFields;
+    private List<DerivationCell> subsetMembers;
+    private List<DerivationCell> externalCells;
     private CandidateSet subsetCandidates;
 
     public NakedSetDerivation(HintTypes technique) {
         super(technique);
         subsetMembers  = new Stack<>();
-        externalFields = new Stack<>();
+        externalCells = new Stack<>();
         hasActionListCapability = true;
     }
 
@@ -35,11 +35,11 @@ public class NakedSetDerivation extends SolveDerivation {
 
     public void setConstraint(Constraint c){ constraint = c; }
 
-    public void addExternalField(DerivationField f){
-        externalFields.add(f);
+    public void addExternalCell(DerivationCell f){
+        externalCells.add(f);
     }
 
-    public void addSubsetField(DerivationField f){
+    public void addSubsetCell(DerivationCell f){
         subsetMembers.add(f);
     }
 
@@ -48,9 +48,9 @@ public class NakedSetDerivation extends SolveDerivation {
 
     public Constraint getConstraint(){ return constraint; }
 
-    public List<DerivationField> getSubsetMembers(){ return subsetMembers; }
+    public List<DerivationCell> getSubsetMembers(){ return subsetMembers; }
 
-    public List<DerivationField> getExternalFieldsMembers(){ return externalFields; }
+    public List<DerivationCell> getExternalCellsMembers(){ return externalCells; }
 
     /* creates a list of actions in case the user want the app to execute the hints */
     @Override
@@ -58,9 +58,9 @@ public class NakedSetDerivation extends SolveDerivation {
         List<Action> actionlist = new ArrayList<>();
         NoteActionFactory af = new NoteActionFactory();
 
-        for(DerivationField df : externalFields)
+        for(DerivationCell df : externalCells)
             for(int note: CandidateSet.fromBitSet(df.getRelevantCandidates()).getSetBits())
-                actionlist.add(af.createAction(note, sudoku.getField(df.getPosition())));
+                actionlist.add(af.createAction(note, sudoku.getCell(df.getPosition())));
 
         return actionlist;
     }

@@ -18,16 +18,16 @@ import android.widget.RelativeLayout;
 import java.util.ArrayList;
 
 import de.sudoq.controller.sudoku.board.BoardPainter;
-import de.sudoq.controller.sudoku.FieldInteractionListener;
-import de.sudoq.controller.sudoku.board.FieldViewPainter;
+import de.sudoq.controller.sudoku.CellInteractionListener;
+import de.sudoq.controller.sudoku.board.CellViewPainter;
 import de.sudoq.controller.sudoku.hints.HintPainter;
-import de.sudoq.controller.sudoku.ObservableFieldInteraction;
+import de.sudoq.controller.sudoku.ObservableCellInteraction;
 import de.sudoq.controller.sudoku.SudokuActivity;
 import de.sudoq.model.game.Assistances;
 import de.sudoq.model.game.Game;
+import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.ConstraintType;
-import de.sudoq.model.sudoku.Field;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
@@ -35,7 +35,7 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 /**
  * Eine View als RealativeLayout, die eine Sudoku-Anzeige verwaltet.
  */
-public class SudokuLayout extends RelativeLayout implements ObservableFieldInteraction, ZoomableView {
+public class SudokuLayout extends RelativeLayout implements ObservableCellInteraction, ZoomableView {
 	/**
 	 * Das Log-Tag für den LogCat
 	 */
@@ -54,7 +54,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	/**
 	 * Die Standardgröße eines Feldes
 	 */
-	private int defaultFieldViewSize;
+	private int defaultCellViewSize;
 
 	/**
 	 * Die aktuelle Größe eines Feldes
@@ -64,14 +64,14 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	/**
 	 * Die aktuell ausgewählte FieldView
 	 */
-	private SudokuFieldView currentFieldView;
+	private SudokuCellView currentCellView;
 
 	private float zoomFactor;
 
 	/**
 	 * Ein Array aller FieldViews
 	 */
-	private SudokuFieldView[][] sudokuFieldViews;
+	private SudokuCellView[][] sudokuCellViews;
 
 	/**
 	 * Der linke Rand, verursacht durch ein zu niedriges Layout
@@ -102,13 +102,13 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 		this.context = context;
 		this.game = ((SudokuActivity) context).getGame();
 
-		this.defaultFieldViewSize = 40;
+		this.defaultCellViewSize = 40;
 		this.zoomFactor = 1.0f;
 		// this.currentFieldViewSize = this.defaultFieldViewSize;
 		this.setWillNotDraw(false);
 		paint = new Paint();
 		this.boardPainter = new BoardPainter(this, game.getSudoku().getSudokuType());
-		FieldViewPainter.getInstance().setSudokuLayout(this);
+		CellViewPainter.getInstance().setSudokuLayout(this);
 		this.hintPainter = new HintPainter(this);
 		inflateSudoku();
 
@@ -121,35 +121,35 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	 */
 	private void inflateSudoku() {
 		Log.d(LOG_TAG, "SudokuLayout.inflateSudoku()");
-		FieldViewPainter.getInstance().flushMarkings();
+		CellViewPainter.getInstance().flushMarkings();
 		this.removeAllViews();
 
 		Sudoku sudoku = this.game.getSudoku();
 		SudokuType sudokuType = sudoku.getSudokuType();
 		boolean isMarkWrongSymbolAvailable = this.game.isAssistanceAvailable(Assistances.markWrongSymbol);
-		this.sudokuFieldViews = new SudokuFieldView[sudokuType.getSize().getX() + 1][sudokuType.getSize().getY() + 1];
+		this.sudokuCellViews = new SudokuCellView[sudokuType.getSize().getX() + 1][sudokuType.getSize().getY() + 1];
 		for (Position p : sudokuType.getValidPositions()) {
-				Field field = sudoku.getField(p);
-				if (field != null) {
+				Cell cell = sudoku.getCell(p);
+				if (cell != null) {
 					int x = p.getX();
 					int y = p.getY();
-					LayoutParams params = new LayoutParams(this.getCurrentFieldViewSize(), this.defaultFieldViewSize);
-					params.topMargin  = (y *  this.getCurrentFieldViewSize()) + y;
-					params.leftMargin = (x *  this.getCurrentFieldViewSize()) + x;
-					this.sudokuFieldViews[x][y] = new SudokuFieldView(context, game, field, isMarkWrongSymbolAvailable);
-					field.registerListener(this.sudokuFieldViews[x][y]);
-					this.addView(          this.sudokuFieldViews[x][y], params);
+					LayoutParams params = new LayoutParams(this.getCurrentCellViewSize(), this.defaultCellViewSize);
+					params.topMargin  = (y *  this.getCurrentCellViewSize()) + y;
+					params.leftMargin = (x *  this.getCurrentCellViewSize()) + x;
+					this.sudokuCellViews[x][y] = new SudokuCellView(context, game, cell, isMarkWrongSymbolAvailable);
+					cell.registerListener(this.sudokuCellViews[x][y]);
+					this.addView(          this.sudokuCellViews[x][y], params);
 				}
 		}
 		int x = sudoku.getSudokuType().getSize().getX();//why all this????
 		int y = sudoku.getSudokuType().getSize().getY();
 
-		LayoutParams params = new LayoutParams( this.getCurrentFieldViewSize(), this.defaultFieldViewSize);
-		params.topMargin  = ((y - 1) *  this.getCurrentFieldViewSize()) + (y - 1) + getCurrentTopMargin();
-		params.leftMargin = ((x - 1) *  this.getCurrentFieldViewSize()) + (x - 1) + getCurrentLeftMargin();
-		this.sudokuFieldViews[x][y] = new SudokuFieldView(context, game, this.game.getSudoku().getField(Position.get(x - 1, y - 1)), isMarkWrongSymbolAvailable);
-		this.addView(this.sudokuFieldViews[x][y], params);
-		this.sudokuFieldViews[x][y].setVisibility(INVISIBLE);
+		LayoutParams params = new LayoutParams( this.getCurrentCellViewSize(), this.defaultCellViewSize);
+		params.topMargin  = ((y - 1) *  this.getCurrentCellViewSize()) + (y - 1) + getCurrentTopMargin();
+		params.leftMargin = ((x - 1) *  this.getCurrentCellViewSize()) + (x - 1) + getCurrentLeftMargin();
+		this.sudokuCellViews[x][y] = new SudokuCellView(context, game, this.game.getSudoku().getCell(Position.get(x - 1, y - 1)), isMarkWrongSymbolAvailable);
+		this.addView(this.sudokuCellViews[x][y], params);
+		this.sudokuCellViews[x][y].setVisibility(INVISIBLE);
 
 
 		/* In case highlighting of current row and col is activated,
@@ -162,10 +162,10 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 					positions = c.getPositions();
 					for (int i = 0; i < positions.size(); i++)
 						for (int k = i+1; k < positions.size(); k++) {
-							SudokuFieldView fvI = getSudokuFieldView(positions.get(i));
-							SudokuFieldView fvK = getSudokuFieldView(positions.get(k));
-							fvI.addConnectedField(fvK);
-							fvK.addConnectedField(fvI);
+							SudokuCellView fvI = getSudokuCellView(positions.get(i));
+							SudokuCellView fvK = getSudokuCellView(positions.get(k));
+							fvI.addConnectedCell(fvK);
+							fvK.addConnectedCell(fvI);
 						}
 
 				}
@@ -213,31 +213,31 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	private void refresh() {
 		Log.d(LOG_TAG, "SudokuLayout.refresh()");
 
-		if (this.sudokuFieldViews != null) {
+		if (this.sudokuCellViews != null) {
 			SudokuType type = this.game.getSudoku().getSudokuType();
 			Position typeSize = type.getSize();
-			int fieldPlusSpacing = (this.getCurrentFieldViewSize() + getCurrentSpacing());
+			int fieldPlusSpacing = (this.getCurrentCellViewSize() + getCurrentSpacing());
 			//Iterate over all positions within the size 
 			for (Position p : type.getValidPositions()) {
-				LayoutParams params = (LayoutParams) this.getSudokuFieldView(p).getLayoutParams();
-				params.width  = this.getCurrentFieldViewSize();
-				params.height = this.getCurrentFieldViewSize();
+				LayoutParams params = (LayoutParams) this.getSudokuCellView(p).getLayoutParams();
+				params.width  = this.getCurrentCellViewSize();
+				params.height = this.getCurrentCellViewSize();
 				params.topMargin  = (getCurrentTopMargin()  + (p.getY() * fieldPlusSpacing));
 				params.leftMargin = (getCurrentLeftMargin() + (p.getX() * fieldPlusSpacing));
-				this.getSudokuFieldView(p).setLayoutParams(params);
-				this.getSudokuFieldView(p).invalidate();
+				this.getSudokuCellView(p).setLayoutParams(params);
+				this.getSudokuCellView(p).invalidate();
 			}
 			//still not sure why we are doing this...
 			int x = typeSize.getX();
 			int y = typeSize.getY();
 			//both x and y are over the limit. Why do we go there? we could just do it outside the loop, why was it ever put it in there?!
-			LayoutParams params = new LayoutParams( this.getCurrentFieldViewSize(), this.defaultFieldViewSize);
-			params.width  = this.getCurrentFieldViewSize();
-			params.height = this.getCurrentFieldViewSize();
+			LayoutParams params = new LayoutParams( this.getCurrentCellViewSize(), this.defaultCellViewSize);
+			params.width  = this.getCurrentCellViewSize();
+			params.height = this.getCurrentCellViewSize();
 			params.topMargin =  (2 * getCurrentTopMargin()  + ((y - 1) * fieldPlusSpacing));
 			params.leftMargin = (2 * getCurrentLeftMargin() + ((x - 1) * fieldPlusSpacing));
-			this.sudokuFieldViews[x][y].setLayoutParams(params);
-			this.sudokuFieldViews[x][y].invalidate();
+			this.sudokuCellViews[x][y].setLayoutParams(params);
+			this.sudokuCellViews[x][y].invalidate();
 			//end strange thing
 
 		}
@@ -255,7 +255,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		Log.d(LOG_TAG, "SudokuLayout.onDraw()");
-		float edgeRadius = getCurrentFieldViewSize() / 20.0f;
+		float edgeRadius = getCurrentCellViewSize() / 20.0f;
 		paint.reset();
 		paint.setColor(Color.BLACK);
 		boardPainter.paintBoard(paint, canvas, edgeRadius);
@@ -282,11 +282,11 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 		                                    : height;
 		int numberOfFields = width < height ? sudokuType.getSize().getX()
 		                                    : sudokuType.getSize().getY();
-		this.defaultFieldViewSize = (size - (numberOfFields + 1) * spacing) / numberOfFields;
+		this.defaultCellViewSize = (size - (numberOfFields + 1) * spacing) / numberOfFields;
 		// this.currentFieldViewSize = this.defaultFieldViewSize;
 
-		int fieldSizeX = sudokuType.getSize().getX() * this.getCurrentFieldViewSize() + (sudokuType.getSize().getX() -1) * spacing;
-		int fieldSizeY = sudokuType.getSize().getY() * this.getCurrentFieldViewSize() + (sudokuType.getSize().getY() -1) * spacing;
+		int fieldSizeX = sudokuType.getSize().getX() * this.getCurrentCellViewSize() + (sudokuType.getSize().getX() -1) * spacing;
+		int fieldSizeY = sudokuType.getSize().getY() * this.getCurrentCellViewSize() + (sudokuType.getSize().getY() -1) * spacing;
 
 		this.leftMargin = ( width - fieldSizeX) / 2;
 		this. topMargin = (height - fieldSizeY)	/ 2;
@@ -311,8 +311,8 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	/**
 	 *  returns the FieldView at Position p.
 	 */
-	public SudokuFieldView getSudokuFieldView(Position p){
-		return sudokuFieldViews[p.getX()][p.getY()];
+	public SudokuCellView getSudokuCellView(Position p){
+		return sudokuCellViews[p.getX()][p.getY()];
 	}
 
 	/**
@@ -337,18 +337,18 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	 * 
 	 * @return Die aktive SudokuFieldView
 	 */
-	public SudokuFieldView getCurrentFieldView() {
-		return this.currentFieldView;
+	public SudokuCellView getCurrentCellView() {
+		return this.currentCellView;
 	}
 
 	/**
 	 * Setzt die aktuelle SudokuFieldView
 	 * 
-	 * @param currentFieldView
+	 * @param currentCellView
 	 *            die zu setzende SudokuFieldView
 	 */
-	public void setCurrentFieldView(SudokuFieldView currentFieldView) {
-		this.currentFieldView = currentFieldView;
+	public void setCurrentCellView(SudokuCellView currentCellView) {
+		this.currentCellView = currentCellView;
 	}
 
 	/**
@@ -356,8 +356,8 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	 * 
 	 * @return die aktuelle Größe einer FieldView
 	 */
-	public int getCurrentFieldViewSize() {
-		return (int) (this.defaultFieldViewSize * zoomFactor);
+	public int getCurrentCellViewSize() {
+		return (int) (this.defaultCellViewSize * zoomFactor);
 	}
 
 	/**
@@ -373,19 +373,19 @@ public class SudokuLayout extends RelativeLayout implements ObservableFieldInter
 	/**
 	 * {@inheritDoc}
 	 */
-	public void registerListener(FieldInteractionListener listener) {
+	public void registerListener(CellInteractionListener listener) {
 		SudokuType sudokuType = this.game.getSudoku().getSudokuType();
 		for (Position p: sudokuType.getValidPositions())
-			this.getSudokuFieldView(p).registerListener(listener);
+			this.getSudokuCellView(p).registerListener(listener);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void removeListener(FieldInteractionListener listener) {
+	public void removeListener(CellInteractionListener listener) {
 		SudokuType sudokuType = this.game.getSudoku().getSudokuType();
 		for (Position p: sudokuType.getValidPositions())
-			this.getSudokuFieldView(p).removeListener(listener);
+			this.getSudokuCellView(p).removeListener(listener);
 	}
 
 	/**

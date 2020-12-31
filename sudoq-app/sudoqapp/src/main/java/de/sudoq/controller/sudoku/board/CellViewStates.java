@@ -11,7 +11,7 @@ package de.sudoq.controller.sudoku.board;
  * Dieses Enum definiert Konstanten für Animationen bzw. Markierungen für
  * Felder.
  */
-public enum FieldViewStates {
+public enum CellViewStates {
 	/** Animation */
 
 	/**

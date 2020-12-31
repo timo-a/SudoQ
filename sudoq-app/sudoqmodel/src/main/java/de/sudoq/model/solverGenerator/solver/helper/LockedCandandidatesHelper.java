@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
-import de.sudoq.model.solverGenerator.solution.DerivationField;
+import de.sudoq.model.solverGenerator.solution.DerivationCell;
 import de.sudoq.model.solverGenerator.solution.LockedCandidatesDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.solvingAssistant.HintTypes;
@@ -129,7 +129,7 @@ public class LockedCandandidatesHelper extends SolveHelper {
             if(sudoku.getCurrentCandidates(p).get(first)){
                 BitSet irrelevantCandidates = (BitSet) sudoku.getCurrentCandidates(p).clone();
                 irrelevantCandidates.clear(first);
-                lastDerivation.addDerivationField(new DerivationField(p,relevantCandidates,irrelevantCandidates));
+                lastDerivation.addDerivationCell(new DerivationCell(p,relevantCandidates,irrelevantCandidates));
             }
         //Todo better: list fields where it is removed
         lastDerivation.setDescription("Note "+(first+1) );

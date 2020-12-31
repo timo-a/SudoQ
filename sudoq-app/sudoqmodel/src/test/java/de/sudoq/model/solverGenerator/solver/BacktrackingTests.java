@@ -76,7 +76,7 @@ public class BacktrackingTests {
 		back.update(true);
 		SolveDerivation deriv = back.getDerivation();
 		assertEquals(sudoku.branchings.size(), 1);
-		assertEquals(deriv.getFieldIterator().next().getPosition(), Position.get(1, 3));
+		assertEquals(deriv.getCellIterator().next().getPosition(), Position.get(1, 3));
 	}
 
 	@Test

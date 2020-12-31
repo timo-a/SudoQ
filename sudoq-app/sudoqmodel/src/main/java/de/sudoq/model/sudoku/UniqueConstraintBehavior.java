@@ -45,7 +45,7 @@ public class UniqueConstraintBehavior implements ConstraintBehavior {
 
 		ArrayList<Position> positions = constraint.getPositions();
 		for (Position pos: positions) {
-			currentValue = sudoku.getField(pos).getCurrentValue();
+			currentValue = sudoku.getCell(pos).getCurrentValue();
 			if (currentValue != -1)
 				if (foundNumbers.contains(currentValue))
 					return false;

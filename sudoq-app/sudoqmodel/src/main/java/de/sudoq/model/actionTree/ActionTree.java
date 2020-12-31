@@ -14,7 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.sudoq.model.ObservableModelImpl;
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 
 /**
  * Diese Klasse repräsentiert die Menge aller Züge auf einem Sudoku. Sie erlaubt
@@ -43,7 +43,7 @@ public class ActionTree extends ObservableModelImpl<ActionTreeElement> implement
 	 */
 	public ActionTree() {
 		idCounter = 1;
-		Action mockAction = new Action(0, new Field(-1, 1)) {
+		Action mockAction = new Action(0, new Cell(-1, 1)) {
 			public void undo() { }
 			public void execute() { }
 			public boolean inverse(Action a){ return false; }

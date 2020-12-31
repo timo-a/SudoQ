@@ -10,7 +10,7 @@ package de.sudoq.model.solverGenerator.transformations;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
 
@@ -61,9 +61,9 @@ public final class TransformationUtilities {
 
 		for (int i = 0; i < width - 1; i++) {// zeilen
 			for (int j = i + 1; j < width; j++) {// zeilenElemente
-				Field tmp = sudoku.getField(Position.get(i, j));
-				sudoku.setField(sudoku.getField(Position.get(j, i)), Position.get(i, j));
-				sudoku.setField(tmp, Position.get(j, i));
+				Cell tmp = sudoku.getCell(Position.get(i, j));
+				sudoku.setCell(sudoku.getCell(Position.get(j, i)), Position.get(i, j));
+				sudoku.setCell(tmp, Position.get(j, i));
 			}
 		}
 	}
@@ -150,13 +150,13 @@ public final class TransformationUtilities {
 			Position a = Position.get(collum1, j);
 			Position b = Position.get(collum2, j);
 
-			Field tmp = sudoku.getField(a);
+			Cell tmp = sudoku.getCell(a);
 
-			Field target = sudoku.getField(b);
+			Cell target = sudoku.getCell(b);
 
-			sudoku.setField(target, a);
+			sudoku.setCell(target, a);
 
-			sudoku.setField(tmp, b);
+			sudoku.setCell(tmp, b);
 		}
 	}
 
@@ -213,11 +213,11 @@ public final class TransformationUtilities {
 
 		for (Position p: sudoku.getSudokuType().getValidPositions()) {
 
-			Field f = sudoku.getField(p);
+			Cell f = sudoku.getCell(p);
 			int oldSymbol = f.getSolution();
 			int newSymbol = permutationRule.get(oldSymbol);
 			if (newSymbol != oldSymbol) // nur wenn sich was ändert, sonst bleibts ja gleich
-				sudoku.setField(new Field(f.isEditable(), newSymbol, f.getId(), f.getNumberOfValues()), p);
+				sudoku.setCell(new Cell(f.isEditable(), newSymbol, f.getId(), f.getNumberOfValues()), p);
 			
 		}
 	}

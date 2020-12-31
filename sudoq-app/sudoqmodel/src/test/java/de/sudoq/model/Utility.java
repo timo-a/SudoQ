@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.sudoq.model.files.FileManager;
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
 
@@ -49,7 +49,7 @@ public abstract class Utility {
         StringBuilder sb = new StringBuilder();
         for (int j = 0; j < sudoku.getSudokuType().getSize().getY(); j++) {
             for (int i = 0; i < sudoku.getSudokuType().getSize().getX(); i++) {
-                Field f = sudoku.getField(Position.get(i, j));
+                Cell f = sudoku.getCell(Position.get(i, j));
                 String op;
                 if (f != null){//feld existiert
                     int value = f.getCurrentValue();
@@ -75,7 +75,7 @@ public abstract class Utility {
         List<Position> p = new ArrayList<>();
         for (int y = 0; y < sudoku.getSudokuType().getSize().getY(); y++)
             for (int x = 0; x < sudoku.getSudokuType().getSize().getX(); x++)
-                if (sudoku.getField(Position.get(x, y)) != null)
+                if (sudoku.getCell(Position.get(x, y)) != null)
                     p.add(Position.get(x, y));
         return p;
     }

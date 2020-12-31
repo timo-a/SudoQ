@@ -7,7 +7,7 @@
  */
 package de.sudoq.model.actionTree;
 
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 
 /**
  * Dieses Interface definiert die Schnittstelle für Klassen, die konkrete
@@ -24,10 +24,10 @@ public interface ActionFactory {
 	 * 
 	 * @param value
 	 *            Der einzutragende Wert
-	 * @param field
+	 * @param cell
 	 *            Das von der Action zu bearbeitende Feld
 	 * @return Die erzeugt Aktion
 	 */
-    Action createAction(int value, Field field);
+    Action createAction(int value, Cell cell);
 
 }

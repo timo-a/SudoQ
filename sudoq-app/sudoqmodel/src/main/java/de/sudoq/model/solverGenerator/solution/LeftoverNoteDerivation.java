@@ -6,8 +6,8 @@ import java.util.List;
 import de.sudoq.model.actionTree.Action;
 import de.sudoq.model.actionTree.NoteActionFactory;
 import de.sudoq.model.solvingAssistant.HintTypes;
+import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Constraint;
-import de.sudoq.model.sudoku.Field;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.Utils;
@@ -46,7 +46,7 @@ public class LeftoverNoteDerivation extends SolveDerivation {
         NoteActionFactory af = new NoteActionFactory();
 
         for (Position p : constraint ) {
-            Field f = sudoku.getField(p);
+            Cell f = sudoku.getCell(p);
             if (f.isNoteSet(note) && f.isNotSolved())
                 actionlist.add(af.createAction(note, f));
         }

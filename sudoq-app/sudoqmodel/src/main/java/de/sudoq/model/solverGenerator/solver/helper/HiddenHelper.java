@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
-import de.sudoq.model.solverGenerator.solution.DerivationField;
+import de.sudoq.model.solverGenerator.solution.DerivationCell;
 import de.sudoq.model.solverGenerator.solution.HiddenSetDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.solvingAssistant.HintTypes;
@@ -119,8 +119,8 @@ public class HiddenHelper extends SubsetHelper {
 							BitSet relevantCandidates = (BitSet) currentCandidates.clone();
 							BitSet irrelevantCandidates = localCopy;
 							irrelevantCandidates.andNot(currentSet);
-							DerivationField field = new DerivationField(pos, relevantCandidates, irrelevantCandidates);
-							lastDerivation.addDerivationField(field);
+							DerivationCell field = new DerivationCell(pos, relevantCandidates, irrelevantCandidates);
+							lastDerivation.addDerivationCell(field);
 						}
 						foundSubset = true;
 					}
@@ -156,8 +156,8 @@ public class HiddenHelper extends SubsetHelper {
 		for (Position p : subsetPositions) {
 			BitSet relevantCandidates = (BitSet) this.sudoku.getCurrentCandidates(p).clone();
 			relevantCandidates.and(currentSet);
-			DerivationField field = new DerivationField(p, relevantCandidates, new BitSet());
-			derivation.addSubsetField(field);
+			DerivationCell field = new DerivationCell(p, relevantCandidates, new BitSet());
+			derivation.addSubsetCell(field);
 		}
 		return derivation;
 	}

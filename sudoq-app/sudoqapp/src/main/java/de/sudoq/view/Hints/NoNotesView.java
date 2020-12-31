@@ -13,7 +13,7 @@ import android.view.View;
 
 import java.util.Iterator;
 
-import de.sudoq.model.solverGenerator.solution.DerivationField;
+import de.sudoq.model.solverGenerator.solution.DerivationCell;
 import de.sudoq.model.solverGenerator.solution.NoNotesDerivation;
 import de.sudoq.view.SudokuLayout;
 
@@ -33,8 +33,8 @@ public class NoNotesView extends HintView {
 	public NoNotesView(Context context, SudokuLayout sl, NoNotesDerivation d) {
 		super(context, sl, d);
 
-		for(Iterator<DerivationField> i = d.getFieldIterator(); i.hasNext();) {
-			View fieldV = new HighlightedFieldView(context, sl, i.next().getPosition(), Color.GREEN);
+		for(Iterator<DerivationCell> i = d.getCellIterator(); i.hasNext();) {
+			View fieldV = new HighlightedCellView(context, sl, i.next().getPosition(), Color.GREEN);
 			highlightedObjects.add(fieldV);
 		}
 	}

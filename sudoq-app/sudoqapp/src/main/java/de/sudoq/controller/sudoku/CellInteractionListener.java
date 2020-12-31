@@ -7,28 +7,27 @@
  */
 package de.sudoq.controller.sudoku;
 
-import de.sudoq.view.SudokuFieldView;
+import de.sudoq.view.SudokuCellView;
 
 /**
- * Ein Listener für Änderungen an Sudoku-Feldern, wie das Auswählen eines Feld
- * bzw. die Änderung des Feldinhaltes.
+ * A listener for changes in sudoku cells, like selection of a cell or change in its value.
  */
-public interface FieldInteractionListener {
+public interface CellInteractionListener {
 
 	/**
-	 * Wird aufgerufen, falls ein neues Feld ausgewählt wurde.
+	 * Called if a cell is selected.
 	 * 
 	 * @param view
-	 *            Die View, welche neu ausgewählt wurde
+	 *            The newly selected view
 	 */
-	public void onFieldSelected(SudokuFieldView view);
+	public void onCellSelected(SudokuCellView view);
 
 	/**
-	 * Wird aufgerufen, falls ein Feld geändert wurde.
+	 * Called is a cell is changed.
 	 * 
 	 * @param view
-	 *            Die View, welche geändert wurde
+	 *            The changed view
 	 */
-	public void onFieldChanged(SudokuFieldView view);
+	public void onCellChanged(SudokuCellView view);
 
 }

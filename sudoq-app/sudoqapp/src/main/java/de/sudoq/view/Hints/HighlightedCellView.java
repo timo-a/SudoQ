@@ -12,11 +12,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.util.Log;
 import android.view.View;
 
 import de.sudoq.controller.sudoku.Symbol;
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.view.SudokuLayout;
 
@@ -25,7 +24,7 @@ import de.sudoq.view.SudokuLayout;
  * einzelnes Feld innerhalb eines Sudokus dar. Es erweitert den Android View um
  * Funktionalität zur Benutzerinteraktion und Färben.
  */
-public class HighlightedFieldView extends View {
+public class HighlightedCellView extends View {
 
 	/** Attributes */
 
@@ -56,7 +55,7 @@ public class HighlightedFieldView extends View {
 	 * @param color      Color of the margin
 	 * @throws IllegalArgumentException Wird geworfen, falls eines der Argumente null ist
 	 */
-	public HighlightedFieldView(Context context, SudokuLayout sl, Position position, int color) {
+	public HighlightedCellView(Context context, SudokuLayout sl, Position position, int color) {
 		super(context);
 		if (context == null || position == null) throw new IllegalArgumentException();
 
@@ -88,14 +87,14 @@ Paint.Style style;
 	}
 
 	private void drawOldMethod(Position p, Canvas canvas){
-		float edgeRadius = sl.getCurrentFieldViewSize() / 20.0f;
+		float edgeRadius = sl.getCurrentCellViewSize() / 20.0f;
 		paint.reset();
 		int thickness = 10;
 		paint.setStrokeWidth(thickness*sl.getCurrentSpacing());
 
 
 		//deklariert hier, weil wir es nicht früher brauchen, effizienter wäre weiter oben
-		int fieldSizeAndSpacing = sl.getCurrentFieldViewSize() + sl.getCurrentSpacing();
+		int fieldSizeAndSpacing = sl.getCurrentCellViewSize() + sl.getCurrentSpacing();
 		/* these first 4 seem similar. drawing the black line around?*/
 		/* fields that touch the edge: Paint your edge but leave space at the corners*/
 
@@ -169,14 +168,14 @@ Paint.Style style;
 
 
 	private void drawNewMethod(Position p, Canvas canvas, int color){
-		float edgeRadius = sl.getCurrentFieldViewSize() / 20.0f;
+		float edgeRadius = sl.getCurrentCellViewSize() / 20.0f;
 		paint.reset();
 		paint.setColor(color);
 		paint.setStyle(Paint.Style.STROKE);
 		int thickness = 10;
 		paint.setStrokeWidth(thickness*sl.getCurrentSpacing());
 
-		int fieldSizeAndSpacing = sl.getCurrentFieldViewSize() + sl.getCurrentSpacing();
+		int fieldSizeAndSpacing = sl.getCurrentCellViewSize() + sl.getCurrentSpacing();
 
 		float left   = sl.getCurrentLeftMargin() +  p.getX()      * fieldSizeAndSpacing - sl.getCurrentSpacing()/2;
 		float top    = sl.getCurrentTopMargin()  +  p.getY()      * fieldSizeAndSpacing - sl.getCurrentSpacing()/2;
@@ -198,10 +197,10 @@ Paint.Style style;
 	 * @param canvas
 	 *            Das Canvas in das gezeichnet werde nsoll
 	 *
-	 * @param field
+	 * @param cell
 	 *            Das Canvas in das gezeichnet werde nsoll
 	 */
-	private void drawNotes(Canvas canvas, Field field) {
+	private void drawNotes(Canvas canvas, Cell cell) {
 		Paint notePaint = new Paint();
 		notePaint.setAntiAlias(true);
 		int noteTextSize = getHeight() / Symbol.getInstance().getRasterSize();
@@ -209,7 +208,7 @@ Paint.Style style;
 		notePaint.setTextAlign(Paint.Align.CENTER);
 		notePaint.setColor(Color.BLACK);
 		for (int i = 0; i < Symbol.getInstance().getNumberOfSymbols(); i++) {
-			if (field.isNoteSet(i)) {
+			if (cell.isNoteSet(i)) {
 				String note = Symbol.getInstance().getMapping(i);
 				canvas.drawText(note + "", (i % Symbol.getInstance().getRasterSize()) * noteTextSize + noteTextSize / 2, (i / Symbol.getInstance().getRasterSize()) * noteTextSize + noteTextSize, notePaint);
 			}

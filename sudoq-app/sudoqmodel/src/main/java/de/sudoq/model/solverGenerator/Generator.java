@@ -95,7 +95,7 @@ public class Generator {
 
 		for (int x = 0; x < sudoku.getSudokuType().getSize().getX(); x++)
 			for (int y = 0; y < sudoku.getSudokuType().getSize().getY(); y++)
-				if (sudoku.getField(Position.get(x, y)) != null)
+				if (sudoku.getCell(Position.get(x, y)) != null)
 					p.add(Position.get(x, y));
 
 		return p;

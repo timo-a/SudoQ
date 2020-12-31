@@ -36,7 +36,7 @@ public class LastCandidateDerivation extends SolveDerivation {
     public List<Action> getActionList(Sudoku sudoku){
         SolveActionFactory af = new SolveActionFactory();
 
-        actionlist.add(af.createAction(remainingNote, sudoku.getField(pos)));
+        actionlist.add(af.createAction(remainingNote, sudoku.getCell(pos)));
         return actionlist;
     }
 

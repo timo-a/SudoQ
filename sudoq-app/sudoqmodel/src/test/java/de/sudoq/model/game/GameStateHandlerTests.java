@@ -11,8 +11,7 @@ import de.sudoq.model.ModelChangeListener;
 import de.sudoq.model.actionTree.ActionFactory;
 import de.sudoq.model.actionTree.ActionTreeElement;
 import de.sudoq.model.actionTree.SolveActionFactory;
-import de.sudoq.model.game.GameStateHandler;
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 
 public class GameStateHandlerTests {
 
@@ -25,10 +24,10 @@ public class GameStateHandlerTests {
 		assertFalse(stateHandler.canRedo());
 		stateHandler.redo();
 		ActionFactory af = new SolveActionFactory();
-		Field field = new Field(-1, 9);
+		Cell cell = new Cell(-1, 9);
 
-		stateHandler.addAndExecute(af.createAction(5, field));
-		assertEquals(field.getCurrentValue(), 5);
+		stateHandler.addAndExecute(af.createAction(5, cell));
+		assertEquals(cell.getCurrentValue(), 5);
 		assertTrue(stateHandler.getActionTree().getSize() !=0);
 	}
 
@@ -44,16 +43,16 @@ public class GameStateHandlerTests {
 	public void testUndoRedo() {
 		GameStateHandler stateHandler = new GameStateHandler();
 		ActionFactory af = new SolveActionFactory();
-		Field field1 = new Field(-1, 9);
-		Field field2 = new Field(-1, 9);
-		Field field3 = new Field(-1, 9);
+		Cell cell1 = new Cell(-1, 9);
+		Cell cell2 = new Cell(-1, 9);
+		Cell cell3 = new Cell(-1, 9);
 
-		int value1 = field1.getCurrentValue();
-		int value2 = field2.getCurrentValue();
-		int value3 = field3.getCurrentValue();
-		stateHandler.addAndExecute(af.createAction(5, field1));
-		stateHandler.addAndExecute(af.createAction(6, field2));
-		stateHandler.addAndExecute(af.createAction(7, field3));
+		int value1 = cell1.getCurrentValue();
+		int value2 = cell2.getCurrentValue();
+		int value3 = cell3.getCurrentValue();
+		stateHandler.addAndExecute(af.createAction(5, cell1));
+		stateHandler.addAndExecute(af.createAction(6, cell2));
+		stateHandler.addAndExecute(af.createAction(7, cell3));
 		assertTrue(stateHandler.canUndo());
 		stateHandler.undo();
 		assertTrue(stateHandler.canUndo());
@@ -61,9 +60,9 @@ public class GameStateHandlerTests {
 		assertTrue(stateHandler.canUndo());
 		stateHandler.undo();
 		assertFalse(stateHandler.canUndo());
-		assertEquals(value1, field1.getCurrentValue());
-		assertEquals(value2, field2.getCurrentValue());
-		assertEquals(value3, field3.getCurrentValue());
+		assertEquals(value1, cell1.getCurrentValue());
+		assertEquals(value2, cell2.getCurrentValue());
+		assertEquals(value3, cell3.getCurrentValue());
 		assertTrue(stateHandler.canRedo());
 		stateHandler.redo();
 		assertTrue(stateHandler.canRedo());
@@ -71,9 +70,9 @@ public class GameStateHandlerTests {
 		assertTrue(stateHandler.canRedo());
 		stateHandler.redo();
 		assertFalse(stateHandler.canRedo());
-		assertEquals(5, field1.getCurrentValue());
-		assertEquals(6, field2.getCurrentValue());
-		assertEquals(7, field3.getCurrentValue());
+		assertEquals(5, cell1.getCurrentValue());
+		assertEquals(6, cell2.getCurrentValue());
+		assertEquals(7, cell3.getCurrentValue());
 	}
 
 	@Test
@@ -82,19 +81,19 @@ public class GameStateHandlerTests {
 		 * first 2 beheave as expected, 3rd does nothing and 4 crashes */
 		GameStateHandler stateHandler = new GameStateHandler();
 		ActionFactory af = new SolveActionFactory();
-		Field field1 = new Field(-1, 9);
+		Cell cell1 = new Cell(-1, 9);
 
-		stateHandler.addAndExecute(af.createAction(3, field1));
-		assertEquals(3, field1.getCurrentValue());
+		stateHandler.addAndExecute(af.createAction(3, cell1));
+		assertEquals(3, cell1.getCurrentValue());
 
-		stateHandler.addAndExecute(af.createAction(-1, field1));
-		assertEquals(-1, field1.getCurrentValue());
+		stateHandler.addAndExecute(af.createAction(-1, cell1));
+		assertEquals(-1, cell1.getCurrentValue());
 
-		stateHandler.addAndExecute(af.createAction(3, field1));
-		assertEquals(3, field1.getCurrentValue());
+		stateHandler.addAndExecute(af.createAction(3, cell1));
+		assertEquals(3, cell1.getCurrentValue());
 
-		stateHandler.addAndExecute(af.createAction(-1, field1));
-		assertEquals(-1, field1.getCurrentValue());
+		stateHandler.addAndExecute(af.createAction(-1, cell1));
+		assertEquals(-1, cell1.getCurrentValue());
 
 	}
 
@@ -103,47 +102,47 @@ public class GameStateHandlerTests {
 	public void testGoTo() {
 		GameStateHandler stateHandler = new GameStateHandler();
 		ActionFactory af = new SolveActionFactory();
-		Field field = new Field(-1, 9);
+		Cell cell = new Cell(-1, 9);
 
 		//add 5, undo test if undo successful
-		int value = field.getCurrentValue();
-		stateHandler.addAndExecute(af.createAction(5, field));
+		int value = cell.getCurrentValue();
+		stateHandler.addAndExecute(af.createAction(5, cell));
 		stateHandler.goToState(stateHandler.getCurrentState());
 		stateHandler.undo();
-		assertEquals(value, field.getCurrentValue());
+		assertEquals(value, cell.getCurrentValue());
 
 		//redo the 5,
 		stateHandler.redo();
 		ActionTreeElement first = stateHandler.getCurrentState();// first <- 5
-		stateHandler.addAndExecute(af.createAction(7, field));
+		stateHandler.addAndExecute(af.createAction(7, cell));
 		ActionTreeElement branch = stateHandler.getCurrentState();
 		stateHandler.goToState(first);
-		assertEquals(5, field.getCurrentValue());
-		stateHandler.addAndExecute(af.createAction(3, field));
-		assertEquals(3, field.getCurrentValue());
+		assertEquals(5, cell.getCurrentValue());
+		stateHandler.addAndExecute(af.createAction(3, cell));
+		assertEquals(3, cell.getCurrentValue());
 
 		stateHandler.undo();
 		stateHandler.undo();
-		assertEquals(value, field.getCurrentValue());
+		assertEquals(value, cell.getCurrentValue());
 		stateHandler.undo();
-		assertEquals(value, field.getCurrentValue());
+		assertEquals(value, cell.getCurrentValue());
 
 		stateHandler.redo();
 		stateHandler.redo();
-		assertEquals(3, field.getCurrentValue());
+		assertEquals(3, cell.getCurrentValue());
 
 		stateHandler.goToState(branch);
-		assertEquals(7, field.getCurrentValue());
+		assertEquals(7, cell.getCurrentValue());
 	}
 
 	@Test
 	public void testEmptyUndoStack() {
 		GameStateHandler stateHandler = new GameStateHandler();
 		ActionFactory af = new SolveActionFactory();
-		Field f_1 = new Field(-1, 9);
-		Field f_2 = new Field(-2, 9);
-		Field f_3 = new Field(-3, 9);
-		Field f_4 = new Field(-4, 9);
+		Cell f_1 = new Cell(-1, 9);
+		Cell f_2 = new Cell(-2, 9);
+		Cell f_3 = new Cell(-3, 9);
+		Cell f_4 = new Cell(-4, 9);
 
 		stateHandler.addAndExecute(af.createAction(1, f_1));
 		ActionTreeElement b1 = stateHandler.getCurrentState();
@@ -178,13 +177,13 @@ public class GameStateHandlerTests {
 	public void testStateMarking() {
 		GameStateHandler stateHandler = new GameStateHandler();
 		ActionFactory af = new SolveActionFactory();
-		Field field = new Field(-1, 9);
+		Cell cell = new Cell(-1, 9);
 
 		assertFalse(stateHandler.isMarked(stateHandler.getCurrentState()));
 		stateHandler.markCurrentState();
 		assertTrue(stateHandler.isMarked(stateHandler.getCurrentState()));
 
-		stateHandler.addAndExecute(af.createAction(5, field));
+		stateHandler.addAndExecute(af.createAction(5, cell));
 
 		assertFalse(stateHandler.isMarked(stateHandler.getCurrentState()));
 		stateHandler.markCurrentState();
@@ -197,10 +196,10 @@ public class GameStateHandlerTests {
 		GameStateHandler stateHandler = new GameStateHandler();
 		ActionFactory af = new SolveActionFactory();
 		// Vier Felder
-		Field field1 = new Field(-1, 9);
-		Field field2 = new Field(-1, 9);
-		Field field3 = new Field(-1, 9);
-		Field field4 = new Field(-1, 9);
+		Cell cell1 = new Cell(-1, 9);
+		Cell cell2 = new Cell(-1, 9);
+		Cell cell3 = new Cell(-1, 9);
+		Cell cell4 = new Cell(-1, 9);
 
 		// Vier Werte
 		int value1 = 2;
@@ -209,13 +208,13 @@ public class GameStateHandlerTests {
 		int value4 = 1;
 
 		// Feld 1 wird Wert 1 gesetzt
-		stateHandler.addAndExecute(af.createAction(value1, field1));
+		stateHandler.addAndExecute(af.createAction(value1, cell1));
 		// System.out.println(field1.getCurrentValue() + " " +
 		// field2.getCurrentValue() + " " + field3.getCurrentValue() + " " +
 		// field4.getCurrentValue());
-		stateHandler.addAndExecute(af.createAction(value2, field2));
-		stateHandler.addAndExecute(af.createAction(value3, field3));
-		stateHandler.addAndExecute(af.createAction(value4, field4));
+		stateHandler.addAndExecute(af.createAction(value2, cell2));
+		stateHandler.addAndExecute(af.createAction(value3, cell3));
+		stateHandler.addAndExecute(af.createAction(value4, cell4));
 
 		// current ist die letzte addAndExecute Operation
 		ActionTreeElement element1 = stateHandler.getCurrentState().getParent();
@@ -230,9 +229,9 @@ public class GameStateHandlerTests {
 		stateHandler.goToState(element1);
 
 		// Alles sollte wie vorher sein
-		assertEquals(field1.getCurrentValue(), value1);
-		assertEquals(field2.getCurrentValue(), value2);
-		assertEquals(field3.getCurrentValue(), value3);
+		assertEquals(cell1.getCurrentValue(), value1);
+		assertEquals(cell2.getCurrentValue(), value2);
+		assertEquals(cell3.getCurrentValue(), value3);
 
 	}
 
@@ -240,11 +239,11 @@ public class GameStateHandlerTests {
 	public void testGotoDownwards() {
 		GameStateHandler stateHandler = new GameStateHandler();
 		ActionFactory af = new SolveActionFactory();
-		Field field = new Field(-1, 9);
+		Cell cell = new Cell(-1, 9);
 
-		stateHandler.addAndExecute(af.createAction(1, field));
-		stateHandler.addAndExecute(af.createAction(2, field));
-		stateHandler.addAndExecute(af.createAction(3, field));
+		stateHandler.addAndExecute(af.createAction(1, cell));
+		stateHandler.addAndExecute(af.createAction(2, cell));
+		stateHandler.addAndExecute(af.createAction(3, cell));
 		ActionTreeElement current = stateHandler.getCurrentState();
 		stateHandler.undo();
 		stateHandler.undo();
@@ -256,12 +255,12 @@ public class GameStateHandlerTests {
 	public void testLocking() {
 		final GameStateHandler stateHandler = new GameStateHandler();
 		final ActionFactory af = new SolveActionFactory();
-		final Field f = new Field(-1, 9);
+		final Cell f = new Cell(-1, 9);
 
-		f.registerListener(new ModelChangeListener<Field>() {
+		f.registerListener(new ModelChangeListener<Cell>() {
 
 			@Override
-			public void onModelChanged(Field obj) {
+			public void onModelChanged(Cell obj) {
 				stateHandler.addAndExecute(af.createAction(8, f));
 			}
 		});

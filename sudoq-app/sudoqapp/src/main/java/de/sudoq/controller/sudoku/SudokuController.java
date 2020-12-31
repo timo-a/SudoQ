@@ -13,7 +13,7 @@ import de.sudoq.model.actionTree.SolveActionFactory;
 import de.sudoq.model.game.Game;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.profile.Statistics;
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 
 /**
  * Der SudokuController ist dafür zuständig auf Aktionen des Benutzers mit dem
@@ -85,22 +85,22 @@ public class SudokuController implements AssistanceRequestListener, ActionListen
 	/**
 	 * {@inheritDoc}
 	 */
-	public void onNoteAdd(Field field, int value) {
-		game.addAndExecute(new NoteActionFactory().createAction(value, field));
+	public void onNoteAdd(Cell cell, int value) {
+		game.addAndExecute(new NoteActionFactory().createAction(value, cell));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void onNoteDelete(Field field, int value) {
-		game.addAndExecute(new NoteActionFactory().createAction(value, field)); //TODO same code as onNoteAdd why?
+	public void onNoteDelete(Cell cell, int value) {
+		game.addAndExecute(new NoteActionFactory().createAction(value, cell)); //TODO same code as onNoteAdd why?
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void onAddEntry(Field field, int value) {
-		game.addAndExecute(new SolveActionFactory().createAction(value, field));
+	public void onAddEntry(Cell cell, int value) {
+		game.addAndExecute(new SolveActionFactory().createAction(value, cell));
 		if (this.game.isFinished()) {
 			updateStatistics();
 			handleFinish(false);
@@ -118,15 +118,15 @@ public class SudokuController implements AssistanceRequestListener, ActionListen
 	/**
 	 * {@inheritDoc}
 	 */
-	public void onDeleteEntry(Field field) {
-		game.addAndExecute(new SolveActionFactory().createAction(Field.EMPTYVAL, field));
+	public void onDeleteEntry(Cell cell) {
+		game.addAndExecute(new SolveActionFactory().createAction(Cell.EMPTYVAL, cell));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public boolean onSolveOne() {
-		boolean res = this.game.solveField();
+		boolean res = this.game.solveCell();
 		if (this.game.isFinished()) {
 			updateStatistics();
 			handleFinish(false);
@@ -137,8 +137,8 @@ public class SudokuController implements AssistanceRequestListener, ActionListen
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean onSolveCurrent(Field field) {
-		boolean res = this.game.solveField(field);
+	public boolean onSolveCurrent(Cell cell) {
+		boolean res = this.game.solveCell(cell);
 		if (this.game.isFinished()) {
 			updateStatistics();
 			handleFinish(false);
@@ -151,9 +151,9 @@ public class SudokuController implements AssistanceRequestListener, ActionListen
 	 */
 	public boolean onSolveAll() {
 
-		for (Field f : this.game.getSudoku()) {
+		for (Cell f : this.game.getSudoku()) {
 			if (!f.isNotWrong()) {
-				this.game.addAndExecute(new SolveActionFactory().createAction(Field.EMPTYVAL, f));
+				this.game.addAndExecute(new SolveActionFactory().createAction(Cell.EMPTYVAL, f));
 			}
 		}
 

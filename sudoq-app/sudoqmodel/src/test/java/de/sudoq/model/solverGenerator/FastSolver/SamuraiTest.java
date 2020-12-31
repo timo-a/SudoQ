@@ -3,17 +3,11 @@ package de.sudoq.model.solverGenerator.FastSolver;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.files.FileManagerTests;
-import de.sudoq.model.solverGenerator.GenerationAlgo;
-import de.sudoq.model.sudoku.Field;
-import de.sudoq.model.sudoku.Position;
-import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
-import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;

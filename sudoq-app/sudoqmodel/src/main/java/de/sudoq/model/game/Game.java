@@ -17,8 +17,8 @@ import de.sudoq.model.actionTree.ActionTreeElement;
 import de.sudoq.model.actionTree.NoteActionFactory;
 import de.sudoq.model.actionTree.SolveAction;
 import de.sudoq.model.actionTree.SolveActionFactory;
+import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Constraint;
-import de.sudoq.model.sudoku.Field;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuManager;
@@ -228,7 +228,7 @@ public class Game implements Xmlable {
 
         this.stateHandler.addAndExecute(action);
 
-        updateNotes(sudoku.getField(action.getFieldId()));
+        updateNotes(sudoku.getCell(action.getCellId()));
 
         if (isFinished())
             this.finished = true;
@@ -238,15 +238,15 @@ public class Game implements Xmlable {
      * Updatet die Notizen in den Constraints des spezifizierten Feldes so, dass der spezifizierte Wert aus diesen
      * gelöscht wird. Dies wird nur ausgeführt, falls die entsprechende Hilfestellung im Game aktiviert ist.
      * 
-     * @param field
+     * @param cell
      *            Das Field, welches modifiziert wurde
      */
-    private void updateNotes(Field field) {
+    private void updateNotes(Cell cell) {
         if (!this.isAssistanceAvailable(Assistances.autoAdjustNotes))
             return;
 
-        Position editedPos = sudoku.getPosition(field.getId());
-        int value = field.getCurrentValue();
+        Position editedPos = sudoku.getPosition(cell.getId());
+        int value = cell.getCurrentValue();
 
         /*this.sudoku.getSudokuType().getConstraints().stream().filter(c -> c.includes(editedPos))
                                                              .flatMap(c -> c.getPositions().stream())
@@ -256,8 +256,8 @@ public class Game implements Xmlable {
         for (Constraint c : this.sudoku.getSudokuType()) {
             if (c.includes(editedPos)) {
                 for (Position changePos : c) {
-                    if (this.sudoku.getField(changePos).isNoteSet(value)) {
-                        this.addAndExecute(new NoteActionFactory().createAction(value, this.sudoku.getField(changePos)));
+                    if (this.sudoku.getCell(changePos).isNoteSet(value)) {
+                        this.addAndExecute(new NoteActionFactory().createAction(value, this.sudoku.getCell(changePos)));
                     }
                 }
             }
@@ -335,18 +335,18 @@ public class Game implements Xmlable {
      * Versucht das spezifizierte Feld zu lösen und gibt zurück, ob das Lösen möglich war. Ist das Sudoku ungültig oder
      * gibt es Fehler im Sudoku, so wird false zurückgegeben.
      * 
-     * @param field
+     * @param cell
      *            Das zu lösende Feld
      * @return true, falls das Feld gelöst werden konnte, false andernfalls
      */
-    public boolean solveField(Field field) {
-        if (this.sudoku.hasErrors() || field == null)
+    public boolean solveCell(Cell cell) {
+        if (this.sudoku.hasErrors() || cell == null)
             return false;
 
         this.assistancesCost += 3;
-        int solution = field.getSolution();
-        if (solution != Field.EMPTYVAL) {
-            this.addAndExecute(new SolveActionFactory().createAction(solution, field));
+        int solution = cell.getSolution();
+        if (solution != Cell.EMPTYVAL) {
+            this.addAndExecute(new SolveActionFactory().createAction(solution, cell));
             return true;
         } else {
             return false;
@@ -358,13 +358,13 @@ public class Game implements Xmlable {
      * 
      * @return true, falls ein Feld gelöst werden konnte, false falls nicht
      */
-    public boolean solveField() {
+    public boolean solveCell() {
         if (this.sudoku.hasErrors())
             return false;
 
         this.assistancesCost += 3;
 
-        for (Field f : this.sudoku) {
+        for (Cell f : this.sudoku) {
             if (f.isNotSolved()) {
                 this.addAndExecute(new SolveActionFactory().createAction(f.getSolution(), f));
                 break;
@@ -387,19 +387,19 @@ public class Game implements Xmlable {
         if (this.sudoku.hasErrors())
             return false;
 
-        List<Field> unsolvedFields = new ArrayList<>();
-        for (Field f : this.sudoku) {
+        List<Cell> unsolvedCells = new ArrayList<>();
+        for (Cell f : this.sudoku) {
             if (f.isNotSolved()) {
-                unsolvedFields.add(f);
+                unsolvedCells.add(f);
             }
         }
 
         Random rnd = new Random();
-        while (!unsolvedFields.isEmpty()) {
-            int nr = rnd.nextInt(unsolvedFields.size());
-            this.addAndExecute(new SolveActionFactory().createAction(unsolvedFields.get(nr).getSolution(),
-                    unsolvedFields.get(nr)));
-            unsolvedFields.remove(nr);
+        while (!unsolvedCells.isEmpty()) {
+            int nr = rnd.nextInt(unsolvedCells.size());
+            this.addAndExecute(new SolveActionFactory().createAction(unsolvedCells.get(nr).getSolution(),
+                    unsolvedCells.get(nr)));
+            unsolvedCells.remove(nr);
         }
 
         this.assistancesCost += Integer.MAX_VALUE / 80;
@@ -548,7 +548,7 @@ public class Game implements Xmlable {
                 // every element has e parent
 
                 int field_id = Integer.parseInt(sub.getAttributeValue(ActionTreeElement.FIELD_ID));
-                Field f = sudoku.getField(field_id);
+                Cell f = sudoku.getCell(field_id);
                 if (sub.getAttributeValue(ActionTreeElement.ACTION_TYPE).equals(SolveAction.class.getSimpleName())) {
                     this.stateHandler.addAndExecute(new SolveActionFactory().createAction(f.getCurrentValue() + diff,
                                                                                           f));

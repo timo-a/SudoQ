@@ -6,10 +6,9 @@ import java.util.BitSet;
 
 import org.junit.Test;
 
-import de.sudoq.model.solverGenerator.solution.DerivationField;
 import de.sudoq.model.sudoku.Position;
 
-public class DerivationFieldTests {
+public class DerivationCellTests {
 
 	@Test
 	public void standardTest() {
@@ -19,7 +18,7 @@ public class DerivationFieldTests {
 		BitSet irrelevantCandidates = new BitSet();
 		irrelevantCandidates.set(1);
 		irrelevantCandidates.set(2);
-		DerivationField derivation = new DerivationField(Position.get(1, 1), relevantCandidates, irrelevantCandidates);
+		DerivationCell derivation = new DerivationCell(Position.get(1, 1), relevantCandidates, irrelevantCandidates);
 		assertEquals(derivation.getPosition(), Position.get(1, 1));
 		assertEquals(derivation.getRelevantCandidates(), relevantCandidates);
 		assertEquals(derivation.getIrrelevantCandidates(), irrelevantCandidates);
@@ -27,12 +26,12 @@ public class DerivationFieldTests {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void positionNull() {
-		new DerivationField(null, new BitSet(), new BitSet());
+		new DerivationCell(null, new BitSet(), new BitSet());
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void candidatesNull() {
-		new DerivationField(Position.get(1, 1), null, null);
+		new DerivationCell(Position.get(1, 1), null, null);
 	}
 
 }

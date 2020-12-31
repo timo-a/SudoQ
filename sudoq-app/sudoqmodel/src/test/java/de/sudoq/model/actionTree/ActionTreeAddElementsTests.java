@@ -2,10 +2,8 @@ package de.sudoq.model.actionTree;
 
 import org.junit.Test;
 
-import java.util.List;
-
 import de.sudoq.model.game.GameStateHandler;
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -24,13 +22,13 @@ public class ActionTreeAddElementsTests {
 		//ActionTree at = new ActionTree();
 		ActionFactory factory = new SolveActionFactory();
 
-		Field field = new Field(1, 9);
+		Cell cell = new Cell(1, 9);
 
 		ActionTreeElement root = stateHandler.getActionTree().getRoot();
 
-		stateHandler.addAndExecute(factory.createAction(1, field));
+		stateHandler.addAndExecute(factory.createAction(1, cell));
 		stateHandler.undo();
-		stateHandler.addAndExecute(factory.createAction(1, field));//should be ignored by at
+		stateHandler.addAndExecute(factory.createAction(1, cell));//should be ignored by at
 
 		assertEquals(1, root.getChildrenList().size());
 		assertTrue(root.getChildrenList().get(0).getChildrenList().isEmpty());
@@ -47,14 +45,14 @@ public class ActionTreeAddElementsTests {
 		GameStateHandler sh = new GameStateHandler();
 		ActionFactory af = new SolveActionFactory();
 
-		Field field = new Field(1, 9);
+		Cell cell = new Cell(1, 9);
 
 		ActionTreeElement root = sh.getActionTree().getRoot();
 
-		sh.addAndExecute(af.createAction(2, field));
-		sh.addAndExecute(af.createAction(1, field));
+		sh.addAndExecute(af.createAction(2, cell));
+		sh.addAndExecute(af.createAction(1, cell));
 
-		sh.addAndExecute(af.createAction(2, field));
+		sh.addAndExecute(af.createAction(2, cell));
 
 		assertEquals(2, root.getChildrenList().size());
 		for(ActionTreeElement child: root.getChildrenList())

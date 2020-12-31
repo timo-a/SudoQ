@@ -18,9 +18,8 @@ import de.sudoq.model.solverGenerator.solution.LeftoverNoteDerivation;
 import de.sudoq.model.solverGenerator.solution.LockedCandidatesDerivation;
 import de.sudoq.model.solverGenerator.solution.NakedSetDerivation;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
-import de.sudoq.model.solverGenerator.solution.XWingDerivation;
 import de.sudoq.model.sudoku.CandidateSet;
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.Utils;
 import de.sudoq.model.sudoku.Utils.ConstraintShape;
@@ -93,9 +92,9 @@ public class HintFormulator {
         return text;
     }
 
-    private static boolean aFieldIsEmpty(SudokuActivity sActivity){
+    private static boolean aCellIsEmpty(SudokuActivity sActivity){
         Sudoku sudoku = sActivity.getGame().getSudoku();
-        for (Field f : sudoku)
+        for (Cell f : sudoku)
             if (f.isCompletelyEmpty()){
                 return true;
             }

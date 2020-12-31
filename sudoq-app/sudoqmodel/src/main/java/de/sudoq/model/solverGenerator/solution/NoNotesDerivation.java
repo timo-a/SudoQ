@@ -34,12 +34,12 @@ public class NoNotesDerivation extends SolveDerivation {
     public List<Action> getActionList(Sudoku sudoku){
         NoteActionFactory af = new NoteActionFactory();
 
-        for(Iterator<DerivationField> dfi = getFieldIterator(); dfi.hasNext();){
-            DerivationField df = dfi.next();
+        for(Iterator<DerivationCell> dfi = getCellIterator(); dfi.hasNext();){
+            DerivationCell df = dfi.next();
             CandidateSet cs = new CandidateSet();
             cs.assignWith(df.getRelevantCandidates());
             for (int i : cs.getSetBits()){
-                actionlist.add(af.createAction(i, sudoku.getField(df.getPosition())));
+                actionlist.add(af.createAction(i, sudoku.getCell(df.getPosition())));
             }
         }
         return actionlist;

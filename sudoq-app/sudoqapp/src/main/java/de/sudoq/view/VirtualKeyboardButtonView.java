@@ -15,8 +15,8 @@ import android.widget.TableLayout.LayoutParams;
 
 import java.util.ArrayList;
 
-import de.sudoq.controller.sudoku.board.FieldViewPainter;
-import de.sudoq.controller.sudoku.board.FieldViewStates;
+import de.sudoq.controller.sudoku.board.CellViewPainter;
+import de.sudoq.controller.sudoku.board.CellViewStates;
 import de.sudoq.controller.sudoku.InputListener;
 import de.sudoq.controller.sudoku.ObservableInput;
 import de.sudoq.controller.sudoku.Symbol;
@@ -65,7 +65,7 @@ public class VirtualKeyboardButtonView extends View implements ObservableInput {
 		this.drawnSymbol = Symbol.getInstance().getMapping(symbol);
 		this.inputListener = new ArrayList<InputListener>();
 
-		FieldViewPainter.getInstance().setMarking(this, FieldViewStates.DEFAULT_BORDER);
+		CellViewPainter.getInstance().setMarking(this, CellViewStates.DEFAULT_BORDER);
 	}
 
 	/** Methods */
@@ -101,7 +101,7 @@ public class VirtualKeyboardButtonView extends View implements ObservableInput {
 	public void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		FieldViewPainter.getInstance().markField(canvas, this, this.drawnSymbol, false, false);
+		CellViewPainter.getInstance().markCell(canvas, this, this.drawnSymbol, false, false);
 		if (!this.isEnabled()) {
 			canvas.drawARGB(100, 10, 10, 10);
 		}

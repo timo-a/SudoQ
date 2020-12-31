@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.ConstraintType;
 import de.sudoq.model.sudoku.Position;
@@ -75,7 +74,7 @@ public class SolverSudokuTests {
 		sudoku.resetCandidates();
 		assertEquals(sudoku.branchings.size(), 0);
 		for (Position p : sudoku.positions) {
-			if (sudoku.getField(p).getCurrentValue() != -1) {
+			if (sudoku.getCell(p).getCurrentValue() != -1) {
 				assertEquals(sudoku.getCurrentCandidates(p).cardinality(), 0);
 			} else {
 				int currentCandidate = -1;
@@ -83,7 +82,7 @@ public class SolverSudokuTests {
 					currentCandidate = sudoku.getCurrentCandidates(p).nextSetBit(currentCandidate + 1);
 					for (Constraint c : sudoku.constraints.get(p)) {
 						for (Position pos : c) {
-							assertFalse(sudoku.getField(pos).getCurrentValue() == currentCandidate);
+							assertFalse(sudoku.getCell(pos).getCurrentValue() == currentCandidate);
 						}
 					}
 				}
@@ -124,7 +123,7 @@ public class SolverSudokuTests {
 		sudoku.setSolution(Position.get(0, 0), 3);
 		sudoku.setSolution(Position.get(1, 0), 2);
 		sudoku.startNewBranch(Position.get(2, 0), 3);
-		sudoku.getField(Position.get(2, 0)).setCurrentValue(3);
+		sudoku.getCell(Position.get(2, 0)).setCurrentValue(3);
 		sudoku.updateCandidates();
 		assertEquals(sudoku.getCurrentCandidates(Position.get(3, 0)).cardinality(), 1);
 		assertEquals(sudoku.getCurrentCandidates(Position.get(3, 0)).nextSetBit(0), 2);

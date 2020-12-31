@@ -1,7 +1,7 @@
 package de.sudoq.model.solverGenerator.FastSolver.DLX2;
 
 import de.sudoq.model.solverGenerator.FastSolver.FastSolver;
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
@@ -22,10 +22,10 @@ public class SamuraiSolver implements FastSolver {
 
     private int[][] toArray(Sudoku s){
         int[][] a = new int[21][21];
-        Field f;
+        Cell f;
         for (int y = 0; y < 21; y++)
             for (int x = 0; x < 21; x++) {
-                f = s.getField(Position.get(x,y));
+                f = s.getCell(Position.get(x,y));
                 if (f != null && f.isSolved())
                     a[y][x] = f.getCurrentValue() +1; //s has values [0,8] so we need to add one.
             }

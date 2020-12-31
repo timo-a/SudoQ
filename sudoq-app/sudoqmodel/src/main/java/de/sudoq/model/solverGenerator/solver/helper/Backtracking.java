@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Stack;
 
-import de.sudoq.model.solverGenerator.solution.DerivationField;
+import de.sudoq.model.solverGenerator.solution.DerivationCell;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.solvingAssistant.HintTypes;
@@ -83,9 +83,9 @@ public class Backtracking extends SolveHelper {
 			BitSet relevantCandidates = new BitSet();
 			relevantCandidates.set(chosenCandidate);
 			irrelevantCandidates.clear(chosenCandidate);
-			DerivationField derivField = new DerivationField(leastCandidatesPosition, relevantCandidates,
+			DerivationCell derivField = new DerivationCell(leastCandidatesPosition, relevantCandidates,
 			                                                 irrelevantCandidates);
-			lastDerivation.addDerivationField(derivField);
+			lastDerivation.addDerivationCell(derivField);
 			lastDerivation.setDescription("Backtrack");
 		}
 

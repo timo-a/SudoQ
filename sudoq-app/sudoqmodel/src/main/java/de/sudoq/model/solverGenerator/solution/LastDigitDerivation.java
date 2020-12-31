@@ -40,7 +40,7 @@ public class LastDigitDerivation extends SolveDerivation {
     @Override
     public List<Action> getActionList(Sudoku sudoku){
         SolveActionFactory af = new SolveActionFactory();
-        return Collections.singletonList(af.createAction(solution, sudoku.getField(emptyPosition)));
+        return Collections.singletonList(af.createAction(solution, sudoku.getCell(emptyPosition)));
     }
 
 

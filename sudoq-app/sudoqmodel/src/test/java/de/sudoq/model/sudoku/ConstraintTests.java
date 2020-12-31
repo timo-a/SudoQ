@@ -72,9 +72,9 @@ public class ConstraintTests {
 		
 		Sudoku sudo = new Sudoku(s99, map, new PositionMap<Boolean>(Position.get(9, 9)));
 
-		sudo.getField(posA).setCurrentValue(0);
-		sudo.getField(posB).setCurrentValue(4);
-		sudo.getField(posC).setCurrentValue(4);
+		sudo.getCell(posA).setCurrentValue(0);
+		sudo.getCell(posB).setCurrentValue(4);
+		sudo.getCell(posC).setCurrentValue(4);
 
 		assertTrue(c.isSaturated(sudo));
 

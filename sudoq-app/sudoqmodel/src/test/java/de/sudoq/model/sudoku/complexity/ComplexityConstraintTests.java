@@ -11,7 +11,7 @@ public class ComplexityConstraintTests {
 		ComplexityConstraint com = new ComplexityConstraint(Complexity.medium, 32, 1000, 2000, 5);
 
 		assertEquals(com.getComplexity(), Complexity.medium);
-		assertEquals(com.getAverageFields(), 32);
+		assertEquals(com.getAverageCells(), 32);
 		assertEquals(com.getMinComplexityIdentifier(), 1000);
 		assertEquals(com.getMaxComplexityIdentifier(), 2000);
 		assertEquals(com.getNumberOfAllowedHelpers(), 5);
@@ -33,7 +33,7 @@ public class ComplexityConstraintTests {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testNegativeAverageFields() {
+	public void testNegativeAverageCells() {
 		new ComplexityConstraint(Complexity.easy, -5, 10, 100, 3);
 	}
 
@@ -44,7 +44,7 @@ public class ComplexityConstraintTests {
 
 	public static void returnsValues(ComplexityConstraint c, Complexity complexity, int averageFields, int minComplexityIdentifier, int maxComplexityIdentifier, int numberOfAllowedHelpers) {
 		assertEquals(c.getComplexity(), complexity);
-		assertEquals(c.getAverageFields(), averageFields);
+		assertEquals(c.getAverageCells(), averageFields);
 		assertEquals(c.getMinComplexityIdentifier(), minComplexityIdentifier);
 		assertEquals(c.getMaxComplexityIdentifier(), maxComplexityIdentifier);
 		assertEquals(c.getNumberOfAllowedHelpers(), numberOfAllowedHelpers);

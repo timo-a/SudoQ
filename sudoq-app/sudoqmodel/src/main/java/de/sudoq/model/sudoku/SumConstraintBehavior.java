@@ -57,8 +57,8 @@ public class SumConstraintBehavior implements ConstraintBehavior {
 		int fieldSum = 0;
 		boolean fullySolved = true;
 		for (Position pos : constraint) {
-			fieldSum += sudoku.getField(pos).getCurrentValue();
-			if (sudoku.getField(pos).isNotSolved())
+			fieldSum += sudoku.getCell(pos).getCurrentValue();
+			if (sudoku.getCell(pos).isNotSolved())
 				fullySolved = false;
 		}
 		return (fieldSum == sum || (!fullySolved && fieldSum <= sum));

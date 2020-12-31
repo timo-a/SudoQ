@@ -31,7 +31,7 @@ public /*abstract*/ class SolveDerivation {
 	 * Eine Liste von DerivationFields, die für diesen Lösungsschritt relevant
 	 * sind
 	 */
-	private List<DerivationField> fields;
+	private List<DerivationCell> cells;
 
 	/**
 	 * Eine Liste von DerivationBlocks, die für diesen Lösungsschritt relevant
@@ -52,7 +52,7 @@ public /*abstract*/ class SolveDerivation {
 
 	public SolveDerivation(HintTypes technique) {
 		this.technique = technique;
-		this.fields = new ArrayList<>();
+		this.cells = new ArrayList<>();
 		this.blocks = new ArrayList<>();
 	}
 
@@ -77,14 +77,13 @@ public /*abstract*/ class SolveDerivation {
 	 * DerivationFields dieses SolveDerivation-Objektes hinzu. Ist das
 	 * übergebene Objekt null, so wird es nicht hinzugefügt.
 	 * 
-	 * @param field
+	 * @param cell
 	 *            Das DerivationField, welches dieser SolveDerivation
 	 *            hinzugefügt werden soll
 	 */
-	public void addDerivationField(DerivationField field) {
-		if (field == null)
-			return;
-		this.fields.add(field);
+	public void addDerivationCell(DerivationCell cell) {
+		if (cell != null)
+			this.cells.add(cell);
 	}
 
 	/**
@@ -109,8 +108,8 @@ public /*abstract*/ class SolveDerivation {
 	 * @return Ein Iterator, mit dem über die DerivationFields dieses
 	 *         SolveDerivation-Objektes iteriert werden kann
 	 */
-	public Iterator<DerivationField> getFieldIterator() {
-		return fields.iterator();
+	public Iterator<DerivationCell> getCellIterator() {
+		return cells.iterator();
 	}
 
 	/**

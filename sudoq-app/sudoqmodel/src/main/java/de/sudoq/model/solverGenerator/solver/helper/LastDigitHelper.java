@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Vector;
 
 import de.sudoq.model.solverGenerator.solution.DerivationBlock;
-import de.sudoq.model.solverGenerator.solution.DerivationField;
+import de.sudoq.model.solverGenerator.solution.DerivationCell;
 import de.sudoq.model.solverGenerator.solution.LastDigitDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.solvingAssistant.HintTypes;
@@ -42,7 +42,7 @@ public class LastDigitHelper extends SolveHelper {
         assert remaining.isEmpty();
         Position candidate = null;//no empty fields found
         for(Position p : positions)
-            if(sudoku.getField(p).isNotSolved()){
+            if(sudoku.getCell(p).isNotSolved()){
                 if(candidate==null)//found our first empty field
                     candidate = p;
                 else{
@@ -75,7 +75,7 @@ public class LastDigitHelper extends SolveHelper {
                     //make List with all values entered in this constraint
                     List<Integer> otherSolutions = new ArrayList<>();
                     for(Position p : remaining)
-                        otherSolutions.add(sudoku.getField(p).getCurrentValue());
+                        otherSolutions.add(sudoku.getCell(p).getCurrentValue());
 
                     //make list with all possible values
                     List<Integer> possibleSolutions = new ArrayList<>((AbstractList<Integer>)sudoku.getSudokuType().getSymbolIterator());
@@ -95,7 +95,7 @@ public class LastDigitHelper extends SolveHelper {
                             relevant.set(solutionValue); //set solution to 1
                             BitSet irrelevant = new BitSet();
                             irrelevant.xor(relevant); // create complement to relevant
-                            lastDerivation.addDerivationField(new DerivationField(candidate, relevant, irrelevant));
+                            lastDerivation.addDerivationCell(new DerivationCell(candidate, relevant, irrelevant));
 
                             lastDerivation.addDerivationBlock(new DerivationBlock(c));
                             lastDerivation.setDescription("Look at "+ Utils.classifyGroup(c.getPositions())+"! Only field "+Utils.positionToRealWorld(candidate) + "is empty.");

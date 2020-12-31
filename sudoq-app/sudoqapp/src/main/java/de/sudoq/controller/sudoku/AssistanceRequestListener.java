@@ -7,7 +7,7 @@
  */
 package de.sudoq.controller.sudoku;
 
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 
 /**
  * Dieses Listenerinterface stellt Methoden bereit, sodass die implementierende
@@ -27,12 +27,12 @@ public interface AssistanceRequestListener {
 	/**
 	 * Löst im aktuellen Sudoku das aktuell ausgewählte Feld.
 	 * 
-	 * @param field
+	 * @param cell
 	 *            das zu lösende Feld
 	 * @return true, sollte das lösen des aktuellen Feldes erfolgreich sein,
 	 *         ansonsten false.
 	 */
-	public boolean onSolveCurrent(Field field);
+	public boolean onSolveCurrent(Cell cell);
 
 	/**
 	 * Löst das komplette Sudoku. Das entspricht der Aufgabe des Spielenden.

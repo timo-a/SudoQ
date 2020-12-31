@@ -103,7 +103,7 @@ public class GameStateHandler extends ObservableModelImpl<ActionTreeElement> {
 			currentState = currentState.getParent();
 			action.execute();
 
-		}else if(isSolveOnSameField(action)) {
+		}else if(isSolveOnSameCell(action)) {
 
 			SolveAction intended = (SolveAction) action;
 			SolveAction above = (SolveAction) currentState.getAction();
@@ -142,8 +142,8 @@ public class GameStateHandler extends ObservableModelImpl<ActionTreeElement> {
 		return mountingElement.getAction().inverse(action);
 	}
 
-	private boolean isSolveOnSameField(Action action){
-		return currentState != actionTree.getRoot() && bothSolveActions(currentState, action) && isActionOnSameField(currentState, action);
+	private boolean isSolveOnSameCell(Action action){
+		return currentState != actionTree.getRoot() && bothSolveActions(currentState, action) && isActionOnSameCell(currentState, action);
 	}
 
 	private boolean bothSolveActions(ActionTreeElement mountingElement, Action action) {
@@ -151,10 +151,10 @@ public class GameStateHandler extends ObservableModelImpl<ActionTreeElement> {
 		return (action instanceof SolveAction) && (actionAbove instanceof SolveAction);
 	}
 
-	private boolean isActionOnSameField(ActionTreeElement mountingElement, Action action) {
+	private boolean isActionOnSameCell(ActionTreeElement mountingElement, Action action) {
 
-		boolean sameField = mountingElement.getAction().getField().equals(action.getField());
-		return (action instanceof SolveAction) && sameField;
+		boolean sameCell = mountingElement.getAction().getCell().equals(action.getCell());
+		return (action instanceof SolveAction) && sameCell;
 	}
 
 

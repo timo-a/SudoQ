@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import de.sudoq.model.solverGenerator.solution.DerivationField;
+import de.sudoq.model.solverGenerator.solution.DerivationCell;
 import de.sudoq.model.solverGenerator.solution.XWingDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.solvingAssistant.HintTypes;
@@ -73,7 +73,7 @@ public class XWingHelper extends SolveHelper {
                 Constraint col1 = cols.get(c1);
                 Constraint row1 = rows.get(r1);
                 Position topLeft = intersectionPoint(row1, col1);
-                if(topLeft==null || !sudoku.getField(topLeft).isNotSolved())
+                if(topLeft==null || !sudoku.getCell(topLeft).isNotSolved())
                     continue;
 
                 for(int c2=c1+1; c2< cols.size(); c2++){
@@ -84,7 +84,7 @@ public class XWingHelper extends SolveHelper {
                         continue;
 
                     Position topRight = intersectionPoint(row1, col2);
-                    if(topRight==null || !sudoku.getField(topRight).isNotSolved())
+                    if(topRight==null || !sudoku.getCell(topRight).isNotSolved())
                         continue;
 
                     for(int r2=r1+1; r2< rows.size(); r2++) {
@@ -98,8 +98,8 @@ public class XWingHelper extends SolveHelper {
                         Position bottomRight = intersectionPoint(col2, row2);
                         Position bottomLeft  = intersectionPoint(row2, col1);
 
-                        if (bottomRight != null && sudoku.getField(bottomRight).isNotSolved()
-                         && bottomLeft  != null && sudoku.getField(bottomLeft).isNotSolved()) {
+                        if (bottomRight != null && sudoku.getCell(bottomRight).isNotSolved()
+                         && bottomLeft  != null && sudoku.getCell(bottomLeft).isNotSolved()) {
                             /* we found a # of 2rows, 2 cols now check if 2 are locked ...*/
 
                             Position[] intersectionPoints = new Position[]{topLeft, topRight, bottomLeft, bottomRight};
@@ -190,7 +190,7 @@ public class XWingHelper extends SolveHelper {
             relevant.set(note);
             CandidateSet irrelevant = new CandidateSet();
 
-            internalDerivation.addDerivationField(new DerivationField(p, relevant, irrelevant));
+            internalDerivation.addDerivationCell(new DerivationCell(p, relevant, irrelevant));
             internalDerivation.setNote(note);
         }
         lastDerivation = internalDerivation;

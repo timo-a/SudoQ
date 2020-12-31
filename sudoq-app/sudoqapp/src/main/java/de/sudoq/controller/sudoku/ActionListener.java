@@ -7,7 +7,7 @@
  */
 package de.sudoq.controller.sudoku;
 
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 
 /**
  * Dieses Interface ermöglicht es Klassen zu reagieren, sobald Actions geaendert werde sollen.
@@ -29,48 +29,48 @@ public interface ActionListener {
 	/**
 	 * Wird aufgerufen, falls der Benutzer einem Feld eine Notiz hinzufügt.
 	 * 
-	 * @param field
+	 * @param cell
 	 *            Das Feld, welchem eine Notiz hinzugefügt werden soll
 	 * @param value
 	 *            Der Wert der hinzugefügten Notiz
 	 * @throw IllegalArgumentException Wird geworfen, falls das übergebene Field
 	 *        null ist
 	 */
-	public void onNoteAdd(Field field, int value);
+	public void onNoteAdd(Cell cell, int value);
 	
 	/**
 	 * Wird aufgerufen, falls der Benutzer eine Notiz entfernt.
 	 * 
-	 * @param field
+	 * @param cell
 	 *            Das Feld, dessen Notiz entfernd werden soll
 	 * @param value
 	 *            Der Wert der Notiz, die zu entfernen ist.
 	 * @throw IllegalArgumentException Wird geworfen, falls das übergebene Field
 	 *        null ist
 	 */
-	public void onNoteDelete(Field field, int value);
+	public void onNoteDelete(Cell cell, int value);
 
 	/**
 	 * Wird aufgerufen, falls der Benutzer einem Feld einen Lösungswert
 	 * hinzufügt.
 	 * 
-	 * @param field
+	 * @param cell
 	 *            Das Feld, welchem der Lösungswert hinzugefügt werden soll
 	 * @param value
 	 *            Der Wert der Eingabe
 	 * @throw IllegalArgumentException Wird geworfen, falls das übergebene Field
 	 *        null ist
 	 */
-	public void onAddEntry(Field field, int value);
+	public void onAddEntry(Cell cell, int value);
 
 	/**
 	 * Wird aufgerufen, falls der Benutzer einen Eintrag aus einem Feld
 	 * entfernt.
 	 * 
-	 * @param field
+	 * @param cell
 	 *            Das Feld, aus welchem der Eintrag entfernt werden soll
 	 * @throw IllegalArgumentException Wird geworfen, falls das übergebene Field
 	 *        null ist
 	 */
-	public void onDeleteEntry(Field field);
+	public void onDeleteEntry(Cell cell);
 }

@@ -53,7 +53,7 @@ public class BoardPainter {
 
             for (int i = from; i <= to; i++) {//?
                 //deklariert hier, weil wir es nicht früher brauchen, effizienter wäre weiter oben
-                int fieldSizeAndSpacing = sl.getCurrentFieldViewSize() + spacing;
+                int fieldSizeAndSpacing = sl.getCurrentCellViewSize() + spacing;
 						/* these first 4 seem similar. drawing the black line around?*/
 						/* fields that touch the edge: Paint your edge but leave space at the corners*/
                 //paint.setColor(Color.GREEN);

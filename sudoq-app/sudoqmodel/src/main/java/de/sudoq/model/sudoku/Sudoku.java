@@ -23,7 +23,7 @@ import de.sudoq.model.xml.Xmlable;
 /**
  * Diese Klasse repräsentiert ein Sudoku mit seinem Typ, seinen Feldern und seinem Schwierigkeitsgrad.
  */
-public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field>, Xmlable, ModelChangeListener<Field> {
+public class Sudoku extends ObservableModelImpl<Cell> implements Iterable<Cell>, Xmlable, ModelChangeListener<Cell> {
 	/* Attributes */
 
 	/**
@@ -36,10 +36,10 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 	/**
 	 * Eine Map, welche jeder Position des Sudokus ein Feld zuweist
 	 */
-	protected HashMap<Position, Field> fields;
+	protected HashMap<Position, Cell> cells;
 
-	private int fieldIdCounter;
-	private Map<Integer, Position> fieldPositions;
+	private int cellIdCounter;
+	private Map<Integer, Position> cellPositions;
 
 	/**
 	 * Der Typ dieses Sudokus
@@ -86,31 +86,31 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 			throw new IllegalArgumentException();
 		}
 
-		fieldIdCounter = 1;
-		fieldPositions = new HashMap<>();
+		cellIdCounter = 1;
+		cellPositions = new HashMap<>();
 
 		this.type = type;
-		this.fields = new HashMap<>();
+		this.cells = new HashMap<>();
 		this.complexity = null;
 
 		// iterate over the constraints of the type and create the fields
 		for (Constraint constraint : type) {
 			for (Position position : constraint) {
-				if (!fields.containsKey(position)) {
+				if (!cells.containsKey(position)) {
 
-					Field f;
+					Cell f;
 					Integer solution = map == null ? null : map.get(position);
 					if (solution != null) {
 						boolean editable = setValues    == null ||
 							    setValues.get(position) == null || 
 							    setValues.get(position) == false;
-						f = new Field(editable, solution, fieldIdCounter,type.getNumberOfSymbols());
+						f = new Cell(editable, solution, cellIdCounter,type.getNumberOfSymbols());
 					} else {
-						f = new Field(fieldIdCounter, type.getNumberOfSymbols());
+						f = new Cell(cellIdCounter, type.getNumberOfSymbols());
 					}
 
-					fields.put(position, f);
-					fieldPositions.put(fieldIdCounter++, position);
+					cells.put(position, f);
+					cellPositions.put(cellIdCounter++, position);
 					f.registerListener(this);
 				}
 			}
@@ -160,25 +160,25 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 	 *            Die Position, dessen Feld abgefragt werden soll
 	 * @return Das Feld an der spezifizierten Position oder null, falls dies nicht existiert oder null übergeben wurde
 	 */
-	public Field getField(Position position) {
+	public Cell getCell(Position position) {
 		return (position == null) ? null
-		                          : fields.get(position);
+		                          : cells.get(position);
 	}
 
 	/**
 	 * Belegt die spezifizierte Position mit einem neuen Field.
 	 * Falls field oder position null sind, bricht die Methode ab
 	 * 
-	 * @param field
+	 * @param cell
 	 *            das neue Field
 	 * @param position
 	 *            die Position des neuen Fields
 	 */
-	public void setField(Field field, Position position) {
-		if (field == null || position == null)
+	public void setCell(Cell cell, Position position) {
+		if (cell == null || position == null)
 			return;
-		fields.put(position, field);
-		fieldPositions.put(field.getId(), position);
+		cells.put(position, cell);
+		cellPositions.put(cell.getId(), position);
 	}
 
 	/**
@@ -188,8 +188,8 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 	 *            Die id des Feldes das ausgegeben werden soll
 	 * @return Das Feld an der spezifizierten Position oder null, falls dies nicht existiert oder die id ungültig war
 	 */
-	public Field getField(int id) {
-		return getField(fieldPositions.get(id));
+	public Cell getCell(int id) {
+		return getCell(cellPositions.get(id));
 	}
 
 	/**
@@ -200,7 +200,7 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 	 * @return Die spezifizierte Position oder null, falls diese nicht existiert oder die id ungültig war
 	 */
 	public Position getPosition(int id) {
-		return fieldPositions.get(id);
+		return cellPositions.get(id);
 	}
 
 	/**
@@ -209,8 +209,8 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 	 * @return Ein Iterator mit dem über alle Felder dieses Sudokus iteriert werden kann
 	 */
 	@Override
-	public Iterator<Field> iterator() {
-		return fields.values().iterator();
+	public Iterator<Cell> iterator() {
+		return cells.values().iterator();
 	}
 
 	/**
@@ -248,8 +248,8 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 	 */
 	public boolean isFinished() {
 		boolean allCorrect = true;
-		for (Field field : fields.values())
-			allCorrect &= field.isSolvedCorrect();
+		for (Cell cell : cells.values())
+			allCorrect &= cell.isSolvedCorrect();
 
 		return allCorrect;
 	}
@@ -269,7 +269,7 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 			representation.addAttribute(new XmlAttribute("complexity", "" + this.getComplexity().ordinal()));
 		}
 
-		for (Map.Entry<Position, Field> field : fields.entrySet()) {
+		for (Map.Entry<Position, Cell> field : cells.entrySet()) {
 			if (field.getValue() != null) {
 				XmlTree fieldmap = new XmlTree("fieldmap");
 				fieldmap.addAttribute(new XmlAttribute("id", "" + field.getValue().getId()));
@@ -293,10 +293,10 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 	public void fillFromXml(XmlTree xmlTreeRepresentation) {
 		// initialisation
 
-		fieldIdCounter = 1;
-		fieldPositions = new HashMap<>();
+		cellIdCounter = 1;
+		cellPositions = new HashMap<>();
 
-		fields = new HashMap<>();
+		cells = new HashMap<>();
 
 		try {
 			id = Integer.parseInt(xmlTreeRepresentation.getAttributeValue("id"));
@@ -327,11 +327,11 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 					y = Integer.parseInt(position.getAttributeValue("y"));
 				}
 				Position pos = Position.get(x, y);
-				Field field = new Field(editable, solution, fieldId, type.getNumberOfSymbols());
-				field.registerListener(this);
-				fields.put(pos, field);
-				fieldPositions.put(fieldId, pos);
-				fieldIdCounter++;
+				Cell cell = new Cell(editable, solution, fieldId, type.getNumberOfSymbols());
+				cell.registerListener(this);
+				cells.put(pos, cell);
+				cellPositions.put(fieldId, pos);
+				cellIdCounter++;
 			}
 		}
 	}
@@ -340,8 +340,8 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void onModelChanged(Field changedField) {
-		notifyListeners(changedField);
+	public void onModelChanged(Cell changedCell) {
+		notifyListeners(changedCell);
 	}
 
 	/**
@@ -367,8 +367,8 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 			boolean       typeMatch = type.getEnumType() == other.getSudokuType().getEnumType();
 
 			boolean     fieldsMatch = true;
-			for(Field f: this.fields.values())
-				fieldsMatch &= f.equals(other.getField(f.getId()));
+			for(Cell f: this.cells.values())
+				fieldsMatch &= f.equals(other.getCell(f.getId()));
 
 			return complexityMatch && typeMatch && fieldsMatch;
 		}
@@ -382,7 +382,7 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 	 * @return true, falls es in dem Sudoku falsch gelöste Felder gibt, false andernfalls
 	 */
 	public boolean hasErrors() {
-		for (Field f : this.fields.values())
+		for (Cell f : this.cells.values())
 			if (!f.isNotWrong())
 				return true;
 
@@ -399,7 +399,7 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 		final String NONE   = type.getNumberOfSymbols()< 10 ? " " : "  ";
 		for (int j = 0; j < getSudokuType().getSize().getY(); j++) {
 			for (int i = 0; i < getSudokuType().getSize().getX(); i++) {
-				Field f = getField(Position.get(i, j));
+				Cell f = getCell(Position.get(i, j));
 				String op;
 				if (f != null){//feld existiert
 					int value = f.getCurrentValue();
@@ -428,14 +428,14 @@ public class Sudoku extends ObservableModelImpl<Field> implements Iterable<Field
 		Sudoku clone = new Sudoku(this.type);
 		clone.id             = this.id;
 		clone.transformCount = this.transformCount;
-		clone.fields = new HashMap<>();
+		clone.cells = new HashMap<>();
 
-		for(Map.Entry<Position, Field> e : this.fields.entrySet())
-			clone.fields.put(e.getKey(), (Field) e.getValue().clone());
+		for(Map.Entry<Position, Cell> e : this.cells.entrySet())
+			clone.cells.put(e.getKey(), (Cell) e.getValue().clone());
 
-		clone.fieldIdCounter = this.fieldIdCounter;
+		clone.cellIdCounter = this.cellIdCounter;
 
-		clone.fieldPositions = new HashMap<>(this.fieldPositions);
+		clone.cellPositions = new HashMap<>(this.cellPositions);
 
 		clone.complexity = this.complexity;
 

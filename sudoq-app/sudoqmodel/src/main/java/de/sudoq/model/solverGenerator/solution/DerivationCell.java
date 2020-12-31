@@ -9,12 +9,11 @@ import de.sudoq.model.sudoku.Position;
  * relevanten Kandidaten eines Lösungsschrittes zum Lösen eines Sudoku-Feldes
  * dar.
  */
-public class DerivationField {
+public class DerivationCell {
     /* Attributes */
 
 	/**
-	 * Die Position des Feldes, dessen Kandidaten dieses DerivationField
-	 * repräsentiert
+	 * Position of the Cell, whose candidates this DerivationCell represents
 	 */
 	private Position position;
 
@@ -51,7 +50,7 @@ public class DerivationField {
 	 * @throws IllegalArgumentException
 	 *             Wird geworfen, falls einer der Parameter null ist
 	 */
-	public DerivationField(Position pos, BitSet relevantCandidates, BitSet irrelevantCandidates) {
+	public DerivationCell(Position pos, BitSet relevantCandidates, BitSet irrelevantCandidates) {
 		if (pos == null || relevantCandidates == null || irrelevantCandidates == null)
 			throw new IllegalArgumentException("one argument was null");
 		this.position = pos;

@@ -9,7 +9,7 @@ import java.io.IOException;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.files.FileManagerTests;
 import de.sudoq.model.solverGenerator.GenerationAlgo;
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
@@ -46,7 +46,7 @@ public class SudokuTest {
             }
 			Sudoku sudoku = sub.createSudoku();
             for (Position p: GenerationAlgo.getPositions(sudoku)) {
-                Field f = sudoku.getField(p);
+                Cell f = sudoku.getCell(p);
                 f.setCurrentValue(f.getSolution());
             }
 			System.out.println(sudoku );

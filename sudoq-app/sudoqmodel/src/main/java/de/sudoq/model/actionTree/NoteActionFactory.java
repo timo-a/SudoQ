@@ -7,7 +7,7 @@
  */
 package de.sudoq.model.actionTree;
 
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 
 /**
  * Diese Klasse dient der Erzeugung von NoteActions.
@@ -19,8 +19,8 @@ public class NoteActionFactory implements ActionFactory {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Action createAction(int value, Field field) {
-		return new NoteAction(value, field);
+	public Action createAction(int value, Cell cell) {
+		return new NoteAction(value, cell);
 	}
 
 }

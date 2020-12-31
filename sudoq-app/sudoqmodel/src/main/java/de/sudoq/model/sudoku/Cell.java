@@ -12,65 +12,64 @@ import java.util.BitSet;
 import de.sudoq.model.ObservableModelImpl;
 
 /**
- * Ein Field-Objekt beschreibt ein Feld eines Sudoku-Spielfeldes. Dabei enthält es Informationen über aktuellen Wert,
- * Editierbarkeit, Notizen, sowie die korrekte Lösung für das Feld und stellt diese zur Verfügung. Außerdem ist es ein
- * OberservableModel und kann damit auf Veränderungen hinsichtlich aktuellem Wert und Notizen beobachtet werden.
+ * A Cell describes an atomic unit in a sudoku board. It holds information about the current value,
+ * editierbility, notes and the correct solution. It extends OberservableModel so changes in value
+ * und notes can be observed.
  */
-public class Field extends ObservableModelImpl<Field> {
+public class Cell extends ObservableModelImpl<Cell> {
 	/* Attributes */
 
 	/**
-	 * Eine Sudokuweit eindeutige Nummer für dieses Feld
+	 * A unique number identifying the cell in the scope of the sudoku
 	 */
 	private final int id;
 
 	/**
-	 * Die korrekte Lösung für dieses Feld
-	 */
+	 * The correct solution for this cell
+	 * */
 	private final int solution;
 
 	/**
-	 * Der aktuell in diesem Feld eingetragene Wert
+	 * The current value in this cell
 	 */
 	// package scope to increase performance and bypass the notifications
 	int currentVal;
 
 	/**
-	 * Der Wert der ein leeres Feld repräsentiert
+	 * The value representing an empty cell
 	 */
 	public static final int EMPTYVAL = -1;
 
 	/**
-	 * Die Editierbarkeit dieses Feldes; vorgegebene Felder haben den Wert false
+	 * The editability of this cell; false for prefilled cell
 	 */
 	private final boolean editable;
 
 	/**
-	 * Die gesetzten Notizen in diesem Feld; ist das n-te Bit 1, so ist das n-te Symbol als Notiz gesetzt
+	 * The set notes in this cell; Symbol $n$ is represented by bit number n-1 being set
 	 */
 	private BitSet noticeFlags;
 
 	/**
-	 * Der höchste Wert, den dieses Feld annehmen kann
+	 * The highest value this cell can take
 	 */
 	private int maxValue;
 
 	/* Constructors */
 
 	/**
-	 * Instanziiert ein neues Field-Objekt. Mit den Parametern wird spezifiziert, ob dieses Feld vom Spieler änderbar
-	 * sein soll oder nicht und was die korrekte Lösung für dieses Feld ist.
+	 * Instantiates a new cell object.
 	 * 
 	 * @param editable
-	 *            Gibt an, ob das Feld vom Spieler editierbar sein soll
+	 *            specifies whether the value is mutable (true) of immutable, i.e. prefilled
 	 * @param solution
-	 *            Die Richtige Belegung für dieses Feld
+	 *            the correct value for this cell
 	 * @param id
-	 *            die id dieses Feldes
+	 *            the id of this cell
 	 * @param numberOfValues
-	 *            Die Anzahl von Werten, die dieses Feld annehmen kann
+	 *            the number of values this cell can take (e.g. 9 for regular sudoku)
 	 */
-	public Field(boolean editable, int solution, int id, int numberOfValues) {
+	public Cell(boolean editable, int solution, int id, int numberOfValues) {
 		if (solution < 0 && solution != EMPTYVAL)
 			throw new IllegalArgumentException("Solution has to be positive.");
 
@@ -86,52 +85,52 @@ public class Field extends ObservableModelImpl<Field> {
 	}
 
 	/**
-	 * Instanziiert ein neues editierbares Field-Objekt.
+	 * Intantiates a new editable cell object.
 	 * 
 	 * @param id
-	 *            die id dieses Feldes
+	 *            id of this cell
 	 * @param numberOfValues
-	 *            Die Anzahl an Werten, die dieses Feld annehmen kann
+	 *            the number of values this cell can take (e.g. 9 for regular sudoku)
 	 */
-	public Field(int id, int numberOfValues) {
+	public Cell(int id, int numberOfValues) {
 		this(true, EMPTYVAL, id, numberOfValues);
 	}
 
 	/* Methods */
 
 	/**
-	 * Gibt die id dieses Feldes zurück
-	 * 
-	 * @return die id
+	 * Returns the id of this cell
+	 *
+	 * @return this cells id
 	 */
 	public int getId() {
 		return id;
 	}
 
 	/**
-	 * Gibt die korrekte Lösung für dieses Feld zurück.
+	 * Returns the correct solution for this cell.
 	 * 
-	 * @return Die Korrekte Lösung für dieses Feld
+	 * @return the correct solution for this cell.
 	 */
 	public int getSolution() {
 		return solution;
 	}
 
 	/**
-	 * Gibt den aktuell in diesem Feld eingetragenen Wert zurück.
+	 * Returns the current value in this cell.
 	 * 
-	 * @return Der aktuell in diesem Feld eingetragene Wert
+	 * @return the current value in this cell
 	 */
 	public int getCurrentValue() {
 		return currentVal;
 	}
 
 	/**
-	 * Sets the current value of the field to the specified and notifies listeners.
-	 * If the field is not editable, the parameter will be ignored and nothing will change.
+	 * Sets the current value of the cell to the specified and notifies listeners.
+	 * If the cell is not editable, the parameter will be ignored and nothing will change.
 	 * 
 	 * @param value
-	 *            The new value for this field
+	 *            The new value for this cell
 	 * @throws IllegalArgumentException
 	 *             if {@code value < 0}
 	 */
@@ -140,12 +139,12 @@ public class Field extends ObservableModelImpl<Field> {
 	}
 
 	/**
-	 * Sets the current value of the field to the specified and notifies listeners if requested.
-	 * If the field is not editable, the parameter will be ignored and listeners will not be
+	 * Sets the current value of the cell to the specified and notifies listeners if requested.
+	 * If the cell is not editable, the parameter will be ignored and listeners will not be
 	 * informed.
 	 *
 	 * @param value
-	 *            The new value for this field
+	 *            The new value for this cell
 	 * @param notify
 	 *            if true listeners will be notified of change
 	 * @throws IllegalArgumentException
@@ -160,7 +159,7 @@ public class Field extends ObservableModelImpl<Field> {
 		if (isEditable()) {
 			if ((value < 0 && value != EMPTYVAL) || value > maxValue) {
 				throw new IllegalArgumentException("maxValue is " + maxValue
-						+ " parameter value is " + value);
+				                                  + " parameter value is " + value);
 			}
 
 			this.currentVal = value;
@@ -170,7 +169,8 @@ public class Field extends ObservableModelImpl<Field> {
 	}
 
 	/**
-	 * Löscht den aktuellen Wert dieses Feldes. Falls das Feld nicht editierbar ist, so wird nichts getan.
+	 * Clears the current value in this cell and notifies listeners.
+	 * If the cell is not editable nothing happens.
 	 */
 	public void clearCurrentValue() {
 		if (this.editable) {
@@ -180,16 +180,16 @@ public class Field extends ObservableModelImpl<Field> {
 	}
 
 	/**
-	 * Gibt die Anzahl an Werten zurück, die dieses Feld annehmen kann.
+	 * Returns the number of symbols this cell can take.
 	 * 
-	 * @return Die Anzahl an Werten, die dieses Feld annehmen kann
+	 * @return the number of symbols this cell can take
 	 */
 	public int getNumberOfValues() {
 		return this.maxValue + 1;
 	}
 
 	/**
-	 * Checks whether the field is occupied with any solution
+	 * Checks whether the cell is occupied with any solution
 	 *
 	 * @return true, if the current solution is not 'empty'
 	 */
@@ -198,7 +198,7 @@ public class Field extends ObservableModelImpl<Field> {
 	}
 
 	/**
-	 * Checks whether the field is occupied with any solution
+	 * Checks whether the cell is occupied with any solution
 	 *
 	 * @return true, if the current solution is 'empty'
 	 */
@@ -215,21 +215,21 @@ public class Field extends ObservableModelImpl<Field> {
 	}
 
 	/**
-	 * Gibt zurück, ob die Notiz mit dem gegebenen Wert gesetzt ist.
+	 * Returns whether the passed note is set.
 	 * 
 	 * @param value
-	 *            der Wert der Notiz
-	 * @return true falls sie gesetzt ist, andernfalls false
+	 *            note value
+	 * @return true if the note is set, false otherwise
 	 */
 	public boolean isNoteSet(int value) {
 		return value >= 0 && noticeFlags.get(value);
 	}
 
 	/**
-	 * Schaltet das spezifizierte Symbol als Notiz um. Ist der Parameter value kleiner als 0, so wird nichts getan.
+	 * toggles the specified symbol as note. If the parameter is below 0, nothing happens.
 	 * 
 	 * @param value
-	 *            Die Nummer des Symbols, welches als Notiz umgeschaltet werden soll
+	 *            the note to toggle
 	 */
 	public void toggleNote(int value) {
 		if (value >= 0) {
@@ -239,27 +239,27 @@ public class Field extends ObservableModelImpl<Field> {
 	}
 
 	/**
-	 * Überprüft, ob das Feld zur Belegung freigegeben ist.
+	 * Checks if the cell is editable, i.e. its value is mutable.
 	 * 
-	 * @return true wenn das Feld belegt werden darf, anderenfalls false
+	 * @return true if cell is editable. false otherwise
 	 */
 	public boolean isEditable() {
 		return editable;
 	}
 
 	/**
-	 * Überprüft, ob das Feld korrekt gelöst ist, also ob der aktuell eingetragene Wert der richtigen Lösung entspricht.
+	 * Checks if the cell is solved correctly, i.e. if the filled in value is correct.
 	 * 
-	 * @return true, falls das Feld korrekt gelöst ist, sonst false
+	 * @return true, iff the cell is solved correctly
 	 */
 	public boolean isSolvedCorrect() {
 		return currentVal == solution && currentVal != EMPTYVAL;
 	}
 
 	/**
-	 * Überprüft ob das Feld nicht falsch belegt ist d.h. korrekt gelöst oder unbelegt ist
+	 * Checks that the cell is not solved wrong i.e. either solved correct or empty
 	 * 
-	 * @return true, falls das Feld unbelegt oder korrekt gelöst ist
+	 * @return true, iff the cell is solved correctly or empty
 	 */
 	public boolean isNotWrong() {
 		return currentVal == solution || currentVal == EMPTYVAL;
@@ -269,9 +269,9 @@ public class Field extends ObservableModelImpl<Field> {
 	 * {@inheritDoc}
 	 */
 	public boolean equals(Object obj) {
-		if (obj != null && obj instanceof Field) {
+		if (obj != null && obj instanceof Cell) {
 
-			Field other = (Field) obj;
+			Cell other = (Cell) obj;
 
 			return this.id         == other.id         &&
                    this.solution   == other.solution   &&
@@ -297,7 +297,7 @@ public class Field extends ObservableModelImpl<Field> {
 	 */
 	@Override
 	public Object clone(){
-		Field clone = new Field(this.isEditable(),
+		Cell clone = new Cell(this.isEditable(),
 			                    this.getSolution(),
 			                    this.getId(),
 			                    this.getNumberOfValues());

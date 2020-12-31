@@ -145,7 +145,7 @@ public class Pseudotest {
 	}
 
 	private boolean complexityEqual(ComplexityConstraint c1, ComplexityConstraint c2) {
-		return c1.getComplexity() == c2.getComplexity() && c1.getAverageFields() == c2.getAverageFields()
+		return c1.getComplexity() == c2.getComplexity() && c1.getAverageCells() == c2.getAverageCells()
 				&& c1.getMinComplexityIdentifier() == c2.getMinComplexityIdentifier()
 				&& c1.getMaxComplexityIdentifier() == c2.getMaxComplexityIdentifier()
 				&& c1.getNumberOfAllowedHelpers() == c2.getNumberOfAllowedHelpers();

@@ -16,7 +16,7 @@ import android.view.View;
 
 import de.sudoq.controller.sudoku.Symbol;
 import de.sudoq.model.sudoku.Constraint;
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.view.SudokuLayout;
 
@@ -79,7 +79,7 @@ public class HighlightedConstraintView extends View {
 	public void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		float edgeRadius = sl.getCurrentFieldViewSize() / 20.0f;
+		float edgeRadius = sl.getCurrentCellViewSize() / 20.0f;
 		paint.reset();
 		paint.setColor(marginColor);
 		int thickness = 10;
@@ -106,7 +106,7 @@ public class HighlightedConstraintView extends View {
 
 
 			//deklariert hier, weil wir es nicht früher brauchen, effizienter wäre weiter oben
-			int fieldSizeAndSpacing = sl.getCurrentFieldViewSize() + spacing;
+			int fieldSizeAndSpacing = sl.getCurrentCellViewSize() + spacing;
 					/* these first 4 seem similar. drawing the black line around?*/
 					/* fields that touch the edge: Paint your edge but leave space at the corners*/
 				//paint.setColor(Color.GREEN);
@@ -253,10 +253,10 @@ public class HighlightedConstraintView extends View {
 	 * @param canvas
 	 *            Das Canvas in das gezeichnet werde nsoll
 	 *
-	 * @param field
+	 * @param cell
 	 *            Das Canvas in das gezeichnet werde nsoll
 	 */
-	private void drawNotes(Canvas canvas, Field field) {
+	private void drawNotes(Canvas canvas, Cell cell) {
 		Paint notePaint = new Paint();
 		notePaint.setAntiAlias(true);
 		int noteTextSize = getHeight() / Symbol.getInstance().getRasterSize();
@@ -264,7 +264,7 @@ public class HighlightedConstraintView extends View {
 		notePaint.setTextAlign(Paint.Align.CENTER);
 		notePaint.setColor(Color.BLACK);
 		for (int i = 0; i < Symbol.getInstance().getNumberOfSymbols(); i++) {
-			if (field.isNoteSet(i)) {
+			if (cell.isNoteSet(i)) {
 				String note = Symbol.getInstance().getMapping(i);
 				canvas.drawText(note + "", (i % Symbol.getInstance().getRasterSize()) * noteTextSize + noteTextSize / 2, (i / Symbol.getInstance().getRasterSize()) * noteTextSize + noteTextSize, notePaint);
 			}

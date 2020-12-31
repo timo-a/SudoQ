@@ -8,14 +8,10 @@
 package de.sudoq.view.Hints;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.view.View;
 
-import java.util.List;
-import java.util.Stack;
-
-import de.sudoq.model.solverGenerator.solution.DerivationField;
+import de.sudoq.model.solverGenerator.solution.DerivationCell;
 import de.sudoq.model.solverGenerator.solution.NakedSetDerivation;
 import de.sudoq.view.SudokuLayout;
 
@@ -39,8 +35,8 @@ public class NakedSetView extends HintView {
 		View constraintV = new HighlightedConstraintView(context, sl, d.getConstraint(), Color.BLUE);
 		highlightedObjects.add(constraintV);
 
-		for(DerivationField df: d.getSubsetMembers()){
-			highlightedObjects.add(new HighlightedFieldView(context, sl, df.getPosition(), Color.GREEN));
+		for(DerivationCell df: d.getSubsetMembers()){
+			highlightedObjects.add(new HighlightedCellView(context, sl, df.getPosition(), Color.GREEN));
 		}
 	}
 

@@ -11,9 +11,9 @@ package de.sudoq.controller.sudoku;
  * Interface, welches von Klassen implementiert werden kann, die auf denen
  * Feld-Interaktionen ausgeführt werden. einem Sudoku ausführen.
  * 
- * @see FieldInteractionListener
+ * @see CellInteractionListener
  */
-public interface ObservableFieldInteraction {
+public interface ObservableCellInteraction {
 
 	/**
 	 * Benachrichtigt die Listener.
@@ -26,7 +26,7 @@ public interface ObservableFieldInteraction {
 	 * @param listener
 	 *            Der Listener der hinzugefügt werden soll.
 	 */
-	void registerListener(FieldInteractionListener listener);
+	void registerListener(CellInteractionListener listener);
 
 	/**
 	 * Entfernt einen Listener. Ist dieser nicht registriert, so wird nichts
@@ -35,5 +35,5 @@ public interface ObservableFieldInteraction {
 	 * @param listener
 	 *            Der Listener der entfernt werden soll.
 	 */
-	void removeListener(FieldInteractionListener listener);
+	void removeListener(CellInteractionListener listener);
 }
