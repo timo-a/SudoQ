@@ -409,7 +409,7 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 	 */
 	private void inflateViewAndButtons() {
 
-		this.sudokuScrollView = findViewById(R.id.sudoku_field);
+		this.sudokuScrollView = findViewById(R.id.sudoku_cell);
 		this.sudokuView = new SudokuLayout(this);
 		Log.d(LOG_TAG, "Inflated sudoku layout");
 		this.sudokuView.setGravity(Gravity.CENTER);

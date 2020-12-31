@@ -35,7 +35,7 @@ public class CellViewPainter {
 	 */
 	private static CellViewPainter instance;
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Privater Konstruktor, da diese Klasse statisch ist.
@@ -62,7 +62,7 @@ public class CellViewPainter {
 		this.sl=sl;
 	}
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Bemalt das spezifizierte Canvas entsprechend der in der Hashtable für das
@@ -83,7 +83,7 @@ public class CellViewPainter {
 	 */
 	public void markCell(Canvas canvas, View cell, String symbol, boolean justText, boolean darken) {
 		CellViewStates cellState = this.markings.get(cell);
-		/*if(true){}else //to suppress fielddrawing TODO remove again*/
+		/*if(true){}else //to suppress celldrawing TODO remove again*/
 		if (cellState != null && !justText) {
 			switch (cellState) {
 			case SELECTED_INPUT_BORDER:
@@ -143,7 +143,7 @@ public class CellViewPainter {
 				break;
 			case CONTROLS:
 				drawBackground(canvas, cell, Color.rgb(40, 40, 40), false, darken);
-				// drawInner(canvas, field, Color.rgb(40, 40, 40), false);
+				// drawInner(canvas, cell, Color.rgb(40, 40, 40), false);
 				break;
 			case KEYBOARD:
 				drawBackground(canvas, cell, Color.rgb(230, 230, 230), false, darken);
@@ -151,7 +151,7 @@ public class CellViewPainter {
 				break;
 			case SUDOKU:
 				drawBackground(canvas, cell, Color.rgb(200, 200, 200), false, darken);
-				// drawInner(canvas, field, Color.LTGRAY, false);
+				// drawInner(canvas, cell, Color.LTGRAY, false);
 				break;
 			}
 		} else if (cellState != null) {

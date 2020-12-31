@@ -43,10 +43,10 @@
 	<string name="sf_tutorial_assistances_active_title">Active assistances</string>
 	<string name="sf_tutorial_assistances_active_description1">Active assistances can be used as you need them during a game.
 	    You can reach them by clicking on the button shown left.</string>
-	<string name="sf_tutorial_assistances_active_solverandomfield_title">Solve random cell</string>
-	<string name="sf_tutorial_assistances_active_solverandomfield_description1">A random cell is automatically solved for you.</string>
-	<string name="sf_tutorial_assistances_active_solvecurrentfield_title">Solve current cell</string>
-	<string name="sf_tutorial_assistances_active_solvecurrentfield_description1">The cell you have currently selected is solved for you.</string>
+	<string name="sf_tutorial_assistances_active_solverandomcell_title">Solve random cell</string>
+	<string name="sf_tutorial_assistances_active_solverandomcell_description1">A random cell is automatically solved for you.</string>
+	<string name="sf_tutorial_assistances_active_solvecurrentcell_title">Solve current cell</string>
+	<string name="sf_tutorial_assistances_active_solvecurrentcell_description1">The cell you have currently selected is solved for you.</string>
 	<string name="sf_tutorial_assistances_active_check_title">Check solution</string>
 	<string name="sf_tutorial_assistances_active_check_description1">Your current solution is checked and a message tells you if your
 	    currently solved cells are all correct or if there is a cell that is solved wrong.</string>

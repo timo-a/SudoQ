@@ -9,8 +9,8 @@
     <string name="profile_preference_title_assistance_markRowColumn">Zeile/Spalte markieren</string>
     <string name="profile_preference_title_assistance_markWrongSymbol">Falsche Symbole markieren</string>
     <string name="profile_preference_title_assistance_restrictCandidates">Eingabehilfe</string>
-    <string name="profile_preference_title_assistance_allowSolveSpecificField">Ausgewähltes Feld lösen</string>
-    <string name="profile_preference_title_assistance_allowSolveRandomField">Zufälliges Feld lösen</string>
+    <string name="profile_preference_title_assistance_allowSolveSpecificCell">Ausgewähltes Feld lösen</string>
+    <string name="profile_preference_title_assistance_allowSolveRandomCell">Zufälliges Feld lösen</string>
     <string name="profile_preference_title_assistance_allowGetHint">Tipps</string>
     <string name="profile_preference_title_assistance_autoAdjustNotes">Notizen automatisch anpassen</string>
     <string name="profile_preference_title_profile">Profil</string>

@@ -34,8 +34,8 @@ public class NoNotesView extends HintView {
 		super(context, sl, d);
 
 		for(Iterator<DerivationCell> i = d.getCellIterator(); i.hasNext();) {
-			View fieldV = new HighlightedCellView(context, sl, i.next().getPosition(), Color.GREEN);
-			highlightedObjects.add(fieldV);
+			View cellView = new HighlightedCellView(context, sl, i.next().getPosition(), Color.GREEN);
+			highlightedObjects.add(cellView);
 		}
 	}
 

@@ -155,7 +155,7 @@ public class AssistancesDialogFragment extends DialogFragment {
 
                     controller.onHintAction(a);
                     activity.onInputAction();
-                    /* in case we delete a note in the focussed field */
+                    /* in case we delete a note in the focussed cell */
                     activity.getMediator().restrictCandidates();
                 }
             }
@@ -179,7 +179,7 @@ public class AssistancesDialogFragment extends DialogFragment {
 //
 //			/* iterate over all symbols e.g. 0-8 */
 //			for (int i = 0; i < type.getNumberOfSymbols(); i++) {
-//				/* set fieldval to current symbol */
+//				/* set cellval to current symbol */
 //				currentField.setCurrentValue(i, false);
 //				/* for every constraint */
 //				for (Constraint c : type) {

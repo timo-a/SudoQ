@@ -46,10 +46,10 @@
 	<string name="sf_tutorial_assistances_active_title">Aide active</string>
 	<string name="sf_tutorial_assistances_active_description1">L’aide active peut être appelée au cours de la partie. 
 	                                                           Elle est accessible par l’icone affiché à gauche.</string>
-	<string name="sf_tutorial_assistances_active_solverandomfield_title">Résoudre une case au hasard.</string>
-	<string name="sf_tutorial_assistances_active_solverandomfield_description1">Automatiquement, une case prise au hasard est résolue.</string>
-	<string name="sf_tutorial_assistances_active_solvecurrentfield_title">Résoudre la case choisie</string>
-	<string name="sf_tutorial_assistances_active_solvecurrentfield_description1">La case actuellement sélectionnée.</string>
+	<string name="sf_tutorial_assistances_active_solverandomcell_title">Résoudre une case au hasard.</string>
+	<string name="sf_tutorial_assistances_active_solverandomcell_description1">Automatiquement, une case prise au hasard est résolue.</string>
+	<string name="sf_tutorial_assistances_active_solvecurrentcell_title">Résoudre la case choisie</string>
+	<string name="sf_tutorial_assistances_active_solvecurrentcell_description1">La case actuellement sélectionnée.</string>
 	<string name="sf_tutorial_assistances_active_check_title">Vérifier la solution</string>
 	<string name="sf_tutorial_assistances_active_check_description1">Votre solution actuelle se fait vérifier et un message vous préviendra si toutes vos cases sont justes ou si une case n’a pas été résolue correctement.</string>
 	<string name="sf_tutorial_assistances_active_backtolastcorrect_title">Retourner au dernier état correct</string>

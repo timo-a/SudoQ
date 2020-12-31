@@ -26,10 +26,10 @@ import de.sudoq.view.SudokuLayout;
  */
 public class HighlightedCellView extends View {
 
-	/** Attributes */
+	/* Attributes */
 
 	/**
-	 * The Field, represented by this View
+	 * The Cell, represented by this View
 	 *
 	 * @see Position
 	 */
@@ -44,16 +44,16 @@ public class HighlightedCellView extends View {
 
 	private Paint paint = new Paint();
 	private RectF oval = new RectF();
-	/** Constructors */
+	/* Constructors */
 
 	/**
-	 * Erstellt einen SudokuFieldView und initialisiert die Attribute der
-	 * Klasse.
+	 * Creates a SudokuCellView
 	 *
-	 * @param context    der Applikationskontext
-	 * @param position   field represented
+	 * @param context    the application context
+	 * @param sl         a sudokuLayout
+	 * @param position   cell represented
 	 * @param color      Color of the margin
-	 * @throws IllegalArgumentException Wird geworfen, falls eines der Argumente null ist
+	 * @throws IllegalArgumentException if context or position are null
 	 */
 	public HighlightedCellView(Context context, SudokuLayout sl, Position position, int color) {
 		super(context);
@@ -64,14 +64,14 @@ public class HighlightedCellView extends View {
 		this.sl = sl;
 		paint.setColor(marginColor);
 		int thickness = 10;
-		paint.setStrokeWidth(thickness*sl.getCurrentSpacing());
+		paint.setStrokeWidth(thickness * sl.getCurrentSpacing());
 		style = paint.getStyle();
 	}
 Paint.Style style;
-	/** Methods */
+	/* Methods */
 
 	/**
-	 * Zeichnet den Inhalt des Feldes auf das Canvas dieses SudokuFieldViews.
+	 * Draws the content of the cell on the canvas of this SudokuCellView.
 	 * Sollte den AnimationHandler nutzen um vorab Markierungen/Färbung an dem
 	 * Canvas Objekt vorzunehmen.
 	 *
@@ -94,9 +94,9 @@ Paint.Style style;
 
 
 		//deklariert hier, weil wir es nicht früher brauchen, effizienter wäre weiter oben
-		int fieldSizeAndSpacing = sl.getCurrentCellViewSize() + sl.getCurrentSpacing();
+		int cellSizeAndSpacing = sl.getCurrentCellViewSize() + sl.getCurrentSpacing();
 		/* these first 4 seem similar. drawing the black line around?*/
-		/* fields that touch the edge: Paint your edge but leave space at the corners*/
+		/* cells that touch the edge: Paint your edge but leave space at the corners*/
 
 		paint.reset();
 		paint.setStrokeWidth(thickness*sl.getCurrentSpacing());
@@ -104,32 +104,32 @@ Paint.Style style;
 
 		float leftX,rightX, topY, bottomY;
 
-		leftX = sl.getCurrentLeftMargin() +  p.getX()      * fieldSizeAndSpacing - sl.getCurrentSpacing()/2;
-		rightX = sl.getCurrentLeftMargin() + (p.getX() + 1) * fieldSizeAndSpacing - sl.getCurrentSpacing()/2;
+		leftX = sl.getCurrentLeftMargin() +  p.getX()      * cellSizeAndSpacing - sl.getCurrentSpacing()/2;
+		rightX = sl.getCurrentLeftMargin() + (p.getX() + 1) * cellSizeAndSpacing - sl.getCurrentSpacing()/2;
 
-		topY = sl.getCurrentTopMargin() +  p.getY()      * fieldSizeAndSpacing - sl.getCurrentSpacing()/2;
-		bottomY = sl.getCurrentTopMargin() + (p.getY() + 1) * fieldSizeAndSpacing - sl.getCurrentSpacing()/2;
+		topY = sl.getCurrentTopMargin() +  p.getY()      * cellSizeAndSpacing - sl.getCurrentSpacing()/2;
+		bottomY = sl.getCurrentTopMargin() + (p.getY() + 1) * cellSizeAndSpacing - sl.getCurrentSpacing()/2;
 
 		float startY, stopY, startX, stopX;
 
 		/* left edge */
-		startY = sl.getCurrentTopMargin() +  p.getY()      * fieldSizeAndSpacing + edgeRadius;
-		stopY = sl.getCurrentTopMargin() + (p.getY() + 1) * fieldSizeAndSpacing - edgeRadius - sl.getCurrentSpacing();
+		startY = sl.getCurrentTopMargin() +  p.getY()      * cellSizeAndSpacing + edgeRadius;
+		stopY = sl.getCurrentTopMargin() + (p.getY() + 1) * cellSizeAndSpacing - edgeRadius - sl.getCurrentSpacing();
 		canvas.drawLine(leftX, startY, leftX, stopY, paint);
 
 		/* right edge */
 		canvas.drawLine(rightX, startY, rightX, stopY, paint);
 
 		/* top edge */
-		startX = sl.getCurrentLeftMargin() +  p.getX()      * fieldSizeAndSpacing + edgeRadius;
-		stopX = sl.getCurrentLeftMargin() + (p.getX() + 1) * fieldSizeAndSpacing - edgeRadius - sl.getCurrentSpacing();
+		startX = sl.getCurrentLeftMargin() +  p.getX()      * cellSizeAndSpacing + edgeRadius;
+		stopX = sl.getCurrentLeftMargin() + (p.getX() + 1) * cellSizeAndSpacing - edgeRadius - sl.getCurrentSpacing();
 		canvas.drawLine(startX, topY, stopX, topY, paint);
 
 		/* bottom edge */
 		canvas.drawLine(startX, bottomY, stopX, bottomY, paint);
 
 
-		/* Fields at corners of their block draw a circle for a round circumference*/
+		/* Cells at corners of their block draw a circle for a round circumference*/
 
 		paint.setStyle(Paint.Style.FILL_AND_STROKE);
 		float radius  = edgeRadius +sl.getCurrentSpacing()/2;
@@ -137,29 +137,29 @@ Paint.Style style;
 
 		float centerX, centerY;
 		/*TopLeft*/
-		centerX = sl.getCurrentLeftMargin() + p.getX() * fieldSizeAndSpacing + edgeRadius;
-		centerY = sl.getCurrentTopMargin()  + p.getY() * fieldSizeAndSpacing + edgeRadius;
+		centerX = sl.getCurrentLeftMargin() + p.getX() * cellSizeAndSpacing + edgeRadius;
+		centerY = sl.getCurrentTopMargin()  + p.getY() * cellSizeAndSpacing + edgeRadius;
 
 		oval.set( centerX - radius, centerY - radius, centerX + radius, centerY + radius);
 		canvas.drawArc(oval, 180 -5, angle, false, paint);
 
 		/* Top Right*/
-		centerX = sl.getCurrentLeftMargin() + (p.getX() + 1) * fieldSizeAndSpacing - sl.getCurrentSpacing() - edgeRadius;
-		centerY = sl.getCurrentTopMargin()  +  p.getY()      * fieldSizeAndSpacing + edgeRadius;
+		centerX = sl.getCurrentLeftMargin() + (p.getX() + 1) * cellSizeAndSpacing - sl.getCurrentSpacing() - edgeRadius;
+		centerY = sl.getCurrentTopMargin()  +  p.getY()      * cellSizeAndSpacing + edgeRadius;
 
 		oval.set( centerX - radius, centerY - radius, centerX + radius, centerY + radius);
 		canvas.drawArc(oval, 270 -5, angle, false, paint);
 
 		/*Bottom Left*/
-		centerX = sl.getCurrentLeftMargin() +  p.getX()      * fieldSizeAndSpacing + edgeRadius;
-		centerY = sl.getCurrentTopMargin()  + (p.getY() + 1) * fieldSizeAndSpacing - edgeRadius - sl.getCurrentSpacing();
+		centerX = sl.getCurrentLeftMargin() +  p.getX()      * cellSizeAndSpacing + edgeRadius;
+		centerY = sl.getCurrentTopMargin()  + (p.getY() + 1) * cellSizeAndSpacing - edgeRadius - sl.getCurrentSpacing();
 
 		oval.set( centerX - radius, centerY - radius, centerX + radius, centerY + radius);
 		canvas.drawArc(oval, 90 -5, angle, false, paint);
 
 		/*BottomRight*/
-		centerX = sl.getCurrentLeftMargin() + (p.getX() + 1) * fieldSizeAndSpacing - edgeRadius - sl.getCurrentSpacing();
-		centerY = sl.getCurrentTopMargin()  + (p.getY() + 1) * fieldSizeAndSpacing - edgeRadius - sl.getCurrentSpacing();
+		centerX = sl.getCurrentLeftMargin() + (p.getX() + 1) * cellSizeAndSpacing - edgeRadius - sl.getCurrentSpacing();
+		centerY = sl.getCurrentTopMargin()  + (p.getY() + 1) * cellSizeAndSpacing - edgeRadius - sl.getCurrentSpacing();
 
 		oval.set( centerX - radius, centerY - radius, centerX + radius, centerY + radius);
 		canvas.drawArc(oval, 0 -5, angle, false, paint);
@@ -175,12 +175,12 @@ Paint.Style style;
 		int thickness = 10;
 		paint.setStrokeWidth(thickness*sl.getCurrentSpacing());
 
-		int fieldSizeAndSpacing = sl.getCurrentCellViewSize() + sl.getCurrentSpacing();
+		int cellSizeAndSpacing = sl.getCurrentCellViewSize() + sl.getCurrentSpacing();
 
-		float left   = sl.getCurrentLeftMargin() +  p.getX()      * fieldSizeAndSpacing - sl.getCurrentSpacing()/2;
-		float top    = sl.getCurrentTopMargin()  +  p.getY()      * fieldSizeAndSpacing - sl.getCurrentSpacing()/2;
-		float right  = sl.getCurrentLeftMargin() + (p.getX() + 1) * fieldSizeAndSpacing - sl.getCurrentSpacing()/2;
-		float bottom = sl.getCurrentTopMargin()  + (p.getY() + 1) * fieldSizeAndSpacing - sl.getCurrentSpacing()/2;
+		float left   = sl.getCurrentLeftMargin() +  p.getX()      * cellSizeAndSpacing - sl.getCurrentSpacing()/2;
+		float top    = sl.getCurrentTopMargin()  +  p.getY()      * cellSizeAndSpacing - sl.getCurrentSpacing()/2;
+		float right  = sl.getCurrentLeftMargin() + (p.getX() + 1) * cellSizeAndSpacing - sl.getCurrentSpacing()/2;
+		float bottom = sl.getCurrentTopMargin()  + (p.getY() + 1) * cellSizeAndSpacing - sl.getCurrentSpacing()/2;
 		canvas.drawRoundRect(new RectF(left, top, right, bottom)
 		                    ,edgeRadius +sl.getCurrentSpacing()/2
 		                    ,edgeRadius +sl.getCurrentSpacing()/2, paint);

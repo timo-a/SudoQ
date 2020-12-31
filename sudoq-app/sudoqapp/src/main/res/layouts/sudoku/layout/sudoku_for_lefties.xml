@@ -25,7 +25,7 @@
             android:orientation="vertical" >
 
             <de.sudoq.view.FullScrollLayout
-                android:id="@+id/sudoku_field"
+                android:id="@+id/sudoku_cell"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"

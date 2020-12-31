@@ -9,8 +9,8 @@
     <string name="profile_preference_title_assistance_markRowColumn">Séléctionner la ligne/ la colonne</string>
     <string name="profile_preference_title_assistance_markWrongSymbol">Séléctionner les symboles faux</string>
     <string name="profile_preference_title_assistance_restrictCandidates">Aide de saisie</string>
-    <string name="profile_preference_title_assistance_allowSolveSpecificField">Résoudre la case choisie</string>
-    <string name="profile_preference_title_assistance_allowSolveRandomField">Résoudre une case au hasard</string>
+    <string name="profile_preference_title_assistance_allowSolveSpecificCell">Résoudre la case choisie</string>
+    <string name="profile_preference_title_assistance_allowSolveRandomCell">Résoudre une case au hasard</string>
     <string name="profile_preference_title_assistance_allowGetHint">Conseils</string>
     <string name="profile_preference_title_assistance_autoAdjustNotes">Adapter les remarques automatiquement</string>
     <string name="profile_preference_title_profile">Profil</string>

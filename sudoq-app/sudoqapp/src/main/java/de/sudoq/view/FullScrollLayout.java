@@ -296,7 +296,7 @@ public class FullScrollLayout extends LinearLayout {
 		Point focus;
 		@Override
 		public boolean onScale(ScaleGestureDetector detector) {
-			/* TODO still buggy, if sudokuLayout.maxzoom is unrestrained focuspoint appears ~1 field next to where it is supposed to be. try out by painting focus point in hintpainter */
+			/* TODO still buggy, if sudokuLayout.maxzoom is unrestrained focuspoint appears ~1 cell next to where it is supposed to be. try out by painting focus point in hintpainter */
 			if(detector.getScaleFactor() < 0.01) return false;
 
 			/* compute the new absolute zoomFactor (∈ [1,2]) by multiplying the old one with the scale Factor*/

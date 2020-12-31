@@ -34,7 +34,7 @@ public class NormalFlowTest extends SudoqTestCase {
 		solo.clickOnText(a.getString(R.string.sf_sudokupreferences_start));
 		solo.assertCurrentActivity("should be in sudokuactivity", SudokuActivity.class);
 
-		// actually the user should solve some fields by himself right here, but
+		// actually the user should solve some cells by himself right here, but
 		// thats not possible i guess
 
 		solo.clickOnView(solo.getCurrentActivity().findViewById(R.id.button_sudoku_help));

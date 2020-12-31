@@ -59,17 +59,17 @@ public class SudokuLayout extends RelativeLayout implements ObservableCellIntera
 	/**
 	 * Die aktuelle Größe eines Feldes
 	 */
-	// private int currentFieldViewSize;
+	// private int currentCellViewSize;
 
 	/**
-	 * Die aktuell ausgewählte FieldView
+	 * Die aktuell ausgewählte CellView
 	 */
 	private SudokuCellView currentCellView;
 
 	private float zoomFactor;
 
 	/**
-	 * Ein Array aller FieldViews
+	 * Ein Array aller CellViews
 	 */
 	private SudokuCellView[][] sudokuCellViews;
 
@@ -104,7 +104,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableCellIntera
 
 		this.defaultCellViewSize = 40;
 		this.zoomFactor = 1.0f;
-		// this.currentFieldViewSize = this.defaultFieldViewSize;
+		// this.currentCellViewSize = this.defaultCellViewSize;
 		this.setWillNotDraw(false);
 		paint = new Paint();
 		this.boardPainter = new BoardPainter(this, game.getSudoku().getSudokuType());
@@ -216,14 +216,14 @@ public class SudokuLayout extends RelativeLayout implements ObservableCellIntera
 		if (this.sudokuCellViews != null) {
 			SudokuType type = this.game.getSudoku().getSudokuType();
 			Position typeSize = type.getSize();
-			int fieldPlusSpacing = (this.getCurrentCellViewSize() + getCurrentSpacing());
+			int cellPlusSpacing = (this.getCurrentCellViewSize() + getCurrentSpacing());
 			//Iterate over all positions within the size 
 			for (Position p : type.getValidPositions()) {
 				LayoutParams params = (LayoutParams) this.getSudokuCellView(p).getLayoutParams();
 				params.width  = this.getCurrentCellViewSize();
 				params.height = this.getCurrentCellViewSize();
-				params.topMargin  = (getCurrentTopMargin()  + (p.getY() * fieldPlusSpacing));
-				params.leftMargin = (getCurrentLeftMargin() + (p.getX() * fieldPlusSpacing));
+				params.topMargin  = (getCurrentTopMargin()  + (p.getY() * cellPlusSpacing));
+				params.leftMargin = (getCurrentLeftMargin() + (p.getX() * cellPlusSpacing));
 				this.getSudokuCellView(p).setLayoutParams(params);
 				this.getSudokuCellView(p).invalidate();
 			}
@@ -234,8 +234,8 @@ public class SudokuLayout extends RelativeLayout implements ObservableCellIntera
 			LayoutParams params = new LayoutParams( this.getCurrentCellViewSize(), this.defaultCellViewSize);
 			params.width  = this.getCurrentCellViewSize();
 			params.height = this.getCurrentCellViewSize();
-			params.topMargin =  (2 * getCurrentTopMargin()  + ((y - 1) * fieldPlusSpacing));
-			params.leftMargin = (2 * getCurrentLeftMargin() + ((x - 1) * fieldPlusSpacing));
+			params.topMargin =  (2 * getCurrentTopMargin()  + ((y - 1) * cellPlusSpacing));
+			params.leftMargin = (2 * getCurrentLeftMargin() + ((x - 1) * cellPlusSpacing));
 			this.sudokuCellViews[x][y].setLayoutParams(params);
 			this.sudokuCellViews[x][y].invalidate();
 			//end strange thing
@@ -249,7 +249,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableCellIntera
 	@Override
 	/**
 	 * Draws all black borders for the sudoku, nothing else
-	 * Fields have to be drawn after this method
+	 * Cells have to be drawn after this method
 	 * No insight on the coordinate-wise workings, unsure about the 'i's.
 	 */
 	protected void onDraw(Canvas canvas) {
@@ -280,16 +280,16 @@ public class SudokuLayout extends RelativeLayout implements ObservableCellIntera
 		SudokuType sudokuType = this.game.getSudoku().getSudokuType();
 		int size           = width < height ? width
 		                                    : height;
-		int numberOfFields = width < height ? sudokuType.getSize().getX()
-		                                    : sudokuType.getSize().getY();
-		this.defaultCellViewSize = (size - (numberOfFields + 1) * spacing) / numberOfFields;
-		// this.currentFieldViewSize = this.defaultFieldViewSize;
+		int numberOfCells = width < height ? sudokuType.getSize().getX()
+		                                   : sudokuType.getSize().getY();
+		this.defaultCellViewSize = (size - (numberOfCells + 1) * spacing) / numberOfCells;
+		// this.currentCellViewSize = this.defaultCellViewSize;
 
-		int fieldSizeX = sudokuType.getSize().getX() * this.getCurrentCellViewSize() + (sudokuType.getSize().getX() -1) * spacing;
-		int fieldSizeY = sudokuType.getSize().getY() * this.getCurrentCellViewSize() + (sudokuType.getSize().getY() -1) * spacing;
+		int cellSizeX = sudokuType.getSize().getX() * this.getCurrentCellViewSize() + (sudokuType.getSize().getX() -1) * spacing;
+		int cellSizeY = sudokuType.getSize().getY() * this.getCurrentCellViewSize() + (sudokuType.getSize().getY() -1) * spacing;
 
-		this.leftMargin = ( width - fieldSizeX) / 2;
-		this. topMargin = (height - fieldSizeY)	/ 2;
+		this.leftMargin = ( width - cellSizeX) / 2;
+		this. topMargin = (height - cellSizeY)	/ 2;
 		Log.d(LOG_TAG, "Sudoku width: "  + width);
 		Log.d(LOG_TAG, "Sudoku height: " + height);
 		this.refresh();
@@ -309,7 +309,7 @@ public class SudokuLayout extends RelativeLayout implements ObservableCellIntera
 	}
 
 	/**
-	 *  returns the FieldView at Position p.
+	 *  returns the CellView at Position p.
 	 */
 	public SudokuCellView getSudokuCellView(Position p){
 		return sudokuCellViews[p.getX()][p.getY()];
@@ -333,28 +333,28 @@ public class SudokuLayout extends RelativeLayout implements ObservableCellIntera
 	public float getZoomFactor(){ return zoomFactor; }
 
 	/**
-	 * Gibt die aktuell aktive SudokuFieldView dieser View zurück.
+	 * Gibt die aktuell aktive SudokuCellView dieser View zurück.
 	 * 
-	 * @return Die aktive SudokuFieldView
+	 * @return Die aktive SudokuCellView
 	 */
 	public SudokuCellView getCurrentCellView() {
 		return this.currentCellView;
 	}
 
 	/**
-	 * Setzt die aktuelle SudokuFieldView
+	 * Setzt die aktuelle SudokuCellView
 	 * 
 	 * @param currentCellView
-	 *            die zu setzende SudokuFieldView
+	 *            die zu setzende SudokuCellView
 	 */
 	public void setCurrentCellView(SudokuCellView currentCellView) {
 		this.currentCellView = currentCellView;
 	}
 
 	/**
-	 * Gibt die aktuelle Größe einer FieldView zurück.
+	 * Gibt die aktuelle Größe einer CellView zurück.
 	 * 
-	 * @return die aktuelle Größe einer FieldView
+	 * @return die aktuelle Größe einer CellView
 	 */
 	public int getCurrentCellViewSize() {
 		return (int) (this.defaultCellViewSize * zoomFactor);

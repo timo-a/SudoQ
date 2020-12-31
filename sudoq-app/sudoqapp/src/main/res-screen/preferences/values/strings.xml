@@ -10,8 +10,8 @@
     <string name="profile_preference_title_assistance_markRowColumn">Mark Row/Column</string>
     <string name="profile_preference_title_assistance_markWrongSymbol">Mark wrong Symbols</string>
     <string name="profile_preference_title_assistance_restrictCandidates">Input Assistance</string>
-    <string name="profile_preference_title_assistance_allowSolveSpecificField">Solve Specific Cell</string>
-    <string name="profile_preference_title_assistance_allowSolveRandomField">Solve Random Cell</string>
+    <string name="profile_preference_title_assistance_allowSolveSpecificCell">Solve Specific Cell</string>
+    <string name="profile_preference_title_assistance_allowSolveRandomCell">Solve Random Cell</string>
     <string name="profile_preference_title_assistance_allowGetHint">Hint For Easy Cell</string>
     <string name="profile_preference_title_assistance_autoAdjustNotes">Auto Adjust Notices</string>
     <string name="profile_preference_title_profile">Profile</string>

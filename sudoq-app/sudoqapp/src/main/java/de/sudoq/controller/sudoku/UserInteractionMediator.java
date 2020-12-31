@@ -317,7 +317,7 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 		/* iterate over all symbols e.g. 0-8 */
 		for (int i : type.getSymbolIterator()) {
 
-			/* set fieldval to current symbol */
+			/* set cellval to current symbol */
 			currentCell.setCurrentValue(i, false);
 
 			boolean possible = true;

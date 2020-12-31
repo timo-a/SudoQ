@@ -155,7 +155,7 @@ public class SudokuCellView extends View implements ModelChangeListener<Cell>, O
 		this.symbol = Symbol.getInstance().getMapping(this.cell.getCurrentValue());
 		CellViewPainter.getInstance().markCell(canvas, this, this.symbol, false, this.isInExtraConstraint && !this.selected);
 
-		// Draw notes if field has no value
+		// Draw notes if cell has no value
 		if (this.cell.isNotSolved()) {
 			drawNotes(canvas);
 		}
