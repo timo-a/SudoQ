@@ -36,7 +36,7 @@
     <string name="error_cant_switch_symbols">No alternate symbolset available!</string>
     
     <!-- Toasts -->
-    <string name="toast_solved_wrong">A field is not solved correctly</string>
+    <string name="toast_solved_wrong">A cell is not solved correctly</string>
     <string name="toast_solved_correct">Everything is solved correctly</string>
     <string name="toast_invalid_symbol">Invalid symbol</string>
     <string name="toast_restricted_symbol">Symbol is restricted</string>
@@ -107,8 +107,8 @@
     <string name="sf_sudoku_button_close">Close</string>
     <string name="sf_sudoku_assistances_title">Assistances</string>
     <string name="sf_sudoku_assistances_check">Check solution</string>
-    <string name="sf_sudoku_assistances_solve_specific">Solve selected field</string>
-    <string name="sf_sudoku_assistances_solve_random">Solve random field</string>
+    <string name="sf_sudoku_assistances_solve_specific">Solve selected cell</string>
+    <string name="sf_sudoku_assistances_solve_random">Solve random cell</string>
     <string name="sf_sudoku_assistances_solve_surrender">Surrender</string>
     <string name="sf_sudoku_assistances_back_to_valid_state">Back to last correct status</string>
     <string name="sf_sudoku_assistances_back_to_bookmark">Back to last bookmark</string>
@@ -180,7 +180,7 @@
 
     <!-- Hints -->
 
-    <string name="hint_lastdigit">Look at the highlighted {shape}! There\'s only one field left.</string>
+    <string name="hint_lastdigit">Look at the highlighted {shape}! There\'s only one cell left.</string>
 
     <string name="constraintshape_row_accusative_determined"     >row</string>
     <string name="constraintshape_column_accusative_determined"  >column</string>
@@ -212,28 +212,28 @@
     <string name="feminine_accusative_suffix"></string>
     <string name="neutral_accusative_suffix"></string>
 
-    <string name="hint_lastcandidate">Look at the highlighted field. There\'s only one candidate left.</string>
+    <string name="hint_lastcandidate">Look at the highlighted cell. There\'s only one candidate left.</string>
     <string name="hint_leftovernote">Look at the highlighted {shape}. As {note} is set, any notes of it can be removed.</string>
 
     <string name="hint_nakedsingle_look">Look there\'s a naked single!</string>
-    <string name="hint_nakedsingle_note">{note} is the only note left in the highlighted field.</string>
-    <string name="hint_nakedsingle_remove">It can be set there and removed from all other Fields in this {shape}.</string>
+    <string name="hint_nakedsingle_note">{note} is the only note left in the highlighted cell.</string>
+    <string name="hint_nakedsingle_remove">It can be set there and removed from all other cells in this {shape}.</string>
 
-    <string name="hint_nakedset">Look there\'s a naked set! {symbols} will in some way be distributed among the highlighted fields. They can be removed from all other fields in this group.</string>
-
-    
-    <string name="hint_hiddensingle">Look there\'s a hidden single! Of all the fields in the highlighted shape \"{note}\" appears only in the highlighted field. It can be set there.</string>
-
-    <string name="hint_hiddenset">Look there\'s a hidden set! {symbols} will in some way be distributed among the highlighted fields. Therefore any other candidates in these fields can be removed.</string>
+    <string name="hint_nakedset">Look there\'s a naked set! {symbols} will in some way be distributed among the highlighted cells. They can be removed from all other cells in this group.</string>
 
     
-    <string name="hint_lockedcandidates">There\'s a locked candidate: {note} appears only once in the blue group. It can therefore be deleted in all other fields in the green group.</string>
+    <string name="hint_hiddensingle">Look there\'s a hidden single! Of all the cells in the highlighted shape \"{note}\" appears only in the highlighted cell. It can be set there.</string>
+
+    <string name="hint_hiddenset">Look there\'s a hidden set! {symbols} will in some way be distributed among the highlighted cells. Therefore any other candidates in these cells can be removed.</string>
+
+    
+    <string name="hint_lockedcandidates">There\'s a locked candidate: {note} appears only once in the blue group. It can therefore be deleted in all other cells in the green group.</string>
 
     <string name="hint_xWing">If you look at the intersections of green and blue groups some notes appear nowhere else in the blue groups. They can therefore be deleted in the green ones.</string>
 
     
-    <string name="hint_backtracking">As said, I\'m still in development. So I\'m out of ideas and my best advice is to set a bookmark and guess a field.</string>
-    <string name="hint_fill_out_notes"> By the way, there\'s a field that has no notes in it. If I don\'t see a note in a field I assume that you\'ve ruled it out. I work best if all numbers that are still considered possible are set as notes in a field. If you want I can enter the notes for you. </string>
+    <string name="hint_backtracking">As said, I\'m still in development. So I\'m out of ideas and my best advice is to set a bookmark and guess a cell.</string>
+    <string name="hint_fill_out_notes"> By the way, there\'s a cell that has no notes in it. If I don\'t see a note in a cell I assume that you\'ve ruled it out. I work best if all numbers that are still considered possible are set as notes in a cell. If you want I can enter the notes for you. </string>
 
 
 </resources>

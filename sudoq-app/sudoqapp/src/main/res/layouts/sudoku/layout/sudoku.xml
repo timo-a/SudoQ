@@ -16,7 +16,7 @@
         android:orientation="vertical" >
         <include layout="@layout/toolbar"/>
 
-        <!--whole SudokuField-->
+        <!--whole SudokuCell-->
         <LinearLayout
             android:id="@+id/sudoku_border"
             android:layout_width="fill_parent"
