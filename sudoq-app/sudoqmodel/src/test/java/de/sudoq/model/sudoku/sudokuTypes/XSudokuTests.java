@@ -68,7 +68,7 @@ public class XSudokuTests {
 		assertTrue(stX.getEnumType() == SudokuTypes.Xsudoku);
 	}
 
-	@Test
+	//@Test ignored no point in specification by test
 	public void buildComplexityConstraintTest() {
 		SudokuType xSudo = TypeBuilder.getType(SudokuTypes.Xsudoku);
 

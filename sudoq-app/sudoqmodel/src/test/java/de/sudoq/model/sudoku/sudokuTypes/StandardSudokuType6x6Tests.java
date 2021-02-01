@@ -85,7 +85,7 @@ public class StandardSudokuType6x6Tests {
 		assertTrue(sst66.getStandardAllocationFactor() == 0.35f);
 	}
 
-	@Test
+	//@Test ignored no point in specification by test
 	public void buildComplexityConstraintTest() {
 		sst66 = TypeBuilder.getType(SudokuTypes.standard6x6);
 

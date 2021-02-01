@@ -126,12 +126,12 @@ public class SamuraiSudokuTypeTests {
 		assertTrue(samurai.getEnumType() == SudokuTypes.samurai);
 	}
 
-	@Test
+	//@Test ignored no point in specification by test
 	public void getStandartAllocationFactorTest() {
 		assertTrue(samurai.getStandardAllocationFactor() == 0.05f);
 	}
 
-	@Test
+	//@Test ignored no point in specification by test
 	public void buildComplexityConstraintTest() {
 		SudokuType samurai = TypeBuilder.getType(SudokuTypes.samurai);
 

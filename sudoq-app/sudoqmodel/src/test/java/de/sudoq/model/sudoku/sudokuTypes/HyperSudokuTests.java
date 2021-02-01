@@ -96,7 +96,7 @@ public class HyperSudokuTests {
 		assertTrue(stHy.getStandardAllocationFactor() == 0.25f);
 	}
 
-	@Test
+	//@Test ignored no point in specification by test
 	public void buildComplexityConstraintTest() {
 		assertTrue(stHy.buildComplexityConstraint(null) == null);
 		assertTrue(complexityEqual(stHy.buildComplexityConstraint(Complexity.easy), new ComplexityConstraint(

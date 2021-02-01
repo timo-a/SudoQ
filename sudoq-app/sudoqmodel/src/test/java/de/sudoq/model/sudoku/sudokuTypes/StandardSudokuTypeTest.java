@@ -99,24 +99,24 @@ public class StandardSudokuTypeTest {
 	@Test
 	public void complexityTest() {
 		SudokuType type = TypeBuilder.getType(SudokuTypes.standard9x9);
-		testComplexity(type.buildComplexityConstraint(Complexity.easy),      Complexity.easy,      35, 45,  600,  1100, 2);
-		testComplexity(type.buildComplexityConstraint(Complexity.medium),    Complexity.medium,    27, 35, 1100,  2050, 3);
-		testComplexity(type.buildComplexityConstraint(Complexity.difficult), Complexity.difficult, 22, 28, 1600,  3000, Integer.MAX_VALUE);
-		testComplexity(type.buildComplexityConstraint(Complexity.infernal),  Complexity.infernal,  17, 24, 2400, 25000,	Integer.MAX_VALUE);
+		testComplexity(type, Complexity.easy,      35, 45,  400,  1200, 2);
+		testComplexity(type, Complexity.medium,    27, 35, 1200,  2500, 3);
+		testComplexity(type, Complexity.difficult, 22, 28, 2500,  4000, Integer.MAX_VALUE);
+		testComplexity(type, Complexity.infernal,  17, 24, 4000, 25000,	Integer.MAX_VALUE);
 		assertNull(type.buildComplexityConstraint(null));
 	}
 
-	private void testComplexity(ComplexityConstraint constraint,
+	private void testComplexity(SudokuType type,
 								Complexity complexity,
 	                            int minFields, int maxFields,
 	                            int minComplexityIdentifier,
 	                            int maxComplexityIdentifier,
 	                            int numberOfAllowedHelpers) {
-
-		assertEquals(constraint.getComplexity(),              complexity);
-		assertEquals(constraint.getMinComplexityIdentifier(), minComplexityIdentifier);
-		assertEquals(constraint.getMaxComplexityIdentifier(), maxComplexityIdentifier);
-		assertEquals(constraint.getNumberOfAllowedHelpers(),  numberOfAllowedHelpers);
+		ComplexityConstraint constraint = type.buildComplexityConstraint(complexity);
+		assertEquals("expected complexity is: ", constraint.getComplexity(),              complexity);
+		assertEquals("expected minComplexity:", constraint.getMinComplexityIdentifier(), minComplexityIdentifier);
+		assertEquals("expected maxComplexity:", constraint.getMaxComplexityIdentifier(), maxComplexityIdentifier);
+		assertEquals("expected number of allowed Helpers:", constraint.getNumberOfAllowedHelpers(),  numberOfAllowedHelpers);
 	}
 
 }

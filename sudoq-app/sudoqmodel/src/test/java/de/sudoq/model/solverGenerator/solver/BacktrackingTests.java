@@ -84,6 +84,7 @@ public class BacktrackingTests {
 		SolverSudoku sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
 		sudoku.setComplexity(Complexity.arbitrary);
 		assertTrue(new Solver(sudoku).solveAll(false, true));
+		//TODO see if sudoku can be mocked better, use smaller sudoku, understand why no return false
 		Backtracking back = new Backtracking(sudoku, 10);
 		sudoku.updateCandidates();
 		// there should be no fields to solve any more

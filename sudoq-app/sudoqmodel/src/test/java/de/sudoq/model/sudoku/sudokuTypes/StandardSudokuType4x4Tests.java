@@ -68,7 +68,7 @@ public class StandardSudokuType4x4Tests {
 		assertTrue(sst44.getEnumType() == SudokuTypes.standard4x4);
 	}
 
-	@Test
+	//@Test ignored no point in specification by test
 	public void buildComplexityConstraintTest() {
 		SudokuType standard4x4 = TypeBuilder.getType(SudokuTypes.standard4x4);
 

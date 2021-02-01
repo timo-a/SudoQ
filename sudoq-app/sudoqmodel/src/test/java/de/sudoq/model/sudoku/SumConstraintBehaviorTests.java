@@ -3,8 +3,10 @@ package de.sudoq.model.sudoku;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.sudoq.model.Utility;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.ConstraintType;
 import de.sudoq.model.sudoku.Position;
@@ -15,6 +17,11 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
 public class SumConstraintBehaviorTests {
+
+	@BeforeClass
+	public static void init() {
+		Utility.copySudokus();
+	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testIllegalValue() {

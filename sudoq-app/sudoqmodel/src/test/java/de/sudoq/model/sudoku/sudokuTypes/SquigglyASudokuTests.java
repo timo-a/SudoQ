@@ -12,9 +12,9 @@ import de.sudoq.model.sudoku.complexity.ComplexityConstraintTests;
 public class SquigglyASudokuTests {
 
 	SudokuType squigglyA = TypeBuilder.getType(SudokuTypes.squigglya);
-	
-	
-	@Test
+
+
+	//@Test ignored no point in specification by test
 	public void buildComplexityConstraintTest() {
 		
 		ComplexityConstraint comCo = squigglyA.buildComplexityConstraint(Complexity.easy);

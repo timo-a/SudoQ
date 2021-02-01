@@ -1,18 +1,27 @@
 package de.sudoq.model.sudoku.sudokuTypes;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.sudoq.model.Utility;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
 import de.sudoq.model.xml.XmlHelper;
 
 public class Pseudotest {
+
+	@BeforeClass
+	public static void init() {
+		Utility.copySudokus();
+	}
+
 
 	SudokuType stHy = TypeBuilder.getType(SudokuTypes.HyperSudoku);
 
@@ -91,25 +100,48 @@ public class Pseudotest {
 	}
 
 	@Test
-	public void buildComplexityConstraintTest() {
-		assertTrue(stHy.buildComplexityConstraint(null) == null);
-		assertTrue(complexityEqual(stHy.buildComplexityConstraint(Complexity.easy), new ComplexityConstraint(
-				Complexity.easy, 40, 500, 800, 2)));
+	public void buildComplexityConstraintInitializedWithNullShouldReturnNull() {
+		assertNull("passing null to buildComplexityConstraint should return null.", stHy.buildComplexityConstraint(null));
+	}
 
-		assertTrue(complexityEqual(stHy.buildComplexityConstraint(Complexity.medium), new ComplexityConstraint(
-				Complexity.medium, 32, 750, 1050, 3)));
+	@Test //This tests just specification, is such a test relevant?
+	public void buildComplexityConstraintEasy() {
+		ComplexityConstraint reference = new ComplexityConstraint(
+				Complexity.easy, 40, 500, 1500, 2);
+		ComplexityConstraint test = stHy.buildComplexityConstraint(Complexity.easy);
+		assertTrue(complexityEqual(test, reference));
+	}
 
-		assertTrue(complexityEqual(stHy.buildComplexityConstraint(Complexity.easy), new ComplexityConstraint(
-				Complexity.easy, 40, 500, 800, 2)));
+	@Test
+	public void buildComplexityConstraintMedium() {
+		ComplexityConstraint reference = new ComplexityConstraint(
+				Complexity.medium, 32, 1500, 3500, 3);
+		ComplexityConstraint test = stHy.buildComplexityConstraint(Complexity.medium);
+		assertTrue(complexityEqual(test, reference));
+	}
 
-		assertTrue(complexityEqual(stHy.buildComplexityConstraint(Complexity.difficult), new ComplexityConstraint(
-				Complexity.difficult, 28, 1000, 2500, Integer.MAX_VALUE)));
+	@Test
+	public void buildComplexityConstraintDifficult() {
+		ComplexityConstraint reference = new ComplexityConstraint(
+				Complexity.difficult, 28, 3500, 6000, Integer.MAX_VALUE);
+		ComplexityConstraint test = stHy.buildComplexityConstraint(Complexity.difficult);
+		assertTrue(complexityEqual(test, reference));
+	}
 
-		assertTrue(complexityEqual(stHy.buildComplexityConstraint(Complexity.infernal), new ComplexityConstraint(
-				Complexity.infernal, 27, 2500, 25000, Integer.MAX_VALUE)));
+	@Test
+	public void buildComplexityConstraintInfernal() {
+		ComplexityConstraint reference = new ComplexityConstraint(
+				Complexity.infernal, 27, 6000, 25000, Integer.MAX_VALUE);
+		ComplexityConstraint test = stHy.buildComplexityConstraint(Complexity.infernal);
+		assertTrue(complexityEqual(test, reference));
+	}
 
-		assertTrue(complexityEqual(stHy.buildComplexityConstraint(Complexity.arbitrary), new ComplexityConstraint(
-				Complexity.arbitrary, 32, 1, Integer.MAX_VALUE, Integer.MAX_VALUE)));
+	@Test
+	public void buildComplexityConstraintArbitrary() {
+		ComplexityConstraint reference = new ComplexityConstraint(
+				Complexity.arbitrary, 32, 1, Integer.MAX_VALUE, Integer.MAX_VALUE);
+		ComplexityConstraint test = stHy.buildComplexityConstraint(Complexity.arbitrary);
+		assertTrue(complexityEqual(test, reference));
 	}
 
 	private boolean complexityEqual(ComplexityConstraint c1, ComplexityConstraint c2) {

@@ -33,7 +33,7 @@ public class StandardSudokuType16x16Tests {
 		assertTrue(sst1616.getStandardAllocationFactor() == 0.25f);
 	}
 
-	@Test
+	//@Test ignored no point in specification by test
 	public void buildComplexityConstraintTest() {
 		SudokuType standard16x16 = TypeBuilder.getType(SudokuTypes.standard16x16);
 

@@ -103,6 +103,7 @@ public class GameManagerTests {
 		assertEquals(game.getScore(), 0);
 	}
 
+	@Test
 	public void testLoadingAndSaving() {
 		Game game = GameManager.getInstance().newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings());
 		GameManager.getInstance().save(game);

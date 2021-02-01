@@ -186,7 +186,7 @@ public class SquigglyBSudokuTest extends SquigglySudokuTypesTest {
 	
 	
 	
-	@Test
+	//@Test ignored no point in specification by test
 	public void buildComplexityConstraintTest() {
 		
 		ComplexityConstraint comCo = squigglyB.buildComplexityConstraint(Complexity.easy);
