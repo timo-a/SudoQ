@@ -3,7 +3,7 @@ package de.sudoq.model.solverGenerator.solver;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.sudoq.model.files.FileManagerTests2;
+import de.sudoq.model.files.FileManagerTests;
 import de.sudoq.model.solverGenerator.FastSolver.FastSolverFactory;
 import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
@@ -20,7 +20,7 @@ public class SolverRegressionTestSlow {
 
     @Before
     public void before() {
-        FileManagerTests2.init();
+        FileManagerTests.init();
         sudoku = new SudokuBuilder(SudokuTypes.standard9x9).createSudoku();
         sudoku.setComplexity(Complexity.arbitrary);
         solver = new Solver(sudoku);
@@ -55,7 +55,7 @@ public class SolverRegressionTestSlow {
                 + " .  . 13  .  .  . 16  .  .  .  .  .  .  . 14  .\n"
                 + " . 11  .  .  .  .  .  .  . 10  .  .  .  9 15  .\n";
 
-        Sudoku s = SudokuMockUps2.stringTo16x16Sudoku(r2);
+        Sudoku s = SudokuMockUps.stringTo16x16Sudoku(r2);
 
         boolean q = FastSolverFactory.getSolver(s).isAmbiguous();
         System.out.println(q);

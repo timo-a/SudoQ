@@ -39,3 +39,6 @@ tmp
 .metadata/
 *.apk
 *.lock
+sudoq-app/sudoqmodel/build/
+sudoq-app/investigateJARcreation/
+sudoq-app/sudoqmodel/sudoqmodel.jar

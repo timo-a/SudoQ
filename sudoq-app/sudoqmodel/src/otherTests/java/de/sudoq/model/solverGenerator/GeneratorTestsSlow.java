@@ -1,6 +1,9 @@
 package de.sudoq.model.solverGenerator;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -8,16 +11,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-
 import de.sudoq.model.Utility;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.profile.Profile;
-import de.sudoq.model.solverGenerator.Generator;
-import de.sudoq.model.solverGenerator.GeneratorCallback;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solver.ComplexityRelation;
 import de.sudoq.model.solverGenerator.solver.Solver;
@@ -27,7 +23,9 @@ import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
-public class GeneratorTests implements GeneratorCallback {
+import static org.junit.Assert.assertEquals;
+
+public class GeneratorTestsSlow implements GeneratorCallback {
 
 	private Generator generator;
 
@@ -40,13 +38,13 @@ public class GeneratorTests implements GeneratorCallback {
 	@AfterClass
 	public static void clean() throws IOException, SecurityException, NoSuchFieldException, IllegalArgumentException,
 			IllegalAccessException {
-        java.lang.reflect.Field f = FileManager.class.getDeclaredField("profiles");
+        Field f = FileManager.class.getDeclaredField("profiles");
         f.setAccessible(true);
         f.set(null, null);
-        java.lang.reflect.Field s = FileManager.class.getDeclaredField("sudokus");
+        Field s = FileManager.class.getDeclaredField("sudokus");
         s.setAccessible(true);
         s.set(null, null);
-        java.lang.reflect.Field p = Profile.class.getDeclaredField("instance");
+        Field p = Profile.class.getDeclaredField("instance");
         p.setAccessible(true);
         p.set(null, null);
         FileManager.deleteDir(Utility.profiles);
@@ -70,12 +68,16 @@ public class GeneratorTests implements GeneratorCallback {
 		this.notifyAll();
 	}
 
-	@Test
-	public void testGenerationDeb() {
+
+
+	// Empirischer Test durch mehrfaches Generieren
+	@Test(timeout = 40*60*1000)
+	public void testGeneration() {
+		/* validate returns INVADILD. why?? - is this solved now? tests run through */
 		Random rnd = new Random(0);
 		generator.setRandom(rnd);
 		Transformer.setRandom(rnd);
-		generator.generate(SudokuTypes.standard4x4, Complexity.infernal, this);
+		generator.generate(SudokuTypes.standard9x9, Complexity.infernal, this);
 		synchronized (this) {
 			try {
 				wait();
@@ -83,20 +85,10 @@ public class GeneratorTests implements GeneratorCallback {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("4 done");
-	}
-
-
-
-	@Test(timeout = 10 * 60 * 1000)
-	public void testGenerationSamurai(){
-		//TODO fix this
-
-		//159145199318451
-		Random rnd = new Random(159145199318451l);
+		System.out.println("9 done");
 		generator.setRandom(rnd);
 		Transformer.setRandom(rnd);
-		generator.generate(SudokuTypes.samurai, Complexity.difficult, this);
+		generator.generate(SudokuTypes.standard16x16, Complexity.infernal, this);
 		synchronized (this) {
 			try {
 				wait();
@@ -104,12 +96,30 @@ public class GeneratorTests implements GeneratorCallback {
 				e.printStackTrace();
 			}
 		}
-
-		System.out.println("samurai done");
-
+		System.out.println("16 done");
+		generator.setRandom(rnd);
+		Transformer.setRandom(rnd);
+		generator.generate(SudokuTypes.Xsudoku, Complexity.medium, this);
+		synchronized (this) {
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		System.out.println("X done");
+		generator.setRandom(rnd);
+		Transformer.setRandom(rnd);
+		generator.generate(SudokuTypes.squigglya, Complexity.infernal, this);
+		synchronized (this) {
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		System.out.println("sqA done");
 	}
-
-
 
 	private static long getSeed(Random r){
 

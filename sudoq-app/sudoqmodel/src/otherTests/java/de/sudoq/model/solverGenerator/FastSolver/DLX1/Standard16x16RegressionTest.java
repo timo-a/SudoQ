@@ -1,4 +1,4 @@
-package de.sudoq.model.solverGenerator.FastSolver.DLX1;
+package de.sudoq.model.solverGenerator.solver.FastSolver.DLX1;
 
 import org.junit.BeforeClass;
 import org.junit.Test;

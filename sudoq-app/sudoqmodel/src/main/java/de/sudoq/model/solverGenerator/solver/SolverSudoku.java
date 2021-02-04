@@ -228,6 +228,8 @@ public class SolverSudoku extends Sudoku {
 
 		// delete old branch and remove the candidate used for branching from
 		// candidates list
+		if (this.branchings.empty())
+			return;
 
 		Branching lastBranching = this.branchings.pop();
 		currentCandidates = lastBranching.candidates;//override current branch B with A

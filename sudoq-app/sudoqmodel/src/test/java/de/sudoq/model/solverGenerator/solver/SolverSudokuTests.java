@@ -31,7 +31,7 @@ public class SolverSudokuTests {
 		Position secondPos = Position.get(8, 4);
 		Position thirdPos  = Position.get(3, 2);
 
-		sudoku.killCurrentBranch();
+		sudoku.killCurrentBranch(); //nothing should happen todo put it in own test
 		sudoku.getCurrentCandidates(firstPos).clear();
 		sudoku.getCurrentCandidates(firstPos).set(2, 4);
 		assertEquals(sudoku.getCurrentCandidates(firstPos).cardinality(), 2);

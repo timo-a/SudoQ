@@ -1,4 +1,4 @@
-package de.sudoq.model.solverGenerator.FastSolver;
+package de.sudoq.model.solverGenerator.solver.FastSolver;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -10,6 +10,8 @@ import java.util.Calendar;
 
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.files.FileManagerTests;
+import de.sudoq.model.solverGenerator.FastSolver.FastSolver;
+import de.sudoq.model.solverGenerator.FastSolver.FastSolverFactory;
 import de.sudoq.model.solverGenerator.solver.SudokuMockUps;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.complexity.Complexity;
