@@ -10,15 +10,47 @@ sourceCompatibility = '1.7'
 
 //* for debug of creating jar
 dependencies {
+    //implementation 'org.testng:testng:6.9.6'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.0.3'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.0.3'
 
 //testCompile 'junit:junit:4.7'
-testCompile 'org.apache.directory.studio:org.apache.commons.io:2.4'
-testCompile 'org.kie.modules:org-apache-commons-lang3:6.3.0.CR1'
-//*/
-    /*compile 'com.google.code.gson:gson:2.2.4'*/
-}//*/
+testImplementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
+testImplementation 'org.kie.modules:org-apache-commons-lang3:6.3.0.CR1'
+
+//    otherTestsImplementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
+}
+
+//https://blog.inspeerity.com/gradle/integration-and-unit-separate-gradle-tasks/
+sourceSets {
+    othertests {
+        java.srcDir "$projectDir/src/otherTests/java"
+        resources.srcDir "$projectDir/src/otherTests/resources"
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+    }
+}
+
+configurations {
+    othertestsImplementation.extendsFrom testImplementation
+    othertestsRuntime.extendsFrom testRuntime
+}
+task otherTest(type: Test) {
+    testClassesDirs = sourceSets.othertests.output.classesDirs
+    classpath = sourceSets.othertests.runtimeClasspath
+}
+
+check.dependsOn otherTest
+
+/*
+Was funktioniert?
+gradle otherTest
+schlägt fehl
+package org.junit does not exist
+package org.apache.commons.io does not exist
+* */
+
+
 
 
 /* //https://stackoverflow.com/a/35431416/3014199
