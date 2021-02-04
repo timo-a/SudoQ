@@ -45,7 +45,7 @@ public class SudokuManagerTests {
 
 	@Test
 	public void test() {
-		assertEquals(10, FileManager.getSudokuCountOf(SudokuTypes.standard9x9, Complexity.infernal));
+		assertEquals(21, FileManager.getSudokuCountOf(SudokuTypes.standard9x9, Complexity.infernal));
 		Sudoku s = SudokuManager.getNewSudoku(SudokuTypes.standard9x9, Complexity.infernal);
 		for (int i = 0; i < 10; i++) {
 			s.increaseTransformCount();
@@ -66,7 +66,7 @@ public class SudokuManagerTests {
 				e.printStackTrace();
 			}
 		}
-		assertEquals(10, FileManager.getSudokuCountOf(SudokuTypes.standard9x9, Complexity.infernal));
+		assertEquals(21, FileManager.getSudokuCountOf(SudokuTypes.standard9x9, Complexity.infernal));
 	}
 
 }
