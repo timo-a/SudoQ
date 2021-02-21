@@ -2,20 +2,15 @@ package de.sudoq.model.actionTree;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.List;
 
 import org.junit.Test;
 
-import de.sudoq.model.actionTree.ActionFactory;
-import de.sudoq.model.actionTree.ActionTree;
-import de.sudoq.model.actionTree.ActionTreeElement;
-import de.sudoq.model.actionTree.SolveActionFactory;
 import de.sudoq.model.sudoku.Field;
 
 public class ActionTreeTests {
@@ -24,6 +19,17 @@ public class ActionTreeTests {
 	public void testConstruction() {
 		ActionTree at = new ActionTree();
 		assertNotNull(at.getRoot());
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testAddingElementsMountOnNull() {
+		ActionTree at = new ActionTree();
+		ActionFactory factory = new SolveActionFactory();
+		Field field = new Field(-1, 1);
+
+		ActionTreeElement ate = at.getRoot();
+
+		at.add(factory.createAction(2, field), null);
 	}
 
 	@Test
@@ -35,12 +41,6 @@ public class ActionTreeTests {
 		ActionTreeElement ate = at.getRoot();//add(factory.createAction(1, field), null);
 		assertEquals(ate.getId(), 1);
 
-		try {//TODO extract to own method
-			at.add(factory.createAction(2, field), null);
-			fail("No Exception thrown");
-		} catch (IllegalArgumentException e) {
-		}
-
 		assertEquals(at.add(factory.createAction(1, field), ate).getId(), 2);
 
 		assertEquals(ate.getChildrenList().size(), 1);
@@ -48,13 +48,13 @@ public class ActionTreeTests {
 
 	@Test
 	public void testEquals() {
-		assertFalse(new ActionTree().equals(new Object()));
+		assertNotEquals(new ActionTree(), new Object());
 
 		ActionTree at = new ActionTree();
 		ActionTree at2 = new ActionTree();
 		at2.add(new SolveActionFactory().createAction(5, new Field(-1, 1)), at2.getRoot());
-		assertFalse(at.equals(at2));
-		assertTrue(at.equals(at));
+		assertNotEquals(at, at2);
+		assertEquals(at, at);
 	}
 
 	@Test
@@ -95,22 +95,6 @@ public class ActionTreeTests {
 		assertNull(at.getElement(-2));
 	}
 
-	@Test
-	public void testConsistencyCheck() {
-		ActionTree at = new ActionTree();
-		ActionFactory factory = new SolveActionFactory();
-		Field field = new Field(-1, 1);
-
-		ActionTreeElement ate1 = at.getRoot();
-		ActionTreeElement ate2 = at.add(factory.createAction(1, field), ate1);
-		ActionTreeElement ate3 = at.add(factory.createAction(1, field), ate2);
-		at.add(factory.createAction(1, field), ate2);
-		assertTrue(at.isConsistent());
-
-		ate3.addChild(ate1);
-		assertFalse(at.isConsistent());
-	}
-
 	// AT170
 	@Test
 	public void testFindPath() {
@@ -145,24 +129,50 @@ public class ActionTreeTests {
 		assertArrayEquals(new ActionTreeElement[] {}, ActionTree.findPath(ate1, ate1).toArray());
 	}
 
+
+
 	@Test
-	public void testFindNonExistingPath() {
+	public void testFindPathBetweenDifferentTrees() {
 		ActionTree at1 = new ActionTree();
 		ActionTree at2 = new ActionTree();
+
 		ActionFactory factory = new SolveActionFactory();
 		Field field = new Field(-1, 1);
 
-		ActionTreeElement ate1 = at1.getRoot();
-		ActionTreeElement ate2 = at1.add(factory.createAction(4, field), ate1);
+		//at1: r -> n1 -> (n2, n3 -> n4)
+		ActionTreeElement aRoot = at1.getRoot();
+		ActionTreeElement a1 = at1.add(factory.createAction(4, field), aRoot);
+		ActionTreeElement a2 = at1.add(factory.createAction(5, field), a1);
+		ActionTreeElement a3 = at1.add(factory.createAction(6, field), a1);
+		ActionTreeElement a4 = at1.add(factory.createAction(7, field), a3);
 
-		ActionTreeElement ate3 = at2.getRoot();
-		ActionTreeElement ate4 = at2.add(factory.createAction(2, field), ate3);
+		ActionTreeElement bRoot = at2.getRoot();
+		ActionTreeElement b1 = at2.add(factory.createAction(0, field), bRoot);
+		ActionTreeElement b2 = at2.add(factory.createAction(1, field), b1);
+		ActionTreeElement b3 = at2.add(factory.createAction(2, field), b1);
+		ActionTreeElement b4 = at2.add(factory.createAction(3, field), b3);
 
-		List<ActionTreeElement> a = ActionTree.findPath(ate2, ate4);
-		assertNull(a);
-		/*List<ActionTreeElement> b = ActionTree.findPath(at1.getRoot()
-				                                       ,at2.getRoot());
-		assertNull(b); TODO vertagt, gibt bislang [] zurück. vielleicht sollte nie null zurückgegeben werden sondern immer [] wenns hakt*/
+		List<ActionTreeElement> path = ActionTree.findPath(a2, b4);
+		assertNull(path);
+	}
+
+	@Test
+	public void testFindNonExistingPath() {
+		ActionTree a = new ActionTree();
+		ActionTree b = new ActionTree();
+		ActionFactory factory = new SolveActionFactory();
+		Field field = new Field(-1, 1);
+
+		//at1 -> at2
+
+		ActionTreeElement aRoot = a.getRoot();
+		ActionTreeElement a1 = a.add(factory.createAction(4, field), aRoot);
+
+		ActionTreeElement bRoot = b.getRoot();
+		ActionTreeElement b1 = b.add(factory.createAction(2, field), bRoot);
+
+		List<ActionTreeElement> path = ActionTree.findPath(a1, b1);
+		assertTrue(path.isEmpty());//return empty list because elements have same id
 
 	}
 }
