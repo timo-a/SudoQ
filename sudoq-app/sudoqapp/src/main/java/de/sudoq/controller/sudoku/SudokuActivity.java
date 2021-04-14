@@ -335,7 +335,7 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 		}
 
 		if (state.getBoolean(SAVE_GESTURE_ACTIVE + "")) {
-			this.mediator.onCellSelected(this.sudokuView.getCurrentCellView());
+			this.mediator.onCellSelected(this.sudokuView.getCurrentCellView(), CellInteractionListener.SelectEvent.Short);
 		}
 
 		if(mode==Mode.HintMode) {
