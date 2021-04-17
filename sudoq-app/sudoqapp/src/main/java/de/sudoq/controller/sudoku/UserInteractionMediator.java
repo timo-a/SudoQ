@@ -169,7 +169,7 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 
 		} else {
 			this.noteMode = !this.noteMode;
-
+			currentField.setNoteState(this.noteMode);
 		}
 		if (currentField.getCell().isEditable()) {
 			restrictCandidates();
@@ -181,33 +181,36 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 
 	private void cellSelectedGestureMode(SudokuCellView view, SelectEvent e) {
 
-		SudokuCellView currentField = this.sudokuView.getCurrentCellView();
+		SudokuCellView currentCellView = this.sudokuView.getCurrentCellView();
+		Cell currentCell;
 		/* select for the first time -> set a solution */
-		boolean freshlySelected = currentField != view;
+		boolean freshlySelected = currentCellView != view;
 
 		if (freshlySelected) {
 			this.noteMode = e == SelectEvent.Long;
 
 			this.sudokuView.setCurrentCellView(view);
 
-			if (currentField != null)
-				currentField.deselect(true);
+			if (currentCellView != null)
+				currentCellView.deselect(true);
 
-			currentField = view;
+			currentCellView = view;
 
-			if (currentField != null)
-				currentField.setNoteState(this.noteMode);
+			if (currentCellView != null)
+				currentCellView.setNoteState(this.noteMode);
 
-			currentField.select(this.game.isAssistanceAvailable(Assistances.markRowColumn));
+			currentCellView.select(this.game.isAssistanceAvailable(Assistances.markRowColumn));
 
-			if (currentField.getCell().isEditable()) {
+			currentCell = currentCellView.getCell();
+
+			if (currentCell.isEditable()) {
 				restrictCandidates();
 				this.virtualKeyboard.setActivated(true);
 			} else {
 				this.virtualKeyboard.setActivated(false);
 			}
 
-			if (e == SelectEvent.Long && this.sudokuView.getCurrentCellView().getCell().isEditable()) {
+			if (e == SelectEvent.Long && currentCell.isEditable()) {
 				//Long press -> user can input note directly
 
 				this.gestureOverlay.setVisibility(View.VISIBLE);
@@ -219,10 +222,19 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 				this.gestureOverlay.addView(textView, new GestureOverlayView.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL));
 
 			}
-			/* second click */
+		/* second click on the same cell*/
 		} else {
+			currentCell = currentCellView.getCell();
 			/* set solution via touchy swypy*/
-			if (this.sudokuView.getCurrentCellView().getCell().isEditable()) {
+			if (currentCell.isEditable()) {
+
+				//long press switches between selected for note / entry
+				if(e == SelectEvent.Long) {
+					this.noteMode = !this.noteMode;
+					currentCellView.setNoteState(this.noteMode);
+					return;
+				}
+
 				this.gestureOverlay.setVisibility(View.VISIBLE);
 				restrictCandidates();
 				final TextView textView = new TextView(gestureOverlay.getContext());
@@ -232,10 +244,10 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 				this.gestureOverlay.addView(textView, new GestureOverlayView.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL));
 				/* no gestures -> toogle noteMode*/
 			} else {
-				this.noteMode = !this.noteMode;
-				restrictCandidates();
+				//if it is not editable don't do anything
+				//this.noteMode = !this.noteMode;
+				//restrictCandidates();
 			}
-			currentField.setNoteState(this.noteMode);
 		}
 
 	}

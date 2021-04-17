@@ -163,7 +163,7 @@ public class SudokuCellView extends View implements ModelChangeListener<Cell>, O
 				Toast t = Toast.makeText(context, "long click", Toast.LENGTH_LONG);
 				t.show();
 
-				return false;
+				return true;
 			}
 			//this is just to pass `this`
 			SudokuCellView scv;
