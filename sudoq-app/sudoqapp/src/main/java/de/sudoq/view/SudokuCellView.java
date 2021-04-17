@@ -141,9 +141,6 @@ public class SudokuCellView extends View implements ModelChangeListener<Cell>, O
 				for (CellInteractionListener listener : cellSelectListener)
 					listener.onCellSelected(scv, CellInteractionListener.SelectEvent.Short);
 
-				Log.i("sudokucallview", "onClick: was called");
-				Toast t = Toast.makeText(context, "click", Toast.LENGTH_LONG);
-				t.show();
 			}
 			//this is just to pass `this`
 			SudokuCellView scv;
@@ -158,10 +155,6 @@ public class SudokuCellView extends View implements ModelChangeListener<Cell>, O
 			public boolean onLongClick(View v) {
 				for (CellInteractionListener listener : cellSelectListener)
 					listener.onCellSelected(scv, CellInteractionListener.SelectEvent.Long);
-
-				Log.i("sudokucallview", "onLongClick: was called");
-				Toast t = Toast.makeText(context, "long click", Toast.LENGTH_LONG);
-				t.show();
 
 				return true;
 			}
