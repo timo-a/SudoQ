@@ -34,6 +34,7 @@ import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
+import de.sudoq.view.GestureInputOverlay;
 import de.sudoq.view.SudokuCellView;
 import de.sudoq.view.SudokuLayout;
 import de.sudoq.view.VirtualKeyboardLayout;
@@ -75,7 +76,7 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 	/**
 	 * Die Gesten-View.
 	 */
-	private GestureOverlayView gestureOverlay;
+	private GestureInputOverlay gestureOverlay;
 
 	/**
 	 * Die Bibliothek für die Gesteneingabe.
@@ -97,7 +98,7 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 	 * @param gestureStore
 	 *            Die Bibliothek der Gesten
 	 */
-	public UserInteractionMediator(VirtualKeyboardLayout virtualKeyboard, SudokuLayout sudokuView, Game game, GestureOverlayView gestureOverlay,
+	public UserInteractionMediator(VirtualKeyboardLayout virtualKeyboard, SudokuLayout sudokuView, Game game, GestureInputOverlay gestureOverlay,
 			GestureStore gestureStore) {
 		this.actionListener = new ArrayList<ActionListener>();
 
@@ -108,7 +109,6 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 		this.gestureOverlay = gestureOverlay;
 		this.gestureStore = gestureStore;
 		this.gestureOverlay.addOnGesturePerformedListener(this);
-		this.gestureOverlay.setGestureStrokeType(GestureOverlayView.GESTURE_STROKE_TYPE_MULTIPLE);
 		this.sudokuView.registerListener(this);
 	}
 
@@ -221,15 +221,12 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 
 				Log.d("gesture-verify", "cellSelectedGestureMode: noteMode: " + noteMode);
 
-				this.gestureOverlay.setVisibility(View.VISIBLE);
 				restrictCandidates();
-				final TextView textView = new TextView(gestureOverlay.getContext());
-				textView.setTextColor(Color.YELLOW);
-				int title = noteMode ? R.string.sf_sudoku_title_gesture_input_note
-				                     : R.string.sf_sudoku_title_gesture_input_entry;
-				textView.setText(" " + gestureOverlay.getContext().getString(title) + " ");
-				textView.setTextSize(18);
-				this.gestureOverlay.addView(textView, new GestureOverlayView.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL));
+
+				if(noteMode)
+					gestureOverlay.activateForNote();
+				else
+					gestureOverlay.activateForEntry();
 
 			}
 		/* second click on the same cell*/
@@ -245,17 +242,14 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 					return;
 				}
 
-				this.gestureOverlay.setVisibility(View.VISIBLE);
 				restrictCandidates();
-				final TextView textView = new TextView(gestureOverlay.getContext());
-				textView.setTextColor(Color.YELLOW);
-				int title = noteMode ? R.string.sf_sudoku_title_gesture_input_note
-				                     : R.string.sf_sudoku_title_gesture_input_entry;
-				textView.setText(" " + gestureOverlay.getContext().getString(title) + " ");
-				textView.setTextSize(18);
-				this.gestureOverlay.addView(textView, new GestureOverlayView.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL));
-				//this.gestureOverlay.removeView(textView);
-				/* no gestures -> toogle noteMode*/
+
+
+				if(noteMode)
+					gestureOverlay.activateForNote();
+				else
+					gestureOverlay.activateForEntry();
+
 			} else {
 				//if it is not editable don't do anything
 				//this.noteMode = !this.noteMode;

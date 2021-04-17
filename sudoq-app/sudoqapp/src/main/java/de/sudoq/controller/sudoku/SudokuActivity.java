@@ -57,6 +57,7 @@ import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.view.FullScrollLayout;
+import de.sudoq.view.GestureInputOverlay;
 import de.sudoq.view.SudokuCellView;
 import de.sudoq.view.SudokuLayout;
 import de.sudoq.view.VirtualKeyboardLayout;
@@ -145,7 +146,7 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 	/**
 	 * Fängt Gesteneingaben des Benutzers ab
 	 */
-	private GestureOverlayView gestureOverlay;
+	private GestureInputOverlay gestureOverlay;
 
 	/**
 	 * Hält die von der Activity unterstützten Gesten
@@ -393,12 +394,7 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 			}
 		}
 
-		this.gestureOverlay = new GestureOverlayView(this);
-		LayoutParams gestureLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-		this.gestureOverlay.setLayoutParams(gestureLayoutParams);
-		this.gestureOverlay.setBackgroundColor(Color.BLACK);
-		this.gestureOverlay.getBackground().setAlpha(127);
-		this.gestureOverlay.setVisibility(View.INVISIBLE);
+		this.gestureOverlay = new GestureInputOverlay(this);
 
 		FrameLayout frameLayout = findViewById(R.id.sudoku_frame_layout);
 		frameLayout.addView(this.gestureOverlay);
