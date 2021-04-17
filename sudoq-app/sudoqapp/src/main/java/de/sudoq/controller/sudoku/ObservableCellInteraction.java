@@ -16,11 +16,6 @@ package de.sudoq.controller.sudoku;
 public interface ObservableCellInteraction {
 
 	/**
-	 * Benachrichtigt die Listener.
-	 */
-	void notifyListener();
-
-	/**
 	 * Registriert einen Listener. Ist dieser null, so wird nichts getan.
 	 * 
 	 * @param listener

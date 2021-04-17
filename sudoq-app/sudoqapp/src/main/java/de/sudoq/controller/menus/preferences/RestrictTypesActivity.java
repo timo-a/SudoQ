@@ -150,7 +150,6 @@ public class RestrictTypesActivity extends SudoqListActivity implements OnItemCl
 	 *            ID der angeklickten View
 	 */
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		Log.d(LOG_TAG, position + "");
 
 		/* toggle item */
 		SudokuTypes st = adapter.getItem(position);
@@ -164,8 +163,7 @@ public class RestrictTypesActivity extends SudoqListActivity implements OnItemCl
 
 	@Override
 	public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-		Log.d(LOG_TAG, "LongClick on "+ position + "");
-		
+
 		/* nothing */
 			
 		return true;//prevent itemclick from fire-ing as well

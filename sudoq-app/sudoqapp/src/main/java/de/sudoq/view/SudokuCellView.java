@@ -11,8 +11,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.view.MotionEvent;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -109,7 +110,7 @@ public class SudokuCellView extends View implements ModelChangeListener<Cell>, O
 	 * @throws IllegalArgumentException
 	 *             if one of the arguments is null
 	 */
-	public SudokuCellView(Context context, Game game, Cell cell, boolean markWrongSymbol) {
+	public SudokuCellView(final Context context, Game game, Cell cell, boolean markWrongSymbol) {
 		super(context);
 		this.markWrongSymbol = markWrongSymbol;
 		this.cell = cell;
@@ -133,6 +134,37 @@ public class SudokuCellView extends View implements ModelChangeListener<Cell>, O
 		}
 
 		updateMarking();
+
+		setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				for (CellInteractionListener listener : cellSelectListener)
+					listener.onCellSelected(scv, CellInteractionListener.SelectEvent.Short);
+
+			}
+			//this is just to pass `this`
+			SudokuCellView scv;
+			OnClickListener init (SudokuCellView scv){
+				this.scv = scv;
+				return this;
+			}
+		}.init(this));
+
+		setOnLongClickListener(new OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				for (CellInteractionListener listener : cellSelectListener)
+					listener.onCellSelected(scv, CellInteractionListener.SelectEvent.Long);
+
+				return true;
+			}
+			//this is just to pass `this`
+			SudokuCellView scv;
+			OnLongClickListener init (SudokuCellView scv){
+				this.scv = scv;
+				return this;
+			}
+		}.init(this));
 	}
 
 	/* Methods */
@@ -207,17 +239,15 @@ public class SudokuCellView extends View implements ModelChangeListener<Cell>, O
 	 * @throws IllegalArgumentException
 	 *             Wird geworfen, falls das übergebene MotionEvent null ist
 	 */
-	@Override
+	/*@Override
 	public boolean onTouchEvent(MotionEvent touchEvent) {
 		for (CellInteractionListener listener : cellSelectListener) {
 			listener.onCellSelected(this);
 		}
 
 		return false;
-	}
+	}*/
 
-	
-	
 
 	/**
 	 * Returns the cell associated by this view
@@ -379,10 +409,10 @@ public class SudokuCellView extends View implements ModelChangeListener<Cell>, O
 	/**
 	 * Notifies all registered listeners about interaction with this SudokuCellView.
 	 */
-	public void notifyListener() {
+	/*public void notifyListener() {
 		for (CellInteractionListener listener : cellSelectListener) {
 			listener.onCellSelected(this);
 		}
-	}
+	}*/
 
 }

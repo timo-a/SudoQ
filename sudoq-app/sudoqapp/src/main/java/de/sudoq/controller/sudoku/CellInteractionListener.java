@@ -14,13 +14,15 @@ import de.sudoq.view.SudokuCellView;
  */
 public interface CellInteractionListener {
 
+	enum SelectEvent {Short, Long};
+
 	/**
 	 * Called if a cell is selected.
 	 * 
 	 * @param view
 	 *            The newly selected view
 	 */
-	public void onCellSelected(SudokuCellView view);
+	void onCellSelected(SudokuCellView view, SelectEvent e);
 
 	/**
 	 * Called is a cell is changed.
@@ -28,6 +30,6 @@ public interface CellInteractionListener {
 	 * @param view
 	 *            The changed view
 	 */
-	public void onCellChanged(SudokuCellView view);
+	void onCellChanged(SudokuCellView view);
 
 }
