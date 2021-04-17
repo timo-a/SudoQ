@@ -113,7 +113,10 @@
     <string name="sf_sudoku_assistances_back_to_valid_state">Back to last correct status</string>
     <string name="sf_sudoku_assistances_back_to_bookmark">Back to last bookmark</string>
     <string name="sf_sudoku_assistances_give_hint">give a hint</string>
-    <string name="sf_sudoku_title_gesture_input">Input symbol via gesture</string>
+
+    <string name="sf_sudoku_title_gesture_input_entry">Input symbol via gesture</string>
+    <string name="sf_sudoku_title_gesture_input_note">Input note via gesture</string>
+
     <string name="sf_sudoku_title_action_tree">Action History</string>
     <string name="sf_sudoku_assistances_crash">crash the app</string>
 

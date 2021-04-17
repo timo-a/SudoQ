@@ -106,7 +106,8 @@
     <string name="sf_sudoku_assistances_back_to_bookmark">Retourner au dernier signet</string>
     <string name="sf_sudoku_assistances_give_hint">Donner un indice</string>
     <string name="sf_sudoku_assistances_crash">crasher l\'application</string>
-    <string name="sf_sudoku_title_gesture_input">Entrée de l’icône par un geste</string>
+    <string name="sf_sudoku_title_gesture_input_entry">Entrée de l’icône par un geste</string>
+    <string name="sf_sudoku_title_gesture_input_note">Entrez une note avec un geste</string>
     <string name="sf_sudoku_title_action_tree">Les dernières actions</string>
 
     <!-- Titles -->

@@ -13,6 +13,7 @@ import android.gesture.GestureOverlayView.OnGesturePerformedListener;
 import android.gesture.GestureStore;
 import android.gesture.Prediction;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -36,6 +37,8 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.view.SudokuCellView;
 import de.sudoq.view.SudokuLayout;
 import de.sudoq.view.VirtualKeyboardLayout;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Ein Vermittler zwischen einem Sudoku und den verschiedenen
@@ -187,7 +190,10 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 		boolean freshlySelected = currentCellView != view;
 
 		if (freshlySelected) {
+			Log.d("gesture-verify", "cellSelectedGestureMode: freshly selected");
+
 			this.noteMode = e == SelectEvent.Long;
+			Log.d("gesture-verify", "cellSelectedGestureMode: this.noteMode =" + this.noteMode);
 
 			this.sudokuView.setCurrentCellView(view);
 
@@ -213,11 +219,15 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 			if (e == SelectEvent.Long && currentCell.isEditable()) {
 				//Long press -> user can input note directly
 
+				Log.d("gesture-verify", "cellSelectedGestureMode: noteMode: " + noteMode);
+
 				this.gestureOverlay.setVisibility(View.VISIBLE);
 				restrictCandidates();
 				final TextView textView = new TextView(gestureOverlay.getContext());
 				textView.setTextColor(Color.YELLOW);
-				textView.setText(" " + gestureOverlay.getContext().getString(R.string.sf_sudoku_title_gesture_input) + " ");
+				int title = noteMode ? R.string.sf_sudoku_title_gesture_input_note
+				                     : R.string.sf_sudoku_title_gesture_input_entry;
+				textView.setText(" " + gestureOverlay.getContext().getString(title) + " ");
 				textView.setTextSize(18);
 				this.gestureOverlay.addView(textView, new GestureOverlayView.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL));
 
@@ -239,9 +249,12 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 				restrictCandidates();
 				final TextView textView = new TextView(gestureOverlay.getContext());
 				textView.setTextColor(Color.YELLOW);
-				textView.setText(" " + gestureOverlay.getContext().getString(R.string.sf_sudoku_title_gesture_input) + " ");
+				int title = noteMode ? R.string.sf_sudoku_title_gesture_input_note
+				                     : R.string.sf_sudoku_title_gesture_input_entry;
+				textView.setText(" " + gestureOverlay.getContext().getString(title) + " ");
 				textView.setTextSize(18);
 				this.gestureOverlay.addView(textView, new GestureOverlayView.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL));
+				//this.gestureOverlay.removeView(textView);
 				/* no gestures -> toogle noteMode*/
 			} else {
 				//if it is not editable don't do anything
@@ -327,6 +340,7 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 					updateEntryFromGesture(listener, prediction);
 			}
 		}
+		overlay.removeAllViews();
 	}
 
 	private void updateEntryFromGesture(ActionListener listener, Prediction prediction) {

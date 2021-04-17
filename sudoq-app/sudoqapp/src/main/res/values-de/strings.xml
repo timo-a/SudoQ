@@ -105,7 +105,10 @@
     <string name="sf_sudoku_assistances_back_to_valid_state">Zurück zum letzten korrekten Stand</string>
     <string name="sf_sudoku_assistances_back_to_bookmark">Zurück zum letzten Lesezeichen</string>
     <string name="sf_sudoku_assistances_give_hint">Einen Tipp geben</string>
-    <string name="sf_sudoku_title_gesture_input">Symboleingabe durch Geste</string>
+
+    <string name="sf_sudoku_title_gesture_input_entry">Symboleingabe durch Geste</string>
+    <string name="sf_sudoku_title_gesture_input_note">Kandidat eingeben durch Geste</string>
+
     <string name="sf_sudoku_title_action_tree">Aktionsverlauf</string>
     <string name="sf_sudoku_assistances_crash">App abstürzen lassen</string>
 
