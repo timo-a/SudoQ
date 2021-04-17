@@ -7,18 +7,24 @@
  */
 package de.sudoq.controller.menus.preferences;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.Spinner;
 
 import de.sudoq.R;
 import de.sudoq.controller.menus.NewSudokuActivity;
@@ -49,12 +55,21 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 
 	Byte debugCounter = 0;
 
+	private int lastSelectedLanguageItem =0;
+	private boolean langSpinnerInit = true;
+
+	/**
+	 * stores language at activity start to compare if language changed in advanced preferences
+	 */
+	private LanguageSetting currentLanguageCode;
+
 	/**
 	 * Wird aufgerufen, falls die Activity zum ersten Mal gestartet wird. Läd
 	 * die Preferences anhand der zur Zeit aktiven Profil-ID.
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		Log.i("lang","AdvancedPreferencesActivity.onCreate() called.");
 		super.onCreate(savedInstanceState);		
 		this.setContentView(R.layout.preferences_advanced);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -64,6 +79,8 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 		ab.setHomeAsUpIndicator(R.drawable.launcher);
 		ab.setDisplayHomeAsUpEnabled(true);
 		ab.setDisplayShowTitleEnabled(true);
+		//set title explicitly so localization kicks in
+		ab.setTitle(R.string.sf_advancedpreferences_title);
 
 
 		lefthand      = (CheckBox) findViewById(R.id.checkbox_lefthand_mode);
@@ -77,7 +94,7 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 
         switch (caller){
             case NEW_SUDOKU:
-				debug.   setChecked(Profile.getInstance().isDebugSet());
+				debug.   setChecked(Profile.getInstance().getAppSettings().isDebugSet());
 				if(debug.isChecked()){
 					debug.setVisibility(View.VISIBLE);
 				}
@@ -89,15 +106,74 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 				if(debug.isChecked()){
 					debug.setVisibility(View.VISIBLE);
 				}
-				debug.   setChecked(Profile.getInstance().isDebugSet());
+				debug.   setChecked(Profile.getInstance().getAppSettings().isDebugSet());
                 helper.  setChecked(profileGameSettings.isHelperSet());
                 lefthand.setChecked(profileGameSettings.isLefthandModeSet());
         }
 		//myCaller.restricttypes.setChecked(a.isreHelperSet());
 		
 		Profile.getInstance().registerListener(this);
-	}
 
+		/** language spinner **/
+		final Spinner languageSpinner = findViewById(R.id.spinner_language);
+
+		ArrayAdapter<CharSequence> languageAdapter = ArrayAdapter.createFromResource(this,
+				R.array.language_choice_values,
+				android.R.layout.simple_spinner_item);
+		languageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		languageSpinner.setAdapter(languageAdapter);
+
+
+		final Activity thishere = this;
+
+		//set language
+		currentLanguageCode = LanguageUtility.loadLanguageFromSharedPreferences2(this);
+		Log.d("lang","set language to AdvancedPreferencesActivity.onCreate() after setLocaleFromMemory.");
+
+		languageSpinner.setSelection(currentLanguageCode.isSystemLanguage() ? 0 : currentLanguageCode.language.ordinal());
+		// nested Listener for languageSpinner
+		languageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+
+				if (langSpinnerInit){
+					//onitemselected is called after initialization
+					//this flag prevents it
+					langSpinnerInit = false;
+					return;
+				}
+
+				//if position is out of array bounds set to 0 (= system language).
+				if (pos >= LanguageSetting.LanguageCode.values().length){
+					pos=0;
+				}
+
+				//translate pos to enum
+				LanguageSetting.LanguageCode enumCode = LanguageSetting.LanguageCode.values()[pos];
+				//enum to string(resolving system language) and set
+				LanguageSetting newCode = LanguageUtility.getLanguageFromItem(enumCode);
+
+				LanguageUtility.setConfLocale(newCode.language.name(), thishere);
+
+				LanguageUtility.storeLanguageToMemory2(AdvancedPreferencesActivity.this, newCode);
+				//int previous = LanguageUtility.loadLanguageFromConf(AdvancedPreferencesActivity.this).name();
+
+				if (!currentLanguageCode.language.equals(newCode.language)) {
+					//if we change e.g. from system(english) to english we need to store a different value but we don't need to refresh.
+
+					//restart activity so changes can take placem
+					Intent refresh = new Intent(thishere, thishere.getClass());
+					thishere.finish();
+					thishere.startActivity(refresh);
+				}
+
+			}
+
+			public void onNothingSelected(AdapterView<?> parent) {
+				// do nothing
+			}
+		});
+
+	}
 
 	/**
 	 * Aktualisiert die Werte in den Views
@@ -117,6 +193,7 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 	 *            von android xml übergebene View
 	 */
 	public void selectTypesToRestrict(View view) {
+		Log.d("gameSettings","AdvancedPreferencesActivity.selectTypesToRestrict");
 		startActivity(new Intent(this, RestrictTypesActivity.class));
 	}
 

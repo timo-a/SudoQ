@@ -16,7 +16,7 @@ public enum SudokuTypes {
 	/**
 	 * Ein Standard-Sudoku.
 	 */
-	standard9x9,
+	standard9x9, //for legacy reasons 9x9 has ord = 0
 
 	/**
 	 * Ein 4x4 Sudoku mit normalen Regeln.

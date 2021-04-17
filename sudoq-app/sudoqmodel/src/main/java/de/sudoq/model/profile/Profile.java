@@ -325,8 +325,13 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 		return this.gameSettings.isGesturesSet();
 	}
 
-	public boolean isDebugSet() {
-		return this.appSettings.isDebugSet();
+	/**
+	 *
+	 *
+	 * @return AppSettings object representing settings bound to the app in general
+	 */
+	public AppSettings getAppSettings(){
+		return this.appSettings;
 	}
 
 	/*Advanced Settings*/
@@ -353,6 +358,8 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 	public void setDebugActive(boolean value) {
 		this.appSettings.setDebug(value);
 	}
+
+
 
 	/**
 	 * Gibt eine String Liste mit allen Profilnamen zurück.

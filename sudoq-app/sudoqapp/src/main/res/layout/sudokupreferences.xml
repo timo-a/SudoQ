@@ -39,15 +39,24 @@
 	        android:layout_margin="10dp"
 	        android:prompt="@string/sf_sudokupreferences_sudokutype"
 	        android:textColor="@android:color/black" />
-	
-	    <TextView
-	        android:id="@+id/textview_sudokucomplexity"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_margin="10dp"
-	        android:text="@string/subtitle_sudokupreferences_sudokucomplexity"
-	        android:textColor="@android:color/black" />
-	
+
+		<TextView
+			android:id="@+id/textview_no_sudokutypes"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="10dp"
+			android:text="@string/subtitle_sudokupreferences_sudokucomplexity"
+			android:textColor="@android:color/black"
+			android:visibility="gone" />
+
+		<TextView
+			android:id="@+id/textview_sudokucomplexity"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="10dp"
+			android:text="@string/subtitle_sudokupreferences_sudokucomplexity"
+			android:textColor="@android:color/black" />
+
 	    <Spinner
 	        android:id="@+id/spinner_sudokucomplexity"
 	        android:layout_width="fill_parent"

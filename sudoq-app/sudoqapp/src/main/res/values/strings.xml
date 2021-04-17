@@ -75,12 +75,7 @@
 	<!-- Player Preferences Button -->
 	<string name="player_preferences_button_changeprofile">Change Profile</string>
     
-    <!-- MainMenu Buttons -->
-    <string name="sf_mainmenu_new_sudoku">New Sudoku</string>
-    <string name="sf_mainmenu_continue">Continue</string>
-    <string name="sf_mainmenu_load_sudoku">Load Sudoku</string>
-    <string name="sf_mainmenu_profile">Profile</string>
-    
+
     <!-- GestureBuilder -->
     <string name="gesture_builder_title">Gesture Builder</string>
     <string name="gesture_builder_define_gesture">Define a Gesture</string>
@@ -99,9 +94,7 @@
     <string name="sf_sudokupreferences_sudokucomplexity">Choose Difficulty</string>
     <string name="sf_sudokupreferences_assistances">Adjust Assistances</string>
     <string name="sf_sudokupreferences_copying">Templates are currently being copied. Please wait a moment.</string>
-    <string name="sf_sudokupreferences_all_disabled_1">You disabled all sudoku types…</string>
-    <string name="sf_sudokupreferences_all_disabled_2">Enable them again in advanced settings.</string>
-    
+
     <!-- SudokuActivity -->
     <string name="sf_sudoku_button_bookmark">Bookmark</string>
     <string name="sf_sudoku_button_close">Close</string>
