@@ -12,15 +12,19 @@ import de.sudoq.model.xml.XmlTree;
 import de.sudoq.model.xml.Xmlable;
 
 /**
- * Diese Klasse repräsentiert alle Einstellungen zum Spiel:
- * -einen Satz von Assistances, also für jede
- * Assistance ob diese gesetzt ist oder nicht.
- * -zusätzliche optionen, wie lefthandmode, hints...
+ * This class represents general settings:
+ * - whether debug mode is on
+ * - the language
  */
 public class AppSettings implements Xmlable{
 
 	private boolean debug;
 
+	private String language;
+
+	public AppSettings() {
+		language = "system";//default value
+	}
 
 	/* additional settings */
 
@@ -32,13 +36,24 @@ public class AppSettings implements Xmlable{
 		return debug;
 	}
 
+	/* language */
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
 
 	/* to and from string */
 	
 	@Override
 	public XmlTree toXmlTree() {
         XmlTree representation = new XmlTree("appSettings");
-        representation.addAttribute(new XmlAttribute("debug",    debug));
+		representation.addAttribute(new XmlAttribute("debug",    debug));
+		representation.addAttribute(new XmlAttribute("language", language));
 		return representation;
 	}
 	
@@ -47,6 +62,9 @@ public class AppSettings implements Xmlable{
 			throws IllegalArgumentException {
 		
 		debug  = Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("debug"));
+		language= xmlTreeRepresentation.getAttributeValue("language");
+		if(language==null)
+			language="system";
 	}
 
 }

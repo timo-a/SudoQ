@@ -56,52 +56,17 @@ public class RestrictTypesAdapter extends ArrayAdapter<SudokuTypes> {
 		View rowView = inflater.inflate(R.layout.restricttypes_item, parent, false);
 		SudokuTypes type = super.getItem(position);
 		String full = Utility.type2string(context, type);//translated name of Sudoku type;
-		
-		String lang = Locale.getDefault().getLanguage();
-		
-		if(lang.equals("en") | lang.equals("de")){
-			/*for these languages all type names are 'regular', thus we can align them pretty:
-			       standard Sudoku
-			              X-Sudoku
-			      stairstep-Sudoku   */ 
-		
-			TextView sudokuType       = (TextView)  rowView.findViewById(R.id.type_label);
-			TextView sudokuState      = (TextView)  rowView.findViewById(R.id.state_label);
 
+		((View) rowView.findViewById(R.id.regular_languages_layout)).setVisibility(View.GONE);
+		((View) rowView.findViewById(R.id.irregular_languages_layout)).setVisibility(View.VISIBLE);
 			
-			String regex = "(?<=-[Ss]ud)(?=oku)";
-			String s_type = full.split(regex)[0]; //standard
-			String s_rest = full.split(regex)[1]; //-sudoku 9x9
-		
-			sudokuType .setText(s_type);
-			sudokuState.setText(s_rest);
-
-			int color = types.contains(type) ? Color.BLACK : Color.LTGRAY;
-		
-			sudokuState.setTextColor(color);
-			sudokuType. setTextColor(color);
-		}else{
-			/* We have an irregulat language like french with 
-			 *        Sudoku standard 9x9
-			 *      x-Sudoku
-			 *      
-			 *      we can't align that
-			 *      */
-			((View) rowView.findViewById(R.id.regular_languages_layout)).setVisibility(View.GONE);
-			((View) rowView.findViewById(R.id.irregular_languages_layout)).setVisibility(View.VISIBLE);
+		TextView sudokuType = (TextView) rowView.findViewById(R.id.combined_label);
+		sudokuType.setText(full);
 			
-			TextView sudokuType = (TextView) rowView.findViewById(R.id.combined_label);
-			sudokuType.setText(full);
-			
-			int color = types.contains(type) ? Color.BLACK : Color.LTGRAY;
-			sudokuType. setTextColor(color);
-		}
+		int color = types.contains(type) ? Color.BLACK : Color.LTGRAY;
+		sudokuType. setTextColor(color);
 
 		return rowView;
-	}
-
-	public boolean isWanted(SudokuTypes st){
-		return types.contains(st);
 	}
 
 }

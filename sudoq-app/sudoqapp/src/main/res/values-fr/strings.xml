@@ -65,13 +65,6 @@
     
     <!-- Player Preferences Button -->
     <string name="player_preferences_button_changeprofile">Changer de profil</string>
-    
-    <!-- MainMenu Buttons -->
-    <string name="sf_mainmenu_new_sudoku">Nouveau sudoku</string>
-    <string name="sf_mainmenu_continue">Continuer</string>
-    <string name="sf_mainmenu_load_sudoku">Charger un sudoku</string>
-    <string name="sf_mainmenu_profile">Profil</string>
-    
 
     <!-- GestureBuilder -->
     <string name="gesture_builder_title">définir des gestes</string>
@@ -91,8 +84,6 @@
     <string name="sf_sudokupreferences_sudokucomplexity">Choisir le degré de difficulté</string>
     <string name="sf_sudokupreferences_assistances">Configurer l’aide</string>
     <string name="sf_sudokupreferences_copying">Les modèles sont en train d’être copiés. Veuillez patienter.</string>
-    <string name="sf_sudokupreferences_all_disabled_1">Vous avez désactivé tous les types de sudoku…</string>
-    <string name="sf_sudokupreferences_all_disabled_2">Activer les dans les paramètres avancés.</string>
 
     <!-- SudokuActivity -->
     <string name="sf_sudoku_button_bookmark">Marque-page</string>
@@ -130,7 +121,7 @@
     <string name="sudoku_type_standard_4x4"  >Sudoku standard 4x4</string>
     <string name="sudoku_type_squiggly_a_9x9">Squiggly-Sudoku 9x9</string>
     <string name="sudoku_type_squiggly_b_9x9">Squoggly-Sudoku 9x9</string>
-    <string name="sudoku_type_stairstep_9x9" >Stairstep-Sudoku 9x9</string>
+    <string name="sudoku_type_stairstep_9x9" >Sudoku d\'escalier 9x9</string>
     <string name="sudoku_type_samurai"       >Samurai-Sudoku</string>
     <string name="sudoku_type_hyper"         >Hyper-Sudoku</string>
     <string name="sudoku_type_xsudoku"       >X-Sudoku</string>

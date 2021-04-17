@@ -45,6 +45,30 @@
 			android:textColor="@android:color/black"
 			android:visibility="visible" />
 
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content">
+
+			<TextView
+				android:id="@+id/language_label"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/advanced_settings_language_spinner_label"
+				android:layout_margin="5dp"
+				android:singleLine="true"
+				android:textColor="@android:color/black" />
+
+			<Spinner
+				android:id="@+id/spinner_language"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_margin="5dp"
+				android:layout_weight="0.12"
+				android:prompt="@string/advanced_settings_language_spinner_dummy"
+				android:textColor="@android:color/black" />
+
+		</LinearLayout>
+
 
 		<CheckBox
 			android:id="@+id/checkbox_debug"

@@ -8,6 +8,7 @@
 package de.sudoq.controller.menus;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
@@ -21,10 +22,12 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import de.sudoq.R;
 import de.sudoq.controller.SudoqCompatActivity;
+import de.sudoq.controller.menus.preferences.LanguageUtility;
 import de.sudoq.controller.menus.preferences.NewSudokuPreferencesActivity;
 import de.sudoq.controller.sudoku.SudokuActivity;
 import de.sudoq.model.game.Game;
@@ -77,35 +80,14 @@ public class NewSudokuActivity extends SudoqCompatActivity {
 		ab.setHomeAsUpIndicator(R.drawable.launcher);
 		ab.setDisplayHomeAsUpEnabled(true);
 		ab.setDisplayShowTitleEnabled(true);
+		//set title explicitly so localization kicks in when language is changed
+		ab.setTitle(R.string.sf_sudokupreferences_title);
 
 		//for initial settings-values from Profile
 		XmlTree xt = Profile.getInstance().getAssistances().toXmlTree();
 		gameSettings = new GameSettings();
 		gameSettings.fillFromXml(xt);
 		
-		/** type spinner **/
-		Spinner typeSpinner = fillTypeSpinner(gameSettings.getWantedTypesList());		
-		
-		// nested Listener for typeSpinner
-		typeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-				String item = parent.getItemAtPosition(pos).toString();
-				if(item.equals(getString(R.string.sf_sudokupreferences_all_disabled_1))
-				|| item.equals(getString(R.string.sf_sudokupreferences_all_disabled_2))){
-					sudokuType=null;//set to null to prevent: going to advanced -> disabling all -> coming back -> now disabled type still set
-					//pass (user disabled all types, so a hint is shown. This hint may not be saved as a sudoku type!)
-				}else{
-					Log.d(LOG_TAG, "OnItemSel_a "+sudokuType);
-					setSudokuType(Utility.string2type(getApplicationContext(), item));
-					Log.d(LOG_TAG, "OnItemSel_z "+sudokuType);
-				}
-			}
-
-			public void onNothingSelected(AdapterView<?> parent) {
-				// do nothing
-			}
-		});
-
 		/** complexity spinner **/
 		Spinner complexitySpinner = (Spinner) findViewById(R.id.spinner_sudokucomplexity);
 
@@ -117,17 +99,18 @@ public class NewSudokuActivity extends SudoqCompatActivity {
 
 		// nested Listener for complexitySpinner
 		complexitySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-				String item = parent.getItemAtPosition(pos).toString();
-
-				setSudokuDifficulty(Utility.string2complexity(getApplicationContext(), item));
+				setSudokuDifficulty(Complexity.values()[pos]);
 			}
 
+			@Override
 			public void onNothingSelected(AdapterView<?> parent) {
 				// do nothing
 			}
-		});		
-		
+		});
+
+		Log.d("gameSettings", "NewSudokuActivity onCreate end is gameSettings null?" +(gameSettings == null));
 	}
 
 	/**
@@ -137,42 +120,72 @@ public class NewSudokuActivity extends SudoqCompatActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		SudokuTypesList wtl = Profile.getInstance().getAssistances().getWantedTypesList(); 
-		fillTypeSpinner(wtl);
-		/* this is a hack: for some reason when returning from settings, the typeSpinner selects the first position
-		 *                 probably because it gets a new adapter. At the time I'm unable to debug this properly
-		 *                 (judging from the LOG.d's it happens after this method) but it seems to work */
-		if(wtl.contains(sudokuType))
-			((Spinner) findViewById(R.id.spinner_sudokutype)).setSelection(wtl.indexOf(sudokuType));
+		/** type spinner **/
+		SudokuTypesList possibleTypes = gameSettings.getWantedTypesList();
+		if(possibleTypes.isEmpty()) {//TODO shouldn't happen in the first place!
+			throw new IllegalStateException("list shouldn't be empty");
+		}
+
+		initTypeSpinner(possibleTypes);
+
+
+//		SudokuTypesList wtl = Profile.getInstance().getAssistances().getWantedTypesList();
+//		fillTypeSpinner(wtl);
+//		/* this is a hack: for some reason when returning from settings, the typeSpinner selects the first position
+//		 *                 probably because it gets a new adapter. At the time I'm unable to debug this properly
+//		 *                 (judging from the LOG.d's it happens after this method) but it seems to work */
+//		if(wtl.contains(sudokuType))
+//			((Spinner) findViewById(R.id.spinner_sudokutype)).setSelection(wtl.indexOf(sudokuType));
 		Log.d(LOG_TAG, "Resume_ende: "+sudokuType);
+
+		//set language
+		//LanguageUtility.setLocaleFromMemory(this);
+
 	}
 
-	private Spinner fillTypeSpinner(SudokuTypesList stl) {
+	private void initTypeSpinner(SudokuTypesList stl) {
 		
-		Spinner typeSpinner = (Spinner) findViewById(R.id.spinner_sudokutype);
-		
-		List<String> wantedSudokuTypes = new ArrayList<String>();//user can choose to only have selected types offered, so here we filter
+		Spinner typeSpinner = findViewById(R.id.spinner_sudokutype);
+		//List<String> translatedSudokuTypes = Arrays.asList(getResources().getStringArray(R.array.sudokutype_values));
+		List<StringAndEnum<SudokuTypes>> wantedSudokuTypes = new ArrayList<>();//user can choose to only have selected types offered, so here we filter
 		if(stl.size()==0){
-			/*special case: user disabled all sudoku types so we give him a hint*/
-			wantedSudokuTypes.add(getString(R.string.sf_sudokupreferences_all_disabled_1));
-			wantedSudokuTypes.add(getString(R.string.sf_sudokupreferences_all_disabled_2));
-		}else{
-			Collections.sort(stl);//sortieren 
-			/* converse */
-			for(SudokuTypes st: stl)
-				wantedSudokuTypes.add(Utility.type2string(this, st));
+			throw new IllegalStateException("list shouldn't be empty");
 		}
+
+		/* convert */
+		for(SudokuTypes st: stl) {
+			StringAndEnum<SudokuTypes> sae = new StringAndEnum<>(Utility.type2string(this, st), st);
+			wantedSudokuTypes.add(sae);
+		}
+
+		Collections.sort(wantedSudokuTypes, new Comparator<StringAndEnum<SudokuTypes>>() {
+			@Override
+			public int compare(StringAndEnum<SudokuTypes> o1, StringAndEnum<SudokuTypes> o2) {
+				return SudokuTypeOrder.getKey(o1.getEnum()) - SudokuTypeOrder.getKey(o2.getEnum());
+			}
+		});
 		
 		Log.d(LOG_TAG, "Sudokutype_1: " + this.sudokuType);
-		ArrayAdapter<String> typeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, wantedSudokuTypes);
+		ArrayAdapter<StringAndEnum<SudokuTypes>> typeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, wantedSudokuTypes);
 		typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		typeSpinner.setAdapter(typeAdapter);	
 		Log.d(LOG_TAG, "Sudokutype_4: " + this.sudokuType);
 
-		return typeSpinner;
+		/* add onItemSelectListener */
+		typeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+				StringAndEnum<SudokuTypes> item = (StringAndEnum<SudokuTypes>) parent.getItemAtPosition(pos);
+				setSudokuType(item.getEnum());
+			}
+
+			public void onNothingSelected(AdapterView<?> parent) {
+				// do nothing
+			}
+		});
+
 	}
-	
-	
+
+
 	/**
 	 * Die Methode startet per Intent ein Sudokus mit den eingegebenen
 	 * Einstellungen.
@@ -215,7 +228,7 @@ public class NewSudokuActivity extends SudoqCompatActivity {
 	 */
 	public void setSudokuType(SudokuTypes type) {
 		this.sudokuType = type;
-		Log.d(LOG_TAG, "type changed to:" + type.toString());
+		Log.d(LOG_TAG, "type changed to:" + ((type == null) ? "null" : type.toString()));
 	}
 
 	/**
@@ -241,5 +254,10 @@ public class NewSudokuActivity extends SudoqCompatActivity {
 		Intent assistancesIntent = new Intent(this, NewSudokuPreferencesActivity.class);
 		startActivity(assistancesIntent);
 	}
-	
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+	}
+
 }

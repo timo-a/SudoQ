@@ -8,17 +8,22 @@
 package de.sudoq.controller.menus.preferences;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.List;
+import java.util.Locale;
 
 import de.sudoq.R;
 import de.sudoq.controller.menus.ProfileListActivity;
@@ -54,6 +59,11 @@ public class PlayerPreferencesActivity extends PreferencesActivity {
 	GameSettings gameSettings;
 
 	/**
+	 * stores language at activity start to compare if language changed in advanced preferences
+	 */
+	private LanguageSetting currentLanguageCode;
+
+	/**
 	 * Wird aufgerufen, falls die Activity zum ersten Mal gestartet wird. Läd
 	 * die Preferences anhand der zur Zeit aktiven Profil-ID.
 	 */
@@ -69,7 +79,9 @@ public class PlayerPreferencesActivity extends PreferencesActivity {
 		ab.setHomeAsUpIndicator(R.drawable.launcher);
 		ab.setDisplayHomeAsUpEnabled(true);
 		ab.setDisplayShowTitleEnabled(true);
-		
+		//set title explicitly so localization kicks in when language is changed
+		ab.setTitle(R.string.profile_preference_title);
+
 		gesture =            (CheckBox) findViewById(R.id.checkbox_gesture);
 		autoAdjustNotes =    (CheckBox) findViewById(R.id.checkbox_autoAdjustNotes);
 		markRowColumn =      (CheckBox) findViewById(R.id.checkbox_markRowColumn);
@@ -84,8 +96,45 @@ public class PlayerPreferencesActivity extends PreferencesActivity {
 		createProfile = true;
 
 		Profile.getInstance().registerListener(this);
+
+		//store language at beginning of activity lifecycle
+		currentLanguageCode = LanguageUtility.loadLanguageFromSharedPreferences2(this);
+
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		//load language from memory
+		//LanguageSetting fromMemory = LanguageUtility.loadLanguageFromSharedPreferences2(this);
+		LanguageSetting.LanguageCode fromConf = LanguageUtility.getConfLocale(this);
+
+		if (!fromConf.equals(currentLanguageCode.language)){
+			Intent refresh = new Intent(this, this.getClass());
+			this.finish();
+			this.startActivity(refresh);
+		} else {
+		}
+	}
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		// check if configuration has changed
+		// per Manifest this method gets called if there are changes in layoutDirection or locale
+		// (if we only check for locale, this method doesn't get called, no idea why https://stackoverflow.com/a/27648673/3014199)
+		//
+		if (!newConfig.locale.getLanguage().equals(currentLanguageCode.language.name())){
+			//only adopt external change if language is set to "system language"
+			if (currentLanguageCode.isSystemLanguage()){
+				//adopt change
+				currentLanguageCode.language = LanguageUtility.loadLanguageFromLocale();
+				//store changes
+				LanguageUtility.storeLanguageToMemory2(this, currentLanguageCode);
+			}
+		}
+
+	}
 
 	/**
 	 * Aktualisiert die Werte in den Views

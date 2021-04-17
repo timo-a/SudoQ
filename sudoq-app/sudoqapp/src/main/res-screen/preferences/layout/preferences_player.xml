@@ -46,7 +46,6 @@
 	            android:text="@string/profile_preference_title_name"
 	            android:layout_margin="5dp"
 	            android:singleLine="true"
-	            android:inputType="textCapCharacters"
 	            android:textAppearance="?android:attr/textAppearanceMedium"
 	        	android:textColor="@android:color/black" />
 	

@@ -242,7 +242,7 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 			temp_items.add(getString(R.string.sudokuloading_dialog_play));
 			temp_items.add(getString(R.string.sudokuloading_dialog_delete));
 
-			if(Profile.getInstance().isDebugSet()){
+			if(Profile.getInstance().getAppSettings().isDebugSet()){
 				temp_items.add("export as text");
 				temp_items.add("export as file");
 			}
