@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: 'kotlin'
 
 /*plugins {//test
     // Apply the java-library plugin to add support for Java Library
@@ -17,6 +18,7 @@ dependencies {
 //testCompile 'junit:junit:4.7'
 testImplementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
 testImplementation 'org.kie.modules:org-apache-commons-lang3:6.3.0.CR1'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
 //    otherTestsImplementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
 }
@@ -41,6 +43,28 @@ task otherTest(type: Test) {
 }
 
 check.dependsOn otherTest
+buildscript {
+    ext.kotlin_version = '1.5.0-RC'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+repositories {
+    mavenCentral()
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
 
 /*
 Was funktioniert?
