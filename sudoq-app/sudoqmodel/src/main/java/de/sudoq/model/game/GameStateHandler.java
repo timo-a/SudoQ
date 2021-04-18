@@ -172,7 +172,7 @@ public class GameStateHandler extends ObservableModelImpl<ActionTreeElement> {
 		locked = true;
 		boolean onlyUndo = true;
 
-		List<ActionTreeElement> listWay = ActionTree.findPath(currentState, target);
+		List<ActionTreeElement> listWay = ActionTree.Companion.findPath(currentState, target);
 		ActionTreeElement[] way = new ActionTreeElement[listWay.size()];
 		listWay.toArray(way);
 
