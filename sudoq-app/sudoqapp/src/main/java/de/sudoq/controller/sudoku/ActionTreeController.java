@@ -233,7 +233,7 @@ public class ActionTreeController implements ActionTreeNavListener, ModelChangeL
 				break;
 			}
 
-			root = root.getChildren().hasNext() ? root.getChildren().next() : null;
+			root = root.hasChildren() ? root.iterator().next() : null;
 			if (root != null) {
 				drawLine(x, y, x + 1, y);
 			}

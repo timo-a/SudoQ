@@ -14,6 +14,7 @@ import java.util.Random;
 
 import de.sudoq.model.actionTree.Action;
 import de.sudoq.model.actionTree.ActionTreeElement;
+import de.sudoq.model.actionTree.NoteAction;
 import de.sudoq.model.actionTree.NoteActionFactory;
 import de.sudoq.model.actionTree.SolveAction;
 import de.sudoq.model.actionTree.SolveActionFactory;
@@ -86,6 +87,10 @@ public class Game implements Xmlable {
         if (sudoku == null) {
             throw new IllegalArgumentException("sudoku null");
         }
+        NoteAction na = new NoteAction(5, new Cell(0,0));
+        ActionTreeElement ate;
+        ate = new ActionTreeElement(0, na, null);
+        ate.hasChildren();
         time = 0;
         this.id = id;
         gameSettings = new GameSettings();

@@ -239,8 +239,11 @@ public class GameStateHandler extends ObservableModelImpl<ActionTreeElement> {
 	 * @return true, falls ein Schritt vorwärts gegangen werden kann, false falls nicht
 	 */
 	public boolean canRedo() {
-		return (currentState.isSplitUp() && !undoStack.empty())
-				|| (!currentState.isSplitUp() && currentState.getChildren().hasNext());
+		//if there are several child nodes then undo stack cannot be empty
+		boolean a = currentState.isSplitUp() && !undoStack.empty();
+		//if there are less than 2 child nodes, there has to be at least one
+		boolean b = !currentState.isSplitUp() && currentState.hasChildren();
+		return a || b;
 	}
 
 	/**
@@ -257,8 +260,9 @@ public class GameStateHandler extends ObservableModelImpl<ActionTreeElement> {
 				notifyListeners(currentState);
 			}
 		} else {
-			if (currentState.getChildren().hasNext()) {
-				currentState = currentState.getChildren().next();
+			if (currentState.hasChildren()) {
+				//if there is a child node, go there, execute
+				currentState = currentState.iterator().next();
 				currentState.execute();
 				notifyListeners(currentState);
 			}
