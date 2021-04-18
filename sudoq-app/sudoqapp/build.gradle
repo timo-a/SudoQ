@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'kotlin-android'
 allprojects {
     gradle.projectsEvaluated {
         tasks.withType(JavaCompile) {
