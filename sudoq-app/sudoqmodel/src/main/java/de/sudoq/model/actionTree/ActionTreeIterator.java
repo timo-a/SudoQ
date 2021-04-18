@@ -44,7 +44,7 @@ public class ActionTreeIterator implements Iterator<ActionTreeElement> {
 	 */
 	public ActionTreeIterator(ActionTree tree) {
 		this.actionTree = tree;
-		currentElement = actionTree.rootElement;
+		currentElement = actionTree.getRoot();
 		otherPaths = new Stack<>();
 	}
 
