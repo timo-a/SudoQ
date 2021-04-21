@@ -8,6 +8,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
+
 import java.util.List;
 
 import org.junit.Test;
@@ -136,20 +137,20 @@ public class ActionTreeTests {
 		ActionTreeElement ate5 =       at.add(factory.createAction(2, cell3), ate2);
 		ActionTreeElement ate6 =          at.add(factory.createAction(1, cell4), ate5);
 
-		assertArrayEquals(new ActionTreeElement[] { ate4, ate3, ate2, ate5, ate6 }, ActionTree.findPath(ate4, ate6)
+		assertArrayEquals(new ActionTreeElement[] { ate4, ate3, ate2, ate5, ate6 }, ActionTree.Companion.findPath(ate4, ate6)
 				.toArray());
 
-		assertArrayEquals(new ActionTreeElement[] { ate6, ate5, ate2 }, ActionTree.findPath(ate6, ate2).toArray());
+		assertArrayEquals(new ActionTreeElement[] { ate6, ate5, ate2 }, ActionTree.Companion.findPath(ate6, ate2).toArray());
 
-		assertArrayEquals(new ActionTreeElement[] { ate2, ate5, ate6 }, ActionTree.findPath(ate2, ate6).toArray());
+		assertArrayEquals(new ActionTreeElement[] { ate2, ate5, ate6 }, ActionTree.Companion.findPath(ate2, ate6).toArray());
 
-		assertArrayEquals(new ActionTreeElement[] { ate6, ate5, ate2, ate1 }, ActionTree.findPath(ate6, ate1).toArray());
+		assertArrayEquals(new ActionTreeElement[] { ate6, ate5, ate2, ate1 }, ActionTree.Companion.findPath(ate6, ate1).toArray());
 
-		assertArrayEquals(new ActionTreeElement[] { ate1, ate2, ate5, ate6 }, ActionTree.findPath(ate1, ate6).toArray());
+		assertArrayEquals(new ActionTreeElement[] { ate1, ate2, ate5, ate6 }, ActionTree.Companion.findPath(ate1, ate6).toArray());
 
-		assertArrayEquals(new ActionTreeElement[] {}, ActionTree.findPath(ate6, ate6).toArray());
+		assertArrayEquals(new ActionTreeElement[] {}, ActionTree.Companion.findPath(ate6, ate6).toArray());
 
-		assertArrayEquals(new ActionTreeElement[] {}, ActionTree.findPath(ate1, ate1).toArray());
+		assertArrayEquals(new ActionTreeElement[] {}, ActionTree.Companion.findPath(ate1, ate1).toArray());
 	}
 
 
@@ -168,7 +169,7 @@ public class ActionTreeTests {
 		ActionTreeElement ate3 = at2.getRoot();
 		ActionTreeElement ate4 = at2.add(factory.createAction(2, cell), ate3);
 
-		List<ActionTreeElement> path = ActionTree.findPath(ate2, ate4);
+		List<ActionTreeElement> path = ActionTree.Companion.findPath(ate2, ate4);
 		assertTrue(path.isEmpty());//return empty list because elements have same id
 
 	}

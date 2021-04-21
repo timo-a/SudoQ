@@ -5,22 +5,20 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
  * You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.sudoq.model.actionTree;
+package de.sudoq.model.actionTree
 
-import de.sudoq.model.sudoku.Cell;
+import de.sudoq.model.sudoku.Cell
 
 /**
- * Diese Klasse dient der Erzeugung von NoteActions.
- * 
- * @see NoteAction
+ * An Interface for Factories that create objects of a certain [Action] type.
  */
-public class NoteActionFactory implements ActionFactory {
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public Action createAction(int value, Cell cell) {
-		return new NoteAction(value, cell);
-	}
-
+interface ActionFactory { //TODO rename IActionFactory
+    /**
+     * Creates an [Action].
+     *
+     * @param value the value to enter
+     * @param cell The field that the action refers to
+     * @return an Action
+     */
+    fun createAction(value: Int, cell: Cell): Action
 }
