@@ -78,7 +78,7 @@ class ActionTree : ObservableModelImpl<ActionTreeElement>(), Iterable<ActionTree
     /**
      * @return an iterator over action tree nodes
      */
-    override fun iterator(): MutableIterator<ActionTreeElement> {//TODO should probably not be mutable
+    override fun iterator(): Iterator<ActionTreeElement> {//TODO should probably not be mutable
         return ActionTreeIterator(this)
     }
 
