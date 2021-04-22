@@ -142,7 +142,7 @@ public class SudokuTests {
 		assertNull(sudoku.getCell(null));
 
 		assertNull(sudoku.getCell(Position.get(9, 10)));
-		Field f = sudoku.getCell(Position.get(1, 2));
+		Cell f = sudoku.getCell(Position.get(1, 2));
 
 		f.setCurrentValue(6);
 
