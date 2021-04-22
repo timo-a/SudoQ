@@ -43,7 +43,7 @@ public class SudokuManagerTests {
 	}
 
 
-	@Test
+	@Test(timeout = 60) // threw an exception and ran forever in the past -> timeout
 	public void test() {
 		assertEquals(21, FileManager.getSudokuCountOf(SudokuTypes.standard9x9, Complexity.infernal));
 		Sudoku s = SudokuManager.getNewSudoku(SudokuTypes.standard9x9, Complexity.infernal);
