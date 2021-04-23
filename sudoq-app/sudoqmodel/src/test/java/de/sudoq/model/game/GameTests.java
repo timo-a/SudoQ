@@ -67,7 +67,7 @@ public class GameTests {
 		assertEquals(0, game.getAssistancesCost());
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void testNullInstantiation() {
 		new Game(2, null);
 	}
@@ -183,15 +183,15 @@ public class GameTests {
 		assertTrue(game.isFinished());
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void testSetNullAssistances() {
+		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9).createSudoku());
+		game.setAssistances(null);
+	}
+
 	@Test
 	public void testAssistanceSetting() {
 		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9).createSudoku());
-		try {
-			game.setAssistances(null);
-			fail("no exception");
-		} catch (IllegalArgumentException e) {
-			// fine
-		}
 
 		assertFalse(game.isAssistanceAvailable(null));
 
