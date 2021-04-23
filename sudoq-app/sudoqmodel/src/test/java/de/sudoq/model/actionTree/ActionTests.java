@@ -40,24 +40,24 @@ public class ActionTests {
 		assertTrue(cell.getCurrentValue() == value);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void testNullCellInstantiationForSolveAction() {
 		ActionFactory factory = new SolveActionFactory();
 		factory.createAction(5, null);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void testNullCellInstantiationForNoteAction() {
 		ActionFactory factory = new NoteActionFactory();
 		factory.createAction(5, null);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void testNullCellInstantiationForSolveActionWithoutFactory() {
 		new SolveAction(5, null);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void testNullCellInstantiationForNoteActionWithoutFactory() {
 		new NoteAction(5, null);
 	}
