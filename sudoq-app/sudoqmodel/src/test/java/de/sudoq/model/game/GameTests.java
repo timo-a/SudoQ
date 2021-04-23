@@ -183,7 +183,7 @@ public class GameTests {
 		assertTrue(game.isFinished());
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void testSetNullAssistances() {
 		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9).createSudoku());
 		game.setAssistances(null);
