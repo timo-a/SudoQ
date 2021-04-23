@@ -2,6 +2,7 @@ package de.sudoq.model.actionTree;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNull;
 
@@ -28,7 +29,7 @@ public class ActionTreeElementTests {
 		assertFalse(ate1.isMistake());
 	}
 
-	@Test
+	@Test(expected = NullPointerException.class)
 	public void testAddNullChild() {
 		Action action = new SolveAction(1, new Cell(-1, 1));
 
@@ -36,10 +37,9 @@ public class ActionTreeElementTests {
 		ActionTreeElement ate2 = new ActionTreeElement(2, action, ate1);
 
 		ate2.addChild(null);
-		assertEquals(0, ate2.getChildrenList().size());
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void testFailConstruction() {
 		new ActionTreeElement(1, null, null);
 	}

@@ -14,6 +14,10 @@ import de.sudoq.model.sudoku.Cell
  */
 class SolveAction(diff: Int, cell: Cell) : Action(diff, cell) {
 
+    init {
+        XML_ATTRIBUTE_NAME = "SolveAction"
+    }
+
     /**
      * {@inheritDoc}
      */

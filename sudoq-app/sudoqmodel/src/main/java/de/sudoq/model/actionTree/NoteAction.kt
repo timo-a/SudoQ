@@ -14,6 +14,10 @@ import de.sudoq.model.sudoku.Cell
  */
 class NoteAction(diff: Int, cell: Cell) : Action(diff, cell) {
 
+    init {
+        XML_ATTRIBUTE_NAME = "NoteAction"
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -33,4 +37,5 @@ class NoteAction(diff: Int, cell: Cell) : Action(diff, cell) {
         if (a !is NoteAction) return false
         return equals(a)
     }
+
 }

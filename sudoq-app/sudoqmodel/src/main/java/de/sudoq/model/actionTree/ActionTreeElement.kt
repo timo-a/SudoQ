@@ -129,7 +129,7 @@ class ActionTreeElement(val id: Int, val action: Action, val parent: ActionTreeE
         xml.addAttribute(XmlAttribute(PARENT, parent?.id?.toString() ?: ""))
         xml.addAttribute(XmlAttribute(DIFF, action.diff.toString()))
         xml.addAttribute(XmlAttribute(FIELD_ID, action.cellId.toString()))
-        xml.addAttribute(XmlAttribute(ACTION_TYPE, action::class.simpleName))
+        xml.addAttribute(XmlAttribute(ACTION_TYPE, action.XML_ATTRIBUTE_NAME))
         xml.addAttribute(XmlAttribute(MARKED, java.lang.Boolean.toString(isMarked)))
         if (isMistake) {
             xml.addAttribute(XmlAttribute(MISTAKE, java.lang.Boolean.toString(true)))
