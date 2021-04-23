@@ -123,7 +123,10 @@ class ActionTreeElement(val id: Int, val action: Action, val parent: ActionTreeE
     /**
      * @return an [XmlTree] representing this objects
      */
-    fun toXml(): XmlTree {
+    fun toXml(): XmlTree? {
+        if (action.cellId <= 0) //indicates root node
+            return null
+
         val xml = XmlTree("action")
         xml.addAttribute(XmlAttribute(ID, id.toString()))
         xml.addAttribute(XmlAttribute(PARENT, parent?.id?.toString() ?: ""))
