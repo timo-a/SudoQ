@@ -16,16 +16,14 @@ public class GameDataTests {
 
 	protected final static String dateFormat = "yyyy:MM:dd HH:mm:ss";
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void initTestA()	{
 		new GameData(0, null, true, SudokuTypes.squigglya, Complexity.difficult);
-		//apparently not yet implemented
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void initTestB()	{
 		new GameData(0, "hugo", true, SudokuTypes.squigglya, Complexity.difficult);
-		//apparently not yet implemented
 	}
 
 
