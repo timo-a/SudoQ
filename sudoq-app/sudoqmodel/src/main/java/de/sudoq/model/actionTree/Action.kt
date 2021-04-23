@@ -20,6 +20,9 @@ abstract class Action internal constructor(@JvmField var diff: Int, @JvmField va
 //constuctor was originally package wide through protected
 //but there is no kotlin equivalent so it is `internal` now
 
+    var XML_ATTRIBUTE_NAME = "Action"
+        protected set
+
     /**
      * Executes the action.
      */
