@@ -23,15 +23,15 @@ public class ActionTreeTests {
 		assertNotNull(at.getRoot());
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void testAddingElementsMountOnNull() {
 		ActionTree at = new ActionTree();
 		ActionFactory factory = new SolveActionFactory();
-		Cell field = new Cell(-1, 1);
+		Cell cell = new Cell(-1, 1);
 
 		ActionTreeElement ate = at.getRoot();
 
-		at.add(factory.createAction(2, field), null);
+		at.add(factory.createAction(2, cell), null);
 	}
 
 	@Test
@@ -42,12 +42,6 @@ public class ActionTreeTests {
 
 		ActionTreeElement ate = at.getRoot();//add(factory.createAction(1, field), null);
 		assertEquals(ate.getId(), 1);
-
-		try {//TODO extract to own method
-			at.add(factory.createAction(2, cell), null);
-			fail("No Exception thrown");
-		} catch (IllegalArgumentException e) {
-		}
 
 		assertEquals(at.add(factory.createAction(1, cell), ate).getId(), 2);
 
