@@ -3,7 +3,7 @@ package de.sudoq.model.actionTree;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
@@ -24,10 +24,19 @@ public class ActionTreeElementTests {
 		assertEquals(ate1, ate2.getParent());
 		assertTrue(ate1.getChildrenList().contains(ate2));
 		assertEquals(ate2, ate1.getChildren().next());
-		ate2.addChild(null);
-		assertEquals(0, ate2.getChildrenList().size());
 		assertFalse(ate1.isCorrect());
 		assertFalse(ate1.isMistake());
+	}
+
+	@Test
+	public void testAddNullChild() {
+		Action action = new SolveAction(1, new Cell(-1, 1));
+
+		ActionTreeElement ate1 = new ActionTreeElement(1, action, null);
+		ActionTreeElement ate2 = new ActionTreeElement(2, action, ate1);
+
+		ate2.addChild(null);
+		assertEquals(0, ate2.getChildrenList().size());
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -81,16 +90,19 @@ public class ActionTreeElementTests {
 	public void testToXml() {
 		Action action = new SolveAction(1, new Cell(1, 9));
 		ActionTreeElement ate = new ActionTreeElement(1, action, null);
-		assertTrue(ate.toXml().getAttributeValue(ActionTreeElement.PARENT).equals(""));
-		assertTrue(new ActionTreeElement(2, action, ate).toXml().getAttributeValue(ActionTreeElement.PARENT)
-				.equals("1"));
+		assertEquals("", ate.toXml().getAttributeValue(ActionTreeElement.PARENT));
+		assertEquals("1", new ActionTreeElement(2, action, ate).toXml().getAttributeValue(ActionTreeElement.PARENT));
 		ate.markCorrect();
 		ate.markWrong();
-		assertTrue(ate.toXml().getAttributeValue(ActionTreeElement.MISTAKE).equals("true"));
-		assertTrue(ate.toXml().getAttributeValue(ActionTreeElement.CORRECT).equals("true"));
-		action = new SolveAction(1, new Cell(-1, 9));
-		ate = new ActionTreeElement(1, action, null);
-		assertEquals(ate.toXml(), null);
+		assertEquals("true", ate.toXml().getAttributeValue(ActionTreeElement.MISTAKE));
+		assertEquals("true", ate.toXml().getAttributeValue(ActionTreeElement.CORRECT));
+	}
+
+	@Test
+	public void testToXml2() {
+		Action action = new SolveAction(1, new Cell(-1, 9));
+		ActionTreeElement ate = new ActionTreeElement(1, action, null);
+		assertNull(ate.toXml());
 	}
 
 	@Test
