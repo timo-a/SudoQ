@@ -16,7 +16,7 @@ import de.sudoq.model.sudoku.Cell
  *            then the diff is 2.
  *  @property cell the [Cell] that this action is associated  with
  */
-abstract class Action internal constructor(var diff: Int, val cell: Cell) {
+abstract class Action internal constructor(@JvmField var diff: Int, @JvmField val cell: Cell) {
 //constuctor was originally package wide through protected
 //but there is no kotlin equivalent so it is `internal` now
 

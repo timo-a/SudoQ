@@ -40,7 +40,7 @@ public class ActionTests {
 		assertTrue(cell.getCurrentValue() == value);
 	}
 
-	@Test(expected = NullPointerException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void testNullCellInstantiationForSolveAction() {
 		ActionFactory factory = new SolveActionFactory();
 		factory.createAction(5, null);

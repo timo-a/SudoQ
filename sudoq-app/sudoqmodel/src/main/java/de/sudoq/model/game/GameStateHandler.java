@@ -153,7 +153,7 @@ public class GameStateHandler extends ObservableModelImpl<ActionTreeElement> {
 
 	private boolean isActionOnSameCell(ActionTreeElement mountingElement, Action action) {
 
-		boolean sameCell = mountingElement.getAction().getCell().equals(action.getCell());
+		boolean sameCell = mountingElement.getAction().cell.equals(action.cell);
 		return (action instanceof SolveAction) && sameCell;
 	}
 
