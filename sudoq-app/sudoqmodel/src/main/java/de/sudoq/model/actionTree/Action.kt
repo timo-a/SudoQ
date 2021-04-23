@@ -41,7 +41,10 @@ abstract class Action protected constructor(val diff: Int, val cell: Cell) {
      */
     override fun equals(other: Any?): Boolean {
         if (other == null) return false
-        if (other !is Action) return false
+        if (javaClass != other.javaClass)
+            return false
+
+        other as Action //TODO make explicit equals for all subclasses instead of comparing javaClass
 
         return diff == other.diff
                 && cell == other.cell
