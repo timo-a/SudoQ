@@ -257,7 +257,7 @@ public class ActionTreeElement extends ObservableModelImpl<ActionTreeElement> im
 	 */
 	public XmlTree toXml() {
 		if (action.cell.getId() <= 0)
-			return null;
+			return null; //indicates root node
 		XmlTree xml = new XmlTree("action");
 
 		xml.addAttribute(new XmlAttribute(ID, Integer.toString(getId())));

@@ -91,7 +91,7 @@ public class GameManagerTests {
 	}
 
 	@Test
-	public void testAssitenceSetting() {
+	public void testAssistanceSetting() {
 		GameSettings set = new GameSettings();
 		set.setAssistance(Assistances.autoAdjustNotes);
 		Game game = GameManager.getInstance().newGame(SudokuTypes.standard9x9, Complexity.difficult, set);
@@ -99,7 +99,7 @@ public class GameManagerTests {
 		assertFalse(game.isAssistanceAvailable(Assistances.markRowColumn));
 		game.addTime(50);
 		game.solveAll();
-		assertEquals(game.getScore(), 0);
+		assertEquals(0, game.getScore());
 	}
 
 	@Test
