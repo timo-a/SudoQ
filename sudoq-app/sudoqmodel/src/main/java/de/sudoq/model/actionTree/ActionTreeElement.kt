@@ -170,8 +170,14 @@ class ActionTreeElement(val id: Int, val action: Action, val parent: ActionTreeE
     /**
      * {@inheritDoc}
      */
-    override fun iterator(): MutableIterator<ActionTreeElement> {
+    override fun iterator(): Iterator<ActionTreeElement> {
         return childrenList.iterator();
+    }
+
+    //kept for compatibility with callers
+    //TODO rename to iterateChildren, analyse use, replace with get first child:optional
+    fun getChildren() : Iterator<ActionTreeElement> {
+        return iterator();
     }
 
     companion object {
