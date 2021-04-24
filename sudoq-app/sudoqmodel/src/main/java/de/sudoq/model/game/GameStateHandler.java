@@ -1,4 +1,4 @@
-/*
+ /*
  * SudoQ is a Sudoku-App for Adroid Devices with Version 2.2 at least.
  * Copyright (C) 2012  Heiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version. 

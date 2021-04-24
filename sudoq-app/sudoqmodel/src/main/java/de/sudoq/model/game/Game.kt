@@ -353,7 +353,7 @@ class Game : Xmlable {
      *
      * @return true, if the assistance is available
      */
-    fun isAssistanceAvailable(assist: Assistances?): Boolean {//TODO don't accept null
+    fun isAssistanceAvailable(assist: Assistances): Boolean {//TODO don't accept null
         return gameSettings!!.getAssistance(assist)
     }
 
