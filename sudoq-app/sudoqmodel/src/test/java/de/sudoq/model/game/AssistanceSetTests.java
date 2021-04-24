@@ -43,7 +43,7 @@ public class AssistanceSetTests {
 		assertFalse(a.getAssistance(null));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void testFooString() {
 		(new GameSettings()).fillFromXml(new XmlTree("foo"));
 	}

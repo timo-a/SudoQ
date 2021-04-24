@@ -48,9 +48,9 @@ public class GameManagerTests {
 
 	@Test
 	public void testDeletingCurrentGame() {
-		Game game = GameManager.getInstance().newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings());
+		Game game = GameManager.Companion.getInstance().newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings());
 		Profile.getInstance().setCurrentGame(game.getId());
-		GameManager.getInstance().deleteGame(Profile.getInstance().getCurrentGame());
+		GameManager.Companion.getInstance().deleteGame(Profile.getInstance().getCurrentGame());
 		assertEquals(Profile.NO_GAME, Profile.getInstance().getCurrentGame());
 	}
 
@@ -59,12 +59,12 @@ public class GameManagerTests {
 		for (int i = 1; i <= FileManager.getGamesDir().list().length; i++) {
 			FileManager.deleteGame(i);
 		}
-		GameManager.getInstance().updateGamesList();
+		GameManager.Companion.getInstance().updateGamesList();
 	}
 
 	@Test
 	public void testCreatingAndSolving() {
-		Game game = GameManager.getInstance().newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings());
+		Game game = GameManager.Companion.getInstance().newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings());
 		assertFalse(game.isFinished());
 		int count = 0;
 		for (Cell f : game.getSudoku()) {
@@ -92,7 +92,7 @@ public class GameManagerTests {
 	public void testAssistanceSetting() {
 		GameSettings set = new GameSettings();
 		set.setAssistance(Assistances.autoAdjustNotes);
-		Game game = GameManager.getInstance().newGame(SudokuTypes.standard9x9, Complexity.difficult, set);
+		Game game = GameManager.Companion.getInstance().newGame(SudokuTypes.standard9x9, Complexity.difficult, set);
 		assertTrue(game.isAssistanceAvailable(Assistances.autoAdjustNotes));
 		assertFalse(game.isAssistanceAvailable(Assistances.markRowColumn));
 		game.addTime(50);
@@ -102,32 +102,34 @@ public class GameManagerTests {
 
 	@Test
 	public void testLoadingAndSaving() {
-		Game game = GameManager.getInstance().newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings());
-		GameManager.getInstance().save(game);
-		assertEquals(GameManager.getInstance().load(game.getId()), game);
+		Game game = GameManager.Companion.getInstance().newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings());
+		GameManager.Companion.getInstance().save(game);
+		assertEquals(GameManager.Companion.getInstance().load(game.getId()), game);
 	}
 
 	@Test
 	public void testGameList() {
-		Game game1 = GameManager.getInstance().newGame(SudokuTypes.standard9x9, Complexity.easy, new GameSettings());
-		GameManager.getInstance().save(game1);
-		Game game2 = GameManager.getInstance().newGame(SudokuTypes.standard9x9, Complexity.medium, new GameSettings());
-		GameManager.getInstance().save(game2);
-		Game game3 = GameManager.getInstance().newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings());
-		GameManager.getInstance().save(game3);
-		assertEquals(GameManager.getInstance().getGameList().size(), 3);
+		GameManager gm = GameManager.Companion.getInstance();
+
+		Game game1 = gm.newGame(SudokuTypes.standard9x9, Complexity.easy, new GameSettings());
+		gm.save(game1);
+		Game game2 = gm.newGame(SudokuTypes.standard9x9, Complexity.medium, new GameSettings());
+		gm.save(game2);
+		Game game3 = gm.newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings());
+		gm.save(game3);
+		assertEquals(gm.getGameList().size(), 3);
 		game3.solveAll();
 		assertTrue(game3.isFinished());
-		GameManager.getInstance().save(game3);
-		GameManager.getInstance().deleteFinishedGames();
-		assertEquals(GameManager.getInstance().getGameList().size(), 2);
-		GameManager.getInstance().deleteGame(game2.getId());
-		assertEquals(GameManager.getInstance().getGameList().size(), 1);
+		gm.save(game3);
+		gm.deleteFinishedGames();
+		assertEquals(gm.getGameList().size(), 2);
+		gm.deleteGame(game2.getId());
+		assertEquals(gm.getGameList().size(), 1);
 	}
 
 	@Test
 	public void testSudokuLoading() {
-		GameManager gm = GameManager.getInstance();
+		GameManager gm = GameManager.Companion.getInstance();
 		Game game = gm.newGame(SudokuTypes.standard9x9, Complexity.medium, new GameSettings());
 		int id = game.getId();
 		Cell cell = null;
@@ -149,12 +151,12 @@ public class GameManagerTests {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testUnvalidLoadingIds() {
-		GameManager.getInstance().load(-5);
+		GameManager.Companion.getInstance().load(-5);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testLoadingNonexistentGame() {
-		GameManager.getInstance().load(2);
+		GameManager.Companion.getInstance().load(2);
 	}
 
 	@Test
@@ -162,7 +164,7 @@ public class GameManagerTests {
 		FileManager.getGamesFile().setWritable(false);
 		assertFalse(FileManager.getGamesFile().canWrite());
 		try {
-			GameManager.getInstance().deleteFinishedGames();
+			GameManager.Companion.getInstance().deleteFinishedGames();
 			fail("No Exception");
 		} catch (IllegalStateException e) {
 			// fine
@@ -176,7 +178,7 @@ public class GameManagerTests {
 		File other = new File(FileManager.getGamesFile().getParentFile(), "foo");
 		FileManager.getGamesFile().renameTo(new File(FileManager.getGamesFile().getParentFile(), "foo"));
 		try {
-			GameManager.getInstance().deleteFinishedGames();
+			GameManager.Companion.getInstance().deleteFinishedGames();
 			fail("No Exception");
 		} catch (IllegalStateException e) {
 			other.renameTo(FileManager.getGamesFile());
