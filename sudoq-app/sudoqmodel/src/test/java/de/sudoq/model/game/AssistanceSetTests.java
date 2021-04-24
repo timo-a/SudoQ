@@ -34,15 +34,6 @@ public class AssistanceSetTests {
 		assertFalse("markWrongSymbol has wrong value", a.getAssistance(Assistances.markWrongSymbol));
 	}
 
-	@Test
-	public void testNull() {
-		GameSettings a = new GameSettings();
-		a.setAssistance(null);
-		assertFalse(a.getAssistance(null));
-		a.clearAssistance(null);
-		assertFalse(a.getAssistance(null));
-	}
-
 	@Test(expected = NullPointerException.class)
 	public void testFooString() {
 		(new GameSettings()).fillFromXml(new XmlTree("foo"));
