@@ -5,25 +5,33 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
  * You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.sudoq.model.sudoku;
+package de.sudoq.model.sudoku.complexity
+
+import java.util.*
 
 /**
- * Definiert die Typen von Constraints.
+ * The complexity of a sudoku.
  */
-public enum ConstraintType {
-	/**
-	 * Eine Zeile oder Spalte
-	 */
-	LINE,
+enum class Complexity {
 
-	/**
-	 * Ein Block, wobei alle Blöcke eines Sudokus sich nicht überschneiden
-	 */
-	BLOCK,
+    easy,
 
-	/**
-	 * Ein gesondertes Constraints, das sich mit Blöcken überschneiden kann.
-	 */
-	EXTRA
+    medium,
 
+    difficult,
+
+    /** highest complexity guessing(-> backtracking) is required*/
+    infernal,
+
+    /** Dummy value for arbitrary complexity. There are no requirements. */
+    arbitrary;
+
+    companion object {
+        @JvmStatic
+		fun playableValues(): Iterable<Complexity> {
+            val l: MutableList<Complexity> = ArrayList(listOf(*values()))
+            l.remove(arbitrary)//skip arbitrary as it is not playable
+            return l
+        }
+    }
 }
