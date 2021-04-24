@@ -18,11 +18,6 @@ public class ComplexityConstraintTests {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void nullTest() {
-		new ComplexityConstraint(null, 32, 1000, 2000, 5);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
 	public void testInvalidIdentifierRange() {
 		new ComplexityConstraint(Complexity.difficult, 5, 2000, 1000, 5);
 	}
