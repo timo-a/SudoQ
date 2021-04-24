@@ -193,8 +193,6 @@ public class GameTests {
 	public void testAssistanceSetting() {
 		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9).createSudoku());
 
-		assertFalse(game.isAssistanceAvailable(null));
-
 		game.setAssistances(new GameSettings() {
 			@Override
 			public boolean getAssistance(Assistances assistance) {
