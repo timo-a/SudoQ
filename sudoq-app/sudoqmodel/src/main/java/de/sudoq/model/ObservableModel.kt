@@ -5,25 +5,34 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
  * You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.sudoq.model;
+package de.sudoq.model
 
 /**
- * Dieses Interface definiert die Schnittstelle für alle Klassen die über
- * Änderungen in einer Model-Klasse benachrichtigt werden wollen.
- * 
- * @param <T>
- *            der Typ des Objekts welches bei Änderungen mitgegeben wird
+ * This interface is implemented by all model classes, that can be observed.
+ * In case of a change they will notify all registered listeners.
+ *
+ * @param T type of the object that is passed in case of a change
  */
-public interface ModelChangeListener<T> {
-	/* Methods */
+interface ObservableModel<T> {
 
-	/**
-	 * Diese Methode wird aufgerufen, falls sich etwas im beobachteten Model
-	 * ändert.
-	 * 
-	 * @param obj
-	 *            Das Objekt, das sich geaendert hat. Kann auch null sein
-	 */
-    void onModelChanged(T obj);
+    /**
+     * Notifies all listeners.
+     *
+     * @param obj The object that has changed.
+     */
+    fun notifyListeners(obj: T)
 
+    /**
+     * Registers a listeners to be notified about all future changes.
+     *
+     * @param listener the listener to register
+     */
+    fun registerListener(listener: ModelChangeListener<T>)
+
+    /**
+     * Removes an listner. If listener is not found nothing happens.
+     *
+     * @param listener the listener to remove
+     */
+    fun removeListener(listener: ModelChangeListener<T>)
 }
