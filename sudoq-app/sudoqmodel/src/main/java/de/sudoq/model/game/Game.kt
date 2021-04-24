@@ -209,7 +209,7 @@ class Game : Xmlable {
      * The action tree node of the current state.
      */
     val currentState: ActionTreeElement
-        get() = stateHandler!!.currentState
+        get() = stateHandler!!.currentState!! //todo find a way to ensure it can never be null (the implicit root)
 
     /**
      * Marks the current state to better find it later.
@@ -326,7 +326,7 @@ class Game : Xmlable {
      */
     fun goToLastBookmark() {
         while (stateHandler!!.currentState != stateHandler!!.actionTree.root
-                && !stateHandler!!.currentState.isMarked) {
+                && !stateHandler!!.currentState!!.isMarked) {
             undo()
         }
     }
