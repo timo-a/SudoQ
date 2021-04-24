@@ -17,12 +17,6 @@ public class ObservableModelTest {
 		listener = new Listener<>();
 	}
 
-	// we can't use the newest method because we're constrained to language level 7...
-	@Test(expected = IllegalArgumentException.class)
-	public void testRegisterNull(){
-		observable.registerListener(null);
-	}
-
 	@Test
 	public void testNotification() {
 
