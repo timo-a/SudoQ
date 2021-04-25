@@ -43,7 +43,7 @@ class GameManager private constructor() {
         val games = gamesXml
         val gameTree = XmlTree("game")
         gameTree.addAttribute(XmlAttribute(ID, game.id.toString()))
-        gameTree.addAttribute(XmlAttribute(SUDOKU_TYPE, game.sudoku!!.sudokuType.enumType.ordinal.toString()))
+        gameTree.addAttribute(XmlAttribute(SUDOKU_TYPE, game.sudoku!!.sudokuType.enumType!!.ordinal.toString()))
         gameTree.addAttribute(XmlAttribute(COMPLEXITY, game.sudoku!!.complexity.ordinal.toString()))
         gameTree.addAttribute(XmlAttribute(PLAYED_AT, SimpleDateFormat(GameData.dateFormat).format(Date())))
         games.addChild(gameTree)

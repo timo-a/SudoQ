@@ -19,7 +19,7 @@ interface ComplexityFactory {
      * @return A ComplexityConstraint for the given complexity of null, if complexity constraint is not valid
      * Todo throw illegalArgException instead
      */
-    fun buildComplexityConstraint(complexity: Complexity): ComplexityConstraint?
+    fun buildComplexityConstraint(complexity: Complexity?): ComplexityConstraint? //todo make non-nullable
 
     /**
      * Returns the factor that indicates the number of [Cell]s, that are randomly prefilled and

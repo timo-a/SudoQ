@@ -15,9 +15,8 @@ import java.util.*
 /**
  * An xmlable ArrayList of PermutationProperties
  */
-class SetOfPermutationProperties : ArrayList<PermutationProperties?>(), Xmlable {
-    private val PERMUTATION_PROPERTY = "PermutationProperty"
-    private val TAG_PROPERTY_NR = "permutationNr"
+class SetOfPermutationProperties : ArrayList<PermutationProperties>(), Xmlable {
+
     override fun toXmlTree(): XmlTree {
         val representation = XmlTree(SET_OF_PERMUTATION_PROPERTIES)
         for (p in this) {
@@ -39,5 +38,7 @@ class SetOfPermutationProperties : ArrayList<PermutationProperties?>(), Xmlable 
 
     companion object {
         const val SET_OF_PERMUTATION_PROPERTIES = "SetOfPermutationProperties"
+        private const val PERMUTATION_PROPERTY = "PermutationProperty"
+        private const val TAG_PROPERTY_NR = "permutationNr"
     }
 }
