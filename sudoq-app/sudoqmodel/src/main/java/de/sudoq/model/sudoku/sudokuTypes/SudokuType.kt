@@ -20,29 +20,29 @@ import de.sudoq.model.xml.Xmlable
 import java.util.*
 
 /**
- * Ein SudokuType repräsentiert die Eigenschaften eines spezifischen Sudoku-Typs. Dazu gehören insbesondere die
- * Constraints, die einen Sudoku-Typ beschreiben.
+ * A SudokuType represents the Attributes of a specific sudoku type.
+ * This includes especially the Constraints that describe a sudoku type.
  */
-open class SudokuType : Iterable<Constraint?>, ComplexityFactory, Xmlable {
-    /**
-     * Gibt das enum dieses Typs zurück.
-     * @return Enum dieses Typs
-     */
-    /** Attributes  */
-    open var enumType: SudokuTypes? = null
+open class SudokuType : Iterable<Constraint>, ComplexityFactory, Xmlable {
+
+    /** Enum holding this Type */
+    open var enumType: SudokuTypes? = null //TODO make fillFromXML statis - make this nonnullable
 
     /** The ratio of fields that are to be allocated i.e. already filled when starting  a sudoku game  */
-    var standardAllocationFactor = 0f
+    @JvmField
+    var standardAllocationFactor : Float = 0f
+
     /**
-     * Gibt die Größe eines Sudokus dieses Typs zurück. Die Größe wird durch ein Position-Objekt repräsentiert, wobei
-     * die x-Koordinate die maximale Anzahl horizontaler Felder eines Sudokus dieses Typs beschreibt, die y-Koordinaten
-     * die maximale Anzahl vertikaler Felder.
-     *
-     * @return Ein Position-Objekt, welches die maximale Anzahl horizontaler bzw. vertikaler Felder eines Sudokus dieses
-     * Typs beschreibt
+     * Gibt den Standard Belegungsfaktor zurück
      */
+    override fun getStandardAllocationFactor(): Float {
+        return standardAllocationFactor //this is needed explicitly because of ComplexityFactory TODO combine with field one everything is kotlin
+    }
+
     /**
-     * Ein Positionobjekt das in seinen Koordinaten die Anzahl an Spalten und Zeilen hält
+     * The size of the sudoku as a [Position] object where
+     * the x-coordinate is the maximum number of (columns) horizontal cells and
+     * the y-coordinate is the maximum number of (rows) vertical cells.
      */
     var size: Position? = null
         protected set
@@ -52,34 +52,34 @@ open class SudokuType : Iterable<Constraint?>, ComplexityFactory, Xmlable {
      * But for Squiggly or Stairstep: 0,0
      * and for 4x4: 2,2
      */
-    var blockSize = Position.get(0, 0)
+    var blockSize: Position = Position.get(0, 0)
         protected set
 
     /**
-     * Die Anzahl von Symbolen die in die Felder eines Sudokus dieses Typs eingetragen werden können.
+     * Number of symbols that can be entered in a cell.
      */
-    private var numberOfSymbols = 0
+    var numberOfSymbols = 0
+        private set
 
     /**
-     * Die Liste der Constraints, die diesen Sudoku-Typ beschreiben
+     * The list of constraints for this sudoku type
      */
+    @JvmField
     var constraints: MutableList<Constraint>
 
     /**
-     * Alle Positions die in Teil eines Constraints sind d.h. auf ein Feld verweisen
-     * (Bei Samurai sind das ja nicht alle)
+     * All [Position]s that are contained in at least one constraint.
+     * (For a Samurai sudoku not all positions are part of a constraint)
      */
     protected var positions: MutableList<Position>
+
     /**
-     * Gibt eine Liste mit zulässigen Transformationen an diesem Sudoku aus.
-     *
-     * @return eine Liste mit zulässigen Transformationen an diesem Sudoku
-     */
-    /**
-     * eine List die zulässige Transformationen am Sudokutyp hält
+     * list of admissible permutations for this sudoku type
      */
     var permutationProperties: List<PermutationProperties>
+
     protected var helperList: MutableList<Helpers>
+    @JvmField
     var ccb: ComplexityConstraintBuilder
 
     constructor() {
@@ -91,15 +91,11 @@ open class SudokuType : Iterable<Constraint?>, ComplexityFactory, Xmlable {
     }
 
     /**
-     * Konstruktor für einen SudokuTyp
+     * Creates a SudokuType
      *
-     *
-     * @param width
-     * width of the sudoku in fields
-     * @param height
-     * height of the sudoku in fields
-     * @param numberOfSymbols
-     * die Anzahl an Symbolen die dieses Sudoku verwendet
+     * @param width width of the sudoku in cells
+     * @param height height of the sudoku in cells
+     * @param numberOfSymbols the number of symbols that can be used in this sudoku
      */
     constructor(width: Int, height: Int, numberOfSymbols: Int) {
         require(numberOfSymbols >= 0) { "Number of symbols < 0 : $numberOfSymbols" }
@@ -109,44 +105,43 @@ open class SudokuType : Iterable<Constraint?>, ComplexityFactory, Xmlable {
         standardAllocationFactor = -1.0f
         this.numberOfSymbols = numberOfSymbols
         size = Position.get(width, height)
+
         constraints = ArrayList()
         positions = ArrayList()
         permutationProperties = SetOfPermutationProperties()
         helperList = ArrayList()
         ccb = ComplexityConstraintBuilder()
     }
-    /* Methods */
+
     /**
-     * Überprüft, ob das spezifizierte Sudoku die Vorgaben aller Constraints dieses SudokuTyps erfüllt. Ist dies der
-     * Fall, so wir true zurückgegeben. Erfüllt es die Vorgaben nicht, oder wird null übergeben, so wird false
-     * zurückgegeben.
+     * Checks if the passed [Sudoku] satisfies all [Constraint]s of this [SudokuType].
      *
-     * @param sudoku
-     * Das Sudoku, welches auf Erfüllung der Constraints überprüft werden soll
-     * @return true, falls das Sudoku alle Constraints erfüllt, false falls es dies nicht tut oder null ist
+     * @param sudoku Sudoku to check for constraint satisfaction
+
+     * @return true, iff the sudoku satisfies all constraints
      */
-    fun checkSudoku(sudoku: Sudoku?): Boolean {
-        if (sudoku == null) return false
+    fun checkSudoku(sudoku: Sudoku): Boolean {
         for (c in constraints) {
-            if (!c.isSaturated(sudoku)) return false
+            if (!c.isSaturated(sudoku))
+                return false
         }
         return true
     }
 
     /**
-     * Gibt einen Iterator für die Constraints dieses Sudoku-Typs zurück.
+     * Returns an Iterator over the [Constraint]s of this sudoku type.
      *
-     * @return Einen Iterator für die Constraints dieses Sudoku-Typs
+     * @return Iterator over the [Constraint]s of this sudoku type
      */
-    override fun iterator(): MutableIterator<Constraint> {
+    override fun iterator(): Iterator<Constraint> {
         return constraints.iterator()
     }
 
-    private inner class Positions : Iterable<Position?> {
-        override fun iterator(): MutableIterator<Position> {
+    private inner class Positions : Iterable<Position> {
+        override fun iterator(): Iterator<Position> {
             return positions.iterator()
         }
-    }//return positions.iterator();
+    }
 
     /**
      * Returns an iterator over all valid positions in this type.
@@ -154,17 +149,8 @@ open class SudokuType : Iterable<Constraint?>, ComplexityFactory, Xmlable {
      * @return all positions
      */
     val validPositions: Iterable<Position>
-        get() =//return positions.iterator();
-            Positions()
+        get() = Positions()
 
-    /**
-     * Gibt die Anzahl der Symbole eines Sudokus dieses Typs zurück.
-     *
-     * @return Die Anzahl der Symbole in einem Sudoku dieses Typs
-     */
-    fun getNumberOfSymbols(): Int {
-        return numberOfSymbols
-    }
 
     /**
      * returns a (monotone) Iterable over all symbols in this type starting at 0, for use in for each loops
@@ -176,46 +162,38 @@ open class SudokuType : Iterable<Constraint?>, ComplexityFactory, Xmlable {
                 return index
             }
 
-            override fun size(): Int {
-                return numberOfSymbols
-            }
+            override val size: Int
+                get() = numberOfSymbols
         }
 
     /**
-     * Gibt einen ComplexityContraint für eine Schwierigkeit complexity zurück.
+     * Returns a complexity constraint for a complexity.
      *
-     * @param complexity
-     * eine Schwierigkeit zu der ein ComplexityConstraint erzeugt werden soll
+     * @param complexity Complexity for which to return a ComplexityConstraint
      */
-    override fun buildComplexityConstraint(complexity: Complexity): ComplexityConstraint? {
+    override fun buildComplexityConstraint(complexity: Complexity?): ComplexityConstraint? {
         return ccb.getComplexityConstraint(complexity)
     }
 
-    /**
-     * Gibt den Standard Belegungsfaktor zurück
-     */
-    override fun getStandardAllocationFactor(): Float {
-        return standardAllocationFactor //0.35f; TODO WHY DID I SET A CONST. VALUE?! REALLY?!
-    }
 
     /**
-     * Gibt den Sudoku-Typ als String zurück.
+     * Returns the sudoku type as string.
      *
-     * @return Sudoku-Typ als String
+     * @return sudoku type as string
      */
     override fun toString(): String {
         return "" + enumType
     }
 
     /**
-     * Setzt den Typ auf den spezifizierten Wert.
-     * @param type Typ
+     * Sets the type
+     * @param type Type
      */
-    fun setTypeName(type: SudokuTypes?) {
-        if (type != null) enumType = type
+    fun setTypeName(type: SudokuTypes) {
+        enumType = type
     }
 
-    fun setDimensions(p: Position?) {
+    fun setDimensions(p: Position) {
         size = p
     }
 
@@ -224,7 +202,7 @@ open class SudokuType : Iterable<Constraint?>, ComplexityFactory, Xmlable {
     }
 
     /**
-     * @return Eine Liste der Constraints dieses Sudokutyps.
+     * @return A list of the [Constraint]s of this SudokuType.
      */
     @Deprecated(""" Gibt eine Liste der Constraints, welche zu diesem Sudokutyp gehören zurück. Hinweis: Wenn möglich stattdessen den
 	  Iterator benutzen.
@@ -235,17 +213,15 @@ open class SudokuType : Iterable<Constraint?>, ComplexityFactory, Xmlable {
     }
 
     //make a method that returns an iterator over all positions !=null. I think we need this a lot
-    fun addConstraint(c: Constraint?) {
-        if (c != null) {
-            constraints.add(c)
-        }
+    fun addConstraint(c: Constraint) {
+        constraints.add(c)
     }
 
     override fun toXmlTree(): XmlTree {
         val representation = XmlTree("sudokutype")
         representation.addAttribute(XmlAttribute("typename", "" + enumType!!.ordinal))
         representation.addAttribute(XmlAttribute("numberOfSymbols", "" + numberOfSymbols))
-        representation.addAttribute(XmlAttribute("standardAllocationFactor", java.lang.Float.toString(standardAllocationFactor)))
+        representation.addAttribute(XmlAttribute("standardAllocationFactor", standardAllocationFactor.toString()))
         representation.addChild(size!!.toXmlTree("size"))
         representation.addChild(blockSize.toXmlTree("blockSize"))
         for (c in constraints) {
@@ -308,10 +284,8 @@ open class SudokuType : Iterable<Constraint?>, ComplexityFactory, Xmlable {
     }
 
     companion object {
-        fun getSudokuType(type: SudokuTypes?): SudokuType? {
-            if (type == null) {
-                return null
-            }
+        @JvmStatic
+        fun getSudokuType(type: SudokuTypes): SudokuType? {
             val f = FileManager.getSudokuTypeFile(type)
             if (!f.exists()) {
                 return null

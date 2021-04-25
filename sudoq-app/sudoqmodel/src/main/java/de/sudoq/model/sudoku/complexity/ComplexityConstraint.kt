@@ -17,7 +17,7 @@ import de.sudoq.model.xml.Xmlable
 class ComplexityConstraint : Cloneable, Xmlable {
 
     /** The complexity that this constraint pertains to */
-    var complexity: Complexity? = null
+    var complexity: Complexity = Complexity.arbitrary //default value without meaning
         private set
 
     /**
@@ -46,7 +46,7 @@ class ComplexityConstraint : Cloneable, Xmlable {
     var numberOfAllowedHelpers = 0
         private set
 
-    constructor() {}
+    constructor() {} //this is needed for fillFromXML todo refactor fillFromXML into a static method that returns an object
 
     /**
      * Creates a new ComplexityConstraint.
@@ -83,7 +83,7 @@ class ComplexityConstraint : Cloneable, Xmlable {
 
     override fun toXmlTree(): XmlTree {
         val representation = XmlTree(COMPLEXITY_CONSTRAINT)
-        representation.addAttribute(XmlAttribute(COMPLEXITY, "" + complexity!!.ordinal))
+        representation.addAttribute(XmlAttribute(COMPLEXITY, "" + complexity.ordinal))
         representation.addAttribute(XmlAttribute(AVERAGE_FIELDS, "" + averageCells))
         representation.addAttribute(XmlAttribute(MIN_COMPLEXITY_IDENTIFIER, "" + minComplexityIdentifier))
         representation.addAttribute(XmlAttribute(MAX_COMPLEXITY_IDENTIFIER, "" + maxComplexityIdentifier))
