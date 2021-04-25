@@ -2,22 +2,13 @@ package de.sudoq.model.sudoku
 
 import java.util.*
 
-/**
- * Created by timo on 20.10.16.
- */
 class CandidateSet : BitSet() {
-    //creates a singleton tmp set, but is it really neccessary? We have gc after all.
-    private var tmp: CandidateSet? = null
-        private get() { //creates a singleton tmp set, but is it really neccessary? We have gc after all.
-            if (field == null) field = CandidateSet()
-            return field
-        }
 
     /**
      * assigns the value of the parameter to itself
      * @param bs bit set to assign itself with
      */
-    fun assignWith(bs: BitSet?) {
+    fun assignWith(bs: BitSet) {
         clear()
         or(bs)
     }
@@ -27,7 +18,7 @@ class CandidateSet : BitSet() {
     * */
     @Synchronized
     fun isSubsetOf(bs: BitSet): Boolean {
-        val tmp = tmp!!
+        val tmp = CandidateSet()
         tmp.assignWith(this)
         tmp.and(bs)
         return bs == tmp // => bs == bs & currentSet => bs ⊆ currentSetf
@@ -61,15 +52,16 @@ class CandidateSet : BitSet() {
         }
 
     @Synchronized
-    fun hasCommonElement(bs: BitSet?): Boolean {
-        val tmp = tmp!!
+    fun hasCommonElement(bs: BitSet): Boolean {
+        val tmp = CandidateSet()
         tmp.assignWith(this)
         tmp.and(bs)
         return !tmp.isEmpty
     }
 
     companion object {
-        fun fromBitSet(bs: BitSet?): CandidateSet {
+        @JvmStatic
+        fun fromBitSet(bs: BitSet): CandidateSet {
             val cs = CandidateSet()
             cs.or(bs)
             return cs
