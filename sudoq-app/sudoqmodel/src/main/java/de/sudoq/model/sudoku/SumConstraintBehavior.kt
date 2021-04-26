@@ -7,28 +7,21 @@
  */
 package de.sudoq.model.sudoku
 
-/*Never used, just here to show what's possible.
+/* Never used, just here to show what's possible.
   Sudokus don't use this! or do they? not sure anymore...
-  I say they wouln't be neccessary if the fully solved part was moved to uniquebehavior*/ /**
- * Das SumConstraintBehavior repräsentiert ein Constraint-Verhalten, wobei die Summe der Feld-Werte eines Constraints
- * eine vorgegebene Summe haben muss.
- */
-class SumConstraintBehavior(sum: Int) : ConstraintBehavior {
-    /* Attributes */
+  I say they wouln't be neccessary if the fully solved part was moved to uniquebehavior
+  */
+
+/** SumConstraintBehavior means the sum of the values in the cells must have a certain value
+ * @property fixed sum the cells must have
+ * */
+class SumConstraintBehavior(private val sum: Int) : ConstraintBehavior {
+
     /**
-     * Die Summe, auf welche das SumConstraintBehavior die Felder des Constraints auf dem Sudoku ueberprueft.
-     */
-    private val sum = 0
-    /* Methods */
-    /**
-     * Überprüft, ob das spezifizierte Constraint dieses Verhalten auf dem uebergebenen Sudoku erfüllt. Dies bedeutet,
-     * dass überprüft wird, ob die Summe der aktuellen Feldwerte des Constraints kleiner ist als der im Konstruktor
-     * dieses Verhaltens vorgegebene Wert bzw. gleich diesem ist, falls alle Felder des Constraints befüllt sind. Ist
-     * das Verhalten erfüllt, so wird true, andernfalls oder falls das spezifizierte Constraint null ist wird false
-     * zurückgegeben.
+     * Checkcs if the passed Constraint satisfies Unique behaviour, i.e.
+     * if all values sum up to a given total.
      *
-     * @return true, falls das spezifizierte Constraint dieses Verhalten erfüllt bzw. false falls es dies nicht tut oder
-     * null übergeben wurde
+     * @return true, iff constraint satisfies sum behaviour.
      */
     override fun check(constraint: Constraint, sudoku: Sudoku): Boolean {
         var fieldSum = 0
@@ -39,17 +32,9 @@ class SumConstraintBehavior(sum: Int) : ConstraintBehavior {
         }
         return fieldSum == sum || !fullySolved && fieldSum <= sum
     }
-    /* Constructors */ /**
-     * Instanziiert ein neues SumConstraintBehavior-Objekt, welches Constraints auf die spezifizierte Summe der
-     * zugehörigen Feldwerte überprüfen kann. Ist diese kleiner als 0, so wird eine IllegalArgumentException geworfen.
-     *
-     * @param sum
-     * Die Summe, die die Feldwerte in diesem Constraint haben müssen
-     */
+
     init {
-        if (sum >= 0) {
-            this.sum = sum
-        } else {
+        if (sum < 0) {
             throw IllegalArgumentException()
         }
     }
