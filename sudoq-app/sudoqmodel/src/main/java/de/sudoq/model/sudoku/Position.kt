@@ -12,56 +12,37 @@ import de.sudoq.model.xml.XmlTree
 import de.sudoq.model.xml.Xmlable
 
 /**
- * Eine Position repräsentiert eine zweidimensionale, kartesische Koordinate.
- * implementiert als Flyweight (not quite, but Position.get(x,y) gives memoized objects)
- */
-class Position
-/**
- * Instanziiert ein neues Position-Objekt mit den spezifizierten x- und y-Koordinaten. Ist eine der Koordinaten
- * kleiner als 0, so wird eine IllegalArgumentException geworfen.
+ * A two dimensional cartesian Coordinate.
+ * Implemented as Flyweight (not quite, but Position.get(x,y) gives memoized objects)
  *
- * @param x
- * Die x-Koordinate der zu erzeugenden Position
- * @param y
- * Die y-Koordinate der zu erzeugenden Position
- * @throws IllegalArgumentException
- * Wird geworfen, falls eine der Koordinaten kleiner als 0 ist
- */(
-        /**
-         * Die x-Koordinate der Position
-         */
-        var x: Int,
-        /**
-         * Die y-Koordinate der Position
-         */
-        var y: Int) : Xmlable {
-    /* Attributes */
+ * @property x the x coordinate
+ * @property y the y coordinate
+ *
+ */
+class Position(var x: Int, var y: Int) : Xmlable {
+
     /**
-     * Identifiziert, ob diese Position ein Flyweight ist und somit nicht geändert werden darf.
+     * Instanziiert ein neues Position-Objekt mit den spezifizierten x- und y-Koordinaten. Ist eine der Koordinaten
+     * kleiner als 0, so wird eine IllegalArgumentException geworfen.
+     *
+     * @throws IllegalArgumentException
+     * Wird geworfen, falls eine der Koordinaten kleiner als 0 ist
      */
+
+    /** Identifies, if this Position is a Flyweight and thus may not be changed. */
     private var fixed = true
+
     /**
-     * Gibt die x-Koordinate dieser Position zurück.
+     * Tests for equality with other [Position].
      *
-     * @return Die x-Koordinate dieser Position
-     */
-    /**
-     * Gibt die y-Koordinate dieser Position zurück.
-     *
-     * @return Die y-Koordinate dieser Position
-     */
-    /* Methods */
-    /**
-     * Vergleicht mit einem anderen Positionobjekt auf Gleichheit bzgl. der Koordinaten
-     *
-     * @return true wenn obj vom Typ Position und mit diesem Objekt in den Koordinaten übereinstimmt, sonst false
+     * @return true if obj is of same type and coordinates match
      */
     override fun equals(obj: Any?): Boolean {
         return if (obj == null || obj !is Position) {
             false
         } else {
-            val other = obj
-            x == other.x && y == other.y
+            x == obj.x
+                    && y == obj.y
         }
     }
 
@@ -84,10 +65,10 @@ class Position
     }
 
     /**
-     * Gibt eine String-Repräsentation dieser Position zurück.
+     * Returns a String Representation of this Position.
      */
     override fun toString(): String {
-        return x.toString() + ", " + y
+        return "$x, $y"
     }
 
     override fun toXmlTree(): XmlTree {
@@ -115,25 +96,24 @@ class Position
         /**
          * Das statische Position-Array
          */
-        private var positions: Array<Array<Position?>>?
+        private var positions: Array<Array<Position>>? = null
 
         /**
-         * Gibt ein Positions-Objekt mit den spezifizierten x- und y-Koordinaten. Ist eine der Koordinaten kleiner als 0, so
-         * wird eine IllegalArgumentException geworfen.
+         * Returns a [Position] with the specified coordinates
          *
-         * @param x
-         * Die x-Koordinate der zu erzeugenden Position
-         * @param y
-         * Die y-Koordinate der zu erzeugenden Position
-         * @return das neue Position Objekt
-         * @throws IllegalArgumentException
-         * Wird geworfen, falls eine der Koordinaten kleiner als 0 ist
+         * @param x the desired x-coordinate
+         * @param y the desired y-coordinate
+         * @return Position Object with the coordinates
+         * @throws IllegalArgumentException if either coordinate is > 0
          */
-        operator fun get(x: Int, y: Int): Position? {
-            require(!(x < 0 || y < 0)) { "a parameter is less than zero" }
+        @JvmStatic
+		operator fun get(x: Int, y: Int): Position {
+            require(x >= 0 && y >= 0) { "a parameter is less than zero" }
+
             if (positions == null) {
-                initializePositions()
+                initializePositions();
             }
+
             return if (x < 25 && y < 25) {
                 positions!![x][y]
             } else {
@@ -144,10 +124,10 @@ class Position
         }
 
         /**
-         * Initialisiert das Positions-Array für effiziere Positionsverwaltung.
+         * Initialises the Position Array for efficient Position storage.
          */
         private fun initializePositions() {
-            positions = Array(25) { arrayOfNulls(25) }
+            positions = Array(25) { Array(25) { Position(0,0) } }
             for (x in 0..24) {
                 for (y in 0..24) {
                     positions!![x][y] = Position(x, y)
@@ -155,9 +135,10 @@ class Position
             }
         }
 
-        fun fillFromXmlStatic(xmlTreeRepresentation: XmlTree): Position? {
-            return Companion[xmlTreeRepresentation.getAttributeValue("x").toInt(), xmlTreeRepresentation.getAttributeValue("y").toInt()]
+        fun fillFromXmlStatic(xmlTreeRepresentation: XmlTree): Position {
+            return Companion[
+                    xmlTreeRepresentation.getAttributeValue("x").toInt(),
+                    xmlTreeRepresentation.getAttributeValue("y").toInt()]
         }
     }
-    /* Constructors */
 }
