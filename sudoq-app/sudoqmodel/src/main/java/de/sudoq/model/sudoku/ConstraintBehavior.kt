@@ -8,24 +8,16 @@
 package de.sudoq.model.sudoku
 
 /**
- * Dieses Interface definiert eine check Methode, welche überprüft, ob ein
- * spezifiziertes Constraint ein bestimmtes Verhalten erfüllt.
+ * This Interface defines a check function, that checks if a constraint has a certain behaviour.
  */
-interface ConstraintBehavior {
-    /* Methods */
+interface ConstraintBehavior {//todo refactor. make abstract class instead?
+
     /**
-     * Diese Methode überprüft, ob ein bestimmtes (durch die Methode
-     * implementiertes) Verhalten auf den durch das Constraint spezifizierten
-     * Feldern des uebergebenen Sudokus erfüllt ist. Ist das Constraint oder das
-     * Sudoku null, so wird false zurückgegeben.
+     * This function checks of a certain constraint behaviour is fulfilled by the Sudoku
      *
-     * @param constraint
-     * Das Constraint, welches auf ein bestimmtes Verhalten überprüft
-     * werden soll
-     * @param sudoku
-     * Sudoku, auf welchem das Constraint ueberprueft werden soll
-     * @return true, falls das Constraint die Vorgaben erfüllt, false falls es
-     * dies nicht tut oder null ist
+     * @param constraint The Constraint which to check for
+     * @param sudoku The Sudoku on which to check
+     * @return true, iff sudoku satisfies the constraint
      */
-    fun check(constraint: Constraint?, sudoku: Sudoku?): Boolean
+    fun check(constraint: Constraint, sudoku: Sudoku): Boolean
 }

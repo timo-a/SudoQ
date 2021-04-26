@@ -9,23 +9,17 @@ package de.sudoq.model.sudoku
 
 import java.util.*
 
-/**
- * Das UniqueConstraintBehavior repräsentiert ein Constraint-Verhalten, wobei kein Symbol innerhalb eines Constraints
- * doppelt vorkommen darf.
- */
+/** UniqueConstraintBehavior means no symbol may appear twice within a constraint. */
 class UniqueConstraintBehavior : ConstraintBehavior {
+
+    /** list of symbols found in the check method. */
+    var foundNumbers: MutableList<Int> = ArrayList()
+
     /**
-     * Eine Liste der in der check-Methode gefundenen Ziffern. Wurde aus Performancegründen nicht lokal definiert.
-     */
-    var foundNumbers: MutableList<Int>
-    /* Methods */
-    /**
-     * Überprüft, ob das spezifizierte Constraint das Unique-Verhalten erfüllt. D.h. es wird überprüft, ob innerhalb des
-     * Constraints kein Symbol in zwei Feldern eingetragen ist. Ist das Verhalten erfüllt, so wird true, andernfalls
-     * oder falls das spezifizierten Constraint null ist wird false zurückgegeben.
+     * Checkcs if the passed Constraint satisfies Unique behaviour, i.e.
+     * if no symbol appears twice among the cells in the constraint.
      *
-     * @return true, falls das spezifizierte Constraint dieses Verhalten erfüllt bzw. false falls es dies nicht tut oder
-     * null übergeben wurde
+     * @return true, iff constraint satisfies unique behaviour.
      */
     override fun check(constraint: Constraint, sudoku: Sudoku): Boolean {
         var currentValue: Int
@@ -33,14 +27,13 @@ class UniqueConstraintBehavior : ConstraintBehavior {
         val positions = constraint.getPositions()
         for (pos in positions) {
             currentValue = sudoku.getCell(pos).currentValue
-            if (currentValue != -1) if (foundNumbers.contains(currentValue)) return false else foundNumbers.add(currentValue)
+            if (currentValue != -1)
+                if (foundNumbers.contains(currentValue))
+                    return false
+                else
+                    foundNumbers.add(currentValue)
         }
         return true
     }
-    /* Constructors */ /**
-     * Instanziiert ein neues UniqueConstraintBehavior-Objekt.
-     */
-    init {
-        foundNumbers = ArrayList()
-    }
+
 }
