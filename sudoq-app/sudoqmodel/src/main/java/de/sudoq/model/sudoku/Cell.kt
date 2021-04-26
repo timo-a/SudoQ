@@ -16,77 +16,46 @@ import java.util.*
  * und notes can be observed.
  */
 class Cell(editable: Boolean, solution: Int, id: Int, numberOfValues: Int) : ObservableModelImpl<Cell?>(), Cloneable {
-    /* Attributes */
-    /**
-     * Returns the id of this cell
-     *
-     * @return this cells id
-     */
-    /**
-     * A unique number identifying the cell in the scope of the sudoku
-     */
+
+    /** A unique number identifying the cell in the scope of the sudoku */
     val id: Int
-    /**
-     * Returns the correct solution for this cell.
-     *
-     * @return the correct solution for this cell.
-     */
-    /**
-     * The correct solution for this cell
-     */
+
+    /** The correct solution for this cell */
     val solution: Int
 
-    /**
-     * The current value in this cell
-     */
+    /** The current value in this cell */
     // package scope to increase performance and bypass the notifications
     var currentVal: Int
-    /**
-     * Checks if the cell is editable, i.e. its value is mutable.
-     *
-     * @return true if cell is editable. false otherwise
-     */
-    /**
-     * The editability of this cell; false for prefilled cell
-     */
+
+    /** The editability of this cell; false for prefilled cell */
     val isEditable: Boolean
 
-    /**
-     * The set notes in this cell; Symbol $n$ is represented by bit number n-1 being set
-     */
+    /** The set notes in this cell; Symbol $n$ is represented by bit number n-1 being set */
     private var noticeFlags: BitSet
 
-    /**
-     * The highest value this cell can take
-     */
+    /** The highest value this cell can take */
     private val maxValue: Int
 
     /**
      * Intantiates a new editable cell object.
      *
-     * @param id
-     * id of this cell
-     * @param numberOfValues
-     * the number of values this cell can take (e.g. 9 for regular sudoku)
+     * @param id id of this cell
+     * @param numberOfValues the number of values this cell can take (e.g. 9 for regular sudoku)
      */
     constructor(id: Int, numberOfValues: Int) : this(true, EMPTYVAL, id, numberOfValues) {}
-    /* Methods */
-    /**
-     * Returns the current value in this cell.
-     *
-     * @return the current value in this cell
-     */
-    /**
-     * Sets the current value of the cell to the specified and notifies listeners.
-     * If the cell is not editable, the parameter will be ignored and nothing will change.
-     *
-     * @param value
-     * The new value for this cell
-     * @throws IllegalArgumentException
-     * if `value < 0`
-     */
+
+    /** The current value in this cell */
     var currentValue: Int
         get() = currentVal
+        /**
+         * Sets the current value of the cell to the specified and notifies listeners.
+         * If the cell is not editable, the parameter will be ignored and nothing will change.
+         *
+         * @param value
+         * The new value for this cell
+         * @throws IllegalArgumentException
+         * if `value < 0`
+         */
         set(value) {
             setCurrentValueP(value, true)
         }
@@ -96,10 +65,8 @@ class Cell(editable: Boolean, solution: Int, id: Int, numberOfValues: Int) : Obs
      * If the cell is not editable, the parameter will be ignored and listeners will not be
      * informed.
      *
-     * @param value
-     * The new value for this cell
-     * @param notify
-     * if true listeners will be notified of change
+     * @param value The new value for this cell
+     * @param notify if true listeners will be notified of change
      * @throws IllegalArgumentException
      * if `value < 0`
      */
@@ -205,9 +172,11 @@ class Cell(editable: Boolean, solution: Int, id: Int, numberOfValues: Int) : Obs
      */
     override fun equals(obj: Any?): Boolean {
         if (obj != null && obj is Cell) {
-            val other = obj
-            return id == other.id && solution == other.solution && currentVal == other.currentVal && isEditable == other.isEditable && noticeFlags ==
-                    other.noticeFlags
+            return id == obj.id
+                    && solution == obj.solution
+                    && currentVal == obj.currentVal
+                    && isEditable == obj.isEditable
+                    && noticeFlags == obj.noticeFlags
         }
         return false
     }
@@ -219,9 +188,9 @@ class Cell(editable: Boolean, solution: Int, id: Int, numberOfValues: Int) : Obs
         return currentVal.toString()
     }
 
-    /**  creates another object with the same values.
+    /**
+     * creates another object with the same values.
      * the created object is a perfect clone: even the id attribute is cloned
-     *
      */
     public override fun clone(): Any {
         val clone = Cell(isEditable,
@@ -234,23 +203,10 @@ class Cell(editable: Boolean, solution: Int, id: Int, numberOfValues: Int) : Obs
     }
 
     companion object {
-        /**
-         * The value representing an empty cell
-         */
+        /** The value representing an empty cell */
         const val EMPTYVAL = -1
     }
-    /* Constructors */ /**
-     * Instantiates a new cell object.
-     *
-     * @param editable
-     * specifies whether the value is mutable (true) of immutable, i.e. prefilled
-     * @param solution
-     * the correct value for this cell
-     * @param id
-     * the id of this cell
-     * @param numberOfValues
-     * the number of values this cell can take (e.g. 9 for regular sudoku)
-     */
+
     init {
         require(!(solution < 0 && solution != EMPTYVAL)) { "Solution has to be positive." }
         noticeFlags = BitSet()
