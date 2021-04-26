@@ -8,50 +8,40 @@
 package de.sudoq.model.sudoku
 
 /**
- * Diese Klasse stellt eine Map von Positions auf generische Objekte zur Verfügung. Da das Mapping direkt über die
- * 2D-Koordinaten der Positions vorgenommen wird, ist dieses Mapping effizienter als HashMaps oder TreeMaps.
+ * A map from Positions to generic objects.
+ * Since the mapping is defined directly over the x,y coordinates it is more efficient than a HashMap or a TreeMap.
  *
- * @param <T>
- * Ein belibiger Typ, auf den Positions abgebildet werden sollen
-</T> */
-class PositionMap<T>(dimension: Position?) : Cloneable {
-    /**
-     * Die BoundingBox-Abmessungen der Positionen dieser PositionMap
-     */
-    var dimension: Position
+ * @param T arbitrary type on which to map positions
+ * @property dimension the bounding box dimensions of this positions to map
+ */
+class PositionMap<T>(private var dimension: Position) : Cloneable {
 
     /**
      * Das Werte-Array dieser PositionMap
      */
-    var values: Array<Array<T>>
+    var values: Array<Array<T?>>
 
     /**
-     * Fügt das spezifizierte Objekt an der spezifizierten Position ein. Ist dort bereits ein Objekt vorhanden, so wird
-     * dieses überschrieben.
+     * Adds the object at the position, an existing mapping will be overwritten
      *
-     * @param pos
-     * Die Position, an der das BitSet eingefügt werden soll
-     * @param object
-     * Das Objekt, welches eingefügt werden soll
-     * @return der Wert der vorher an pos lag, oder null falls es keinen gab
+     * @param pos [Position] at which to insert the object
+     * @param object the object to insert
+     * @return the previous object at that position or null if there was none
      */
-    fun put(pos: Position?, `object`: T?): T {
-        require(!(pos == null || `object` == null || pos.x > dimension.x || pos.y > dimension.y))
+    fun put(pos: Position, `object`: T): T? {
+        require(!(pos.x > dimension.x || pos.y > dimension.y))
         val ret = values[pos.x][pos.y]
         values[pos.x][pos.y] = `object`
         return ret
     }
 
     /**
-     * Gibt das BitSet, welches der spezifizierten Position zugewiesen wurden zurück. Wurde keines zugewiesen, so wird
-     * null zurückgegeben.
+     * Returns the object at the specified position.
      *
-     * @param pos
-     * Die Position, dessen zugewiesenes BitSet abgefragt werden soll
-     * @return Das BitSet, welches der spezifizierten Position zugeordnet wurde oder null, falls keines zugewiesen wurde
+     * @param pos [Position] to query object for
+     * @return the object at the specified position or null if there is no mapping
      */
-    operator fun get(pos: Position?): T {
-        requireNotNull(pos) { "pos was null" }
+    operator fun get(pos: Position): T? {
         require(pos.x <= dimension.x) { "x coordinate of pos was > " + dimension.x + ": " + pos.x }
         require(pos.y <= dimension.y) { "y coordinate of pos was > " + dimension.y + ": " + pos.y }
         assert(pos.x < dimension.x)
@@ -62,33 +52,31 @@ class PositionMap<T>(dimension: Position?) : Cloneable {
     }
 
     /**
-     * Gibt eine "deep copy" dieser PositionMap zurück. Es wird dazu die clone-Methode aller in dieser PositionMap
-     * befindlichen Objekte aufgerufen.
+     * Returns a "deep copy" of this [PositionMap].
+     * `clone` is called on every object in the map.
      *
-     * @return Eine "deep copy" dieser PositionMap
+     * @return A "deep copy" of this PositionMap
      */
     public override fun clone(): PositionMap<T> {
         val result = PositionMap<T>(dimension)
         for (i in 0 until dimension.x) {
             for (j in 0 until dimension.y) {
-                if (values[i][j] != null) result.put(Position[i, j], values[i][j])
+                if (values[i][j] != null)
+                    result.put(Position[i, j], values[i][j]!!)
             }
         }
         return result
     }
 
     /**
-     * Initialisiert eine neue Position-Map für so viele Einträge, wie eine Matrix der spezifizierten Dimension hat. Die
-     * Größe muss in beiden Komponenten mindestens 1 sein.
+     * Initialises a new PositionMap for as many Entries as dimension defines.
+     * Size must be at least 1 on both components.
      *
-     * @param dimension
-     * Die Größe der PositionMap
-     * @throws IllegalArgumentException
-     * Wird geworfen, falls die spezifizierte Position null oder eine der Dimensionskomponenten 0 ist
+     * @param dimension size of the domain
+     * @throws IllegalArgumentException if either dimension component is <= 0
      */
     init {
-        require(!(dimension == null || dimension.x < 1 || dimension.y < 1)) { "Specified dimension or one of its components was null." }
-        this.dimension = dimension
+        require(!(dimension.x < 1 || dimension.y < 1)) { "Specified dimension or one of its components was null." }
         values = Array(dimension.x) { arrayOfNulls<Any>(dimension.y) } as Array<Array<T?>>
     }
 }

@@ -30,11 +30,6 @@ public class PositionMapTests {
 
 	@Test
 	public void testIllegalArguments() {
-		try {
-			new PositionMap<BitSet>(null);
-			fail("No IllegalArgumentException was thrown, altough there was a null argument");
-		} catch (IllegalArgumentException e) {
-		}
 
 		try {
 			new PositionMap<BitSet>(Position.get(1, 0));
@@ -51,27 +46,9 @@ public class PositionMapTests {
 		PositionMap<BitSet> map = new PositionMap<>(Position.get(9, 9));
 
 		try {
-			map.put(null, new BitSet());
-			fail("No IllegalArgumentException was thrown, altough there was a null argument");
-		} catch (IllegalArgumentException e) {
-		}
-
-		try {
-			map.put(Position.get(1, 1), null);
-			fail("No IllegalArgumentException was thrown, altough there was a null argument");
-		} catch (IllegalArgumentException e) {
-		}
-
-		try {
 			map.put(Position.get(10, 9), new BitSet());
 			fail("No IllegalArgumentException was thrown, altough the Position was invalid");
 		} catch (IllegalArgumentException e) {
-		}
-
-		try {
-			map.get(null);
-			fail("No IllegalArgumentException was thrown, altough the Position was null");
-		} catch (IllegalArgumentException e) {// assertions need to be enabled
 		}
 
 		try {
