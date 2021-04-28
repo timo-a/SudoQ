@@ -379,9 +379,10 @@ class Game : Xmlable {
         }
         actionList.sort()
         for (ate in actionList) {
-            if (ate.toXml() != null)
-                representation.addChild(ate.toXml())
-            // TODO cant add child do for null just nothing?
+
+            //add if not null
+            ate.toXml()?.let { representation.addChild(it) }
+
         }
         return representation
     }
@@ -390,14 +391,14 @@ class Game : Xmlable {
      * {@inheritDoc}
      */
     override fun fillFromXml(xmlTreeRepresentation: XmlTree) {
-        id = xmlTreeRepresentation.getAttributeValue("id").toInt()
-        time = xmlTreeRepresentation.getAttributeValue("time").toInt()
-        val currentStateId = xmlTreeRepresentation.getAttributeValue("currentTurnId").toInt()
+        id = xmlTreeRepresentation.getAttributeValue("id")!!.toInt()
+        time = xmlTreeRepresentation.getAttributeValue("time")!!.toInt()
+        val currentStateId = xmlTreeRepresentation.getAttributeValue("currentTurnId")!!.toInt()
 
         // Problems:
         // - What about corrupt files? is the game validated after it has been
         // filled?
-        assistancesCost = xmlTreeRepresentation.getAttributeValue("assistancesCost").toInt()
+        assistancesCost = xmlTreeRepresentation.getAttributeValue("assistancesCost")!!.toInt()
         for (sub in xmlTreeRepresentation) {
             if (sub.name == "sudoku") {
                 sudoku = SudokuManager.emptySudokuToFillWithXml
@@ -410,11 +411,11 @@ class Game : Xmlable {
         stateHandler = GameStateHandler()
         for (sub in xmlTreeRepresentation) {
             if (sub.name == "action") {
-                val diff = sub.getAttributeValue(ActionTreeElement.DIFF).toInt()
+                val diff = sub.getAttributeValue(ActionTreeElement.DIFF)!!.toInt()
 
                 // put the action to the parent action
                 val attributeValue = sub.getAttributeValue(ActionTreeElement.PARENT)
-                val parentID = attributeValue.toInt()
+                val parentID = attributeValue!!.toInt()
                 val parent = stateHandler!!.actionTree.getElement(parentID)
                 goToState(parent!!)//since we don't serialize the root node there should always be a parent
 
@@ -422,7 +423,7 @@ class Game : Xmlable {
                 // is not necessary since the root action comes from the gsh so
 
                 // every element has e parent
-                val field_id = sub.getAttributeValue(ActionTreeElement.FIELD_ID).toInt()
+                val field_id = sub.getAttributeValue(ActionTreeElement.FIELD_ID)!!.toInt()
                 val f = sudoku!!.getCell(field_id)!!
                 if (sub.getAttributeValue(ActionTreeElement.ACTION_TYPE) == SolveAction::class.java.simpleName) {
                     stateHandler!!.addAndExecute(SolveActionFactory().createAction(f.currentValue + diff,

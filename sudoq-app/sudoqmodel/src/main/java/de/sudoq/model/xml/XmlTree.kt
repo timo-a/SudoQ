@@ -10,82 +10,48 @@ package de.sudoq.model.xml
 import java.util.*
 
 /**
- * Diese Klasse repräsentiert eine zu Xml kompatible Baumstruktur
+ * This class represents a tree that models an xml structure
  */
-class XmlTree(name: String?) : Iterable<XmlTree?> {
-    /* Attributes */
-    /**
-     * Diese Methode gibt des Namen der Wurzel des Baumes zurück.
-     *
-     * @return String Name der Wurzel
-     */
-    /**
-     * Name des Xml Objektes
-     */
+class XmlTree(name: String) : Iterable<XmlTree> {
+
+    /** Name of the Xml tree (root) */
     val name: String
-    /**
-     * Diese Methode gibt den Inhalt des Xml Objektes zurück.
-     *
-     * @return String Name der Wurzel
-     */
-    /**
-     * Inhalt des Xml Objektes
-     */
+
+    /** content of the Xml tree */
     var content: String
         private set
-    /**
-     * Gibt die Anzahl der Unterobjekte des Xml Objekts zurück.
-     *
-     * @return Anzahl der Sub-Objekte
-     */
-    /**
-     * Anzahl der Unterobjekte des Xml Objektes
-     */
-    var numberOfChildren: Int
+
+    /** Number of child nodes. */
+    var numberOfChildren: Int //todo redundant since we can just query the list object
         private set
 
-    /**
-     * Menge der Attribute dieses Xml Objekts
-     */
+    /** List of Attributes in this node */
     private val attributes: MutableList<XmlAttribute>
 
-    /**
-     * Menge der Unterobjekte dieses Xml Objekts
-     */
+    /** List of child nodes */
     private val children: MutableList<XmlTree>
 
-    /**@param name
-     * Name der Wurzel Xml Baumes
-     * @param content
-     * Inhalt des Xml Objektes
-     * @throws IllegalArgumentException
-     * Wird geworfen, falls einer der übergebenen Strings null oder
-     * der name leer ist
-     */
-    @Deprecated("""content can not be read apparently.
-	  Dieser Konstruktor initialisiert einen neuen Xml Baum Objekt mit
-	  gegebenem Namen und leerem Inhalt.
-	  
-	  """)
-    constructor(name: String?, content: String?) : this(name) {
-        requireNotNull(content)
+    init {
+        require(name != "")
+        this.name = name
+        content = ""
+        attributes = ArrayList()
+        children = ArrayList()
+        numberOfChildren = 0
+    }
+
+    @Deprecated("content can not be read apparently.")
+    constructor(name: String, content: String) : this(name) {
         this.content = content
     }
-    /* Methods */
+
     /**
-     * Diese Methode gibt den Wert des Attributes mit dem angegebenen Namen oder
-     * null, falls dieses nicht existiert, zurück.
+     * Retrieves an attribute value by name.
      *
-     * @param name
-     * Name des Attributes dessen Wert erfragt wird.
-     * @return Wert des Attributes oder null, falls das Attribut nicht
-     * existiert.
-     * @throws IllegalArgumentException
-     * Wird geworfen, falls der übergebene Name null ist
+     * @param name Name of the attribute.
+     * @return Value of the attribute or null if not found.
      */
-    @Throws(IllegalArgumentException::class)
-    fun getAttributeValue(name: String?): String? {
-        requireNotNull(name)
+    fun getAttributeValue(name: String): String? {
         for (attribute in attributes) {
             if (attribute.name == name) {
                 return attribute.value
@@ -95,55 +61,57 @@ class XmlTree(name: String?) : Iterable<XmlTree?> {
     }
 
     /**
-     * Diese Methode gibt eine Liste alle Unterobjekte des Xml Baumes zurück.
+     * Returns a list of all child nodes of this node.
      *
-     * @return Liste aller Unterobjekte oder null, falls keine Unterobjekte
-     * existieren
+     * @return a list of all child nodes.
      */
     fun getChildren(): MutableIterator<XmlTree> {
         return children.iterator()
     }
 
     /**
-     * Diese Methode gibt eine Liste aller Attribute des Xml Baumes zurück.
+     * Returns a list of all attributes of this node
      *
-     * @return Liste aller Attribute oder null, falls keine Attribute existieren
+     * @return a list of all attributes of this node
      */
     fun getAttributes(): Iterator<XmlAttribute> {
         return attributes.iterator()
     }
 
-    /* zum bequem drüberiterieren*/
+    /* for convenient iteration todo check if still needed */
     val attributes2: Iterable<XmlAttribute>
         get() = AttributesIterator()
 
     /**
-     * Diese Methode fügt ein Unterobjekt an diesen Xml Baum an.
-     *
-     * @param child
-     * Anzufügendes Unterobjekt
-     * @throws IllegalArgumentException
-     * Wird geworfen, falls der übergebene XmlTree null ist
+     * {@inheritDoc}
      */
-    @Throws(IllegalArgumentException::class)
-    fun addChild(child: XmlTree?) {
-        requireNotNull(child)
+    override fun iterator(): MutableIterator<XmlTree> {
+        return getChildren()
+    }
+
+    inner class AttributesIterator : Iterable<XmlAttribute> {
+        override fun iterator(): Iterator<XmlAttribute> {
+            return attributes.iterator()
+        }
+    }
+
+
+    /**
+     * Adds a child node to the tree
+     *
+     * @param child [XmlTree] to add
+     */
+    fun addChild(child: XmlTree) {
         children.add(child)
         numberOfChildren++
     }
 
     /**
-     * Diese Methode fügt dem Xml Objekt ein Attribut hinzu, falls kein Attribut
-     * dieses Namens existiert.
+     * Adds an attribute.
      *
-     * @param attribute
-     * Anzfügendes Attribut
-     * @throws IllegalArgumentException
-     * Wird geworfen, falls der übergebene XmlTree null ist
+     * @param attribute [XmlAttribute] to add
      */
-    @Throws(IllegalArgumentException::class)
-    fun addAttribute(attribute: XmlAttribute?) {
-        requireNotNull(attribute)
+    fun addAttribute(attribute: XmlAttribute) {
         for (attr in attributes) {
             if (attr.isSameAttribute(attribute)) {
                 return
@@ -153,12 +121,12 @@ class XmlTree(name: String?) : Iterable<XmlTree?> {
     }
 
     /**
-     * Setzt oder updatetet das gegebene Attribut. Ist es null passiert nichts
+     * Sets or updates a given attribute
+     * If it is null nothing happens.
      *
-     * @param attribute
-     * das zu setzende Attribut
+     * @param attribute [XmlAttribute] to update
      */
-    fun updateAttribute(attribute: XmlAttribute?) {
+    fun updateAttribute(attribute: XmlAttribute?) {//todo can we require nonnull?
         if (attribute != null) {
             for (attr in attributes) {
                 if (attr.isSameAttribute(attribute)) {
@@ -171,40 +139,11 @@ class XmlTree(name: String?) : Iterable<XmlTree?> {
     }
 
     /**
-     * Gibt die Anzahl der Attribute des Xml Objekts zurück.
+     * Returns the number of attributes of this node.
      *
-     * @return Anzahl der Attribute
+     * @return the number of attributes of this node.
      */
     val numberOfAttributes: Int
         get() = attributes.size
 
-    /**
-     * {@inheritDoc}
-     */
-    override fun iterator(): MutableIterator<XmlTree> {
-        return getChildren()
-    }
-
-    inner class AttributesIterator : Iterable<XmlAttribute?> {
-        override fun iterator(): MutableIterator<XmlAttribute> {
-            return attributes.iterator()
-        }
-    }
-    /* Constructors */ /**
-     * Dieser Konstruktor initialisiert einen neuen Xml Baum Objekt mit
-     * gegebenem Namen und leerem Inhalt.
-     *
-     * @param name
-     * Name der Wurzel Xml Baumes
-     * @throws IllegalArgumentException
-     * Wird geworfen, falls der übergebene String null oder leer ist
-     */
-    init {
-        require(!(name == null || name == ""))
-        this.name = name
-        content = ""
-        attributes = ArrayList()
-        children = ArrayList()
-        numberOfChildren = 0
-    }
 }

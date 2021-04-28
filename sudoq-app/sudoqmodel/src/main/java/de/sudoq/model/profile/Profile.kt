@@ -66,7 +66,7 @@ class Profile private constructor() : ObservableModelImpl<Profile>(), Xmlable {
             return
         }
         val profiles = profilesXml
-        currentProfileID = profiles.getAttributeValue(CURRENT).toInt()
+        currentProfileID = profiles.getAttributeValue(CURRENT)!!.toInt()
         xmlHandler.createObjectFromXml(this)
         FileManager.setCurrentProfile(currentProfileID)
         notifyListeners(this)
@@ -81,13 +81,13 @@ class Profile private constructor() : ObservableModelImpl<Profile>(), Xmlable {
             val oldProfiles = profilesXml
             val profiles = XmlTree(oldProfiles.name)
             for (profile in oldProfiles) {
-                if (profile.getAttributeValue(ID).toInt() != currentProfileID) {
+                if (profile.getAttributeValue(ID)!!.toInt() != currentProfileID) {
                     profiles.addChild(profile)
                 }
             }
             saveProfilesFile(profiles)
             FileManager.deleteProfile(currentProfileID)
-            setProfile(profiles.children.next().getAttributeValue(ID).toInt())
+            setProfile(profiles.getChildren().next().getAttributeValue(ID)!!.toInt())
         }
     }
 
@@ -143,7 +143,7 @@ class Profile private constructor() : ObservableModelImpl<Profile>(), Xmlable {
         xmlHandler.saveAsXml(this)
         val profiles = profilesXml
         for (profile in profiles) {
-            if (profile.getAttributeValue(ID).toInt() == currentProfileID) {
+            if (profile.getAttributeValue(ID)!!.toInt() == currentProfileID) {
                 profile.updateAttribute(XmlAttribute(NAME, name))
             }
         }
@@ -199,7 +199,7 @@ class Profile private constructor() : ObservableModelImpl<Profile>(), Xmlable {
         get() {
             val used = ArrayList<Int>()
             for (profile in profilesXml) {
-                used.add(profile.getAttributeValue(ID).toInt())
+                used.add(profile.getAttributeValue(ID)!!.toInt())
             }
             var i = 1
             while (used.contains(i)) {
@@ -250,7 +250,7 @@ class Profile private constructor() : ObservableModelImpl<Profile>(), Xmlable {
             val profilesList = ArrayList<String>()
             val profiles = profilesXml
             for (profile in profiles) {
-                profilesList.add(profile.getAttributeValue(NAME))
+                profile.getAttributeValue(NAME)?.let { profilesList.add(it) }
             }
             return profilesList
         }
@@ -319,7 +319,7 @@ class Profile private constructor() : ObservableModelImpl<Profile>(), Xmlable {
      * {@inheritDoc}
      */
     override fun fillFromXml(xmlTreeRepresentation: XmlTree) {
-        currentGame = xmlTreeRepresentation.getAttributeValue("currentGame").toInt()
+        currentGame = xmlTreeRepresentation.getAttributeValue("currentGame")!!.toInt()
         name = xmlTreeRepresentation.getAttributeValue("name")
         for (sub in xmlTreeRepresentation) {
             if (sub.name == "gameSettings") {
@@ -333,7 +333,7 @@ class Profile private constructor() : ObservableModelImpl<Profile>(), Xmlable {
         }
         statistics = IntArray(Statistics.values().size)
         for (stat in Statistics.values()) {
-            statistics!![stat.ordinal] = xmlTreeRepresentation.getAttributeValue(stat.name).toInt()
+            statistics!![stat.ordinal] = xmlTreeRepresentation.getAttributeValue(stat.name)!!.toInt()
         }
     }
 

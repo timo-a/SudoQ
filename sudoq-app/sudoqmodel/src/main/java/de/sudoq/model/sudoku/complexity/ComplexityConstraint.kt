@@ -93,11 +93,11 @@ class ComplexityConstraint : Cloneable, Xmlable {
 
     @Throws(IllegalArgumentException::class)
     override fun fillFromXml(xmlTreeRepresentation: XmlTree) {
-        complexity = Complexity.values()[xmlTreeRepresentation.getAttributeValue(COMPLEXITY).toInt()]
-        averageCells = xmlTreeRepresentation.getAttributeValue(AVERAGE_FIELDS).toInt()
-        minComplexityIdentifier = xmlTreeRepresentation.getAttributeValue(MIN_COMPLEXITY_IDENTIFIER).toInt()
-        maxComplexityIdentifier = xmlTreeRepresentation.getAttributeValue(MAX_COMPLEXITY_IDENTIFIER).toInt()
-        numberOfAllowedHelpers = xmlTreeRepresentation.getAttributeValue(NUMBER_OF_ALLOWED_HELPERS).toInt()
+        complexity = Complexity.values()[xmlTreeRepresentation.getAttributeValue(COMPLEXITY)!!.toInt()]
+        averageCells = xmlTreeRepresentation.getAttributeValue(AVERAGE_FIELDS)!!.toInt()
+        minComplexityIdentifier = xmlTreeRepresentation.getAttributeValue(MIN_COMPLEXITY_IDENTIFIER)!!.toInt()
+        maxComplexityIdentifier = xmlTreeRepresentation.getAttributeValue(MAX_COMPLEXITY_IDENTIFIER)!!.toInt()
+        numberOfAllowedHelpers = xmlTreeRepresentation.getAttributeValue(NUMBER_OF_ALLOWED_HELPERS)!!.toInt()
     }
 
     companion object {
