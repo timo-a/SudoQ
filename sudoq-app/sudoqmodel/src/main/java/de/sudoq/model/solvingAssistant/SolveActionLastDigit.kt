@@ -4,12 +4,9 @@ import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.Utils.positionToRealWorld
 import de.sudoq.model.sudoku.Utils.symbolToRealWorld
 
-/**
- * Created by timo on 28.04.16.
- */
-class SolveActionLastDigit(target: Position?, solution: Int, list: List<Position>) : SolveAction() {
+class SolveActionLastDigit(target: Position, solution: Int, list: List<Position>) : SolveAction() {
     init {
-        val rwPosition = positionToRealWorld(target!!)
+        val rwPosition = positionToRealWorld(target)
         val rwSolution = symbolToRealWorld(solution)
         /* are all x values the same? */
         val xPo = list[0].x

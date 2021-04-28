@@ -8,7 +8,8 @@ import de.sudoq.model.sudoku.Sudoku
 import java.util.*
 
 object SolvingAssistant {
-    fun giveAHint(sudoku: Sudoku?): SolveDerivation {
+    @JvmStatic
+    fun giveAHint(sudoku: Sudoku): SolveDerivation {
         val s = SolverSudoku(sudoku, SolverSudoku.Initialization.USE_EXISTING)
         val helpers: Queue<SolveHelper> = LinkedList()
         helpers.add(LastDigitHelper(s, 0))
