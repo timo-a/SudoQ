@@ -5,24 +5,20 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
  * You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.sudoq.model.xml;
+package de.sudoq.model.xml
 
-import java.io.File;
-
-import de.sudoq.model.files.FileManager;
-import de.sudoq.model.profile.Profile;
+import de.sudoq.model.files.FileManager
+import de.sudoq.model.profile.Profile
+import java.io.File
 
 /**
  * Der konkrete XmlHandler für Profile
  */
-public class ProfileXmlHandler extends XmlHandler<Profile> {
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected File getFileFor(Profile obj) {
-		return FileManager.getProfileXmlFor(obj.getCurrentProfileID());
-	}
-
+class ProfileXmlHandler : XmlHandler<Profile?>() {
+    /**
+     * {@inheritDoc}
+     */
+    protected override fun getFileFor(obj: Profile): File {
+        return FileManager.getProfileXmlFor(obj.currentProfileID)
+    }
 }
