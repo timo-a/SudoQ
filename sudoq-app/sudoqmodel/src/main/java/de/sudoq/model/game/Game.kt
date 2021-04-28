@@ -102,11 +102,12 @@ class Game : Xmlable {
     val score: Int
         get() {
             var scoreFactor = 0
+            fun power(expo : Double) : Int = sudoku!!.sudokuType?.numberOfSymbols?.let { Math.pow(it.toDouble(), expo).toInt()}!!
             when (sudoku!!.complexity) {
-                Complexity.infernal -> scoreFactor = Math.pow(sudoku!!.sudokuType.numberOfSymbols.toDouble(), 4.0).toInt()
-                Complexity.difficult -> scoreFactor = Math.pow(sudoku!!.sudokuType.numberOfSymbols.toDouble(), 3.5).toInt()
-                Complexity.medium -> scoreFactor = Math.pow(sudoku!!.sudokuType.numberOfSymbols.toDouble(), 3.0).toInt()
-                Complexity.easy -> scoreFactor = Math.pow(sudoku!!.sudokuType.numberOfSymbols.toDouble(), 2.5).toInt()
+                Complexity.infernal ->  scoreFactor = power(4.0)
+                Complexity.difficult -> scoreFactor = power(3.5)
+                Complexity.medium ->    scoreFactor = power(3.0)
+                Complexity.easy ->      scoreFactor = power(2.5)
             }
             return (scoreFactor * 10 / ((time + assistancesTimeCost) / 60.0f)).toInt()
         }
@@ -148,7 +149,7 @@ class Game : Xmlable {
     fun addAndExecute(action: Action) {
         if (finished) return
         stateHandler!!.addAndExecute(action)
-        updateNotes(sudoku!!.getCell(action.cellId))
+        sudoku!!.getCell(action.cellId)?.let { updateNotes(it) }
         if (isFinished()) finished = true
     }
 
@@ -169,11 +170,11 @@ class Game : Xmlable {
                                                              .forEachOrdered(changePos -> this.addAndExecute(new NoteActionFactory().createAction(value, this.sudoku.getField(changePos))));
         should work, but to tired to try*/
 
-        for (c in sudoku!!.sudokuType) {
-            if (c.includes(editedPos)) {
+        for (c in sudoku!!.sudokuType!!) {
+            if (c.includes(editedPos!!)) {
                 for (changePos in c) {
-                    if (sudoku!!.getCell(changePos).isNoteSet(value)) {
-                        addAndExecute(NoteActionFactory().createAction(value, sudoku!!.getCell(changePos)))
+                    if (sudoku!!.getCell(changePos)?.isNoteSet(value)!!) {
+                        addAndExecute(NoteActionFactory().createAction(value, sudoku!!.getCell(changePos)!!))
                     }
                 }
             }
@@ -422,7 +423,7 @@ class Game : Xmlable {
 
                 // every element has e parent
                 val field_id = sub.getAttributeValue(ActionTreeElement.FIELD_ID).toInt()
-                val f = sudoku!!.getCell(field_id)
+                val f = sudoku!!.getCell(field_id)!!
                 if (sub.getAttributeValue(ActionTreeElement.ACTION_TYPE) == SolveAction::class.java.simpleName) {
                     stateHandler!!.addAndExecute(SolveActionFactory().createAction(f.currentValue + diff,
                             f))

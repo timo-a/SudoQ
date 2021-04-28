@@ -15,7 +15,7 @@ import java.util.*
  * editierbility, notes and the correct solution. It extends OberservableModel so changes in value
  * und notes can be observed.
  */
-class Cell(editable: Boolean, solution: Int, id: Int, numberOfValues: Int) : ObservableModelImpl<Cell?>(), Cloneable {
+class Cell(editable: Boolean, solution: Int, id: Int, numberOfValues: Int) : ObservableModelImpl<Cell>(), Cloneable {
 
     /** A unique number identifying the cell in the scope of the sudoku */
     val id: Int

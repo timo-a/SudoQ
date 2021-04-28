@@ -55,15 +55,6 @@ public class SudokuTests {
 		});
 	}
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testNull_0() {
-        sudoku = new Sudoku(null);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testNull_1() {
-        sudoku = new Sudoku(null, null, null);
-    }
 
 	@Test
 	public void testInitializeStandardSudoku() {
@@ -138,8 +129,6 @@ public class SudokuTests {
 		Sudoku sudoku = new Sudoku(TypeBuilder.getType(SudokuTypes.standard9x9));
 
 		assertNotNull(sudoku);
-
-		assertNull(sudoku.getCell(null));
 
 		assertNull(sudoku.getCell(Position.get(9, 10)));
 		Cell f = sudoku.getCell(Position.get(1, 2));
@@ -296,7 +285,7 @@ public class SudokuTests {
 		assertTrue(sudoku.hasErrors());
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void testFromXmlError() {
 		Sudoku sudoku = new Sudoku(TypeBuilder.get99());
 		XmlTree tree = sudoku.toXmlTree();
@@ -310,7 +299,7 @@ public class SudokuTests {
 		sudoku.fillFromXml(tree);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void testFromXmlError2() {
 		Sudoku sudoku = new Sudoku(TypeBuilder.get99());
 		XmlTree tree = sudoku.toXmlTree();

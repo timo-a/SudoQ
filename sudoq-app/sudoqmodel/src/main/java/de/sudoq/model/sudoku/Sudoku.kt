@@ -25,77 +25,47 @@ import kotlin.collections.iterator
 import kotlin.collections.set
 
 /**
- * Diese Klasse repräsentiert ein Sudoku mit seinem Typ, seinen Feldern und seinem Schwierigkeitsgrad.
+ * This class represents a Sudoku with mit seinem Typ, seinen Feldern und seinem Schwierigkeitsgrad.
  */
-open class Sudoku : ObservableModelImpl<Cell?>, Iterable<Cell?>, Xmlable, ModelChangeListener<Cell?>, Cloneable {
-    /* Attributes */
-    /**
-     * Eine Identifikationsnummer, die ein Sudoku eindeutig identifiziert
-     */
-    private var id = 0
+open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, Xmlable, ModelChangeListener<Cell> {
 
-    /**
-     * Gibt an wie oft dieses Sudoku bereits transformiert wurde
-     *
-     * @return die anzahl der Transformationen
-     */
+    /** An ID uniquely identifying the Sudoku */
+    var id : Int = 0
+
+    /** Counts how often the Sudokuw was already transformed */
     var transformCount = 0
         private set
 
-    /**
-     * Eine Map, welche jeder Position des Sudokus ein Feld zuweist
-     */
-    var cells: HashMap<Position, Cell>? = null
+    /** Eine Map, welche jeder Position des Sudokus ein Feld zuweist */
+	@JvmField
+	var cells: HashMap<Position, Cell>? = null
+
     private var cellIdCounter = 0
     private var cellPositions: MutableMap<Int, Position>? = null
-    /**
-     * Gibt den Typ dieses Sudokus zurück.
-     *
-     * @return Der Typ dieses Sudokus
-     */
-    /**
-     * Der Typ dieses Sudokus
-     */
+
+    /** The Type of the Sudoku */
     var sudokuType: SudokuType? = null
         private set
 
+    /** The Complexity of this Sudoku */
+    var complexity: Complexity? = null
+
+
     /**
-     * Der Schwierigkeitsgrad dieses Sudokus
-     */
-    private var complexity: Complexity? = null
-    /**
-     * Instanziiert ein Sudoku-Objekt mit dem spezifizierten SudokuType. Ist dieser null, so wird eine
-     * IllegalArgumentException geworfen.
+     * All Cells are set as editable.
      *
-     * @param type
-     * Der Typ des zu erstellenden Sudokus
-     * @param map
-     * Eine Map von Positions auf Lösungswerte. Werte in vorgegebenen Feldern sind verneint. (nicht negiert,
-     * sondern bitweise verneint)
-     * @param setValues
-     * Eine Map wo jede Position mit dem Wert true einen vorgegebenen Wert markiert
-     * @throws IllegalArgumentException
-     * Wird geworfen, falls der übergebene Typ null ist
-     */
-    /* Constructors */
-    /**
-     * Instanziiert ein Sudoku-Objekt mit dem spezifizierten SudokuType. Ist dieser null, so wird eine
-     * IllegalArgumentException geworfen. Alle Felder werden als editierbar ohne vorgegebene Lösung gesetzt.
-     *
-     * @param type
-     * Der Typ des zu erstellenden Sudokus
-     * @throws IllegalArgumentException
-     * Wird geworfen, falls der übergebene Typ null ist
+     * @param type Type of the Sudoku
+     * @param map A Map from Positions to solution values. Values in pre-filled Cells are negated. (actually bitwise negated)
+     * @param setValues A Map from Position to whether the value is pre-filled.
      */
     @JvmOverloads
-    constructor(type: SudokuType?, map: PositionMap<Int?>? = PositionMap((if (type == null) Position[1, 1] else type.size)!!), setValues: PositionMap<Boolean?>? =  //TODO warum so kompliziert? wenn type == null fliegt eh eine exception
-            PositionMap((if (type == null) Position[1, 1] else type.size)!!)) {
-        requireNotNull(type)
+    constructor(type: SudokuType,
+                map: PositionMap<Int>? = PositionMap((type.size)!!),
+                setValues: PositionMap<Boolean>? = PositionMap((type.size)!!)) {
         cellIdCounter = 1
         cellPositions = HashMap()
         sudokuType = type
         cells = HashMap()
-        complexity = null
 
         // iterate over the constraints of the type and create the fields
         for (constraint in type) {
@@ -104,129 +74,101 @@ open class Sudoku : ObservableModelImpl<Cell?>, Iterable<Cell?>, Xmlable, ModelC
                     var f: Cell
                     val solution = map?.get(position)
                     f = if (solution != null) {
-                        val editable = setValues == null || setValues[position] == null || setValues[position] == false
+                        val editable = setValues == null
+                                || setValues[position] == null
+                                || setValues[position] == false
                         Cell(editable, solution, cellIdCounter, type.numberOfSymbols)
                     } else {
                         Cell(cellIdCounter, type.numberOfSymbols)
                     }
                     cells!![position] = f
-                    cellPositions[cellIdCounter++] = position
+                    cellPositions!![cellIdCounter++] = position
                     f.registerListener(this)
                 }
             }
         }
     }
 
-    /**
-     * Erzeugt ein vollständig leeres Sudoku, welches noch gefüllt werden muss. DO NOT USE THIS METHOD (if you are not
-     * from us)
-     */
+    /** Creates a completely empty sudoku that has to be filled */
+    @Deprecated("DO NOT USE THIS METHOD (if you are not from us)")
     internal constructor() {
         id = -1
     }
-    /* Methods */
-    /**
-     * Gibt die id dieses Sudokus zurueck
-     *
-     * @return die id
-     */
-    fun getId(): Int {
-        return id
-    }
 
-    /**
-     * Zaehlt den transform Counter um 1 hoch
-     */
+    /** increases transform count by one */
     fun increaseTransformCount() {
         transformCount++
     }
 
     /**
-     * Gibt das Feld, welches sich an der spezifizierten Position befindet zurück. Ist position null oder in diesem
-     * Sudoku unbelegt, so wird null zurückgegeben.
+     * Returns the [Cell] at the specified [Position].
+     * If the position is not mapped to a cell, null is returned
      *
-     * @param position
-     * Die Position, dessen Feld abgefragt werden soll
-     * @return Das Feld an der spezifizierten Position oder null, falls dies nicht existiert oder null übergeben wurde
+     * @param position Position of the cell
+     * @return Cell at the [Position] or null if it is not mapped to a [Cell].
      */
-    fun getCell(position: Position?): Cell? {
-        return if (position == null) null else cells!![position]
+    fun getCell(position: Position): Cell? {
+        //todo refactor so that a miss leads to illegal args exception
+        return cells!![position]
     }
 
     /**
-     * Belegt die spezifizierte Position mit einem neuen Field.
-     * Falls field oder position null sind, bricht die Methode ab
+     * Returns the [Cell] at the id.
      *
-     * @param cell
-     * das neue Field
-     * @param position
-     * die Position des neuen Fields
+     * @param id ID of the [Cell] to return
+     * @return the [Cell] at the specified id or null of id not found
      */
-    fun setCell(cell: Cell?, position: Position?) {
-        if (cell == null || position == null) return
+    fun getCell(id: Int): Cell? {
+        return getCell(cellPositions!![id]!!)
+    }
+
+    /**
+     * Maps the [Position] to the [Cell]
+     *
+     * @param cell the new [Cell]
+     * @param position the [Position] for the new Cell
+     */
+    fun setCell(cell: Cell, position: Position) {
         cells!![position] = cell
         cellPositions!![cell.id] = position
     }
 
-    /**
-     * Gibt das Feld, das die gegebene id hat zurück. Ist id noch nicht vergeben wird null zurückgegeben
-     *
-     * @param id
-     * Die id des Feldes das ausgegeben werden soll
-     * @return Das Feld an der spezifizierten Position oder null, falls dies nicht existiert oder die id ungültig war
-     */
-    fun getCell(id: Int): Cell? {
-        return getCell(cellPositions!![id])
-    }
 
     /**
-     * Gibt die Position des Feldes, das die gegebene id hat zurück. Ist id noch nicht vergeben wird null zurückgegeben
+     * Returns the [Position] of the [Cell] if the given id.
+     * Ist id noch nicht vergeben wird null zurückgegeben
      *
-     * @param id
-     * Die id des Feldes der Position die ausgegeben werden soll
-     * @return Die spezifizierte Position oder null, falls diese nicht existiert oder die id ungültig war
+     * @param id ID of the Cell of the Position to return
+     * @return the [Position] of the id or null if id not found
      */
     fun getPosition(id: Int): Position? {
         return cellPositions!![id]
     }
 
     /**
-     * Gibt einen Iterator zurück, mithilfe dessen über alle Felder dieses Sudokus iteriert werden kann.
+     * Returns an [Iterator] over the [Cell]s.
      *
-     * @return Ein Iterator mit dem über alle Felder dieses Sudokus iteriert werden kann
+     * @return An [Iterator] over the [Cell]s
      */
-    override fun iterator(): MutableIterator<Cell> {
+    override fun iterator(): Iterator<Cell> {
         return cells!!.values.iterator()
     }
 
-    /**
-     * Gibt den Schwierigkeitsgrad dieses Sudokus zurück.
-     *
-     * @return Der Schwierigkeitsgrad dieses Sudokus
-     */
-    fun getComplexity(): Complexity? {
-        return complexity
-    }
 
     /**
-     * Setzt den Schwierigkeitsgrad dieses Sudokus auf den Spezifizierten. Ist dieser ungültig so wird nichts getan.
+     * Checks if the Sudoku is completely filled and solved correctly.
      *
-     * @param complexity
-     * Der Schwierigkeitsgrad auf den dieses Sudoku gesetzt werden soll
-     */
-    fun setComplexity(complexity: Complexity?) {
-        this.complexity = complexity
-    }
-
-    /**
-     * Gibt an, ob das Sudoku vollstaendig ausgefuellt und korrekt geloest ist.
-     *
-     * @return true, falls das Sudoku ausgefüllt und gelöst ist, sonst false
+     * @return true, iff Sudoku is fully filled and solved correctly
      */
     open val isFinished: Boolean
         get() {
+            //todo doesn't check for completeness
             var allCorrect = true
-            for (cell in cells!!.values) allCorrect = allCorrect and cell.isSolvedCorrect
+            for (cell in cells!!.values)
+                if (!cell.isSolvedCorrect) {
+                    allCorrect = false
+                    break
+                }
             return allCorrect
         }
 
@@ -241,20 +183,18 @@ open class Sudoku : ObservableModelImpl<Cell?>, Iterable<Cell?>, Xmlable, ModelC
         representation.addAttribute(XmlAttribute("transformCount", "" + transformCount))
         representation.addAttribute(XmlAttribute("type", "" + sudokuType!!.enumType!!.ordinal))
         if (complexity != null) {
-            representation.addAttribute(XmlAttribute("complexity", "" + getComplexity()!!.ordinal))
+            representation.addAttribute(XmlAttribute("complexity", "" + complexity!!.ordinal))
         }
         for ((key, value) in cells!!) {
-            if (value != null) {
-                val fieldmap = XmlTree("fieldmap")
-                fieldmap.addAttribute(XmlAttribute("id", "" + value.id))
-                fieldmap.addAttribute(XmlAttribute("editable", "" + value.isEditable))
-                fieldmap.addAttribute(XmlAttribute("solution", "" + value.solution))
-                val position = XmlTree("position")
-                position.addAttribute(XmlAttribute("x", "" + key.x))
-                position.addAttribute(XmlAttribute("y", "" + key.y))
-                fieldmap.addChild(position)
-                representation.addChild(fieldmap)
-            }
+            val fieldmap = XmlTree("fieldmap")
+            fieldmap.addAttribute(XmlAttribute("id", "" + value.id))
+            fieldmap.addAttribute(XmlAttribute("editable", "" + value.isEditable))
+            fieldmap.addAttribute(XmlAttribute("solution", "" + value.solution))
+            val position = XmlTree("position")
+            position.addAttribute(XmlAttribute("x", "" + key.x))
+            position.addAttribute(XmlAttribute("y", "" + key.y))
+            fieldmap.addChild(position)
+            representation.addChild(fieldmap)
         }
         return representation
     }
@@ -294,10 +234,10 @@ open class Sudoku : ObservableModelImpl<Cell?>, Iterable<Cell?>, Xmlable, ModelC
                     y = position.getAttributeValue("y").toInt()
                 }
                 val pos = Position[x, y]
-                val cell = Cell(editable, solution, fieldId, sudokuType.numberOfSymbols)
+                val cell = Cell(editable, solution, fieldId, sudokuType!!.numberOfSymbols)
                 cell.registerListener(this)
                 cells!![pos] = cell
-                cellPositions[fieldId] = pos
+                cellPositions!![fieldId] = pos
                 cellIdCounter++
             }
         }
@@ -310,39 +250,33 @@ open class Sudoku : ObservableModelImpl<Cell?>, Iterable<Cell?>, Xmlable, ModelC
         notifyListeners(changedCell)
     }
 
-    /**
-     * Setzt die Identifikationsnummer des Sudokus.
-     *
-     * @param id
-     * Die eindeutige Identifikationsnummer
-     */
-    fun setId(id: Int) {
-        this.id = id
-    }
+
 
     /**
      * {@inheritDoc}
      */
     override fun equals(obj: Any?): Boolean {
         if (obj != null && obj is Sudoku) {
-            val other = obj
-            val complexityMatch = complexity === other.getComplexity()
-            val typeMatch = sudokuType!!.enumType === other.sudokuType!!.enumType
+            val complexityMatch = complexity === obj.complexity
+            val typeMatch = sudokuType!!.enumType === obj.sudokuType!!.enumType
             var fieldsMatch = true
-            for (f in cells!!.values) fieldsMatch = fieldsMatch and f.equals(other.getCell(f.id))
+            for (f in cells!!.values)
+                fieldsMatch = fieldsMatch and f.equals(obj.getCell(f.id))
             return complexityMatch && typeMatch && fieldsMatch
         }
         return false
     }
 
     /**
-     * Gibt zurück, ob dieses Sudoku in den aktuell gesetzten Werten Fehler enthält, d.h. ob es ein Feld gibt, dessen
-     * aktueller Wert nicht der korrekten Lösung entspricht.
+     * Checks if this [Sudoku] has errors, i.e. if there is a [Cell] where the value is not the
+     * correct solution.
      *
-     * @return true, falls es in dem Sudoku falsch gelöste Felder gibt, false andernfalls
+     * @return true, if there are incorrectly solved cells, false otherwise
      */
     open fun hasErrors(): Boolean {
-        for (f in cells!!.values) if (!f.isNotWrong) return true
+        for (f in cells!!.values)
+            if (!f.isNotWrong)
+                return true
         return false
 
         //return this.fields.values().stream().anyMatch(f -> !f.isNotWrong()); //looks weird but be very careful with simplifications!
@@ -373,18 +307,5 @@ open class Sudoku : ObservableModelImpl<Cell?>, Iterable<Cell?>, Xmlable, ModelC
         return sb.toString()
     }
 
-    /**
-     * creates a perfect clone,
-     */
-    public override fun clone(): Any {
-        val clone = Sudoku(sudokuType)
-        clone.id = id
-        clone.transformCount = transformCount
-        clone.cells = HashMap()
-        for ((key, value) in cells!!) clone.cells!![key] = value.clone() as Cell
-        clone.cellIdCounter = cellIdCounter
-        clone.cellPositions = HashMap(cellPositions)
-        clone.complexity = complexity
-        return clone
-    }
+
 }
