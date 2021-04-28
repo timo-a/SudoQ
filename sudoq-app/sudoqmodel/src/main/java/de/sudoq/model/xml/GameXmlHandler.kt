@@ -12,23 +12,14 @@ import de.sudoq.model.game.Game
 import java.io.File
 
 /**
- * Eine Klasse um konkret Games aus Xml zu bekommen bzw in Xml umzuwandeln
+ * This class aids in converting concrete games into and from XML
  */
-class GameXmlHandler
-/**
- * Erzeugt einen GameXmlHandler um ein Game zu speichern
- */ @JvmOverloads constructor(private val id: Int = -1) : XmlHandler<Game?>() {
+class GameXmlHandler @JvmOverloads constructor(private val id: Int = -1) : XmlHandler<Game>() {
+
     /**
      * {@inheritDoc}
      */
     protected override fun getFileFor(g: Game): File {
         return FileManager.getGameFile(if (id > 0) id else g.id)
     }
-    /**
-     * Erzeugt einen GameXmlHandler, der auf das Game mit der gegebenen ID
-     * schreibt und liest.
-     *
-     * @param id
-     * die id des zu aendernden/erstellenden games
-     */
 }

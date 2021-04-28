@@ -12,9 +12,10 @@ import de.sudoq.model.profile.Profile
 import java.io.File
 
 /**
- * Der konkrete XmlHandler für Profile
+ * This class aids in converting profiles into and from XML
  */
-class ProfileXmlHandler : XmlHandler<Profile?>() {
+class ProfileXmlHandler : XmlHandler<Profile>() {
+
     /**
      * {@inheritDoc}
      */
