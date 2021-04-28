@@ -8,7 +8,7 @@
 package de.sudoq.model
 
 /**
- * Interface for all classes that want to be informed about chanes in a model class.
+ * Interface for all classes that want to be informed about changes in a model class.
  *
  * @param T type of the object that is observed
  */

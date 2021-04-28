@@ -27,8 +27,8 @@ class SumConstraintBehavior(private val sum: Int) : ConstraintBehavior {
         var fieldSum = 0
         var fullySolved = true
         for (pos in constraint) {
-            fieldSum += sudoku.getCell(pos).currentValue
-            if (sudoku.getCell(pos).isNotSolved) fullySolved = false
+            fieldSum += sudoku.getCell(pos)!!.currentValue
+            if (sudoku.getCell(pos)!!.isNotSolved) fullySolved = false
         }
         return fieldSum == sum || !fullySolved && fieldSum <= sum
     }
