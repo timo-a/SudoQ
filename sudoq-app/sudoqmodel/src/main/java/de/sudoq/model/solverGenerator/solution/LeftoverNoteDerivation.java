@@ -11,12 +11,15 @@ import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.Utils;
+import de.sudoq.model.sudoku.UtilsKt;
+import de.sudoq.model.sudoku.Utils.*;
 import de.sudoq.model.sudoku.Utils.ConstraintShape;
 
 /**
  * Created by timo on 04.10.16.
  */
 public class LeftoverNoteDerivation extends SolveDerivation {
+
 
 
     private Constraint constraint;
@@ -37,7 +40,7 @@ public class LeftoverNoteDerivation extends SolveDerivation {
     public int getNote(){ return note; }
 
     public ConstraintShape getConstraintShape(){
-        return Utils.getGroupShape(constraint);
+        return UtilsKt.getGroupShape(constraint);
     }
 
 
