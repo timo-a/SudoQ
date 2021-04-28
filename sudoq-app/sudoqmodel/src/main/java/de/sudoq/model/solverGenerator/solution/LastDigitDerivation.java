@@ -11,6 +11,7 @@ import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.Utils;
 import de.sudoq.model.sudoku.Utils.ConstraintShape;
+import de.sudoq.model.sudoku.UtilsKt;
 
 /**
  * Created by timo on 04.10.16.
@@ -34,7 +35,7 @@ public class LastDigitDerivation extends SolveDerivation {
     }
 
     public ConstraintShape getConstraintShape(){
-        return Utils.getGroupShape(constraint);
+        return UtilsKt.getGroupShape(constraint);
     }
 
     @Override

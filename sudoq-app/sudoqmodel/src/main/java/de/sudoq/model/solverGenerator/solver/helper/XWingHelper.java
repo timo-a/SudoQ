@@ -14,6 +14,7 @@ import de.sudoq.model.sudoku.CandidateSet;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Utils;
+import de.sudoq.model.sudoku.UtilsKt;
 
 /**Idea:
  *
@@ -44,7 +45,7 @@ public class XWingHelper extends SolveHelper {
 
     private void separateIntoRowColumn(Iterable<Constraint> pool, List<Constraint> rows, List<Constraint> cols){
         for(Constraint c: pool) {
-            switch (Utils.getGroupShape(c.getPositions())) {
+            switch (UtilsKt.getGroupShape(c.getPositions())) {
                 case Row:
                     rows.add(c);
                     break;
