@@ -14,12 +14,15 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import java.io.File
 
 /**
- * Der XmlHandler zum Laden und Speichern von Sudokus
+ * This class aids in converting sudokus into and from XML
+ *
+ * @property type [Type][SudokuTypes] of the Sudoku
+ * @property complexity [Complexity] of the Sudoku
  */
-open class SudokuXmlHandler
-/**
- * Erzeugt einen SudokuXmlHandler, der ein neues sudoku file anlegt
- */ @JvmOverloads constructor(private val type: SudokuTypes? = null, private val complexity: Complexity? = null) : XmlHandler<Sudoku?>() {
+open class SudokuXmlHandler @JvmOverloads constructor(
+        private val type: SudokuTypes? = null,
+        private val complexity: Complexity? = null) : XmlHandler<Sudoku>() {
+
     /**
      * {@inheritDoc}
      */
@@ -34,15 +37,10 @@ open class SudokuXmlHandler
     }
 
     override fun modifySaveTree(tree: XmlTree) {
-        tree.addAttribute(XmlAttribute("id", file!!.name.substring(7, file!!.name.length - 4)))
+        //  7] cuts sudoku_
+        // [-4 cuts the .xml todo use regex instead
+        val idFromFileName : String = file!!.name.substring(7, file!!.name.length - 4)
+        tree.addAttribute(XmlAttribute("id", idFromFileName))
     }
-    /**
-     * Erzeugt einen SudokuXmlHandler zum Laden eines zufälligen Sudokus mit den
-     * gegebenen Parametern
-     *
-     * @param type
-     * der Typ des zu ladenden Sudokus
-     * @param complexity
-     * die Schwierigkeit des zu ladenden Sudokus
-     */
+
 }
