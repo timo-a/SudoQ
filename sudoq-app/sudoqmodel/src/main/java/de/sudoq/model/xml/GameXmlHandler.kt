@@ -5,44 +5,30 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
  * You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.sudoq.model.xml;
+package de.sudoq.model.xml
 
-import java.io.File;
-
-import de.sudoq.model.files.FileManager;
-import de.sudoq.model.game.Game;
+import de.sudoq.model.files.FileManager
+import de.sudoq.model.game.Game
+import java.io.File
 
 /**
  * Eine Klasse um konkret Games aus Xml zu bekommen bzw in Xml umzuwandeln
  */
-public class GameXmlHandler extends XmlHandler<Game> {
-
-	private final int id;
-
-	/**
-	 * Erzeugt einen GameXmlHandler um ein Game zu speichern
-	 */
-	public GameXmlHandler() {
-		this(-1);
-	}
-
-	/**
-	 * Erzeugt einen GameXmlHandler, der auf das Game mit der gegebenen ID
-	 * schreibt und liest.
-	 * 
-	 * @param loadingId
-	 *            die id des zu aendernden/erstellenden games
-	 */
-	public GameXmlHandler(int loadingId) {
-		this.id = loadingId;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected File getFileFor(Game g) {
-		return FileManager.getGameFile(id > 0 ? id : g.getId());
-	}
-
+class GameXmlHandler
+/**
+ * Erzeugt einen GameXmlHandler um ein Game zu speichern
+ */ @JvmOverloads constructor(private val id: Int = -1) : XmlHandler<Game?>() {
+    /**
+     * {@inheritDoc}
+     */
+    protected override fun getFileFor(g: Game): File {
+        return FileManager.getGameFile(if (id > 0) id else g.id)
+    }
+    /**
+     * Erzeugt einen GameXmlHandler, der auf das Game mit der gegebenen ID
+     * schreibt und liest.
+     *
+     * @param id
+     * die id des zu aendernden/erstellenden games
+     */
 }
