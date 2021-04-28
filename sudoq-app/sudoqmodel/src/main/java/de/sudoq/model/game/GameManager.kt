@@ -77,11 +77,11 @@ class GameManager private constructor() {
             val list: MutableList<GameData> = ArrayList()
             for (game in gamesXml) {
                 list.add(GameData(
-                        game.getAttributeValue(ID).toInt(),
-                        game.getAttributeValue(PLAYED_AT),
+                        game.getAttributeValue(ID)!!.toInt(),
+                        game.getAttributeValue(PLAYED_AT)!!,
                         Boolean.parseBoolean(game.getAttributeValue(FINISHED)),
-                        SudokuTypes.values()[game.getAttributeValue(SUDOKU_TYPE).toInt()],
-                        Complexity.values()[game.getAttributeValue(COMPLEXITY).toInt()]
+                        SudokuTypes.values()[game.getAttributeValue(SUDOKU_TYPE)!!.toInt()],
+                        Complexity.values()[game.getAttributeValue(COMPLEXITY)!!.toInt()]
                 )
                 )
             }
@@ -100,7 +100,7 @@ class GameManager private constructor() {
         val games = gamesXml
 
         for (g in games) {
-            if (g.getAttributeValue(ID).toInt() == game.id) {
+            if (g.getAttributeValue(ID)!!.toInt() == game.id) {
                 // TODO anpassen
                 g.updateAttribute(XmlAttribute(PLAYED_AT, SimpleDateFormat(GameData.dateFormat).format(Date())))
                 g.updateAttribute(XmlAttribute(FINISHED, Boolean.toString(game.isFinished())))
@@ -120,7 +120,7 @@ class GameManager private constructor() {
         val games = gamesXml
         val newGames = XmlTree(games.name)
         for (g in games) {
-            if (FileManager.getGameFile(g.getAttributeValue(ID).toInt()).exists()) {
+            if (FileManager.getGameFile(g.getAttributeValue(ID)!!.toInt()).exists()) {
                 newGames.addChild(g)
             }
         }
@@ -149,7 +149,7 @@ class GameManager private constructor() {
         val games = gamesXml
         for (g in games) {
             if (Boolean.parseBoolean(g.getAttributeValue(FINISHED))) {
-                FileManager.deleteGame(g.getAttributeValue(ID).toInt())
+                FileManager.deleteGame(g.getAttributeValue(ID)!!.toInt())
             }
         }
         updateGamesList()
@@ -175,7 +175,7 @@ class GameManager private constructor() {
 
         private const val ID = "id"
         private const val FINISHED = "finished"
-        private const val PLAYED_AT = "played_at"
+        private const val PLAYED_AT : String = "played_at"
         private const val SUDOKU_TYPE = "sudoku_type"
         private const val COMPLEXITY = "complexity"
 

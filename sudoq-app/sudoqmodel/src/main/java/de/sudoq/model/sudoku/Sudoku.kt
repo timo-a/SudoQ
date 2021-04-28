@@ -232,26 +232,26 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, Xmlable, ModelCha
         } catch (e: NumberFormatException) {
            -1
         }
-        val enumType = SudokuTypes.values()[xmlTreeRepresentation.getAttributeValue("type").toInt()]
+        val enumType = SudokuTypes.values()[xmlTreeRepresentation.getAttributeValue("type")!!.toInt()]
         sudokuType = SudokuBuilder.createType(enumType)
-        transformCount = xmlTreeRepresentation.getAttributeValue("transformCount").toInt()
+        transformCount = xmlTreeRepresentation.getAttributeValue("transformCount")!!.toInt()
         val compl = xmlTreeRepresentation.getAttributeValue("complexity")
         complexity = if (compl == null) null else Complexity.values()[compl.toInt()]
 
         // build the fields
         for (sub in xmlTreeRepresentation) {
             if (sub.name == "fieldmap") {
-                val fieldId = sub.getAttributeValue("id").toInt()
+                val fieldId = sub.getAttributeValue("id")!!.toInt()
                 val editable = java.lang.Boolean.parseBoolean(sub.getAttributeValue("editable"))
-                val solution = sub.getAttributeValue("solution").toInt()
+                val solution = sub.getAttributeValue("solution")!!.toInt()
                 var x = -1
                 var y = -1
                 // check if there is only one child element
                 require(sub.numberOfChildren == 1)
-                val position = sub.children.next()
+                val position = sub.getChildren().next()
                 if (position.name == "position") {
-                    x = position.getAttributeValue("x").toInt()
-                    y = position.getAttributeValue("y").toInt()
+                    x = position.getAttributeValue("x")!!.toInt()
+                    y = position.getAttributeValue("y")!!.toInt()
                 }
                 val pos = Position[x, y]
                 val cell = Cell(editable, solution, fieldId, sudokuType!!.numberOfSymbols)

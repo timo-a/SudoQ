@@ -85,13 +85,13 @@ open class GameSettings : Xmlable {
         representation.addAttribute(XmlAttribute("gestures", isGesturesSet))
         representation.addAttribute(XmlAttribute("left", isLefthandModeSet))
         representation.addAttribute(XmlAttribute("helper", isHelperSet))
-        representation.addChild(wantedTypesList.toXmlTree())
+        representation.addChild(wantedTypesList.toXmlTree()!!)
         return representation
     }
 
     @Throws(IllegalArgumentException::class)
     override fun fillFromXml(xmlTreeRepresentation: XmlTree) {
-        AssistancesfromString(xmlTreeRepresentation.getAttributeValue("assistances"))
+        AssistancesfromString(xmlTreeRepresentation.getAttributeValue("assistances")!!)
         isGesturesSet = java.lang.Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("gestures"))
         isLefthandModeSet = java.lang.Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("left"))
         isHelperSet = java.lang.Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("helper"))

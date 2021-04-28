@@ -241,9 +241,9 @@ open class SudokuType : Iterable<Constraint>, ComplexityFactory, Xmlable {
 
     @Throws(IllegalArgumentException::class)
     override fun fillFromXml(xmlTreeRepresentation: XmlTree) {
-        enumType = SudokuTypes.values()[xmlTreeRepresentation.getAttributeValue("typename").toInt()]
-        numberOfSymbols = xmlTreeRepresentation.getAttributeValue("numberOfSymbols").toInt()
-        standardAllocationFactor = xmlTreeRepresentation.getAttributeValue("standardAllocationFactor").toFloat()
+        enumType = SudokuTypes.values()[xmlTreeRepresentation.getAttributeValue("typename")!!.toInt()]
+        numberOfSymbols = xmlTreeRepresentation.getAttributeValue("numberOfSymbols")!!.toInt()
+        standardAllocationFactor = xmlTreeRepresentation.getAttributeValue("standardAllocationFactor")!!.toFloat()
         for (sub in xmlTreeRepresentation) {
             when (sub.name) {
                 "size" -> size = Position.fillFromXmlStatic(sub)
@@ -259,7 +259,7 @@ open class SudokuType : Iterable<Constraint>, ComplexityFactory, Xmlable {
                 }
                 "helperList" -> {
                     helperList = ArrayList(sub.numberOfAttributes)
-                    val jterator = sub.attributes
+                    val jterator = sub.getAttributes()
                     while (jterator.hasNext()) {
                         val xa = jterator.next()
                         val index = xa.name.toInt()

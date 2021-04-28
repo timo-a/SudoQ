@@ -78,7 +78,7 @@ class Position(var x: Int, var y: Int) : Xmlable {
         return representation
     }
 
-    fun toXmlTree(name: String?): XmlTree {
+    fun toXmlTree(name: String): XmlTree {
         val representation = XmlTree(name)
         representation.addAttribute(XmlAttribute("x", "" + x))
         representation.addAttribute(XmlAttribute("y", "" + y))
@@ -88,8 +88,8 @@ class Position(var x: Int, var y: Int) : Xmlable {
     @Throws(IllegalArgumentException::class)
     override fun fillFromXml(xmlTreeRepresentation: XmlTree) {
         require(!fixed) { "Tried to manipulate a fixed position" }
-        x = xmlTreeRepresentation.getAttributeValue("x").toInt()
-        y = xmlTreeRepresentation.getAttributeValue("y").toInt()
+        x = xmlTreeRepresentation.getAttributeValue("x")!!.toInt()
+        y = xmlTreeRepresentation.getAttributeValue("y")!!.toInt()
     }
 
     companion object {
@@ -137,8 +137,8 @@ class Position(var x: Int, var y: Int) : Xmlable {
 
         fun fillFromXmlStatic(xmlTreeRepresentation: XmlTree): Position {
             return Companion[
-                    xmlTreeRepresentation.getAttributeValue("x").toInt(),
-                    xmlTreeRepresentation.getAttributeValue("y").toInt()]
+                    xmlTreeRepresentation.getAttributeValue("x")!!.toInt(),
+                    xmlTreeRepresentation.getAttributeValue("y")!!.toInt()]
         }
     }
 }

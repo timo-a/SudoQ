@@ -19,18 +19,6 @@ public class XmlTreeTests {
 	public ExpectedException thrown = ExpectedException.none();
 
 	@Test
-	public void testConstructorStringIllegalArgumentException() {
-		thrown.expect(IllegalArgumentException.class);
-		new XmlTree(null);
-	}
-
-	@Test
-	public void testConstructorStringStringIllegalArgumentException() {
-		thrown.expect(IllegalArgumentException.class);
-		new XmlTree("root", null);
-	}
-
-	@Test
 	public void testGetName() {
 		XmlTree tree = new XmlTree("xyz");
 		assertEquals(tree.getName(), "xyz");
@@ -59,13 +47,7 @@ public class XmlTreeTests {
 		assertEquals(tree.getAttributeValue("xyzName"), "xyzValue");
 		assertNull(tree.getAttributeValue("notExistingAttribute"));
 	}
-
-	@Test
-	public void testGetAttributeValueIllegalArgumentException() {
-		thrown.expect(IllegalArgumentException.class);
-		new XmlTree("root").getAttributeValue(null);
-	}
-
+	
 	@Test
 	public void testGetAttributes() {
 		XmlTree tree = new XmlTree("root");
@@ -104,18 +86,6 @@ public class XmlTreeTests {
 			i++;
 		}
 		assertEquals(i, 2);
-	}
-
-	@Test
-	public void testAddChildIllegalArgumentException() {
-		thrown.expect(IllegalArgumentException.class);
-		new XmlTree("root").addChild(null);
-	}
-
-	@Test
-	public void testAddAttributeIllegalArgumentException() {
-		thrown.expect(IllegalArgumentException.class);
-		new XmlTree("root").addAttribute(null);
 	}
 
 	@Test
