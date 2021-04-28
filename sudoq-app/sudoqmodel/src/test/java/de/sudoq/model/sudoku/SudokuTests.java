@@ -285,7 +285,7 @@ public class SudokuTests {
 		assertTrue(sudoku.hasErrors());
 	}
 
-	@Test(expected = NullPointerException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void testFromXmlError() {
 		Sudoku sudoku = new Sudoku(TypeBuilder.get99());
 		XmlTree tree = sudoku.toXmlTree();
@@ -299,7 +299,7 @@ public class SudokuTests {
 		sudoku.fillFromXml(tree);
 	}
 
-	@Test(expected = NullPointerException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void testFromXmlError2() {
 		Sudoku sudoku = new Sudoku(TypeBuilder.get99());
 		XmlTree tree = sudoku.toXmlTree();
