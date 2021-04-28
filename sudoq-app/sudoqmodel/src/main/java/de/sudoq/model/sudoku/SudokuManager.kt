@@ -16,20 +16,15 @@ import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.xml.SudokuXmlHandler
 
-/**
- * Ist fuer die Verwaltung der vorhandenen Sudokus zuständig. Setzt das
- * Singleton Pattern um.
- */
+/** Responsible for maintaining existing Sudokus. Implemented as Singleton. */
 open class SudokuManager : GeneratorCallback {
     private val generator = Generator()
 
-    /**
-     * speicher für das alte Sudoku während ein neues generiert wird
-     */
+    /** holds the old sudoku while the new sudoku is being generated. */
     private var used: Sudoku? = null
 
     /**
-     * Das Callback fuer den Generator
+     * Callback for the Generator
      */
     override fun generationFinished(sudoku: Sudoku) {
         SudokuXmlHandler().saveAsXml(sudoku)
@@ -42,11 +37,10 @@ open class SudokuManager : GeneratorCallback {
     }
 
     /**
-     * Markiert ein Sudoku als benutzt. Falls möglich wird es transformiert,
-     * andernfalls gelöscht und ein neues generiert.
+     * Marks a Sudoku as used.
+     * If possible it will be transformed, otherwise a new one is generated.
      *
-     * @param sudoku
-     * das genutzte Sudoku
+     * @param sudoku the used Sudoku
      */
     fun usedSudoku(sudoku: Sudoku) {
         if (sudoku.transformCount >= 10) {
@@ -60,26 +54,25 @@ open class SudokuManager : GeneratorCallback {
 
     companion object {
         /**
-         * Gibt ein neues Sudoku des gewünschten Typs und der gewünschten
-         * Schwierigkeit zurück
+         * Retrune a new [Sudoku] of the specified [type][SudokuTypes] and [Complexity]
          *
-         * @param t Typ des Sudokus
-         * @param c Schwierigkeit des Sudokus
-         * @return das neue Sudoku
+         * @param t [type][SudokuTypes] of the [Sudoku]
+         * @param c [Complexity] of the [Sudoku]
+         * @return the new [Sudoku]
          */
-        fun getNewSudoku(t: SudokuTypes?, c: Complexity?): Sudoku {
+		@JvmStatic
+		fun getNewSudoku(t: SudokuTypes?, c: Complexity?): Sudoku {
             val sudoku = emptySudokuToFillWithXml
             SudokuXmlHandler(t, c).createObjectFromXml(sudoku)
             return sudoku
         }
 
         /**
-         * Erzeugt ein vollständig leeres Sudoku, welches noch gefüllt werden muss.
-         * DO NOT USE THIS METHOD (if you are not from us)
-         *
-         * @return das neue Sudoku
+         * Creates an empty sudoku that has to be filled.
+         * @return empty Sudoku
          */
-        val emptySudokuToFillWithXml: Sudoku
+        @Deprecated("DO NOT USE THIS METHOD (if you are not from us)")
+        internal val emptySudokuToFillWithXml: Sudoku
             get() = Sudoku()
     }
 }
