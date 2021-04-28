@@ -400,7 +400,7 @@ class Game : Xmlable {
         assistancesCost = xmlTreeRepresentation.getAttributeValue("assistancesCost").toInt()
         for (sub in xmlTreeRepresentation) {
             if (sub.name == "sudoku") {
-                sudoku = SudokuManager.getEmptySudokuToFillWithXml()
+                sudoku = SudokuManager.emptySudokuToFillWithXml
                 sudoku!!.fillFromXml(sub)
             } else if (sub.name == "gameSettings") {
                 gameSettings = GameSettings()

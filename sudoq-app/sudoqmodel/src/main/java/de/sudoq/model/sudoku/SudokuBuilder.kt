@@ -11,55 +11,45 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType.Companion.getSudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 
-/**
- * Der SudokuBuilder stellt Methoden zur Verfügung, um einen Sudoku-Typ oder ein
- * komplettes, leeres Sudoku zu erzeugen.
- */
+/** Provides functions to create a [SudokuType] or an empty [Sudoku] */
 class SudokuBuilder(private val type: SudokuType?) {
-    private val solutions: PositionMap<Int>
-    private val setValues: PositionMap<Boolean>
-    /* Constructors */
+
+    private val solutions: PositionMap<Int> = PositionMap(type!!.size!!)
+    private val setValues: PositionMap<Boolean> = PositionMap(type?.size!!)
+
     /**
-     * Erstellt einen Builder fuer ein Sudoku des spezifizierten Typs.
+     * Cretaes a Builder for a [Sudoku] of the specified type.
      *
-     * @param type
-     * der Enum-Typ des zu erstellenden Sudokus
-     * @throws NullPointerException
-     * falls type invalid ist.
+     * @param type Enum-Type of the [Sudoku] to create
+     * @throws NullPointerException if type invalid.
      */
-    constructor(type: SudokuTypes?) : this(createType(type)) {}
-    /* Methods */
+    constructor(type: SudokuTypes) : this(createType(type)) {}
+
     /**
-     * Erstellt ein Sudoku mit dem Sudoku Typ dieses Builders und den
-     * eingetragenen Loesungen.
+     * Creates a [Sudoku] with the SudokeType of this builder and the entered Solutions.
      *
-     * @return Das passende Sudoku
+     * @return a new Sudoku
      */
     fun createSudoku(): Sudoku {
         return Sudoku(type!!, solutions, setValues)
     }
 
     /**
-     * Fügt dem aktuellen Sudoku die gegebene Lösung hinzu
+     * Ads a solution to the Sudoku
      *
-     * @param pos
-     * die Position der Lösung
-     * @param value
-     * der Wert der Lösung
-     * @throws IllegalArgumentException
-     * falls der gegebene Wert kleiner 0 oder größer dem maximalen
-     * für diesen Typ zugelassen Wert ist
+     * @param pos [Position] of the Solution
+     * @param value Value of the Solution
+     * @throws IllegalArgumentException If the value is out of bounds for the type
      */
-    fun addSolution(pos: Position?, value: Int) {
+    fun addSolution(pos: Position, value: Int) {
         require(!(value < 0 || value >= type!!.numberOfSymbols)) { "Invalid value for given Sudoku Type" }
-        solutions.put(pos!!, value)
+        solutions.put(pos, value)
     }
 
     /**
-     * Setzt die gegebene Position als Vorgabe für das Sudoku
+     * Sets this Position as pre-filled in the Sudoku
      *
-     * @param pos
-     * die Position der Vorgabe
+     * @param pos [Position] to mark as pre-filled
      */
     fun setFixed(pos: Position?) {
         setValues.put(pos!!, true)
@@ -67,31 +57,16 @@ class SudokuBuilder(private val type: SudokuType?) {
 
     companion object {
         /**
-         * Erstellt ein SudokuType-Objekt entsprechend dem spezifizierten Typ-Namen
-         * und gibt dieses zurück. Ist der übergebene Name null oder kann er nicht
-         * zugeordnet werden, so wird null zurückgegeben.
+         * Creates and returns a SudokuType subject to the specified Type Name.
+         * If the type cannot be mapped to a type null is returned.
          *
-         * @param type
-         * Der Enum-Typ des zu erstellenden Sudoku Types
-         * @return Ein SudokuType-Objekt entsprechend dem spezifizierten Typnamen
-         * oder null, falls der Name null ist oder nicht zugeordnet werden
-         * kann
+         * @param type Enum Type of the SudokuType to create.
+         * @return a [SudokuType] of null if type cannot be mapped
          */
-        fun createType(type: SudokuTypes?): SudokuType? {
-            return if (type == null) null else getSudokuType(type)
+		@JvmStatic
+		fun createType(type: SudokuTypes): SudokuType? {
+            return getSudokuType(type)
         }
     }
 
-    /**
-     * Erstellt einen Builder fuer ein Sudoku des spezifizierten Typs.
-     *
-     * @param type
-     * Das SudokuType-Objekt für das zu erstellende Sudokus
-     * @throws NullPointerException
-     * falls type null ist.
-     */
-    init {
-        solutions = PositionMap(type!!.size!!)
-        setValues = PositionMap(type.size!!)
-    }
 }

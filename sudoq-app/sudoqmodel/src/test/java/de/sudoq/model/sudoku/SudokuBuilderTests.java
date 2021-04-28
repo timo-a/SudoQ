@@ -6,12 +6,19 @@ import static org.junit.Assert.fail;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
 public class SudokuBuilderTests extends TestWithInitCleanforSingletons {
+
+	@BeforeClass
+	public static void initFileManager() {
+		TestWithInitCleanforSingletons.legacyInit();
+	}
+
 
 	Cell cell;
 
@@ -33,8 +40,6 @@ public class SudokuBuilderTests extends TestWithInitCleanforSingletons {
 			else
 				testBuildergeneric(t, 9);
 		}
-		assertEquals(SudokuBuilder.createType(null), null);
-		
 	}
 
 	private void testBuildergeneric(SudokuTypes t, int length) {
