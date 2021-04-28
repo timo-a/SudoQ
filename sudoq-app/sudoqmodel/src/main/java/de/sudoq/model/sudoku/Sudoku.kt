@@ -124,15 +124,33 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, Xmlable, ModelCha
 
     /**
      * Maps the [Position] to the [Cell]
+     * if cell is null nothing happens
+     *
      *
      * @param cell the new [Cell]
      * @param position the [Position] for the new Cell
      */
-    fun setCell(cell: Cell, position: Position) {
+    fun setCell(cell: Cell?, position: Position) {
+        //todo cell can be null because samurai transformation needs it -> refactor?
+        if (cell == null) return
+
         cells!![position] = cell
         cellPositions!![cell.id] = position
     }
 
+
+    /**
+     * Checks if the id is mapped to a cell
+     */
+    fun hasCell(id: Int): Boolean {
+        if (cellPositions == null)
+            return false
+
+        var p : Position = cellPositions!![id] ?: return false
+
+        return cells?.get(p) != null
+
+    }
 
     /**
      * Returns the [Position] of the [Cell] if the given id.
@@ -208,9 +226,11 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, Xmlable, ModelCha
         cellPositions = HashMap()
         cells = HashMap()
         id = try {
-            xmlTreeRepresentation.getAttributeValue("id").toInt()
-        } catch (e: NumberFormatException) {
+            xmlTreeRepresentation.getAttributeValue("id")!!.toInt()
+        } catch (e: NullPointerException) {
             -1
+        } catch (e: NumberFormatException) {
+           -1
         }
         val enumType = SudokuTypes.values()[xmlTreeRepresentation.getAttributeValue("type").toInt()]
         sudokuType = SudokuBuilder.createType(enumType)
@@ -260,8 +280,12 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, Xmlable, ModelCha
             val complexityMatch = complexity === obj.complexity
             val typeMatch = sudokuType!!.enumType === obj.sudokuType!!.enumType
             var fieldsMatch = true
-            for (f in cells!!.values)
-                fieldsMatch = fieldsMatch and f.equals(obj.getCell(f.id))
+            for (f in cells!!.values) {
+                if (!obj.hasCell(f.id) || f != obj.getCell(f.id)){
+                    fieldsMatch = false
+                    break
+                }
+            }
             return complexityMatch && typeMatch && fieldsMatch
         }
         return false

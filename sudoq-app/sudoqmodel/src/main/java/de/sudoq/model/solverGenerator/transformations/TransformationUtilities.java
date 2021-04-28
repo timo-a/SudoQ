@@ -61,11 +61,18 @@ public final class TransformationUtilities {
 
 		for (int i = 0; i < width - 1; i++) {// zeilen
 			for (int j = i + 1; j < width; j++) {// zeilenElemente
-				Cell tmp = sudoku.getCell(Position.get(i, j));
-				sudoku.setCell(sudoku.getCell(Position.get(j, i)), Position.get(i, j));
-				sudoku.setCell(tmp, Position.get(j, i));
+				swapCells(sudoku,
+						Position.get(i, j),
+						Position.get(j, i));
 			}
 		}
+	}
+
+	protected static void swapCells(Sudoku sudoku, Position a, Position b){
+		Cell tmp = sudoku.getCell(a);
+		sudoku.setCell(sudoku.getCell(b), a);
+		sudoku.setCell(tmp, b);
+
 	}
 
 	protected static void mirrorDiagonallyUp(Sudoku sudoku) {
@@ -150,13 +157,7 @@ public final class TransformationUtilities {
 			Position a = Position.get(collum1, j);
 			Position b = Position.get(collum2, j);
 
-			Cell tmp = sudoku.getCell(a);
-
-			Cell target = sudoku.getCell(b);
-
-			sudoku.setCell(target, a);
-
-			sudoku.setCell(tmp, b);
+			swapCells(sudoku, a, b);
 		}
 	}
 
