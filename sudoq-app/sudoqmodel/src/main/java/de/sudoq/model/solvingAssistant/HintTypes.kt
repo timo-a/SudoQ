@@ -1,9 +1,6 @@
 package de.sudoq.model.solvingAssistant;
 
-/**
- * Created by timo on 27.09.16.
- */
-public enum HintTypes {
+enum class HintTypes {
     LastDigit,
 
     LastCandidate,

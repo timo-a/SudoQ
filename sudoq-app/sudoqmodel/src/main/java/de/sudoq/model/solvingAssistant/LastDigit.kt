@@ -4,9 +4,6 @@ import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.Sudoku
 import java.util.*
 
-/**
- * Created by timo on 27.04.16.
- */
 //TODO make an optional<SolveAction>
 object LastDigit {
     fun findOne(sudoku: Sudoku): SolveAction? {
