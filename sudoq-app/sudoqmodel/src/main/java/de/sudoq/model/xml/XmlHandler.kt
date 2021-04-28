@@ -11,36 +11,30 @@ import java.io.File
 import java.io.IOException
 
 /**
- * Diese Generische Klasse dient zur Handhabung der XML Repräsentation von
- * Objekten, die das Xmlable Interface implementieren.
+ * This generic class aids in handling the xml representations of classes that implement [Xmlable].
  *
- * @param <T>
- * der Typ der konkret umgewandelt werden soll
-</T> */
-abstract class XmlHandler<T : Xmlable?> {
-    /* Attributes */
+ * @param T the xmlable type
+ */
+abstract class XmlHandler<T : Xmlable> {
+
+    /** Helper for saving and loading XML files */
+    private val helper: XmlHelper = XmlHelper()
+
+    @JvmField
+	protected var file: File? = null
+
     /**
-     * Helfer für das Speichern und Laden von XML Dateien
-     */
-    private val helper: XmlHelper
-    protected var file: File? = null
-    /* Methods */
-    /**
-     * Speichert ein übegebenes Objekt, das das Xmlable Interface implementiert,
-     * in eine XML Datei.
+     * Stores the passed [Xmlable] in an xml file.
      *
-     * @param obj
-     * Objekt, das Xmlable implementiert
-     * @see Xmlable
+     * @param obj the [Xmlable] to serialize
      *
-     * @throws IllegalArgumentException
-     * Wird geworfen, falls das übergebene Objekt null ist
+     * @throws IllegalArgumentException if saving goes wrong todo throw io exception instead?
      */
     fun saveAsXml(obj: T) {
         try {
             file = getFileFor(obj)
-            val tree = obj!!.toXmlTree()
-            modifySaveTree(tree)
+            val tree = obj.toXmlTree()
+            modifySaveTree(tree!!)
             helper.saveXml(tree, file)
         } catch (e: IOException) {
             throw IllegalArgumentException("Something went wrong when writing xml", e)
@@ -48,16 +42,14 @@ abstract class XmlHandler<T : Xmlable?> {
     }
 
     /**
-     * Lädt ein Objekt, das Xmlable implementiert, aus einer XML Datei.
+     * Loads an Xmlable (in place) from an xml file.
      *
-     * @param obj
-     * leeres Objekt, das Xmlable implementiert
-     * @return Objekt, welches Xmlable implementiert
-     * @see Xmlable
+     * @param obj empty [Xmlable]
+     * @return filled [Xmlable]
      */
     fun createObjectFromXml(obj: T): T {
         try {
-            obj!!.fillFromXml(helper.loadXml(getFileFor(obj)))
+            obj.fillFromXml(helper.loadXml(getFileFor(obj)))
         } catch (e: IOException) {
             throw IllegalArgumentException("Something went wrong when reading xml " + getFileFor(obj), e)
         } catch (e: IllegalArgumentException) {
@@ -67,26 +59,18 @@ abstract class XmlHandler<T : Xmlable?> {
     }
 
     /**
-     * Lässt Subklassen den XMLTree falls nötig anpassen
+     * Lets subclasses modify the XMLTree
      *
-     * @param tree
-     * der Ursprüngliche Baum
+     * @param tree the [XmlTree] to modify
      */
-    protected open fun modifySaveTree(tree: XmlTree?) {}
+    protected open fun modifySaveTree(tree: XmlTree) {}
 
     /**
-     * Gibt ein File welches auf den Speicherort des gegebenen Objektes zeigt
-     * zurueck
+     * Returns a file that points to the storage place of the given object.
      *
-     * @param obj
-     * das zu speichernde/ladende Objekt
-     * @return das darauf zeigende File
+     * @param obj the object for wich to retrieve the file
+     * @return the file pointing to the param.
      */
-    abstract fun getFileFor(obj: T): File
-    /* Constructors */ /**
-     * Dieser Konstruktor initialisiert einen neuen XmlHandler.
-     */
-    init {
-        helper = XmlHelper()
-    }
+    protected abstract fun getFileFor(obj: T): File
+
 }
