@@ -12,7 +12,7 @@ import de.sudoq.model.sudoku.sudokuTypes.PermutationProperties
 
 class MirrorVertically : Permutation {
     override fun permutate(sudoku: Sudoku) {
-        TransformationUtilities.mirrorVertically(sudoku)
+        mirrorVertically(sudoku)
     }
 
     override val condition: PermutationProperties

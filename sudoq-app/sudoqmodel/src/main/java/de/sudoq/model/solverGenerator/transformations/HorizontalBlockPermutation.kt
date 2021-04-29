@@ -12,7 +12,7 @@ import de.sudoq.model.sudoku.sudokuTypes.PermutationProperties
 
 class HorizontalBlockPermutation : Permutation {
     override fun permutate(sudoku: Sudoku) {
-        TransformationUtilities.horizontalBlockPermutation(sudoku)
+        horizontalBlockPermutation(sudoku)
     }
 
     override val condition: PermutationProperties

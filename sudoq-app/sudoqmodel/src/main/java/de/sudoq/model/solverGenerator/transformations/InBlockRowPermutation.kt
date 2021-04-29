@@ -12,7 +12,7 @@ import de.sudoq.model.sudoku.sudokuTypes.PermutationProperties
 
 class InBlockRowPermutation : Permutation {
     override fun permutate(sudoku: Sudoku) {
-        TransformationUtilities.inBlockRowPermutation(sudoku)
+        inBlockRowPermutation(sudoku)
     }
 
     override val condition: PermutationProperties
