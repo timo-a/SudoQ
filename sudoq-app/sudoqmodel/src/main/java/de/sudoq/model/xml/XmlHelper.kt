@@ -17,87 +17,44 @@ import java.io.*
 import java.util.*
 
 /**
- * Dies ist eine Helfer-Klasse, die das Laden und Speichern von XmlTree Objekten
- * in Xml Dateien ermöglicht.
- *
- * @see XmlTree
+ * Helper class that enables loading and saving [XmlTree]s to files.
  */
 class XmlHelper {
-    /* Attributes */
-    /**
-     * Unterstützte Typen von Xml Dateien
-     */
-    private val SUPPORTEDDTDS = arrayOf("sudoku", "game", "games",
-            "profile", "profiles", "sudokutype")
 
-    /**
-     * Prämbel für geschriebene Xml Dateien
+    /** Unterstützte Typen von Xml Dateien */
+    private val SUPPORTEDDTDS = arrayOf("sudoku", "game", "games", "profile", "profiles", "sudokutype")
+
+    /** Preamble for written Xml Files
      */
     private val XmlPREAMBLE = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
 
-    /**
-     * Systempfad, an dem die DTD Spezifikationen hinterlegt wurden
-     */
+    /** System path, where DTD Specifications are stored */
     private val XmlDTDPATH = "./"
 
-    /**
-     * Wurzel einer eingelesenen Xml Baumstruktur
-     */
+    /** Root of the read xml */
     private var xmlReadTreeRoot: XmlTree? = null
 
-    /**
-     * Stack für das Einlesen von Xml Dateien, speichert derzeitige
-     * Hierarchietiefe
-     */
+    /** Stack for readind xmlfiles, saves current dept in hierarchy */
     private var xmlReadStack: Stack<XmlTree>? = null
-    /* Methods */
+
     /**
-     * Diese Methode lädt den Inhalt einer Xml Datei in ein XmlTree Objekt.
+     * This function loads the content of an xml file into an [XmlTree].
      *
-     * @param xmlFile
-     * Xml Datei aus der gelesen werden soll
-     * @return Xml Baum der eingelesenen Datei
-     * @see XmlTree
+     * @param xmlFile File to read
+     * @return [XmlTree] of the file
      *
      * @throws FileNotFoundException
-     * Wird geworfen, falls die spezifizierte Datei nicht existiert
-     * @throws IllegalArgumentException
-     * Wird geworfen, falls das übergebene Argument null ist
-     * @throws IOException
-     * Wird geworfen, wenn Probleme beim Lesen der Datei auftraten
-     * oder z.B. die Xml Datei kompromittiert ist
+     * @throws IOException If there are problems reading the file
      */
-    @Throws(FileNotFoundException::class, IllegalArgumentException::class, IOException::class)
-    fun loadXml(xmlFile: File?): XmlTree? {
-        requireNotNull(xmlFile)
+    @Throws(FileNotFoundException::class, IOException::class)
+    fun loadXml(xmlFile: File): XmlTree? {
         if (!xmlFile.exists()) {
             throw FileNotFoundException()
         }
         return readXmlTree(InputSource(xmlFile.absolutePath))
     }
-    //	/**
-    //	 * Diese Methode generiert einen Xml-Baum aus einem String, der eine valide
-    //	 * Struktur besitzt.
-    //	 *
-    //	 * @param structure
-    //	 *            Xml-Baum in einer String Repaesentation
-    //	 * @return XmlTree Repraesentation der Xml Struktur
-    //	 * @throws IllegalArgumentException
-    //	 *             Wird geworfen, wenn der gegebene Xml String eine invalide
-    //	 *             Struktur aufweist.
-    //	 */
-    //	 public XmlTree buildXmlTree(String structure) throws
-    //	 IllegalArgumentException {
-    //	 try {
-    //	 return readXmlTree(new InputSource(new StringReader(structure)));
-    //	 } catch (IOException exc) {
-    //	 throw new IllegalArgumentException();
-    //	 }
-    //	 }
-    /**
-     * Bereitet das Lesen einer Xml Quelle zu einem XmlTree Objekt vor und
-     * fuehrt diese Operation aus.
-     */
+
+    /** Reads an XmlTree from an input source. */
     @Throws(IllegalArgumentException::class, IOException::class)
     private fun readXmlTree(input: InputSource): XmlTree? {
         val xr: XMLReader
@@ -120,23 +77,15 @@ class XmlHelper {
     }
 
     /**
-     * Diese Methode speichert ein XmlTree Objekt in einer Xml Datei.
+     * This function saves an [XmlTree] to a file.
      *
-     * @param xmlTree
-     * Xml Baum, der die zu schreibenden Daten enthält
-     * @param xmlFile
-     * Xml Datei in die geschrieben werden soll
-     * @see XmlTree
+     * @param xmlTree XmlTree to persist
+     * @param xmlFile file in which to write
      *
-     * @throws IllegalArgumentException
-     * Wird geworfen, falls eines der Argumente null ist
-     * @throws IOException
-     * Wird geworfen, wenn Probleme beim Schreiben der Datei
-     * auftraten
+     * @throws IOException if there are problems writing to the file
      */
-    @Throws(IllegalArgumentException::class, IOException::class)
-    fun saveXml(xmlTree: XmlTree?, xmlFile: File?) {
-        require(!(xmlFile == null || xmlTree == null))
+    @Throws(IOException::class)
+    fun saveXml(xmlTree: XmlTree, xmlFile: File) {
         // Check if the write operation is supported for this type of xml tree
         var supported = false
         for (dtd in SUPPORTEDDTDS) {
@@ -150,24 +99,19 @@ class XmlHelper {
         val osw = OutputStreamWriter(oustream)
         osw.write(XmlPREAMBLE)
         osw.write("""<!DOCTYPE ${xmlTree.name} SYSTEM "$XmlDTDPATH${xmlTree.name}.dtd">
-""")
+""")//todo can \n be used for next line?
         osw.write(buildXmlStructure(xmlTree))
         osw.flush()
         osw.close()
     }
 
     /** TODO if no children make just one tag instead of opening tag + closing tag
-     * Gibt eine String Repäsentation des eingegebenen Xml Baumes zurück
+     * Converts [XmlTree] to String
      *
-     * @param tree
-     * der umzuwandelnde XmlBaum
-     * @return Die String Repräsentation des Xml Baumes
-     * @throws IllegalArgumentException
-     * Wird geworfen, wenn der eingegebene Xml Baum null ist
+     * @param tree an [XmlTree]
+     * @return String representation of the tree
      */
-    @Throws(IllegalArgumentException::class)
-    fun buildXmlStructure(tree: XmlTree?): String {
-        requireNotNull(tree)
+    fun buildXmlStructure(tree: XmlTree): String {
         // write the opening tag
         val sb = StringBuilder()
         sb.append("<")
@@ -203,11 +147,11 @@ class XmlHelper {
     }
 
     /**
-     * Klasse für das Einlesen von Xml Dateien mit dem SAX Parser
+     * Class for reading Xml files with SAX Parser
      */
     private inner class XmlSAXHandler : DefaultHandler() {
         /**
-         * Wird vom SAX Parser aufgerufen, falls ein Xml Element beginnt
+         * Called by SAX Parser if an element begins
          */
         override fun startElement(uri: String, name: String, qName: String, atts: Attributes) {
             if ("" == uri) {
@@ -235,7 +179,7 @@ class XmlHelper {
         }
 
         /**
-         * Wird vom SAX Parser aufgerufen, wenn ein Xml Element schließt
+         * Called by SAX Parser to close an element
          */
         override fun endElement(uri: String, name: String, qName: String) {
             if ("" == uri) {
