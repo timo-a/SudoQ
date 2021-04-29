@@ -11,7 +11,7 @@ import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.sudokuTypes.PermutationProperties
 
 class VerticalBlockPermutation : Permutation {
-    override fun permutate(sudoku: Sudoku?) {
+    override fun permutate(sudoku: Sudoku) {
         TransformationUtilities.verticalBlockPermutation(sudoku)
     }
 

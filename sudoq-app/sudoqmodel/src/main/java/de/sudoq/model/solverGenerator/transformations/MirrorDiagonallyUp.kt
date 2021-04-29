@@ -11,10 +11,10 @@ import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.sudokuTypes.PermutationProperties
 
 class MirrorDiagonallyUp : Permutation {
-    override fun permutate(sudoku: Sudoku?) {
+    override fun permutate(sudoku: Sudoku) {
         TransformationUtilities.mirrorDiagonallyUp(sudoku)
     }
 
-    override val condition: PermutationProperties?
+    override val condition: PermutationProperties
         get() = PermutationProperties.diagonal_up
 }
