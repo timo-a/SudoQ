@@ -16,12 +16,6 @@ public class XmlAttributeTests {
 
 	private String returnNull(){return null;}
 
-	@Test
-	public void testConstructorStringStringIllegalArgumentException1() {
-		thrown.expect(IllegalArgumentException.class);
-		String value = returnNull();
-		new XmlAttribute("name", value);
-	}
 
 	@Test
 	public void testConstructorStringStringIllegalArgumentException2() {
@@ -29,11 +23,6 @@ public class XmlAttributeTests {
 		new XmlAttribute("", "value");
 	}
 
-	@Test
-	public void testConstructorStringStringIllegalArgumentException3() {
-		thrown.expect(IllegalArgumentException.class);
-		new XmlAttribute(null, "value");
-	}
 
 	@Test
 	public void testGetName() {
@@ -52,9 +41,4 @@ public class XmlAttributeTests {
 		assertTrue(new XmlAttribute("xyzName", "value").isSameAttribute(new XmlAttribute("xyzName", "differentvalue")));
 	}
 
-	@Test
-	public void testIsSameAttributeIllegalArgumentException() {
-		thrown.expect(IllegalArgumentException.class);
-		new XmlAttribute("xyzName", "value").isSameAttribute(null);
-	}
 }
