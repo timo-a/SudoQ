@@ -11,10 +11,10 @@ import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.sudokuTypes.PermutationProperties
 
 class InBlockColumnPermutation : Permutation {
-    override fun permutate(sudoku: Sudoku?) {
+    override fun permutate(sudoku: Sudoku) {
         TransformationUtilities.inBlockCollumnPermutation(sudoku)
     }
 
-    override val condition: PermutationProperties?
+    override val condition: PermutationProperties
         get() = PermutationProperties.inBlock_Collumnshift
 }

@@ -11,7 +11,7 @@ import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.sudokuTypes.PermutationProperties
 
 class Rotate180 : Permutation {
-    override fun permutate(sudoku: Sudoku?) {
+    override fun permutate(sudoku: Sudoku) {
         TransformationUtilities.rotate180(sudoku)
     }
 

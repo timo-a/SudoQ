@@ -11,6 +11,8 @@ import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.sudokuTypes.PermutationProperties
 
 interface Permutation {
-    fun permutate(sudoku: Sudoku?)
-    val condition: PermutationProperties?
+
+    fun permutate(sudoku: Sudoku)
+
+    val condition: PermutationProperties
 }
