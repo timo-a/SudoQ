@@ -11,19 +11,20 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import java.util.*
 
 /**
- * An xmlable ArrayList of PermutationProperties
+ * An xmlable ArrayList of [SudokuTypes]
  */
-class SudokuTypesList : ArrayList<SudokuTypes?>(), Xmlable {
+class SudokuTypesList : ArrayList<SudokuTypes>(), Xmlable {
     private val ELEMENT_NAME = "Type"
     private val TYPE_ID = "TypeID"
-    val allTypes: ArrayList<SudokuTypes>
-        get() = ArrayList(Arrays.asList(*SudokuTypes.values()))
 
-    fun isTypeWanted(t: SudokuTypes?): Boolean {
+    val allTypes: ArrayList<SudokuTypes>
+        get() = ArrayList(listOf(*SudokuTypes.values()))
+
+    fun isTypeWanted(t: SudokuTypes): Boolean {
         return contains(t)
     }
 
-    override fun toXmlTree(): XmlTree? {
+    override fun toXmlTree(): XmlTree {
         val representation = XmlTree(ROOT_NAME)
         for (p in this) {
             val index = Integer.toString(representation.numberOfAttributes)
