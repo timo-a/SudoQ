@@ -144,7 +144,7 @@ class Profile private constructor() : ObservableModelImpl<Profile>(), Xmlable {
         val profiles = profilesXml
         for (profile in profiles) {
             if (profile.getAttributeValue(ID)!!.toInt() == currentProfileID) {
-                profile.updateAttribute(XmlAttribute(NAME, name))
+                profile.updateAttribute(XmlAttribute(NAME, name!!))
             }
         }
         saveProfilesFile(profiles)
@@ -166,7 +166,7 @@ class Profile private constructor() : ObservableModelImpl<Profile>(), Xmlable {
         val profiles = profilesXml
         val profileTree = XmlTree("profile")
         profileTree.addAttribute(XmlAttribute(ID, Integer.toString(newProfileID)))
-        profileTree.addAttribute(XmlAttribute(NAME, name))
+        profileTree.addAttribute(XmlAttribute(NAME, name!!))
         profiles.addChild(profileTree)
         profiles.updateAttribute(XmlAttribute(CURRENT, Integer.toString(newProfileID)))
         saveProfilesFile(profiles)
@@ -306,7 +306,7 @@ class Profile private constructor() : ObservableModelImpl<Profile>(), Xmlable {
         val representation = XmlTree("profile")
         representation.addAttribute(XmlAttribute("id", currentProfileID.toString()))
         representation.addAttribute(XmlAttribute("currentGame", currentGame.toString()))
-        representation.addAttribute(XmlAttribute("name", name))
+        representation.addAttribute(XmlAttribute("name", name!!))
         representation.addChild(assistances.toXmlTree())
         for (stat in Statistics.values()) {
             representation.addAttribute(XmlAttribute(stat.name, getStatistic(stat).toString() + ""))

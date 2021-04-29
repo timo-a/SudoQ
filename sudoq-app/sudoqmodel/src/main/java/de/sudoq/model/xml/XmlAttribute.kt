@@ -8,83 +8,35 @@
 package de.sudoq.model.xml
 
 /**
- * Diese Klasse repräsentiert ein Attribut eines Xml Baumes
+ * An Attribute in an [XmlTree]
  *
- * @see XmlTree
+ * @property value Value of the Attribute
+ *
  */
-class XmlAttribute(name: String?, value: String?) {
-    /* Attributes */
-    /**
-     * Diese Methode gibt des Namen des Attributes zurück.
-     *
-     * @return String Name des Attributes
-     */
-    /**
-     * Name des Attributes
-     */
+class XmlAttribute(name: String, var value: String) {
+
+    /** Name of the Attribute */
     val name: String
 
-    /**
-     * Wert des Xml Attributes
-     */
-    private var value: String
-
-    constructor(name: String?, value: Boolean) : this(name, "" + value) {}
-    /* Methods */
-    /**
-     * Diese Methode gibt den Wert des Attributes zurück.
-     *
-     * @return String Wert des Attributes
-     */
-    fun getValue(): String {
-        return value
+    init {
+        require(name != "")
+        this.name = name
     }
+
+    constructor(name: String, value: Boolean) : this(name, "" + value) {}
+
 
     override fun toString(): String {
         return "$name: $value"
     }
 
     /**
-     * Setzt falls der Parameter nicht null ist value auf diesen
+     * Checks if another attribute has the same name
      *
-     * @param value
-     * der einzutragende Wert
+     * @param attribute attribute to compare
+     * @return True, iff both have the same name
      */
-    protected fun setValue(value: String?) {
-        if (value != null) {
-            this.value = value
-        }
-    }
-
-    /**
-     * Diese Methode prüft ob ein weiteres Attribut des selben Typs ist, also
-     * den gleichen Namen tragen
-     *
-     * @param attribute
-     * Das zu vergleichende Attribut
-     * @return True, wenn beide den selben Namen haben, sonst false
-     * @throws IllegalArgumentException
-     * Wird geworfen, falls das übergebene Attribut null ist
-     */
-    @Throws(IllegalArgumentException::class)
-    fun isSameAttribute(attribute: XmlAttribute?): Boolean {
-        requireNotNull(attribute)
+    fun isSameAttribute(attribute: XmlAttribute): Boolean {
         return attribute.name == name
-    }
-    /* Constructors */ /**
-     * Dieser Konstruktor initialisiert ein neues Attribut mit gegebenem Wert.
-     *
-     * @param name
-     * Name des Attributes
-     * @param value
-     * Wert des Attributes
-     * @throws IllegalArgumentException
-     * Wird geworfen, falls einer der übergebenen Strings null oder
-     * der name leer ist
-     */
-    init {
-        require(!(name == null || name == "" || value == null))
-        this.name = name
-        this.value = value
     }
 }
