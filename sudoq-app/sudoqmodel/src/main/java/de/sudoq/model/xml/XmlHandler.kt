@@ -49,7 +49,7 @@ abstract class XmlHandler<T : Xmlable> {
      */
     fun createObjectFromXml(obj: T): T {
         try {
-            obj.fillFromXml(helper.loadXml(getFileFor(obj)))
+            obj.fillFromXml(helper.loadXml(getFileFor(obj))!!)
         } catch (e: IOException) {
             throw IllegalArgumentException("Something went wrong when reading xml " + getFileFor(obj), e)
         } catch (e: IllegalArgumentException) {

@@ -166,7 +166,7 @@ class GameManager private constructor() {
     private val gamesXml: XmlTree
         private get() = try {
             val gf = FileManager.getGamesFile()
-            XmlHelper().loadXml(gf)
+            XmlHelper().loadXml(gf)!!
         } catch (e: IOException) {
             throw IllegalStateException("Profil broken", e)
         }

@@ -293,7 +293,7 @@ open class SudokuType : Iterable<Constraint>, ComplexityFactory, Xmlable {
             val helper = XmlHelper()
             try {
                 val t = SudokuType()
-                val xt = helper.loadXml(f)
+                val xt = helper.loadXml(f)!!
                 t.fillFromXml(xt)
                 return t
             } catch (e: Exception) {
