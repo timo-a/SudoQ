@@ -11,36 +11,51 @@ import de.sudoq.model.sudoku.Sudoku
 import java.util.*
 
 /**
- * Transformer Klasse. Transformiert ein quadratisches! Sudoku, so dass es nach wie vor mit den gleichen Schritten
- * lösbar ist, aber völlig anders aussieht.
+ * Transforms a quadratic! Sudoku, so that it is still solvable with the same steps
+ * but looks completely different.
  */
 object Transformer {
-    val elementaryList: MutableList<Permutation>? = null
-    val subtleList: MutableList<Permutation>? = null
+
+    private val elementaryList: List<Permutation> = Vector(listOf(
+            Rotate90(),
+            Rotate180(),
+            Rotate270(),
+            MirrorHorizontally(),
+            MirrorVertically(),
+            MirrorDiagonallyDown(),
+            MirrorDiagonallyUp()))
+
+    private val subtleList: List<Permutation> = Vector(listOf(
+            HorizontalBlockPermutation(),
+            VerticalBlockPermutation(),
+            InBlockColumnPermutation(),
+            InBlockRowPermutation()))
+
 
     /**
-     * Für Tests kann ein eigenes deterministisches 'random'-Object verwendet werden. Das Randomobjekt von Transformer
-     * ist standardmäßig nichtdeterministisch und wird nach jedem Aufruf von transform() wieder auf nichtdeterministisch
-     * gesetzt.
+     * Random object. Can be set to have it deterministic during testing.
+     * Is reset to nondeterministic after every execution of transform().
      *
-     * @param r
-     * ein neues randomObject
      */
-    var random: Random? = null
+	@JvmStatic
+	var random: Random = Random()
+
 
     /**
-     * Diese Methode transformiert das spezifizierte Sudoku falls möglich mehrmals auf folgende Weisen:<br></br>
-     * 1. Vertauschen zweier Zeilen / Spalten von Blöcken<br></br>
-     * 2. Vertauschen zweier Zeilen / Spalten von Feldern<br></br>
-     * 3. Drehen 4. (Spiegeln) 5. Seien x und y zwei Symbole. Im gesamten Sudoku wird x durch y ersetzt und umgekehrt.<br></br>
+     * This method transforms the specified Sudoku if possible several times as follows:
+     * 1. swap two rows / columns of blocks
+     * 2. swap two rows / columns of cells
+     * 3. Rotate
+     * 4. (mirror)
+     * 5. swapping symbols (e.g. replace all 4s with 7s, ...)
      *
-     * Nach einer beliebigen, endlichen Anzahl solcher Modifikationen, ist das Sudoku noch immer eindeutig lösbar,
-     * unterscheidet sich aber im Allgemeinen gänzlich vom ursprünglichen Sudoku.
+     * After an arbitrary finite number of such modifications the Sudoku is still
+     * uniquely(eindeutig) solvable, but looks very different.
      *
-     * @param sudoku
-     * Das zu modifizierende Sudoku
+     * @param sudoku [Sudoku] to transform
      */
-    fun transform(sudoku: Sudoku) {
+	@JvmStatic
+	fun transform(sudoku: Sudoku) {
         // not rotateClockwise and mirror! results in Clockrotation(grouptheory)
         elementaryPermutation(sudoku)
         subtlePermutation(sudoku)
@@ -53,14 +68,13 @@ object Transformer {
     }
 
     /**
-     * Führt elementare Permutationen auf dem übergebenen Sudoku aus, z.B. Spiegelungen und Drehungen
+     * Executes elementary permutations on the [Sudoku], e.g. mirroring and rotations
      *
-     * @param sudoku
-     * das Sudoku dessen Felder permutiert werden
+     * @param sudoku [Sudoku] to transform
      */
     private fun elementaryPermutation(sudoku: Sudoku) {
         val l: MutableList<Permutation> = Vector()
-        for (p in elementaryList!!) {
+        for (p in elementaryList) {
             if (sudoku.sudokuType!!.permutationProperties.contains(p.condition)) {
                 l.add(p)
             }
@@ -69,21 +83,20 @@ object Transformer {
         //List<Permutation> l = elementaryList.stream().filter(p -> sudoku.getSudokuType().getPermutationProperties().contains(p.getCondition()))
         //		                                     .collect(Collectors.toList());
         if (l.size > 0) {
-            l[random!!.nextInt(l.size)].permutate(sudoku)
+            l[random.nextInt(l.size)].permutate(sudoku)
         }
     }
 
     /**
-     * Führt spezielle Permutationen auf dem übergebenen Sudoku aus, z.B. BlockPermutationen und ZeilenPermutationen
-     * innerhalb eines Blocks
+     * Executes special [Permutation]s such as
+     * block permutations and row permutations within a block
      *
-     * @param sudoku
-     * das Sudoku dessen Felder permutiert werden
+     * @param sudoku [Sudoku] to transform
      */
     private fun subtlePermutation(sudoku: Sudoku) {
         /* make sure only allowed permutations are executed by intersecting subtleList with properties of the sudoku */
         val l: MutableList<Permutation> = Vector()
-        for (p in subtleList!!) if (sudoku.sudokuType!!.permutationProperties.contains(p.condition)) l.add(p)
+        for (p in subtleList) if (sudoku.sudokuType!!.permutationProperties.contains(p.condition)) l.add(p)
         for (p in l) p.permutate(sudoku)
 
 
@@ -94,26 +107,5 @@ object Transformer {
         //l.forEach( p -> p.permutate(sudoku) );
     }
 
-    init {
-        elementaryList = Vector()
-        elementaryList.add(Rotate90())
-        elementaryList.add(Rotate180())
-        elementaryList.add(Rotate270())
-        elementaryList.add(MirrorHorizontally())
-        elementaryList.add(MirrorVertically())
-        elementaryList.add(MirrorDiagonallyDown())
-        elementaryList.add(MirrorDiagonallyUp())
-    }
 
-    init {
-        subtleList = Vector()
-        subtleList.add(HorizontalBlockPermutation())
-        subtleList.add(VerticalBlockPermutation())
-        subtleList.add(InBlockColumnPermutation())
-        subtleList.add(InBlockRowPermutation())
-    }
-
-    init {
-        random = Random()
-    }
 }

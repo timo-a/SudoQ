@@ -150,7 +150,7 @@ private fun rotate_horizontally_By1(sudoku: Sudoku, numberOfHorizontalBlocks: In
 private fun horizontalBlockSwaps(sudoku: Sudoku, numberOfHorizontalBlocks: Int, collumnsPerBlock: Int) {
     val limit = numberOfHorizontalBlocks / 2 - (1 - numberOfHorizontalBlocks % 2)
     for (i in 0 until limit) {
-        val first = Transformer.getRandom().nextInt(numberOfHorizontalBlocks)
+        val first = Transformer.random.nextInt(numberOfHorizontalBlocks)
         val other = randomOtherNumber(first, numberOfHorizontalBlocks)
         swapColumnOfBlocks(sudoku, first, other, collumnsPerBlock)
     }
@@ -167,7 +167,7 @@ private fun inBlockColumnPermutation(sudoku: Sudoku, blockWidth: Int) {
             / sudoku.sudokuType!!.blockSize.x)
     for (i in 0 until numberOfHorizontalBlocks) {
         for (j in 0 until blockWidth) {
-            val first = Transformer.getRandom().nextInt(blockWidth)
+            val first = Transformer.random.nextInt(blockWidth)
             swap_columns(sudoku, i * blockWidth + first, i * blockWidth + randomOtherNumber(first, blockWidth))
         }
     }
@@ -230,6 +230,6 @@ private fun createPermutation(sudoku: Sudoku): Map<Int, Int> {
 
 /* returns a number < range but not num */
 private fun randomOtherNumber(num: Int, range: Int): Int {
-    val distance = Transformer.getRandom().nextInt(range - 1) + 1
+    val distance = Transformer.random.nextInt(range - 1) + 1
     return (num + distance) % range
 }
