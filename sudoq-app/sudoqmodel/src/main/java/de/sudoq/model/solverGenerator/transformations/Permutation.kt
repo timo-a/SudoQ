@@ -5,21 +5,12 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
  * You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.sudoq.model.solverGenerator.transformations;
+package de.sudoq.model.solverGenerator.transformations
 
-import de.sudoq.model.sudoku.Sudoku;
-import de.sudoq.model.sudoku.sudokuTypes.PermutationProperties;
+import de.sudoq.model.sudoku.Sudoku
+import de.sudoq.model.sudoku.sudokuTypes.PermutationProperties
 
-public class VerticalBlockPermutation implements Permutation {
-
-	@Override
-	public void permutate(Sudoku sudoku) {
-		TransformationUtilities.verticalBlockPermutation(sudoku);
-	}
-
-	@Override
-	public PermutationProperties getCondition() {
-		return PermutationProperties.vertical_Blockshift;
-	}
-
+interface Permutation {
+    fun permutate(sudoku: Sudoku?)
+    val condition: PermutationProperties?
 }
