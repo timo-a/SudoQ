@@ -5,21 +5,16 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
  * You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.sudoq.model.solverGenerator.transformations;
+package de.sudoq.model.solverGenerator.transformations
 
-import de.sudoq.model.sudoku.Sudoku;
-import de.sudoq.model.sudoku.sudokuTypes.PermutationProperties;
+import de.sudoq.model.sudoku.Sudoku
+import de.sudoq.model.sudoku.sudokuTypes.PermutationProperties
 
-public class MirrorVertically implements Permutation {
+class VerticalBlockPermutation : Permutation {
+    override fun permutate(sudoku: Sudoku?) {
+        TransformationUtilities.verticalBlockPermutation(sudoku)
+    }
 
-	@Override
-	public void permutate(Sudoku sudoku) {
-		TransformationUtilities.mirrorVertically(sudoku);
-	}
-
-	@Override
-	public PermutationProperties getCondition() {
-		return PermutationProperties.mirror_vertical;
-	}
-
+    override val condition: PermutationProperties
+        get() = PermutationProperties.vertical_Blockshift
 }
