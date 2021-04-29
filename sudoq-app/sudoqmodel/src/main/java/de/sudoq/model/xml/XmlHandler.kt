@@ -35,7 +35,7 @@ abstract class XmlHandler<T : Xmlable> {
             file = getFileFor(obj)
             val tree = obj.toXmlTree()
             modifySaveTree(tree!!)
-            helper.saveXml(tree, file)
+            helper.saveXml(tree, file!!)
         } catch (e: IOException) {
             throw IllegalArgumentException("Something went wrong when writing xml", e)
         }

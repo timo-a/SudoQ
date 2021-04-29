@@ -63,12 +63,6 @@ public class XmlHelperTests {
 		helper.loadXml(new File("res/compromised.xml"));
 	}
 
-	@Test
-	public void testLoadXmlIllegalArgumentException() throws IllegalArgumentException, FileNotFoundException, IOException {
-		thrown.expect(IllegalArgumentException.class);
-		helper.loadXml(null);
-	}
-
 	//TODO test content. it does not seem to bee working
 	
 	@Test
@@ -147,33 +141,10 @@ public class XmlHelperTests {
 	}
 
 	@Test
-	public void testSaveXmlIllegalArgumentException1() throws IllegalArgumentException, IOException {
-		thrown.expect(IllegalArgumentException.class);
-		helper.saveXml(new XmlTree("sudoku", ""), null);
-	}
-
-	@Test
-	public void testSaveXmlIllegalArgumentException2() throws IllegalArgumentException, IOException {
-		thrown.expect(IllegalArgumentException.class);
-		helper.saveXml(null, new File("res/tmp.xml"));
-	}
-
-	@Test
-	public void testSaveXmlIllegalArgumentException3() throws IllegalArgumentException, IOException {
-		thrown.expect(IllegalArgumentException.class);
-		helper.saveXml(null, null);
-	}
-
-	@Test
 	public void testSaveXmlIllegalArgumentException4() throws IllegalArgumentException, IOException {
 		thrown.expect(IllegalArgumentException.class);
 		helper.saveXml(new XmlTree("name", ""), new File("res/tmp.xml"));
 	}
 
-	@Test
-	public void testBuildXmlStructureIllegalArgumentException() throws IllegalArgumentException {
-		thrown.expect(IllegalArgumentException.class);
-		helper.buildXmlStructure(null);
-	}
 
 }
