@@ -12,7 +12,7 @@ import de.sudoq.model.sudoku.sudokuTypes.PermutationProperties
 
 class Rotate270 : Permutation {
     override fun permutate(sudoku: Sudoku) {
-        TransformationUtilities.rotate270(sudoku)
+        rotate270(sudoku)
     }
 
     override val condition: PermutationProperties

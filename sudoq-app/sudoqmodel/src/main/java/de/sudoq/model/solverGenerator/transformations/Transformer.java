@@ -13,6 +13,8 @@ import java.util.Vector;
 
 import de.sudoq.model.sudoku.Sudoku;
 
+import static de.sudoq.model.solverGenerator.transformations.TransformationUtilitiesKt.changeSymbols;
+
 /**
  * Transformer Klasse. Transformiert ein quadratisches! Sudoku, so dass es nach wie vor mit den gleichen Schritten
  * lösbar ist, aber völlig anders aussieht.
@@ -89,7 +91,7 @@ public class Transformer {
 
 		elementaryPermutation(sudoku);
 
-		TransformationUtilities.changeSymbols(sudoku);
+		changeSymbols(sudoku);
 
 		sudoku.increaseTransformCount();
 
