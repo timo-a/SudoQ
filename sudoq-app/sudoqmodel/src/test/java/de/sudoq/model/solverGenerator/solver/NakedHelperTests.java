@@ -57,25 +57,19 @@ public class NakedHelperTests extends NakedHelper {
         super(new SolverSudoku(new Sudoku(TypeBuilder.get99())),4,0 );
     }
 
-    @Test
+    @Test(expected = AssertionError.class)
     public void testIllegalArguments() {
-        try {
-            new NakedHelper(null, 1, 20);
-            fail("No IllegalArgumentException thrown, altough sudoku was null");
-        } catch (IllegalArgumentException e) {
-        }
+        new NakedHelper(null, 1, 20);
+    }
 
-        try {
-            new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 0, 20);
-            fail("No IllegalArgumentException thrown, altough level was too low");
-        } catch (IllegalArgumentException e) {
-        }
+    @Test(expected = IllegalArgumentException.class)
+    public void testIllegalArgumentLevelTooLow() {
+        new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 0, 20);
+    }
 
-        try {
-            new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 1, -1);
-            fail("No IllegalArgumentException thrown, altough complexity was too low");
-        } catch (IllegalArgumentException e) {
-        }
+    @Test(expected = AssertionError.class)
+    public void testIllegalArgumentComplexityTooLow() {
+        new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 1, -1);
     }
 
     @Test

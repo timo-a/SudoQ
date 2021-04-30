@@ -174,25 +174,19 @@ public class HelperTests {
 	}
 
 
-	@Test
-	public void testIllegalArguments() {
-		try {
-			new NakedHelper(null, 1, 20);
-			fail("No IllegalArgumentException thrown, altough sudoku was null");
-		} catch (IllegalArgumentException e) {
-		}
+	@Test(expected = AssertionError.class)
+	public void testIllegalArgumentNull() {
+		new NakedHelper(null, 1, 20);
+	}
 
-		try {
-			new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 0, 20);
-			fail("No IllegalArgumentException thrown, altough level was too low");
-		} catch (IllegalArgumentException e) {
-		}
+	@Test(expected = IllegalArgumentException.class)
+	public void testIllegalArgumentLevelTooLow() {
+		new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 0, 20);
+	}
 
-		try {
-			new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 1, -1);
-			fail("No IllegalArgumentException thrown, altough complexity was too low");
-		} catch (IllegalArgumentException e) {
-		}
+	@Test(expected = AssertionError.class)
+	public void testIllegalArgumentComplexityTooLow() {
+		new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 1, -1);
 	}
 
 	private void setVal(Sudoku s, int x, int y, int val){
