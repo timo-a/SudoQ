@@ -32,12 +32,12 @@ public class BacktrackingTests extends TestWithInitCleanforSingletons {
 	}
 
 	@Test(expected = AssertionError.class)
-	public void testIllegalArgumentNull() {
+	public void testInitialisationWithNull() {
 		new Backtracking(null, 5);
 	}
 
 	@Test(expected = AssertionError.class)
-	public void testIllegalComplexity() {
+	public void testIInitialisationWithInvalidComplexity() {
 		new Backtracking(new SolverSudoku(new Sudoku(TypeBuilder.get99())), -2);
 	}
 
