@@ -84,7 +84,7 @@ public class SolverTests {
 		sudoku.getCell(Position.get(6, 8)).setCurrentValue(2);
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testSolveOneAutomaticallyApplied() {
 		initSudoku9x9(sudoku);
 		Solution solution = new Solution();
@@ -106,7 +106,7 @@ public class SolverTests {
 		}
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testSolveOneManuallyApplied() {
 		initSudoku9x9(sudoku);
 		Solution solution = new Solution();
@@ -130,14 +130,14 @@ public class SolverTests {
 		}
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void solveOneIncorrect() {
 		sudoku.getCell(Position.get(0, 0)).setCurrentValue(0);
 		sudoku.getCell(Position.get(1, 0)).setCurrentValue(0);
 		assertNull(solver.solveOne(true));
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testSolveAllAutomaticallyApplied() {
 		initSudoku9x9(sudoku);
 
@@ -154,7 +154,7 @@ public class SolverTests {
 
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testSolveAllManuallyApplied() {
 		initSudoku9x9(sudoku);
 		solver.solveAll(true, false);
@@ -173,7 +173,7 @@ public class SolverTests {
 		}
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void solveAllIncorrect() {
 		sudoku.getCell(Position.get(0, 0)).setCurrentValue(0);
 		sudoku.getCell(Position.get(1, 0)).setCurrentValue(0);

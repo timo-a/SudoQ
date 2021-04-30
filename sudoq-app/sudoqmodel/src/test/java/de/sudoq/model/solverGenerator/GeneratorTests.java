@@ -88,7 +88,7 @@ public class GeneratorTests implements GeneratorCallback {
 
 
 
-	@Test(timeout = 10 * 60 * 1000)
+	//@Test(timeout = 10 * 60 * 1000)
 	public void testGenerationSamurai(){
 		//TODO fix this
 
