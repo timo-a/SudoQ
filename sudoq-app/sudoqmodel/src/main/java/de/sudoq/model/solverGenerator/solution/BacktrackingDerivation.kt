@@ -5,8 +5,4 @@ import de.sudoq.model.solvingAssistant.HintTypes
 /**
  * Created by timo on 04.10.16.
  */
-class BacktrackingDerivation : SolveDerivation() {
-    init {
-        technique = HintTypes.Backtracking
-    }
-}
+class BacktrackingDerivation : SolveDerivation(HintTypes.Backtracking) {}

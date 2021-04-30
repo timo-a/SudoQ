@@ -6,89 +6,74 @@ import de.sudoq.model.sudoku.Sudoku
 import java.util.*
 
 /**
- * Ein Objekt dieser Klasse stellt einen Herleitungsschritt für die Lösung eines
- * Sudoku-Feldes dar. Dazu enthält es eine Liste von DerivationFields und
- * DerivationBlocks, die Informationenen über die entsprechend relevanten
- * Blöcke, sowie Kandidaten in den beteiligten Feldern enthalten.
+ * A Derivation on the way to a solution of a Cell.
+ *
+ * @property type the technique that led to this derivation
  */
-/*abstract*/ open class SolveDerivation @JvmOverloads constructor(
-        /**
-         * A string holding the name of the technique that led to this derivation
-         */
-        var type: HintTypes? = null) {
-    /* Attributes */
+open class SolveDerivation @JvmOverloads constructor(var type: HintTypes?) {
+
     /**
      * A textual illustration of this solution step
      */
     private var description: String? = null
 
     /**
-     * Eine Liste von DerivationFields, die für diesen Lösungsschritt relevant
-     * sind
+     * A list of [DerivationCell]s, that are relevant fo this step
      */
-    private val cells: MutableList<DerivationCell>
+    private val cells: MutableList<DerivationCell> = ArrayList()
 
     /**
-     * Eine Liste von DerivationBlocks, die für diesen Lösungsschritt relevant
-     * sind
+     * A list of [DerivationBlock]s that are relevant for this step
      */
-    private val blocks: MutableList<DerivationBlock>
-    protected var hasActionListCapability = false
-    /* Methods */
+    private val blocks: MutableList<DerivationBlock> = ArrayList()
+
+    protected var hasActionListCapability = false //maybe cleaner to have classes implement interface ActionList
+
+    constructor() : this(null)
+
+
     /**
      * Accepts a string description of what this derivation does
      * @param descrip String that describes the derivation
      */
-    fun setDescription(descrip: String?) {
-        description = descrip
+    fun setDescription(description: String) {
+        this.description = description
     }
 
     /**
-     * Diese Methode fügt das spezifizierte DerivationField zur Liste der
-     * DerivationFields dieses SolveDerivation-Objektes hinzu. Ist das
-     * übergebene Objekt null, so wird es nicht hinzugefügt.
+     * Adds a DerivationCell
      *
-     * @param cell
-     * Das DerivationField, welches dieser SolveDerivation
-     * hinzugefügt werden soll
+     * @param cell [DerivationCell] to add
      */
-    fun addDerivationCell(cell: DerivationCell?) {
-        if (cell != null) cells.add(cell)
+    fun addDerivationCell(cell: DerivationCell) {
+        cells.add(cell)
     }
 
     /**
-     * Diese Methode fügt den spezifizierten DerivationBlock zur Liste der
-     * DerivationBlocks dieses SolveDerivation-Objektes hinzu. Ist das übegebene
-     * Objekt null, so wird es nicht hinzugefügt.
+     * Adds a DerivationBlock
      *
-     * @param block
-     * Der DerivationBlock, welcher dieser SolveDerivation
-     * hinzugefügt werden soll
+     * @param cell [DerivationBlock] to add
      */
-    fun addDerivationBlock(block: DerivationBlock?) {
-        if (block == null) return
+    fun addDerivationBlock(block: DerivationBlock) {
         blocks.add(block)
     }
 
     /**
-     * Diese Methode gibt einen Iterator zurück, mit dem über die diesem Objekt
-     * hinzugefügten DerivationFields iteriert werden kann.
+     * Iterator over [DerivationCell]s
      *
-     * @return Ein Iterator, mit dem über die DerivationFields dieses
-     * SolveDerivation-Objektes iteriert werden kann
+     * @return Iterator over [DerivationCell]s
      */
     val cellIterator: Iterator<DerivationCell>
         get() = cells.iterator()
 
     /**
-     * Diese Methode gibt einen Iterator zurück, mithilfe dessen über die diesem
-     * Objekt hinzugefügten DerivationBlocks iteriert werden kann.
+     * Iterator over [DerivationBlock]s
      *
-     * @return Ein Iterator, mit dem über die DerivationBlocks dieses
-     * SolveDerivation-Objektes iteriert werden kann
+     * @return Iterator over [DerivationBlock]s
      */
     val blockIterator: Iterator<DerivationBlock>
         get() = blocks.iterator()
+
     val derivationBlocks: List<DerivationBlock>
         get() = blocks
 
@@ -96,18 +81,11 @@ import java.util.*
         return hasActionListCapability
     }
 
-    open fun getActionList(sudoku: Sudoku): List<Action?> {
+    open fun getActionList(sudoku: Sudoku): List<Action> {
         return ArrayList()
     }
 
     override fun toString(): String {
         return description!!
-    }
-    /* Constructors */ /**
-     * Initiiert ein neues SolveDerivation-Objekt.
-     */
-    init {
-        cells = ArrayList()
-        blocks = ArrayList()
     }
 }

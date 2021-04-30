@@ -23,7 +23,6 @@ public class SolveDerivationTests {
 		sd.addDerivationBlock(blocks[0]);
 		blocks[1] = new DerivationBlock(constr);
 		sd.addDerivationBlock(blocks[1]);
-		sd.addDerivationBlock(null);
 
 		DerivationCell[] fields = new DerivationCell[3];
 		BitSet relevantCandidates = new BitSet();
@@ -38,7 +37,6 @@ public class SolveDerivationTests {
 		sd.addDerivationCell(fields[1]);
 		fields[2] = new DerivationCell(Position.get(3, 5), new BitSet(), new BitSet());
 		sd.addDerivationCell(fields[2]);
-		sd.addDerivationCell(null);
 
 		int counter = 0;
 		Iterator<DerivationBlock> itBlock = sd.getBlockIterator();

@@ -18,7 +18,7 @@ public class DerivationBlockTests {
 		assertEquals(block.getBlock(), constr);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void constraintNull() {
 		new DerivationBlock(null);
 	}
