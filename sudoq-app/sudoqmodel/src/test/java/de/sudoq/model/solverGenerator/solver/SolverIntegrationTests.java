@@ -37,7 +37,7 @@ public class SolverIntegrationTests {
 		solution = new PositionMap<Integer>(sudoku.getSudokuType().getSize());
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testEasySudoku1() {
 		sudoku.getCell(Position.get(1, 0)).setCurrentValue(3);
 		sudoku.getCell(Position.get(3, 0)).setCurrentValue(4);
@@ -111,7 +111,7 @@ public class SolverIntegrationTests {
 
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testEasySudoku2() {
 		sudoku.getCell(Position.get(0, 0)).setCurrentValue(1);
 		sudoku.getCell(Position.get(0, 1)).setCurrentValue(3);
@@ -166,7 +166,7 @@ public class SolverIntegrationTests {
 		skeleton("Solution (Easy 2) - Complexity: ");
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testEasySudoku3() {
 		sudoku.getCell(Position.get(0, 0)).setCurrentValue(0);
 		sudoku.getCell(Position.get(2, 0)).setCurrentValue(6);
@@ -218,7 +218,7 @@ public class SolverIntegrationTests {
 		skeleton("Solution (Easy 3) - Complexity: ");
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testMediumSudoku1() {
 		sudoku.getCell(Position.get(2, 0)).setCurrentValue(2);
 		sudoku.getCell(Position.get(3, 0)).setCurrentValue(3);
@@ -262,7 +262,7 @@ public class SolverIntegrationTests {
 		skeleton("Solution (Medium 1) - Complexity: ");
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testMediumSudoku2() {
 		sudoku.getCell(Position.get(2, 0)).setCurrentValue(0);
 		sudoku.getCell(Position.get(4, 0)).setCurrentValue(4);
@@ -306,7 +306,7 @@ public class SolverIntegrationTests {
 		skeleton("Solution (Medium 2) - Complexity: ");
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testMediumSudoku3() {
 		sudoku.getCell(Position.get(0, 0)).setCurrentValue(4);
 		sudoku.getCell(Position.get(1, 0)).setCurrentValue(5);
@@ -351,7 +351,7 @@ public class SolverIntegrationTests {
 		skeleton("Solution (Medium 3) - Complexity: ");
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testMediumSudoku4() {
 		sudoku.getCell(Position.get(1, 0)).setCurrentValue(1);
 		sudoku.getCell(Position.get(2, 0)).setCurrentValue(2);
@@ -389,7 +389,7 @@ public class SolverIntegrationTests {
 		skeleton("Solution (Medium 4) - Complexity: ");
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testDifficultSudoku1() {
 		sudoku.getCell(Position.get(0, 0)).setCurrentValue(2);
 		sudoku.getCell(Position.get(2, 0)).setCurrentValue(8);
@@ -422,7 +422,7 @@ public class SolverIntegrationTests {
 		skeleton("Solution (Difficult 1) - Complexity: ");
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testDifficultSudoku2() {
 		sudoku.getCell(Position.get(2, 0)).setCurrentValue(5);
 		sudoku.getCell(Position.get(3, 0)).setCurrentValue(7);
@@ -457,7 +457,7 @@ public class SolverIntegrationTests {
 		skeleton("Solution (Difficult 2) - Complexity: ");
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testDifficultSudoku3() {
 		sudoku.getCell(Position.get(2, 0)).setCurrentValue(0);
 		sudoku.getCell(Position.get(5, 0)).setCurrentValue(6);
@@ -492,7 +492,7 @@ public class SolverIntegrationTests {
 		skeleton("Solution (Difficult 3) - Complexity: ");
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testDifficultSudoku4() {
 		sudoku.getCell(Position.get(4, 0)).setCurrentValue(7);
 		sudoku.getCell(Position.get(7, 0)).setCurrentValue(2);
@@ -529,7 +529,7 @@ public class SolverIntegrationTests {
 		skeleton("Solution (Difficult 4) - Complexity: ");
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testDifficultSudoku5() {
 		sudoku.getCell(Position.get(7, 0)).setCurrentValue(0);
 		sudoku.getCell(Position.get(1, 1)).setCurrentValue(6);
@@ -563,7 +563,7 @@ public class SolverIntegrationTests {
 		skeleton("Solution (Difficult 5) - Complexity: ");
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testInfernalSudoku1() {
 		sudoku.getCell(Position.get(1, 0)).setCurrentValue(6);
 		sudoku.getCell(Position.get(3, 0)).setCurrentValue(4);
@@ -588,7 +588,7 @@ public class SolverIntegrationTests {
 		skeleton("Solution (Infernal 1) - Complexity: ");
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testInfernalSudoku2() {
 		sudoku.getCell(Position.get(0, 0)).setCurrentValue(8);
 		sudoku.getCell(Position.get(3, 0)).setCurrentValue(4);
@@ -623,7 +623,7 @@ public class SolverIntegrationTests {
 		skeleton("Solution (Infernal 2) - Complexity: ");
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testInfernalSudoku3() {
 		sudoku.getCell(Position.get(3, 0)).setCurrentValue(6);
 		sudoku.getCell(Position.get(5, 1)).setCurrentValue(7);
@@ -660,7 +660,7 @@ public class SolverIntegrationTests {
 		skeleton("Solution (Infernal 3) - Complexity: ");
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testWorldsHardestSudoku() {
 		sudoku.getCell(Position.get(0, 0)).setCurrentValue(0);
 		sudoku.getCell(Position.get(5, 0)).setCurrentValue(6);
@@ -694,7 +694,7 @@ public class SolverIntegrationTests {
 		skeleton("Solution (world's hardest) - Complexity: ");
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testWorldsHardestSudoku2() {
 		sudoku.getCell(Position.get(2, 0)).setCurrentValue(4);
 		sudoku.getCell(Position.get(3, 0)).setCurrentValue(2);
@@ -725,7 +725,7 @@ public class SolverIntegrationTests {
 		skeleton("Solution (world's hardest 2) - Complexity: ");
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testNotSolvableSudoku() {
 		sudoku.getCell(Position.get(0, 0)).setCurrentValue(2);
 		sudoku.getCell(Position.get(2, 0)).setCurrentValue(8);
@@ -760,7 +760,7 @@ public class SolverIntegrationTests {
 		assertFalse(solver.solveOne(true) != null);
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testAmbiguouslySolvable() {
 		sudoku.getCell(Position.get(1, 0)).setCurrentValue(6);
 		sudoku.getCell(Position.get(3, 0)).setCurrentValue(4);

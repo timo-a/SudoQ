@@ -48,7 +48,7 @@ public class BacktrackingTests extends TestWithInitCleanforSingletons {
 		assertEquals(deriv.getCellIterator().next().getPosition(), Position.get(1, 3));
 	}
 
-	@Test
+	@Test(timeout = 60)
 	public void testAlreadySolved() {
 		SolverSudoku sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
 		sudoku.setComplexity(Complexity.arbitrary);
