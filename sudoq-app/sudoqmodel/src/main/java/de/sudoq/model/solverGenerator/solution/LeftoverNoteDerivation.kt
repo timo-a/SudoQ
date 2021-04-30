@@ -13,11 +13,13 @@ import java.util.*
  * Created by timo on 04.10.16.
  */
 class LeftoverNoteDerivation(val constraint: Constraint, val note: Int) : SolveDerivation(HintTypes.LeftoverNote) {
-    private val actionlist: MutableList<Action?>
+
+    private val actionlist: MutableList<Action> = ArrayList()
+
     val constraintShape: Utils.ConstraintShape
         get() = getGroupShape(constraint)
 
-    override fun getActionList(sudoku: Sudoku): List<Action?> {
+    override fun getActionList(sudoku: Sudoku): List<Action> {
         val af = NoteActionFactory()
         for (p in constraint) {
             val f = sudoku.getCell(p)
@@ -27,7 +29,6 @@ class LeftoverNoteDerivation(val constraint: Constraint, val note: Int) : SolveD
     }
 
     init {
-        actionlist = ArrayList()
         hasActionListCapability = true
     }
 }

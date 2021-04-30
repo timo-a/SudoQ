@@ -4,13 +4,13 @@ import de.sudoq.model.solvingAssistant.HintTypes
 import de.sudoq.model.sudoku.Constraint
 import java.util.*
 
-/**
- * Created by timo on 04.10.16.
- */
 class XWingDerivation : SolveDerivation(HintTypes.XWing) {
-    private val lockedConstraints: MutableList<Constraint>
-    private val reducibleConstraints: MutableList<Constraint>
+
+    private val lockedConstraints: MutableList<Constraint> = Stack()
+    private val reducibleConstraints: MutableList<Constraint> = Stack()
+
     var note = 0
+
     fun setLockedConstraints(c1: Constraint, c2: Constraint) {
         lockedConstraints.add(c1)
         lockedConstraints.add(c2)
@@ -30,8 +30,6 @@ class XWingDerivation : SolveDerivation(HintTypes.XWing) {
     }
 
     init {
-        lockedConstraints = Stack()
-        reducibleConstraints = Stack()
         setDescription("XWing")
     }
 }

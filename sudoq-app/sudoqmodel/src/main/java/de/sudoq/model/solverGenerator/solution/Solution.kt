@@ -4,28 +4,15 @@ import de.sudoq.model.actionTree.Action
 import java.util.*
 
 /**
- * Ein Solution-Objekt repräsentiert einen Lösungsschritt für ein Sudoku. Es
- * setzt sich zusammen aus einer konkreten Action, die auf das Sudoku angewendet
- * ein Feld löst und den Derivations, die die Herleitung für eine Lösung
- * beschreiben (siehe dazu die Klassen SolveDerivation und Action).
+ * A Solution step for the [Sudoku]. Comprises
+ * - a concrete [Action] that if applied to a [Sudoku] solves a [Cell]
+ * - [Derivation]s that lead to the solution (see [SolveDerivation] und [Action]).
  */
 class Solution {
-    /* Attributes */
+
     /**
-     * Gibt die Action zurück, die diesem Solution-Objekt zugewiesen wurde.
-     *
-     * @return Die Action, die diesem Solution-Objekt zugewiesen wurde
-     */
-    /**
-     * Diese Methode setzt die Action dieses Solution-Objektes auf die
-     * spezifizierte. Ist diese null, so wird nichts geändert.
-     *
-     * @param action
-     * Die Action, die diesem Solution-Objekt zugewiesen werden soll
-     */
-    /**
-     * Die Action, die das zu dieser Solution gehörige Feld löst oder null,
-     * falls diese Solution kein Feld löst
+     * The [Action] that solves the [Cell] that belongs to the [Solution]
+     * or null if the Action doesn't solve a [Cell].
      */
     var action: Action? = null
         set(action) {
@@ -33,41 +20,29 @@ class Solution {
         }
 
     /**
-     * Eine Liste von SolveDerivations, die die Herleitung für die Action
-     * repräsentieren
+     * A list of [SolveDerivation]s that derive the [Action].
      */
-    private val derivations: MutableList<SolveDerivation>
-    /* Methods */
+    private val derivations: MutableList<SolveDerivation> = ArrayList()
+
+
     /**
-     * Diese Methode fügt die spezifizierten SolveDerivation zu der Liste der
-     * SolveDerivations dieses Solution-Objektes hinzu. Ist diese null, so wird
-     * sie nicht hinzugefügt.
+     * Adds a [SolveDerivation]
      *
-     * @param derivation
-     * Die SolveDerivation, die diesem Solution-Objekt hinzugefügt
-     * werden soll
+     * @param derivation A SolveDerivation to add
      */
-    fun addDerivation(derivation: SolveDerivation?) {
-        if (derivation != null) derivations.add(derivation)
+    fun addDerivation(derivation: SolveDerivation) {
+        derivations.add(derivation)
     }
 
     /**
-     * Diese methode gibt einen Iterator zurück, mithilfe dessen über die diesem
-     * Solution-Objekt hinzugefügten SolveDerivation iteriert werden kann.
+     * Iterator over the SolveDerivations.
      *
-     * @return Einen Iterator, mit dem über die SolveDerivations dieses
-     * Solution-Objektes iteriert werden kann
+     * @return An Iterator over the SolveDerivations
      */
     val derivationIterator: Iterator<SolveDerivation>
         get() = derivations.iterator()
 
     fun getDerivations(): List<SolveDerivation> {
         return derivations
-    }
-    /* Constructors */ /**
-     * Initiiert ein neues Solution-Objekt.
-     */
-    init {
-        derivations = ArrayList()
     }
 }

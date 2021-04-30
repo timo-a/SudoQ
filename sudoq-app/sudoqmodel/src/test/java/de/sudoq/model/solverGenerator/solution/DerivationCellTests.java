@@ -24,12 +24,12 @@ public class DerivationCellTests {
 		assertEquals(derivation.getIrrelevantCandidates(), irrelevantCandidates);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void positionNull() {
 		new DerivationCell(null, new BitSet(), new BitSet());
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void candidatesNull() {
 		new DerivationCell(Position.get(1, 1), null, null);
 	}

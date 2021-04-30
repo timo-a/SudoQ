@@ -9,12 +9,17 @@ import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.Sudoku
 import java.util.*
 
-/**
- * Created by timo on 04.10.16.
- */
-class HiddenSetDerivation(technique: HintTypes?) : SolveDerivation(technique) {
-    var constraint: Constraint? = null
-    private val subsetMembers: MutableList<DerivationCell>
+class HiddenSetDerivation(technique: HintTypes) : SolveDerivation(technique) {
+
+    var constraint: Constraint? = null //todo is it ever set?
+
+    private val subsetMembers: MutableList<DerivationCell> = Stack()
+
+    fun getSubsetMembers(): List<DerivationCell> {
+        return subsetMembers
+    }
+
+
     var subsetCandidates: CandidateSet? = null
         private set
 
@@ -22,28 +27,29 @@ class HiddenSetDerivation(technique: HintTypes?) : SolveDerivation(technique) {
         subsetCandidates = bs.clone() as CandidateSet
     }
 
+
+    init {
+        hasActionListCapability = true
+    }
+
+
+
     fun addSubsetCell(f: DerivationCell) {
         subsetMembers.add(f)
     }
 
-    fun getSubsetMembers(): List<DerivationCell> {
-        return subsetMembers
-    }
 
     /* creates a list of actions in case the user want the app to execute the hints */
-    override fun getActionList(sudoku: Sudoku): List<Action?> {
-        val actionlist: MutableList<Action?> = ArrayList()
+    override fun getActionList(sudoku: Sudoku): List<Action> {
+        val actionlist: MutableList<Action> = ArrayList()
         val af = NoteActionFactory()
         val it = cellIterator
-        while (it!!.hasNext()) {
+        while (it.hasNext()) {
             val df = it.next()
-            for (note in fromBitSet(df!!.irrelevantCandidates).setBits) actionlist.add(af.createAction(note, sudoku.getCell(df.position)))
+            for (note in fromBitSet(df.irrelevantCandidates).setBits)
+                actionlist.add(af.createAction(note, sudoku.getCell(df.position)!!))
         }
         return actionlist
     }
 
-    init {
-        subsetMembers = Stack()
-        hasActionListCapability = true
-    }
 }
