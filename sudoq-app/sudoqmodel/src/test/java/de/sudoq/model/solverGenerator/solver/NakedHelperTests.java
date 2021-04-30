@@ -54,11 +54,6 @@ public class NakedHelperTests extends NakedHelper {
         super(new SolverSudoku(new Sudoku(TypeBuilder.get99())),4,0 );
     }
 
-    @Test(expected = AssertionError.class)
-    public void testIllegalArguments() {
-        new NakedHelper(null, 1, 20);
-    }
-
     @Test(expected = IllegalArgumentException.class)
     public void testIllegalArgumentLevelTooLow() {
         new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 0, 20);

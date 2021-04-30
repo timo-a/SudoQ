@@ -42,11 +42,6 @@ public class LeftoverNoteTests extends LeftoverNoteHelper {
 
 
     @Test(expected = AssertionError.class)
-    public void testIllegalArgumentNull() {
-        new LeftoverNoteHelper(null, 20);
-    }
-
-    @Test(expected = AssertionError.class)
     public void testIllegalArgumentComplexity() {
         new LeftoverNoteHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), -1);
     }

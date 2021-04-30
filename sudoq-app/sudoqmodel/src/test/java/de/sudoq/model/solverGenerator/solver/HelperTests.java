@@ -175,12 +175,6 @@ public class HelperTests {
 		assertEquals(sudoku.getCurrentCandidates(Position.get(0, 2)), nakedDouble);
 	}
 
-
-	@Test(expected = AssertionError.class)
-	public void testIllegalArgumentNull() {
-		new NakedHelper(null, 1, 20);
-	}
-
 	@Test(expected = IllegalArgumentException.class)
 	public void testIllegalArgumentLevelTooLow() {
 		new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 0, 20);
