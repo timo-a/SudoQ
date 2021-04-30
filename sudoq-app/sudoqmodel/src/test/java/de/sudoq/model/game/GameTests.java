@@ -67,7 +67,7 @@ public class GameTests {
 		assertEquals(0, game.getAssistancesCost());
 	}
 
-	@Test(expected = NullPointerException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void testNullInstantiation() {
 		new Game(2, null);
 	}

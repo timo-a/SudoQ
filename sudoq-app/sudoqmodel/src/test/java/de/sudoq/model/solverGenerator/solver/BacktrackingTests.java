@@ -53,18 +53,14 @@ public class BacktrackingTests {
 		assertEquals(back.getComplexityScore(), 10);
 	}
 
-	@Test
-	public void testIllegalArguments() {
-		try {
-			new Backtracking(null, 5);
-			fail("No IllegalArgumentException, altough sudoku was null");
-		} catch (IllegalArgumentException e) {
-		}
-		try {
-			new Backtracking(new SolverSudoku(new Sudoku(TypeBuilder.get99())), -2);
-			fail("No IllegalArgumentException, complexity was < 0");
-		} catch (IllegalArgumentException e) {
-		}
+	@Test(expected = AssertionError.class)
+	public void testIllegalArgumentNull() {
+		new Backtracking(null, 5);
+	}
+
+	@Test(expected = AssertionError.class)
+	public void testIllegalComplexity() {
+		new Backtracking(new SolverSudoku(new Sudoku(TypeBuilder.get99())), -2);
 	}
 
 	@Test
