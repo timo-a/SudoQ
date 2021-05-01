@@ -5,12 +5,10 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
  * You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.sudoq.model.solverGenerator;
+package de.sudoq.model.solverGenerator
 
-import java.util.List;
-
-import de.sudoq.model.solverGenerator.solution.Solution;
-import de.sudoq.model.sudoku.Sudoku;
+import de.sudoq.model.solverGenerator.solution.Solution
+import de.sudoq.model.sudoku.Sudoku
 
 /**
  * Dieses Interface muss implementiert werden, um die generate-Methode des
@@ -18,19 +16,17 @@ import de.sudoq.model.sudoku.Sudoku;
  * aus und ruft die generationFinished-Methode dieses Callback-Objektes auf,
  * sobald er fertig ist.
  */
-public interface GeneratorCallback {
-	/* Methods */
-
-	/**
-	 * Diese Methode wird vom Generator aufgerufen, nachdem er die Generierung
-	 * eines Sudokus abgeschlossen hat. Das übergebene Sudoku soll dabei ein
-	 * generiertes, valides Sudoku sein. Ist das spezifizierte Sudoku null, so
-	 * wird nichts ausgeführt.
-	 * 
-	 * @param sudoku
-	 *            Das vom Generator erzeugte, valide Sudoku
-	 */
-    void generationFinished(Sudoku sudoku);
-
-	void generationFinished(Sudoku sudoku, List<Solution> s);
+interface GeneratorCallback {
+    /* Methods */
+    /**
+     * Diese Methode wird vom Generator aufgerufen, nachdem er die Generierung
+     * eines Sudokus abgeschlossen hat. Das übergebene Sudoku soll dabei ein
+     * generiertes, valides Sudoku sein. Ist das spezifizierte Sudoku null, so
+     * wird nichts ausgeführt.
+     *
+     * @param sudoku
+     * Das vom Generator erzeugte, valide Sudoku
+     */
+    fun generationFinished(sudoku: Sudoku?)
+    fun generationFinished(sudoku: Sudoku?, s: List<Solution?>?)
 }
