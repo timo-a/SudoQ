@@ -25,11 +25,11 @@ class NoNotesHelper(sudoku: SolverSudoku?, complexity: Int) : SolveHelper(sudoku
             val cmap: MutableMap<Position, MutableList<Constraint>> = HashMap()
             for (c in sudoku.sudokuType!!) if (c.hasUniqueBehavior()) for (p in c.getPositions()) if (emptyPosSet.contains(p)) if (cmap.containsKey(p)) cmap[p]!!.add(c) else cmap[p] = ArrayList(listOf(c))
             derivation = NoNotesDerivation()
-            val allSymbbols: Set<Int> = HashSet<Int>(sudoku.sudokuType!!.symbolIterator as Collection<*>)
+            val allSymbols: Set<Int> = HashSet(sudoku.sudokuType!!.symbolIterator as MutableCollection<out Int>)
             //for(int i : sudoku.getSudokuType().getSymbolIterator())
             //    allSymbbols.add(i);
             for (p in emptyPos) {
-                val allCandidates: MutableSet<Int> = HashSet(allSymbbols)
+                val allCandidates: MutableSet<Int> = HashSet(allSymbols)
                 for (c in cmap[p]!!) {
                     for (pi in c.getPositions()) {
                         val f = sudoku.getCell(pi)
@@ -38,8 +38,8 @@ class NoNotesHelper(sudoku: SolverSudoku?, complexity: Int) : SolveHelper(sudoku
                 }
                 val relevant = BitSet()
                 val irrelevant = BitSet()
-                for (i in allSymbbols) if (allCandidates.contains(i)) relevant.set(i) else irrelevant.set(i)
-                derivation.addDerivationCell(DerivationCell(p, relevant, irrelevant))
+                for (i in allSymbols) if (allCandidates.contains(i)) relevant.set(i) else irrelevant.set(i)
+                derivation!!.addDerivationCell(DerivationCell(p, relevant, irrelevant))
             }
         }
         return foundOne

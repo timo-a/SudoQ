@@ -10,7 +10,7 @@ import java.util.*
  * Created by timo on 20.10.16.
  */
 class LastCandidateHelper(sudoku: SolverSudoku?, complexity: Int) : SolveHelper(sudoku!!, complexity) {
-    override var derivation: LastCandidateDerivation? = null
+
     override fun update(buildDerivation: Boolean): Boolean {
 
         //iterate through all positions of all constraints, none twice

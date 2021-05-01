@@ -10,12 +10,12 @@ import de.sudoq.model.solvingAssistant.HintTypes
  * schränken so die Möglichkeiten ein Symbol in ein Feld einzutragen ein, womit i. A. andere Helper ihre Vorgehensweise
  * anwenden können.
  */
-abstract class SolveHelper protected constructor(sudoku: SolverSudoku?, complexity: Int) {
+abstract class SolveHelper protected constructor(sudoku: SolverSudoku, complexity: Int) {
     /* Attributes */
     /**
      * Das Sudoku, auf welches dieser SolveHelper seine Vorgehensweise anwendet
      */
-    protected var sudoku: SolverSudoku?
+    @JvmField protected var sudoku: SolverSudoku
     /**
      * Gibt die Schwierigkeit der Anwendbarkeit dieses Helfers zurück. Dieser ist mit dem Konstruktor zu setzen.
      *

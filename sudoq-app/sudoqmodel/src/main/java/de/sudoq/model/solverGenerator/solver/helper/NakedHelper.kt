@@ -17,7 +17,7 @@ import java.util.*
  *
  * If there are n fields with only n distinct candidates in them, those candidates can't appear anywhere else.
  */
-open class NakedHelper(sudoku: SolverSudoku?, level: Int, complexity: Int) : SubsetHelper(sudoku!!, level, complexity) {
+open class NakedHelper(sudoku: SolverSudoku, level: Int, complexity: Int) : SubsetHelper(sudoku, level, complexity) {
     private val labels = arrayOf(HintTypes.NakedSingle,
             HintTypes.NakedPair,
             HintTypes.NakedTriple,
@@ -31,7 +31,6 @@ open class NakedHelper(sudoku: SolverSudoku?, level: Int, complexity: Int) : Sub
             HintTypes.Naked_11_tuple,
             HintTypes.Naked_12_tuple,
             HintTypes.Naked_13_tuple)
-    private override var derivation: NakedSetDerivation? = null
 
     /**
      * collect all candidates appearing in fields with maximum `level` candidates.
@@ -88,7 +87,7 @@ open class NakedHelper(sudoku: SolverSudoku?, level: Int, complexity: Int) : Sub
                             relevant.and(currentSet) //deleted notes
                             irrelevant.andNot(currentSet) //remaining notes
                             val field = DerivationCell(pos, relevant, irrelevant)
-                            derivation!!.addExternalCell(field)
+                            (derivation as NakedSetDerivation).addExternalCell(field)
                         }
                         foundSubset = true
                     }

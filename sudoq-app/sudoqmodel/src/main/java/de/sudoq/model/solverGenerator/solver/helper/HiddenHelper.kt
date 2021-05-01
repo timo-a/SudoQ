@@ -36,7 +36,6 @@ open class HiddenHelper(sudoku: SolverSudoku?, level: Int, complexity: Int) : Su
             HintTypes.Hidden_11_tuple,
             HintTypes.Hidden_12_tuple,
             HintTypes.Hidden_13_tuple)
-    private override var derivation: HiddenSetDerivation? = null
 
     /**
      * Collect all candidates appearing in this constraint.
