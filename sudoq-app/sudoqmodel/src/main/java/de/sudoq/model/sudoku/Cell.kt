@@ -170,13 +170,13 @@ class Cell(editable: Boolean, solution: Int, id: Int, numberOfValues: Int) : Obs
     /**
      * {@inheritDoc}
      */
-    override fun equals(obj: Any?): Boolean {
-        if (obj != null && obj is Cell) {
-            return id == obj.id
-                    && solution == obj.solution
-                    && currentVal == obj.currentVal
-                    && isEditable == obj.isEditable
-                    && noticeFlags == obj.noticeFlags
+    override fun equals(other: Any?): Boolean {
+        if (other != null && other is Cell) {
+            return id == other.id
+                    && solution == other.solution
+                    && currentVal == other.currentVal
+                    && isEditable == other.isEditable
+                    && noticeFlags == other.noticeFlags
         }
         return false
     }

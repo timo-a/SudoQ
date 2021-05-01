@@ -85,13 +85,13 @@ class ActionTree : ObservableModelImpl<ActionTreeElement>(), Iterable<ActionTree
     /**
      * {@inheritDoc}
      */
-    override fun equals(obj: Any?): Boolean {
-        if (obj !is ActionTree) return false
+    override fun equals(other: Any?): Boolean {
+        if (other !is ActionTree) return false
 
-        if (size != obj.size) return false
+        if (size != other.size) return false
 
         val at1: Iterator<ActionTreeElement> = iterator()
-        val at2: Iterator<ActionTreeElement> = obj.iterator()
+        val at2: Iterator<ActionTreeElement> = other.iterator()
         while (at1.hasNext()) {
             // since the sites are equals at2.hasNext() is true
             if (at1.next() != at2.next()) return false
