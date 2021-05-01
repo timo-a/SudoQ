@@ -99,7 +99,7 @@ class SolverSudoku : Sudoku {
 
 
         /* For debugging, we need predictable order */
-        positions = Generator.getPositions(sudoku) //TODO remove again
+        positions = Generator.getPositions(sudoku).toMutableList() //TODO remove again
 
 
         // initialize new SolverSudoku with the fields of the specified one

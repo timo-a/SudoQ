@@ -27,9 +27,9 @@ import java.util.*
  * @see Solver
  */
 class Generator {
-    /** Attributes  */
+
     private var random: Random
-    /* Methods */
+
     /**
      * creates a sudoku of type @param{type} and difficulty @param{complexity} and appends it
      * (together with the callback object) to the queue of sudokus being generated.
@@ -81,20 +81,23 @@ class Generator {
 
     companion object {
         /**
-         * returns all positions of non-null Fields of sudoku
+         * returns all positions of non-null Cells of sudoku
          * @param sudoku a sudoku object
          *
-         * @return list of positions whose corresponding `Field` objects are not null
+         * @return list of positions whose corresponding `Cell` objects are not null
          */
         fun getPositions(sudoku: Sudoku): List<Position> {
-            val p: MutableList<Position> = ArrayList()
-            for (x in 0 until sudoku.sudokuType!!.size!!.x) for (y in 0 until sudoku.sudokuType!!.size!!.y) if (sudoku.getCell(Position[x, y]) != null) p.add(Position[x, y])
-            return p
+
+            val xLim = sudoku.sudokuType!!.size!!.x
+            val yLim = sudoku.sudokuType!!.size!!.y
+
+            val allPositions = (0 until xLim).flatMap { x -> (0 until yLim)
+                        .map { y -> Position[x,y] } }
+
+            return allPositions.filter { sudoku.getCell(it) != null }
         }
     }
-    /* Constructors */ /**
-     * Initiiert ein neues Generator-Objekt.
-     */
+
     init {
         random = Random(0)
     } //Todo remove 0 again

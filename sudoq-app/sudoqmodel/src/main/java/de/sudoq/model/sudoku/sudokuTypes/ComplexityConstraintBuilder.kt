@@ -36,7 +36,7 @@ class ComplexityConstraintBuilder : Xmlable {
         specimen = HashMap()
         for (sub in xmlTreeRepresentation) {
             val cc = ComplexityConstraint()
-            cc.fillFromXml(sub!!)
+            cc.fillFromXml(sub)
             specimen[cc.complexity] = cc
         }
     }

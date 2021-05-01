@@ -212,6 +212,7 @@ open class Solver(sudoku: Sudoku) {
      */
     val solutions: List<Solution>?
         get() = lastSolutions
+
     val hintCounts: Map<HintTypes, Int>
         get() {
             checkNotNull(lastSolutions) { "lastsolutions is null -> no counts can be generated" }

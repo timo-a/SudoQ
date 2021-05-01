@@ -10,7 +10,7 @@ import java.util.*
  *
  * @property type the technique that led to this derivation
  */
-open class SolveDerivation @JvmOverloads constructor(var type: HintTypes?) {
+open class SolveDerivation constructor(var type: HintTypes?) {
 
     /**
      * A textual illustration of this solution step
