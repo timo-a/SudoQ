@@ -39,7 +39,7 @@ public class FastBranchAndBound extends Solver {
         numberOfHelpers = this.helper.size();
 
         // Look for constraint saturation at the beginning
-        if (!this.sudoku.getSudokuType().checkSudoku(this.sudoku)) {
+        if (!this.solverSudoku.getSudokuType().checkSudoku(this.solverSudoku)) {
             return false;
         }
 
@@ -90,12 +90,12 @@ public class FastBranchAndBound extends Solver {
     public boolean solveAll2() {
 
 
-        this.sudoku.resetCandidates();
+        this.solverSudoku.resetCandidates();
 
         numberOfHelpers = this.helper.size();
 
         // Look for constraint saturation at the beginning
-        if (!this.sudoku.getSudokuType().checkSudoku(this.sudoku)) {
+        if (!this.solverSudoku.getSudokuType().checkSudoku(this.solverSudoku)) {
             return false;
         }
 
@@ -151,7 +151,7 @@ public class FastBranchAndBound extends Solver {
 
 			//if a helper can be applied
 			if (hel.update(false)) {
-                this.sudoku.addComplexityValue(hel.getComplexityScore(), !(hel instanceof Backtracking));
+                this.solverSudoku.addComplexityValue(hel.getComplexityScore(), !(hel instanceof Backtracking));
 				return true;
 			}
 		}
@@ -167,13 +167,13 @@ public class FastBranchAndBound extends Solver {
         // candidate left = solved
         do {
             hasNakedSingle = false;
-            for (Position p : this.sudoku.getPositions()) {
-                BitSet b = this.sudoku.getCurrentCandidates(p);
+            for (Position p : this.solverSudoku.getPositions()) {
+                BitSet b = this.solverSudoku.getCurrentCandidates(p);
                 if (b.cardinality() == 1) {
-                    sudoku.setSolution(p, b.nextSetBit(0));//execute, since only one candidate, take first
+                    solverSudoku.setSolution(p, b.nextSetBit(0));//execute, since only one candidate, take first
                     hasNakedSingle   = true;
                     foundNakedSingle = true;
-                    this.sudoku.addComplexityValue(10, true);
+                    this.solverSudoku.addComplexityValue(10, true);
                 }
             }
         } while(hasNakedSingle);
@@ -204,10 +204,10 @@ public class FastBranchAndBound extends Solver {
         ComplexityRelation result = ComplexityRelation.INVALID;
 
         boolean solved  = false;
-        ComplexityConstraint complConstr = sudoku.getSudokuType().buildComplexityConstraint(sudoku.getComplexity());
+        ComplexityConstraint complConstr = solverSudoku.getSudokuType().buildComplexityConstraint(solverSudoku.getComplexity());
 
 
-        this.sudoku.resetCandidates();
+        this.solverSudoku.resetCandidates();
 
         numberOfHelpers = this.helper.size();
 
@@ -229,7 +229,7 @@ public class FastBranchAndBound extends Solver {
             if (!solved && isInvalid()) {
                 if ( advanceBranching(false) == Branchresult.SUCCESS){
                     didUpdate = true;
-                    if (sudoku.getBranchLevel() > 10)                   // we don't want to generate sudokus where it is necessary to backtrack more than 10 times
+                    if (solverSudoku.getBranchLevel() > 10)                   // we don't want to generate sudokus where it is necessary to backtrack more than 10 times
                         return ComplexityRelation.MUCH_TOO_DIFFICULT;   // so we can stop here.
                 }
                 else
@@ -259,7 +259,7 @@ public class FastBranchAndBound extends Solver {
 ///////////////////////////s
 
 
-        int complexity = this.sudoku.getComplexityValue();
+        int complexity = this.solverSudoku.getComplexityValue();
         //System.out.println("cmplx: "+complexity);
         // depending on the result, return an int
         int minComplextiy = complConstr.getMinComplexityIdentifier();

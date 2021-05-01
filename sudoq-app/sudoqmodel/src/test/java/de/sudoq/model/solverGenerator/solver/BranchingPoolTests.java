@@ -8,7 +8,7 @@ import de.sudoq.model.sudoku.Position;
 
 public class BranchingPoolTests {
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testComplete() {
 		BranchingPool pool = new BranchingPool();
 		assertEquals(pool.getBranching(Position.get(1, 5), 1).candidate, 1);
@@ -20,7 +20,14 @@ public class BranchingPoolTests {
 		// return another branching
 		pool.recycleLastBranching();
 
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void testGetBranchingNull() {
+		BranchingPool pool = new BranchingPool();
+
 		// should throw exception
 		pool.getBranching(null, 5);
 	}
+
 }

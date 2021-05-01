@@ -4,12 +4,13 @@ import de.sudoq.model.sudoku.CandidateSet
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.PositionMap
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * BranchinigPool maintains active branchings and recycles old objects
  *
  */
-internal class BranchingPool {
+class BranchingPool {
     /**
      * Stores discarded branching objects ready to be reused (we want to save on object instantiation for performance)
      */
@@ -28,12 +29,12 @@ internal class BranchingPool {
      * @throws IllegalArgumentException
      * Wird geworfen, falls die spezifizierte Position null ist
      */
-    fun getBranching(p: Position?, candidate: Int): Branching {
-        requireNotNull(p) { "Position was null" }
+    fun getBranching(p: Position, candidate: Int): Branching {
 
         /* fetch a new Branching. Preferrably recycle one from unused */
         val ret: Branching
-        /* if no unused Branchings ready */if (branchingsReservoir.isEmpty()) {
+        /* if no unused Branchings ready */
+        if (branchingsReservoir.isEmpty()) {
             ret = Branching(p, candidate)
         } else {
             ret = branchingsReservoir.pop()
@@ -70,27 +71,29 @@ internal class BranchingPool {
      * Alle Attribute sind package scope verfügbar, um diese direkt bearbeiten zu können.
      * Aus Performancegründen wurde auf einen Zugriff durch Getter/Setter-Methoden verzichtet.
      */
-    inner class Branching(p: Position?, candidate: Int) {
+    inner class Branching(p: Position, candidate: Int) {
         /**
          * Die Position, an der gebrancht wurde
          */
+        @JvmField
         var position: Position? = null
 
         /**
          * Der Kandidate mit dem gebrancht wurde
          */
+        @JvmField
         var candidate = 0
 
         /**
          * Die Liste von Positionen an denen in diesem Branch eine Lösung eingetragen wurde.
          */
-        val solutionsSet //TODO rename to sol..LIST??
-                : MutableList<Position?>
+        //TODO rename to sol..LIST??
+        val solutionsSet : MutableList<Position> = ArrayList()
 
         /**
          * Eine Map, welche für jede Position dessen Kandidaten vor dem Branchen speichert.
          */
-        var candidates: PositionMap<CandidateSet?>? = null
+        var candidates: PositionMap<CandidateSet>? = null
 
         /**
          * Der Komplexitätswert für diesen Branch
@@ -98,7 +101,7 @@ internal class BranchingPool {
         var complexityValue = 0
 
         //we have an extra method here to ensure that reinitialization as well as initialization are invariant with regard to pos, can, complxVal
-        fun initializeWith(p: Position?, candidate: Int) {
+        fun initializeWith(p: Position, candidate: Int) {
             position = p
             this.candidate = candidate
             complexityValue = 0
@@ -109,7 +112,6 @@ internal class BranchingPool {
          * position and candidate are set by parameter values, complexity value is set to 0
          */
         init {
-            solutionsSet = ArrayList()
             initializeWith(p, candidate)
         }
     }

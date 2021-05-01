@@ -15,7 +15,7 @@ import java.util.*
  * Diese Klasse bietet Methoden zum Lösen eines Sudokus. Sowohl einzelne Felder, als auch gesamte Sudokus können gelöst
  * werden. Auch das Validieren eines Sudokus auf Lösbarkeit ist möglich.
  */
-open class Solver(sudoku: Sudoku?) {
+open class Solver(sudoku: Sudoku) {
     /* Attributes */
     /**
      * Returns the sudoku this solver is working on.
@@ -27,17 +27,22 @@ open class Solver(sudoku: Sudoku?) {
     /**
      * Das Sudoku, welches von diesem Solver gelöst wird
      */
+    @JvmField //todo remove when migration to kotlin complete
     var solverSudoku: SolverSudoku
+
+    fun getSolverSudoku() : SolverSudoku { return solverSudoku}
 
     /**
      * Eine Liste von SolveHelpern, welche zum Lösen des Sudokus genutzt werden
      */
-    protected var helper: List<SolveHelper>
+    @JvmField
+	protected var helper: List<SolveHelper>
 
     /**
      * Die Anzahl der verfügbaren Helfer;
      */
-    protected var numberOfHelpers: Int
+    @JvmField
+	protected var numberOfHelpers: Int
 
     /**
      * Eine Liste der Lösungen des letzten solveAll-Aufrufes
@@ -59,6 +64,7 @@ open class Solver(sudoku: Sudoku?) {
      * Das ComplexityConstraint für die Schwierigkeit des Sudokus.
      */
     private var complConstr: ComplexityConstraint?
+
     protected open fun makeHelperList(): List<SolveHelper> {
         // Initialize the helpers
         val helpers: MutableList<SolveHelper> = ArrayList()
@@ -132,11 +138,11 @@ open class Solver(sudoku: Sudoku?) {
             }
 
             /* try to solve fields where only one note is remaining TODO why not just make a naked single?!(efficiency?)*/for (p in solverSudoku.positions!!) {
-                val b: BitSet? = solverSudoku.getCurrentCandidates(p)
-                if (b!!.cardinality() == 1) { //we found a field where only one note remains
+                val b: BitSet = solverSudoku.getCurrentCandidates(p)
+                if (b.cardinality() == 1) { //we found a field where only one note remains
                     if (!solverSudoku.hasBranch()) {
                         //if there are no branches create solution-object
-                        solution.action = SolveActionFactory().createAction(b.nextSetBit(0), solverSudoku.getCell(p!!)!!)
+                        solution.action = SolveActionFactory().createAction(b.nextSetBit(0), solverSudoku.getCell(p)!!)
                         val deriv = SolveDerivation()
                         deriv.addDerivationCell(DerivationCell(p, (b.clone() as BitSet), BitSet())) //since only one bit set, complement is an empty set
                         solution.addDerivation(deriv)
@@ -179,7 +185,7 @@ open class Solver(sudoku: Sudoku?) {
         //print9x9(sudoku);
         val copy = PositionMap<Int>(solverSudoku.sudokuType!!.size!!)
         for (p in solverSudoku.positions!!) {
-            copy.put(p!!, solverSudoku.getCell(p)!!.currentValue)
+            copy.put(p, solverSudoku.getCell(p)!!.currentValue)
         }
         val solved = solveAll(buildDerivation, false, false)
 
@@ -189,7 +195,7 @@ open class Solver(sudoku: Sudoku?) {
         // Restore old state if solutions shall not be applied or if sudoku could not be solved
         if (!applySolutions || !solved) {
             for (p in solverSudoku.positions!!) {
-                solverSudoku.getCell(p!!)!!.setCurrentValue(copy[p]!!, false)
+                solverSudoku.getCell(p)!!.setCurrentValue(copy[p]!!, false)
             }
         }
         return solved
@@ -244,7 +250,9 @@ open class Solver(sudoku: Sudoku?) {
 
     private fun getHintScore(h: HintTypes): Int {
         return if (h === HintTypes.NakedSingle) 10 else {
-            if (hintscores.isEmpty()) for (sh in helper) hintscores[sh.hintType] = sh.complexityScore
+            if (hintscores.isEmpty())
+                for (sh in helper)
+                    hintscores[sh.hintType!!] = sh.complexityScore
             hintscores[h]!!
         }
     }
@@ -271,7 +279,7 @@ open class Solver(sudoku: Sudoku?) {
         //map position -> value
         val copy = PositionMap<Int>(solverSudoku.sudokuType!!.size!!)
         for (p in solverSudoku.positions!!) {
-            copy.put(p!!, solverSudoku.getCell(p)!!.currentValue)
+            copy.put(p, solverSudoku.getCell(p)!!.currentValue)
         }
 
         /////debug
@@ -287,7 +295,7 @@ open class Solver(sudoku: Sudoku?) {
             // store the correct solution
             if (solution != null) {
                 for (p in solverSudoku.positions!!) {
-                    val curVal = solverSudoku.getCell(p!!)!!.currentValue
+                    val curVal = solverSudoku.getCell(p)!!.currentValue
                     solution.put(p, curVal)
                 }
             }
@@ -303,7 +311,7 @@ open class Solver(sudoku: Sudoku?) {
         //this.sudoku.complexityValue is overwritten by the attempt at finding a second solution
 
         // restore initial state
-        for (p in solverSudoku.positions!!) solverSudoku.getCell(p!!)!!.setCurrentValue(copy[p]!!, false)
+        for (p in solverSudoku.positions!!) solverSudoku.getCell(p)!!.setCurrentValue(copy[p]!!, false)
 
 
         // depending on the result, return an int
@@ -330,7 +338,7 @@ open class Solver(sudoku: Sudoku?) {
         get() {
             val solutions = PositionMap<Int>(solverSudoku.sudokuType!!.size!!)
             for (p in solverSudoku.positions!!) {
-                val curVal = solverSudoku.getCell(p!!)!!.currentValue
+                val curVal = solverSudoku.getCell(p)!!.currentValue
                 solutions.put(p, curVal)
             }
             return solutions
@@ -476,8 +484,8 @@ open class Solver(sudoku: Sudoku?) {
         return if (!solverSudoku.hasBranch()) {
             Branchresult.UNSOLVABLE // possible output nr1: insolvable
         } else {
-            val branchingPos = solverSudoku.lastBranch.position
-            val branchingCandidate = solverSudoku.lastBranch.candidate
+            val branchingPos = solverSudoku.lastBranch!!.position
+            val branchingCandidate = solverSudoku.lastBranch!!.candidate
 
             /* delete all solutions (including the backtracking-derivation) since the last branch */if (buildDerivation) {
                 while (lastSolutions!!.size > branchPoints!!.peek()) {
@@ -486,8 +494,8 @@ open class Solver(sudoku: Sudoku?) {
                 branchPoints!!.pop()
             }
             solverSudoku.killCurrentBranch()
-            val candidates = solverSudoku.getCurrentCandidates(branchingPos)
-            val nextCandidate = candidates!!.nextSetBit(branchingCandidate + 1)
+            val candidates = solverSudoku.getCurrentCandidates(branchingPos!!)
+            val nextCandidate = candidates.nextSetBit(branchingCandidate + 1)
             if (nextCandidate != -1) {
 
                 //TODO new Backtracking(this.sudoku).update(tre)
@@ -573,11 +581,11 @@ if there is another candidate -> advance
         do {
             hasNakedSingle = false
             for (p in solverSudoku.positions!!) {
-                val b: BitSet? = solverSudoku.getCurrentCandidates(p)
-                if (b!!.cardinality() == 1) {
+                val b: BitSet = solverSudoku.getCurrentCandidates(p)
+                if (b.cardinality() == 1) {
                     if (addDerivations) {
                         val deriv = SolveDerivation(HintTypes.NakedSingle)
-                        deriv.addDerivationCell(DerivationCell(p!!, (b.clone() as BitSet),
+                        deriv.addDerivationCell(DerivationCell(p, (b.clone() as BitSet),
                                 BitSet()))
                         deriv.setDescription("debug: naked single via Solver.updateNakedSingles")
                         /*
@@ -608,9 +616,9 @@ if there is another candidate -> advance
      * @return true, falls das Sudoku aktuell invalide ist, false falls nicht
      */
     protected val isInvalid: Boolean
-        protected get() {
+        get() {
             //for (Position p : this.sudoku.positions)
-            for (p in solverSudoku.sudokuType!!.validPositions)  /* look for no solution entered && no candidates left */ if (solverSudoku.getCurrentCandidates(p)!!.isEmpty && solverSudoku.getCell(p)!!.isNotSolved) return true
+            for (p in solverSudoku.sudokuType!!.validPositions)  /* look for no solution entered && no candidates left */ if (solverSudoku.getCurrentCandidates(p).isEmpty && solverSudoku.getCell(p)!!.isNotSolved) return true
             return false
         }//return sudoku.positions.forall( p => !sudoku.getField(p).isNotSolved())
     //return sudoku.positions.map(sudoku.getField).forall(f=>!f.isNotSolved())
@@ -622,12 +630,12 @@ if there is another candidate -> advance
      * @return true, falls das Sudoku gelöst ist, false andernfalls
      */
     protected val isFilledCompletely: Boolean
-        protected get() {
+        get() {
 
             //return sudoku.positions.forall( p => !sudoku.getField(p).isNotSolved())
             //return sudoku.positions.map(sudoku.getField).forall(f=>!f.isNotSolved())
             //return !sudoku.positions.map(sudoku.getField).exists(f=>f.isNotSolved())
-            for (p in solverSudoku.positions!!) if (solverSudoku.getCell(p!!)!!.isNotSolved) return false
+            for (p in solverSudoku.positions!!) if (solverSudoku.getCell(p)!!.isNotSolved) return false
             return true
         }
 
@@ -636,7 +644,7 @@ if there is another candidate -> advance
      * @return the iterator for helper
      */
     fun helperIterator(): Iterable<SolveHelper> {
-        return object : Iterable<SolveHelper?> {
+        return object : Iterable<SolveHelper> {
             override fun iterator(): Iterator<SolveHelper> {
                 return helper.iterator()
             }
@@ -644,8 +652,8 @@ if there is another candidate -> advance
     }
 
     companion object {
-        private val hintscores: MutableMap<HintTypes?, Int> = HashMap()
-        fun print9x9(sudoku: Sudoku?) {
+        private val hintscores: MutableMap<HintTypes, Int> = EnumMap(HintTypes::class.java)
+        fun print9x9(sudoku: Sudoku) {
             println(sudoku)
         }
     }
@@ -660,7 +668,6 @@ if there is another candidate -> advance
      * if `sudoku == null`
      */
     init {
-        requireNotNull(sudoku) { "sudoku was null" }
         solverSudoku = SolverSudoku(sudoku)
         complConstr = sudoku.sudokuType!!.buildComplexityConstraint(sudoku.complexity)
         helper = makeHelperList()

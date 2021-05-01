@@ -73,7 +73,7 @@ class Backtracking(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku, 
     private val ambiguous: List<Position>
         private get() {
             val ambiguousPositions = Stack<Position>()
-            for (p in sudoku.positions) {
+            for (p in sudoku.positions!!) {
                 val cardinality = sudoku.getCurrentCandidates(p).cardinality()
                 if (cardinality > 1) ambiguousPositions.push(p)
             }
