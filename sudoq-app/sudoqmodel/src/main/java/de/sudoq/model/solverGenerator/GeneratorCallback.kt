@@ -27,6 +27,6 @@ interface GeneratorCallback {
      * @param sudoku
      * Das vom Generator erzeugte, valide Sudoku
      */
-    fun generationFinished(sudoku: Sudoku?)
-    fun generationFinished(sudoku: Sudoku?, s: List<Solution?>?)
+    fun generationFinished(sudoku: Sudoku)
+    fun generationFinished(sudoku: Sudoku, sl: List<Solution>)
 }

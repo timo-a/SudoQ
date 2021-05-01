@@ -32,39 +32,35 @@ import java.util.*
  * Die Klasse implementiert das [Runnable] interface
  * und kann daher in einem eigenen Thread ausgeführt werden.
  *
+ * @property sudoku Das Sudoku auf welchem die Generierung ausgeführt wird
+ * @property Das Objekt, auf dem nach Abschluss der Generierung die Callback-Methode aufgerufen wird
  */
 class GenerationAlgo(
-        /**
-         * Das Sudoku auf welchem die Generierung ausgeführt wird
-         */
         protected var sudoku: Sudoku,
-        /**
-         * Das Objekt, auf dem nach Abschluss der Generierung die
-         * Callback-Methode aufgerufen wird
-         */
-        protected var callbackObject: GeneratorCallback, random: Random) : Runnable {
-    /* Attributes */
+        protected var callbackObject: GeneratorCallback,
+        random: Random) : Runnable {
+
     /**
      * Das Zufallsobjekt für den Generator
      */
-    protected var random: Random
+    protected var random: Random = random
 
     /**
      * Der Solver, der für Validierungsvorgänge genutzt wird
      */
-    protected var solver: Solver
+    protected var solver: Solver = Solver(sudoku)
 
     /**
      * List of currently defined(occupied) Fields.
      * If we gave the current sudoku to the user tey wouldn't have to solve these fields
      * as they'd already be filled in.
      */
-    protected var definedCells: MutableList<Position?>
+    protected var definedCells: MutableList<Position> = ArrayList()
 
     /**
      * Die noch freien, also nicht belegten Felder des Sudokus
      */
-    protected var freeCells: MutableList<Position?>
+    protected var freeCells: MutableList<Position> = ArrayList(getPositions(sudoku))
 
     /**
      * Das gelöste Sudoku
@@ -83,7 +79,10 @@ class GenerationAlgo(
      * ComplexityConstraint für ein Sudoku des definierten
      * Schwierigkeitsgrades
      */
-    private val desiredComplexityConstraint: ComplexityConstraint?
+    private val desiredComplexityConstraint: ComplexityConstraint? = sudoku.sudokuType!!.buildComplexityConstraint(sudoku.complexity)
+
+
+
 
     /**
      * Die Methode, die die tatsächliche Generierung eines Sudokus mit der
@@ -92,12 +91,12 @@ class GenerationAlgo(
     override fun run() {
         /* 1. Finde Totalbelegung */
         solvedSudoku = createSudokuPattern()
-        createAllocation(solvedSudoku)
+        createAllocation(solvedSudoku!!)
 
         // Call the callback
         val suBi = SudokuBuilder(sudoku.sudokuType)
-        for (p in getPositions(solvedSudoku)) {
-            val value = solvedSudoku!!.getCell(p!!)!!.solution
+        for (p in getPositions(solvedSudoku!!)) {
+            val value = solvedSudoku!!.getCell(p)!!.solution
             suBi.addSolution(p, value)
             if (!sudoku.getCell(p)!!.isNotSolved) suBi.setFixed(p)
         }
@@ -108,7 +107,7 @@ class GenerationAlgo(
         quickSolver.solveAll(true, false, false)
         res.complexity = sudoku.complexity
         if (callbackObject.toString() == "experiment") {
-            callbackObject.generationFinished(res, quickSolver.solutions)
+            callbackObject.generationFinished(res, quickSolver.solutions!!)
         } else {
             callbackObject.generationFinished(res)
         }
@@ -124,9 +123,7 @@ class GenerationAlgo(
         //System.out.println("Fields to define: "+fieldsToDefine);
 
         //define fields
-        for (i in 0 until cellsToDefine) {
-            val p = addDefinedCell()
-        }
+        (0 until cellsToDefine).forEach { addDefinedCell() }
         var fieldsToDefineDynamic = cellsToDefine
 
         /* until a solution is found, remove 5 random fields and add new ones */
@@ -139,7 +136,8 @@ class GenerationAlgo(
             // Define average number of fields
             while (definedCells.size < fieldsToDefineDynamic) if (addDefinedCell() == null) //try to add field, if null returned i.e. nospace / invalid
                 removeDefinedCells(5) //remove 5 fields
-            if (fieldsToDefineDynamic > 0 && random.nextFloat() < 0.2) fieldsToDefineDynamic-- //to avoid infinite loop slowly relax
+            if (fieldsToDefineDynamic > 0 && random.nextFloat() < 0.2)
+                fieldsToDefineDynamic-- //to avoid infinite loop slowly relax
             fs = FastSolverFactory.getSolver(sudoku)
         }
 
@@ -162,14 +160,15 @@ class GenerationAlgo(
 
         // Create the sudoku template generated before
         val sub = SudokuBuilder(sudoku.sudokuType)
-        for (p in getPositions(sudoku)) sub.addSolution(p!!, solution[p]!!) //fill in all solutions
+        for (p in getPositions(sudoku))
+            sub.addSolution(p, solution[p]!!) //fill in all solutions
         return sub.createSudoku()
     }
 
-    private fun createAllocation(pattern: Sudoku?) {
+    private fun createAllocation(pattern: Sudoku) {
 
         //ensure all fields are defined
-        while (!freeCells.isEmpty()) {
+        while (freeCells.isNotEmpty()) {
             definedCells.add(freeCells.removeAt(0))
         }
 
@@ -177,8 +176,8 @@ class GenerationAlgo(
         // Fill the sudoku being generated with template solutions
         //TODO simplify: iterate over fields/positions
         for (pos in getPositions(sudoku)) {
-            val fSudoku = sudoku.getCell(pos!!)
-            val fSolved = pattern!!.getCell(pos)
+            val fSudoku = sudoku.getCell(pos)
+            val fSolved = pattern.getCell(pos)
             fSudoku!!.setCurrentValue(fSolved!!.solution, false)
         }
         val reallocationAmount = 2 //getReallocationAmount(sudoku.getSudokuType(), 0.05);
@@ -215,10 +214,11 @@ class GenerationAlgo(
                 ComplexityRelation.TOO_EASY -> removeDefinedCells(1)
                 ComplexityRelation.INVALID, ComplexityRelation.TOO_DIFFICULT, ComplexityRelation.MUCH_TOO_DIFFICULT -> {
                     var i = 0
-                    while (i < Math.min(reallocationAmount, freeCells.size)) {
+                    while (i < reallocationAmount.coerceAtMost(freeCells.size)) {
                         addDefinedCell2()
                         i++
                     }
+
                 }
             }
             plusminuscounter++
@@ -317,7 +317,7 @@ class GenerationAlgo(
 
         //definierte Felder markieren
         for (p in definedCells) {
-            markings[p!!.x][p.y] = true
+            markings[p.x][p.y] = true
         }
 
         /* avoids infitite while loop*/
@@ -331,7 +331,7 @@ class GenerationAlgo(
             if (sudoku.getCell(Position[x, y]) == null) { //position existiert nicht
                 markings[x][y] = true
                 count++
-            } else if (markings[x][y] == false) { //pos existiert und ist unmarkiert
+            } else if (!markings[x][y]) { //pos existiert und ist unmarkiert
                 p = Position[x, y]
             }
         }
@@ -349,14 +349,12 @@ class GenerationAlgo(
         for (s in symbols) {
             sudoku.getCell(p!!)!!.setCurrentValue(s, false)
             //alle constraints saturiert?
-            valid = true
-            for (c in sudoku.sudokuType!!) {
-                if (!c.isSaturated(sudoku)) {
-                    valid = false
-                    sudoku.getCell(p)!!.setCurrentValue(Cell.EMPTYVAL, false)
-                    break
-                }
-            }
+            valid = sudoku.sudokuType!!.all { it.isSaturated(sudoku) }
+
+            if (!valid)
+                sudoku.getCell(p)!!.setCurrentValue(Cell.EMPTYVAL, false)
+
+
             if (valid) {
                 definedCells.add(p)
                 freeCells.remove(p) //if it's defined it is no longer free
@@ -372,7 +370,7 @@ class GenerationAlgo(
      */
     private fun addDefinedCell2(i: Int = random.nextInt(freeCells.size)) {
         val p = freeCells.removeAt(i) //used to be 0, random just in case
-        val fSudoku = sudoku.getCell(p!!)
+        val fSudoku = sudoku.getCell(p)
         val fSolved = solvedSudoku!!.getCell(p)
         fSudoku!!.setCurrentValue(fSolved!!.solution, false)
         definedCells.add(p)
@@ -393,7 +391,7 @@ class GenerationAlgo(
         if (definedCells.isEmpty()) return null
         val nr = random.nextInt(definedCells.size)
         val p = definedCells.removeAt(nr)
-        sudoku.getCell(p!!)!!.setCurrentValue(Cell.EMPTYVAL, false)
+        sudoku.getCell(p)!!.setCurrentValue(Cell.EMPTYVAL, false)
         freeCells.add(p)
         return p
     }
@@ -404,12 +402,7 @@ class GenerationAlgo(
      * @return list of removed positions
      */
     private fun removeDefinedCells(numberOfCellsToRemove: Int): List<Position> {
-        val removed = ArrayList<Position>()
-        for (i in 0 until numberOfCellsToRemove) {
-            val p = removeDefinedCell()
-            if (p != null) removed.add(p)
-        }
-        return removed
+        return (0 until numberOfCellsToRemove).mapNotNull { _ -> removeDefinedCell() }
     }
 
     /* debugging, remove when done */
@@ -417,7 +410,7 @@ class GenerationAlgo(
         println("This is the debug message from `Generator`")
     }
 
-    fun saveSudokuAllInOne(path: String, filename: String, sudoku: Sudoku?) {
+    fun saveSudokuAllInOne(path: String, filename: String, sudoku: Sudoku) {
         val sudokuLocation = FileManager.getSudokuDir()
         FileManager.initialize(FileManager.getProfilesDir(), File(path))
         object : SudokuXmlHandler() {
@@ -428,7 +421,7 @@ class GenerationAlgo(
             override fun modifySaveTree(tree: XmlTree) {
                 tree.addAttribute(XmlAttribute("id", "42"))
             }
-        }.saveAsXml(sudoku!!)
+        }.saveAsXml(sudoku)
     }
 
     companion object {
@@ -438,18 +431,22 @@ class GenerationAlgo(
          *
          * @return list of positions whose corresponding `Field` objects are not null
          */
-        fun getPositions(sudoku: Sudoku?): List<Position?> {
-            val p: MutableList<Position?> = ArrayList()
-            for (x in 0 until sudoku!!.sudokuType!!.size!!.x) for (y in 0 until sudoku.sudokuType!!.size!!.y) if (sudoku.getCell(Position[x, y]) != null) p.add(Position[x, y])
+        @JvmStatic ///todo Generator has same function...
+        fun getPositions(sudoku: Sudoku): List<Position> {
+            val p: MutableList<Position> = ArrayList()
+            for (x in 0 until sudoku.sudokuType!!.size!!.x)
+                for (y in 0 until sudoku.sudokuType!!.size!!.y)
+                    if (sudoku.getCell(Position[x, y]) != null)
+                        p.add(Position[x, y])
             return p
         }
 
-        fun getSudoku(path: String?, st: SudokuTypes?): Sudoku? {
+        fun getSudoku(path: String, st: SudokuTypes): Sudoku? {
             FileManager.initialize(
                     File("/home/t/Code/SudoQ/DebugOnPC/profilefiles"),
                     File("/home/t/Code/SudoQ/sudoq-app/sudoqapp/src/main/assets/sudokus/"))
             val f = File(path)
-            val s = Sudoku(getSudokuType(st!!)!!)
+            val s = Sudoku(getSudokuType(st)!!)
             try {
                 s.fillFromXml(XmlHelper().loadXml(f)!!)
                 s.complexity = Complexity.arbitrary //justincase
@@ -461,25 +458,4 @@ class GenerationAlgo(
         }
     }
 
-    /**
-     * Instanziiert ein neues Generierungsobjekt für das spezifizierte
-     * Sudoku. Da die Klasse privat ist wird keine Überprüfung der
-     * Eingabeparameter durchgeführt.
-     *
-     * @param sudoku
-     * Das Sudoku, auf dem die Generierung ausgeführt werden soll
-     * @param callbackObject
-     * Das Objekt, auf dem die Callback-Methode nach Abschluss
-     * der Generierung aufgerufen werden soll
-     * @param random
-     * Das Zufallsobjekt zur Erzeugung des Sudokus
-     */
-    init {
-        solver = Solver(sudoku)
-        freeCells = ArrayList()
-        definedCells = ArrayList()
-        this.random = random
-        desiredComplexityConstraint = sudoku.sudokuType!!.buildComplexityConstraint(sudoku.complexity)
-        freeCells.addAll(getPositions(sudoku)) //fills the currenlty empty list freefields as no field is defined=occupied
-    }
 }
