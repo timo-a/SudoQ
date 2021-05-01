@@ -31,7 +31,7 @@ public class BacktrackingTests extends TestWithInitCleanforSingletons {
 		assertEquals(back.getComplexityScore(), 10);
 	}
 
-	@Test(expected = AssertionError.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void testIInitialisationWithInvalidComplexity() {
 		new Backtracking(new SolverSudoku(new Sudoku(TypeBuilder.get99())), -2);
 	}
