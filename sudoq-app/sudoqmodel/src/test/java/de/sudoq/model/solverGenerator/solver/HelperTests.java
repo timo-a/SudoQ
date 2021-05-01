@@ -180,7 +180,7 @@ public class HelperTests {
 		new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 0, 20);
 	}
 
-	@Test(expected = AssertionError.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void testIllegalArgumentComplexityTooLow() {
 		new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 1, -1);
 	}
