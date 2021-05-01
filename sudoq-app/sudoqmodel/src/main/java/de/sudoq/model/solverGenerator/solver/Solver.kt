@@ -6,6 +6,7 @@ import de.sudoq.model.solverGenerator.solution.Solution
 import de.sudoq.model.solverGenerator.solution.SolveDerivation
 import de.sudoq.model.solverGenerator.solver.helper.*
 import de.sudoq.model.solvingAssistant.HintTypes
+import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.PositionMap
 import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint
@@ -16,7 +17,7 @@ import java.util.*
  * werden. Auch das Validieren eines Sudokus auf Lösbarkeit ist möglich.
  */
 open class Solver(sudoku: Sudoku) {
-    /* Attributes */
+
     /**
      * Returns the sudoku this solver is working on.
      * The returned object not identical to the object passed as parameter to the constructor!
@@ -216,44 +217,38 @@ open class Solver(sudoku: Sudoku) {
             checkNotNull(lastSolutions) { "lastsolutions is null -> no counts can be generated" }
             val values = HintTypes.values()
             val hist = IntArray(values.size)
-            for (s in lastSolutions!!) for (sd in s.getDerivations()) hist[sd.type!!.ordinal]++
+            for (s in lastSolutions!!)
+                for (sd in s.getDerivations())
+                    hist[sd.type!!.ordinal]++
             val hm = EnumMap<HintTypes, Int>(HintTypes::class.java)
-            for (i in hist.indices) if (hist[i] > 0) hm[values[i]] = hist[i]
+            for (i in hist.indices)
+                if (hist[i] > 0)
+                    hm[values[i]] = hist[i]
             return hm
         }//switch to separator after first element
 
-    //TODO switch to stringJoiner from (API 24) on
     val hintCountString: String
         get() {
-            val em: Map<HintTypes, Int>
-            em = try {
+            val em: Map<HintTypes, Int> = try {
                 hintCounts
             } catch (ise: IllegalStateException) {
                 return "lastSolutions is zero"
             }
-            var separator = "" //TODO switch to stringJoiner from (API 24) on
-            val countsBuilder = StringBuilder()
-            for (h in em.keys) {
-                countsBuilder.append(separator)
-                        .append(em[h].toString() + " " + h)
-                separator = "  " //switch to separator after first element
-            }
-            return countsBuilder.toString()
-        }
-    val hintScore: Int
-        get() {
-            val em = hintCounts
-            var checkscore = 0
-            for (h in em.keys) checkscore += em[h]!! * getHintScore(h)
-            return checkscore
+
+            return em.keys.joinToString(separator = " ") { h -> "${em[h].toString()} $h" }
         }
 
+    val hintScore: Int
+        get() = hintCounts.keys.sumOf { h -> hintCounts[h]!! * getHintScore(h) }
+
     private fun getHintScore(h: HintTypes): Int {
-        return if (h === HintTypes.NakedSingle) 10 else {
-            if (hintscores.isEmpty())
-                for (sh in helper)
-                    hintscores[sh.hintType!!] = sh.complexityScore
-            hintscores[h]!!
+        return if (h === HintTypes.NakedSingle)
+                    10
+               else {
+                 if (hintscores.isEmpty())
+                   for (sh in helper)
+                     hintscores[sh.hintType!!] = sh.complexityScore
+                 hintscores[h]!!
         }
     }
 
@@ -416,7 +411,10 @@ open class Solver(sudoku: Sudoku) {
             // try to solve the sudoku
             solved = isFilledCompletely
             if (!solved && isInvalid) {
-                if (advanceBranching(buildDerivation) == Branchresult.SUCCESS) didUpdate = true else isUnsolvable = true
+                if (advanceBranching(buildDerivation) == Branchresult.SUCCESS)
+                    didUpdate = true
+                else
+                    isUnsolvable = true
                 /*
 				 * if sudoku is invalid, has no branches and no solution was found,
 				 * it is invalid if there was already a solution
@@ -504,11 +502,11 @@ open class Solver(sudoku: Sudoku) {
                     branchPoints!!.push(lastSolutions!!.size)
                     //copied from class Backtracking (because we need a custom candidate here).
                     val lastDerivation = SolveDerivation(HintTypes.Backtracking)
-                    val irrelevantCandidates: BitSet? = candidates //startNewBranch() deletes candidates in currendCandidates, and branchpool can't be accessed from here, so we need to use saved bitset
+                    val irrelevantCandidates: BitSet = candidates //startNewBranch() deletes candidates in currendCandidates, and branchpool can't be accessed from here, so we need to use saved bitset
                     val relevantCandidates = BitSet()
                     relevantCandidates.set(nextCandidate)
-                    irrelevantCandidates!!.clear(nextCandidate)
-                    val derivField = DerivationCell(branchingPos!!,
+                    irrelevantCandidates.clear(nextCandidate)
+                    val derivField = DerivationCell(branchingPos,
                             relevantCandidates,
                             irrelevantCandidates)
                     lastDerivation.addDerivationCell(derivField)
@@ -544,7 +542,8 @@ if there is another candidate -> advance
 
                 //if a helper can be applied
                 if (hel.update(buildDerivation)) {
-                    if (!validation) solverSudoku.addComplexityValue(hel.complexityScore, hel !is Backtracking)
+                    if (!validation)
+                        solverSudoku.addComplexityValue(hel.complexityScore, hel !is Backtracking)
                     if (buildDerivation) {
                         val newSolution = Solution()
                         newSolution.addDerivation(hel.derivation!!)
@@ -593,7 +592,8 @@ if there is another candidate -> advance
  -						several actions per solution would only ovewrite themselves
  						SolveAction action = (SolveAction) new SolveActionFactory().createAction(b.nextSetBit(0),
 								this.sudoku.getField(p));
-						sol.setAction(action);*/newSolution.addDerivation(deriv)
+						sol.setAction(action);*/
+                        newSolution.addDerivation(deriv)
                         //lastSolutions.add(new Solution());
                     }
                     solverSudoku.setSolution(p, b.nextSetBit(0)) //execute, since only one candidate, take first
@@ -617,12 +617,13 @@ if there is another candidate -> advance
      */
     protected val isInvalid: Boolean
         get() {
-            //for (Position p : this.sudoku.positions)
-            for (p in solverSudoku.sudokuType!!.validPositions)  /* look for no solution entered && no candidates left */ if (solverSudoku.getCurrentCandidates(p).isEmpty && solverSudoku.getCell(p)!!.isNotSolved) return true
-            return false
-        }//return sudoku.positions.forall( p => !sudoku.getField(p).isNotSolved())
-    //return sudoku.positions.map(sudoku.getField).forall(f=>!f.isNotSolved())
-    //return !sudoku.positions.map(sudoku.getField).exists(f=>f.isNotSolved())
+            fun invalid(vp: Position): Boolean =
+                    solverSudoku.getCurrentCandidates(vp).isEmpty //no solution entered
+                    && solverSudoku.getCell(vp)!!.isNotSolved //no candidates left
+
+            return solverSudoku.sudokuType!!.validPositions.any(::invalid)
+        }
+
     /**
      * Überprüft, ob im Sudoku in jedem Feld eine Lösung eingetragen ist.
      * Keine Überprüfung auf Richtigkeit.
@@ -630,14 +631,9 @@ if there is another candidate -> advance
      * @return true, falls das Sudoku gelöst ist, false andernfalls
      */
     protected val isFilledCompletely: Boolean
-        get() {
+        get() = solverSudoku.positions!!.map(solverSudoku::getCell)
+                                        .none { it!!.isNotSolved }
 
-            //return sudoku.positions.forall( p => !sudoku.getField(p).isNotSolved())
-            //return sudoku.positions.map(sudoku.getField).forall(f=>!f.isNotSolved())
-            //return !sudoku.positions.map(sudoku.getField).exists(f=>f.isNotSolved())
-            for (p in solverSudoku.positions!!) if (solverSudoku.getCell(p)!!.isNotSolved) return false
-            return true
-        }
 
     /**
      * intended for debugging only

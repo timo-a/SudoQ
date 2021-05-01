@@ -9,7 +9,7 @@ import java.util.*
  * Eine für den Lösungsalgorithmus optimierte und erweiterte Sudoku Klasse
  */
 class SolverSudoku : Sudoku {
-    /* Attributes */
+
     /**
      * Eine Liste aller Positionen dieses Sudokus
      */
@@ -54,8 +54,6 @@ class SolverSudoku : Sudoku {
      */
     var complexityValue = 0
         private set
-    private val neighborDirectory //better to have that static in the type
-            : Map<Constraint, List<Constraint>>? = null
 
     enum class Initialization {
         NEW_CANDIDATES, USE_EXISTING
@@ -120,8 +118,10 @@ class SolverSudoku : Sudoku {
         //this.positions.stream().forEach(p -> this.constraints.put(p, new ArrayList<>()));
 
         // add the constraints each position belongs to to the list
-        val allConstraints: Iterable<Constraint>? = sudoku.sudokuType
-        for (constr in allConstraints!!) for (pos in constr.getPositions()) constraints!![pos]!!.add(constr)
+        val allConstraints: Iterable<Constraint> = sudoku.sudokuType!!
+        for (constr in allConstraints)
+            for (pos in constr.getPositions())
+                constraints!![pos]!!.add(constr)
 
         // initialize the candidates map
         positionPool = PositionMapPool(sudokuType!!.size, positions)
@@ -133,8 +133,11 @@ class SolverSudoku : Sudoku {
         when (mode) {
             Initialization.NEW_CANDIDATES -> resetCandidates()
             Initialization.USE_EXISTING ->                //solverSudoku's fields take the candidates/notes from sudoku
-                for (p in positions!!) if (sudoku.getCell(p)!!.isNotSolved) {
-                    for (i in sudokuType!!.symbolIterator) if (sudoku.getCell(p)!!.isNoteSet(i) != currentCandidates!![p!!]!![i]) currentCandidates!![p!!]!!.flip(i)
+                for (p in positions!!)
+                    if (sudoku.getCell(p)!!.isNotSolved) {
+                    for (i in sudokuType!!.symbolIterator)
+                        if (sudoku.getCell(p)!!.isNoteSet(i) != currentCandidates!![p]!![i])
+                            currentCandidates!![p]!!.flip(i)
                 }
         }
     }
@@ -152,14 +155,13 @@ class SolverSudoku : Sudoku {
         positionPool!!.returnAll()
         branchings!!.clear()
         currentCandidates = positionPool!!.positionMap
-        // set the candidate lists of all fields to maximum
-        for (p in positions!!) if (cells!![p]!!.isNotSolved) currentCandidates!![p]!![0] = sudokuType!!.numberOfSymbols
 
+        // set the candidate lists of all unsolved cells to 'all possible'
+        positions!!.filter { position -> cells!![position]!!.isNotSolved }
+                   .map { position -> currentCandidates!![position]!!}
+                   .forEach { candidateSet -> candidateSet.set(0, sudokuType!!.numberOfSymbols)}
 
-        /*this.positions.stream()
-						.filter(p -> fields.get(p).isNotSolved())
-						.forEach(p -> this.currentCandidates.get(p).set(0, getSudokuType().getNumberOfSymbols()));
-		functional*/updateCandidates()
+        updateCandidates()
     }
 
     /**
@@ -173,16 +175,17 @@ class SolverSudoku : Sudoku {
      * The candidate that is guessed as start of this branch
      *
      * @throws IllegalArgumentException
-     * Wird geworfen, falls die spezifizierte Position null oder nicht in dem Sudoku vorhanden ist
+     * Wird geworfen, falls die spezifizierte Position nicht in dem Sudoku vorhanden ist
      */
-    fun startNewBranch(pos: Position?, candidate: Int) {
-        require(!(pos == null || cells!![pos] == null)) { "Position was null or does not exist in this sudoku." }
+    fun startNewBranch(pos: Position, candidate: Int) {
+        require(cells!![pos] != null) { "Position does not exist in this sudoku." }
 
         // initialize a new branch and copy candidate lists of current branch
         val branch = branchPool!!.getBranching(pos, candidate) //create new branch
         branch.candidates = currentCandidates //store current candidates there
         currentCandidates = positionPool!!.positionMap //current candidates in a new (empty) PositionMap
-        for (p in positions!!) currentCandidates!![p]!!.or(branch.candidates!![p]) //fill currentCandidates with candidates from before branching
+        for (p in positions!!)
+            currentCandidates!![p]!!.or(branch.candidates!![p]!!) //fill currentCandidates with candidates from before branching
         branchings!!.push(branch) //put branch (i.e. a backup of what we had before this method was called) on branchings (which seems to be identical to branchpool.branchesinactiveuse)
 
         //the candidate given as parameter is entered as a (user solution)
@@ -211,7 +214,8 @@ class SolverSudoku : Sudoku {
         if (branchings!!.empty()) return
         val lastBranching = branchings!!.pop()
         currentCandidates = lastBranching!!.candidates //override current branch B with A
-        for (p in lastBranching.solutionsSet) cells!![p!!]!!.setCurrentValue(Cell.EMPTYVAL, false) //remove solutions added in B
+        for (p in lastBranching.solutionsSet)
+            cells!![p]!!.setCurrentValue(Cell.EMPTYVAL, false) //remove solutions added in B
         complexityValue -= lastBranching.complexityValue //substract cmplx scores of techniques that are not used after all
 
         //BitSet branchCandidates = this.currentCandidates.get(lastBranching.position);//candidates of A at critical pos of A
@@ -251,32 +255,26 @@ class SolverSudoku : Sudoku {
                             val updatedPosition: Position = updatedPositions[up]
                             currentCandidates!![updatedPosition]!!.clear(getCell(position)!!.currentValue)
                             if (currentCandidates!![updatedPosition]!!.isEmpty
-                                    && getCell(updatedPosition)!!.isNotSolved) isInvalid = true
+                                    && getCell(updatedPosition)!!.isNotSolved)
+                                        isInvalid = true
                             up++
                         }
                     }
                 }
             } else {
                 /* Update candidates in non-unique constraints */
-                var hasNonUnique = false
                 updatedConstraints = constraints!![position]!!
-                for (updatedConstraint in updatedConstraints) {
-                    if (!updatedConstraint.hasUniqueBehavior()) {
-                        hasNonUnique = true
-                        break
-                    }
-                }
+                var hasNonUnique = updatedConstraints.any { c -> !c.hasUniqueBehavior() }
+
                 //boolean hasNonUnique = updatedConstraints.stream().anyMatch(c -> !c.hasUniqueBehavior());
                 if (hasNonUnique) {
-                    var currentCell: Cell? = null
-                    var currentCandidatesSet: BitSet? = null
-                    currentCell = cells!![position]
-                    currentCandidatesSet = currentCandidates!![position]
+                    var currentCell: Cell = cells!![position]!!
+                    var currentCandidatesSet: BitSet = currentCandidates!![position]!!
                     var currentCandidate = -1
-                    val numberOfCandidates = currentCandidatesSet!!.cardinality()
-                    for (i in 0 until numberOfCandidates) {
+                    val numberOfCandidates = currentCandidatesSet.cardinality()
+                    (0 until numberOfCandidates).forEach { _ ->
                         currentCandidate = currentCandidatesSet.nextSetBit(currentCandidate + 1)
-                        currentCell!!.setCurrentValue(currentCandidate, false)
+                        currentCell.setCurrentValue(currentCandidate, false)
                         for (updatedConstraint in updatedConstraints) if (!updatedConstraint.isSaturated(this)) currentCandidatesSet.clear(currentCandidate)
                         currentCell.setCurrentValue(Cell.EMPTYVAL, false)
                     }
@@ -303,10 +301,10 @@ class SolverSudoku : Sudoku {
         var checkedConstraints: ArrayList<Constraint>
         for (constr in updatedConstraints) {
             updatedPositions = constr.getPositions()
-            for (uPos in updatedPositions) if (cells!![uPos!!]!!.isNotSolved) if (constr.hasUniqueBehavior()) currentCandidates!![uPos]!!.clear(candidate) else {
+            for (uPos in updatedPositions) if (cells!![uPos]!!.isNotSolved) if (constr.hasUniqueBehavior()) currentCandidates!![uPos]!!.clear(candidate) else {
                 var currentCandidate = -1
                 val numberOfCandidates = currentCandidates!![uPos]!!.cardinality()
-                for (i in 0 until numberOfCandidates) {
+                (0 until numberOfCandidates).forEach { _ ->
                     currentCandidate = currentCandidates!![uPos]!!.nextSetBit(currentCandidate + 1)
                     cells!![uPos]!!.setCurrentValue(currentCandidate, false)
                     checkedConstraints = constraints!![uPos]!!
@@ -330,10 +328,12 @@ class SolverSudoku : Sudoku {
      * Die temporäre Lösung, die eingetragen werden soll
      */
     fun setSolution(pos: Position?, candidate: Int) {
-        if (pos == null || candidate < 0) return
+        if (pos == null || candidate < 0)
+            return
         cells!![pos]!!.setCurrentValue(candidate, false)
         currentCandidates!![pos]!!.clear()
-        if (hasBranch()) branchings!!.peek()!!.solutionsSet.add(pos)
+        if (hasBranch())
+            branchings!!.peek()!!.solutionsSet.add(pos)
         updateCandidates(pos, candidate)
     }
 
@@ -343,7 +343,7 @@ class SolverSudoku : Sudoku {
      * @return true, falls auf diesem Sudoku ein Branch erzeugt wurde, false falls nicht
      */
     fun hasBranch(): Boolean {
-        return !branchings!!.isEmpty()
+        return branchings!!.isNotEmpty()
     }
 
     /**
@@ -381,7 +381,8 @@ class SolverSudoku : Sudoku {
      */
     fun addComplexityValue(value: Int, applyToBranch: Boolean) {
         if (value > 0) {
-            if (branchings!!.size > 0) branchings!!.peek()!!.complexityValue += value
+            if (branchings!!.size > 0)
+                branchings!!.peek()!!.complexityValue += value
             complexityValue += value
         }
     }
@@ -404,12 +405,12 @@ class SolverSudoku : Sudoku {
         /**
          * Eine Liste der erstellten, noch nicht vergebenen Maps
          */
-        private val unusedMaps: Stack<PositionMap<CandidateSet>>
+        private val unusedMaps: Stack<PositionMap<CandidateSet>> = Stack()
 
         /**
          * Ein Stack der erstellten und bereits vergebenen Maps
          */
-        private val usedMaps: Stack<PositionMap<CandidateSet>>
+        private val usedMaps: Stack<PositionMap<CandidateSet>> = Stack()
 
 
         /**
@@ -422,8 +423,6 @@ class SolverSudoku : Sudoku {
          */
         init {
             // Keine Überprüfung der Eingabesituation, da nur lokal genutzt
-            usedMaps = Stack()
-            unusedMaps = Stack()
             unusedMaps.push(initialisePositionMap())
             unusedMaps.push(initialisePositionMap())
         }
@@ -437,7 +436,7 @@ class SolverSudoku : Sudoku {
          */
         val positionMap: PositionMap<CandidateSet>
             get() {
-                if (unusedMaps.size == 0) {
+                if (unusedMaps.empty()) {
                     unusedMaps.add(initialisePositionMap())
                 }
                 val ret = unusedMaps.pop()
@@ -482,37 +481,4 @@ class SolverSudoku : Sudoku {
 
     }
 
-    companion object {
-        /**
-         * Determines whether Lists a,b have a common(by equals) element
-         * @param a first list
-         * @param b second list
-         * @param <T> any element in the list needs to have equals defined
-         * @return true iff i.equals(j) == true for at least one i € a, j € b
-        </T> */
-        fun <T> intersect(a: Iterable<T>, b: Iterable<T>): Boolean {
-            for (t1 in a) for (t2 in b) if (t1 == t2) return true
-            return false
-        } //	/**
-        //	 * 	creates a perfect clone
-        // 	 */
-        //	@Override
-        //	public Object clone(){
-        //		SolverSudoku clone = new SolverSudoku(this.type);
-        //		clone.id             = this.id;
-        //		clone.transformCount = this.transformCount;
-        //		clone.fields = new HashMap<>();
-        //
-        //		for(Map.Entry<Position, Field> e : this.fields.entrySet())
-        //			clone.fields.put(e.getKey(), (Field) e.getValue().clone());
-        //
-        //		clone.fieldIdCounter = this.fieldIdCounter;
-        //
-        //		clone.fieldPositions = new HashMap<>(this.fieldPositions);
-        //
-        //		clone.complexity = this.complexity;
-        //
-        //		return clone;
-        //	}
-    }
 }

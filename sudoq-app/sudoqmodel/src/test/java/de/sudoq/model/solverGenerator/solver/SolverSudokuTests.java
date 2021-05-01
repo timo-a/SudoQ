@@ -136,7 +136,7 @@ public class SolverSudokuTests {
 		assertTrue(sudoku.getSudokuType().checkSudoku(sudoku));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void testStartNewBranchWithoutPosition() {
 		sudoku.startNewBranch(null, 1);
 	}
