@@ -216,12 +216,12 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 		// Load the Game by using current game id
 		if (savedInstanceState != null) {
 			try {
-				this.game = GameManager.getInstance().load(savedInstanceState.getInt(SAVE_GAME_ID + ""));
+				this.game = GameManager.Companion.getInstance().load(savedInstanceState.getInt(SAVE_GAME_ID + ""));
 			} catch (Exception e) {
 				this.finish();
 			}
 		} else {
-			this.game = GameManager.getInstance().load(Profile.getInstance().getCurrentGame());
+			this.game = GameManager.Companion.getInstance().load(Profile.getInstance().getCurrentGame());
 		}
 
 		if (game != null) {
@@ -475,7 +475,7 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 	@Override
 	public void onPause() {
 		this.timeHandler.removeCallbacks(timeUpdate);
-		GameManager.getInstance().save(this.game);
+		GameManager.Companion.getInstance().save(this.game);
 
 		float prevZoomFactor = this.sudokuScrollView.getZoomFactor();
 		sudokuView.setDrawingCacheEnabled(true);
@@ -525,7 +525,7 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 	@Override
 	public void finish() {
 		if (this.game != null) {
-			GameManager.getInstance().save(this.game);
+			GameManager.Companion.getInstance().save(this.game);
 		}
 		super.finish();
 		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -832,7 +832,7 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 
     /** saves the whole game, purpose: save the action tree so a spontaneous crash doesn't lose us actions record */
 	private void saveActionTree() {
-		GameManager.getInstance().save(this.game);
+		GameManager.Companion.getInstance().save(this.game);
 	}
 
 	ActionTreeController getActionTreeController(){
