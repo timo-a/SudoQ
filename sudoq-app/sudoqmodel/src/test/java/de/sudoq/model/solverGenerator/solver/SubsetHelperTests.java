@@ -34,7 +34,7 @@ public class SubsetHelperTests extends HiddenHelper{
 		for(int i : new int[]{0,1,2,3})
 			currentSet.set(i);
 
-		this.level=4;        //just to be sure
+		assert super.getLevel() == 4;        //just to be sure
 
 		evaluateGetNext();
 

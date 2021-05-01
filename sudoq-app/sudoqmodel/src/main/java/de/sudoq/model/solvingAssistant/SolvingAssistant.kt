@@ -30,7 +30,7 @@ object SolvingAssistant {
         helpers.add(NoNotesHelper(s, 0))
         for (sh in helpers) if (sh.update(true)) {
             //System.out.println("SolvingAssistant finds: " + sh.getClass());
-            return sh.derivation
+            return sh.derivation!!
         }
         return BacktrackingDerivation()
     }

@@ -6,30 +6,31 @@ import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.Position
 import java.util.*
 
-abstract class SubsetHelper protected constructor(sudoku: SolverSudoku?,
+abstract class SubsetHelper protected constructor(sudoku: SolverSudoku,
                                                   /**
                                                    * Die Stufe des Helpers, wobei diese die Anzahl der Ziffern und Felder angibt, welche die Naked-Bedingung erfüllen
                                                    * sollen
                                                    */
-                                                  protected var level: Int, complexity: Int) : SolveHelper(sudoku!!, complexity) {
+                                                  protected var level: Int, complexity: Int) : SolveHelper(sudoku, complexity) {
     /* Attributes */
     /**
      * Ein BitSet, welches alle Kandidaten des aktuell untersuchten Constraints enthält. Aus Performancegründen nicht
      * lokal definiert.
      */
-    protected var constraintSet //TODO call it candidateset?
+    @JvmField protected var constraintSet //TODO call it candidateset?
             : BitSet
 
     /**
      * Das BitSet, welches das gerade untersuchte Subset darstellt. Aus Performancegründen nicht lokal definiert.
      */
-    protected var currentSet: CandidateSet
+    @JvmField protected var currentSet: CandidateSet
 
     /**
      * Die Positionen, welche zum aktuell untersuchten Subset gehören. Aus Performancegründen nicht lokal definiert.
      */
+    @JvmField
     protected var subsetPositions //TODO make Stack? might be far more readable
-            : List<Position>
+            : MutableList<Position>
 
     /**
      * Ein BitSet für lokale Kopien zum vergleichen. Aus Performancegründen nicht lokal definiert.
@@ -95,48 +96,9 @@ abstract class SubsetHelper protected constructor(sudoku: SolverSudoku?,
         return found
     }
 
-    protected abstract fun collectPossibleCandidates(constraint: Constraint?): BitSet
+    protected abstract fun collectPossibleCandidates(constraint: Constraint): BitSet
 
     //todo make this an iterator?
-    val nextSubset: Boolean
-        protected get() {
-            var nextSetExists = false
-            val allCandidates = constraintSet //rename for clarity, holds all candiates(set to 1) in the current constraint
-            val lastBitSet = currentSet.length() - 1
-            // Get the last set candidate
-
-            // Calculate next candidate set if existing
-            var nextCandidate = lastBitSet
-            var currentCandidate = allCandidates.nextSetBit(lastBitSet + 1) //test if there is another candidate -> we can shift
-            if (currentCandidate != -1) //if we found one
-                currentCandidate++ //increment for coming 'if' namely 'if (allCandidates.nextSetBit(nextCandidate + 1) != currentCandidate) {' left side is either -1 => no next set or currentCandidate, but we want ineq in that case , so increment it. Why not writing '-1' in the left side? because loop: the limit won't always be the last bit, it is shifted to the left.
-            while (!nextSetExists && nextCandidate != -1) { //initially true iff currentSet not empty
-                // If the next candidate can be increased without interfering with
-                // the next one, do it
-                if (allCandidates.nextSetBit(nextCandidate + 1) != currentCandidate) {
-                    nextSetExists = true
-                    currentSet.clear(nextCandidate)
-                    currentCandidate = nextCandidate
-                    while (currentSet.cardinality() < level) { //fill remaining
-                        currentCandidate = allCandidates.nextSetBit(currentCandidate + 1)
-                        currentSet.set(currentCandidate)
-                    }
-                }
-
-
-                // If no set was found, get the next highest candidate to manipulate it
-                // save nextCandidate in currentCandidate and have the new nextCandidate point to the next set bit below where it's currently pointing at; then delete old one
-                if (!nextSetExists) {
-                    currentCandidate = nextCandidate
-                    nextCandidate = -1 //
-                    while (currentSet.nextSetBit(nextCandidate + 1) < currentCandidate) { // == nextCandidate = currentSet.previousSetBit(nextCandidate)
-                        nextCandidate = currentSet.nextSetBit(nextCandidate + 1) // but we don't have the api for it
-                    }
-                    currentSet.clear(currentCandidate)
-                }
-            }
-            return nextSetExists
-        }
 
     /**
      * Berechnet das nächste Subset des spezifizierten BitSets mit der im Konstruktor definierten Größe "level",
@@ -221,7 +183,7 @@ abstract class SubsetHelper protected constructor(sudoku: SolverSudoku?,
      * getDerivation Methode abgerufen werden kann
      * @return true, falls ein Subset gefunden wurde, false falls nicht
      */
-    protected abstract fun updateNext(constraint: Constraint?, buildDerivation: Boolean): Boolean
+    protected abstract fun updateNext(constraint: Constraint, buildDerivation: Boolean): Boolean
 
     companion object {
         /**
