@@ -21,7 +21,7 @@ import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.sudoku.CandidateSet;
 import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Sudoku;
-import de.sudoq.model.sudoku.Utils;
+import de.sudoq.model.sudoku.UtilsKt;
 import de.sudoq.model.sudoku.Utils.ConstraintShape;
 
 /**
@@ -159,8 +159,8 @@ public class HintFormulator {
         sb.append(context.getString(R.string.hint_nakedsingle_note).replace("{note}", note+""));
         sb.append(' ');
 
-        String shapeString =  Utility.constraintShapeGenDet2string(context, Utils.getGroupShape(d.getConstraint()));
-        String shapePrepDet = Utility.getGender(context, Utils.getGroupShape(d.getConstraint()));
+        String shapeString =  Utility.constraintShapeGenDet2string(context, UtilsKt.getGroupShape(d.getConstraint()));
+        String shapePrepDet = Utility.getGender(context, UtilsKt.getGroupShape(d.getConstraint()));
         String prepDet      = Utility.gender2inThe(context, shapePrepDet);
 
         sb.append(context.getString(R.string.hint_nakedsingle_remove).replace("{prep det}", prepDet)
