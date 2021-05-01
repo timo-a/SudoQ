@@ -182,11 +182,11 @@ public class SolverTests {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void solveAllIllegalComplexity() {
-		solver.sudoku.setComplexity(null);
+		solver.solverSudoku.setComplexity(null);
 		solver.validate(null);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void testNullSudoku() {
 		new Solver(null);
 	}
@@ -341,7 +341,7 @@ public class SolverTests {
 			assertTrue(c.isSaturated(sudoku16x16));
 		}
 
-		System.out.println("Solution (16x16) - Complexity: " + solver.sudoku.getComplexityValue());
+		System.out.println("Solution (16x16) - Complexity: " + solver.solverSudoku.getComplexityValue());
 		if (PRINT_SOLUTIONS) {
 			StringBuilder sb = new StringBuilder();
 			for (int j = 0; j < sudoku16x16.getSudokuType().getSize().getY(); j++) {
@@ -484,7 +484,7 @@ public class SolverTests {
 		}
 
 		// print solution if wanted
-		System.out.println("Solution (16x16) - Complexity: " + solver.sudoku.getComplexityValue());
+		System.out.println("Solution (16x16) - Complexity: " + solver.solverSudoku.getComplexityValue());
 		if (PRINT_SOLUTIONS) {
 			StringBuilder sb = new StringBuilder();
 			for (int j = 0; j < sudoku16x16.getSudokuType().getSize().getY(); j++) {

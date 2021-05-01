@@ -13,24 +13,27 @@ class SolverSudoku : Sudoku {
     /**
      * Eine Liste aller Positionen dieses Sudokus
      */
+    @JvmField
     var positions: MutableList<Position>? = null
 
     /**
      * Mappt die Positionen auf eine Liste von Constraints, zu welchen diese Position gehört
      */
+    @JvmField
     var constraints: PositionMap<ArrayList<Constraint>>? = null
 
     /**
      * Mappt die Positionen auf ein BitSet, welches die Kandidaten für dieses Feld repräsentiert nach jedem
      * Branching-Schritt repräsentiert
      */
-    private var currentCandidates: PositionMap<CandidateSet?>? = null
+    private var currentCandidates: PositionMap<CandidateSet>? = null
 
     /**
      * Speichert die Positionen an denen gebrancht wurde. (implizit in den einzelnen branchings )
      * TODO warum nehmen wir nicht branchPool.usedBranchings?
      */
-    var branchings: Stack<Branching?>? = null
+    @JvmField
+    var branchings: Stack<Branching>? = null
 
     /**
      * Der BranchingPool zum Verwalten der Branchings.
@@ -94,20 +97,22 @@ class SolverSudoku : Sudoku {
 
         // initialize the list of positions
         //this.positions = new ArrayList<>(fields.keySet());
-        positions = ArrayList() //for debugging we need the same as once
-        positions.addAll(cells!!.keys)
+        positions = ArrayList(cells!!.keys) //for debugging we need the same as once
 
 
-        /* For debugging, we need predictable order */positions = Generator.getPositions(sudoku) //TODO remove again
+        /* For debugging, we need predictable order */
+        positions = Generator.getPositions(sudoku) //TODO remove again
 
 
         // initialize new SolverSudoku with the fields of the specified one
-        for (p in positions) cells!![p!!] = (sudoku.getCell(p!!)!!.clone() as Cell)
+        for (p in positions!!)
+            cells!![p] = (sudoku.getCell(p)!!.clone() as Cell)
 
         // initialize the constraints lists for each position and the initial
         // candidates for each field
         constraints = PositionMap(sudokuType!!.size!!)
-        for (p in positions) constraints!!.put(p!!, ArrayList())
+        for (p in positions!!)
+            constraints!!.put(p, ArrayList())
 
 
         //if we were functional
@@ -128,8 +133,8 @@ class SolverSudoku : Sudoku {
         when (mode) {
             Initialization.NEW_CANDIDATES -> resetCandidates()
             Initialization.USE_EXISTING ->                //solverSudoku's fields take the candidates/notes from sudoku
-                for (p in positions) if (sudoku.getCell(p!!)!!.isNotSolved) {
-                    for (i in sudokuType!!.symbolIterator) if (sudoku.getCell(p!!)!!.isNoteSet(i) != currentCandidates!![p!!]!![i]) currentCandidates!![p!!]!!.flip(i)
+                for (p in positions!!) if (sudoku.getCell(p)!!.isNotSolved) {
+                    for (i in sudokuType!!.symbolIterator) if (sudoku.getCell(p)!!.isNoteSet(i) != currentCandidates!![p!!]!![i]) currentCandidates!![p!!]!!.flip(i)
                 }
         }
     }
@@ -175,7 +180,7 @@ class SolverSudoku : Sudoku {
 
         // initialize a new branch and copy candidate lists of current branch
         val branch = branchPool!!.getBranching(pos, candidate) //create new branch
-        branch!!.candidates = currentCandidates //store current candidates there
+        branch.candidates = currentCandidates //store current candidates there
         currentCandidates = positionPool!!.positionMap //current candidates in a new (empty) PositionMap
         for (p in positions!!) currentCandidates!![p]!!.or(branch.candidates!![p]) //fill currentCandidates with candidates from before branching
         branchings!!.push(branch) //put branch (i.e. a backup of what we had before this method was called) on branchings (which seems to be identical to branchpool.branchesinactiveuse)
@@ -232,7 +237,7 @@ class SolverSudoku : Sudoku {
      */
     fun updateCandidates() {
         var updatedConstraints: ArrayList<Constraint>
-        var updatedPositions: ArrayList<Position?>
+        var updatedPositions: ArrayList<Position>
         var isInvalid = false
         for (position in positions!!) {
             if (!isInvalid && !getCell(position)!!.isNotSolved) {
@@ -294,7 +299,7 @@ class SolverSudoku : Sudoku {
     fun updateCandidates(pos: Position?, candidate: Int) {
         if (pos == null) return
         val updatedConstraints = constraints!![pos]!!
-        var updatedPositions: ArrayList<Position?>
+        var updatedPositions: ArrayList<Position>
         var checkedConstraints: ArrayList<Constraint>
         for (constr in updatedConstraints) {
             updatedPositions = constr.getPositions()
@@ -361,8 +366,8 @@ class SolverSudoku : Sudoku {
      * @throws IllegalArgumentException
      * Wird geworfen, falls die spezifizierte Position ungültig ist
      */
-    fun getCurrentCandidates(pos: Position?): CandidateSet? {
-        return currentCandidates!![pos!!]
+    fun getCurrentCandidates(pos: Position): CandidateSet {
+        return currentCandidates!![pos]!!
     }
 
     /**
@@ -388,25 +393,41 @@ class SolverSudoku : Sudoku {
     /**
      * Diese Klasse stellt einen Pool von PositionMaps auf BitSets zur Verfügung, sodass benutzte PositionMaps nicht
      * verfallen, sondern im Pool behalten und für eine weitere Nutzung vorgehalten werden.
+     * @property currentDimension Die Größe der Verwalteten PositionMaps
+     * @property Die Positionen
      */
     private class PositionMapPool(
-            /**
-             * Die Größe der Verwalteten PositionMaps
-             */
             private val currentDimension: Position?,
-            /**
-             * Die Positionen
-             */
             private val positions: List<Position>?) {
+
+
         /**
          * Eine Liste der erstellten, noch nicht vergebenen Maps
          */
-        private val unusedMaps: Stack<PositionMap<CandidateSet?>>
+        private val unusedMaps: Stack<PositionMap<CandidateSet>>
 
         /**
          * Ein Stack der erstellten und bereits vergebenen Maps
          */
-        private val usedMaps: Stack<PositionMap<CandidateSet?>>
+        private val usedMaps: Stack<PositionMap<CandidateSet>>
+
+
+        /**
+         * Initialisiert einen neues PositionMapPool mit PositionMaps der spezifizierten Größe. Die dimension sollte
+         * nicht null oder gleich 0 sein, die positions sollten ebenfalls nicht null sein und denen des Sudokus
+         * entsprechen.
+         *
+         * @param dimension
+         * Die Größe der verwalteten PositionMaps
+         */
+        init {
+            // Keine Überprüfung der Eingabesituation, da nur lokal genutzt
+            usedMaps = Stack()
+            unusedMaps = Stack()
+            unusedMaps.push(initialisePositionMap())
+            unusedMaps.push(initialisePositionMap())
+        }
+
 
         /**
          * Gibt eine PositionMap entsprechend der aktuell gesetzten Größe zurück. Ist der Pool leer, so wird seine Größe
@@ -414,7 +435,7 @@ class SolverSudoku : Sudoku {
          *
          * @return Eine PositionMap entsprechend der aktuell gesetzten Größe
          */
-        val positionMap: PositionMap<CandidateSet?>
+        val positionMap: PositionMap<CandidateSet>
             get() {
                 if (unusedMaps.size == 0) {
                     unusedMaps.add(initialisePositionMap())
@@ -442,8 +463,8 @@ class SolverSudoku : Sudoku {
          *
          * @return Eine neue PositionMap der im Konstruktor definierten Größe
          */
-        private fun initialisePositionMap(): PositionMap<CandidateSet?> {
-            val newMap = PositionMap<CandidateSet?>(currentDimension!!)
+        private fun initialisePositionMap(): PositionMap<CandidateSet> {
+            val newMap = PositionMap<CandidateSet>(currentDimension!!)
             for (pos in positions!!) {
                 newMap.put(pos, CandidateSet())
             }
@@ -459,21 +480,6 @@ class SolverSudoku : Sudoku {
             }
         }
 
-        /**
-         * Initialisiert einen neues PositionMapPool mit PositionMaps der spezifizierten Größe. Die dimension sollte
-         * nicht null oder gleich 0 sein, die positions sollten ebenfalls nicht null sein und denen des Sudokus
-         * entsprechen.
-         *
-         * @param dimension
-         * Die Größe der verwalteten PositionMaps
-         */
-        init {
-            // Keine Überprüfung der Eingabesituation, da nur lokal genutzt
-            usedMaps = Stack()
-            unusedMaps = Stack()
-            unusedMaps.push(initialisePositionMap())
-            unusedMaps.push(initialisePositionMap())
-        }
     }
 
     companion object {

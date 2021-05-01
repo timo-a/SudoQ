@@ -91,7 +91,7 @@ public class SolverIntegrationTests {
 		}
 
         // print solution if wanted
-        System.out.println(title + solver.sudoku.getComplexityValue());
+        System.out.println(title + solver.solverSudoku.getComplexityValue());
 		if (PRINT_SOLUTIONS) {
 			StringBuilder sb = new StringBuilder();
 			for (int j = 0; j < size.getY(); j++) {
@@ -160,7 +160,7 @@ public class SolverIntegrationTests {
 		sudoku.getCell(Position.get(8, 4)).setCurrentValue(0);
 
 		assertEquals(solver.validate(solution), ComplexityRelation.CONSTRAINT_SATURATION);
-		solver.sudoku.setComplexity(Complexity.difficult);
+		solver.solverSudoku.setComplexity(Complexity.difficult);
 		assertEquals(solver.validate(solution), ComplexityRelation.MUCH_TOO_EASY);
 
 		skeleton("Solution (Easy 2) - Complexity: ");
@@ -383,7 +383,7 @@ public class SolverIntegrationTests {
 		sudoku.getCell(Position.get(6, 8)).setCurrentValue(3);
 
 		assertEquals(solver.validate(solution), ComplexityRelation.CONSTRAINT_SATURATION);
-		solver.sudoku.setComplexity(Complexity.easy);
+		solver.solverSudoku.setComplexity(Complexity.easy);
 		assertEquals(solver.validate(solution), ComplexityRelation.MUCH_TOO_DIFFICULT);
 
 		skeleton("Solution (Medium 4) - Complexity: ");
@@ -523,7 +523,7 @@ public class SolverIntegrationTests {
 		sudoku.getCell(Position.get(7, 8)).setCurrentValue(6);
 
 		assertEquals(ComplexityRelation.CONSTRAINT_SATURATION, solver.validate(solution));
-		solver.sudoku.setComplexity(Complexity.infernal);
+		solver.solverSudoku.setComplexity(Complexity.infernal);
 		// assertEquals(solver.validate(solution), ComplexityRelation.TOO_EASY);
 
 		skeleton("Solution (Difficult 4) - Complexity: ");
@@ -557,7 +557,7 @@ public class SolverIntegrationTests {
 		sudoku.getCell(Position.get(8, 8)).setCurrentValue(1);
 
 		assertEquals(ComplexityRelation.CONSTRAINT_SATURATION, solver.validate(solution));
-		solver.sudoku.setComplexity(Complexity.easy);
+		solver.solverSudoku.setComplexity(Complexity.easy);
 		assertEquals(ComplexityRelation.TOO_DIFFICULT, solver.validate(solution));
 
 		skeleton("Solution (Difficult 5) - Complexity: ");
@@ -686,9 +686,9 @@ public class SolverIntegrationTests {
 		sudoku.getCell(Position.get(2, 8)).setCurrentValue(6);
 		sudoku.getCell(Position.get(6, 8)).setCurrentValue(2);
 
-		solver.sudoku.setComplexity(Complexity.easy);
+		solver.solverSudoku.setComplexity(Complexity.easy);
 		assertEquals(solver.validate(solution), ComplexityRelation.INVALID);
-		solver.sudoku.setComplexity(Complexity.arbitrary);
+		solver.solverSudoku.setComplexity(Complexity.arbitrary);
 		assertEquals(solver.validate(solution), ComplexityRelation.CONSTRAINT_SATURATION);
 
 		skeleton("Solution (world's hardest) - Complexity: ");
