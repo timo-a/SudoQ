@@ -8,15 +8,23 @@ import de.sudoq.model.sudoku.Position
 import java.util.*
 
 /**
- * Dieser konkrete SolverHelper implementiert eine Vorgehensweise zum Lösen eines Sudokus. Das Backtracking ist ein Trial and
- * Error Verfahren, wobei beginnend bei einem Feld systematisch versucht wird ein Symbol einzutragen, sodass die
- * Constraints weiterhin erfüllt sind. Ist dies der Fall, so wird dasselbe mit dem nächsten Feld getan, bis entweder in
- * einem Feld beim Eintragen jedes Symbols die Constraints verletzt sind oder die Kandidatenliste eines anderen Feldes
- * leer wird oder aber das gesamte Sudoku befüllt ist. In den ersten beiden Fällen wird ein Feld zurückgegangen
- * (Backtracking) und dort mit dem nächsten Symbol fortgefahren.
+ * Dieser konkrete SolverHelper implementiert eine Vorgehensweise zum Lösen eines Sudokus.
+ * Das Backtracking ist ein Trial and Error Verfahren,
+ * wobei beginnend bei einem Feld systematisch versucht wird ein Symbol einzutragen,
+ * sodass die Constraints weiterhin erfüllt sind.
+ * Ist dies der Fall, so wird dasselbe mit dem nächsten Feld getan, bis entweder in
+ * einem Feld beim Eintragen jedes Symbols die Constraints verletzt sind
+ * oder die Kandidatenliste eines anderen Feldes
+ * leer wird oder aber das gesamte Sudoku befüllt ist.
+ * In den ersten beiden Fällen wird ein Feld zurückgegangen(Backtracking)
+ * und dort mit dem nächsten Symbol fortgefahren.
  */
-class Backtracking(sudoku: SolverSudoku?, complexity: Int) : SolveHelper(sudoku!!, complexity) {
-    /* Methods */
+class Backtracking(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku, complexity) {
+
+    init {
+        hintType = HintTypes.Backtracking
+    }
+
     /**
      * Wendet das Backtracking-Verfahren an und ermittelt damit die Lösung für alle Felder des Sudokus. Es wird die
      * Kandidatenliste desjenigen Feldes mit der kleinsten Kandidatenliste upgedated, sodass in dieser nur noch die
@@ -39,8 +47,6 @@ class Backtracking(sudoku: SolverSudoku?, complexity: Int) : SolveHelper(sudoku!
 
         //take the position with minimal candidates
         val leastCandidatesPosition = getMinimalCandidatesPosition(ambiguousPositions)
-                ?: //if none was found
-                return false
 
         /*  */
         val candidates = sudoku.getCurrentCandidates(leastCandidatesPosition).clone() as BitSet
@@ -85,18 +91,5 @@ class Backtracking(sudoku: SolverSudoku?, complexity: Int) : SolveHelper(sudoku!
             }
         }
         return Collections.min(ambiguousPositions, compareCardinality)
-    }
-    /* Constructors */ /**
-     * Erzeugt einen neuen Backtracking Helfer für das spezifizierte Sudoku.
-     *
-     * @param sudoku
-     * Das Sudoku auf dem dieser Helper operieren soll
-     * @param complexity
-     * Die Schwierigkeit der Anwendbarkeit dieses Lösungshelfers
-     * @throws IllegalArgumentException
-     * Wird geworfen, falls das Sudoku null oder die complexity kleiner als 0 ist
-     */
-    init {
-        hintType = HintTypes.Backtracking
     }
 }

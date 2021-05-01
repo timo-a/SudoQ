@@ -15,9 +15,9 @@ import java.util.*
  * a note that within I only appears in intersection, locks the note for J:
  * it has to be in intersection and cannot be in J_only
  *
- * Created by timo on 07.06.16.
  */
-class LockedCandandidatesHelper(sudoku: SolverSudoku?, complexity: Int) : SolveHelper(sudoku!!, complexity) {
+class LockedCandandidatesHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku, complexity) {
+
     override fun update(buildDerivation: Boolean): Boolean {
         var success = false
         val constraints: MutableList<Constraint> = ArrayList()
@@ -106,7 +106,7 @@ class LockedCandandidatesHelper(sudoku: SolverSudoku?, complexity: Int) : SolveH
 
     private fun collectNotes(l: List<Position>): BitSet {
         val merged = BitSet()
-        if (!l.isEmpty()) for (p in l) merged.or(sudoku.getCurrentCandidates(p))
+        if (l.isNotEmpty()) for (p in l) merged.or(sudoku.getCurrentCandidates(p))
         return merged
     }
 
