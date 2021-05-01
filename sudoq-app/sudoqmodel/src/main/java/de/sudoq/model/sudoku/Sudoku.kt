@@ -17,7 +17,6 @@ import de.sudoq.model.xml.XmlTree
 import de.sudoq.model.xml.Xmlable
 import java.util.*
 import kotlin.collections.Iterable
-import kotlin.collections.MutableIterator
 import kotlin.collections.MutableMap
 import kotlin.collections.component1
 import kotlin.collections.component2
@@ -275,13 +274,13 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, Xmlable, ModelCha
     /**
      * {@inheritDoc}
      */
-    override fun equals(obj: Any?): Boolean {
-        if (obj != null && obj is Sudoku) {
-            val complexityMatch = complexity === obj.complexity
-            val typeMatch = sudokuType!!.enumType === obj.sudokuType!!.enumType
+    override fun equals(other: Any?): Boolean {
+        if (other != null && other is Sudoku) {
+            val complexityMatch = complexity === other.complexity
+            val typeMatch = sudokuType!!.enumType === other.sudokuType!!.enumType
             var fieldsMatch = true
             for (f in cells!!.values) {
-                if (!obj.hasCell(f.id) || f != obj.getCell(f.id)){
+                if (!other.hasCell(f.id) || f != other.getCell(f.id)){
                     fieldsMatch = false
                     break
                 }

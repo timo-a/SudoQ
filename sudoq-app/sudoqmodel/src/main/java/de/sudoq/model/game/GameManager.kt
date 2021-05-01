@@ -14,7 +14,6 @@ import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.xml.*
 import java.io.IOException
-import java.lang.Boolean
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -79,7 +78,7 @@ class GameManager private constructor() {
                 list.add(GameData(
                         game.getAttributeValue(ID)!!.toInt(),
                         game.getAttributeValue(PLAYED_AT)!!,
-                        Boolean.parseBoolean(game.getAttributeValue(FINISHED)),
+                        game.getAttributeValue(FINISHED).toBoolean(),
                         SudokuTypes.values()[game.getAttributeValue(SUDOKU_TYPE)!!.toInt()],
                         Complexity.values()[game.getAttributeValue(COMPLEXITY)!!.toInt()]
                 )
@@ -103,7 +102,7 @@ class GameManager private constructor() {
             if (g.getAttributeValue(ID)!!.toInt() == game.id) {
                 // TODO anpassen
                 g.updateAttribute(XmlAttribute(PLAYED_AT, SimpleDateFormat(GameData.dateFormat).format(Date())))
-                g.updateAttribute(XmlAttribute(FINISHED, Boolean.toString(game.isFinished())))
+                g.updateAttribute(XmlAttribute(FINISHED, (game.isFinished().toString())))
                 break
             }
         }
@@ -148,7 +147,7 @@ class GameManager private constructor() {
     fun deleteFinishedGames() {
         val games = gamesXml
         for (g in games) {
-            if (Boolean.parseBoolean(g.getAttributeValue(FINISHED))) {
+            if (g.getAttributeValue(FINISHED).toBoolean()) {
                 FileManager.deleteGame(g.getAttributeValue(ID)!!.toInt())
             }
         }
@@ -164,11 +163,11 @@ class GameManager private constructor() {
     }
 
     private val gamesXml: XmlTree
-        private get() = try {
+        get() = try {
             val gf = FileManager.getGamesFile()
             XmlHelper().loadXml(gf)!!
         } catch (e: IOException) {
-            throw IllegalStateException("Profil broken", e)
+            throw IllegalStateException("Profile broken", e)
         }
 
     companion object {

@@ -85,7 +85,7 @@ open class GameSettings : Xmlable {
         representation.addAttribute(XmlAttribute("gestures", isGesturesSet))
         representation.addAttribute(XmlAttribute("left", isLefthandModeSet))
         representation.addAttribute(XmlAttribute("helper", isHelperSet))
-        representation.addChild(wantedTypesList.toXmlTree()!!)
+        representation.addChild(wantedTypesList.toXmlTree())
         return representation
     }
 

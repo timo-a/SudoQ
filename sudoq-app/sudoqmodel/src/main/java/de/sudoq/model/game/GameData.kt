@@ -49,9 +49,9 @@ class GameData(val id: Int, playedAt: String, val isFinished: Boolean, val type:
     /**
      * Sorts by finished < not yet finished and then by last played date
      */
-    override fun compareTo(another: GameData): Int {
-        return if (isFinished == another.isFinished) {
-            playedAt.compareTo(another.playedAt)
+    override fun compareTo(other: GameData): Int {
+        return if (isFinished == other.isFinished) {
+            playedAt.compareTo(other.playedAt)
         } else {
             if (isFinished) -1 else 1
         }

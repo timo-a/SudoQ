@@ -451,13 +451,12 @@ class Game : Xmlable {
     /**
      * {@inheritDoc}
      */
-    override fun equals(obj: Any?): Boolean {//todo refactor
-        if (obj is Game) {
-            val g = obj
-            return (id == g.id
-                    && sudoku == g.sudoku
-                    && stateHandler!!.actionTree == g.stateHandler!!.actionTree
-                    && currentState.equals(g.currentState))
+    override fun equals(other: Any?): Boolean {//todo refactor
+        if (other is Game) {
+            return (id == other.id
+                    && sudoku == other.sudoku
+                    && stateHandler!!.actionTree == other.stateHandler!!.actionTree
+                    && currentState == other.currentState)
         }
         return false
     }
