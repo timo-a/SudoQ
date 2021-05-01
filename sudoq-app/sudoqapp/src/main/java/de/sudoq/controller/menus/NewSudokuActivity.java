@@ -196,7 +196,7 @@ public class NewSudokuActivity extends SudoqCompatActivity {
 	public void startGame(View view) {
 		if (this.sudokuType != null && this.complexity != null && gameSettings != null) {
 			try {
-				Game game = GameManager.getInstance().newGame(this.sudokuType, this.complexity, gameSettings);
+				Game game = GameManager.Companion.getInstance().newGame(this.sudokuType, this.complexity, gameSettings);
 				Profile.getInstance().setCurrentGame(game.getId());
 				startActivity(new Intent(this, SudokuActivity.class));
 				overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

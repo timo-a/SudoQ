@@ -155,11 +155,11 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_sudokuloading_delete_finished:
-			GameManager.getInstance().deleteFinishedGames();
+			GameManager.Companion.getInstance().deleteFinishedGames();
 			break;
 		case R.id.action_sudokuloading_delete_all:
-			for (GameData gd : GameManager.getInstance().getGameList())
-				GameManager.getInstance().deleteGame(gd.getId());
+			for (GameData gd : GameManager.Companion.getInstance().getGameList())
+				GameManager.Companion.getInstance().deleteGame(gd.getId());
 			break;
 		default:
 			super.onOptionsItemSelected(item);
@@ -171,7 +171,7 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
-		List<GameData> gamesList = GameManager.getInstance().getGameList();
+		List<GameData> gamesList = GameManager.Companion.getInstance().getGameList();
 		boolean noGames = gamesList.isEmpty();
 		
 		menu.findItem(R.id.action_sudokuloading_delete_finished).setVisible(!noGames);
@@ -225,7 +225,7 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 
         }else{
             /*selected in order to delete*/
-            GameManager.getInstance().deleteGame(adapter.getItem(position).getId());
+            GameManager.Companion.getInstance().deleteGame(adapter.getItem(position).getId());
 			onContentChanged();
         }
 	}
@@ -261,7 +261,7 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 					overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 					break;
 				case 1://delete
-					GameManager.getInstance().deleteGame(adapter.getItem(position).getId());
+					GameManager.Companion.getInstance().deleteGame(adapter.getItem(position).getId());
 					onContentChanged();
 					break;
 				case 2://export as text
@@ -350,7 +350,7 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 
 
 	private void initialiseGames() {
-		games = GameManager.getInstance().getGameList();
+		games = GameManager.Companion.getInstance().getGameList();
 		// initialize ArrayAdapter for the profile names and set it
 		adapter = new SudokuLoadingAdapter(this, games);
 		setListAdapter(adapter);
