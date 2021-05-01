@@ -6,57 +6,59 @@ import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.Position
 import java.util.*
 
+/**
+ *
+ * @property level Level of the Helpers, where the number indicates the symbols and Cells that
+ * satisfy the `Naked` constrain.
+ *  @param complexity desired complexity for the final sudoku. Must be `>= 0`.
+ */
 abstract class SubsetHelper protected constructor(sudoku: SolverSudoku,
-                                                  /**
-                                                   * Die Stufe des Helpers, wobei diese die Anzahl der Ziffern und Felder angibt, welche die Naked-Bedingung erfüllen
-                                                   * sollen
-                                                   */
-                                                  protected var level: Int, complexity: Int) : SolveHelper(sudoku, complexity) {
-    /* Attributes */
-    /**
-     * Ein BitSet, welches alle Kandidaten des aktuell untersuchten Constraints enthält. Aus Performancegründen nicht
-     * lokal definiert.
-     */
-    @JvmField protected var constraintSet //TODO call it candidateset?
-            : BitSet
+                                                  protected var level: Int,
+                                                  complexity: Int) : SolveHelper(sudoku, complexity) {
 
     /**
-     * Das BitSet, welches das gerade untersuchte Subset darstellt. Aus Performancegründen nicht lokal definiert.
-     */
-    @JvmField protected var currentSet: CandidateSet
-
-    /**
-     * Die Positionen, welche zum aktuell untersuchten Subset gehören. Aus Performancegründen nicht lokal definiert.
+     * A BitSet comprising all candidates of the currently inspected constraint.
      */
     @JvmField
-    protected var subsetPositions //TODO make Stack? might be far more readable
-            : MutableList<Position>
+	protected var constraintSet : BitSet  = BitSet()//TODO call it candidateset?
 
     /**
-     * Ein BitSet für lokale Kopien zum vergleichen. Aus Performancegründen nicht lokal definiert.
+     * A CandidateSet comprising all candidates of the currently inspected subset.
      */
-    protected var localCopy: CandidateSet
+    @JvmField
+	protected var currentSet: CandidateSet = CandidateSet()
 
     /**
-     * Speichert alle Constraints des zugrundeliegenden Sudokus.
+     * The positions of the currently inspected subset.
      */
-    protected var allConstraints //TODO see if it can be replaced by iterator or just the sudokutype, because we dont want to modify the list of constraints!!!
-            : ArrayList<Constraint>
-    /* Methods */
+    @JvmField
+	protected var subsetPositions : MutableList<Position> = Stack() //TODO make Stack? might be far more readable
+
     /**
-     * Sucht so lange nach einem Subset mit der im Konstruktor spezifizierten Größe level, bis entweder eines
-     * gefunden wird oder alle Möglichkeiten abgearbeitet sind. Wird ein Subset gefunden, werden die entsprechenden
-     * Kandidatenlisten upgedatet.
+     * Ein BitSet to compare local copies.
+     */
+    @JvmField
+	protected var localCopy: CandidateSet = CandidateSet()
+    //this is for performance so no new object has to be created
+
+
+    /**
+     * All [Constraint]s of the Sudoku.
+     */
+    //TODO see if it can be replaced by iterator or just the sudokutype, because we dont want to modify the list of constraints!!!
+    protected var allConstraints : ArrayList<Constraint> = this.sudoku.sudokuType!!.getConstraints()
+
+    /**
+     * Searches for a subset with the size `level` (specified in the constructor),
+     * until one is found or, all subsets have been tried.
+     * If a Subset is found, the respective candidate lists are updated.
      *
-     * Wurde eine Lösung gefunden, so wird eine SolveDerivation, die die Herleitung des NakedSubsets darstellt,
-     * erstellt. Dabei werden in der SolveDerivation die Kandidatenlisten des betroffenen Constraints als
-     * irrelevantCandidates, sowie das gefundene Subset als relevantCandidates dargestellt. Diese kann durch die
-     * getDerivation Methode abgefragt werden.
+     * If a solution is found a SolveDerivation is created.
+     * In the [SolveDerivation] the candidate lists of the constraints in question are represented
+     * as irrelevant candidates and the found subset as is represented as relevantCandidates.
      *
-     * @param buildDerivation
-     * Bestimmt, ob beim Finden eines Subsets eine Herleitung dafür erstellt werden soll, welche daraufhin
-     * mit getDerivation abgerufen werden kann.
-     * @return true, falls ein Subset gefunden wurde, false falls nicht
+     * @param buildDerivation specifies if a derivation should be created if a subset is found.
+     * @return true iff a subset is found
      */
     override fun update(buildDerivation: Boolean): Boolean {
         derivation = null
@@ -84,7 +86,8 @@ abstract class SubsetHelper protected constructor(sudoku: SolverSudoku,
 					currentSet = (BitSet) constraintSet.clone();
 					while (currentSet.cardinality() > this.level)
 						currentSet.clear(currentSet.length()-1);
-					*/found = updateNext(constraint, buildDerivation)
+					*/
+                    found = updateNext(constraint, buildDerivation)
 
                     // Stop searching if a subset was found
                     if (found) {
@@ -101,17 +104,15 @@ abstract class SubsetHelper protected constructor(sudoku: SolverSudoku,
     //todo make this an iterator?
 
     /**
-     * Berechnet das nächste Subset des spezifizierten BitSets mit der im Konstruktor definierten Größe "level",
-     * ausgehend von demjenigen Subset, welches die niederwertigsten Kandidaten gesetzt hat. Das übergebene Subset muss
-     * bereits entsprechend viele Kandidaten gesetzt haben. Es wird immer der hochwertigste Kandidat erhöht bis dieser
-     * beim letzten Kandidaten angelangt ist, daraufhin wird der nächste Kandidat erhöht bis schließlich das
-     * hochwertigste Subset berechnet wurde.
+     * Calculates the next subset with the size `level`, from the current subset
+     * The most significant candidate is increased until the last candidate is reached.
+     * Then the next candidate is increased until the last subset has been calculated.
      *
      * new interpretation: if highest bit in current set can be moved to the right, do so
      * otherwise look from right to left for the first bit after(left of) a gap./fook for rightmost bit that can be moved to the right. move it to the right and set remaining bits next to it
      * Gospers hack is a beautiful implementation, but worthless here as it operates on (binary) numbers, which we cannot convert to/from BitSets
      *
-     * @return true, falls es noch ein Subset gibt, false falls nicht
+     * @return true, if there is another subset, false otherwise
      */
     protected fun getNextSubset(): Boolean {
         var nextSetExists = false
@@ -176,12 +177,9 @@ abstract class SubsetHelper protected constructor(sudoku: SolverSudoku,
      * [de.sudoq.model.solverGenerator.solver.helper.SubsetHelper.getNextSubset] from the
      * specified Subset on.
      *
-     * @param constraint
-     * Der Constraint, in dem ein NakedSubset gesucht werden soll
-     * @param buildDerivation
-     * Gibt an, ob eine Herleitung für ein gefundenes Subset erstellt werden soll, welche über die
-     * getDerivation Methode abgerufen werden kann
-     * @return true, falls ein Subset gefunden wurde, false falls nicht
+     * @param constraint [Constraint], in which to look for a subset
+     * @param buildDerivation specifies if a derivation should be created if a subset is found.
+     * @return true, iff a Subset was found
      */
     protected abstract fun updateNext(constraint: Constraint, buildDerivation: Boolean): Boolean
 
@@ -198,10 +196,11 @@ abstract class SubsetHelper protected constructor(sudoku: SolverSudoku,
             //idea: looking from right if there is a '1' that can be moved to the right, do so
             //      all other '1' right from it(that didn't have a '0' to their right) are lined up directly to the right of it
             //e.g. |11  11| -> |1 111 |
-            var i: Int
-            i = n - 1
+            var i: Int = n - 1
             while (i > 0) {
-                if (bitSet[i]) bitSet.clear(i) else if (bitSet[i - 1]) {
+                if (bitSet[i])
+                    bitSet.clear(i)
+                else if (bitSet[i - 1]) {
                     bitSet.clear(i - 1)
                     break
                 }
@@ -218,11 +217,10 @@ abstract class SubsetHelper protected constructor(sudoku: SolverSudoku,
             val denseSet = BitSet()
 
             //loop over true bits of pattern as described in JavaDoc of 'nextSetBit'
-            var denseIndex: Int
             var sparseIndex: Int
             sparseIndex = pattern.nextSetBit(0)
-            denseIndex = 0
-            while (sparseIndex >= 0) {
+            var denseIndex: Int = 0
+            while (sparseIndex >= 0) {//todo refactor to for loop?
                 denseSet[denseIndex] = sparseSet[sparseIndex]
                 if (sparseIndex == Int.MAX_VALUE) break // or (i+1) would overflow
                 sparseIndex = pattern.nextSetBit(sparseIndex + 1)
@@ -233,10 +231,9 @@ abstract class SubsetHelper protected constructor(sudoku: SolverSudoku,
 
         fun inflate(denseSet: BitSet, pattern: BitSet): CandidateSet {
             val sparseSet = CandidateSet()
-            var denseIndex: Int
             var sparseIndex: Int
             sparseIndex = pattern.nextSetBit(0)
-            denseIndex = 0
+            var denseIndex: Int = 0
             while (sparseIndex >= 0) {
                 sparseSet[sparseIndex] = denseSet[denseIndex]
                 if (sparseIndex == Int.MAX_VALUE) break // or (i+1) would overflow
@@ -246,27 +243,5 @@ abstract class SubsetHelper protected constructor(sudoku: SolverSudoku,
             return sparseSet
         }
     }
-    //protected static HintTypes labels[];
-    /* Constructors */ /**
-     * Erzeugt einen neuen NakedHelper für das spezifizierte Suduoku mit dem spezifizierten level. Der level entspricht
-     * dabei der Größe der Symbolmenge nach der gesucht werden soll.
-     *
-     * @param sudoku
-     * Das Sudoku auf dem dieser Helper operieren soll
-     * @param level
-     * Das Größe der Symbolmenge auf die der Helper hin überprüft
-     * @param complexity
-     * Die Schwierigkeit der Anwendung dieser Vorgehensweise
-     * @throws IllegalArgumentException
-     * Wird geworfen, falls das Sudoku null oder das level oder die complexity kleiner oder gleich 0 ist
-     */
-    init {
 
-        //hintType = labels[level-1];
-        allConstraints = this.sudoku.sudokuType!!.getConstraints()
-        constraintSet = BitSet()
-        currentSet = CandidateSet()
-        subsetPositions = Stack()
-        localCopy = CandidateSet()
-    }
 }

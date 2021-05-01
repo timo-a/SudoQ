@@ -18,7 +18,8 @@ import java.util.*
  * If there are n fields with only n distinct candidates in them, those candidates can't appear anywhere else.
  */
 open class NakedHelper(sudoku: SolverSudoku, level: Int, complexity: Int) : SubsetHelper(sudoku, level, complexity) {
-    private val labels = arrayOf(HintTypes.NakedSingle,
+    private val labels = arrayOf(
+            HintTypes.NakedSingle,
             HintTypes.NakedPair,
             HintTypes.NakedTriple,
             HintTypes.NakedQuadruple,
@@ -44,7 +45,7 @@ open class NakedHelper(sudoku: SolverSudoku, level: Int, complexity: Int) : Subs
         for (pos in constraint.getPositions()) {
             val currentCandidates: BitSet = sudoku.getCurrentCandidates(pos)
             val nrCandidates = currentCandidates.cardinality().toByte()
-            if (0 < nrCandidates && nrCandidates <= level) //we only want up to n candidates per field
+            if (nrCandidates in 1..level) //we only want up to n candidates per field
                 possibleCandidates.or(currentCandidates)
         }
         //now we have constraintSet of all candidates in the constraint
@@ -76,10 +77,10 @@ open class NakedHelper(sudoku: SolverSudoku, level: Int, complexity: Int) : Subs
                         currentPosCandidates.andNot(currentSet)
 
                         /* We found a subset that does delete candidates,
-                           initialize derivation obj. and fill it during remaining cycles of pos  */if (buildDerivation) {
+                           initialize derivation obj. and fill it during remaining cycles of pos  */
+                        if (buildDerivation) {
                             if (derivation == null) { //is this the first time?
                                 derivation = initializeDerivation(constraint)
-                                derivation = derivation
                             }
                             //what was deleted?
                             val relevant = localCopy.clone() as BitSet
@@ -107,7 +108,9 @@ open class NakedHelper(sudoku: SolverSudoku, level: Int, complexity: Int) : Subs
         for (pos in positions) {
             val currentCandidates = sudoku.getCurrentCandidates(pos)
             val nrCandidates = currentCandidates.cardinality()
-            if (0 < nrCandidates && nrCandidates <= level) if (currentCandidates.isSubsetOf(currentSet)) subsetPositions.add(pos)
+            if (nrCandidates in 1..level)
+                if (currentCandidates.isSubsetOf(currentSet))
+                    subsetPositions.add(pos)
         }
         return subsetPositions.size
     }
@@ -135,7 +138,7 @@ open class NakedHelper(sudoku: SolverSudoku, level: Int, complexity: Int) : Subs
      * @throws IllegalArgumentException Wird geworfen, falls das Sudoku null oder das level oder die complexity kleiner oder gleich 0 ist
      */
     init {
-        require(!(level <= 0 || level > labels.size)) { "level must be ∈ [1," + labels.size + "] but is " + level }
+        require(level in 1..labels.size) { "level must be ∈ [1," + labels.size + "] but is " + level }
         hintType = labels[level - 1]
     }
 }

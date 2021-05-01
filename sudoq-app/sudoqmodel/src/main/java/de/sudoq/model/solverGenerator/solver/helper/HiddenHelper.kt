@@ -22,8 +22,9 @@ import java.util.*
  * In that case, they are all the solutions to these n fields (in some order) and all other candidates within these n fields can be removed
  *
  */
-open class HiddenHelper(sudoku: SolverSudoku?, level: Int, complexity: Int) : SubsetHelper(sudoku!!, level, complexity) {
-    private val labels = arrayOf(HintTypes.HiddenSingle,
+open class HiddenHelper(sudoku: SolverSudoku, level: Int, complexity: Int) : SubsetHelper(sudoku, level, complexity) {
+    private val labels = arrayOf(
+            HintTypes.HiddenSingle,
             HintTypes.HiddenPair,
             HintTypes.HiddenTriple,
             HintTypes.HiddenQuadruple,
@@ -82,7 +83,6 @@ open class HiddenHelper(sudoku: SolverSudoku?, level: Int, complexity: Int) : Su
                         if (buildDerivation) {
                             if (derivation == null) {
                                 derivation = initializeDerivation(constraint)
-                                derivation = derivation
                             }
                             val relevantCandidates = currentCandidates.clone() as BitSet
                             val irrelevantCandidates: BitSet = localCopy
@@ -140,7 +140,7 @@ open class HiddenHelper(sudoku: SolverSudoku?, level: Int, complexity: Int) : Su
      * Wird geworfen, falls das Sudoku null oder das level oder die complexity kleiner oder gleich 0 ist
      */
     init {
-        require(!(level <= 0 || level > labels.size)) { "level must be ∈ [1," + labels.size + "] but is " + level }
+        require(level in 1..labels.size) { "level must be ∈ [1," + labels.size + "] but is " + level }
         hintType = labels[level - 1]
     }
 }

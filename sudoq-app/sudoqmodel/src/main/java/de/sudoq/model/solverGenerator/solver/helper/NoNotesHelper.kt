@@ -8,10 +8,8 @@ import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.Position
 import java.util.*
 
-/**
- * Created by timo on 25.09.16.
- */
-class NoNotesHelper(sudoku: SolverSudoku?, complexity: Int) : SolveHelper(sudoku!!, complexity) {
+class NoNotesHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku, complexity) {
+
     override fun update(buildDerivation: Boolean): Boolean {
         var foundOne = false
         var candidate: Position
@@ -38,7 +36,10 @@ class NoNotesHelper(sudoku: SolverSudoku?, complexity: Int) : SolveHelper(sudoku
                 }
                 val relevant = BitSet()
                 val irrelevant = BitSet()
-                for (i in allSymbols) if (allCandidates.contains(i)) relevant.set(i) else irrelevant.set(i)
+                for (i in allSymbols)
+                    (if (i in allCandidates) relevant
+                     else                    irrelevant).set(i)
+
                 derivation!!.addDerivationCell(DerivationCell(p, relevant, irrelevant))
             }
         }

@@ -8,13 +8,22 @@ import de.sudoq.model.sudoku.*
 import java.util.*
 
 //TODO test this!!!
-/**Idea:
- *
- * Created by timo on 07.06.16.
+/**
+ * Erzeugt einen neuen HiddenHelper für das spezifizierte Suduoku.
+ * Idea:
+ * We have a '#' of 2 rows+2columns.
+ * The 4 intersection fields all feature a common note n.
+ * for the 2 rows (the 2 columns) the note appears only in the intersection i.e. is locked there -&gt; they are the locked constraints
+ * therefore the columns (the rows) have them in the intersection too and n can be deleted everywhere else.
  */
-class XWingHelper(sudoku: SolverSudoku?, complexity: Int) : SolveHelper(sudoku!!, complexity) {
-    private fun separateIntoRowColumn(pool: Iterable<Constraint>?, rows: MutableList<Constraint>, cols: MutableList<Constraint>) {
-        for (c in pool!!) {
+class XWingHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku, complexity) {
+
+    init {
+        hintType = HintTypes.XWing
+    }
+
+    private fun separateIntoRowColumn(pool: Iterable<Constraint>, rows: MutableList<Constraint>, cols: MutableList<Constraint>) {
+        for (c in pool) {
             when (getGroupShape(c.getPositions())) {
                 Utils.ConstraintShape.Row -> rows.add(c)
                 Utils.ConstraintShape.Column -> cols.add(c)
@@ -23,7 +32,7 @@ class XWingHelper(sudoku: SolverSudoku?, complexity: Int) : SolveHelper(sudoku!!
     }
 
     override fun update(buildDerivation: Boolean): Boolean {
-        val constraints: Iterable<Constraint>? = sudoku.sudokuType
+        val constraints: Iterable<Constraint> = sudoku.sudokuType!!
 
         /* collect rows / cols */
         val rows: MutableList<Constraint> = ArrayList()
@@ -31,7 +40,8 @@ class XWingHelper(sudoku: SolverSudoku?, complexity: Int) : SolveHelper(sudoku!!
         separateIntoRowColumn(constraints, rows, cols)
 
         /* compare all constraints, look for a '#': 2 rows, 2 col intersecting
-        * move clockwise starting north-west i.e. topLeft*/for (c1 in 0 until cols.size - 1) for (r1 in 0 until rows.size - 1) {
+        * move clockwise starting north-west i.e. topLeft*/
+        for (c1 in 0 until cols.size - 1) for (r1 in 0 until rows.size - 1) {
             val col1 = cols[c1]
             val row1 = rows[r1]
             val topLeft = intersectionPoint(row1, col1)
@@ -51,10 +61,11 @@ class XWingHelper(sudoku: SolverSudoku?, complexity: Int) : SolveHelper(sudoku!!
                     val bottomRight = intersectionPoint(col2, row2)
                     val bottomLeft = intersectionPoint(row2, col1)
                     if (bottomRight != null && sudoku.getCell(bottomRight)!!.isNotSolved
-                            && bottomLeft != null && sudoku.getCell(bottomLeft)!!.isNotSolved) {
+                     && bottomLeft  != null && sudoku.getCell(bottomLeft)!!.isNotSolved) {
                         /* we found a # of 2rows, 2 cols now check if 2 are locked ...*/
                         val intersectionPoints = arrayOf(topLeft, topRight, bottomLeft, bottomRight)
-                        if (testForLockedness(row1, row2, col1, col2, intersectionPoints, buildDerivation)) return true
+                        if (testForLockedness(row1, row2, col1, col2, intersectionPoints, buildDerivation))
+                            return true
                     }
                 }
             }
@@ -62,7 +73,9 @@ class XWingHelper(sudoku: SolverSudoku?, complexity: Int) : SolveHelper(sudoku!!
         return false
     }
 
-    private fun testForLockedness(row1: Constraint, row2: Constraint, col1: Constraint, col2: Constraint, intersectionPoints: Array<Position>, buildDerivation: Boolean): Boolean {
+    private fun testForLockedness(row1: Constraint, row2: Constraint,
+                                  col1: Constraint, col2: Constraint,
+                                  intersectionPoints: Array<Position>, buildDerivation: Boolean): Boolean {
         val candidateNotes = intersectNotes(Arrays.asList(*intersectionPoints))
         for (note in candidateNotes.setBits) if (xWing(row1, row2, col1, col2, note, intersectionPoints, buildDerivation) ||
                 xWing(col1, col2, row1, row2, note, intersectionPoints, buildDerivation)) return true
@@ -96,7 +109,8 @@ class XWingHelper(sudoku: SolverSudoku?, complexity: Int) : SolveHelper(sudoku!!
         for (p in col2) if (sudoku.getCurrentCandidates(p).isSet(note)) canBeDeleted.add(p)
         for (p in intersectionPoints) canBeDeleted.remove(p)
 
-        /* delete notes */for (p in canBeDeleted) sudoku.getCurrentCandidates(p).clear(note)
+        /* delete notes */
+        for (p in canBeDeleted) sudoku.getCurrentCandidates(p).clear(note)
         return canBeDeleted
     }
 
@@ -115,20 +129,30 @@ class XWingHelper(sudoku: SolverSudoku?, complexity: Int) : SolveHelper(sudoku!!
         derivation = internalDerivation
     }
 
+    /** intersect the notes of all cells at the given positions
+     *
+     * requires a non empty list
+     */
     private fun intersectNotes(l: List<Position>): CandidateSet {
-        val merged = CandidateSet()
-        if (!l.isEmpty()) merged.assignWith(sudoku.getCurrentCandidates(l[0]))
-        for (i in 1 until l.size) merged.and(sudoku.getCurrentCandidates(l[i])) //TODO in scala this could be a fold1 after mapping sudoku.getc..
-        return merged
+        require(l.isNotEmpty())
+
+        val sets = l.map(sudoku::getCurrentCandidates)
+
+        val init = sets.first().clone() as CandidateSet
+
+        sets.slice(1 until l.size)
+            .forEach(init::and)
+
+        return init
     }
 
     /*
     *
     * */
     private fun countOccurrences(note: Short, positions: Iterable<Position>): Short {
-        var sum: Short = 0
-        for (p in positions) if (sudoku.getCurrentCandidates(p).isSet(note.toInt())) sum++
-        return sum
+        return positions.filter { p ->  sudoku.getCurrentCandidates(p).isSet(note.toInt()) }
+                        .size
+                        .toShort()
     }
 
     companion object {
@@ -145,22 +169,4 @@ class XWingHelper(sudoku: SolverSudoku?, complexity: Int) : SolveHelper(sudoku!!
         }
     }
 
-    /**
-     * Erzeugt einen neuen HiddenHelper für das spezifizierte Suduoku.
-     * Idea:
-     * We have a '#' of 2 rows+2columns.
-     * The 4 intersection fields all feature a common note n.
-     * for the 2 rows (the 2 columns) the note appears only in the intersection i.e. is locked there -&gt; they are the locked constraints
-     * therefore the columns (the rows) have them in the intersection too and n can be deleted everywhere else.
-     *
-     * @param sudoku
-     * Das Sudoku auf dem dieser Helper operieren soll
-     * @param complexity
-     * Die Schwierigkeit der Anwendung dieser Vorgehensweise
-     * @throws IllegalArgumentException
-     * Wird geworfen, falls das Sudoku null oder das level oder die complexity kleiner oder gleich 0 ist
-     */
-    init {
-        hintType = HintTypes.XWing
-    }
 }

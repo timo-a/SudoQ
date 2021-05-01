@@ -17,7 +17,7 @@ import java.util.*
  * if candidates are constantly updated, naked single catches everything LastDigitHelper catches and more:
  * e.g. if constraint A has 2 empty fields but intersects with constraint B which can exclude some candidates in A, naked single will catch that
  */
-class LastDigitHelper(sudoku: SolverSudoku?, complexity: Int) : SolveHelper(sudoku!!, complexity) {
+class LastDigitHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku, complexity) {
     /**
      * Finds out if `positions` has only one empty field. if so return `position` and fill `remaining` with all other positions respectively
      * @param positions
@@ -65,14 +65,14 @@ class LastDigitHelper(sudoku: SolverSudoku?, complexity: Int) : SolveHelper(sudo
                     foundOne = true
                     val solutionValue = possibleSolutions[0]
                     if (buildDerivation) {
-                        super.derivation = LastDigitDerivation(c, solutionField, solutionValue)
+                        derivation = LastDigitDerivation(c, solutionField, solutionValue)
                         val relevant = BitSet()
                         relevant.set(solutionValue) //set solution to 1
                         val irrelevant = BitSet()
                         irrelevant.xor(relevant) // create complement to relevant
-                        super.derivation!!.addDerivationCell(DerivationCell(candidate, relevant, irrelevant))
-                        super.derivation!!.addDerivationBlock(DerivationBlock(c))
-                        super.derivation!!.setDescription("Look at " + classifyGroup(c.getPositions()) + "! Only field " + positionToRealWorld(candidate) + "is empty.")
+                        derivation!!.addDerivationCell(DerivationCell(candidate, relevant, irrelevant))
+                        derivation!!.addDerivationBlock(DerivationBlock(c))
+                        derivation!!.setDescription("Look at " + classifyGroup(c.getPositions()) + "! Only field " + positionToRealWorld(candidate) + "is empty.")
                     }
                 }
             }

@@ -7,9 +7,10 @@ import de.sudoq.model.sudoku.CandidateSet
 import de.sudoq.model.sudoku.Constraint
 
 /**
- * Created by timo on 25.09.16.
+ * @param complexity desired complexity for the final sudoku. Must be `>= 0`.
  */
-open class LeftoverNoteHelper(sudoku: SolverSudoku?, complexity: Int) : SolveHelper(sudoku!!, complexity) {
+open class LeftoverNoteHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku, complexity) {
+
     override fun update(buildDerivation: Boolean): Boolean {
         var foundOne = false
         for (c in sudoku.sudokuType!!) if (c.hasUniqueBehavior() && hasLeftoverNotes(c)) {
@@ -28,8 +29,10 @@ open class LeftoverNoteHelper(sudoku: SolverSudoku?, complexity: Int) : SolveHel
         val filled = CandidateSet()
         val notes = CandidateSet()
         for (p in c) {
-            if (sudoku.getCell(p)!!.isNotSolved) notes.or(sudoku.getCurrentCandidates(p)) //collect all notes
-            else filled.set(sudoku.getCell(p)!!.currentValue) //collect all entered solution
+            if (sudoku.getCell(p)!!.isNotSolved)
+                notes.or(sudoku.getCurrentCandidates(p)) //collect all notes
+            else
+                filled.set(sudoku.getCell(p)!!.currentValue) //collect all entered solution
         }
         return filled.hasCommonElement(notes)
     }
@@ -38,14 +41,19 @@ open class LeftoverNoteHelper(sudoku: SolverSudoku?, complexity: Int) : SolveHel
         val filled = CandidateSet()
         val notes = CandidateSet()
         for (p in c) {
-            if (sudoku.getCell(p)!!.isNotSolved) notes.or(sudoku.getCurrentCandidates(p)) else filled.set(sudoku.getCell(p)!!.currentValue)
+            if (sudoku.getCell(p)!!.isNotSolved)
+                notes.or(sudoku.getCurrentCandidates(p))
+            else
+                filled.set(sudoku.getCell(p)!!.currentValue)
         }
         filled.and(notes)
         return filled.nextSetBit(0)
     }
 
     private fun deleteNote(c: Constraint, note: Int) {
-        for (p in c) if (sudoku.getCell(p)!!.isNotSolved && sudoku.getCell(p)!!.isNoteSet(note)) sudoku.getCurrentCandidates(p).clear(note)
+        for (p in c)
+            if (sudoku.getCell(p)!!.isNotSolved && sudoku.getCell(p)!!.isNoteSet(note))
+                sudoku.getCurrentCandidates(p).clear(note)
     }
 
     init {
