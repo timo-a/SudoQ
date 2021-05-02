@@ -20,6 +20,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.Utility;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.profile.Profile;
@@ -30,37 +31,7 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 import de.sudoq.model.xml.SudokuXmlHandler;
 
-public class FileManagerTests {
-
-	@BeforeClass
-	public static void init() {
-		Utility.copySudokus();
-		System.out.println("hu - HA!");
-		//Profile.getInstance();
-        /*try {
-			FileManager.deleteDir(Utility.profiles);
-		} catch (IOException e) {
-        	//e.printStackTrace();
-        	fail("ioexception");
-		}*/
-
-
-	}
-
-	@AfterClass
-	public static void clean() throws IOException, SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-		java.lang.reflect.Field f = FileManager.class.getDeclaredField("profiles");
-		f.setAccessible(true);
-		f.set(null, null);
-		java.lang.reflect.Field s = FileManager.class.getDeclaredField("sudokus");
-		s.setAccessible(true);
-		s.set(null, null);
-		java.lang.reflect.Field p = Profile.class.getDeclaredField("instance");
-		p.setAccessible(true);
-		p.set(null, null);
-		FileManager.deleteDir(Utility.profiles);
-		FileManager.deleteDir(Utility.sudokus);
-	}
+public class FileManagerTests extends TestWithInitCleanforSingletons {
 
 	@Test
 	public void testInit() {
