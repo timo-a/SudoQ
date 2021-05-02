@@ -68,7 +68,7 @@ public abstract class PreferencesActivity extends SudoqCompatActivity implements
 	abstract protected void saveToProfile();
 	
 	protected void saveAssistance(Assistances a, CheckBox c){
-		Profile.getInstance().setAssistance(a, c.isChecked());
+		Profile.Companion.getInstance().setAssistance(a, c.isChecked());
 	}
 	
 

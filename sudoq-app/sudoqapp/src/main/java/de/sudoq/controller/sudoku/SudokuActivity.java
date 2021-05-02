@@ -221,7 +221,7 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 				this.finish();
 			}
 		} else {
-			this.game = GameManager.Companion.getInstance().load(Profile.getInstance().getCurrentGame());
+			this.game = GameManager.Companion.getInstance().load(Profile.Companion.getInstance().getCurrentGame());
 		}
 
 		if (game != null) {
@@ -279,7 +279,7 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 
 			setTypeText();
 			updateButtons();
-			controlPanel.getGestureButton().setSelected(Profile.getInstance().isGestureActive());
+			controlPanel.getGestureButton().setSelected(Profile.Companion.getInstance().isGestureActive());
 		}
 	}
 
@@ -382,14 +382,14 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 				Log.w(LOG_TAG, "Gesture file cannot be loaded!");
 			}
 		} catch (IOException e) {
-			Profile.getInstance().setGestureActive(false);
+			Profile.Companion.getInstance().setGestureActive(false);
 			Toast.makeText(this, R.string.error_gestures_no_library, Toast.LENGTH_SHORT).show();
 		}
 
-		if (firstStart && Profile.getInstance().isGestureActive()) {
+		if (firstStart && Profile.Companion.getInstance().isGestureActive()) {
 			boolean allGesturesSet = checkGesture();
 			if (!allGesturesSet) {
-				Profile.getInstance().setGestureActive(false);
+				Profile.Companion.getInstance().setGestureActive(false);
 				Toast.makeText(this, getString(R.string.error_gestures_not_complete), Toast.LENGTH_SHORT).show();
 			}
 		}
@@ -488,7 +488,7 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 		Bitmap sudokuCapture = sudokuView.getDrawingCache();
 		try {
 			if (sudokuCapture != null) {
-				sudokuCapture.compress(CompressFormat.PNG, 100, new FileOutputStream(FileManager.getGameThumbnailFile(Profile.getInstance().getCurrentGame())));
+				sudokuCapture.compress(CompressFormat.PNG, 100, new FileOutputStream(FileManager.getGameThumbnailFile(Profile.Companion.getInstance().getCurrentGame())));
 			} else {
 				Log.d(LOG_TAG, getString(R.string.error_thumbnail_get));
 			}
@@ -499,8 +499,8 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 		this.sudokuScrollView.setZoomFactor(prevZoomFactor);
 
 		if (finished) {
-			Profile.getInstance().setCurrentGame(Profile.NO_GAME);
-			Profile.getInstance().saveChanges();
+			Profile.Companion.getInstance().setCurrentGame(Profile.NO_GAME);
+			Profile.Companion.getInstance().saveChanges();
 		}
 		super.onPause();
 	}

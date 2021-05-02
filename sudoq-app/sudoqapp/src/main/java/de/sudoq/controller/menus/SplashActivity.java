@@ -98,7 +98,7 @@ public class SplashActivity extends SudoqCompatActivity {
 
 		// If there is no profile initialize one
 		if (FileManager.getNumberOfProfiles() == 0) {
-			Profile.getInstance().setName(getString(R.string.default_user_name));
+			Profile.Companion.getInstance().setName(getString(R.string.default_user_name));
 		}
 
 		// Restore waited time after interruption or set it to 0

@@ -95,7 +95,7 @@ public class PlayerPreferencesActivity extends PreferencesActivity {
 		firstStartup = false;		
 		createProfile = true;
 
-		Profile.getInstance().registerListener(this);
+		Profile.Companion.getInstance().registerListener(this);
 
 		//store language at beginning of activity lifecycle
 		currentLanguageCode = LanguageUtility.loadLanguageFromSharedPreferences2(this);
@@ -142,12 +142,14 @@ public class PlayerPreferencesActivity extends PreferencesActivity {
 	 */
 	@Override
 	protected void refreshValues() {
-		name.              setText(Profile.getInstance().getName());
-		gesture.           setChecked(Profile.getInstance().isGestureActive());
-		autoAdjustNotes.   setChecked(Profile.getInstance().getAssistance(Assistances.autoAdjustNotes));
-		markRowColumn.     setChecked(Profile.getInstance().getAssistance(Assistances.markRowColumn));
-		markWrongSymbol.   setChecked(Profile.getInstance().getAssistance(Assistances.markWrongSymbol));
-		restrictCandidates.setChecked(Profile.getInstance().getAssistance(Assistances.restrictCandidates));
+		Profile profile = Profile.Companion.getInstance();
+
+		name.              setText(profile.getName());
+		gesture.           setChecked(profile.isGestureActive());
+		autoAdjustNotes.   setChecked(profile.getAssistance(Assistances.autoAdjustNotes));
+		markRowColumn.     setChecked(profile.getAssistance(Assistances.markRowColumn));
+		markWrongSymbol.   setChecked(profile.getAssistance(Assistances.markWrongSymbol));
+		restrictCandidates.setChecked(profile.getAssistance(Assistances.restrictCandidates));
 	}
 
 	/**
@@ -164,7 +166,7 @@ public class PlayerPreferencesActivity extends PreferencesActivity {
 
 			int newIndex = 0;
 			/* increment newIndex to be bigger than the others */
-			List<String> l = Profile.getInstance().getProfilesNameList();
+			List<String> l = Profile.Companion.getInstance().getProfilesNameList();
 			for (String s : l)
 				if (s.startsWith(newProfileName)) {
 					String currentIndex = s.substring(newProfileName.length());
@@ -179,7 +181,7 @@ public class PlayerPreferencesActivity extends PreferencesActivity {
 			if (newIndex != 0)
 				newProfileName += newIndex;
 
-			Profile.getInstance().createProfile();
+			Profile.Companion.getInstance().createProfile();
 			name.setText(newProfileName);
 		} else {
 			adjustValuesAndSave();
@@ -202,18 +204,18 @@ public class PlayerPreferencesActivity extends PreferencesActivity {
 	 * Uebernimmt die Werte der Views im Profil und speichert die aenderungen
 	 */
 	protected void adjustValuesAndSave() {
-		Profile.getInstance().setName(name.getText().toString());
+		Profile.Companion.getInstance().setName(name.getText().toString());
 		saveToProfile();
 	}
 
 	protected void saveToProfile() {
-		Profile p = Profile.getInstance();
+		Profile p = Profile.Companion.getInstance();
 		p.setGestureActive(gesture.isChecked());
 		saveAssistance(Assistances.autoAdjustNotes,    autoAdjustNotes);
 		saveAssistance(Assistances.markRowColumn,      markRowColumn  );
 		saveAssistance(Assistances.markWrongSymbol,    markWrongSymbol);
 		saveAssistance(Assistances.restrictCandidates, restrictCandidates);
-		Profile.getInstance().saveChanges();
+		p.saveChanges();
 	}
 
 	/* parameter View only needed to be found by xml who clicks this */
@@ -244,7 +246,7 @@ public class PlayerPreferencesActivity extends PreferencesActivity {
 	 *            von der android xml übergebene view
 	 */
 	public void deleteProfile(View view) {
-		Profile.getInstance().deleteProfile();
+		Profile.Companion.getInstance().deleteProfile();
 	}
 
 
@@ -285,7 +287,7 @@ public class PlayerPreferencesActivity extends PreferencesActivity {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
 		
-		boolean multipleProfiles=Profile.getInstance().getNumberOfAvailableProfiles() > 1;
+		boolean multipleProfiles=Profile.Companion.getInstance().getNumberOfAvailableProfiles() > 1;
 		
 		menu.findItem(R.id.action_delete_profile).setVisible(multipleProfiles);
 		menu.findItem(R.id.action_switch_profile).setVisible(multipleProfiles);

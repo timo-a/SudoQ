@@ -98,7 +98,7 @@ public class MainActivity extends SudoqCompatActivity {
 	public void onResume() {
 		super.onResume();
 		//Toast.makeText(this, "onResume", Toast.LENGTH_LONG).show();
-		Profile p = Profile.getInstance();
+		Profile p = Profile.Companion.getInstance();
 
 		Button continueButton = (Button) findViewById(R.id.button_mainmenu_continue);
 		continueButton.setEnabled(p.getCurrentGame() > Profile.NO_GAME);

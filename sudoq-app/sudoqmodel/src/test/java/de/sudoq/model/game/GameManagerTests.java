@@ -29,8 +29,7 @@ public class GameManagerTests {
 	@BeforeClass
 	public static void init() throws IOException {
 		Utility.copySudokus();
-		//Profile.getInstance();
-		Profile.forceInitialize();
+		Profile.Companion.getInstance();
 	}
 
 	@AfterClass
@@ -48,10 +47,12 @@ public class GameManagerTests {
 
 	@Test
 	public void testDeletingCurrentGame() {
-		Game game = GameManager.Companion.getInstance().newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings());
-		Profile.getInstance().setCurrentGame(game.getId());
-		GameManager.Companion.getInstance().deleteGame(Profile.getInstance().getCurrentGame());
-		assertEquals(Profile.NO_GAME, Profile.getInstance().getCurrentGame());
+		Profile p = Profile.Companion.getInstance();
+		GameManager gm = GameManager.Companion.getInstance();
+		Game game = gm.newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings());
+		p.setCurrentGame(game.getId());
+		gm.deleteGame(p.getCurrentGame());
+		assertEquals(Profile.NO_GAME, p.getCurrentGame());
 	}
 
 	@After

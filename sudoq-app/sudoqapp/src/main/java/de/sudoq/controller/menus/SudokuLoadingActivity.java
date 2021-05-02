@@ -196,7 +196,7 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 	public void onContentChanged() {
 		super.onContentChanged();
 		initialiseGames();
-		Profile.getInstance().setCurrentGame(adapter.isEmpty() ? -1
+		Profile.Companion.getInstance().setCurrentGame(adapter.isEmpty() ? -1
 				                                               : adapter.getItem(0).getId());
 	}
 
@@ -219,7 +219,7 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 
         if(fabstate==FAB_STATES.INACTIVE) {
 		    /* selected in order to play */
-            Profile.getInstance().setCurrentGame(adapter.getItem(position).getId());
+            Profile.Companion.getInstance().setCurrentGame(adapter.getItem(position).getId());
             startActivity(new Intent(this, SudokuActivity.class));
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
@@ -242,7 +242,7 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 			temp_items.add(getString(R.string.sudokuloading_dialog_play));
 			temp_items.add(getString(R.string.sudokuloading_dialog_delete));
 
-			if(Profile.getInstance().getAppSettings().isDebugSet()){
+			if(Profile.Companion.getInstance().getAppSettings().isDebugSet()){
 				temp_items.add("export as text");
 				temp_items.add("export as file");
 			}
@@ -255,7 +255,7 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 			public void onClick(DialogInterface dialog, int item) {
 				switch (item) {
 				case 0://play
-					Profile.getInstance().setCurrentGame(adapter.getItem(position).getId());
+					Profile.Companion.getInstance().setCurrentGame(adapter.getItem(position).getId());
 					Intent i = new Intent(SudokuLoadingActivity.this, SudokuActivity.class);
 					startActivity(i);
 					overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

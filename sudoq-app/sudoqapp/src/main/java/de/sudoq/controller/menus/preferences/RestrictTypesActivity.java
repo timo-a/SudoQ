@@ -162,7 +162,7 @@ public class RestrictTypesActivity extends SudoqListActivity implements OnItemCl
 			types.remove(st);
 		else
 			types.add(st);
-		Profile.getInstance().saveChanges();
+		Profile.Companion.getInstance().saveChanges();
 		adapter.notifyDataSetChanged();
 	}
 
@@ -175,7 +175,7 @@ public class RestrictTypesActivity extends SudoqListActivity implements OnItemCl
 	}	
 
 	private void initialiseTypes() {
-		types = Profile.getInstance().getAssistances().getWantedTypesList();
+		types = Profile.Companion.getInstance().getAssistances().getWantedTypesList();
 		// initialize ArrayAdapter for the type names and set it
 		adapter = new RestrictTypesAdapter(this, types);
 		setListAdapter(adapter);

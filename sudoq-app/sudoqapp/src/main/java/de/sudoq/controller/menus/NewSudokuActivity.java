@@ -84,7 +84,7 @@ public class NewSudokuActivity extends SudoqCompatActivity {
 		ab.setTitle(R.string.sf_sudokupreferences_title);
 
 		//for initial settings-values from Profile
-		XmlTree xt = Profile.getInstance().getAssistances().toXmlTree();
+		XmlTree xt = Profile.Companion.getInstance().getAssistances().toXmlTree();
 		gameSettings = new GameSettings();
 		gameSettings.fillFromXml(xt);
 		
@@ -129,7 +129,7 @@ public class NewSudokuActivity extends SudoqCompatActivity {
 		initTypeSpinner(possibleTypes);
 
 
-//		SudokuTypesList wtl = Profile.getInstance().getAssistances().getWantedTypesList();
+//		SudokuTypesList wtl = Profile.Companion.getInstance().getAssistances().getWantedTypesList();
 //		fillTypeSpinner(wtl);
 //		/* this is a hack: for some reason when returning from settings, the typeSpinner selects the first position
 //		 *                 probably because it gets a new adapter. At the time I'm unable to debug this properly
@@ -197,7 +197,7 @@ public class NewSudokuActivity extends SudoqCompatActivity {
 		if (this.sudokuType != null && this.complexity != null && gameSettings != null) {
 			try {
 				Game game = GameManager.Companion.getInstance().newGame(this.sudokuType, this.complexity, gameSettings);
-				Profile.getInstance().setCurrentGame(game.getId());
+				Profile.Companion.getInstance().setCurrentGame(game.getId());
 				startActivity(new Intent(this, SudokuActivity.class));
 				overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 			} catch (IllegalArgumentException e) {

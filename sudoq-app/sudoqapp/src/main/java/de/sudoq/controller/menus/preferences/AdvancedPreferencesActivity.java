@@ -90,11 +90,11 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 		//exporter      = (CheckBox) findViewById(R.id.checkbox_exportcrash_trigger);
 
 		gameSettings = NewSudokuActivity.gameSettings;
-		GameSettings profileGameSettings = Profile.getInstance().getAssistances();
+		GameSettings profileGameSettings = Profile.Companion.getInstance().getAssistances();
 
         switch (caller){
             case NEW_SUDOKU:
-				debug.   setChecked(Profile.getInstance().getAppSettings().isDebugSet());
+				debug.   setChecked(Profile.Companion.getInstance().getAppSettings().isDebugSet());
 				if(debug.isChecked()){
 					debug.setVisibility(View.VISIBLE);
 				}
@@ -106,13 +106,13 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 				if(debug.isChecked()){
 					debug.setVisibility(View.VISIBLE);
 				}
-				debug.   setChecked(Profile.getInstance().getAppSettings().isDebugSet());
+				debug.   setChecked(Profile.Companion.getInstance().getAppSettings().isDebugSet());
                 helper.  setChecked(profileGameSettings.isHelperSet());
                 lefthand.setChecked(profileGameSettings.isLefthandModeSet());
         }
 		//myCaller.restricttypes.setChecked(a.isreHelperSet());
 		
-		Profile.getInstance().registerListener(this);
+		Profile.Companion.getInstance().registerListener(this);
 
 		/** language spinner **/
 		final Spinner languageSpinner = findViewById(R.id.spinner_language);
@@ -240,7 +240,7 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
             case NEW_SUDOKU://TODO just have 2 subclasses, one to be called from playerpref, one from newSudokuPref
 	            saveToGameSettings();
 	            if(debug != null)
-	                 Profile.getInstance().setDebugActive(debug.isChecked());
+	                 Profile.Companion.getInstance().setDebugActive(debug.isChecked());
                 break;
             case PROFILE:
                 saveToProfile();
@@ -256,7 +256,7 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
     }
 
     protected void saveToProfile() {
-        Profile p = Profile.getInstance();
+        Profile p = Profile.Companion.getInstance();
 		if(debug != null)
 			p.setDebugActive(debug.isChecked());
 		if(helper != null)
@@ -264,7 +264,7 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
         if(lefthand != null)
             p.setLefthandActive(lefthand.isChecked());
         //restrict types is automatically saved to profile...
-        Profile.getInstance().saveChanges();
+        p.saveChanges();
     }
 
 

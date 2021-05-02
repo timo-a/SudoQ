@@ -34,7 +34,7 @@ public class GeneratorTests implements GeneratorCallback {
 	@BeforeClass
 	public static void init() throws IOException {
 		Utility.copySudokus();
-		Profile.getInstance();
+		Profile.Companion.getInstance();
 	}
 
 	@AfterClass

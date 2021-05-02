@@ -27,7 +27,7 @@ public class StatisticsActivity extends SudoqCompatActivity {
 
 	private void setScore(int textViewID, int label, Statistics statLabel){
 		TextView current = (TextView) findViewById(textViewID);
-		current.setText(getString(label) + ": " + Profile.getInstance().getStatistic(statLabel));
+		current.setText(getString(label) + ": " + Profile.Companion.getInstance().getStatistic(statLabel));
 	}
 	
 	/**
@@ -55,7 +55,7 @@ public class StatisticsActivity extends SudoqCompatActivity {
         
 		TextView current = (TextView) findViewById(R.id.text_fastest_solving_time);
 		
-		int timeRecordInSecs = Profile.getInstance().getStatistic(Statistics.fastestSolvingTime);
+		int timeRecordInSecs = Profile.Companion.getInstance().getStatistic(Statistics.fastestSolvingTime);
 		
 		String timeString = "---";
 		
