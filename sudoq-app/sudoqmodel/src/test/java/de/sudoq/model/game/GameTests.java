@@ -38,7 +38,7 @@ public class GameTests {
 	@BeforeClass
 	public static void beforeClass() {
 		Utility.copySudokus();
-		Profile.getInstance();
+		Profile.Companion.getInstance();
 
 		TypeBuilder.get99(); //just to force initialization of filemanager
 		

@@ -34,7 +34,7 @@ public class NakedHelperTests extends NakedHelper {
     @BeforeClass
 	public static void init() {
 		Utility.copySudokus();
-		Profile.getInstance();
+		Profile.Companion.getInstance();
 	}
 
 	@AfterClass

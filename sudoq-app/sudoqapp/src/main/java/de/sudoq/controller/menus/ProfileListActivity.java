@@ -54,13 +54,13 @@ public class ProfileListActivity extends SudoqListActivity implements OnItemClic
 		setContentView(R.layout.profilelist);
 		this.setTitle(this.getString(R.string.action_switch_profile));
 
-		profileIds = Profile.getInstance().getProfilesIdList();
-		profileNames = Profile.getInstance().getProfilesNameList();
+		profileIds = Profile.Companion.getInstance().getProfilesIdList();
+		profileNames = Profile.Companion.getInstance().getProfilesNameList();
 
-		Log.d(LOG_TAG, "Array length: " + Profile.getInstance().getProfilesNameList().size());
+		Log.d(LOG_TAG, "Array length: " + Profile.Companion.getInstance().getProfilesNameList().size());
 
 		ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-				R.layout.profilelist_item, Profile.getInstance().getProfilesNameList());
+				R.layout.profilelist_item, Profile.Companion.getInstance().getProfilesNameList());
 		setListAdapter(adapter);
 		getListView().setOnItemClickListener(this);
 	}
@@ -80,7 +80,7 @@ public class ProfileListActivity extends SudoqListActivity implements OnItemClic
 	 */
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Log.d(LOG_TAG, "Clicked on name " + profileNames.get(position) + " with id:" + profileIds.get(position));
-		Profile.getInstance().changeProfile(profileIds.get(position));
+		Profile.Companion.getInstance().changeProfile(profileIds.get(position));
 		this.finish();
 	}
 

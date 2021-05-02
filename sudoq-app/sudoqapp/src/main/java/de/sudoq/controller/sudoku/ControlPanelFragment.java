@@ -139,7 +139,7 @@ public class ControlPanelFragment extends Fragment {
         } else if (v == Buttons.actionTreeButton) {
             activity.toogleActionTree();
         } else if (v == Buttons.gestureButton) {
-            Profile profile = Profile.getInstance();
+            Profile profile = Profile.Companion.getInstance();
             if (activity.checkGesture()) {
 				/* toggle 'gesture active'
 				 * toggle button icon as well */

@@ -71,7 +71,7 @@ public class NewSudokuPreferencesActivity extends PreferencesActivity {
 		markWrongSymbol.   setChecked(confSettings.getAssistance(Assistances.markWrongSymbol));
 		restrictCandidates.setChecked(confSettings.getAssistance(Assistances.restrictCandidates));
 		
-		Profile.getInstance().registerListener(this);
+		Profile.Companion.getInstance().registerListener(this);
 
 		//set and store language at beginning of activity lifecycle
 		currentLanguageCode = LanguageUtility.loadLanguageFromSharedPreferences(this);
@@ -122,7 +122,7 @@ public class NewSudokuPreferencesActivity extends PreferencesActivity {
 		saveCheckbox(restrictCandidates, Assistances.restrictCandidates, confSettings);
 		//confSettings.setHelper();
 		//confSettings.setCrash();
-		Profile.getInstance().saveChanges();
+		Profile.Companion.getInstance().saveChanges();
 	}
 	
 
@@ -138,7 +138,7 @@ public class NewSudokuPreferencesActivity extends PreferencesActivity {
 	}
 
     protected void saveToProfile() {
-        Profile p = Profile.getInstance();
+        Profile p = Profile.Companion.getInstance();
 
         p.setGestureActive(gesture.isChecked());
 		saveAssistance(Assistances.autoAdjustNotes,    autoAdjustNotes);
@@ -150,7 +150,7 @@ public class NewSudokuPreferencesActivity extends PreferencesActivity {
 		p.setLefthandActive(confSettings.isLefthandModeSet());
 
         //restrict types is automatically saved to profile...
-        Profile.getInstance().saveChanges();
+        p.saveChanges();
     }
 
 	/* parameter View only needed to be foud by xml who clicks this*/

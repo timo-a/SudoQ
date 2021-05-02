@@ -113,7 +113,7 @@ public class GestureBuilder extends SudoqCompatActivity implements OnGesturePerf
 				Log.w(LOG_TAG, "Gesture file cannot be loaded!");
 			}
 		} catch (IOException e) {
-			Profile.getInstance().setGestureActive(false);
+			Profile.Companion.getInstance().setGestureActive(false);
 			Toast.makeText(this, R.string.error_gestures_no_library, Toast.LENGTH_SHORT).show();
 		}
 
@@ -165,7 +165,7 @@ public class GestureBuilder extends SudoqCompatActivity implements OnGesturePerf
 		try {
 			this.gestureStore.save(new FileOutputStream(gestureFile));
 		} catch (IOException e) {
-			Profile.getInstance().setGestureActive(false);
+			Profile.Companion.getInstance().setGestureActive(false);
 			Toast.makeText(this, R.string.error_gestures_no_library, Toast.LENGTH_SHORT).show();
 		}
 	}

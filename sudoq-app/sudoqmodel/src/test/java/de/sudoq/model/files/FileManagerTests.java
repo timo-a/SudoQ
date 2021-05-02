@@ -109,7 +109,7 @@ public class FileManagerTests /*extends TestWithInitCleanforSingletons*/ {
 
 		assertFalse(FileManager.getProfilesFile().exists());
 		assertEquals(0, FileManager.getNumberOfProfiles());
-		Profile.getInstance();
+		Profile.Companion.getInstance();
 		assertTrue(FileManager.getProfilesFile().exists());
 		File profile = FileManager.getProfileXmlFor(1);
 		assertTrue(profile.exists() && !profile.isDirectory());
@@ -170,7 +170,7 @@ public class FileManagerTests /*extends TestWithInitCleanforSingletons*/ {
 	public void getGameThumbnailFile() throws IOException {
 
 
-		Profile.getInstance(); //needs to be called first otherwise it failes as an indiviidual and sometimes as part of all the tests in this class
+		Profile.Companion.getInstance(); //needs to be called first otherwise it failes as an indiviidual and sometimes as part of all the tests in this class
 
 		assertEquals(1, FileManager.getNextFreeGameId());//currentProfileID==-1
 		assertTrue(FileManager.getGamesFile().exists());

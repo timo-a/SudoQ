@@ -108,7 +108,7 @@ class GameManager private constructor() {
             }
         }
 
-        Profile.getInstance().saveChanges()
+        Profile.Companion.instance.saveChanges()
         saveGamesFile(games)
     }
 
@@ -134,9 +134,9 @@ class GameManager private constructor() {
      * @param id ID of the game to remove
      */
     fun deleteGame(id: Int) {
-        if (id == Profile.getInstance().currentGame) {
-            Profile.getInstance().currentGame = Profile.NO_GAME
-            Profile.getInstance().saveChanges() //save 'currentGameID' in xml (otherwise menu will offer 'continue')
+        if (id == Profile.Companion.instance.currentGame) {
+            Profile.Companion.instance.currentGame = Profile.NO_GAME
+            Profile.Companion.instance.saveChanges() //save 'currentGameID' in xml (otherwise menu will offer 'continue')
         }
         FileManager.deleteGame(id)
         updateGamesList()

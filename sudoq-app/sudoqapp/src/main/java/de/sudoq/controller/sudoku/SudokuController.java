@@ -185,16 +185,16 @@ public class SudokuController implements AssistanceRequestListener, ActionListen
 			case easy:      incrementStatistic(Statistics.playedEasySudokus);      break;
 		}
 		incrementStatistic(Statistics.playedSudokus);
-		if (Profile.getInstance().getStatistic(Statistics.fastestSolvingTime) > game.getTime()) {
-			Profile.getInstance().setStatistic(Statistics.fastestSolvingTime, game.getTime());
+		if (Profile.Companion.getInstance().getStatistic(Statistics.fastestSolvingTime) > game.getTime()) {
+			Profile.Companion.getInstance().setStatistic(Statistics.fastestSolvingTime, game.getTime());
 		}
-		if (Profile.getInstance().getStatistic(Statistics.maximumPoints) < game.getScore()) {
-			Profile.getInstance().setStatistic(Statistics.maximumPoints, game.getScore());
+		if (Profile.Companion.getInstance().getStatistic(Statistics.maximumPoints) < game.getScore()) {
+			Profile.Companion.getInstance().setStatistic(Statistics.maximumPoints, game.getScore());
 		}
 	}
 
 	private void incrementStatistic(Statistics s){ //TODO this should probably be in model...
-		Profile.getInstance().setStatistic(s,  Profile.getInstance().getStatistic(s) + 1);
+		Profile.Companion.getInstance().setStatistic(s,  Profile.Companion.getInstance().getStatistic(s) + 1);
 	}
 
 }

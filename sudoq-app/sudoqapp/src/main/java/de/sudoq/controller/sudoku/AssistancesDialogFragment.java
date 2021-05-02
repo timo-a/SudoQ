@@ -55,10 +55,10 @@ public class AssistancesDialogFragment extends DialogFragment {
         if (v != null && v.getCell().isNotSolved())
             itemStack.add(getString(R.string.sf_sudoku_assistances_solve_specific));
 
-        if (Profile.getInstance().getAssistances().isHelperSet())
+        if (Profile.Companion.getInstance().getAssistances().isHelperSet())
             itemStack.add(getString(R.string.sf_sudoku_assistances_give_hint));
 
-        if (Profile.getInstance().getAppSettings().isDebugSet())
+        if (Profile.Companion.getInstance().getAppSettings().isDebugSet())
             itemStack.add(getString(R.string.sf_sudoku_assistances_crash));
 
         // TODO why this no work? final CharSequence[] items = (CharSequence[]) itemStack.toArray();

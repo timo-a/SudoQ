@@ -139,7 +139,7 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 	public void onCellSelected(SudokuCellView view, SelectEvent e) {
 
 		if(!game.isFinished()) {
-			if (Profile.getInstance().isGestureActive()) {
+			if (Profile.Companion.getInstance().isGestureActive()) {
 				cellSelectedGestureMode(view, e);
 			} else {
 				cellSelectedNumPadMode(view, e);
