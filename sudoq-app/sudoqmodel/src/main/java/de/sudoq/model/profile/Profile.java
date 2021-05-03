@@ -93,6 +93,12 @@ public class Profile extends ObservableModelImpl<Profile> implements Xmlable {
 		return instance;
 	}
 
+	@Deprecated()/** use only for unit tests! */
+	public static synchronized Profile forceInitialize(){
+		instance = null;
+		return getInstance();
+	}
+
 	/* Methods */
 
 	/**

@@ -10,9 +10,13 @@ import de.sudoq.model.files.FileManager;
 public class TestWithInitCleanforSingletons {
 
 	@BeforeClass
-	public static void init() {
+	public static void init() throws IOException {
+		if (Utility.profiles != null && Utility.profiles.exists())
+			FileManager.deleteDir(Utility.profiles);
+
+
+		System.out.println("init called");
 		Utility.copySudokus();
-		System.out.println("hu - HA!");
 	}
 
 	@AfterClass

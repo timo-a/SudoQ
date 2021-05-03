@@ -9,39 +9,14 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.Utility;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
-public class SudokuManagerTests {
-
-	private static File profiles = new File("res/tmp_profiles");
-	private static File sudokus = new File("res/tmp_sudokus");
-
-	@BeforeClass
-	public static void init() throws IOException {
-		Utility.copySudokus();
-		profiles = Utility.profiles;
-		sudokus  = Utility.sudokus;
-	}
-
-	@AfterClass
-	public static void clean() throws IOException, SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-		java.lang.reflect.Field f = FileManager.class.getDeclaredField("profiles");
-		f.setAccessible(true);
-		f.set(null, null);
-		java.lang.reflect.Field s = FileManager.class.getDeclaredField("sudokus");
-		s.setAccessible(true);
-		s.set(null, null);
-		java.lang.reflect.Field p = Profile.class.getDeclaredField("instance");
-		p.setAccessible(true);
-		p.set(null, null);
-		FileManager.deleteDir(profiles);
-		FileManager.deleteDir(sudokus);
-	}
-
+public class SudokuManagerTests extends TestWithInitCleanforSingletons {
 
 	@Test(timeout = 60) // threw an exception and ran forever in the past -> timeout
 	public void test() {

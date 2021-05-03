@@ -5,10 +5,12 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import de.sudoq.model.TestWithInitCleanforSingletons;
+import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
-public class UniqueConstraintBehaviorTests {
+public class UniqueConstraintBehaviorTests extends TestWithInitCleanforSingletons {
 
 	@Test
 	public void testConstraint() {

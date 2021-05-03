@@ -9,6 +9,7 @@ import org.junit.BeforeClass;
 import java.io.IOException;
 import java.util.List;
 
+import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.Utility;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.profile.Profile;
@@ -20,31 +21,8 @@ import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
+public class TransformerTests extends TestWithInitCleanforSingletons implements GeneratorCallback {
 
-public class TransformerTests implements GeneratorCallback {
-
-
-	@BeforeClass
-	public static void init() throws IOException {
-		Utility.copySudokus();
-		Profile.getInstance();
-	}
-
-	@AfterClass
-	public static void clean() throws IOException, SecurityException, NoSuchFieldException, IllegalArgumentException,
-			IllegalAccessException {
-        java.lang.reflect.Field f = FileManager.class.getDeclaredField("profiles");
-        f.setAccessible(true);
-        f.set(null, null);
-        java.lang.reflect.Field s = FileManager.class.getDeclaredField("sudokus");
-        s.setAccessible(true);
-        s.set(null, null);
-        java.lang.reflect.Field p = Profile.class.getDeclaredField("instance");
-        p.setAccessible(true);
-        p.set(null, null);
-        FileManager.deleteDir(Utility.profiles);
-        FileManager.deleteDir(Utility.sudokus);
-	}
 
 	PositionMap<Integer> map = new PositionMap<Integer>(Position.get(9, 9));
 

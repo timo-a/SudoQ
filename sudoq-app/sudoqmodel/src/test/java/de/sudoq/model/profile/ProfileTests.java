@@ -10,21 +10,20 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 
+import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.files.FileManagerTests;
 import de.sudoq.model.game.Assistances;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.profile.Statistics;
 
-public class ProfileTests {
-	@BeforeClass
-	public static void initFileManager() {
-		FileManagerTests.init();
-	}
+public class ProfileTests extends TestWithInitCleanforSingletons {
 
 	@Test
 	public void initProfileAndCheckValues() {
-		Profile.getInstance().loadCurrentProfile();
+		Profile.forceInitialize();
+		Profile pi = Profile.getInstance();
+		pi.loadCurrentProfile();
 		assertTrue("no profile was created", Profile.getInstance().getNumberOfAvailableProfiles() > 0);
 		assertTrue("a default value is wrong", Profile.getInstance().getName().equals("unnamed"));
 		assertTrue("a default value is wrong", Profile.getInstance().isGestureActive() == false);
@@ -79,9 +78,4 @@ public class ProfileTests {
 		assertTrue("id is wrong", Profile.getInstance().getCurrentProfileID() == 2);
 	}
 
-	@AfterClass
-	public static void cleanFileManager() throws IOException, SecurityException, NoSuchFieldException,
-			IllegalArgumentException, IllegalAccessException {
-		FileManagerTests.clean();
-	}
 }
