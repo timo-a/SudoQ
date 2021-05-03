@@ -29,7 +29,8 @@ public class GameManagerTests {
 	@BeforeClass
 	public static void init() throws IOException {
 		Utility.copySudokus();
-		Profile.getInstance();
+		//Profile.getInstance();
+		Profile.forceInitialize();
 	}
 
 	@AfterClass
@@ -41,9 +42,6 @@ public class GameManagerTests {
         java.lang.reflect.Field s = FileManager.class.getDeclaredField("sudokus");
         s.setAccessible(true);
         s.set(null, null);
-        java.lang.reflect.Field p = Profile.class.getDeclaredField("instance");
-        p.setAccessible(true);
-        p.set(null, null);
         FileManager.deleteDir(Utility.profiles);
         FileManager.deleteDir(Utility.sudokus);
     }
