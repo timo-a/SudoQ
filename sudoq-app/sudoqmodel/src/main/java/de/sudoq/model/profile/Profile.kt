@@ -346,7 +346,7 @@ class Profile private constructor() : ObservableModelImpl<Profile>(), Xmlable {
     }
 
     private val profilesXml: XmlTree
-        private get() = try {
+        get() = try {
             XmlHelper().loadXml(FileManager.getProfilesFile())
         } catch (e: IOException) {
             throw IllegalStateException("Something went wrong reading profiles.xml", e)
@@ -404,10 +404,18 @@ class Profile private constructor() : ObservableModelImpl<Profile>(), Xmlable {
          */
         //@JvmStatic
 		//@get:Synchronized
-        val instance: Profile = Profile()
+        var instance: Profile?
         init {
-            instance.loadCurrentProfile()
+            instance = Profile()
+            instance!!.loadCurrentProfile()
         }
+
+        fun forceReinitialize() : Profile {
+            instance = Profile()
+            instance!!.loadCurrentProfile();
+            return instance!!
+        }
+
 
     }
 }

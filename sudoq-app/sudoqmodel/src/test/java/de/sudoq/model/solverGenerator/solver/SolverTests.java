@@ -14,7 +14,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.sudoq.model.files.FileManagerTests;
+import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.sudoku.Cell;
@@ -37,7 +37,7 @@ public class SolverTests {
 
 	@Before
 	public void before() {
-		FileManagerTests.init();
+		TestWithInitCleanforSingletons.legacyInit();
 		sudoku = new SudokuBuilder(SudokuTypes.standard9x9).createSudoku();
 		sudoku.setComplexity(Complexity.arbitrary);
 		solver = new Solver(sudoku);

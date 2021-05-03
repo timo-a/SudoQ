@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
+import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.files.FileManagerTests;
 import de.sudoq.model.sudoku.Sudoku;
@@ -20,7 +21,7 @@ public class SamuraiTest {
 
     @BeforeClass
     public static void init() {
-        FileManagerTests.init();
+        TestWithInitCleanforSingletons.legacyInit();
     }
 
     @Test

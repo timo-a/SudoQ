@@ -14,6 +14,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.Utility;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.profile.Profile;
@@ -28,8 +29,7 @@ public class GameManagerTests {
 
 	@BeforeClass
 	public static void init() throws IOException {
-		Utility.copySudokus();
-		Profile.Companion.getInstance();
+		TestWithInitCleanforSingletons.legacyInit();
 	}
 
 	@AfterClass

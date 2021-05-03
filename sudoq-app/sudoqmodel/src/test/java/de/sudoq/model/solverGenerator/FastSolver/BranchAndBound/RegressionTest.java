@@ -3,6 +3,7 @@ package de.sudoq.model.solverGenerator.FastSolver.BranchAndBound;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.files.FileManagerTests;
 import de.sudoq.model.solverGenerator.AmbiguityChecker;
 import de.sudoq.model.solverGenerator.FastSolver.DLX1.DLXSolver;
@@ -21,7 +22,7 @@ public class RegressionTest {
 
     @BeforeClass
     public static void init() {
-        FileManagerTests.init();
+        TestWithInitCleanforSingletons.legacyInit();
     }
 
 

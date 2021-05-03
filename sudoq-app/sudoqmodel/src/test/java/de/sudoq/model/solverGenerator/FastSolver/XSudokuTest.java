@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 
+import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.files.FileManagerTests;
 import de.sudoq.model.solverGenerator.GenerationAlgo;
@@ -24,7 +25,7 @@ public class XSudokuTest {
 
     @BeforeClass
     public static void init() {
-        FileManagerTests.init();
+        TestWithInitCleanforSingletons.legacyInit();
     }
 
     @Test
