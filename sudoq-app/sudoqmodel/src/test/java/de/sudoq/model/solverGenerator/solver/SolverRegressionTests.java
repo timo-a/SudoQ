@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 
+import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.files.FileManagerTests;
 import de.sudoq.model.solverGenerator.FastSolver.FastSolver;
 import de.sudoq.model.solverGenerator.FastSolver.FastSolverFactory;
@@ -34,7 +35,7 @@ public class SolverRegressionTests {
 
     @Before
     public void before() {
-        FileManagerTests.init();
+        TestWithInitCleanforSingletons.legacyInit();
         sudoku = new SudokuBuilder(SudokuTypes.standard9x9).createSudoku();
         sudoku.setComplexity(Complexity.arbitrary);
         solver = new Solver(sudoku);

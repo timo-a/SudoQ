@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.files.FileManagerTests;
 import de.sudoq.model.solverGenerator.FastSolver.DLX2.SamuraiSolver;
@@ -27,7 +28,7 @@ public class SamuraiRegressionTest {
 
     @BeforeClass
     public static void init() {
-        FileManagerTests.init();
+        TestWithInitCleanforSingletons.legacyInit();
     }
 
 

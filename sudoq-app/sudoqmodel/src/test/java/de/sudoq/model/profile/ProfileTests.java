@@ -21,7 +21,6 @@ public class ProfileTests extends TestWithInitCleanforSingletons {
 
 	@Test
 	public void initProfileAndCheckValues() {
-		Profile.Companion.getInstance().loadCurrentProfile();
 		assertTrue("no profile was created", Profile.Companion.getInstance().getNumberOfAvailableProfiles() > 0);
 		assertTrue("a default value is wrong", Profile.Companion.getInstance().getName().equals("unnamed"));
 		assertTrue("a default value is wrong", Profile.Companion.getInstance().isGestureActive() == false);

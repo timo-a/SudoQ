@@ -12,7 +12,10 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.sudoq.model.TestWithInitCleanforSingletons;
+import de.sudoq.model.Utility;
 import de.sudoq.model.files.FileManagerTests;
+import de.sudoq.model.profile.Profile;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.helper.HiddenHelper;
 import de.sudoq.model.solverGenerator.solver.helper.LastDigitHelper;
@@ -30,8 +33,7 @@ public class HelperTests {
 
 	@Before
 	public void before() {
-		FileManagerTests.init();
-
+		TestWithInitCleanforSingletons.legacyInit();
 	}
 
 

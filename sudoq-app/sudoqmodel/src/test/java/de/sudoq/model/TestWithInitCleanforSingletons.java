@@ -6,6 +6,7 @@ import org.junit.BeforeClass;
 import java.io.IOException;
 
 import de.sudoq.model.files.FileManager;
+import de.sudoq.model.profile.Profile;
 
 public class TestWithInitCleanforSingletons {
 
@@ -17,6 +18,14 @@ public class TestWithInitCleanforSingletons {
 
 		System.out.println("init called");
 		Utility.copySudokus();
+
+		Profile.Companion.forceReinitialize();
+
+	}
+
+	public static void legacyInit(){
+		Utility.copySudokus();
+		Profile.Companion.forceReinitialize();
 	}
 
 	@AfterClass

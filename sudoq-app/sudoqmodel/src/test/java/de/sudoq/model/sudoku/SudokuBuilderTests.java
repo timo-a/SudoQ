@@ -8,9 +8,10 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
-public class SudokuBuilderTests {
+public class SudokuBuilderTests extends TestWithInitCleanforSingletons {
 
 	Cell cell;
 

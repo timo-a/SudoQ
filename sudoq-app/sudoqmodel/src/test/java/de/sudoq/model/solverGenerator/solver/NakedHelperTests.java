@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
+import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.Utility;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.profile.Profile;
@@ -31,10 +32,9 @@ import static org.junit.Assert.fail;
 public class NakedHelperTests extends NakedHelper {
 
 
-    @BeforeClass
+	@BeforeClass
 	public static void init() {
-		Utility.copySudokus();
-		Profile.Companion.getInstance();
+		TestWithInitCleanforSingletons.legacyInit();
 	}
 
 	@AfterClass

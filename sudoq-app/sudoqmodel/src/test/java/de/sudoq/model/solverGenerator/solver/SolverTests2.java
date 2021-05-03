@@ -8,7 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.sudoq.model.TestWithInitCleanforSingletons;
+import de.sudoq.model.Utility;
 import de.sudoq.model.files.FileManagerTests;
+import de.sudoq.model.profile.Profile;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.sudoku.Cell;
@@ -33,7 +36,7 @@ public class SolverTests2 extends Solver {
 
 	@BeforeClass
 	public static void init() {
-		FileManagerTests.init();
+		TestWithInitCleanforSingletons.legacyInit();
 		initialSudoku = new Sudoku(SudokuType.getSudokuType(standard9x9));
 		for (int i=0; i < 8; i++)
 			initialSudoku.getCell(Position.get(i,0)).setCurrentValue(i);
@@ -62,7 +65,7 @@ public class SolverTests2 extends Solver {
 
 	@Before
 	public void before() {
-		FileManagerTests.init();
+		TestWithInitCleanforSingletons.legacyInit();
 		//sudoku = new SudokuBuilder(standard9x9).createSudoku();
 		//sudoku.setComplexity(Complexity.arbitrary);
 		solver = new Solver(sudoku);
