@@ -443,7 +443,7 @@ class GenerationAlgo(
 
         fun getSudoku(path: String, st: SudokuTypes): Sudoku? {
             FileManager.initialize(
-                    File("/home/t/Code/SudoQ/DebugOnPC/profilefiles"),
+                    File("/home/t/Code/SudoQ/DebugOnPC/profilefiles"),//todo is this used by the app??? try to delete
                     File("/home/t/Code/SudoQ/sudoq-app/sudoqapp/src/main/assets/sudokus/"))
             val f = File(path)
             val s = Sudoku(getSudokuType(st)!!)
