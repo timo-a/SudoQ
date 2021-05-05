@@ -20,7 +20,7 @@ import java.util.*
  * which is maintained by SharedPreferences of the Android-API.
  *
  */
-class Profile private constructor() : ObservableModelImpl<Profile>(), Xmlable {
+class Profile : ObservableModelImpl<Profile>(), Xmlable {
 //private constructor because class is static
 //TODO split into profile handler and profile
 
