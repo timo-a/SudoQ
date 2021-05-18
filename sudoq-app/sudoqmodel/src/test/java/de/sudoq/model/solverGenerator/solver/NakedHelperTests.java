@@ -12,7 +12,6 @@ import java.util.List;
 import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.Utility;
 import de.sudoq.model.files.FileManager;
-import de.sudoq.model.profile.Profile;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.helper.NakedHelper;
 import de.sudoq.model.solverGenerator.solver.helper.SubsetHelper;
@@ -46,8 +45,8 @@ public class NakedHelperTests extends NakedHelper {
         java.lang.reflect.Field s = FileManager.class.getDeclaredField("sudokus");
         s.setAccessible(true);
         s.set(null, null);
-        FileManager.deleteDir(Utility.profiles);
-        FileManager.deleteDir(Utility.sudokus);
+        Utility.deleteDir(Utility.profiles);
+        Utility.deleteDir(Utility.sudokus);
 	}
 
     public NakedHelperTests(){

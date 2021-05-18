@@ -30,7 +30,6 @@ public class FromFileTest {
 
     public static Sudoku getSudoku(String path, SudokuTypes st){
         FileManager.initialize(
-                new File("/home/t/Code/SudoQ/DebugOnPC/profilefiles"),
                 new File("/home/t/Code/SudoQ/sudoq-app/sudoqapp/src/main/assets/sudokus/"));
         File f = new File(path);
 

@@ -11,17 +11,16 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.sudoq.model.Utility;
 import de.sudoq.model.files.FileManager;
+import de.sudoq.model.persistence.xml.ProfileRepo;
+import de.sudoq.model.persistence.xml.ProfilesListRepo;
+import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
-import de.sudoq.model.xml.GameXmlHandler;
-import de.sudoq.model.xml.SudokuXmlHandler;
-import de.sudoq.model.xml.XmlHandler;
-import de.sudoq.model.xml.XmlTree;
-import de.sudoq.model.xml.Xmlable;
 
 public class XmlHandlerTests {
 
@@ -30,17 +29,21 @@ public class XmlHandlerTests {
 
 	@Before
 	public void init() {
-		sudokus = new File("res" + File.separator + "tmp_suds");
 		profiles = new File("res" + File.separator + "tmp_profiles");
-		sudokus.mkdir();
 		profiles.mkdir();
-		FileManager.initialize(profiles, sudokus);
+		Profile.Companion.getInstance().setProfileRepo(new ProfileRepo(profiles));
+		Profile.Companion.getInstance().setProfilesListRepo( new ProfilesListRepo(profiles));
+		Profile.Companion.getInstance().setProfilesDir(profiles);
+
+		sudokus = new File("res" + File.separator + "tmp_suds");
+		sudokus.mkdir();
+		FileManager.initialize(sudokus);
 	}
 
 	@After
 	public void clean() throws IOException, SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-		FileManager.deleteDir(profiles);
-		FileManager.deleteDir(sudokus);
+		Utility.deleteDir(profiles);
+		Utility.deleteDir(sudokus);
 	}
 
 	@Test

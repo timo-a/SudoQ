@@ -16,8 +16,6 @@ import org.junit.BeforeClass;
 import de.sudoq.model.Utility;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.profile.Profile;
-import de.sudoq.model.solverGenerator.Generator;
-import de.sudoq.model.solverGenerator.GeneratorCallback;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solver.ComplexityRelation;
 import de.sudoq.model.solverGenerator.solver.Solver;
@@ -49,8 +47,8 @@ public class GeneratorTests implements GeneratorCallback {
         java.lang.reflect.Field p = Profile.class.getDeclaredField("instance");
         p.setAccessible(true);
         p.set(null, null);
-        FileManager.deleteDir(Utility.profiles);
-        FileManager.deleteDir(Utility.sudokus);
+        Utility.deleteDir(Utility.profiles);
+        Utility.deleteDir(Utility.sudokus);
     }
 	@Before
 	public void beforeTest() {

@@ -3,6 +3,7 @@ package de.sudoq.model;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public abstract class Utility {
     public static final String SUDOQ_LOCATION = "/home/t/Code/SudoQ/";
     public static final String RES = SUDOQ_LOCATION + "sudoq-app/sudoqapp/src/main/" + "res" + File.separator;
 
+
     /*
     * Copy files from assets to temporary dir for testing
     * also init Filemanager
@@ -30,7 +32,6 @@ public abstract class Utility {
     public static void copySudokus() {
         String res = RES;
         sudokus  = new File(res + "tmp_suds");
-        profiles = new File(res + "tmp_profiles");
         sudokus.mkdir();
 
         try {
@@ -41,8 +42,7 @@ public abstract class Utility {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        profiles.mkdir();
-        FileManager.initialize(profiles, sudokus);
+        FileManager.initialize(sudokus);
     }
 
     public static void print9x9(Sudoku sudoku){
@@ -81,4 +81,32 @@ public abstract class Utility {
     }
 
 
+    /**
+     * Removes everything in the Directory but not the directory itself
+     * @param f
+     *            das Verzeichnis
+     * @throws IOException
+     *             falls etwas nicht gelöscht werden konnte
+     */
+    public static void clearDir(File f) throws IOException {
+        if (f.isDirectory()) {
+            for (File c : f.listFiles())
+                deleteDir(c);
+        }
+    }
+
+    /**
+     * Löscht rekursiv das gegebene Verzeichnis
+     *
+     * @param f
+     *            das Verzeichnis
+     * @throws IOException
+     *             falls etwas nicht gelöscht werden konnte
+     */
+    public static void deleteDir(File f) throws IOException {
+        clearDir(f);
+
+        if (!f.delete())
+            throw new FileNotFoundException("Failed to delete file: " + f);
+    }
 }
