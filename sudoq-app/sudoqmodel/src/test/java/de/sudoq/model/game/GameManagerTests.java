@@ -41,8 +41,8 @@ public class GameManagerTests {
         java.lang.reflect.Field s = FileManager.class.getDeclaredField("sudokus");
         s.setAccessible(true);
         s.set(null, null);
-        FileManager.deleteDir(Utility.profiles);
-        FileManager.deleteDir(Utility.sudokus);
+        Utility.deleteDir(Utility.profiles);
+        Utility.deleteDir(Utility.sudokus);
     }
 
 	@Test

@@ -47,8 +47,8 @@ public class GeneratorTestsSlow implements GeneratorCallback {
         Field p = Profile.class.getDeclaredField("instance");
         p.setAccessible(true);
         p.set(null, null);
-        FileManager.deleteDir(Utility.profiles);
-        FileManager.deleteDir(Utility.sudokus);
+        Utility.deleteDir(Utility.profiles);
+        Utility.deleteDir(Utility.sudokus);
     }
 	@Before
 	public void beforeTest() {

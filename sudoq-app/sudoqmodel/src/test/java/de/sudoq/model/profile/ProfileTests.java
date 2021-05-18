@@ -1,23 +1,44 @@
 package de.sudoq.model.profile;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import java.io.IOException;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 
+import java.io.File;
+
 import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.files.FileManager;
-import de.sudoq.model.files.FileManagerTests;
 import de.sudoq.model.game.Assistances;
-import de.sudoq.model.profile.Profile;
-import de.sudoq.model.profile.Statistics;
 
 public class ProfileTests extends TestWithInitCleanforSingletons {
+
+	/*@Test
+	public void testProfiles() {
+		if (profileManager.getProfilesDir().exists())
+			for (File f : profileManager.getProfilesDir().listFiles())
+				f.delete();
+
+
+		assertFalse(profileManager.getProfilesListRepo().ProfilesFile().exists());
+		assertEquals(0, FileManager.getNumberOfProfiles());
+		Profile.Companion.getInstance();
+		assertTrue(FileManager.getProfilesFile().exists());
+		File profile = FileManager.getProfileXmlFor(1);
+		assertTrue(profile.exists() && !profile.isDirectory());
+		assertEquals(1, FileManager.getNumberOfProfiles());
+		assertEquals(1, Integer.parseInt(profile.getParentFile().getName().substring(8)));
+
+		FileManager.createProfileFiles(2);
+		assertEquals(2, FileManager.getNumberOfProfiles());
+		FileManager.deleteProfile(2);
+		assertEquals(1, FileManager.getNumberOfProfiles());
+	}*/
+
+
 
 	@Test
 	public void initProfileAndCheckValues() {
@@ -29,8 +50,6 @@ public class ProfileTests extends TestWithInitCleanforSingletons {
 				Profile.Companion.getInstance().getStatistic(Statistics.fastestSolvingTime) == 5999);
 
 		assertEquals("profile id is wrong", 1,Profile.Companion.getInstance().getCurrentProfileID());
-		assertTrue("next profile ID is wrong", Profile.Companion.getInstance().getNewProfileID() == 2);
-
 	}
 
 	@Test
@@ -52,7 +71,7 @@ public class ProfileTests extends TestWithInitCleanforSingletons {
 
 	@Test
 	public void createProfileAndSwitch() {
-		Profile.Companion.getInstance().createProfile();
+		Profile.Companion.getInstance().createAnotherProfile();
 
 		assertTrue("number of profiles is wrong", Profile.Companion.getInstance().getNumberOfAvailableProfiles() == 2);
 		assertTrue("id is wrong", Profile.Companion.getInstance().getCurrentProfileID() == 2);
@@ -70,7 +89,8 @@ public class ProfileTests extends TestWithInitCleanforSingletons {
 
 		assertTrue("number of profiles is wrong", Profile.Companion.getInstance().getNumberOfAvailableProfiles() == 1);
 
-		assertEquals(1, FileManager.getNumberOfProfiles());
+		assertEquals(1, Profile.Companion.getInstance().getNumberOfAvailableProfiles());
+		assertFalse(Profile.Companion.getInstance().noProfiles());
 
 		assertTrue("id is wrong", Profile.Companion.getInstance().getCurrentProfileID() == 2);
 	}

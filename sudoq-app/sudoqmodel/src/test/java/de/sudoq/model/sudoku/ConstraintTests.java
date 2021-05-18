@@ -43,8 +43,8 @@ public class ConstraintTests {
 		java.lang.reflect.Field p = Profile.class.getDeclaredField("instance");
 		p.setAccessible(true);
 		p.set(null, null);
-		FileManager.deleteDir(profiles);
-		FileManager.deleteDir(sudokus);
+		Utility.deleteDir(profiles);
+		Utility.deleteDir(sudokus);
 	}
 
 
