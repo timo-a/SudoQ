@@ -2,9 +2,12 @@ package de.sudoq.model.persistence
 
 interface IRepo<T> {
 
-    fun save(t:T) : T
+    fun create() : T
 
-    fun load(id : Int) : T
+    fun read(id : Int) : T
 
+    fun update(t:T) : T
+
+    fun delete(id : Int)
 
 }
