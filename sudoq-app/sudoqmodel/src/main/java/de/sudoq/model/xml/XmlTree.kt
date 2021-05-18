@@ -52,12 +52,7 @@ class XmlTree(name: String) : Iterable<XmlTree> {
      * @return Value of the attribute or null if not found.
      */
     fun getAttributeValue(name: String): String? {
-        for (attribute in attributes) {
-            if (attribute.name == name) {
-                return attribute.value
-            }
-        }
-        return null
+        return attributes.firstOrNull { it.name == name }?.value
     }
 
     /**
@@ -112,12 +107,8 @@ class XmlTree(name: String) : Iterable<XmlTree> {
      * @param attribute [XmlAttribute] to add
      */
     fun addAttribute(attribute: XmlAttribute) {
-        for (attr in attributes) {
-            if (attr.isSameAttribute(attribute)) {
-                return
-            }
-        }
-        attributes.add(attribute)
+        if (attributes.none { it.isSameAttribute(attribute) })
+            attributes.add(attribute)
     }
 
     /**
@@ -128,13 +119,12 @@ class XmlTree(name: String) : Iterable<XmlTree> {
      */
     fun updateAttribute(attribute: XmlAttribute?) {//todo can we require nonnull?
         if (attribute != null) {
-            for (attr in attributes) {
-                if (attr.isSameAttribute(attribute)) {
-                    attr.value = attribute.value
-                    return
-                }
-            }
-            attributes.add(attribute)
+            var existingAttribute = attributes.firstOrNull { it.isSameAttribute(attribute) }
+
+            if (existingAttribute != null)
+                existingAttribute.value = attribute.value
+            else
+                attributes.add(attribute)
         }
     }
 
