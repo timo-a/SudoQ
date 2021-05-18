@@ -8,6 +8,7 @@
 package de.sudoq.model.solverGenerator
 
 import de.sudoq.model.files.FileManager
+import de.sudoq.model.profile.Profile
 import de.sudoq.model.solverGenerator.FastSolver.BranchAndBound.FastBranchAndBound
 import de.sudoq.model.solverGenerator.FastSolver.FastSolverFactory
 import de.sudoq.model.solverGenerator.solution.SolveDerivation
@@ -412,7 +413,7 @@ class GenerationAlgo(
 
     fun saveSudokuAllInOne(path: String, filename: String, sudoku: Sudoku) {
         val sudokuLocation = FileManager.getSudokuDir()
-        FileManager.initialize(FileManager.getProfilesDir(), File(path))
+        FileManager.initialize(File(path))
         object : SudokuXmlHandler() {
             override fun getFileFor(s: Sudoku): File {
                 return File(path + File.separator + filename)
@@ -442,8 +443,9 @@ class GenerationAlgo(
         }
 
         fun getSudoku(path: String, st: SudokuTypes): Sudoku? {
+            Profile.instance?.profilesDir = File("/home/t/Code/SudoQ/DebugOnPC/profilefiles")//todo is this used by the app??? try to delete
+
             FileManager.initialize(
-                    File("/home/t/Code/SudoQ/DebugOnPC/profilefiles"),//todo is this used by the app??? try to delete
                     File("/home/t/Code/SudoQ/sudoq-app/sudoqapp/src/main/assets/sudokus/"))
             val f = File(path)
             val s = Sudoku(getSudokuType(st)!!)
