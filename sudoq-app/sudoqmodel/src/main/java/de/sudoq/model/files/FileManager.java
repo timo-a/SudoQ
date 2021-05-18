@@ -1,3 +1,5 @@
+
+
 /*
  * SudoQ is a Sudoku-App for Adroid Devices with Version 2.2 at least.
  * Copyright (C) 2012  Heiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele
@@ -13,6 +15,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import de.sudoq.model.profile.Profile;
+import de.sudoq.model.profile.ProfileManager;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
@@ -33,199 +37,51 @@ public final class FileManager {
 	/**
 	 * Die Ordner für die jeweiligen Daten
 	 */
-	private static File profiles;
 	private static File sudokus;
-
-	private static int currentProfileId = -1;
 
 	/* Methods */
 
 	/**
 	 * Erstellt die Singleton-Instanz des FileManagers
 	 * 
-	 * @param p
-	 *            Ein Ordner fuer die Profile
 	 * @param s
 	 *            Ein Ordner fuer die Sudokus
 	 * @throws IllegalArgumentException
 	 *             falls einer der Ordner null oder nicht schreibbar ist
 	 */
-	public static void initialize(File p, File s) {
-		if (p == null || s == null || !p.canWrite() || !s.canWrite()) {
+	public static void initialize(File s) {
+		if (s == null || !s.canWrite()) {
 			String err ="";
-			if     (p==null)
-				            err += " p==null";
-			else if(s==null)
-				            err += " s==null";
-			else if(!p.canWrite())
-				            err += " p can't write";
+			if(s==null)
+				err += " s==null";
 			else
-			                err += " s can't write";
+				err += " s can't write";
 
 			throw new IllegalArgumentException("invalid directories:"+err);
 		}
-		profiles = p;
 		sudokus = s;
 
 		//initSudokuDirectories();
 	}
 
-	/**
-	 * Setzt die id des aktuellen Profils für den FileManager, sodass die Pfade
-	 * zur Verfügung stehen
-	 * 
-	 * @param id new value for currentProfileId
-	 */
-	public static void setCurrentProfile(int id) {
-		currentProfileId = id;
-	}
 
-	/**
-	 * Löscht rekursiv das gegebene Verzeichnis
-	 * 
-	 * @param f
-	 *            das Verzeichnis
-	 * @throws IOException
-	 *             falls etwas nicht gelöscht werden konnte
-	 */
-	public static void deleteDir(File f) throws IOException {
-		if (f.isDirectory()) {
-			for (File c : f.listFiles())
-				deleteDir(c);
-		}
-		if (!f.delete())
-			throw new FileNotFoundException("Failed to delete file: " + f);
-	}
+	// Profiles todo move all to profileManager
 
-	// Profiles
 
-	/**
-	 * Gibt die Anzahl der aktuell existierenden Profile zurück (macht keine
-	 * Rechenfehler :-)
-	 * 
-	 * @return die Anzahl der Profile
-	 */
-	public static int getNumberOfProfiles() {
-		if(!profiles.exists())
-			return 0;
 
-		/*System.out.println("getnrp");
-		for(String s: profiles.list())
-			System.out.println(profiles.list());
-		System.out.println("getnrpEND");*/
-
-		int count = profiles.list().length;//one folder for each profile + file listing all profiles
-		if (getProfilesFile().exists()) {  //if profiles.xml exists subtract it fro count
-			count--;
-		}
-		return count;
-	}
-
-	/**
-	 * Gibt das Verzeichnis des aktuellen Profils zurueck
-	 * 
-	 * @return File, welcher auf das aktuelle Profilverzeichnis zeigt
-	 */
-	private static File getCurrentProfileDir() {
-		return getProfileDirFor(currentProfileId);
-	}
-
-	/**
-	 * Gibt das Verzeichnis des Profils mit der gegebenen id zurueck
-	 * 
-	 * @return File, welcher auf das Profilverzeichnis zeigt
-	 */
-	private static File getProfileDirFor(int id) {
-		return new File(profiles.getAbsolutePath() + File.separator + "profile_" + id);
-	}
-
-	/**
-	 * Gibt die XML-Datei das aktuellen Profils zurück
-	 * 
-	 * @param id
-	 *            die id des Profils dessen xml gesucht ist
-	 * 
-	 * @return File, welcher auf die XML Datei des aktuellen Profils zeigt
-	 */
-	public static File getProfileXmlFor(int id) {
-		return new File(getProfileDirFor(id), "profile.xml");
-	}
-
-	/**
-	 * Gibt das Verzeichis zurück, in denen die Profil-Ornder liegen
-	 * 
-	 * @return File, welcher auf das Verzeichnis mit den Profilordnern zeigt
-	 */
-	public static File getProfilesDir() {
-		return new File(profiles.getAbsolutePath());
-	}
-	
 	/**
 	 * Gibt die Date zurück, in der die Gesten des Benutzers gespeichert werden
 	 * 
 	 * @return File, welcher auf die Gesten-Datei des Benutzers zeigt
 	 */
 	public static File getCurrentGestureFile() {
-		return new File(getCurrentProfileDir(), "gestures");
+		File profilesDir = Profile.Companion.getInstance().getProfilesDir();
+		return new File(profilesDir, "gestures");
 	}
 
-	/**
-	 * Erstellt die Ordnerstruktur und nötige Dateien für das Profil mit der
-	 * übergebenen ID
-	 * 
-	 * @param id
-	 *            ID des Profils
-	 */
-	public static void createProfileFiles(int id) {
-		new File(profiles.getAbsolutePath() + File.separator + "profile_" + id).mkdir();
-		new File(profiles.getAbsolutePath() + File.separator + "profile_" + id + File.separator + "games").mkdir();
-		File games = new File(profiles.getAbsolutePath() + File.separator + "profile_" + id + File.separator + "games.xml");
-		try {
-			new XmlHelper().saveXml(new XmlTree("games"), games);
-		} catch (IOException e) {
-			throw new IllegalStateException("Invalid Profil", e);
-		}
-	}
 
-	/**
-	 * Erzeugt die profiles.xml Datei, wenn noch kein Profil vorhanden ist.
-	 */
-	public static void createProfilesFile() {
-		File profilesXML = new File(profiles.getAbsolutePath() + File.separator + "profiles.xml");
-		try {
-			new XmlHelper().saveXml(new XmlTree("profiles"), profilesXML);
-		} catch (IOException e) {
-			throw new IllegalStateException("Couldnt create profiles.xml", e);
-		}
-	}
 
-	/**
-	 * Gibt die Profilliste Datei zurueck
-	 * 
-	 * @return das File welches auf die Profilliste zeigt
-	 */
-	public static File getProfilesFile() {
-		return new File(getProfilesDir(), "profiles.xml");
-	}
 
-	/**
-	 * Löscht das Profil der gegebenen ID und alle seine Daten Die Profil Liste
-	 * bleibt unverändert! ACHTUNG: Überprüft nicht ob es noch andere Profile
-	 * gibt. Setzt die currentProfileId nicht!
-	 * 
-	 * @param id
-	 *            die id des zu löschenden Profils
-	 */
-	public static void deleteProfile(int id) {
-		try {
-			File dir = getProfileDirFor(id);
-			if (dir.exists()) {
-				deleteDir(dir);
-			}
-		} catch (IOException e) {
-			throw new IllegalArgumentException("Unable to delete given Profile");
-		}
-	}
 
 	// Games
 
@@ -235,7 +91,8 @@ public final class FileManager {
 	 * @return das File welches auf die Spieleliste zeigt
 	 */
 	public static File getGamesFile() {
-		return new File(getCurrentProfileDir(), "games.xml");
+		File currentProfile = Profile.Companion.getInstance().getProfilesDir();
+		return new File(currentProfile, "games.xml");
 	}
 
 	/**
@@ -245,7 +102,8 @@ public final class FileManager {
 	 *         zeigt
 	 */
 	public static File getGamesDir() {
-		return new File(getCurrentProfileDir(), "games");
+		File currentProfile = Profile.Companion.getInstance().getProfilesDir();
+		return new File(currentProfile, "games");
 	}
 
 	/**
