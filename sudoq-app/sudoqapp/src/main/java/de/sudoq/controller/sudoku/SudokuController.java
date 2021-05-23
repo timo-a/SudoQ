@@ -7,6 +7,9 @@
  */
 package de.sudoq.controller.sudoku;
 
+import android.content.Context;
+
+import de.sudoq.R;
 import de.sudoq.model.actionTree.Action;
 import de.sudoq.model.actionTree.NoteActionFactory;
 import de.sudoq.model.actionTree.SolveActionFactory;
@@ -185,16 +188,19 @@ public class SudokuController implements AssistanceRequestListener, ActionListen
 			case easy:      incrementStatistic(Statistics.playedEasySudokus);      break;
 		}
 		incrementStatistic(Statistics.playedSudokus);
-		if (Profile.Companion.getInstance().getStatistic(Statistics.fastestSolvingTime) > game.getTime()) {
-			Profile.Companion.getInstance().setStatistic(Statistics.fastestSolvingTime, game.getTime());
+		Profile p = Profile.Companion.getInstance(context.getDir(context.getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+
+		if (p.getStatistic(Statistics.fastestSolvingTime) > game.getTime()) {
+			p.setStatistic(Statistics.fastestSolvingTime, game.getTime());
 		}
-		if (Profile.Companion.getInstance().getStatistic(Statistics.maximumPoints) < game.getScore()) {
-			Profile.Companion.getInstance().setStatistic(Statistics.maximumPoints, game.getScore());
+		if (p.getStatistic(Statistics.maximumPoints) < game.getScore()) {
+			p.setStatistic(Statistics.maximumPoints, game.getScore());
 		}
 	}
 
 	private void incrementStatistic(Statistics s){ //TODO this should probably be in model...
-		Profile.Companion.getInstance().setStatistic(s,  Profile.Companion.getInstance().getStatistic(s) + 1);
+		Profile p = Profile.Companion.getInstance(context.getDir(context.getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+		p.setStatistic(s,  p.getStatistic(s) + 1);
 	}
 
 }

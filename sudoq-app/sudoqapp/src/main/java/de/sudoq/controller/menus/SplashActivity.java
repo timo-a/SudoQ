@@ -7,6 +7,7 @@
  */
 package de.sudoq.controller.menus;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -17,12 +18,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.Toast;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.StringJoiner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,6 +35,7 @@ import de.sudoq.controller.SudoqCompatActivity;
 import de.sudoq.controller.menus.Utility;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.profile.Profile;
+import de.sudoq.model.profile.ProfileManager;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
@@ -97,9 +102,22 @@ public class SplashActivity extends SudoqCompatActivity {
 		setContentView(R.layout.splash);
 
 		// If there is no profile initialize one
-		if (FileManager.getNumberOfProfiles() == 0) {
-			Profile.Companion.getInstance().setName(getString(R.string.default_user_name));
+
+		ProfileManager pm = new ProfileManager(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+		if (pm.noProfiles()) {
+			pm.initialize();
+			pm.setName(getString(R.string.default_user_name));
+			pm.saveChanges();
+		} else {
+			pm.loadCurrentProfile();
 		}
+		//confirm that there is a profile
+		File profileDir = pm.getProfilesDir();
+		String[] filenames = profileDir.list();
+
+		Log.d("ProfileD", "onCreate: after init: " + StringUtils.join(filenames, ", "));
+		if(filenames.length < 2)
+			throw new IllegalStateException("Too few files. initialization was not successfull");
 
 		// Restore waited time after interruption or set it to 0
 		if (savedInstanceState == null) {

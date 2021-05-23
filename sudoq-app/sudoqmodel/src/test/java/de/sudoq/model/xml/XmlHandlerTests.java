@@ -13,8 +13,8 @@ import org.junit.Test;
 
 import de.sudoq.model.Utility;
 import de.sudoq.model.files.FileManager;
-import de.sudoq.model.persistence.xml.ProfileRepo;
-import de.sudoq.model.persistence.xml.ProfilesListRepo;
+import de.sudoq.model.persistence.xml.profile.ProfileRepo;
+import de.sudoq.model.persistence.xml.profile.ProfilesListRepo;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
@@ -31,9 +31,9 @@ public class XmlHandlerTests {
 	public void init() {
 		profiles = new File("res" + File.separator + "tmp_profiles");
 		profiles.mkdir();
-		Profile.Companion.getInstance().setProfileRepo(new ProfileRepo(profiles));
-		Profile.Companion.getInstance().setProfilesListRepo( new ProfilesListRepo(profiles));
-		Profile.Companion.getInstance().setProfilesDir(profiles);
+		Profile.Companion.getInstance(profiles).setProfileRepo(new ProfileRepo(profiles));
+		Profile.Companion.getInstance(profiles).setProfilesListRepo( new ProfilesListRepo(profiles));
+		Profile.Companion.getInstance(profiles).setProfilesDir(profiles);
 
 		sudokus = new File("res" + File.separator + "tmp_suds");
 		sudokus.mkdir();
@@ -48,7 +48,7 @@ public class XmlHandlerTests {
 
 	@Test
 	public void testGameXmlHandlerConstructor() {
-		new GameXmlHandler();
+		new GameXmlHandler(Profile.Companion.getInstance(profiles));
 	}
 
 	@Test

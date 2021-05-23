@@ -1,5 +1,6 @@
 package de.sudoq.controller.sudoku;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
@@ -139,7 +140,7 @@ public class ControlPanelFragment extends Fragment {
         } else if (v == Buttons.actionTreeButton) {
             activity.toogleActionTree();
         } else if (v == Buttons.gestureButton) {
-            Profile profile = Profile.Companion.getInstance();
+            Profile profile = Profile.Companion.getInstance(activity.getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
             if (activity.checkGesture()) {
 				/* toggle 'gesture active'
 				 * toggle button icon as well */

@@ -59,8 +59,8 @@ public class SudoqListActivity extends AppCompatActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		System.setProperty("org.xml.sax.driver", "org.xmlpull.v1.sax2.Driver");
-		FileManager.initialize(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE),
-				getDir(getString(R.string.path_rel_sudokus), Context.MODE_PRIVATE));
+		//getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE),
+		FileManager.initialize(getDir(getString(R.string.path_rel_sudokus), Context.MODE_PRIVATE));
 	}
 
 	/**

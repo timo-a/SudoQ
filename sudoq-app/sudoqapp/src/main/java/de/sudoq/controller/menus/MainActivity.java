@@ -7,6 +7,7 @@
  */
 package de.sudoq.controller.menus;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.Locale;
 
 import de.sudoq.R;
@@ -28,6 +30,7 @@ import de.sudoq.controller.menus.preferences.PlayerPreferencesActivity;
 import de.sudoq.controller.sudoku.SudokuActivity;
 import de.sudoq.model.game.GameManager;
 import de.sudoq.model.profile.Profile;
+import de.sudoq.model.profile.ProfileManager;
 
 /**
  * Verwaltet das Hauptmenü der App.
@@ -98,10 +101,16 @@ public class MainActivity extends SudoqCompatActivity {
 	public void onResume() {
 		super.onResume();
 		//Toast.makeText(this, "onResume", Toast.LENGTH_LONG).show();
-		Profile p = Profile.Companion.getInstance();
+		File profilesFile = getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE);
+		ProfileManager pm = new ProfileManager(profilesFile);
+		if (pm.noProfiles()) {
+			throw new IllegalStateException("there are no profiles. this is  unexpected. they should be initialized in splashActivity");
+		}
+		pm.loadCurrentProfile();
+
 
 		Button continueButton = (Button) findViewById(R.id.button_mainmenu_continue);
-		continueButton.setEnabled(p.getCurrentGame() > Profile.NO_GAME);
+		continueButton.setEnabled(pm.getCurrentGame() > Profile.NO_GAME);
 
 
 		Button loadButton = (Button) findViewById(R.id.button_mainmenu_load_sudoku);

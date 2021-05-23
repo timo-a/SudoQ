@@ -1,4 +1,4 @@
-package de.sudoq.model.persistence.xml
+package de.sudoq.model.persistence.xml.profile
 
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree

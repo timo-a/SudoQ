@@ -7,6 +7,7 @@
  */
 package de.sudoq.controller.menus.preferences;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import androidx.appcompat.app.ActionBar;
@@ -162,7 +163,8 @@ public class RestrictTypesActivity extends SudoqListActivity implements OnItemCl
 			types.remove(st);
 		else
 			types.add(st);
-		Profile.Companion.getInstance().saveChanges();
+		Profile p = Profile.Companion.getInstance(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+		p.saveChanges();
 		adapter.notifyDataSetChanged();
 	}
 
@@ -175,7 +177,8 @@ public class RestrictTypesActivity extends SudoqListActivity implements OnItemCl
 	}	
 
 	private void initialiseTypes() {
-		types = Profile.Companion.getInstance().getAssistances().getWantedTypesList();
+		Profile p = Profile.Companion.getInstance(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+		types = p.getAssistances().getWantedTypesList();
 		// initialize ArrayAdapter for the type names and set it
 		adapter = new RestrictTypesAdapter(this, types);
 		setListAdapter(adapter);

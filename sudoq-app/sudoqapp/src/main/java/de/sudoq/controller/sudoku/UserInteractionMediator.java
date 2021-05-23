@@ -7,6 +7,7 @@
  */
 package de.sudoq.controller.sudoku;
 
+import android.content.Context;
 import android.gesture.Gesture;
 import android.gesture.GestureOverlayView;
 import android.gesture.GestureOverlayView.OnGesturePerformedListener;
@@ -139,7 +140,10 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 	public void onCellSelected(SudokuCellView view, SelectEvent e) {
 
 		if(!game.isFinished()) {
-			if (Profile.Companion.getInstance().isGestureActive()) {
+			Context c = view.getContext();
+			Profile p = Profile.Companion.getInstance(c.getDir(c.getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+
+			if (p.isGestureActive()) {
 				cellSelectedGestureMode(view, e);
 			} else {
 				cellSelectedNumPadMode(view, e);

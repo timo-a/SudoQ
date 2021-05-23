@@ -443,7 +443,7 @@ class GenerationAlgo(
         }
 
         fun getSudoku(path: String, st: SudokuTypes): Sudoku? {
-            Profile.instance?.profilesDir = File("/home/t/Code/SudoQ/DebugOnPC/profilefiles")//todo is this used by the app??? try to delete
+            Profile.getInstance(File("/home/t/Code/SudoQ/DebugOnPC/profilefiles"))//todo is this used by the app??? try to delete
 
             FileManager.initialize(
                     File("/home/t/Code/SudoQ/sudoq-app/sudoqapp/src/main/assets/sudokus/"))

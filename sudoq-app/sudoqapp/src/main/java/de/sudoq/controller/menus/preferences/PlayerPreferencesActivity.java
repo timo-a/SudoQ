@@ -7,13 +7,13 @@
  */
 package de.sudoq.controller.menus.preferences;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,7 +27,6 @@ import java.util.Locale;
 
 import de.sudoq.R;
 import de.sudoq.controller.menus.ProfileListActivity;
-import de.sudoq.controller.menus.StatisticsActivity;
 import de.sudoq.model.game.Assistances;
 import de.sudoq.model.game.GameSettings;
 import de.sudoq.model.profile.Profile;
@@ -95,7 +94,8 @@ public class PlayerPreferencesActivity extends PreferencesActivity {
 		firstStartup = false;		
 		createProfile = true;
 
-		Profile.Companion.getInstance().registerListener(this);
+		Profile p = Profile.Companion.getInstance(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+		p.registerListener(this);
 
 		//store language at beginning of activity lifecycle
 		currentLanguageCode = LanguageUtility.loadLanguageFromSharedPreferences2(this);
@@ -142,7 +142,7 @@ public class PlayerPreferencesActivity extends PreferencesActivity {
 	 */
 	@Override
 	protected void refreshValues() {
-		Profile profile = Profile.Companion.getInstance();
+		Profile profile = Profile.Companion.getInstance(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
 
 		name.              setText(profile.getName());
 		gesture.           setChecked(profile.isGestureActive());
@@ -159,14 +159,18 @@ public class PlayerPreferencesActivity extends PreferencesActivity {
 	 *            von android xml übergebene View
 	 */
 	public void createProfile(View view) {
-		if (!firstStartup) {
+		if (firstStartup) {
+			adjustValuesAndSave();
+			this.finish();
+		} else {
 			adjustValuesAndSave();
 
 			String newProfileName = getString(R.string.profile_preference_new_profile);
 
 			int newIndex = 0;
 			/* increment newIndex to be bigger than the others */
-			List<String> l = Profile.Companion.getInstance().getProfilesNameList();
+			Profile p = Profile.Companion.getInstance(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+			List<String> l = p.getProfilesNameList();
 			for (String s : l)
 				if (s.startsWith(newProfileName)) {
 					String currentIndex = s.substring(newProfileName.length());
@@ -181,11 +185,8 @@ public class PlayerPreferencesActivity extends PreferencesActivity {
 			if (newIndex != 0)
 				newProfileName += newIndex;
 
-			Profile.Companion.getInstance().createProfile();
+			p.createAnotherProfile();
 			name.setText(newProfileName);
-		} else {
-			adjustValuesAndSave();
-			this.finish();
 		}
 	}
 
@@ -204,12 +205,13 @@ public class PlayerPreferencesActivity extends PreferencesActivity {
 	 * Uebernimmt die Werte der Views im Profil und speichert die aenderungen
 	 */
 	protected void adjustValuesAndSave() {
-		Profile.Companion.getInstance().setName(name.getText().toString());
+		Profile p = Profile.Companion.getInstance(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+		p.setName(name.getText().toString());
 		saveToProfile();
 	}
 
 	protected void saveToProfile() {
-		Profile p = Profile.Companion.getInstance();
+		Profile p = Profile.Companion.getInstance(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
 		p.setGestureActive(gesture.isChecked());
 		saveAssistance(Assistances.autoAdjustNotes,    autoAdjustNotes);
 		saveAssistance(Assistances.markRowColumn,      markRowColumn  );
@@ -246,7 +248,8 @@ public class PlayerPreferencesActivity extends PreferencesActivity {
 	 *            von der android xml übergebene view
 	 */
 	public void deleteProfile(View view) {
-		Profile.Companion.getInstance().deleteProfile();
+		Profile p = Profile.Companion.getInstance(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+		p.deleteProfile();
 	}
 
 
@@ -286,8 +289,9 @@ public class PlayerPreferencesActivity extends PreferencesActivity {
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
-		
-		boolean multipleProfiles=Profile.Companion.getInstance().getNumberOfAvailableProfiles() > 1;
+
+		Profile p = Profile.Companion.getInstance(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+		boolean multipleProfiles=p.getNumberOfAvailableProfiles() > 1;
 		
 		menu.findItem(R.id.action_delete_profile).setVisible(multipleProfiles);
 		menu.findItem(R.id.action_switch_profile).setVisible(multipleProfiles);

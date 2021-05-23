@@ -9,6 +9,7 @@ package de.sudoq.controller.menus.preferences;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import de.sudoq.R;
 import de.sudoq.controller.menus.NewSudokuActivity;
 import de.sudoq.model.game.GameSettings;
 import de.sudoq.model.profile.Profile;
+import de.sudoq.model.profile.ProfileManager;
 
 import static de.sudoq.controller.menus.preferences.AdvancedPreferencesActivity.ParentActivity.NOT_SPECIFIED;
 
@@ -90,11 +92,18 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 		//exporter      = (CheckBox) findViewById(R.id.checkbox_exportcrash_trigger);
 
 		gameSettings = NewSudokuActivity.gameSettings;
-		GameSettings profileGameSettings = Profile.Companion.getInstance().getAssistances();
+
+		ProfileManager pm = new ProfileManager(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+		if (pm.noProfiles()) {
+			throw new IllegalStateException("there are no profiles. this is  unexpected. they should be initialized in splashActivity");
+		}
+		pm.loadCurrentProfile();
+
+		GameSettings profileGameSettings = pm.getAssistances();
 
         switch (caller){
             case NEW_SUDOKU:
-				debug.   setChecked(Profile.Companion.getInstance().getAppSettings().isDebugSet());
+				debug.   setChecked(pm.getAppSettings().isDebugSet());
 				if(debug.isChecked()){
 					debug.setVisibility(View.VISIBLE);
 				}
@@ -106,13 +115,14 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 				if(debug.isChecked()){
 					debug.setVisibility(View.VISIBLE);
 				}
-				debug.   setChecked(Profile.Companion.getInstance().getAppSettings().isDebugSet());
+				debug.   setChecked(pm.getAppSettings().isDebugSet());
                 helper.  setChecked(profileGameSettings.isHelperSet());
                 lefthand.setChecked(profileGameSettings.isLefthandModeSet());
         }
 		//myCaller.restricttypes.setChecked(a.isreHelperSet());
 		
-		Profile.Companion.getInstance().registerListener(this);
+		// nothing happens onModelChangesd
+		// Profile.Companion.getInstance().registerListener(this);
 
 		/** language spinner **/
 		final Spinner languageSpinner = findViewById(R.id.spinner_language);
@@ -177,7 +187,7 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
 
 	/**
 	 * Aktualisiert die Werte in den Views
-	 * 
+	 *
 	 */
 	@Override
 	protected void refreshValues() {
@@ -239,8 +249,14 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
         switch(caller){
             case NEW_SUDOKU://TODO just have 2 subclasses, one to be called from playerpref, one from newSudokuPref
 	            saveToGameSettings();
-	            if(debug != null)
-	                 Profile.Companion.getInstance().setDebugActive(debug.isChecked());
+	            if(debug != null) {
+					ProfileManager pm = new ProfileManager(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+					if (pm.noProfiles()) {
+						throw new IllegalStateException("there are no profiles. this is  unexpected. they should be initialized in splashActivity");
+					}
+					pm.loadCurrentProfile();
+					pm.setDebugActive(debug.isChecked());
+	            }
                 break;
             case PROFILE:
                 saveToProfile();
@@ -256,15 +272,20 @@ public class AdvancedPreferencesActivity extends PreferencesActivity {
     }
 
     protected void saveToProfile() {
-        Profile p = Profile.Companion.getInstance();
+		ProfileManager pm = new ProfileManager(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+		if (pm.noProfiles()) {
+			throw new IllegalStateException("there are no profiles. this is  unexpected. they should be initialized in splashActivity");
+		}
+		pm.loadCurrentProfile();
+
 		if(debug != null)
-			p.setDebugActive(debug.isChecked());
+			pm.setDebugActive(debug.isChecked());
 		if(helper != null)
-			p.setHelperActive(helper.isChecked());
+			pm.setHelperActive(helper.isChecked());
         if(lefthand != null)
-            p.setLefthandActive(lefthand.isChecked());
+            pm.setLefthandActive(lefthand.isChecked());
         //restrict types is automatically saved to profile...
-        p.saveChanges();
+        pm.saveChanges();
     }
 
 

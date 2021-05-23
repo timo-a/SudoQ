@@ -7,35 +7,18 @@
  */
 package de.sudoq.model.profile
 
-import de.sudoq.model.ObservableModelImpl
-import de.sudoq.model.files.FileManager
-import de.sudoq.model.game.Assistances
-import de.sudoq.model.game.GameSettings
-import de.sudoq.model.persistence.xml.ProfileBE
-import de.sudoq.model.persistence.xml.ProfileRepo
-import de.sudoq.model.xml.*
-import java.util.*
-import kotlin.collections.ArrayList
+import java.io.File
 
 /**
  * This static class is a wrapper for the currently loaded player profile
  * which is maintained by SharedPreferences of the Android-API.
  *
  */
-class Profile() : ProfileManager() {
+class Profile private constructor(f: File) : ProfileManager(f) {
 //private constructor because class is static
 //TODO split into profile handler and profile
 
-
-
-    constructor(profileRepo: ProfileRepo) : this() {
-        this.profileRepo = profileRepo
-    }
-
-    /**
-     * Diese Methode erstellt ein neues Profil.
-     */
-    private fun createProfile() {    }
+    // Profiles todo move all to profileManager
 
 
     companion object {
@@ -51,6 +34,7 @@ class Profile() : ProfileManager() {
          */
         const val DEFAULT_PROFILE_NAME = "unnamed"
 
+
         /**
          * Diese Methode gibt eine Instance dieser Klasse zurück, wird sie erneut
          * aufgerufen, so wird dieselbe Instanz zurückgegeben.
@@ -59,18 +43,16 @@ class Profile() : ProfileManager() {
          */
         //@JvmStatic
 		//@get:Synchronized
-        var instance: Profile?
-        init {
-            instance = Profile()
-            instance!!.loadCurrentProfile()
-        }
+        fun getInstance(f: File) : Profile {
+            if (instance == null || instance!!.profilesDir != f) {
+                instance = Profile(f)
+                instance!!.loadCurrentProfile()
+            }
 
-        fun forceReinitialize() : Profile {
-            instance = Profile()
-            instance!!.loadCurrentProfile();
             return instance!!
         }
 
+        private var instance: Profile? = null
 
     }
 }

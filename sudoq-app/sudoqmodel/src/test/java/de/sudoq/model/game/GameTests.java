@@ -8,6 +8,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,8 @@ public class GameTests {
 	@BeforeClass
 	public static void beforeClass() {
 		Utility.copySudokus();
-		Profile.Companion.getInstance();
+		File profileDir = new File("/tmp/sudoq/GameTests/profile");
+		Profile.Companion.getInstance(profileDir);
 
 		TypeBuilder.get99(); //just to force initialization of filemanager
 		

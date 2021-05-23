@@ -7,6 +7,7 @@
  */
 package de.sudoq.controller.menus.preferences;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -70,8 +71,10 @@ public class NewSudokuPreferencesActivity extends PreferencesActivity {
 		markRowColumn.     setChecked(confSettings.getAssistance(Assistances.markRowColumn));
 		markWrongSymbol.   setChecked(confSettings.getAssistance(Assistances.markWrongSymbol));
 		restrictCandidates.setChecked(confSettings.getAssistance(Assistances.restrictCandidates));
-		
-		Profile.Companion.getInstance().registerListener(this);
+
+		Profile p = Profile.Companion.getInstance(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+		assert p != null;
+		p.registerListener(this);
 
 		//set and store language at beginning of activity lifecycle
 		currentLanguageCode = LanguageUtility.loadLanguageFromSharedPreferences(this);
@@ -122,7 +125,9 @@ public class NewSudokuPreferencesActivity extends PreferencesActivity {
 		saveCheckbox(restrictCandidates, Assistances.restrictCandidates, confSettings);
 		//confSettings.setHelper();
 		//confSettings.setCrash();
-		Profile.Companion.getInstance().saveChanges();
+		//todo singleton not necessary
+		Profile p = Profile.Companion.getInstance(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+		p.saveChanges();
 	}
 	
 
@@ -138,7 +143,7 @@ public class NewSudokuPreferencesActivity extends PreferencesActivity {
 	}
 
     protected void saveToProfile() {
-        Profile p = Profile.Companion.getInstance();
+		Profile p = Profile.Companion.getInstance(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
 
         p.setGestureActive(gesture.isChecked());
 		saveAssistance(Assistances.autoAdjustNotes,    autoAdjustNotes);
