@@ -7,8 +7,8 @@ import java.io.File;
 import java.io.IOException;
 
 import de.sudoq.model.files.FileManager;
-import de.sudoq.model.persistence.xml.ProfileRepo;
-import de.sudoq.model.persistence.xml.ProfilesListRepo;
+import de.sudoq.model.persistence.xml.profile.ProfileRepo;
+import de.sudoq.model.persistence.xml.profile.ProfilesListRepo;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.profile.ProfileManager;
 
@@ -50,7 +50,10 @@ public class TestWithInitCleanforSingletons {
 
 	public static void legacyInit(){
 		Utility.copySudokus();
-		Profile.Companion.forceReinitialize();
+		File profileDir = new File("/tmp/sudoq/CatchAll/profile");
+		profileDir.mkdirs();
+
+		Profile.Companion.getInstance(profileDir);
 	}
 
 	@AfterClass

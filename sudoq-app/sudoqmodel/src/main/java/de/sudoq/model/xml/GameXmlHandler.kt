@@ -9,17 +9,18 @@ package de.sudoq.model.xml
 
 import de.sudoq.model.files.FileManager
 import de.sudoq.model.game.Game
+import de.sudoq.model.profile.Profile
 import java.io.File
 
 /**
  * This class aids in converting concrete games into and from XML
  */
-class GameXmlHandler @JvmOverloads constructor(private val id: Int = -1) : XmlHandler<Game>() {
+class GameXmlHandler @JvmOverloads constructor(private val id: Int = -1, val p: Profile) : XmlHandler<Game>() {
 
     /**
      * {@inheritDoc}
      */
     protected override fun getFileFor(g: Game): File {
-        return FileManager.getGameFile(if (id > 0) id else g.id)
+        return FileManager.getGameFile(if (id > 0) id else g.id, p)
     }
 }

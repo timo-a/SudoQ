@@ -53,9 +53,9 @@ public final class FileManager {
 		if (s == null || !s.canWrite()) {
 			String err ="";
 			if(s==null)
-				err += " s==null";
+				   err += " s==null";
 			else
-				err += " s can't write";
+					err += " s can't write";
 
 			throw new IllegalArgumentException("invalid directories:"+err);
 		}
@@ -69,15 +69,6 @@ public final class FileManager {
 
 
 
-	/**
-	 * Gibt die Date zurück, in der die Gesten des Benutzers gespeichert werden
-	 * 
-	 * @return File, welcher auf die Gesten-Datei des Benutzers zeigt
-	 */
-	public static File getCurrentGestureFile() {
-		File profilesDir = Profile.Companion.getInstance().getProfilesDir();
-		return new File(profilesDir, "gestures");
-	}
 
 
 
@@ -90,8 +81,8 @@ public final class FileManager {
 	 * 
 	 * @return das File welches auf die Spieleliste zeigt
 	 */
-	public static File getGamesFile() {
-		File currentProfile = Profile.Companion.getInstance().getProfilesDir();
+	public static File getGamesFile(Profile p) {
+		File currentProfile = p.getCurrentProfileDir();
 		return new File(currentProfile, "games.xml");
 	}
 
@@ -101,9 +92,10 @@ public final class FileManager {
 	 * @return File, welcher auf das Game-Verzeichnis des aktuellen Profils
 	 *         zeigt
 	 */
-	public static File getGamesDir() {
-		File currentProfile = Profile.Companion.getInstance().getProfilesDir();
-		return new File(currentProfile, "games");
+	public static File getGamesDir(ProfileManager p) {
+		File currentProfile = p.getCurrentProfileDir();
+		File games = new File(currentProfile, "games");
+		return games;
 	}
 
 	/**
@@ -113,8 +105,8 @@ public final class FileManager {
 	 *            ID des Games
 	 * @return File, welcher auf die XML Datei des Games zeigt
 	 */
-	public static File getGameFile(int id) {
-		return new File(getGamesDir(), "game_" + id + ".xml");
+	public static File getGameFile(int id, Profile p) {
+		return new File(getGamesDir(p), "game_" + id + ".xml");
 	}
 
 	/**
@@ -125,9 +117,9 @@ public final class FileManager {
 	 *            die id des zu loeschenden Spiels
 	 * @return ob es geloescht wurde.
 	 */
-	public static boolean deleteGame(int id) {
-		boolean game = getGameFile(id).delete();
-		return game && getGameThumbnailFile(id).delete();
+	public static boolean deleteGame(int id, Profile p) {
+		boolean game = getGameFile(id, p).delete();
+		return game && getGameThumbnailFile(id, p).delete();
 	}
 
 	/**
@@ -135,8 +127,9 @@ public final class FileManager {
 	 * 
 	 * @return naechste verfuegbare ID
 	 */
-	public static int getNextFreeGameId() {
-		return getGamesDir().list().length + 1;
+	public static int getNextFreeGameId(Profile p) {
+		File gamesDir = getGamesDir(p);
+		return gamesDir.list().length + 1;
 	}
 
 	// Thumbnails
@@ -149,8 +142,8 @@ public final class FileManager {
 	 * 
 	 * @return The thumbnail File.
 	 */
-	public static File getGameThumbnailFile(int gameID) {
-		return new File(getGamesDir() + File.separator + "game_" +
+	public static File getGameThumbnailFile(int gameID, ProfileManager p) {
+		return new File(getGamesDir(p) + File.separator + "game_" +
                 gameID + ".png");
 	}
 

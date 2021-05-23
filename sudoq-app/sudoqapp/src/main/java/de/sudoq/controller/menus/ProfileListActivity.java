@@ -7,6 +7,7 @@
  */
 package de.sudoq.controller.menus;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import de.sudoq.R;
 import de.sudoq.controller.SudoqListActivity;
 import de.sudoq.model.profile.Profile;
+import de.sudoq.model.profile.ProfileManager;
 
 /**
  * Diese Klasse stellt eine Acitivity zur Anzeige und Auswahl von
@@ -54,13 +56,20 @@ public class ProfileListActivity extends SudoqListActivity implements OnItemClic
 		setContentView(R.layout.profilelist);
 		this.setTitle(this.getString(R.string.action_switch_profile));
 
-		profileIds = Profile.Companion.getInstance().getProfilesIdList();
-		profileNames = Profile.Companion.getInstance().getProfilesNameList();
+		//todo make class variable
+		ProfileManager pm = new ProfileManager(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+		if (pm.noProfiles()) {
+			throw new IllegalStateException("there are no profiles. this is  unexpected. they should be initialized in splashActivity");
+		}
+		pm.loadCurrentProfile();
 
-		Log.d(LOG_TAG, "Array length: " + Profile.Companion.getInstance().getProfilesNameList().size());
+		profileIds   = pm.getProfilesIdList();
+		profileNames = pm.getProfilesNameList();
+
+		Log.d(LOG_TAG, "Array length: " + pm.getProfilesNameList().size());
 
 		ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-				R.layout.profilelist_item, Profile.Companion.getInstance().getProfilesNameList());
+				R.layout.profilelist_item, pm.getProfilesNameList());
 		setListAdapter(adapter);
 		getListView().setOnItemClickListener(this);
 	}
@@ -80,7 +89,13 @@ public class ProfileListActivity extends SudoqListActivity implements OnItemClic
 	 */
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Log.d(LOG_TAG, "Clicked on name " + profileNames.get(position) + " with id:" + profileIds.get(position));
-		Profile.Companion.getInstance().changeProfile(profileIds.get(position));
+		ProfileManager pm = new ProfileManager(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+		if (pm.noProfiles()) {
+			throw new IllegalStateException("there are no profiles. this is  unexpected. they should be initialized in splashActivity");
+		}
+		pm.loadCurrentProfile();
+
+		pm.changeProfile(profileIds.get(position));
 		this.finish();
 	}
 

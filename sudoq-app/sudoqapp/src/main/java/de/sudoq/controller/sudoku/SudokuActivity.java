@@ -8,6 +8,7 @@
 package de.sudoq.controller.sudoku;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.gesture.GestureOverlayView;
 import android.gesture.GestureStore;
@@ -212,16 +213,18 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		File profilesFile = getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE);
 		Log.d(LOG_TAG, "Created");
 		// Load the Game by using current game id
 		if (savedInstanceState != null) {
 			try {
-				this.game = GameManager.Companion.getInstance().load(savedInstanceState.getInt(SAVE_GAME_ID + ""));
+				this.game = GameManager.Companion.getInstance(profilesFile).load(savedInstanceState.getInt(SAVE_GAME_ID + ""));
 			} catch (Exception e) {
 				this.finish();
 			}
 		} else {
-			this.game = GameManager.Companion.getInstance().load(Profile.Companion.getInstance().getCurrentGame());
+			Profile p = Profile.Companion.getInstance(profilesFile);
+			this.game = GameManager.Companion.getInstance(profilesFile).load(p.getCurrentGame());
 		}
 
 		if (game != null) {
@@ -279,7 +282,8 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 
 			setTypeText();
 			updateButtons();
-			controlPanel.getGestureButton().setSelected(Profile.Companion.getInstance().isGestureActive());
+			Profile p = Profile.Companion.getInstance(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+			controlPanel.getGestureButton().setSelected(p.isGestureActive());
 		}
 	}
 
@@ -369,7 +373,8 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 	 *            Hinweise angezeigt werden sollen
 	 */
 	private void inflateGestures(boolean firstStart) {
-		File gestureFile = FileManager.getCurrentGestureFile();
+		Profile p = Profile.Companion.getInstance(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+		File gestureFile = p.getCurrentGestureFile();
 		try {
 			FileInputStream fis = new FileInputStream(gestureFile);
 			this.gestureStore.load(fis);
@@ -382,14 +387,14 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 				Log.w(LOG_TAG, "Gesture file cannot be loaded!");
 			}
 		} catch (IOException e) {
-			Profile.Companion.getInstance().setGestureActive(false);
+			p.setGestureActive(false);
 			Toast.makeText(this, R.string.error_gestures_no_library, Toast.LENGTH_SHORT).show();
 		}
 
-		if (firstStart && Profile.Companion.getInstance().isGestureActive()) {
+		if (firstStart && p.isGestureActive()) {
 			boolean allGesturesSet = checkGesture();
 			if (!allGesturesSet) {
-				Profile.Companion.getInstance().setGestureActive(false);
+				p.setGestureActive(false);
 				Toast.makeText(this, getString(R.string.error_gestures_not_complete), Toast.LENGTH_SHORT).show();
 			}
 		}
@@ -474,8 +479,11 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 	 */
 	@Override
 	public void onPause() {
+		File profilesFile = getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE);
+		Profile p = Profile.Companion.getInstance(profilesFile);
+
 		this.timeHandler.removeCallbacks(timeUpdate);
-		GameManager.Companion.getInstance().save(this.game);
+		GameManager.Companion.getInstance(profilesFile).save(this.game, p);
 
 		float prevZoomFactor = this.sudokuScrollView.getZoomFactor();
 		sudokuView.setDrawingCacheEnabled(true);
@@ -488,7 +496,8 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 		Bitmap sudokuCapture = sudokuView.getDrawingCache();
 		try {
 			if (sudokuCapture != null) {
-				sudokuCapture.compress(CompressFormat.PNG, 100, new FileOutputStream(FileManager.getGameThumbnailFile(Profile.Companion.getInstance().getCurrentGame())));
+				File thumbnail = FileManager.getGameThumbnailFile(p.getCurrentGame(), p);
+				sudokuCapture.compress(CompressFormat.PNG, 100, new FileOutputStream(thumbnail));
 			} else {
 				Log.d(LOG_TAG, getString(R.string.error_thumbnail_get));
 			}
@@ -499,8 +508,8 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 		this.sudokuScrollView.setZoomFactor(prevZoomFactor);
 
 		if (finished) {
-			Profile.Companion.getInstance().setCurrentGame(Profile.NO_GAME);
-			Profile.Companion.getInstance().saveChanges();
+			p.setCurrentGame(Profile.NO_GAME);
+			p.saveChanges();
 		}
 		super.onPause();
 	}
@@ -525,7 +534,9 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 	@Override
 	public void finish() {
 		if (this.game != null) {
-			GameManager.Companion.getInstance().save(this.game);
+			File profilesFile = getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE);
+			Profile p = Profile.Companion.getInstance(profilesFile);
+			GameManager.Companion.getInstance(profilesFile).save(this.game, p);
 		}
 		super.finish();
 		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -832,7 +843,9 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 
     /** saves the whole game, purpose: save the action tree so a spontaneous crash doesn't lose us actions record */
 	private void saveActionTree() {
-		GameManager.Companion.getInstance().save(this.game);
+		File profilesFile = getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE);
+		Profile p = Profile.Companion.getInstance(profilesFile);
+		GameManager.Companion.getInstance(profilesFile).save(this.game, p);
 	}
 
 	ActionTreeController getActionTreeController(){

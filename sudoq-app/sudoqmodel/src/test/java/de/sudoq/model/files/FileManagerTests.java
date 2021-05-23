@@ -114,28 +114,28 @@ public class FileManagerTests extends TestWithInitCleanforSingletons {
 		assertNull(f);
 	}
 
+//	@Test
+//	public void
 
 	@Test
 	public void getGameThumbnailFile() throws IOException {
 
+		File profileDir = new File("/tmp/sudoq/FileManagerTests/getGameThumbnailFile/profiles");
+		profileDir.mkdirs();
+		Utility.clearDir(profileDir);
+		Profile p = Profile.Companion.getInstance(profileDir); //needs to be called first otherwise it failes as an indiviidual and sometimes as part of all the tests in this class
 
-		Profile.Companion.getInstance(); //needs to be called first otherwise it failes as an indiviidual and sometimes as part of all the tests in this class
-
-		assertEquals(1, FileManager.getNextFreeGameId());//currentProfileID==-1
-		assertTrue(FileManager.getGamesFile().exists());
-		File game  = FileManager.getGameFile(1);
-		File thumb = FileManager.getGameThumbnailFile(1);
+		assertEquals(1, FileManager.getNextFreeGameId(p));//currentProfileID==-1
+		assertTrue(FileManager.getGamesFile(p).exists());
+		File game  = FileManager.getGameFile(1, p);
+		File thumb = FileManager.getGameThumbnailFile(1, p);
 		assertEquals(game.getName(),  "game_1.xml");
 		assertEquals(thumb.getName(), "game_1.png");
 		assertTrue(game. createNewFile());
 		assertTrue(thumb.createNewFile());
-		assertTrue(FileManager.deleteGame(1));
+		assertTrue(FileManager.deleteGame(1, p));
 	}
 	
-	@Test
-	public void testGetCurrentGestureFile() {
-		assertNotNull(FileManager.getCurrentGestureFile());
-	}
 
 		/*@Test difficult to test now that we no longer give out files commented out for now
 	public void testUnwritableProfileFile() {

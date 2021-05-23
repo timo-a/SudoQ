@@ -48,6 +48,7 @@ import de.sudoq.model.files.FileManager;
 import de.sudoq.model.game.GameData;
 import de.sudoq.model.game.GameManager;
 import de.sudoq.model.profile.Profile;
+import de.sudoq.model.profile.ProfileManager;
 
 /**
  * Diese Klasse repräsentiert den Lade-Controller des Sudokuspiels. Mithilfe von
@@ -62,6 +63,8 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 	private static final String LOG_TAG = SudokuLoadingActivity.class.getSimpleName();
 
 	/** Attributes */
+
+	private ProfileManager profileManager;
 
 	private SudokuLoadingAdapter adapter;
 
@@ -89,6 +92,14 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		//needs to be called before setcontentview which calls onContentChanged
+		profileManager = new ProfileManager(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+		if (profileManager.noProfiles()) {
+			throw new IllegalStateException("there are no profiles. this is  unexpected. they should be initialized in splashActivity");
+		}
+		profileManager.loadCurrentProfile();
+
 		setContentView(R.layout.sudokuloading);
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -125,6 +136,7 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
             }
         });
 
+
 		initialiseGames();
 	}
 	
@@ -153,13 +165,17 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		File profilesDir = getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE);
 		switch (item.getItemId()) {
 		case R.id.action_sudokuloading_delete_finished:
-			GameManager.Companion.getInstance().deleteFinishedGames();
+			GameManager.Companion.getInstance(profilesDir).deleteFinishedGames();
 			break;
 		case R.id.action_sudokuloading_delete_all:
-			for (GameData gd : GameManager.Companion.getInstance().getGameList())
-				GameManager.Companion.getInstance().deleteGame(gd.getId());
+			Profile p = Profile.Companion.getInstance(profilesDir);
+			GameManager gm = GameManager.Companion.getInstance(profilesDir);
+			for (GameData gd : gm.getGameList()){
+				gm.deleteGame(gd.getId(), p);
+			}
 			break;
 		default:
 			super.onOptionsItemSelected(item);
@@ -171,7 +187,8 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
-		List<GameData> gamesList = GameManager.Companion.getInstance().getGameList();
+		File profilesDir = getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE);
+		List<GameData> gamesList = GameManager.Companion.getInstance(profilesDir).getGameList();
 		boolean noGames = gamesList.isEmpty();
 		
 		menu.findItem(R.id.action_sudokuloading_delete_finished).setVisible(!noGames);
@@ -196,8 +213,8 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 	public void onContentChanged() {
 		super.onContentChanged();
 		initialiseGames();
-		Profile.Companion.getInstance().setCurrentGame(adapter.isEmpty() ? -1
-				                                               : adapter.getItem(0).getId());
+		profileManager.setCurrentGame(adapter.isEmpty() ? -1
+				                                        : adapter.getItem(0).getId());
 	}
 
 	
@@ -219,13 +236,15 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 
         if(fabstate==FAB_STATES.INACTIVE) {
 		    /* selected in order to play */
-            Profile.Companion.getInstance().setCurrentGame(adapter.getItem(position).getId());
+            profileManager.setCurrentGame(adapter.getItem(position).getId());
             startActivity(new Intent(this, SudokuActivity.class));
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
         }else{
             /*selected in order to delete*/
-            GameManager.Companion.getInstance().deleteGame(adapter.getItem(position).getId());
+			File profilesDir = getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE);
+			Profile p = Profile.Companion.getInstance(profilesDir);
+			GameManager.Companion.getInstance(profilesDir).deleteGame(adapter.getItem(position).getId(), p);
 			onContentChanged();
         }
 	}
@@ -242,7 +261,7 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 			temp_items.add(getString(R.string.sudokuloading_dialog_play));
 			temp_items.add(getString(R.string.sudokuloading_dialog_delete));
 
-			if(Profile.Companion.getInstance().getAppSettings().isDebugSet()){
+			if(profileManager.getAppSettings().isDebugSet()){
 				temp_items.add("export as text");
 				temp_items.add("export as file");
 			}
@@ -250,23 +269,26 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 		final CharSequence[] items = (CharSequence[]) temp_items.toArray(new CharSequence[0]);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		
+
+		File profilesDir = getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE);
+		Profile p = Profile.Companion.getInstance(profilesDir);
+
 		builder.setItems(items, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int item) {
 				switch (item) {
 				case 0://play
-					Profile.Companion.getInstance().setCurrentGame(adapter.getItem(position).getId());
+					profileManager.setCurrentGame(adapter.getItem(position).getId());
 					Intent i = new Intent(SudokuLoadingActivity.this, SudokuActivity.class);
 					startActivity(i);
 					overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 					break;
 				case 1://delete
-					GameManager.Companion.getInstance().deleteGame(adapter.getItem(position).getId());
+					GameManager.Companion.getInstance(profilesDir).deleteGame(adapter.getItem(position).getId(), p);
 					onContentChanged();
 					break;
 				case 2://export as text
 					int gameID = adapter.getItem(position).getId();
-					File gameFile = FileManager.getGameFile(gameID);
+					File gameFile = FileManager.getGameFile(gameID, p);
 
 					String str = "there was an error reading the file, sorry";
 					FileInputStream fis = null;
@@ -294,7 +316,7 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 				case 3://export as file
 					//already defined under 2
 					/*int */ gameID = adapter.getItem(position).getId();
-					/*File*/ gameFile = FileManager.getGameFile(gameID);
+					/*File*/ gameFile = FileManager.getGameFile(gameID, p);
 					/* we can only copy from 'files' subdir, so we have to move the file there first */
 					File tmpFile = new File(getFilesDir(),gameFile.getName());
 
@@ -350,7 +372,8 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 
 
 	private void initialiseGames() {
-		games = GameManager.Companion.getInstance().getGameList();
+		File profilesDir = getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE);
+		games = GameManager.Companion.getInstance(profilesDir).getGameList();
 		// initialize ArrayAdapter for the profile names and set it
 		adapter = new SudokuLoadingAdapter(this, games);
 		setListAdapter(adapter);

@@ -7,6 +7,7 @@
  */
 package de.sudoq.controller.menus;
 
+import android.content.Context;
 import android.gesture.Gesture;
 import android.gesture.GestureOverlayView;
 import android.gesture.GestureOverlayView.OnGesturePerformedListener;
@@ -40,6 +41,7 @@ import de.sudoq.controller.sudoku.InputListener;
 import de.sudoq.controller.sudoku.Symbol;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.profile.Profile;
+import de.sudoq.model.profile.ProfileManager;
 import de.sudoq.view.VirtualKeyboardLayout;
 
 /**
@@ -103,7 +105,8 @@ public class GestureBuilder extends SudoqCompatActivity implements OnGesturePerf
 	 * Erzeugt die View für die Gesteneingabe
 	 */
 	private void inflateGestures() {
-		File gestureFile = FileManager.getCurrentGestureFile();
+		ProfileManager pm = new ProfileManager(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+		File gestureFile = pm.getCurrentGestureFile();
 		try {
 			this.gestureStore.load(new FileInputStream(gestureFile));
 		} catch (FileNotFoundException e) {
@@ -113,7 +116,12 @@ public class GestureBuilder extends SudoqCompatActivity implements OnGesturePerf
 				Log.w(LOG_TAG, "Gesture file cannot be loaded!");
 			}
 		} catch (IOException e) {
-			Profile.Companion.getInstance().setGestureActive(false);
+			if (pm.noProfiles()) {
+				throw new IllegalStateException("there are no profiles. this is  unexpected. they should be initialized in splashActivity");
+			}
+			pm.loadCurrentProfile();
+
+			pm.setGestureActive(false);
 			Toast.makeText(this, R.string.error_gestures_no_library, Toast.LENGTH_SHORT).show();
 		}
 
@@ -161,11 +169,17 @@ public class GestureBuilder extends SudoqCompatActivity implements OnGesturePerf
 	 * Speichert den aktuellen Satz an Gesten om Profile Ordner des aktuellen Benutzers
 	 */
 	private void saveGestures() {
-		File gestureFile = FileManager.getCurrentGestureFile();
+		ProfileManager pm = new ProfileManager(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+		File gestureFile = pm.getCurrentGestureFile();
 		try {
 			this.gestureStore.save(new FileOutputStream(gestureFile));
 		} catch (IOException e) {
-			Profile.Companion.getInstance().setGestureActive(false);
+			if (pm.noProfiles()) {
+				throw new IllegalStateException("there are no profiles. this is  unexpected. they should be initialized in splashActivity");
+			}
+			pm.loadCurrentProfile();
+
+			pm.setGestureActive(false);
 			Toast.makeText(this, R.string.error_gestures_no_library, Toast.LENGTH_SHORT).show();
 		}
 	}

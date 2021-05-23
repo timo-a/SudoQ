@@ -13,6 +13,7 @@ import de.sudoq.model.sudoku.SudokuManager
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.xml.*
+import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -22,7 +23,9 @@ import java.util.*
  */
 class GameManager private constructor() {
 
-    private val xmlHandler: XmlHandler<Game>
+    private lateinit var xmlHandler: XmlHandler<Game>
+
+    private lateinit var profile: Profile
 
     /**
      * Creates a new gam and sets up the necessary files.
@@ -36,7 +39,7 @@ class GameManager private constructor() {
     fun newGame(type: SudokuTypes, complexity: Complexity, assistances: GameSettings): Game {
         val sudoku = SudokuManager.getNewSudoku(type, complexity)
         SudokuManager().usedSudoku(sudoku) //TODO warum instanziierung, wenn laut doc singleton?
-        val game = Game(FileManager.getNextFreeGameId(), sudoku)
+        val game = Game(FileManager.getNextFreeGameId(profile), sudoku)
         game.setAssistances(assistances)
         xmlHandler.saveAsXml(game)
         val games = gamesXml
@@ -61,7 +64,7 @@ class GameManager private constructor() {
         require(id > 0) { "invalid id" }
         val game = Game()
         // throws IllegalArgumentException
-        GameXmlHandler(id).createObjectFromXml(game)
+        GameXmlHandler(id, profile).createObjectFromXml(game)
         return game
     }
 
@@ -94,7 +97,7 @@ class GameManager private constructor() {
      *
      * @param game [Game] to save
      */
-    fun save(game: Game) {
+    fun save(game: Game, profile: Profile) {
         xmlHandler.saveAsXml(game)
         val games = gamesXml
 
@@ -107,7 +110,7 @@ class GameManager private constructor() {
             }
         }
 
-        Profile.Companion.instance!!.saveChanges()
+        profile.saveChanges()
         saveGamesFile(games)
     }
 
@@ -119,7 +122,7 @@ class GameManager private constructor() {
         val games = gamesXml
         val newGames = XmlTree(games.name)
         for (g in games) {
-            if (FileManager.getGameFile(g.getAttributeValue(ID)!!.toInt()).exists()) {
+            if (FileManager.getGameFile(g.getAttributeValue(ID)!!.toInt(), profile).exists()) {
                 newGames.addChild(g)
             }
         }
@@ -132,12 +135,12 @@ class GameManager private constructor() {
      *
      * @param id ID of the game to remove
      */
-    fun deleteGame(id: Int) {
-        if (id == Profile.instance!!.currentGame) {
-            Profile.instance!!.currentGame = Profile.NO_GAME
-            Profile.instance!!.saveChanges() //save 'currentGameID' in xml (otherwise menu will offer 'continue')
+    fun deleteGame(id: Int, profile: Profile) {
+        if (id == profile.currentGame) {
+            profile.currentGame = Profile.NO_GAME
+            profile.saveChanges() //save 'currentGameID' in xml (otherwise menu will offer 'continue')
         }
-        FileManager.deleteGame(id)
+        FileManager.deleteGame(id, profile)
         updateGamesList()
     }
 
@@ -148,7 +151,7 @@ class GameManager private constructor() {
         val games = gamesXml
         for (g in games) {
             if (g.getAttributeValue(FINISHED).toBoolean()) {
-                FileManager.deleteGame(g.getAttributeValue(ID)!!.toInt())
+                FileManager.deleteGame(g.getAttributeValue(ID)!!.toInt(), profile)
             }
         }
         updateGamesList()
@@ -156,7 +159,7 @@ class GameManager private constructor() {
 
     private fun saveGamesFile(games: XmlTree) {
         try {
-            XmlHelper().saveXml(games, FileManager.getGamesFile())
+            XmlHelper().saveXml(games, FileManager.getGamesFile(profile))
         } catch (e: IOException) {
             throw IllegalStateException("Profil broken", e)
         }
@@ -164,7 +167,7 @@ class GameManager private constructor() {
 
     private val gamesXml: XmlTree
         get() = try {
-            val gf = FileManager.getGamesFile()
+            val gf = FileManager.getGamesFile(profile)
             XmlHelper().loadXml(gf)!!
         } catch (e: IOException) {
             throw IllegalStateException("Profile broken", e)
@@ -178,10 +181,17 @@ class GameManager private constructor() {
         private const val SUDOKU_TYPE = "sudoku_type"
         private const val COMPLEXITY = "complexity"
 
-        val instance = GameManager()
+        private var instance: GameManager? = null
+
+        fun getInstance(f: File): GameManager {
+            if (instance == null ) {
+                instance = GameManager()
+                instance!!.profile = Profile.getInstance(f)
+                instance!!.xmlHandler = GameXmlHandler(p = instance!!.profile)
+            }
+
+            return instance!!
+        }
     }
 
-    init {
-        xmlHandler = GameXmlHandler()
-    }
 }

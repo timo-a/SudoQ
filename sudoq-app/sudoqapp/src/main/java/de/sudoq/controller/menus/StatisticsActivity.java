@@ -7,6 +7,7 @@
  */
 package de.sudoq.controller.menus;
 
+import android.content.Context;
 import android.os.Bundle;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
@@ -16,6 +17,7 @@ import de.sudoq.R;
 import de.sudoq.controller.SudoqCompatActivity;
 import de.sudoq.controller.sudoku.SudokuActivity;
 import de.sudoq.model.profile.Profile;
+import de.sudoq.model.profile.ProfileManager;
 import de.sudoq.model.profile.Statistics;
 
 /**
@@ -27,7 +29,13 @@ public class StatisticsActivity extends SudoqCompatActivity {
 
 	private void setScore(int textViewID, int label, Statistics statLabel){
 		TextView current = (TextView) findViewById(textViewID);
-		current.setText(getString(label) + ": " + Profile.Companion.getInstance().getStatistic(statLabel));
+		ProfileManager pm = new ProfileManager(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+		if (pm.noProfiles()) {
+			throw new IllegalStateException("there are no profiles. this is  unexpected. they should be initialized in splashActivity");
+		}
+		pm.loadCurrentProfile();
+
+		current.setText(getString(label) + ": " + pm.getStatistic(statLabel));
 	}
 	
 	/**
@@ -54,8 +62,14 @@ public class StatisticsActivity extends SudoqCompatActivity {
 		setScore(R.id.text_score,                   R.string.statistics_score,                    Statistics.maximumPoints);
         
 		TextView current = (TextView) findViewById(R.id.text_fastest_solving_time);
-		
-		int timeRecordInSecs = Profile.Companion.getInstance().getStatistic(Statistics.fastestSolvingTime);
+
+		ProfileManager pm = new ProfileManager(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+		if (pm.noProfiles()) {
+			throw new IllegalStateException("there are no profiles. this is  unexpected. they should be initialized in splashActivity");
+		}
+		pm.loadCurrentProfile();
+
+		int timeRecordInSecs = pm.getStatistic(Statistics.fastestSolvingTime);
 		
 		String timeString = "---";
 		

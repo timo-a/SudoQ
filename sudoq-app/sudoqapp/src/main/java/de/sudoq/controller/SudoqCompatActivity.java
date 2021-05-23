@@ -20,6 +20,7 @@ import java.io.File;
 import de.sudoq.R;
 import de.sudoq.controller.tutorial.TutorialActivity;
 import de.sudoq.model.files.FileManager;
+import de.sudoq.model.profile.ProfileManager;
 
 /**
  * Eine Activity, welche die für einwandfreie Funktionalität der SudoQ-App
@@ -37,7 +38,7 @@ public class SudoqCompatActivity extends AppCompatActivity {
 		System.setProperty("org.xml.sax.driver", "org.xmlpull.v1.sax2.Driver");
 		File profilesDir = getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE);
 		File  sudokusDir = getDir(getString(R.string.path_rel_sudokus), Context.MODE_PRIVATE);
-		FileManager.initialize(profilesDir, sudokusDir );
+		FileManager.initialize(sudokusDir );
 	}
 
 	/**

@@ -10,9 +10,9 @@ package de.sudoq.model.profile
 import de.sudoq.model.ObservableModelImpl
 import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.GameSettings
-import de.sudoq.model.persistence.xml.ProfileBE
-import de.sudoq.model.persistence.xml.ProfileRepo
-import de.sudoq.model.persistence.xml.ProfilesListRepo
+import de.sudoq.model.persistence.xml.profile.ProfileBE
+import de.sudoq.model.persistence.xml.profile.ProfileRepo
+import de.sudoq.model.persistence.xml.profile.ProfilesListRepo
 import de.sudoq.model.xml.*
 import java.io.File
 import java.util.*
@@ -72,6 +72,10 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
     var profileRepo : ProfileRepo? = null //TODO refactor initialization, set it right
     var profilesListRepo : ProfilesListRepo? = null //TODO refactor initialization, set it right
 
+    var currentProfileDir: File? = null
+        get() = profileRepo!!.getProfileDirFor(currentProfileID)
+        private set
+
     var profilesDir : File? = null //todo remove noargs constructor, make non-nullable
         set(value) {
             if (value == null)
@@ -82,6 +86,15 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
             field = value
         }
 
+    constructor(profilesDir: File) : this() {
+        this.profileRepo = ProfileRepo(profilesDir)
+        this.profilesListRepo = ProfilesListRepo(profilesDir)
+
+        if (!profilesDir.canWrite())
+            throw IllegalArgumentException("profiles dir cannot write")
+
+        this.profilesDir = profilesDir
+    }
 
     constructor(profileRepo: ProfileRepo, profilesListRepo: ProfilesListRepo, profilesDir: File) : this() {//todo pas just file and init here?
         this.profileRepo = profileRepo
@@ -99,8 +112,8 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
             profilesDir!!.mkdirs()
 
         //create a new profile
-        currentProfile = profileRepo!!.create()
-
+        //currentProfile = profileRepo!!.create()
+        createInitialProfile()
 
 
     }
@@ -118,6 +131,11 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
             return
         }
 
+        if(profilesDir!!.list().isEmpty() || !File(profilesDir, "profiles.xml").exists()){
+            profilesListRepo!!.createProfilesFile()
+        }
+
+        //if there are no profiles
         if (profilesListRepo!!.getProfileNamesList().isEmpty()) {
             currentProfile = profileRepo!!.create()
             profilesListRepo!!.addProfile(currentProfile)
@@ -126,7 +144,7 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
         }
 
 
-        currentProfileID = profilesListRepo!!.getCurrentProfileId()
+        val currentProfileID = profilesListRepo!!.getCurrentProfileId()//todo put directly into setter of currentProfileID???
 
         currentProfile = profileRepo!!.read(currentProfileID)
 
@@ -180,7 +198,7 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
 			System.out.println(profiles.list());
 		System.out.println("getnrpEND");*/
         var count = profilesDir!!.list()!!.size //one folder for each profile + file listing all profiles
-        if (profilesDir!!.exists()) {  //if profiles.xml exists subtract it from count
+        if (File(profilesDir, "profiles.xml").exists()) {  //if profiles.xml exists subtract it from count
             count--
         }
         return count == 0
@@ -274,6 +292,15 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
         set(value) {
             assistances.setGestures(value)
         }
+
+    /**
+     * Gibt die Datei zurück, in der die Gesten des Benutzers gespeichert werden
+     *
+     * @return File, welcher auf die Gesten-Datei des Benutzers zeigt
+     */
+    fun getCurrentGestureFile(): File = File(profilesDir, "gestures")
+
+
 
     /*Advanced Settings*/
     fun setLefthandActive(value: Boolean) {

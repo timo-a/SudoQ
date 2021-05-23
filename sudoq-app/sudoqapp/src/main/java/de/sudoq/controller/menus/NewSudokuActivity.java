@@ -7,6 +7,7 @@
  */
 package de.sudoq.controller.menus;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -34,6 +36,7 @@ import de.sudoq.model.game.Game;
 import de.sudoq.model.game.GameManager;
 import de.sudoq.model.game.GameSettings;
 import de.sudoq.model.profile.Profile;
+import de.sudoq.model.profile.ProfileManager;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.xml.SudokuTypesList;
@@ -84,7 +87,12 @@ public class NewSudokuActivity extends SudoqCompatActivity {
 		ab.setTitle(R.string.sf_sudokupreferences_title);
 
 		//for initial settings-values from Profile
-		XmlTree xt = Profile.Companion.getInstance().getAssistances().toXmlTree();
+		ProfileManager pm = new ProfileManager(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+		if (pm.noProfiles()) {
+			throw new IllegalStateException("there are no profiles. this is  unexpected. they should be initialized in splashActivity");
+		}
+		pm.loadCurrentProfile();
+		XmlTree xt = pm.getAssistances().toXmlTree();
 		gameSettings = new GameSettings();
 		gameSettings.fillFromXml(xt);
 		
@@ -196,8 +204,16 @@ public class NewSudokuActivity extends SudoqCompatActivity {
 	public void startGame(View view) {
 		if (this.sudokuType != null && this.complexity != null && gameSettings != null) {
 			try {
-				Game game = GameManager.Companion.getInstance().newGame(this.sudokuType, this.complexity, gameSettings);
-				Profile.Companion.getInstance().setCurrentGame(game.getId());
+				File profilesDir = getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE);
+				ProfileManager pm = new ProfileManager(profilesDir);
+				Game game = GameManager.Companion.getInstance(profilesDir).newGame(this.sudokuType, this.complexity, gameSettings);
+				if (pm.noProfiles()) {
+					throw new IllegalStateException("there are no profiles. this is  unexpected. they should be initialized in splashActivity");
+				}
+				pm.loadCurrentProfile();
+
+				pm.setCurrentGame(game.getId());
+				pm.saveChanges();
 				startActivity(new Intent(this, SudokuActivity.class));
 				overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 			} catch (IllegalArgumentException e) {

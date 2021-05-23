@@ -1,15 +1,13 @@
-package de.sudoq.model.persistence.xml
+package de.sudoq.model.persistence.xml.profile
 
 import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.persistence.IRepo
 import de.sudoq.model.profile.Profile
-import de.sudoq.model.profile.Profile.Companion.instance
 import de.sudoq.model.profile.Statistics
 import de.sudoq.model.xml.XmlHelper
 import de.sudoq.model.xml.XmlTree
 import java.io.File
-import java.io.FileNotFoundException
 import java.io.IOException
 
 
@@ -41,7 +39,7 @@ class ProfileRepo(private val profilesDir: File) : IRepo<ProfileBE> {
 
 
     fun createFirstProfile(): ProfileBE {
-        return create(0)
+        return create(1)
     }
 
 
@@ -120,7 +118,7 @@ class ProfileRepo(private val profilesDir: File) : IRepo<ProfileBE> {
      *
      * @return File, welcher auf das Profilverzeichnis zeigt
      */
-    private fun getProfileDirFor(id: Int): File {
+    public fun getProfileDirFor(id: Int): File {
         return File(profilesDir.absolutePath + File.separator + "profile_$id")
     }
 

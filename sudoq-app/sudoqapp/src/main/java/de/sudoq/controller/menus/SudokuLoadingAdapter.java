@@ -33,6 +33,7 @@ import java.util.TimeZone;
 import de.sudoq.R;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.game.GameData;
+import de.sudoq.model.profile.ProfileManager;
 
 /**
  * Adapter für die Anzeige aller Spiele des Spielers
@@ -70,7 +71,9 @@ public class SudokuLoadingAdapter extends ArrayAdapter<GameData> {
 		TextView sudokuTime       = (TextView)  rowView.findViewById(R.id.time_label);
 		TextView sudokuState      = (TextView)  rowView.findViewById(R.id.state_label);
 
-		File currentThumbnailFile = FileManager.getGameThumbnailFile(gameDatas.get(position).getId());
+		ProfileManager pm = new ProfileManager(context.getDir(context.getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+		pm.loadCurrentProfile();
+		File currentThumbnailFile = FileManager.getGameThumbnailFile(gameDatas.get(position).getId(), pm);
 		try {
 			Bitmap currentThumbnailBitmap = BitmapFactory.decodeStream(new FileInputStream(currentThumbnailFile));
 			int thumbnailWidth = currentThumbnailBitmap.getWidth();

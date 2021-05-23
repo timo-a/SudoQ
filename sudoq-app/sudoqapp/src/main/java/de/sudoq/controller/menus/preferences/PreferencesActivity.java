@@ -1,18 +1,21 @@
 package de.sudoq.controller.menus.preferences;
 
+import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 
+import de.sudoq.R;
 import de.sudoq.controller.SudoqCompatActivity;
 import de.sudoq.controller.menus.GestureBuilder;
 import de.sudoq.model.ModelChangeListener;
 import de.sudoq.model.game.Assistances;
 import de.sudoq.model.game.GameSettings;
 import de.sudoq.model.profile.Profile;
+import de.sudoq.model.profile.ProfileManager;
 
-public abstract class PreferencesActivity extends SudoqCompatActivity implements ModelChangeListener<Profile> {
+public abstract class PreferencesActivity extends SudoqCompatActivity implements ModelChangeListener<ProfileManager> {
 	
 	CheckBox gesture;
 	CheckBox autoAdjustNotes;
@@ -58,17 +61,18 @@ public abstract class PreferencesActivity extends SudoqCompatActivity implements
 		super.onResume();
 		refreshValues();
 	}
-	
+
 	protected abstract void refreshValues();
 
-	public void onModelChanged(Profile obj) {
+	public void onModelChanged(ProfileManager obj) {
 		this.refreshValues();
 	}
 	
 	abstract protected void saveToProfile();
 	
 	protected void saveAssistance(Assistances a, CheckBox c){
-		Profile.Companion.getInstance().setAssistance(a, c.isChecked());
+		Profile p = Profile.Companion.getInstance(getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
+		p.setAssistance(a, c.isChecked());
 	}
 	
 
