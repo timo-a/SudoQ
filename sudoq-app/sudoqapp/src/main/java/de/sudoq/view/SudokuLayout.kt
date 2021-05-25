@@ -29,16 +29,16 @@ import java.util.*
 
 /**
  * Eine View als RealativeLayout, die eine Sudoku-Anzeige verwaltet.
+ *
+ * @param context Der Kontext, in dem diese View angezeigt wird
+
  */
-class SudokuLayout(
-        /**
-         * Der Kontext dieser View
-         */
-        private val context: Context) : RelativeLayout(context), ObservableCellInteraction, ZoomableView {
+class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellInteraction, ZoomableView {
+
     /**
      * Das Game, welches diese Anzeige verwaltet
      */
-    private val game: Game
+    private val game: Game = (context as SudokuActivity).game
 
     /**
      * Die Standardgröße eines Feldes
@@ -48,17 +48,7 @@ class SudokuLayout(
      * Die aktuelle Größe eines Feldes
      */
     // private int currentCellViewSize;
-    /**
-     * Gibt die aktuell aktive SudokuCellView dieser View zurück.
-     *
-     * @return Die aktive SudokuCellView
-     */
-    /**
-     * Setzt die aktuelle SudokuCellView
-     *
-     * @param currentCellView
-     * die zu setzende SudokuCellView
-     */
+
     /**
      * Die aktuell ausgewählte CellView
      */
@@ -69,7 +59,7 @@ class SudokuLayout(
     /**
      * Ein Array aller CellViews
      */
-    private var sudokuCellViews: Array<Array<SudokuCellView>>?
+    private var sudokuCellViews: Array<Array<SudokuCellView?>>? = null
 
     /**
      * Der linke Rand, verursacht durch ein zu niedriges Layout
@@ -95,7 +85,7 @@ class SudokuLayout(
         val sudoku = game.sudoku
         val sudokuType = sudoku!!.sudokuType
         val isMarkWrongSymbolAvailable = game.isAssistanceAvailable(Assistances.markWrongSymbol)
-        sudokuCellViews = Array<Array<SudokuCellView?>>(sudokuType!!.size!!.x + 1) { arrayOfNulls(sudokuType.size!!.y + 1) }
+        sudokuCellViews = Array(sudokuType!!.size!!.x + 1) { arrayOfNulls(sudokuType.size!!.y + 1) }
         for (p in sudokuType.validPositions) {
             val cell = sudoku.getCell(p)
             if (cell != null) {
@@ -104,9 +94,9 @@ class SudokuLayout(
                 val params = LayoutParams(currentCellViewSize, defaultCellViewSize)
                 params.topMargin = y * currentCellViewSize + y
                 params.leftMargin = x * currentCellViewSize + x
-                sudokuCellViews.get(x)[y] = SudokuCellView(context, game, cell, isMarkWrongSymbolAvailable)
-                cell.registerListener(sudokuCellViews.get(x)[y]!!)
-                this.addView(sudokuCellViews.get(x)[y], params)
+                sudokuCellViews!![x][y] = SudokuCellView(context, game, cell, isMarkWrongSymbolAvailable)
+                cell.registerListener(sudokuCellViews!![x][y]!!)
+                this.addView(sudokuCellViews!![x][y], params)
             }
         }
         val x = sudoku.sudokuType!!.size!!.x //why all this????
@@ -114,14 +104,14 @@ class SudokuLayout(
         val params = LayoutParams(currentCellViewSize, defaultCellViewSize)
         params.topMargin = (y - 1) * currentCellViewSize + (y - 1) + currentTopMargin
         params.leftMargin = (x - 1) * currentCellViewSize + (x - 1) + currentLeftMargin
-        sudokuCellViews.get(x)[y] = SudokuCellView(context, game, game.sudoku!!.getCell(Position[x - 1, y - 1])!!, isMarkWrongSymbolAvailable)
-        this.addView(sudokuCellViews.get(x)[y], params)
-        sudokuCellViews.get(x)[y]!!.visibility = INVISIBLE
+        sudokuCellViews!![x][y] = SudokuCellView(context, game, game.sudoku!!.getCell(Position[x - 1, y - 1])!!, isMarkWrongSymbolAvailable)
+        this.addView(sudokuCellViews!![x][y], params)
+        sudokuCellViews!![x][y]!!.visibility = INVISIBLE
 
 
         /* In case highlighting of current row and col is activated,
 		   pass each pos its constraint-mates */if (game.isAssistanceAvailable(Assistances.markRowColumn)) {
-            var positions: ArrayList<Position?>
+            var positions: ArrayList<Position>
             val allConstraints: Iterable<Constraint>? = game.sudoku!!.sudokuType
             for (c in allConstraints!!) if (c.type == ConstraintType.LINE) {
                 positions = c.getPositions()
@@ -192,8 +182,8 @@ class SudokuLayout(
             params.height = currentCellViewSize
             params.topMargin = 2 * currentTopMargin + (y - 1) * cellPlusSpacing
             params.leftMargin = 2 * currentLeftMargin + (x - 1) * cellPlusSpacing
-            sudokuCellViews!![x][y].layoutParams = params
-            sudokuCellViews!![x][y].invalidate()
+            sudokuCellViews!![x][y]!!.layoutParams = params
+            sudokuCellViews!![x][y]!!.invalidate()
             //end strange thing
         }
         hintPainter.updateLayout()
@@ -255,7 +245,7 @@ class SudokuLayout(
      * returns the CellView at Position p.
      */
     fun getSudokuCellView(p: Position): SudokuCellView {
-        return sudokuCellViews!![p.x][p.y]
+        return sudokuCellViews!![p.x][p.y]!!
     }
 
     /**
@@ -317,7 +307,7 @@ class SudokuLayout(
      * {@inheritDoc}
      */
     override fun getMaxZoomFactor(): Float {
-        return 10 //this.game.getSudoku().getSudokuType().getSize().getX() / 2.0f;
+        return 10f //this.game.getSudoku().getSudokuType().getSize().getX() / 2.0f;
     }
 
     companion object {
@@ -335,11 +325,8 @@ class SudokuLayout(
     /**
      * Instanziiert eine neue SudokuView in dem spezifizierten Kontext.
      *
-     * @param context
-     * Der Kontext, in dem diese View angezeigt wird
      */
     init {
-        game = (context as SudokuActivity).game
         defaultCellViewSize = 40
         zoomFactor = 1.0f
         // this.currentCellViewSize = this.defaultCellViewSize;

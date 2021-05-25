@@ -18,7 +18,7 @@ import de.sudoq.view.SudokuLayout
  * einzelnes Feld innerhalb eines Sudokus dar. Es erweitert den Android View um
  * Funktionalität zur Benutzerinteraktion und Färben.
  */
-class NakedSetView(context: Context?, sl: SudokuLayout, d: NakedSetDerivation) : HintView(context, sl, d) {
+class NakedSetView(context: Context, sl: SudokuLayout, d: NakedSetDerivation) : HintView(context, sl, d) {
     /**
      * Erstellt einen SudokuFieldView und initialisiert die Attribute der
      * Klasse.

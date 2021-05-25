@@ -18,7 +18,7 @@ import de.sudoq.view.SudokuLayout
  * einzelnes Feld innerhalb eines Sudokus dar. Es erweitert den Android View um
  * Funktionalität zur Benutzerinteraktion und Färben.
  */
-class NoNotesView(context: Context?, sl: SudokuLayout, d: NoNotesDerivation) : HintView(context, sl, d) {
+class NoNotesView(context: Context, sl: SudokuLayout, d: NoNotesDerivation) : HintView(context, sl, d) {
     /**
      * Erstellt einen LastDigitView
      *
@@ -27,7 +27,7 @@ class NoNotesView(context: Context?, sl: SudokuLayout, d: NoNotesDerivation) : H
      */
     init {
         val i = d.cellIterator
-        while (i.hasNext()) {
+        while (i.hasNext()) {//todo can this be a for loop
             val cellView: View = HighlightedCellView(context, sl, i.next().position, Color.GREEN)
             highlightedObjects.add(cellView)
         }

@@ -19,8 +19,9 @@ import de.sudoq.model.actionTree.ActionTreeElement
  */
 class BranchingElement
 /** Constructors  */
-(context: Context?, inner: ActionTreeElementView?, ate: ActionTreeElement?) : ActionTreeElementView(context!!, inner!!, ate!!) {
-    /** Methods  */
+(context: Context, inner: ActionTreeElementView, ate: ActionTreeElement) :
+        ActionTreeElementView(context, inner, ate) {
+
     /**
      * {@inheritDoc}
      */

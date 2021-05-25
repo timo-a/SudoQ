@@ -22,15 +22,10 @@ import java.util.*
 /**
  * Diese Subklasse des Android internen Views stellt einen Button in der
  * Eingabeansicht des Sudokus dar.
+ *
+ * @property symbol The symbol associated with this VirtualKeyboardButtonView.
  */
-class VirtualKeyboardButtonView(context: Context?, symbol: Int) : View(context), ObservableInput {
-    /** Attributes  */
-    /**
-     * Das mit diesem VirtualKeyboardButtonView assoziierte Symbol. Es handlet
-     * sich um einen int, da ein generische Zeichensatz unterstützt werden soll,
-     * in dem die Symbole durch int repräsentiert werden.
-     */
-    private val symbol: Int
+class VirtualKeyboardButtonView(context: Context?, private val symbol: Int) : View(context), ObservableInput {
 
     /**
      * Das Symbol, welches in diesem Button steht so, wie es gemalt wird
@@ -122,7 +117,6 @@ class VirtualKeyboardButtonView(context: Context?, symbol: Int) : View(context),
      */
     init {
         this.layoutParams = TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 1.0f)
-        this.symbol = symbol
         drawnSymbol = Symbol.getInstance().getMapping(symbol)
         inputListener = ArrayList()
         CellViewPainter.getInstance().setMarking(this, CellViewStates.DEFAULT_BORDER)

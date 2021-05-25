@@ -17,9 +17,8 @@ import de.sudoq.model.actionTree.ActionTreeElement
  * Die ActionElementView stellt im ActionTree eine einfache Aktion dar.
  *
  */
-class ActionElement
-/** Methods  */
-(context: Context?, inner: ActionTreeElementView?, ate: ActionTreeElement?) : ActionTreeElementView(context, inner, ate) {
+class ActionElement(context: Context, inner: ActionTreeElementView, ate: ActionTreeElement) : ActionTreeElementView(context, inner, ate) {
+
     /**
      * {@inheritDoc}
      */

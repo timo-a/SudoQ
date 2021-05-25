@@ -20,12 +20,13 @@ import java.util.*
  * Interaktionselement genutzt wird. Es wird die Benutzerinteraktion sowie die
  * Erscheinung definiert.
  */
-abstract class ActionTreeElementView(context: Context?, inner: ActionTreeElementView?,
+abstract class ActionTreeElementView(context: Context, inner: ActionTreeElementView,
                                      /**
                                       * Das Element des Aktionsbaumes das von diesem View representiert wird
                                       */
                                      private val actionTreeElement: ActionTreeElement) : View(context) {
-    protected var actionColor = DEFAULT_COLOR
+    @JvmField
+	protected var actionColor = DEFAULT_COLOR
     protected var inner: ActionTreeElementView? = null
 
     /**
@@ -82,7 +83,7 @@ abstract class ActionTreeElementView(context: Context?, inner: ActionTreeElement
         paint(canvas)
     }
 
-    protected fun paint(canvas: Canvas?) {
+    protected fun paint(canvas: Canvas) {
         if (inner != null) {
             inner!!.paint(canvas)
         }
@@ -95,7 +96,7 @@ abstract class ActionTreeElementView(context: Context?, inner: ActionTreeElement
      * @param canvas
      * Das Canvas, das bemalt werden soll.
      */
-    abstract fun paintCanvas(canvas: Canvas?)
+    abstract fun paintCanvas(canvas: Canvas)
 
     /**
      * Erlaubt die Registrierung von Listenern

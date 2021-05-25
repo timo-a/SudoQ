@@ -16,19 +16,28 @@ import de.sudoq.controller.sudoku.InputListener
 import de.sudoq.controller.sudoku.ObservableInput
 import de.sudoq.controller.sudoku.board.CellViewPainter
 import de.sudoq.controller.sudoku.board.CellViewStates
+import kotlin.math.ceil
+import kotlin.math.floor
+import kotlin.math.sqrt
 
 /**
  * Dieses Layout stellt ein virtuelles Keyboard zur Verfügung, in dem sich die
  * Buttons möglichst quadratisch ausrichten.
- */
+ *
+ * Instanziiert ein neues VirtualKeyboardLayout mit den gegebenen Parametern
+ *
+ * @param context der Applikationskontext
+ * @param attrs das Android AttributeSet
+*/
 class VirtualKeyboardLayout(context: Context?, attrs: AttributeSet?) : LinearLayout(context, attrs), ObservableInput, Iterable<View?> {
     /**
      * Die Buttons des VirtualKeyboard
      */
-    private var buttons: Array<Array<VirtualKeyboardButtonView>>?
-    private val buttonIterator: Iterable<VirtualKeyboardButtonView> = object : Iterable<VirtualKeyboardButtonView?> {
+    private var buttons: Array<Array<VirtualKeyboardButtonView>>? = null
+
+    private val buttonIterator: Iterable<VirtualKeyboardButtonView> = object : Iterable<VirtualKeyboardButtonView> {
         override fun iterator(): Iterator<VirtualKeyboardButtonView> {
-            return object : MutableIterator<VirtualKeyboardButtonView?> {
+            return object : Iterator<VirtualKeyboardButtonView> {
                 var i = 0
                 var j = 0
                 override fun hasNext(): Boolean {
@@ -37,14 +46,12 @@ class VirtualKeyboardLayout(context: Context?, attrs: AttributeSet?) : LinearLay
 
                 override fun next(): VirtualKeyboardButtonView {
                     val current = buttons!![i][j++]
-                    if (j == buttons!![i].length) {
+                    if (j == buttons!![i].size) {
                         j = 0
                         i++
                     }
                     return current
                 }
-
-                override fun remove() {}
             }
         }
     }
@@ -75,13 +82,17 @@ class VirtualKeyboardLayout(context: Context?, attrs: AttributeSet?) : LinearLay
      */
     private fun inflate(numberOfButtons: Int) {
         removeAllViews()
-        val buttonsPerColumn = Math.floor(Math.sqrt(numberOfButtons.toDouble())).toInt()
-        val buttonsPerRow = Math.ceil(Math.sqrt(numberOfButtons.toDouble())).toInt()
-        buttons = Array(buttonsPerRow) { arrayOfNulls(buttonsPerColumn) }
+        val buttonsPerColumn = floor(sqrt(numberOfButtons.toDouble())).toInt()
+        val buttonsPerRow = ceil(sqrt(numberOfButtons.toDouble())).toInt()
+
+
+        buttons = Array(buttonsPerRow) { r ->
+            Array(buttonsPerColumn) { c ->
+                VirtualKeyboardButtonView(context, r + c * buttonsPerRow)} }
+
         for (y in 0 until buttonsPerColumn) {
             val la = LinearLayout(context)
             for (x in 0 until buttonsPerRow) {
-                buttons!![x][y] = VirtualKeyboardButtonView(context, x + y * buttonsPerRow)
                 buttons!![x][y].visibility = INVISIBLE
                 val params = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1.0f)
                 params.leftMargin = 2
@@ -177,7 +188,7 @@ class VirtualKeyboardLayout(context: Context?, attrs: AttributeSet?) : LinearLay
         if (buttons == null) {
             return
         }
-        for (b in buttonIterator) b?.invalidate()
+        for (b in buttonIterator) b.invalidate()
     }
 
     /**
@@ -189,8 +200,8 @@ class VirtualKeyboardLayout(context: Context?, attrs: AttributeSet?) : LinearLay
         return !deactivated
     }
 
-    override fun iterator(): MutableIterator<View> {
-        return object : MutableIterator<View?> {
+    override fun iterator(): Iterator<View> {
+        return object : Iterator<View> {
             var i = 0
             override fun hasNext(): Boolean {
                 return i < childCount
@@ -199,19 +210,9 @@ class VirtualKeyboardLayout(context: Context?, attrs: AttributeSet?) : LinearLay
             override fun next(): View {
                 return getChildAt(i++)
             }
-
-            override fun remove() {}
         }
     }
 
-    /**
-     * Instanziiert ein neues VirtualKeyboardLayout mit den gegebenen Parametern
-     *
-     * @param context
-     * der Applikationskontext
-     * @param attrs
-     * das Android AttributeSet
-     */
     init {
         setWillNotDraw(false)
     }

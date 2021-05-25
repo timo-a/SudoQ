@@ -10,19 +10,12 @@ import java.util.*
 /**
  * Created by timo on 20.10.16.
  */
-open class HintView(context: Context?, sl: SudokuLayout, d: SolveDerivation) : View(context) {
-    var sl: SudokuLayout
-    var derivation: SolveDerivation
-    var highlightedObjects: List<View>
+open class HintView(context: Context, var sl: SudokuLayout, d: SolveDerivation) : View(context) {
+    var derivation: SolveDerivation = d
+    var highlightedObjects: MutableList<View> = Stack()
     public override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         for (v in highlightedObjects) v.draw(canvas)
     }
 
-    init {
-        requireNotNull(context)
-        this.sl = sl
-        derivation = d
-        highlightedObjects = Stack()
-    }
 }
