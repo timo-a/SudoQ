@@ -5,35 +5,28 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
  * You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.sudoq.view.actionTree;
+package de.sudoq.view.actionTree
 
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-
-import de.sudoq.controller.sudoku.ActionTreeController;
-import de.sudoq.model.actionTree.ActionTreeElement;
+import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Paint
+import de.sudoq.controller.sudoku.ActionTreeController
+import de.sudoq.model.actionTree.ActionTreeElement
 
 /**
  * Die ActionElementView stellt im ActionTree eine einfache Aktion dar.
- * 
+ *
  */
-public class ActionElement extends ActionTreeElementView {
-
-	/** Methods */
-
-	public ActionElement(Context context, ActionTreeElementView inner, ActionTreeElement ate) {
-		super(context, inner, ate);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void paintCanvas(Canvas canvas) {
-		Paint elementPaint = new Paint();
-		elementPaint.setColor(actionColor);
-		int rectSize = (int) ((float) ActionTreeController.MAX_ELEMENT_VIEW_SIZE / 3);
-		canvas.drawRect(rectSize, rectSize, ActionTreeController.MAX_ELEMENT_VIEW_SIZE - rectSize, ActionTreeController.MAX_ELEMENT_VIEW_SIZE - rectSize, elementPaint);
-	}
+class ActionElement
+/** Methods  */
+(context: Context?, inner: ActionTreeElementView?, ate: ActionTreeElement?) : ActionTreeElementView(context, inner, ate) {
+    /**
+     * {@inheritDoc}
+     */
+    override fun paintCanvas(canvas: Canvas) {
+        val elementPaint = Paint()
+        elementPaint.color = actionColor
+        val rectSize = (ActionTreeController.MAX_ELEMENT_VIEW_SIZE.toFloat() / 3).toInt()
+        canvas.drawRect(rectSize.toFloat(), rectSize.toFloat(), (ActionTreeController.MAX_ELEMENT_VIEW_SIZE - rectSize).toFloat(), (ActionTreeController.MAX_ELEMENT_VIEW_SIZE - rectSize).toFloat(), elementPaint)
+    }
 }
