@@ -17,11 +17,11 @@ interface ZoomableView {
      * Gibt den minimalen Zoomfaktor für die View zurück.
      * @return den minimalen Zoomfaktor für die View
      */
-    val minZoomFactor: Float
+    fun getMinZoomFactor(): Float
 
     /**
      * Gibt den maximalen Zoomfaktor für die View zurück.
      * @return den maximalen Zoomfaktor für die View
      */
-    val maxZoomFactor: Float
+    fun getMaxZoomFactor(): Float
 }

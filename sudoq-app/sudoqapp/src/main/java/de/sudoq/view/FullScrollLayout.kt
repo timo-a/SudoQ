@@ -17,26 +17,15 @@ import android.view.View
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.ScrollView
-import de.sudoq.view.FullScrollLayout
 
 /**
  * Eine ScrollView, welche sowohl horizontales, als auch vertikales Scrollen
  * ermöglicht.
  */
 class FullScrollLayout : LinearLayout {
+
     /**
-     * Gibt den aktuellen Zoom-Faktor dieses Layouts zurück.
-     *
-     * @return Der aktuelle Zoom-Faktor
-     */
-    /**
-     * Setzt den aktuellen Zoom-Faktor des Layouts.
-     *
-     * @param newZoom
-     * Der neue Zoomfaktor
-     */
-    /**
-     * Der aktuelle Zoom Faktor.
+     * Der aktuelle Zoom Faktor dieses Layouts.
      */
     var zoomFactor = 0f
 
@@ -55,7 +44,7 @@ class FullScrollLayout : LinearLayout {
     /**
      * Aktueller X- und Y-Wert der ScrollViews.
      */
-    private val current: Point = Point(0, 0)
+    private val current: Point = Point(0f, 0f)
 
     /**
      * Der Zoom-Gesten-Detektor
@@ -139,15 +128,15 @@ class FullScrollLayout : LinearLayout {
      */
     override fun scrollTo(x: Int, y: Int) {
         // Has to be changed because the tree algo uses different coords.
-        current.scrollValueX = (x - width / 2).toFloat()
-        current.scrollValueY = (y - height / 2).toFloat() //so apparently "tree algo" needs this... it is parameter are passed with inverse transformation in onscale, to even it out
+        current.x = (x - width / 2).toFloat()
+        current.y = (y - height / 2).toFloat() //so apparently "tree algo" needs this... it is parameter are passed with inverse transformation in onscale, to even it out
         verticalScrollView!!.post {
-            verticalScrollView!!.scrollTo(current.scrollValueX.toInt(), current.scrollValueY.toInt())
-            current.scrollValueY = verticalScrollView!!.scrollY.toFloat()
+            verticalScrollView!!.scrollTo(current.x.toInt(), current.y.toInt())
+            current.y = verticalScrollView!!.scrollY.toFloat()
         }
         horizontalScrollView!!.post {
-            horizontalScrollView!!.scrollTo(current.scrollValueX.toInt(), current.scrollValueY.toInt())
-            current.scrollValueX = horizontalScrollView!!.scrollX.toFloat()
+            horizontalScrollView!!.scrollTo(current.x.toInt(), current.y.toInt())
+            current.x = horizontalScrollView!!.scrollX.toFloat()
         }
     }
 
@@ -161,6 +150,25 @@ class FullScrollLayout : LinearLayout {
     }
 
     /**
+     * Gibt den aktuell gescrollten X-Wert zurück.
+     *
+     * @return der aktuell gescrollte X-Wert
+     */
+    fun getScrollValueX() : Float {
+        return this.current.x
+    }
+
+
+    /**
+     * Gibt den aktuell gescrollten Y-Wert zurück.
+     *
+     * @return der aktuell gescrollte Y-Wert
+     */
+    fun getScrollValueY() : Float {
+        return this.current.y
+    }
+
+        /**
      * Diese Klasse überschreibt das onTouch-Event der ScrollView, sodass dieses
      * an dieses FullScrollLayout weitergereicht wird. Durch die
      * performTouch-Methode kann das Event zurückgereicht werden.
@@ -181,7 +189,7 @@ class FullScrollLayout : LinearLayout {
                 event.x
                 event.y
                 super.onTouchEvent(event)
-                current.scrollValueY = this.scrollY.toFloat()
+                current.y = this.scrollY.toFloat()
             } catch (e: Exception) {
                 // Old android versions sometimes throw an exception when
                 // putting and Event of one view in the onTouch of
@@ -222,7 +230,7 @@ class FullScrollLayout : LinearLayout {
                 event.x
                 event.y
                 super.onTouchEvent(event)
-                current.scrollValueX = this.scrollX.toFloat()
+                current.x = this.scrollX.toFloat()
             } catch (e: Exception) {
                 // Old android versions sometimes throw an exception when
                 // putting and Event of one view in the onTouch of
@@ -253,8 +261,8 @@ class FullScrollLayout : LinearLayout {
             var newZoom = zoomFactor * scaleFactor
 
             // Don't let the object get too large/small.
-            val lowerLimit = childView!!.minZoomFactor
-            val upperLimit = childView!!.maxZoomFactor
+            val lowerLimit = childView!!.getMinZoomFactor()
+            val upperLimit = childView!!.getMaxZoomFactor()
             newZoom = Math.max(Math.min(newZoom, upperLimit), lowerLimit) //ensure newZoom ∈ [lowerLim,upperLim]
             if (!childView!!.zoom(newZoom)) {
                 return false
@@ -268,8 +276,9 @@ class FullScrollLayout : LinearLayout {
 			 * in the normalized case fp-tl is fp (bec tl==0)
 			 * we want that distance to be kept so we subtract it from the scaled value for fp namely fp* zoom.
 			 * hence lt = focus * zoom - focus
-			 * */current.scrollValueX = focus!!.scrollValueX * zoomFactor - focus!!.scrollValueX
-            current.scrollValueY = focus!!.scrollValueY * zoomFactor - focus!!.scrollValueY
+			 * */
+            current.x = focus!!.x * zoomFactor - focus!!.x
+            current.y = focus!!.y * zoomFactor - focus!!.y
             /* even out the transformation on scrollTo */transform(current)
             scrollTo2(current)
             Log.d(LOG_TAG, "Scaled to: " + current.toString() + "    "
@@ -281,8 +290,8 @@ class FullScrollLayout : LinearLayout {
         override fun onScaleBegin(scaleGestureDetector: ScaleGestureDetector): Boolean {
             Log.d(LOG_TAG, "On scale begin-------------------------(")
             focus = Point(scaleGestureDetector.focusX, scaleGestureDetector.focusY)
-            (childView as SudokuLayout?)!!.focusX = focus!!.scrollValueX //only for debug
-            (childView as SudokuLayout?)!!.focusY = focus!!.scrollValueY
+            (childView as SudokuLayout?)!!.focusX = focus!!.x //only for debug
+            (childView as SudokuLayout?)!!.focusY = focus!!.y
             return true
         }
 
@@ -292,33 +301,22 @@ class FullScrollLayout : LinearLayout {
 
         /* transform to even out inverse transformation in scrollTo(x,y). A trafo exists there because of "tree algo" */
         private fun transform(p: Point) {
-            p.scrollValueX += (width / 2).toFloat()
-            p.scrollValueY += (height / 2).toFloat()
+            p.x += (width / 2).toFloat()
+            p.y += (height / 2).toFloat()
         }
 
         private fun scrollTo2(p: Point) {
             /* save for log */
-            current.scrollValueX = p.scrollValueX
-            current.scrollValueY = p.scrollValueY
-            scrollTo(p.scrollValueX.toInt(), p.scrollValueY.toInt())
+            current.x = p.x
+            current.y = p.y
+            scrollTo(p.x.toInt(), p.y.toInt())
         }
     }
 
-    private inner class Point(
-            /**
-             * Gibt den aktuell gescrollten X-Wert zurück.
-             *
-             * @return der aktuell gescrollte X-Wert
-             */
-            var scrollValueX: Float,
-            /**
-             * Gibt den aktuell gescrollten Y-Wert zurück.
-             *
-             * @return der aktuell gescrollte Y-Wert
-             */
-            var scrollValueY: Float) {
+    private inner class Point(var x: Float, var y: Float) {
+
         override fun toString(): String {
-            return scrollValueX as Int.toString() + "," + scrollValueY.toInt()
+            return "${x.toInt()},${y.toInt()}"
         }
     }
 

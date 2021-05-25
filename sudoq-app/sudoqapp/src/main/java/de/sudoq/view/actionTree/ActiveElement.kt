@@ -17,14 +17,13 @@ import de.sudoq.model.actionTree.ActionTreeElement
  * Diese Subklasse des ActionTreeElements definiert das Aussehen des aktuellen
  * Elements innerhalb des Aktionsbaumes.
  */
-class ActiveElement
-/** Constructors  */
-(context: Context?, inner: ActionTreeElementView?, ate: ActionTreeElement?) : ActionTreeElementView(context!!, inner!!, ate!!) {
-    /** Methods  */
+class ActiveElement(context: Context, inner: ActionTreeElementView, ate: ActionTreeElement) :
+        ActionTreeElementView(context, inner, ate) {
+
     /**
      * {@inheritDoc}
      */
-    override fun paintCanvas(canvas: Canvas?) {
+    override fun paintCanvas(canvas: Canvas) {
         val activePaint = Paint()
         activePaint.color = ACTIVE_COLOR
         val stroke = (ActionTreeController.MAX_ELEMENT_VIEW_SIZE.toFloat() * 0.1).toInt()

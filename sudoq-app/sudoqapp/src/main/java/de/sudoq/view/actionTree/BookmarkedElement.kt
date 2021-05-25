@@ -17,11 +17,12 @@ import de.sudoq.model.actionTree.ActionTreeElement
  * Diese Subklasse des ActionTreeElements definiert das Aussehen eines als
  * Lesezeichen markierten Elements.
  */
-class BookmarkedElement(context: Context?, inner: ActionTreeElementView?, ate: ActionTreeElement?) : ActionTreeElementView(context!!, inner!!, ate!!) {
+class BookmarkedElement(context: Context, inner: ActionTreeElementView, ate: ActionTreeElement) :
+        ActionTreeElementView(context, inner, ate) {
     /**
      * {@inheritDoc}
      */
-    override fun paintCanvas(canvas: Canvas?) {
+    override fun paintCanvas(canvas: Canvas) {
         // Paint elementPaint = new Paint();
         // elementPaint.setColor(BOOKMARK_COLOR);
         // elementPaint.setAntiAlias(true);

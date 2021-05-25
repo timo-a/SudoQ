@@ -27,33 +27,18 @@ import java.util.*
 /**
  * This subclass of a View represents a cell in a sudoku. It extends the functionality of the
  * Android View by user interaction and coloring in.
+ *
+ * @property cell The cell associated with this view
+ * @property markWrongSymbol should wrong symbols be highlighted
  */
-class SudokuCellView(context: Context?, game: Game,
-                     /**
-                      * The cell represented by this view
-                      *
-                      * @see Cell
-                      */
-                     val cell: Cell,
-                     /**
-                      * should wrong symbols be highlighted
-                      */
-                     private val markWrongSymbol: Boolean) : View(context), ModelChangeListener<Cell?>, ObservableCellInteraction {
-    /**
-     * Returns the cell associated by this view
-     *
-     * @return the cell associated with this view
-     */
+class SudokuCellView(context: Context?, game: Game, val cell: Cell, private val markWrongSymbol: Boolean)
+    : View(context), ModelChangeListener<Cell>, ObservableCellInteraction {
 
     /**
      * List of the  selektion listeners
      */
     private val cellSelectListener: ArrayList<CellInteractionListener>
-    /**
-     * Returns whether this cell is in note mode
-     *
-     * @return true iff this cell is in note mode
-     */
+
     /**
      * A flag defining whether note mode is active
      */
@@ -74,7 +59,8 @@ class SudokuCellView(context: Context?, game: Game,
     /**
      * Indicates if this cell is currently selected
      */
-    private var selected: Boolean
+    private var cellSelected: Boolean
+    //parent class already defines property 'selected' so we need to call our custom one 'cellSelected'
 
     /**
      * Indicates if this cell is connected to the one currently selected
@@ -105,7 +91,7 @@ class SudokuCellView(context: Context?, game: Game,
         super.onDraw(canvas)
         //Log.d(LOG_TAG, "SudokuFieldView.onDraw()");
         symbol = Symbol.getInstance().getMapping(cell.currentValue)
-        CellViewPainter.getInstance().markCell(canvas, this, symbol, false, isInExtraConstraint && !selected)
+        CellViewPainter.getInstance().markCell(canvas, this, symbol, false, isInExtraConstraint && !cellSelected)
 
         // Draw notes if cell has no value
         if (cell.isNotSolved) {
@@ -199,7 +185,7 @@ class SudokuCellView(context: Context?, game: Game,
         if (game.isFinished()) {
             connected = true
         } else {
-            selected = true
+            cellSelected = true
         }
         if (markConnected) {
             for (f in connectedCells) {
@@ -216,7 +202,7 @@ class SudokuCellView(context: Context?, game: Game,
      * determines if connected cells should also be reset.
      */
     fun deselect(updateConnected: Boolean) {
-        selected = false
+        cellSelected = false
         connected = false
         if (updateConnected) {
             for (fv in connectedCells) {
@@ -241,8 +227,25 @@ class SudokuCellView(context: Context?, game: Game,
         val editable = cell.isEditable
         //TODO no idea what 'wrong' is doing, i just etracted it for clarity
         val wrong = markWrongSymbol && !cell.isNotWrong && checkConstraint()
-        val state: CellViewStates
-        state = if (connected) if (editable) if (wrong) CellViewStates.CONNECTED_WRONG else CellViewStates.CONNECTED else CellViewStates.SELECTED_FIXED else if (selected) if (editable) if (isNoteMode) if (wrong) CellViewStates.SELECTED_NOTE_WRONG else CellViewStates.SELECTED_NOTE else if (wrong) CellViewStates.SELECTED_INPUT_WRONG else CellViewStates.SELECTED_INPUT else CellViewStates.SELECTED_FIXED else if (editable) if (wrong) CellViewStates.DEFAULT_WRONG else CellViewStates.DEFAULT else CellViewStates.FIXED
+        val state: CellViewStates =
+                if (connected)
+                    if (editable)
+                        if (wrong) CellViewStates.CONNECTED_WRONG
+                        else CellViewStates.CONNECTED
+                    else CellViewStates.SELECTED_FIXED
+                else if (cellSelected)
+                    if (editable)
+                        if (isNoteMode)
+                            if (wrong)
+                                CellViewStates.SELECTED_NOTE_WRONG
+                            else CellViewStates.SELECTED_NOTE
+                        else if (wrong) CellViewStates.SELECTED_INPUT_WRONG
+                        else CellViewStates.SELECTED_INPUT
+                    else CellViewStates.SELECTED_FIXED
+                else if (editable)
+                    if (wrong) CellViewStates.DEFAULT_WRONG
+                    else CellViewStates.DEFAULT
+                else CellViewStates.FIXED
         CellViewPainter.getInstance().setMarking(this, state)
         invalidate()
     }
@@ -314,7 +317,7 @@ class SudokuCellView(context: Context?, game: Game,
         this.game = game
         cellSelectListener = ArrayList()
         connectedCells = ArrayList()
-        selected = false
+        cellSelected = false
         connected = false
         isNoteMode = false
         isInExtraConstraint = false
@@ -341,7 +344,8 @@ class SudokuCellView(context: Context?, game: Game,
         }.init(this))
         setOnLongClickListener(object : OnLongClickListener {
             override fun onLongClick(v: View): Boolean {
-                for (listener in cellSelectListener) listener.onCellSelected(scv, CellInteractionListener.SelectEvent.Long)
+                for (listener in cellSelectListener)
+                    listener.onCellSelected(scv, CellInteractionListener.SelectEvent.Long)
                 return true
             }
 
