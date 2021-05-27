@@ -33,6 +33,7 @@ import java.util.TimeZone;
 import de.sudoq.R;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.game.GameData;
+import de.sudoq.model.persistence.xml.game.GameRepo;
 import de.sudoq.model.profile.ProfileManager;
 
 /**
@@ -73,7 +74,8 @@ public class SudokuLoadingAdapter extends ArrayAdapter<GameData> {
 
 		ProfileManager pm = new ProfileManager(context.getDir(context.getString(R.string.path_rel_profiles), Context.MODE_PRIVATE));
 		pm.loadCurrentProfile();
-		File currentThumbnailFile = FileManager.getGameThumbnailFile(gameDatas.get(position).getId(), pm);
+		GameRepo gameRepo = new GameRepo(pm.getProfilesDir(), pm.getCurrentProfileID());
+		File currentThumbnailFile = gameRepo.getGameThumbnailFile(gameDatas.get(position).getId(), pm);
 		try {
 			Bitmap currentThumbnailBitmap = BitmapFactory.decodeStream(new FileInputStream(currentThumbnailFile));
 			int thumbnailWidth = currentThumbnailBitmap.getWidth();

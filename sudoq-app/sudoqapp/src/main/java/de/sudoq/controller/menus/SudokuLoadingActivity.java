@@ -47,6 +47,7 @@ import de.sudoq.controller.sudoku.SudokuActivity;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.game.GameData;
 import de.sudoq.model.game.GameManager;
+import de.sudoq.model.persistence.xml.game.GameRepo;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.profile.ProfileManager;
 
@@ -272,6 +273,7 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 
 		File profilesDir = getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE);
 		Profile p = Profile.Companion.getInstance(profilesDir);
+		GameRepo gameRepo = new GameRepo(p.getProfilesDir(), p.getCurrentProfileID());
 
 		builder.setItems(items, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int item) {
@@ -288,7 +290,7 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 					break;
 				case 2://export as text
 					int gameID = adapter.getItem(position).getId();
-					File gameFile = FileManager.getGameFile(gameID, p);
+					File gameFile = gameRepo.getGameFile(gameID, p);
 
 					String str = "there was an error reading the file, sorry";
 					FileInputStream fis = null;
@@ -316,7 +318,7 @@ public class SudokuLoadingActivity extends SudoqListActivity implements OnItemCl
 				case 3://export as file
 					//already defined under 2
 					/*int */ gameID = adapter.getItem(position).getId();
-					/*File*/ gameFile = FileManager.getGameFile(gameID, p);
+					/*File*/ gameFile = gameRepo.getGameFile(gameID, p);
 					/* we can only copy from 'files' subdir, so we have to move the file there first */
 					File tmpFile = new File(getFilesDir(),gameFile.getName());
 

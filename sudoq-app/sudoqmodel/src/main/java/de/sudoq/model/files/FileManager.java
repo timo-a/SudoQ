@@ -9,6 +9,8 @@
  */
 package de.sudoq.model.files;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -86,66 +88,9 @@ public final class FileManager {
 		return new File(currentProfile, "games.xml");
 	}
 
-	/**
-	 * Gibt das Game-Verzeichnis des aktuellen Profils zurueck
-	 * 
-	 * @return File, welcher auf das Game-Verzeichnis des aktuellen Profils
-	 *         zeigt
-	 */
-	public static File getGamesDir(ProfileManager p) {
-		File currentProfile = p.getCurrentProfileDir();
-		File games = new File(currentProfile, "games");
-		return games;
-	}
 
-	/**
-	 * Gibt die XML eines Games des aktuellen Profils anhand seiner ID zurueck
-	 * 
-	 * @param id
-	 *            ID des Games
-	 * @return File, welcher auf die XML Datei des Games zeigt
-	 */
-	public static File getGameFile(int id, Profile p) {
-		return new File(getGamesDir(p), "game_" + id + ".xml");
-	}
 
-	/**
-	 * Loescht falls existierend das Spiel mit der gegebenen id des aktuellen
-	 * Profils
-	 * 
-	 * @param id
-	 *            die id des zu loeschenden Spiels
-	 * @return ob es geloescht wurde.
-	 */
-	public static boolean deleteGame(int id, Profile p) {
-		boolean game = getGameFile(id, p).delete();
-		return game && getGameThumbnailFile(id, p).delete();
-	}
 
-	/**
-	 * Gibt die naechste verfuegbare ID fuer ein Game zurueck
-	 * 
-	 * @return naechste verfuegbare ID
-	 */
-	public static int getNextFreeGameId(Profile p) {
-		File gamesDir = getGamesDir(p);
-		return gamesDir.list().length + 1;
-	}
-
-	// Thumbnails
-
-	/**
-	 * Returns the .png File for thumbnail of the game with id gameID
-	 * 
-	 * @param gameID
-	 *            The ID of the game whos thumbnail is requested.
-	 * 
-	 * @return The thumbnail File.
-	 */
-	public static File getGameThumbnailFile(int gameID, ProfileManager p) {
-		return new File(getGamesDir(p) + File.separator + "game_" +
-                gameID + ".png");
-	}
 
 	// Sudokus
 
@@ -294,4 +239,5 @@ public final class FileManager {
 			}
 		}
 	}
+
 }

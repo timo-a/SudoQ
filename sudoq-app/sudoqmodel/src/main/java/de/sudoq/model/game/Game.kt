@@ -56,7 +56,7 @@ class Game : Xmlable {
     /**
      * game settings
      */
-    private var gameSettings: GameSettings? = null //TODO make non-nullable
+    internal var gameSettings: GameSettings? = null //TODO make non-nullable
 
     /**
      * Indicates if game is finished
