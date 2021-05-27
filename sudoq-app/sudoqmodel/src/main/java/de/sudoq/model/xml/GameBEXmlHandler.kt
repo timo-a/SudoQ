@@ -9,6 +9,7 @@ package de.sudoq.model.xml
 
 import de.sudoq.model.files.FileManager
 import de.sudoq.model.game.Game
+import de.sudoq.model.persistence.xml.game.GameBE
 import de.sudoq.model.persistence.xml.game.GameRepo
 import de.sudoq.model.profile.Profile
 import java.io.File
@@ -16,12 +17,12 @@ import java.io.File
 /**
  * This class aids in converting concrete games into and from XML
  */
-class GameXmlHandler @JvmOverloads constructor(private val id: Int = -1, val p: Profile) : XmlHandler<Game>() {
+class GameBEXmlHandler @JvmOverloads constructor(private val id: Int = -1, val p: Profile) : XmlHandler<GameBE>() {
 
     /**
      * {@inheritDoc}
      */
-    protected override fun getFileFor(g: Game): File {
+    protected override fun getFileFor(g: GameBE): File {
         val gm = GameRepo(profilesDir = p.profilesDir!!, profileId = p.currentProfileID)
         return gm.getGameFile(if (id > 0) id else g.id, p)
     }

@@ -7,7 +7,15 @@
  */
 package de.sudoq.model.game
 
+import de.sudoq.model.persistence.xml.game.GameBE.Companion.ID
+import de.sudoq.model.persistence.xml.game.GameBE.Companion.FINISHED
+import de.sudoq.model.persistence.xml.game.GameBE.Companion.PLAYED_AT
+import de.sudoq.model.persistence.xml.game.GameBE.Companion.SUDOKU_TYPE
+import de.sudoq.model.persistence.xml.game.GameBE.Companion.COMPLEXITY
 import de.sudoq.model.files.FileManager
+import de.sudoq.model.persistence.xml.game.GameBE
+import de.sudoq.model.persistence.xml.game.GameMapper
+import de.sudoq.model.persistence.xml.game.GameRepo
 import de.sudoq.model.profile.Profile
 import de.sudoq.model.sudoku.SudokuManager
 import de.sudoq.model.sudoku.complexity.Complexity
@@ -25,7 +33,11 @@ class GameManager private constructor() {
 
     private lateinit var xmlHandler: XmlHandler<Game>
 
+    private lateinit var xmlHandlerBE: XmlHandler<GameBE>
+
     private lateinit var profile: Profile
+
+    private lateinit var gameRepo: GameRepo
 
     /**
      * Creates a new gam and sets up the necessary files.
@@ -39,14 +51,22 @@ class GameManager private constructor() {
     fun newGame(type: SudokuTypes, complexity: Complexity, assistances: GameSettings): Game {
         val sudoku = SudokuManager.getNewSudoku(type, complexity)
         SudokuManager().usedSudoku(sudoku) //TODO warum instanziierung, wenn laut doc singleton?
-        val game = Game(FileManager.getNextFreeGameId(profile), sudoku)
+
+        val repo = GameRepo(
+                profilesDir = profile.profilesDir!!,
+                profileId = profile.currentProfileID)
+
+        val game = Game(repo.getNextFreeGameId(profile), sudoku)
         game.setAssistances(assistances)
-        xmlHandler.saveAsXml(game)
+
+
+        val gameBE = GameMapper.toBE(game)
+        xmlHandlerBE.saveAsXml(gameBE)
         val games = gamesXml
         val gameTree = XmlTree("game")
-        gameTree.addAttribute(XmlAttribute(ID, game.id.toString()))
-        gameTree.addAttribute(XmlAttribute(SUDOKU_TYPE, game.sudoku!!.sudokuType?.enumType!!.ordinal.toString()))
-        gameTree.addAttribute(XmlAttribute(COMPLEXITY, game.sudoku!!.complexity?.ordinal.toString()))
+        gameTree.addAttribute(XmlAttribute(ID, gameBE.id.toString()))
+        gameTree.addAttribute(XmlAttribute(SUDOKU_TYPE, gameBE.sudoku!!.sudokuType?.enumType!!.ordinal.toString()))
+        gameTree.addAttribute(XmlAttribute(COMPLEXITY, gameBE.sudoku!!.complexity?.ordinal.toString()))
         gameTree.addAttribute(XmlAttribute(PLAYED_AT, SimpleDateFormat(GameData.dateFormat).format(Date())))
         games.addChild(gameTree)
         saveGamesFile(games)
@@ -115,14 +135,14 @@ class GameManager private constructor() {
     }
 
     /**
-     * Deletes no longer existing [Games] from the list.
+     * Deletes no longer existing [Game]s from the list.
      *
      */
     fun updateGamesList() {
         val games = gamesXml
         val newGames = XmlTree(games.name)
         for (g in games) {
-            if (FileManager.getGameFile(g.getAttributeValue(ID)!!.toInt(), profile).exists()) {
+            if (gameRepo.getGameFile(g.getAttributeValue(ID)!!.toInt(), profile).exists()) {
                 newGames.addChild(g)
             }
         }
@@ -140,7 +160,7 @@ class GameManager private constructor() {
             profile.currentGame = Profile.NO_GAME
             profile.saveChanges() //save 'currentGameID' in xml (otherwise menu will offer 'continue')
         }
-        FileManager.deleteGame(id, profile)
+        gameRepo.deleteGame(id, profile)
         updateGamesList()
     }
 
@@ -151,7 +171,7 @@ class GameManager private constructor() {
         val games = gamesXml
         for (g in games) {
             if (g.getAttributeValue(FINISHED).toBoolean()) {
-                FileManager.deleteGame(g.getAttributeValue(ID)!!.toInt(), profile)
+                gameRepo.deleteGame(g.getAttributeValue(ID)!!.toInt(), profile)
             }
         }
         updateGamesList()
@@ -173,21 +193,19 @@ class GameManager private constructor() {
             throw IllegalStateException("Profile broken", e)
         }
 
-    companion object {
 
-        private const val ID = "id"
-        private const val FINISHED = "finished"
-        private const val PLAYED_AT : String = "played_at"
-        private const val SUDOKU_TYPE = "sudoku_type"
-        private const val COMPLEXITY = "complexity"
+    companion object {
 
         private var instance: GameManager? = null
 
         fun getInstance(f: File): GameManager {
             if (instance == null ) {
                 instance = GameManager()
-                instance!!.profile = Profile.getInstance(f)
-                instance!!.xmlHandler = GameXmlHandler(p = instance!!.profile)
+                val profile = Profile.getInstance(f)
+                instance!!.profile = profile
+                instance!!.xmlHandler = GameXmlHandler(p = profile)
+                instance!!.xmlHandlerBE = GameBEXmlHandler(p = profile)
+                instance!!.gameRepo = GameRepo(profile.profilesDir!!, profile.currentProfileID)
             }
 
             return instance!!

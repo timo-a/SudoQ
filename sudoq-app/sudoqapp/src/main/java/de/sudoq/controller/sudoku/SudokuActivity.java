@@ -54,7 +54,9 @@ import de.sudoq.model.files.FileManager;
 import de.sudoq.model.game.Assistances;
 import de.sudoq.model.game.Game;
 import de.sudoq.model.game.GameManager;
+import de.sudoq.model.persistence.xml.game.GameRepo;
 import de.sudoq.model.profile.Profile;
+import de.sudoq.model.profile.ProfileManager;
 import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.view.FullScrollLayout;
@@ -223,8 +225,9 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 				this.finish();
 			}
 		} else {
-			Profile p = Profile.Companion.getInstance(profilesFile);
-			this.game = GameManager.Companion.getInstance(profilesFile).load(p.getCurrentGame());
+			ProfileManager pm = new ProfileManager(profilesFile);
+			pm.loadCurrentProfile();
+			this.game = GameManager.Companion.getInstance(profilesFile).load(pm.getCurrentGame());
 		}
 
 		if (game != null) {
@@ -496,7 +499,8 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 		Bitmap sudokuCapture = sudokuView.getDrawingCache();
 		try {
 			if (sudokuCapture != null) {
-				File thumbnail = FileManager.getGameThumbnailFile(p.getCurrentGame(), p);
+				GameRepo gameRepo = new GameRepo(p.getProfilesDir(), p.getCurrentProfileID());
+				File thumbnail = gameRepo.getGameThumbnailFile(p.getCurrentGame(), p);
 				sudokuCapture.compress(CompressFormat.PNG, 100, new FileOutputStream(thumbnail));
 			} else {
 				Log.d(LOG_TAG, getString(R.string.error_thumbnail_get));
