@@ -18,21 +18,29 @@ import java.util.*
 /**
  * Manages all hintrelated views
  */
-class HintPainter(sl: SudokuLayout) {
-    var viewList: Vector<View>
-    private val context: Context
-    private val sl: SudokuLayout
+class HintPainter(private val sl: SudokuLayout) {
+    private var viewList: Vector<View> = Vector()
+    private val context: Context = sl.context
+
     fun realizeHint(sd: SolveDerivation) {
-        var v: View? = null
-        when (sd.type) {
-            HintTypes.LastDigit -> v = LastDigitView(context, sl, sd)
-            HintTypes.LastCandidate -> v = LastCandidateView(context, sl, sd)
-            HintTypes.LeftoverNote -> v = LeftoverNoteView(context, sl, (sd as LeftoverNoteDerivation))
-            HintTypes.NakedSingle, HintTypes.NakedPair, HintTypes.NakedTriple, HintTypes.NakedQuadruple, HintTypes.NakedQuintuple -> v = NakedSetView(context, sl, (sd as NakedSetDerivation))
-            HintTypes.HiddenSingle, HintTypes.HiddenPair, HintTypes.HiddenTriple, HintTypes.HiddenQuadruple, HintTypes.HiddenQuintuple -> v = HiddenSetView(context, sl, (sd as HiddenSetDerivation))
-            HintTypes.LockedCandidatesExternal -> v = LockedCandidatesView(context, sl, (sd as LockedCandidatesDerivation))
-            HintTypes.XWing -> v = XWingView(context, sl, (sd as XWingDerivation))
-            HintTypes.NoNotes -> v = NoNotesView(context, sl, (sd as NoNotesDerivation))
+        var v: View? = when (sd.type) {
+            HintTypes.LastDigit -> LastDigitView(context, sl, sd)
+            HintTypes.LastCandidate -> LastCandidateView(context, sl, sd)
+            HintTypes.LeftoverNote -> LeftoverNoteView(context, sl, (sd as LeftoverNoteDerivation))
+            HintTypes.NakedSingle,
+            HintTypes.NakedPair,
+            HintTypes.NakedTriple,
+            HintTypes.NakedQuadruple,
+            HintTypes.NakedQuintuple -> NakedSetView(context, sl, (sd as NakedSetDerivation))
+            HintTypes.HiddenSingle,
+            HintTypes.HiddenPair,
+            HintTypes.HiddenTriple,
+            HintTypes.HiddenQuadruple,
+            HintTypes.HiddenQuintuple -> HiddenSetView(context, sl, (sd as HiddenSetDerivation))
+            HintTypes.LockedCandidatesExternal -> LockedCandidatesView(context, sl, (sd as LockedCandidatesDerivation))
+            HintTypes.XWing ->   XWingView(context, sl, (sd as XWingDerivation))
+            HintTypes.NoNotes -> NoNotesView(context, sl, (sd as NoNotesDerivation))
+            else -> null
         }
         if (v != null) {
             viewList.add(v)
@@ -70,10 +78,4 @@ class HintPainter(sl: SudokuLayout) {
         private val LOG_TAG = HintPainter::class.java.simpleName
     }
 
-    /** Constructors  */
-    init {
-        viewList = Vector()
-        context = sl.context
-        this.sl = sl
-    }
 }

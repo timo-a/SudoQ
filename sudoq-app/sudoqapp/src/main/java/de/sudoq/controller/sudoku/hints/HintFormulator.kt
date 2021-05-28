@@ -17,35 +17,39 @@ import java.util.*
  */
 object HintFormulator {
     private const val LOG_TAG = "HintFormulator"
+
+    @JvmStatic
     fun getText(context: Context, sd: SolveDerivation): String {
-        var text: String
         Log.d("HintForm", sd.type.toString())
-        when (sd.type) {
-            HintTypes.LastDigit -> text = lastDigitText(context, sd)
-            HintTypes.LastCandidate -> text = lastCandidateText(context, sd)
-            HintTypes.LeftoverNote -> text = leftoverNoteText(context, sd)
-            HintTypes.NakedSingle -> text = nakedSingleText(context, sd)
-            HintTypes.NakedPair, HintTypes.NakedTriple, HintTypes.NakedQuadruple, HintTypes.NakedQuintuple -> text = nakedMultiple(context, sd)
-            HintTypes.HiddenSingle -> text = hiddenSingleText(context, sd)
-            HintTypes.HiddenPair, HintTypes.HiddenTriple, HintTypes.HiddenQuadruple, HintTypes.HiddenQuintuple -> text = hiddenMultiple(context, sd)
-            HintTypes.LockedCandidatesExternal -> text = lockedCandidates(context, sd)
-            HintTypes.XWing -> text = xWing(context, sd)
+
+        return when (sd.type) {
+            HintTypes.LastDigit -> lastDigitText(context, sd)
+            HintTypes.LastCandidate -> lastCandidateText(context, sd)
+            HintTypes.LeftoverNote -> leftoverNoteText(context, sd)
+            HintTypes.NakedSingle -> nakedSingleText(context, sd)
+            HintTypes.NakedPair,
+            HintTypes.NakedTriple,
+            HintTypes.NakedQuadruple,
+            HintTypes.NakedQuintuple -> nakedMultiple(context, sd)
+            HintTypes.HiddenSingle -> hiddenSingleText(context, sd)
+            HintTypes.HiddenPair,
+            HintTypes.HiddenTriple,
+            HintTypes.HiddenQuadruple,
+            HintTypes.HiddenQuintuple -> hiddenMultiple(context, sd)
+            HintTypes.LockedCandidatesExternal -> lockedCandidates(context, sd)
+            HintTypes.XWing -> xWing(context, sd)
             HintTypes.NoNotes -> {
-                text = context.getString(R.string.hint_backtracking)
-                text += context.getString(R.string.hint_fill_out_notes)
+                context.getString(R.string.hint_backtracking) +
+                        context.getString(R.string.hint_fill_out_notes)
             }
-            HintTypes.Backtracking -> text = context.getString(R.string.hint_backtracking)
-            else -> text = "We found a hint, but did not implement a representation yet. That's a bug! Please send us a screenshot so we can fix it!"
+            HintTypes.Backtracking -> context.getString(R.string.hint_backtracking)
+            else -> "We found a hint, but did not implement a representation yet. That's a bug! Please send us a screenshot so we can fix it!"
         }
-        return text
     }
 
     private fun aCellIsEmpty(sActivity: SudokuActivity): Boolean {
         val sudoku = sActivity.game.sudoku
-        for (f in sudoku!!) if (f.isCompletelyEmpty) {
-            return true
-        }
-        return false
+        return sudoku!!.any { it.isCompletelyEmpty }
     }
 
     private fun lastDigitText(context: Context, sd: SolveDerivation): String {
@@ -55,15 +59,14 @@ object HintFormulator {
         val shapeGender = Utility.getGender(context, cs)
         val shapeDeterminer = Utility.gender2AccDeterminer(context, shapeGender)
         val highlightSuffix = Utility.gender2AccSufix(context, shapeGender)
-        return context.getString(R.string.hint_lastdigit).replace("{shape}", shapeString)
+        return context.getString(R.string.hint_lastdigit)
+                .replace("{shape}", shapeString)
                 .replace("{determiner}", shapeDeterminer)
                 .replace("{suffix}", highlightSuffix)
     }
 
     private fun lastCandidateText(context: Context, sd: SolveDerivation): String {
-        val sb = StringBuilder()
-        sb.append(context.getString(R.string.hint_lastcandidate))
-        return sb.toString()
+        return context.getString(R.string.hint_lastcandidate)
     }
 
     private fun leftoverNoteText(context: Context, sd: SolveDerivation): String {
@@ -83,7 +86,8 @@ object HintFormulator {
             e.printStackTrace()
         }
         Log.d(LOG_TAG, "leftovernotetext is called. and versionNumber is: $versionNumber")
-        return context.getString(R.string.hint_leftovernote).replace("{note}", d.note + 1 + "")
+        return context.getString(R.string.hint_leftovernote)
+                .replace("{note}", (d.note + 1).toString())
                 .replace("{shape}", shapeString)
                 .replace("{determiner}", shapeDeterminer)
                 .replace("{suffix}", highlightSuffix)
@@ -96,54 +100,53 @@ object HintFormulator {
         val sb = StringBuilder()
         sb.append(context.getString(R.string.hint_nakedsingle_look))
         sb.append(' ')
-        sb.append(context.getString(R.string.hint_nakedsingle_note).replace("{note}", note.toString() + ""))
+        sb.append(context.getString(R.string.hint_nakedsingle_note)
+                .replace("{note}", note.toString() + ""))
         sb.append(' ')
         val shapeString = Utility.constraintShapeGenDet2string(context, getGroupShape(d.constraint!!))
         val shapePrepDet = Utility.getGender(context, getGroupShape(d.constraint!!))
         val prepDet = Utility.gender2inThe(context, shapePrepDet)
-        sb.append(context.getString(R.string.hint_nakedsingle_remove).replace("{prep det}", prepDet)
+        sb.append(context.getString(R.string.hint_nakedsingle_remove)
+                .replace("{prep det}", prepDet)
                 .replace("{shape}", shapeString))
         return sb.toString()
     }
 
     private fun nakedMultiple(context: Context, sd: SolveDerivation): String {
-        val bs: BitSet? = (sd as NakedSetDerivation).subsetCandidates
-        val seq = StringBuilder()
-        seq.append("{")
-        var i = bs!!.nextSetBit(0)
-        seq.append(i + 1)
-        i = bs.nextSetBit(i + 1)
+        val bs: BitSet = (sd as NakedSetDerivation).subsetCandidates!!
+        val symbols : MutableList<Int> = mutableListOf()
+
+        //collect all set bits, we assume there will never be an overflow
+        var i = bs.nextSetBit(0)
         while (i >= 0) {
-            seq.append(", ")
-            seq.append(i + 1)
+            symbols.add(i)
             i = bs.nextSetBit(i + 1)
         }
-        seq.append("}")
-        return context.getString(R.string.hint_nakedset).replace("{symbols}", seq.toString())
+
+        val symbolsString = symbols
+                .map { + 1 } //add one for user representation
+                .joinToString(", ", "{", "}", transform = {it.toString()})
+
+        return context.getString(R.string.hint_nakedset).replace("{symbols}", symbolsString)
     }
 
     private fun hiddenSingleText(context: Context, sd: SolveDerivation): String { //TODO this should never be used but already be taken by a special hit that just says: Look at this cell, only one left can go;
         val bs = (sd as HiddenSetDerivation).getSubsetMembers()[0].relevantCandidates
-        val note = (bs.nextSetBit(0) + 1).toString() + ""
+        val note = (bs.nextSetBit(0) + 1).toString()
         return context.getString(R.string.hint_hiddensingle).replace("{note}", note)
     }
 
     private fun hiddenMultiple(context: Context, sd: SolveDerivation): String {
         val bs = (sd as HiddenSetDerivation).subsetCandidates
-        val sb = StringBuilder()
-        sb.append("{")
-        val setCandidates = bs!!.setBits
-        sb.append(setCandidates[0] + 1)
-        for (i in 1 until setCandidates.size) {
-            sb.append(", ")
-            sb.append(setCandidates[i] + 1)
-        }
-        sb.append("}")
-        return context.getString(R.string.hint_hiddenset).replace("{symbols}", sb.toString())
+        val hiddenMultiples = bs!!.setBits
+                .map { + 1 }
+                .joinToString(", ", "{", "}", transform = {it.toString()})
+
+        return context.getString(R.string.hint_hiddenset).replace("{symbols}", hiddenMultiples)
     }
 
     private fun lockedCandidates(context: Context, sd: SolveDerivation): String {
-        val note = (sd as LockedCandidatesDerivation).getNote().toString() + ""
+        val note = (sd as LockedCandidatesDerivation).getNote().toString()
         return context.getString(R.string.hint_lockedcandidates).replace("{note}", note)
     }
 
