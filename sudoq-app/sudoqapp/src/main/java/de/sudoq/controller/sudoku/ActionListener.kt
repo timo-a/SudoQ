@@ -33,10 +33,8 @@ interface ActionListener {
      * Das Feld, welchem eine Notiz hinzugefügt werden soll
      * @param value
      * Der Wert der hinzugefügten Notiz
-     * @throw IllegalArgumentException Wird geworfen, falls das übergebene Field
-     * null ist
      */
-    fun onNoteAdd(cell: Cell?, value: Int)
+    fun onNoteAdd(cell: Cell, value: Int)
 
     /**
      * Wird aufgerufen, falls der Benutzer eine Notiz entfernt.
@@ -45,10 +43,8 @@ interface ActionListener {
      * Das Feld, dessen Notiz entfernd werden soll
      * @param value
      * Der Wert der Notiz, die zu entfernen ist.
-     * @throw IllegalArgumentException Wird geworfen, falls das übergebene Field
-     * null ist
      */
-    fun onNoteDelete(cell: Cell?, value: Int)
+    fun onNoteDelete(cell: Cell, value: Int)
 
     /**
      * Wird aufgerufen, falls der Benutzer einem Feld einen Lösungswert
@@ -58,10 +54,8 @@ interface ActionListener {
      * Das Feld, welchem der Lösungswert hinzugefügt werden soll
      * @param value
      * Der Wert der Eingabe
-     * @throw IllegalArgumentException Wird geworfen, falls das übergebene Field
-     * null ist
      */
-    fun onAddEntry(cell: Cell?, value: Int)
+    fun onAddEntry(cell: Cell, value: Int)
 
     /**
      * Wird aufgerufen, falls der Benutzer einen Eintrag aus einem Feld
@@ -69,8 +63,6 @@ interface ActionListener {
      *
      * @param cell
      * Das Feld, aus welchem der Eintrag entfernt werden soll
-     * @throw IllegalArgumentException Wird geworfen, falls das übergebene Field
-     * null ist
      */
-    fun onDeleteEntry(cell: Cell?)
+    fun onDeleteEntry(cell: Cell)
 }

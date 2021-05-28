@@ -38,7 +38,7 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
     /**
      * Das Game, welches diese Anzeige verwaltet
      */
-    private val game: Game = (context as SudokuActivity).game
+    private val game: Game = (context as SudokuActivity).game!!
 
     /**
      * Die Standardgröße eines Feldes
@@ -80,7 +80,7 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
      */
     private fun inflateSudoku() {
         Log.d(LOG_TAG, "SudokuLayout.inflateSudoku()")
-        CellViewPainter.instance.flushMarkings()
+        CellViewPainter.instance!!.flushMarkings()
         removeAllViews()
         val sudoku = game.sudoku
         val sudokuType = sudoku!!.sudokuType
@@ -332,8 +332,8 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
         // this.currentCellViewSize = this.defaultCellViewSize;
         setWillNotDraw(false)
         paint = Paint()
-        boardPainter = BoardPainter(this, game.sudoku!!.sudokuType)
-        CellViewPainter.instance.setSudokuLayout(this)
+        boardPainter = BoardPainter(this, game.sudoku!!.sudokuType!!)
+        CellViewPainter.instance!!.setSudokuLayout(this)
         hintPainter = HintPainter(this)
         inflateSudoku()
         Log.d(LOG_TAG, "End of Constructor.")

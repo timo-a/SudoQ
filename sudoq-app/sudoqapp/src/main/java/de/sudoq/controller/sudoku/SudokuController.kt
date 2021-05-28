@@ -22,18 +22,11 @@ import de.sudoq.model.sudoku.complexity.Complexity
  * Der SudokuController ist dafür zuständig auf Aktionen des Benutzers mit dem
  * Spielfeld zu reagieren.
  */
-class SudokuController(game: Game?, context: SudokuActivity?) : AssistanceRequestListener, ActionListener {
-    /** Attributes  */
-    /**
-     * Hält eine Referenz auf das Game, welches Daten über das aktuelle Spiel
-     * enthält
-     */
-    private val game: Game
-
-    /**
-     * Die SudokuActivity.
-     */
-    private val context: SudokuActivity
+class SudokuController(
+        /** Hält eine Referenz auf das Game, welches Daten über das aktuelle Spiel enthält */
+        private val game: Game,
+        /** Die SudokuActivity. */
+        private val context: SudokuActivity) : AssistanceRequestListener, ActionListener {
 
     /**
      * Debugging
@@ -62,30 +55,30 @@ class SudokuController(game: Game?, context: SudokuActivity?) : AssistanceReques
     /**
      * {@inheritDoc}
      */
-    override fun onNoteAdd(cell: Cell?, value: Int) {
-        game.addAndExecute(NoteActionFactory().createAction(value, cell!!))
+    override fun onNoteAdd(cell: Cell, value: Int) {
+        game.addAndExecute(NoteActionFactory().createAction(value, cell))
     }
 
     /**
      * {@inheritDoc}
      */
-    override fun onNoteDelete(cell: Cell?, value: Int) {
-        game.addAndExecute(NoteActionFactory().createAction(value, cell!!)) //TODO same code as onNoteAdd why?
+    override fun onNoteDelete(cell: Cell, value: Int) {
+        game.addAndExecute(NoteActionFactory().createAction(value, cell)) //TODO same code as onNoteAdd why?
     }
 
     /**
      * {@inheritDoc}
      */
-    override fun onAddEntry(cell: Cell?, value: Int) {
-        game.addAndExecute(SolveActionFactory().createAction(value, cell!!))
+    override fun onAddEntry(cell: Cell, value: Int) {
+        game.addAndExecute(SolveActionFactory().createAction(value, cell))
         if (game.isFinished()) {
             updateStatistics()
             handleFinish(false)
         }
     }
 
-    fun onHintAction(a: Action?) {
-        game.addAndExecute(a!!)
+    fun onHintAction(a: Action) {
+        game.addAndExecute(a)
         if (game.isFinished()) {
             updateStatistics()
             handleFinish(false)
@@ -95,8 +88,8 @@ class SudokuController(game: Game?, context: SudokuActivity?) : AssistanceReques
     /**
      * {@inheritDoc}
      */
-    override fun onDeleteEntry(cell: Cell?) {
-        game.addAndExecute(SolveActionFactory().createAction(Cell.EMPTYVAL, cell!!))
+    override fun onDeleteEntry(cell: Cell) {
+        game.addAndExecute(SolveActionFactory().createAction(Cell.EMPTYVAL, cell))
     }
 
     /**
@@ -114,7 +107,7 @@ class SudokuController(game: Game?, context: SudokuActivity?) : AssistanceReques
     /**
      * {@inheritDoc}
      */
-    override fun onSolveCurrent(cell: Cell?): Boolean {
+    override fun onSolveCurrent(cell: Cell): Boolean {
         val res = game.solveCell(cell)
         if (game.isFinished()) {
             updateStatistics()
@@ -170,22 +163,5 @@ class SudokuController(game: Game?, context: SudokuActivity?) : AssistanceReques
     private fun incrementStatistic(s: Statistics) { //TODO this should probably be in model...
         val p = Profile.getInstance(context.getDir(context.getString(R.string.path_rel_profiles), Context.MODE_PRIVATE))
         p.setStatistic(s, p.getStatistic(s) + 1)
-    }
-    /** Constructors  */
-    /**
-     * Erstellt einen neuen SudokuController. Wirft eine
-     * IllegalArgumentException, falls null übergeben wird.
-     *
-     * @param game
-     * Game, auf welchem der SudokuController arbeitet
-     * @param context
-     * der Applikationskontext
-     * @throws IllegalArgumentException
-     * Wird geworfen, falls null übergeben wird
-     */
-    init {
-        require(!(game == null || context == null)) { "Unvalid param!" }
-        this.game = game
-        this.context = context
     }
 }

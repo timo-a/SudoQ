@@ -23,7 +23,7 @@ interface CellInteractionListener {
      * @param view
      * The newly selected view
      */
-    fun onCellSelected(view: SudokuCellView?, e: SelectEvent)
+    fun onCellSelected(view: SudokuCellView, e: SelectEvent)
 
     /**
      * Called is a cell is changed.
@@ -31,5 +31,5 @@ interface CellInteractionListener {
      * @param view
      * The changed view
      */
-    fun onCellChanged(view: SudokuCellView?)
+    fun onCellChanged(view: SudokuCellView)
 }

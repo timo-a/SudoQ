@@ -25,7 +25,7 @@ interface ObservableActionCaster {
      * @param listener
      * Der Listener der hinzugefügt werden soll.
      */
-    fun registerListener(listener: ActionListener?)
+    fun registerListener(listener: ActionListener)
 
     /**
      * Entfernt einen Listener. Ist dieser nicht registriert, so wird nichts
@@ -34,5 +34,5 @@ interface ObservableActionCaster {
      * @param listener
      * Der Listener der entfernt werden soll.
      */
-    fun removeListener(listener: ActionListener?)
+    fun removeListener(listener: ActionListener)
 }
