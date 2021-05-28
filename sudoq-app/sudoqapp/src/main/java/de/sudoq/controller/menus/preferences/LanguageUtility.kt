@@ -18,6 +18,7 @@ object LanguageUtility {
     }
 
     /* save language to enum */
+    @JvmStatic
     fun loadLanguageFromSharedPreferences2(a: Activity): LanguageSetting {
         val sp = a.getSharedPreferences(SUDOQ_SHARED_PREFS_FILE, MODE_PRIVATE)
         val code = sp.getString("language", "system")
@@ -32,8 +33,9 @@ object LanguageUtility {
     /**
      * @param langSetting
      */
-    fun storeLanguageToMemory2(a: Activity, langSetting: LanguageSetting?) {
-        val langEnum = if (langSetting!!.isSystemLanguage) LanguageCode.system else langSetting.language
+    @JvmStatic
+    fun storeLanguageToMemory2(a: Activity, langSetting: LanguageSetting) {
+        val langEnum = if (langSetting.isSystemLanguage) LanguageCode.system else langSetting.language
         val sp = a.getSharedPreferences(SUDOQ_SHARED_PREFS_FILE, MODE_PRIVATE)
         sp.edit()
                 .putString("language", langEnum.name)
@@ -41,12 +43,14 @@ object LanguageUtility {
     }
 
     /* save language to enum */
+    @JvmStatic
     fun loadLanguageFromLocale(): LanguageCode {
         val code = Locale.getDefault().language
         LanguageCode.values().forEach { if (it.name == code) return it}
         return LanguageCode.en
     }
 
+    @JvmStatic
     fun getConfLocale(a: Activity): LanguageCode {
         val res = a.resources
         val conf = res.configuration
@@ -54,6 +58,7 @@ object LanguageUtility {
         return LanguageCode.valueOf(code)
     }
 
+    @JvmStatic
     fun setConfLocale(lang: String, a: Activity) {
         Log.i("lang", "setLocale( " + lang + ", " + a.javaClass.simpleName + ")")
         val myLocale = Locale(lang)

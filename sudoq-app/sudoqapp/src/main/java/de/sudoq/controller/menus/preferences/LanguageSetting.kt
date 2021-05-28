@@ -10,6 +10,7 @@ class LanguageSetting {
     }
 
     //may never be system!
+    @JvmField
     var language: LanguageCode
     var isSystemLanguage: Boolean
         private set

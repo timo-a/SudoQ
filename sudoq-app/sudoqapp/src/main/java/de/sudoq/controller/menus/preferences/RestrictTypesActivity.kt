@@ -74,7 +74,10 @@ class RestrictTypesActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_restore_all ->            /* add (only!) types that are not currently selected */for (s in types!!.allTypes) if (!types!!.contains(s)) types!!.add(s)
+            R.id.action_restore_all ->
+                /* add (only!) types that are not currently selected */
+                types!!.addAll(types!!.allTypes.filter { !types!!.contains(it) })
+
             else -> super.onOptionsItemSelected(item)
         }
         onContentChanged()

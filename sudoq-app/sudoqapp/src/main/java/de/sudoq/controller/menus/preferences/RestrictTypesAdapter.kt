@@ -23,8 +23,9 @@ import de.sudoq.model.xml.SudokuTypesList
 /**
  * Adapter für die Anzeige aller zu wählenden Sudoku Typen
  */
-class RestrictTypesAdapter(private val context: Context, typesList: SudokuTypesList) : ArrayAdapter<SudokuTypes?>(context, R.layout.restricttypes_item, typesList.allTypes) {
-    private val types: List<SudokuTypes?>
+class RestrictTypesAdapter(context: Context, typesList: SudokuTypesList) : ArrayAdapter<SudokuTypes>(context, R.layout.restricttypes_item, typesList.allTypes) {
+
+    private val types: List<SudokuTypes>
 
     /**
      * {@inheritDoc}

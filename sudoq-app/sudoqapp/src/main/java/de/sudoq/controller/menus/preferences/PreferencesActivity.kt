@@ -13,7 +13,7 @@ import de.sudoq.model.game.GameSettings
 import de.sudoq.model.profile.Profile.Companion.getInstance
 import de.sudoq.model.profile.ProfileManager
 
-abstract class PreferencesActivity : SudoqCompatActivity(), ModelChangeListener<ProfileManager?> {
+abstract class PreferencesActivity : SudoqCompatActivity(), ModelChangeListener<ProfileManager> {
     var gesture: CheckBox? = null
     var autoAdjustNotes: CheckBox? = null
     var markRowColumn: CheckBox? = null
@@ -60,12 +60,12 @@ abstract class PreferencesActivity : SudoqCompatActivity(), ModelChangeListener<
     }
 
     protected abstract fun saveToProfile()
-    protected fun saveAssistance(a: Assistances?, c: CheckBox) {
+    protected fun saveAssistance(a: Assistances, c: CheckBox) {
         val p = getInstance(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
         p.setAssistance(a, c.isChecked)
     }
 
-    protected fun saveCheckbox(cb: CheckBox, a: Assistances?, gs: GameSettings) {
-        if (cb.isChecked) gs.setAssistance(a!!) else gs.clearAssistance(a!!)
+    protected fun saveCheckbox(cb: CheckBox, a: Assistances, gs: GameSettings) {
+        if (cb.isChecked) gs.setAssistance(a) else gs.clearAssistance(a)
     }
 }
