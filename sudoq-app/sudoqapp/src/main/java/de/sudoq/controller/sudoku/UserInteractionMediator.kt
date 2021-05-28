@@ -95,9 +95,9 @@ class UserInteractionMediator(virtualKeyboard: VirtualKeyboardLayout, sudokuView
         updateKeyboard()
     }
 
-    override fun onCellSelected(view: SudokuCellView?, e: SelectEvent) {
+    override fun onCellSelected(view: SudokuCellView, e: SelectEvent) {
         if (!game!!.isFinished()) {
-            val c = view!!.context
+            val c = view.context
             val p = Profile.getInstance(c.getDir(c.getString(R.string.path_rel_profiles), Context.MODE_PRIVATE))
             if (p.isGestureActive) {
                 cellSelectedGestureMode(view, e)
@@ -108,7 +108,7 @@ class UserInteractionMediator(virtualKeyboard: VirtualKeyboardLayout, sudokuView
         updateKeyboard()
     }
 
-    private fun cellSelectedNumPadMode(view: SudokuCellView?, e: SelectEvent) {
+    private fun cellSelectedNumPadMode(view: SudokuCellView, e: SelectEvent) {
         var currentField = sudokuView!!.currentCellView
         val freshlySelected = currentField != view
         if (freshlySelected) {
@@ -118,8 +118,8 @@ class UserInteractionMediator(virtualKeyboard: VirtualKeyboardLayout, sudokuView
             //unpdate currentField
             currentField?.deselect(true)
             currentField = view
-            currentField?.setNoteState(noteMode)
-            currentField!!.select(game!!.isAssistanceAvailable(Assistances.markRowColumn))
+            currentField.setNoteState(noteMode)
+            currentField.select(game!!.isAssistanceAvailable(Assistances.markRowColumn))
         } else {
             noteMode = !noteMode
             currentField!!.setNoteState(noteMode)
@@ -162,7 +162,8 @@ class UserInteractionMediator(virtualKeyboard: VirtualKeyboardLayout, sudokuView
             /* second click on the same cell*/
         } else {
             currentCell = currentCellView!!.cell
-            /* set solution via touchy swypy*/if (currentCell.isEditable) {
+            /* set solution via touchy swypy*/
+            if (currentCell.isEditable) {
 
                 //long press switches between selected for note / entry
                 if (e == SelectEvent.Long) {
@@ -194,11 +195,11 @@ class UserInteractionMediator(virtualKeyboard: VirtualKeyboardLayout, sudokuView
     }
 
     override fun notifyListener() {}
-    override fun registerListener(listener: ActionListener?) {
+    override fun registerListener(listener: ActionListener) {
         actionListener.add(listener)
     }
 
-    override fun removeListener(listener: ActionListener?) {
+    override fun removeListener(listener: ActionListener) {
         actionListener.remove(listener)
     }
 
@@ -213,7 +214,7 @@ class UserInteractionMediator(virtualKeyboard: VirtualKeyboardLayout, sudokuView
         virtualKeyboard.isActivated = activated
     }
 
-    override fun onCellChanged(view: SudokuCellView?) {
+    override fun onCellChanged(view: SudokuCellView) {
         updateKeyboard()
     }
 
@@ -241,11 +242,11 @@ class UserInteractionMediator(virtualKeyboard: VirtualKeyboardLayout, sudokuView
 
     private fun updateEntryFromGesture(listener: ActionListener?, prediction: Prediction) {
         val currentCell = sudokuView!!.currentCellView!!.cell
-        val currentValue: String = Symbol.Companion.getInstance()!!.getMapping(currentCell.currentValue)
+        val currentValue: String = Symbol.getInstance().getMapping(currentCell.currentValue)
         if (prediction.name == currentValue) {
             listener!!.onDeleteEntry(currentCell)
         } else {
-            var number: Int = Symbol.Companion.getInstance()!!.getAbstract(prediction.name)
+            var number: Int = Symbol.getInstance().getAbstract(prediction.name)
             val save = currentCell.currentValue
             if (number >= game!!.sudoku!!.sudokuType!!.numberOfSymbols) number = -1
             if (number != -1 && game.isAssistanceAvailable(Assistances.restrictCandidates)) {
@@ -273,7 +274,7 @@ class UserInteractionMediator(virtualKeyboard: VirtualKeyboardLayout, sudokuView
 
     private fun updateNoteFromGesture(listener: ActionListener?, prediction: Prediction) {
         val currentCell = sudokuView!!.currentCellView!!.cell
-        var predictedNote: Int = Symbol.Companion.getInstance()!!.getAbstract(prediction.name)
+        var predictedNote: Int = Symbol.getInstance().getAbstract(prediction.name)
         if (currentCell.isNoteSet(predictedNote)) {
             listener!!.onNoteDelete(currentCell, predictedNote)
         } else {

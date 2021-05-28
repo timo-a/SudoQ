@@ -32,7 +32,7 @@ interface AssistanceRequestListener {
      * @return true, sollte das lösen des aktuellen Feldes erfolgreich sein,
      * ansonsten false.
      */
-    fun onSolveCurrent(cell: Cell?): Boolean
+    fun onSolveCurrent(cell: Cell): Boolean
 
     /**
      * Löst das komplette Sudoku. Das entspricht der Aufgabe des Spielenden.

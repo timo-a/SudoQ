@@ -137,14 +137,16 @@ class HighlightedCellView(context: Context, sl: SudokuLayout,
     private fun drawNotes(canvas: Canvas, cell: Cell) {
         val notePaint = Paint()
         notePaint.isAntiAlias = true
-        val noteTextSize = height / Symbol.getInstance().rasterSize
+        val noteTextSize = height / Symbol.getInstance().getRasterSize()
         notePaint.textSize = noteTextSize.toFloat()
         notePaint.textAlign = Paint.Align.CENTER
         notePaint.color = Color.BLACK
-        for (i in 0 until Symbol.getInstance().numberOfSymbols) {
+        for (i in 0 until Symbol.getInstance().getNumberOfSymbols()) {
             if (cell.isNoteSet(i)) {
                 val note = Symbol.getInstance().getMapping(i)
-                canvas.drawText(note + "", (i % Symbol.getInstance().rasterSize * noteTextSize + noteTextSize / 2).toFloat(), (i / Symbol.getInstance().rasterSize * noteTextSize + noteTextSize).toFloat(), notePaint)
+                canvas.drawText(note + "",
+                        (i % Symbol.getInstance().getRasterSize() * noteTextSize + noteTextSize / 2).toFloat(),
+                        (i / Symbol.getInstance().getRasterSize() * noteTextSize + noteTextSize).toFloat(), notePaint)
             }
         }
     }

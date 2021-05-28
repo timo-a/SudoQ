@@ -24,23 +24,23 @@ class AssistancesDialogFragment : DialogFragment() {
     private var sl: SudokuLayout? = null
     private var game: Game? = null
     private var controller: SudokuController? = null
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         // Use the Builder class for convenient dialog construction
-        val activity = activity as SudokuActivity?
-        sl = activity.getSudokuLayout()
-        game = activity.getGame()
-        controller = activity.getSudokuController()
+        val activity = activity as SudokuActivity
+        sl = activity.sudokuLayout
+        game = activity.game
+        controller = activity.sudokuController
         val itemStack = Stack<CharSequence?>()
         itemStack.addAll(Arrays.asList(getString(R.string.sf_sudoku_assistances_solve_surrender), getString(R.string.sf_sudoku_assistances_back_to_valid_state), getString(R.string.sf_sudoku_assistances_back_to_bookmark), getString(R.string.sf_sudoku_assistances_check), getString(R.string.sf_sudoku_assistances_solve_random)))
-        val v = (getActivity() as SudokuActivity?).getCurrentCellView()
+        val v = (getActivity() as SudokuActivity).currentCellView
         if (v != null && v.cell.isNotSolved) itemStack.add(getString(R.string.sf_sudoku_assistances_solve_specific))
-        val p = Profile.getInstance(activity!!.getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE))
+        val p = Profile.getInstance(activity.getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE))
         if (p.assistances.isHelperSet) itemStack.add(getString(R.string.sf_sudoku_assistances_give_hint))
         if (p.appSettings.isDebugSet) itemStack.add(getString(R.string.sf_sudoku_assistances_crash))
 
         // TODO why this no work? final CharSequence[] items = (CharSequence[]) itemStack.toArray();
-        val tmp = arrayOfNulls<CharSequence>(0)
-        val items = itemStack.toArray(tmp)
+        val items = itemStack.toArray(arrayOfNulls<CharSequence>(0))
         val builder = AlertDialog.Builder(getActivity()!!)
         builder.setTitle(getString(R.string.sf_sudoku_assistances_title))
         builder.setItems(items) { dialog, item ->
@@ -51,24 +51,24 @@ class AssistancesDialogFragment : DialogFragment() {
                 3 -> if (game!!.checkSudoku()) Toast.makeText(activity, R.string.toast_solved_correct, Toast.LENGTH_SHORT).show() else Toast.makeText(activity, R.string.toast_solved_wrong, Toast.LENGTH_LONG).show()
                 4 -> if (!controller!!.onSolveOne()) Toast.makeText(activity, R.string.toast_solved_wrong, Toast.LENGTH_SHORT).show()
             }
-            /* not inside switch, because they are at variable positions */if (items[item] === getString(R.string.sf_sudoku_assistances_solve_specific)) {
-            if (!controller!!.onSolveCurrent(activity.currentCellView.cell)) {
-                Toast.makeText(activity, R.string.toast_solved_wrong, Toast.LENGTH_SHORT).show()
+            /* not inside switch, because they are at variable positions */
+            if (items[item] === getString(R.string.sf_sudoku_assistances_solve_specific)) {
+                if (!controller!!.onSolveCurrent(activity.currentCellView!!.cell)) {
+                    Toast.makeText(activity, R.string.toast_solved_wrong, Toast.LENGTH_SHORT).show()
+                }
+            } else if (items[item] === getString(R.string.sf_sudoku_assistances_give_hint)) {
+                hint(activity)
+            } else if (items[item] === getString(R.string.sf_sudoku_assistances_crash)) {
+                throw RuntimeException("This is a crash the user requested")
             }
-        } else if (items[item] === getString(R.string.sf_sudoku_assistances_give_hint)) {
-            hint(activity)
-        } else if (items[item] === getString(R.string.sf_sudoku_assistances_crash)) {
-            throw RuntimeException("This is a crash the user requested")
-        }
-            activity.panel.updateButtons()
+            activity.panel!!.updateButtons()
         }
         return builder.create()
     }
 
-    private fun hint(activity: SudokuActivity?) {
+    private fun hint(activity: SudokuActivity) {
         val sd = giveAHint(game!!.sudoku!!)
-                ?: throw AssertionError("derivation is null, maybe forgot to set lastDerivation = derivation?")
-        val tv = activity!!.findViewById<View>(R.id.hintText) as TextView
+        val tv = activity.findViewById<View>(R.id.hintText) as TextView
         tv.text = getText(activity, sd)
         activity.setModeHint()
         sl!!.hintPainter.realizeHint(sd)
@@ -86,7 +86,8 @@ class AssistancesDialogFragment : DialogFragment() {
         val bExecute = activity.findViewById<View>(R.id.hintExecuteButton) as Button
         bExecute.visibility = if (sd.hasActionListCapability()) View.VISIBLE else View.GONE
 
-        /* user pressed `make it so` so we execute the action for him*/bExecute.setOnClickListener {
+        /* user pressed `make it so` so we execute the action for him*/
+        bExecute.setOnClickListener {
             activity.setModeRegular()
             sl!!.hintPainter.deleteAll()
             sl!!.invalidate()
@@ -94,7 +95,8 @@ class AssistancesDialogFragment : DialogFragment() {
             for (a in sd.getActionList(game!!.sudoku!!)) {
                 controller!!.onHintAction(a)
                 activity.onInputAction()
-                /* in case we delete a note in the focussed cell */activity.mediator.restrictCandidates()
+                /* in case we delete a note in the focussed cell */
+                activity.mediator!!.restrictCandidates()
             }
         }
 

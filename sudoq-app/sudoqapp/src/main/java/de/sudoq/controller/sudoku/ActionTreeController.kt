@@ -22,11 +22,11 @@ import de.sudoq.view.actionTree.*
 /**
  * Reagiert auf Interaktionen des Benutzers mit dem Aktionsbaum.
  */
-class ActionTreeController(context: SudokuActivity?) : ActionTreeNavListener, ModelChangeListener<ActionTreeElement?> {
-    /**
-     * Kontext, von dem der ActionTreeController verwendet wird
-     */
-    private val context: SudokuActivity
+class ActionTreeController(
+        /**
+         * Kontext, von dem der ActionTreeController verwendet wird
+         */
+        private val context: SudokuActivity) : ActionTreeNavListener, ModelChangeListener<ActionTreeElement> {
 
     /**
      * Die ScrolLView des ActionTrees
@@ -41,7 +41,7 @@ class ActionTreeController(context: SudokuActivity?) : ActionTreeNavListener, Mo
     /**
      * Das Layout für den ActionTree.
      */
-    private inner class ActionTreeLayout(context: Context?) : RelativeLayout(context), ZoomableView {
+    private inner class ActionTreeLayout(context: Context) : RelativeLayout(context), ZoomableView {
         /**
          * {@inheritDoc}
          */
@@ -70,7 +70,7 @@ class ActionTreeController(context: SudokuActivity?) : ActionTreeNavListener, Mo
     /**
      * Die View des aktuellen Elements
      */
-    private var activeElementView: ActionTreeElementView? = null
+    private var activeElementView: ActiveElement? = null
 
     /**
      * Das aktuelle Element
@@ -80,7 +80,7 @@ class ActionTreeController(context: SudokuActivity?) : ActionTreeNavListener, Mo
     /**
      * Die aktuelle X-Position der ScrollView
      */
-    private var activeX = 0
+    private var activeX = 0 //todo use Pair or subclass Pair with properties x,y
 
     /**
      * Die aktuelle Y-Position der ScrollView
@@ -126,8 +126,8 @@ class ActionTreeController(context: SudokuActivity?) : ActionTreeNavListener, Mo
         relativeLayout = ActionTreeLayout(context)
 
         // Setting active element
-        active = context.game.stateHandler.currentState
-        val root = context.game.stateHandler.actionTree.root
+        active = context.game!!.stateHandler!!.currentState
+        val root = context.game!!.stateHandler!!.actionTree.root
 
         // Get screen orientation
         orientation = context.resources.configuration.orientation
@@ -138,8 +138,8 @@ class ActionTreeController(context: SudokuActivity?) : ActionTreeNavListener, Mo
         drawElementsUnder(root, rootElementInitX, rootElementInitY)
 
         // Dummy element for a margin at bottom
-        Log.d(LOG_TAG, "ActionTree height: " + actionTreeHeight)
-        Log.d(LOG_TAG, "ActionTree width: " + actionTreeWidth)
+        Log.d(LOG_TAG, "ActionTree height: $actionTreeHeight")
+        Log.d(LOG_TAG, "ActionTree width: $actionTreeWidth")
         val view = View(context)
         val viewLayoutParams = RelativeLayout.LayoutParams(AT_RASTER_SIZE, AT_RASTER_SIZE)
         viewLayoutParams.topMargin = (if (orientation == Configuration.ORIENTATION_PORTRAIT) actionTreeHeight else actionTreeWidth + 1) * AT_RASTER_SIZE
@@ -209,9 +209,7 @@ class ActionTreeController(context: SudokuActivity?) : ActionTreeNavListener, Mo
         var x = x
         var y = y
         if (orientation != Configuration.ORIENTATION_PORTRAIT) {
-            val temp = x
-            x = y
-            y = temp
+            x = y.also { y = x }
         }
         var view: ActionTreeElementView = ActionElement(context, null, element)
         if (element.isMarked) {
@@ -230,7 +228,7 @@ class ActionTreeController(context: SudokuActivity?) : ActionTreeNavListener, Mo
                     AT_RASTER_SIZE)
             viewLayoutParams.topMargin = x * AT_RASTER_SIZE
             viewLayoutParams.leftMargin = y * AT_RASTER_SIZE
-            activeElementView.setLayoutParams(viewLayoutParams)
+            activeElementView!!.layoutParams = viewLayoutParams
         } else {
             val viewLayoutParams = RelativeLayout.LayoutParams(AT_RASTER_SIZE,
                     AT_RASTER_SIZE)
@@ -260,18 +258,26 @@ class ActionTreeController(context: SudokuActivity?) : ActionTreeNavListener, Mo
      * Endposition y-Richtung
      */
     private fun drawLine(fromX: Int, fromY: Int, toX: Int, toY: Int) {
-        var fromX = fromX
-        var fromY = fromY
-        var toX = toX
-        var toY = toY
-        if (orientation != Configuration.ORIENTATION_PORTRAIT) {
-            val tempFrom = fromX
-            val tempTo = toX
-            fromX = fromY
-            fromY = tempFrom
-            toX = toY
-            toY = tempTo
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            drawLineP(fromX, fromY, toX, toY)
+        } else {
+            drawLineP(fromY, fromX, toY, toX)
         }
+    }
+
+    /**
+     * Zeichnet eine Linie von/bis zu den spezifizierten Positionen.
+     *
+     * @param fromX
+     * Startposition x-Richtung
+     * @param fromY
+     * Startposition y-Richtung
+     * @param toX
+     * Endposition x-Richtung
+     * @param toY
+     * Endposition y-Richtung
+     */
+    private fun drawLineP(fromX: Int, fromY: Int, toX: Int, toY: Int) {
         val branchingLine = BranchingLine(context, fromX * AT_RASTER_SIZE, fromY * AT_RASTER_SIZE,
                 toX * AT_RASTER_SIZE + AT_RASTER_SIZE / 2, toY * AT_RASTER_SIZE)
         val branchingLineLayoutParams = RelativeLayout.LayoutParams(toY * AT_RASTER_SIZE
@@ -282,6 +288,8 @@ class ActionTreeController(context: SudokuActivity?) : ActionTreeNavListener, Mo
         branchingLine.layoutParams = branchingLineLayoutParams
         relativeLayout!!.addView(branchingLine)
     }
+
+
 
     /**
      * Aktualisiert die ActionTree Ansicht neu
@@ -294,15 +302,15 @@ class ActionTreeController(context: SudokuActivity?) : ActionTreeNavListener, Mo
     /**
      * {@inheritDoc}
      */
-    override fun onHoverTreeElement(ate: ActionTreeElement?) {
-        context.game.goToState(ate)
+    override fun onHoverTreeElement(ate: ActionTreeElement) {
+        context.game!!.goToState(ate)
     }
 
     /**
      * {@inheritDoc}
      */
-    override fun onLoadState(ate: ActionTreeElement?) {
-        context.game.goToState(ate)
+    override fun onLoadState(ate: ActionTreeElement) {
+        context.game!!.goToState(ate)
     }
 
     /**
@@ -361,9 +369,7 @@ class ActionTreeController(context: SudokuActivity?) : ActionTreeNavListener, Mo
      * Wird geworfen, falls der übergebene Context null ist
      */
     init {
-        requireNotNull(context) { "Unvalid param context!" }
-        this.context = context
-        this.context.game.stateHandler.registerListener(this)
+        this.context.game!!.stateHandler!!.registerListener(this)
         actionTreeLayout = context.findViewById<View>(R.id.sudoku_action_tree_layout) as RelativeLayout
         actionTreeScroll = context.findViewById<View>(R.id.sudoku_action_tree_scroll) as FullScrollLayout
     }

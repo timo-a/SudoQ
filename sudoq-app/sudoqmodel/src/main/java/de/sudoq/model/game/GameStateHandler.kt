@@ -19,7 +19,7 @@ import java.util.*
  * Diese Klasse verwaltet den Zustand eines Spiels durch einen ActionTree und stellt Funktionalität für die Verwaltung
  * des Zustandes zur Verfügung.
  */
-class GameStateHandler : ObservableModelImpl<ActionTreeElement?>() {
+class GameStateHandler : ObservableModelImpl<ActionTreeElement>() {
     /**
      * The data structure that stores all actions in order
      */
@@ -52,7 +52,7 @@ class GameStateHandler : ObservableModelImpl<ActionTreeElement?>() {
         if (!locked) {
             locked = true
             addStrategic(action)
-            notifyListeners(currentState)
+            notifyListeners(currentState!!)
             locked = false
         }
     }
@@ -149,7 +149,7 @@ class GameStateHandler : ObservableModelImpl<ActionTreeElement?>() {
             undoStack.clear()
         }
         currentState = target
-        notifyListeners(currentState)
+        notifyListeners(currentState!!)
         locked = false
     }
 
@@ -174,7 +174,7 @@ class GameStateHandler : ObservableModelImpl<ActionTreeElement?>() {
             if (currentState!!.isSplitUp()) {
                 undoStack.push(oldElement)
             }
-            notifyListeners(currentState)
+            notifyListeners(currentState!!)
         }
         locked = false
     }
@@ -202,14 +202,14 @@ class GameStateHandler : ObservableModelImpl<ActionTreeElement?>() {
             if (!undoStack.empty()) {
                 currentState = undoStack.pop()
                 currentState!!.execute()
-                notifyListeners(currentState)
+                notifyListeners(currentState!!)
             }
         } else {
             if (currentState!!.hasChildren()) {
                 //if there is a child node, go there, execute
                 currentState = currentState!!.iterator().next()
                 currentState!!.execute()
-                notifyListeners(currentState)
+                notifyListeners(currentState!!)
             }
         }
         locked = false

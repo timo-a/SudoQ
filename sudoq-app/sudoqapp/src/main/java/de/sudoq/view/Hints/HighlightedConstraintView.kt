@@ -24,23 +24,18 @@ import de.sudoq.view.SudokuLayout
  * einzelnes Feld innerhalb eines Sudokus dar. Es erweitert den Android View um
  * Funktionalität zur Benutzerinteraktion und Färben.
  */
-class HighlightedConstraintView(context: Context?, sl: SudokuLayout, constraint: Constraint?, color: Int) : View(context) {
-    /* Attributes */
-    /**
-     * The Constraint, represented by this View
-     *
-     * @see Constraint
-     */
-    private val constraint: Constraint
+class HighlightedConstraintView(context: Context, sl: SudokuLayout,
+                                /** The Constraint represented by this View */
+                                private val constraint: Constraint, color: Int) : View(context) {
 
     /**
      * Color of the margin
      */
-    private val marginColor: Int
-    private val sl: SudokuLayout
+    private val marginColor: Int = color
+    private val sl: SudokuLayout = sl
     private val paint = Paint()
     private val oval = RectF()
-    /** Methods  */
+
     /**
      * Zeichnet den Inhalt des Feldes auf das Canvas dieses SudokuCellViews.
      * Sollte den AnimationHandler nutzen um vorab Markierungen/Färbung an dem
@@ -192,30 +187,17 @@ class HighlightedConstraintView(context: Context?, sl: SudokuLayout, constraint:
     private fun drawNotes(canvas: Canvas, cell: Cell) {
         val notePaint = Paint()
         notePaint.isAntiAlias = true
-        val noteTextSize = height / Symbol.getInstance().rasterSize
+        val noteTextSize = height / Symbol.getInstance().getRasterSize()
         notePaint.textSize = noteTextSize.toFloat()
         notePaint.textAlign = Paint.Align.CENTER
         notePaint.color = Color.BLACK
-        for (i in 0 until Symbol.getInstance().numberOfSymbols) {
+        for (i in 0 until Symbol.getInstance().getNumberOfSymbols()) {
             if (cell.isNoteSet(i)) {
                 val note = Symbol.getInstance().getMapping(i)
-                canvas.drawText(note + "", (i % Symbol.getInstance().rasterSize * noteTextSize + noteTextSize / 2).toFloat(), (i / Symbol.getInstance().rasterSize * noteTextSize + noteTextSize).toFloat(), notePaint)
+                canvas.drawText(note + "",
+                        (i % Symbol.getInstance().getRasterSize() * noteTextSize + noteTextSize / 2).toFloat(),
+                        (i / Symbol.getInstance().getRasterSize() * noteTextSize + noteTextSize).toFloat(), notePaint)
             }
         }
-    }
-    /* Constructors */ /**
-     * Erstellt einen SudokuCellView und initialisiert die Attribute der
-     * Klasse.
-     *
-     * @param context    der Applikationskontext
-     * @param constraint constraint represented
-     * @param color      Color of the margin
-     * @throws IllegalArgumentException Wird geworfen, falls eines der Argumente null ist
-     */
-    init {
-        require(!(context == null || constraint == null))
-        this.constraint = constraint
-        marginColor = color
-        this.sl = sl
     }
 }

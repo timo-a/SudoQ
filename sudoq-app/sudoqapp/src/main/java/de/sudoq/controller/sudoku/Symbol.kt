@@ -10,7 +10,7 @@ package de.sudoq.controller.sudoku
 /**
  * Klasse zum Mapping der intern genutzen Zahlen auf darstellbare Zeichen
  */
-class Symbol private constructor(mapping: Array<String>) : Iterable<Int?> {
+class Symbol private constructor(mapping: Array<String>) : Iterable<Int> {
     /**
      * Der aktuell verwendete Satz von Symbolen.
      */
@@ -18,7 +18,7 @@ class Symbol private constructor(mapping: Array<String>) : Iterable<Int?> {
         protected set
 
     /**
-     * Diese Methode gibt das gemappte Symbol zurueck, dass von der View
+     * Diese Methode gibt das gemappte Symbol zurueck, das von der View
      * gezeichnet wird.
      *
      * @param abstractSymbol
@@ -71,7 +71,7 @@ class Symbol private constructor(mapping: Array<String>) : Iterable<Int?> {
 
     /// for iterating over symbols
     override fun iterator(): MutableIterator<Int> {
-        return object : MutableIterator<Int?> {
+        return object : MutableIterator<Int> {
             val N = symbolSet!!.size
             var counter = 0
             override fun hasNext(): Boolean {
@@ -107,8 +107,9 @@ class Symbol private constructor(mapping: Array<String>) : Iterable<Int?> {
         /**
          * Die Standardsymbole für 1-16 Sudokus
          */
+        @JvmField
         val MAPPING_NUMBERS_HEX_LETTERS = arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G")
-        val MAPPING_NUMBERS_HEX_DIGGITS = arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16")
+        val MAPPING_NUMBERS_HEX_DIGITS =  arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16")
 
         /**
          * Die statische Instanz dieses Singletons.
@@ -122,12 +123,9 @@ class Symbol private constructor(mapping: Array<String>) : Iterable<Int?> {
          * @throws IllegalArgumentException
          * wenn das Symbol noch nicht initialisiert wurde.
          */
-        fun getInstance(): Symbol? {
-            return if (instance != null) {
-                instance
-            } else {
-                throw IllegalStateException("Symbol not instanciated!")
-            }
+        @JvmStatic
+        fun getInstance(): Symbol {
+            return instance ?: throw IllegalStateException("Symbol not instanciated!")
         }
 
         /**
@@ -138,6 +136,7 @@ class Symbol private constructor(mapping: Array<String>) : Iterable<Int?> {
          * Den Symbolsatz, der verwendet werden soll. Einige sind als
          * statische Felder im Symbol verfügbar.
          */
+        @JvmStatic
         fun createSymbol(mapping: Array<String>) {
             instance = Symbol(mapping)
         }

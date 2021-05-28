@@ -22,11 +22,8 @@ interface ActionTreeNavListener {
      *
      * @param ate
      * ActionTreeElement, welches der Nutzer angewählt hat
-     * @throws IllegalArgumentException
-     * Wird geworfen, falls das übergebene ActionTreeElement null
-     * ist
      */
-    fun onHoverTreeElement(ate: ActionTreeElement?)
+    fun onHoverTreeElement(ate: ActionTreeElement)
 
     /**
      * Wird aufgerufen, wenn der Stand eines ausgewählten ActionTreeElementes
@@ -34,9 +31,6 @@ interface ActionTreeNavListener {
      *
      * @param ate
      * Wom Benutzer ausgewähltes ActionTreeElement
-     * @throws IllegalArgumentException
-     * Wird geworfen, falls das übergebene ActionTreeElement null
-     * ist
      */
-    fun onLoadState(ate: ActionTreeElement?)
+    fun onLoadState(ate: ActionTreeElement)
 }

@@ -20,7 +20,7 @@ interface ObservableCellInteraction {
      * @param listener
      * Der Listener der hinzugefügt werden soll.
      */
-    fun registerListener(listener: CellInteractionListener?)
+    fun registerListener(listener: CellInteractionListener)
 
     /**
      * Entfernt einen Listener. Ist dieser nicht registriert, so wird nichts
@@ -29,5 +29,5 @@ interface ObservableCellInteraction {
      * @param listener
      * Der Listener der entfernt werden soll.
      */
-    fun removeListener(listener: CellInteractionListener?)
+    fun removeListener(listener: CellInteractionListener)
 }

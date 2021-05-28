@@ -27,9 +27,9 @@ class LockedCandidatesView(context: Context, sl: SudokuLayout, d: LockedCandidat
      * @throws IllegalArgumentException Wird geworfen, falls eines der Argumente null ist
      */
     init {
-        val lockedConstraintV: View = HighlightedConstraintView(context, sl, d.lockedConstraint, Color.BLUE)
+        val lockedConstraintV: View = HighlightedConstraintView(context, sl, d.lockedConstraint!!, Color.BLUE)
         highlightedObjects.add(lockedConstraintV)
-        val reducibleConstraintV: View = HighlightedConstraintView(context, sl, d.reducibleConstraint, Color.GREEN)
+        val reducibleConstraintV: View = HighlightedConstraintView(context, sl, d.reducibleConstraint!!, Color.GREEN)
         highlightedObjects.add(reducibleConstraintV)
     }
 }

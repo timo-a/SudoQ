@@ -28,7 +28,7 @@ interface ObservableInput {
      * @param listener
      * Das einzutragenden Objekt
      */
-    fun registerListener(listener: InputListener?)
+    fun registerListener(listener: InputListener)
 
     /**
      * Mit diser Methode kann das gegebene Objekt aus der Beobachter-Liste
@@ -38,5 +38,5 @@ interface ObservableInput {
      * @param listener
      * Das zu entfernende Objekt.
      */
-    fun removeListener(listener: InputListener?)
+    fun removeListener(listener: InputListener)
 }

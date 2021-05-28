@@ -90,8 +90,8 @@ class SudokuCellView(context: Context?, game: Game, val cell: Cell, private val 
     public override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         //Log.d(LOG_TAG, "SudokuFieldView.onDraw()");
-        symbol = Symbol.getInstance().getMapping(cell.currentValue)
-        CellViewPainter.instance.markCell(canvas, this, symbol, false, isInExtraConstraint && !cellSelected)
+        symbol = Symbol.getInstance()!!.getMapping(cell.currentValue)
+        CellViewPainter.instance!!.markCell(canvas, this, symbol, false, isInExtraConstraint && !cellSelected)
 
         // Draw notes if cell has no value
         if (cell.isNotSolved) {
@@ -108,16 +108,16 @@ class SudokuCellView(context: Context?, game: Game, val cell: Cell, private val 
     private fun drawNotes(canvas: Canvas) {
         val notePaint = Paint()
         notePaint.isAntiAlias = true
-        val noteTextSize = height / Symbol.getInstance().rasterSize
+        val noteTextSize = height / Symbol.getInstance()!!.getRasterSize()
         notePaint.textSize = noteTextSize.toFloat()
         notePaint.textAlign = Paint.Align.CENTER
         notePaint.color = Color.BLACK
-        for (i in 0 until Symbol.getInstance().numberOfSymbols) {
+        for (i in 0 until Symbol.getInstance()!!.getNumberOfSymbols()) {
             if (cell.isNoteSet(i)) {
-                val note = Symbol.getInstance().getMapping(i)
+                val note = Symbol.getInstance()!!.getMapping(i)
                 canvas.drawText(note + "", (
-                        i % Symbol.getInstance().rasterSize * noteTextSize + noteTextSize / 2).toFloat(), (
-                        i / Symbol.getInstance().rasterSize * noteTextSize + noteTextSize).toFloat(),
+                        i % Symbol.getInstance()!!.getRasterSize() * noteTextSize + noteTextSize / 2).toFloat(), (
+                        i / Symbol.getInstance()!!.getRasterSize() * noteTextSize + noteTextSize).toFloat(),
                         notePaint)
             }
         }
@@ -246,7 +246,7 @@ class SudokuCellView(context: Context?, game: Game, val cell: Cell, private val 
                     if (wrong) CellViewStates.DEFAULT_WRONG
                     else CellViewStates.DEFAULT
                 else CellViewStates.FIXED
-        CellViewPainter.instance.setMarking(this, state)
+        CellViewPainter.instance!!.setMarking(this, state)
         invalidate()
     }
 
@@ -313,7 +313,7 @@ class SudokuCellView(context: Context?, game: Game, val cell: Cell, private val 
      * if one of the arguments is null
      */
     init {
-        symbol = Symbol.getInstance().getMapping(cell.currentValue)
+        symbol = Symbol.getInstance()!!.getMapping(cell.currentValue)
         this.game = game
         cellSelectListener = ArrayList()
         connectedCells = ArrayList()
@@ -332,7 +332,8 @@ class SudokuCellView(context: Context?, game: Game, val cell: Cell, private val 
         updateMarking()
         setOnClickListener(object : OnClickListener {
             override fun onClick(v: View) {
-                for (listener in cellSelectListener) listener.onCellSelected(scv, CellInteractionListener.SelectEvent.Short)
+                for (listener in cellSelectListener)
+                    listener.onCellSelected(scv!!, CellInteractionListener.SelectEvent.Short)
             }
 
             //this is just to pass `this`
@@ -345,7 +346,7 @@ class SudokuCellView(context: Context?, game: Game, val cell: Cell, private val 
         setOnLongClickListener(object : OnLongClickListener {
             override fun onLongClick(v: View): Boolean {
                 for (listener in cellSelectListener)
-                    listener.onCellSelected(scv, CellInteractionListener.SelectEvent.Long)
+                    listener.onCellSelected(scv!!, CellInteractionListener.SelectEvent.Long)
                 return true
             }
 
