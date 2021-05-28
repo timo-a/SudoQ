@@ -5,35 +5,31 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
  * You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.sudoq.controller.sudoku;
+package de.sudoq.controller.sudoku
+
+import de.sudoq.view.SudokuCellView
 
 /**
- * Interface, welches von Klassen implementiert werden kann, die Actions in
- * einem Sudoku ausführen.
- * 
- * @see ActionListener
+ * A listener for changes in sudoku cells, like selection of a cell or change in its value.
  */
-public interface ObservableActionCaster {
+interface CellInteractionListener {
+    enum class SelectEvent {
+        Short, Long
+    }
 
-	/**
-	 * Benachrichtigt die Listener.
-	 */
-	void notifyListener();
+    /**
+     * Called if a cell is selected.
+     *
+     * @param view
+     * The newly selected view
+     */
+    fun onCellSelected(view: SudokuCellView?, e: SelectEvent)
 
-	/**
-	 * Registriert einen Listener. Ist dieser null, so wird nichts getan.
-	 * 
-	 * @param listener
-	 *            Der Listener der hinzugefügt werden soll.
-	 */
-	void registerListener(ActionListener listener);
-
-	/**
-	 * Entfernt einen Listener. Ist dieser nicht registriert, so wird nichts
-	 * getan.
-	 * 
-	 * @param listener
-	 *            Der Listener der entfernt werden soll.
-	 */
-	void removeListener(ActionListener listener);
+    /**
+     * Called is a cell is changed.
+     *
+     * @param view
+     * The changed view
+     */
+    fun onCellChanged(view: SudokuCellView?)
 }

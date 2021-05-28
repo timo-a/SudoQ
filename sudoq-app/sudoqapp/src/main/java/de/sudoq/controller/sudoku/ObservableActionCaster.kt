@@ -5,30 +5,34 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
  * You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.sudoq.controller.sudoku;
+package de.sudoq.controller.sudoku
 
 /**
- * Interface, welches von Klassen implementiert werden kann, die auf denen
- * Feld-Interaktionen ausgeführt werden. einem Sudoku ausführen.
- * 
- * @see CellInteractionListener
+ * Interface, welches von Klassen implementiert werden kann, die Actions in
+ * einem Sudoku ausführen.
+ *
+ * @see ActionListener
  */
-public interface ObservableCellInteraction {
+interface ObservableActionCaster {
+    /**
+     * Benachrichtigt die Listener.
+     */
+    fun notifyListener()
 
-	/**
-	 * Registriert einen Listener. Ist dieser null, so wird nichts getan.
-	 * 
-	 * @param listener
-	 *            Der Listener der hinzugefügt werden soll.
-	 */
-	void registerListener(CellInteractionListener listener);
+    /**
+     * Registriert einen Listener. Ist dieser null, so wird nichts getan.
+     *
+     * @param listener
+     * Der Listener der hinzugefügt werden soll.
+     */
+    fun registerListener(listener: ActionListener?)
 
-	/**
-	 * Entfernt einen Listener. Ist dieser nicht registriert, so wird nichts
-	 * getan.
-	 * 
-	 * @param listener
-	 *            Der Listener der entfernt werden soll.
-	 */
-	void removeListener(CellInteractionListener listener);
+    /**
+     * Entfernt einen Listener. Ist dieser nicht registriert, so wird nichts
+     * getan.
+     *
+     * @param listener
+     * Der Listener der entfernt werden soll.
+     */
+    fun removeListener(listener: ActionListener?)
 }
