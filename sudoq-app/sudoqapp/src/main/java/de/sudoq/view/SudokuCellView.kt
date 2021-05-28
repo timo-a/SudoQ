@@ -91,7 +91,7 @@ class SudokuCellView(context: Context?, game: Game, val cell: Cell, private val 
         super.onDraw(canvas)
         //Log.d(LOG_TAG, "SudokuFieldView.onDraw()");
         symbol = Symbol.getInstance().getMapping(cell.currentValue)
-        CellViewPainter.getInstance().markCell(canvas, this, symbol, false, isInExtraConstraint && !cellSelected)
+        CellViewPainter.instance.markCell(canvas, this, symbol, false, isInExtraConstraint && !cellSelected)
 
         // Draw notes if cell has no value
         if (cell.isNotSolved) {
@@ -246,7 +246,7 @@ class SudokuCellView(context: Context?, game: Game, val cell: Cell, private val 
                     if (wrong) CellViewStates.DEFAULT_WRONG
                     else CellViewStates.DEFAULT
                 else CellViewStates.FIXED
-        CellViewPainter.getInstance().setMarking(this, state)
+        CellViewPainter.instance.setMarking(this, state)
         invalidate()
     }
 

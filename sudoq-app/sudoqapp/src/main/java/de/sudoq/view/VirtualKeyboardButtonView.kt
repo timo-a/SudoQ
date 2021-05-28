@@ -64,7 +64,7 @@ class VirtualKeyboardButtonView(context: Context?, private val symbol: Int) : Vi
      */
     public override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        CellViewPainter.getInstance().markCell(canvas, this, drawnSymbol, false, false)
+        CellViewPainter.instance.markCell(canvas, this, drawnSymbol, false, false)
         if (!this.isEnabled) {
             canvas.drawARGB(100, 10, 10, 10)
         }
@@ -119,6 +119,6 @@ class VirtualKeyboardButtonView(context: Context?, private val symbol: Int) : Vi
         this.layoutParams = TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 1.0f)
         drawnSymbol = Symbol.getInstance().getMapping(symbol)
         inputListener = ArrayList()
-        CellViewPainter.getInstance().setMarking(this, CellViewStates.DEFAULT_BORDER)
+        CellViewPainter.instance.setMarking(this, CellViewStates.DEFAULT_BORDER)
     }
 }
