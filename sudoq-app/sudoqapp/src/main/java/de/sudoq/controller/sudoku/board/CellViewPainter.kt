@@ -114,9 +114,19 @@ class CellViewPainter private constructor() {
             }
         } else if (cellState != null) {
             when (cellState) {
-                CellViewStates.SELECTED_INPUT_BORDER, CellViewStates.SELECTED_INPUT, CellViewStates.SELECTED_NOTE_BORDER, CellViewStates.SELECTED_NOTE, CellViewStates.CONNECTED, CellViewStates.DEFAULT_BORDER, CellViewStates.DEFAULT -> drawText(canvas, cell, Color.BLACK, false, symbol)
-                CellViewStates.SELECTED_INPUT_WRONG, CellViewStates.SELECTED_NOTE_WRONG, CellViewStates.DEFAULT_WRONG, CellViewStates.CONNECTED_WRONG -> drawText(canvas, cell, Color.RED, false, symbol)
-                CellViewStates.SELECTED_FIXED, CellViewStates.FIXED -> drawText(canvas, cell, Color.rgb(0, 100, 0), true, symbol)
+                CellViewStates.SELECTED_INPUT_BORDER,
+                CellViewStates.SELECTED_INPUT,
+                CellViewStates.SELECTED_NOTE_BORDER,
+                CellViewStates.SELECTED_NOTE,
+                CellViewStates.CONNECTED,
+                CellViewStates.DEFAULT_BORDER,
+                CellViewStates.DEFAULT -> drawText(canvas, cell, Color.BLACK, false, symbol)
+                CellViewStates.SELECTED_INPUT_WRONG,
+                CellViewStates.SELECTED_NOTE_WRONG,
+                CellViewStates.DEFAULT_WRONG,
+                CellViewStates.CONNECTED_WRONG -> drawText(canvas, cell, Color.RED, false, symbol)
+                CellViewStates.SELECTED_FIXED,
+                CellViewStates.FIXED -> drawText(canvas, cell, Color.rgb(0, 100, 0), true, symbol)
             }
         }
         //Log.d("FieldPainter", "Field drawn");
@@ -166,7 +176,7 @@ class CellViewPainter private constructor() {
             darkenPaint.setARGB(60, 0, 0, 0)
         }
         mainPaint.color = color
-        val rect = RectF(0, 0, cell.width.toFloat(), cell.height.toFloat())
+        val rect = RectF(0f, 0f, cell.width.toFloat(), cell.height.toFloat())
         if (round) {
             canvas.drawRoundRect(rect, cell.width / 20.0f, cell.height / 20.0f, mainPaint)
             if (darken) {
@@ -202,7 +212,7 @@ class CellViewPainter private constructor() {
             darkenPaint.setARGB(60, 0, 0, 0)
         }
         mainPaint.color = color
-        val rect = RectF(2, 2, (cell.width - 2).toFloat(), (cell.height - 2).toFloat())
+        val rect = RectF(2f, 2f, (cell.width - 2).toFloat(), (cell.height - 2).toFloat())
         if (round) {
             canvas.drawRoundRect(rect, cell.width / 20.0f, cell.height / 20.0f, mainPaint)
             if (darken) {
@@ -272,6 +282,7 @@ class CellViewPainter private constructor() {
         /**
          * Die Singleton-Instanz des Handlers
          */
+        @JvmStatic
         var instance: CellViewPainter? = null
             get() {
                 if (field == null) {

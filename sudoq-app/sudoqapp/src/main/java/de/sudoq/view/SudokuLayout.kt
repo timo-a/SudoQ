@@ -80,7 +80,7 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
      */
     private fun inflateSudoku() {
         Log.d(LOG_TAG, "SudokuLayout.inflateSudoku()")
-        CellViewPainter.getInstance().flushMarkings()
+        CellViewPainter.instance.flushMarkings()
         removeAllViews()
         val sudoku = game.sudoku
         val sudokuType = sudoku!!.sudokuType
@@ -333,7 +333,7 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
         setWillNotDraw(false)
         paint = Paint()
         boardPainter = BoardPainter(this, game.sudoku!!.sudokuType)
-        CellViewPainter.getInstance().setSudokuLayout(this)
+        CellViewPainter.instance.setSudokuLayout(this)
         hintPainter = HintPainter(this)
         inflateSudoku()
         Log.d(LOG_TAG, "End of Constructor.")

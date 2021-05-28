@@ -159,7 +159,7 @@ class VirtualKeyboardLayout(context: Context?, attrs: AttributeSet?) : LinearLay
      */
     fun markCell(symbol: Int, state: CellViewStates?) {
         val buttonsPerRow = buttons!!.size
-        CellViewPainter.getInstance().setMarking(buttons!![symbol % buttonsPerRow][symbol / buttonsPerRow], state)
+        CellViewPainter.instance.setMarking(buttons!![symbol % buttonsPerRow][symbol / buttonsPerRow], state)
         buttons!![symbol % buttonsPerRow][symbol / buttonsPerRow].invalidate()
     }
 
