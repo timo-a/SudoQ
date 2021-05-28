@@ -33,6 +33,7 @@ import de.sudoq.model.persistence.xml.game.GameRepo
 import de.sudoq.model.profile.Profile
 import de.sudoq.model.profile.ProfileManager
 import java.io.*
+import java.nio.charset.Charset
 import java.util.*
 
 /**
@@ -234,7 +235,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
                         val data = ByteArray(gameFile.length().toInt())
                         fis.read(data)
                         fis.close()
-                        str = String(data, "UTF-8")
+                        str = String(data, Charset.forName("UTF-8"))
                     } catch (e: FileNotFoundException) {
                         e.printStackTrace()
                     } catch (e: IOException) {
@@ -249,8 +250,8 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
                 }
                 3 -> {
                     //already defined under 2
-                    /*int */gameID = adapter!!.getItem(position)!!.id
-                    /*File*/gameFile = gameRepo.getGameFile(gameID, p)
+                    val gameID = adapter!!.getItem(position)!!.id
+                    val gameFile = gameRepo.getGameFile(gameID, p)
                     /* we can only copy from 'files' subdir, so we have to move the file there first */
                     val tmpFile = File(filesDir, gameFile.getName())
                     val `in`: InputStream
@@ -275,7 +276,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
                     val fileUri = FileProvider.getUriForFile(this@SudokuLoadingActivity,
                             "de.sudoq.fileprovider", tmpFile)
                     Log.v("file-share", "uri is null? " + (fileUri == null))
-                    /*Intent*/sendIntent = Intent()
+                    val sendIntent = Intent()
                     sendIntent.setAction(Intent.ACTION_SEND) //
                     //sendIntent.putExtra(Intent.EXTRA_FROM_STORAGE, gameFile);
                     sendIntent.putExtra(Intent.EXTRA_STREAM, fileUri)
@@ -333,8 +334,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
         private var fs: FAB_STATES? = null
         fun setState(fs: FAB_STATES?) {
             this.fs = fs
-            val id: Int
-            id = when (fs) {
+            val id: Int = when (fs) {
                 FAB_STATES.DELETE -> R.drawable.ic_close_white_24dp
                 FAB_STATES.INACTIVE -> R.drawable.ic_delete_white_24dp
                 else -> R.drawable.ic_arrow_back_white_24dp

@@ -60,9 +60,9 @@ object HintFormulator {
         val shapeDeterminer = Utility.gender2AccDeterminer(context, shapeGender)
         val highlightSuffix = Utility.gender2AccSufix(context, shapeGender)
         return context.getString(R.string.hint_lastdigit)
-                .replace("{shape}", shapeString)
-                .replace("{determiner}", shapeDeterminer)
-                .replace("{suffix}", highlightSuffix)
+                .replace("{shape}", shapeString!!)
+                .replace("{determiner}", shapeDeterminer!!)
+                .replace("{suffix}", highlightSuffix!!)
     }
 
     private fun lastCandidateText(context: Context, sd: SolveDerivation): String {
@@ -88,9 +88,9 @@ object HintFormulator {
         Log.d(LOG_TAG, "leftovernotetext is called. and versionNumber is: $versionNumber")
         return context.getString(R.string.hint_leftovernote)
                 .replace("{note}", (d.note + 1).toString())
-                .replace("{shape}", shapeString)
-                .replace("{determiner}", shapeDeterminer)
-                .replace("{suffix}", highlightSuffix)
+                .replace("{shape}", shapeString!!)
+                .replace("{determiner}", shapeDeterminer!!)
+                .replace("{suffix}", highlightSuffix!!)
     }
 
     private fun nakedSingleText(context: Context, sd: SolveDerivation): String {
@@ -105,10 +105,10 @@ object HintFormulator {
         sb.append(' ')
         val shapeString = Utility.constraintShapeGenDet2string(context, getGroupShape(d.constraint!!))
         val shapePrepDet = Utility.getGender(context, getGroupShape(d.constraint!!))
-        val prepDet = Utility.gender2inThe(context, shapePrepDet)
+        val prepDet = Utility.gender2inThe(context, shapePrepDet!!)
         sb.append(context.getString(R.string.hint_nakedsingle_remove)
-                .replace("{prep det}", prepDet)
-                .replace("{shape}", shapeString))
+                .replace("{prep det}", prepDet!!)
+                .replace("{shape}", shapeString!!))
         return sb.toString()
     }
 

@@ -37,7 +37,7 @@ class MainActivity : SudoqCompatActivity() {
      * stores language at activity start to compare if language changed in advanced preferences
      */
     private var currentLanguageCode: LanguageSetting? = null
-    /** Methods  */
+
     /**
      * Wird beim ersten Anzeigen des Hauptmenüs aufgerufen. Inflated das Layout.
      */

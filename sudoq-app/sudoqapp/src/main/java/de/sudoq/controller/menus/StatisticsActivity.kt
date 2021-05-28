@@ -29,7 +29,7 @@ class StatisticsActivity : SudoqCompatActivity() {
         val pm = ProfileManager(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
         check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
         pm.loadCurrentProfile()
-        current.text = getString(label) + ": " + pm.getStatistic(statLabel)
+        current.text = "${getString(label)}: ${pm.getStatistic(statLabel)}"
     }
 
     /**
