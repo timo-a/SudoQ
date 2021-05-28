@@ -94,7 +94,7 @@ class PlayerPreferencesActivity : PreferencesActivity() {
                 //adopt change
                 currentLanguageCode!!.language = LanguageUtility.loadLanguageFromLocale()
                 //store changes
-                LanguageUtility.storeLanguageToMemory2(this, currentLanguageCode)
+                LanguageUtility.storeLanguageToMemory2(this, currentLanguageCode!!)
             }
         }
     }
@@ -119,7 +119,7 @@ class PlayerPreferencesActivity : PreferencesActivity() {
      * @param view
      * von android xml übergebene View
      */
-    fun createProfile(view: View?) {
+    private fun createProfile() {
         if (firstStartup) {
             adjustValuesAndSave()
             finish()
@@ -178,7 +178,7 @@ class PlayerPreferencesActivity : PreferencesActivity() {
     /* parameter View only needed to be found by xml who clicks this */
     fun switchToAdvancedPreferences(view: View?) {
         val advIntent = Intent(this, AdvancedPreferencesActivity::class.java)
-        AdvancedPreferencesActivity.Companion.caller = ParentActivity.PROFILE
+        AdvancedPreferencesActivity.caller = ParentActivity.PROFILE
         //AdvancedPreferencesActivity.gameSettings = this.gameSettings;
         startActivity(advIntent)
     }
@@ -189,7 +189,7 @@ class PlayerPreferencesActivity : PreferencesActivity() {
      * @param view
      * von der android xml übergebene view
      */
-    fun switchToProfileList(view: View?) {
+    private fun switchToProfileList() {
         val profileListIntent = Intent(this, ProfileListActivity::class.java)
         startActivity(profileListIntent)
     }
@@ -200,7 +200,7 @@ class PlayerPreferencesActivity : PreferencesActivity() {
      * @param view
      * von der android xml übergebene view
      */
-    fun deleteProfile(view: View?) {
+    private fun deleteProfile() {
         val p = getInstance(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
         p.deleteProfile()
     }
@@ -222,15 +222,15 @@ class PlayerPreferencesActivity : PreferencesActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_new_profile -> {
-                createProfile(null)
+                createProfile()
                 true
             }
             R.id.action_delete_profile -> {
-                deleteProfile(null)
+                deleteProfile()
                 true
             }
             R.id.action_switch_profile -> {
-                switchToProfileList(null)
+                switchToProfileList()
                 true
             }
             else -> super.onOptionsItemSelected(item)

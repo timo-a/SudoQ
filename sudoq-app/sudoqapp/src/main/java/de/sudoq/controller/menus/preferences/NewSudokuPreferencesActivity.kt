@@ -55,11 +55,11 @@ class NewSudokuPreferencesActivity : PreferencesActivity() {
         Log.i("gameSettings", "NewSudokuPreferencesActivity onCreate end is gameSettings null?" + (NewSudokuActivity.gameSettings == null))
         Log.d("gameSettings", "NewSudokuPreferencesActivity onCreate end is gameSettings null?" + (NewSudokuActivity.gameSettings == null))
         confSettings = NewSudokuActivity.gameSettings
-        gesture!!.isChecked = confSettings.isGesturesSet
-        autoAdjustNotes!!.isChecked = confSettings.getAssistance(Assistances.autoAdjustNotes)
-        markRowColumn!!.isChecked = confSettings.getAssistance(Assistances.markRowColumn)
-        markWrongSymbol!!.isChecked = confSettings.getAssistance(Assistances.markWrongSymbol)
-        restrictCandidates!!.isChecked = confSettings.getAssistance(Assistances.restrictCandidates)
+        gesture!!.isChecked = confSettings!!.isGesturesSet
+        autoAdjustNotes!!.isChecked = confSettings!!.getAssistance(Assistances.autoAdjustNotes)
+        markRowColumn!!.isChecked = confSettings!!.getAssistance(Assistances.markRowColumn)
+        markWrongSymbol!!.isChecked = confSettings!!.getAssistance(Assistances.markWrongSymbol)
+        restrictCandidates!!.isChecked = confSettings!!.getAssistance(Assistances.restrictCandidates)
         val p = getInstance(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
         p.registerListener(this)
 
@@ -72,7 +72,7 @@ class NewSudokuPreferencesActivity : PreferencesActivity() {
 
         //load language from memory
         val fromMemory = LanguageUtility.loadLanguageFromSharedPreferences(this)
-        if (fromMemory!!.language != currentLanguageCode!!.language) {
+        if (fromMemory.language != currentLanguageCode!!.language) {
             val refresh = Intent(this, this.javaClass)
             finish()
             this.startActivity(refresh)

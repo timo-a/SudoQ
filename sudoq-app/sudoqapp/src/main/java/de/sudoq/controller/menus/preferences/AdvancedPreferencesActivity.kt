@@ -33,7 +33,7 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
     }
 
     var lefthand: CheckBox? = null
-    override var restricttypes: Button? = null
+//    override var restricttypes: Button? = null
     var helper: CheckBox? = null
     var debug: CheckBox? = null
     var debugCounter: Byte = 0
@@ -77,8 +77,8 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
                 if (debug!!.isChecked) {
                     debug!!.visibility = View.VISIBLE
                 }
-                helper!!.isChecked = gameSettings.isHelperSet
-                lefthand!!.isChecked = gameSettings.isLefthandModeSet
+                helper!!.isChecked = gameSettings!!.isHelperSet
+                lefthand!!.isChecked = gameSettings!!.isLefthandModeSet
             }
             ParentActivity.PROFILE, ParentActivity.NOT_SPECIFIED -> {
                 if (debug!!.isChecked) {
@@ -126,7 +126,7 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
                 val enumCode = LanguageCode.values()[pos]
                 //enum to string(resolving system language) and set
                 val newCode = LanguageUtility.getLanguageFromItem(enumCode)
-                LanguageUtility.setConfLocale(newCode!!.language.name, thishere)
+                LanguageUtility.setConfLocale(newCode.language.name, thishere)
                 LanguageUtility.storeLanguageToMemory2(this@AdvancedPreferencesActivity, newCode)
                 //int previous = LanguageUtility.loadLanguageFromConf(AdvancedPreferencesActivity.this).name();
                 if (currentLanguageCode!!.language != newCode.language) {
@@ -175,7 +175,8 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
 
     fun count(view: View?) {
         debugCounter++
-        if (debugCounter >= 10) debug!!.visibility = View.VISIBLE
+        if (debugCounter >= 10)
+            debug!!.visibility = View.VISIBLE
     }
 
     private fun askConfirmation(cb: CheckBox) {
@@ -227,17 +228,6 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
         val inflater = menuInflater
         inflater.inflate(R.menu.action_bar_standard, menu)
         return true
-    }
-
-    /**
-     * Stellt das OptionsMenu bereit
-     *
-     * @param item
-     * Das ausgewählte Menü-Item
-     * @return true
-     */
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
