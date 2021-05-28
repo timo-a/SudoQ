@@ -23,17 +23,15 @@ import java.util.*
  * Spielerprofilen dar.
  */
 class ProfileListActivity : SudoqListActivity(), OnItemClickListener {
-    /**
-     * Ein Array der Profil-Dateinamen der Form "Profile_ID", wobei ID der
-     * jeweiligen ID des Profils entspricht.
+
+    /** Ein Array der Profil-Dateinamen der Form "Profile_ID", wobei ID der
+     *  jeweiligen ID des Profils entspricht.
      */
     private var profileIds: ArrayList<Int>? = null
 
-    /**
-     * Ein Array der Profilnamen
-     */
+    /** Ein Array der Profilnamen */
     private var profileNames: ArrayList<String>? = null
-    /** Methods  */
+
     /**
      * Wird beim ersten Start der Activity aufgerufen.
      *
@@ -52,15 +50,13 @@ class ProfileListActivity : SudoqListActivity(), OnItemClickListener {
         profileIds = pm.profilesIdList
         profileNames = pm.profilesNameList
         Log.d(LOG_TAG, "Array length: " + pm.profilesNameList.size)
-        val adapter = ArrayAdapter(this,
-                R.layout.profilelist_item, pm.profilesNameList)
+        val adapter = ArrayAdapter(this, R.layout.profilelist_item, pm.profilesNameList)
         listAdapter = adapter
         listView!!.onItemClickListener = this
     }
 
     /**
-     * Wird aufgerufen, falls der Benutzer einen Eintrag in der ListView
-     * anklickt.
+     * Wird aufgerufen, falls der Benutzer einen Eintrag in der ListView anklickt.
      *
      * @param parent
      * AdapterView auf welcher der Benutzer etwas angeklickt hat

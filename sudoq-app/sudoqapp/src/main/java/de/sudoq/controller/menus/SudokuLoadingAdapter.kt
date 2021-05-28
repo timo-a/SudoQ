@@ -26,16 +26,12 @@ import java.util.*
 
 /**
  * Adapter für die Anzeige aller Spiele des Spielers
- */
-class SudokuLoadingAdapter
-/**
- * Erzeugt einen neuen SudokuLoadingAdpater mit den gegebenen Parametern
  *
- * @param context
- * der Applikationskontext
- * @param games
- * die Liste der games
- */(private val context: Context, private val gameDatas: List<GameData>) : ArrayAdapter<GameData?>(context, R.layout.sudokuloadingitem, gameDatas) {
+ * @property @param games die Liste der games
+ */
+class SudokuLoadingAdapter (context: Context, private val gameDatas: List<GameData>) :
+        ArrayAdapter<GameData?>(context, R.layout.sudokuloadingitem, gameDatas) {
+    //todo make non nullable
     /**
      * {@inheritDoc}
      */
@@ -70,8 +66,8 @@ class SudokuLoadingAdapter
             Toast.makeText(context, context.getString(R.string.toast_stop_that), Toast.LENGTH_LONG).show()
             (context as SudokuLoadingActivity).finish()
         }
-        sudokuType.text = Utility.type2string(getContext(), gameDatas[position].type)
-        sudokuComplexity.text = Utility.complexity2string(getContext(), gameDatas[position].complexity)
+        sudokuType.text = Utility.type2string(context, gameDatas[position].type)
+        sudokuComplexity.text = Utility.complexity2string(context, gameDatas[position].complexity)
         val tz = TimeZone.getDefault()
         val sdf = SimpleDateFormat(context.getString(R.string.time_format))
         sdf.timeZone = tz

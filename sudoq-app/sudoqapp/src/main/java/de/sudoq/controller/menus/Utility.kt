@@ -10,13 +10,15 @@ import java.io.InputStream
 import java.io.OutputStream
 
 object Utility {
-    fun <T : Enum<*>?> enum2String(typeStrings: Array<String?>, e: T): String? {
+    private fun <T : Enum<*>?> enum2String(typeStrings: Array<String?>, e: T): String? {
         val index = e!!.ordinal
         return if (index >= typeStrings.size) null else typeStrings[index]
     }
 
     /* SudokuTypes */
     private fun getSudokuTypeValues(context: Context): Array<String?> { //we need a method because of the context...
+        //we want to be independent of the order in which the enum fields are defined in their class
+        //so we first create an empty array and fill it in an order unknown to us
         val typeStrings = arrayOfNulls<String>(SudokuTypes.values().size)
         typeStrings[SudokuTypes.standard4x4.ordinal] = context.getString(R.string.advanced_settings_restrict_item_standard_4x4)
         typeStrings[SudokuTypes.standard6x6.ordinal] = context.getString(R.string.advanced_settings_restrict_item_standard_6x6)
@@ -50,8 +52,10 @@ object Utility {
 
     fun string2complexity(context: Context, string: String): Complexity? {
         val complexityStrings = getComplexityValues(context)
-        for (i in complexityStrings.indices) if (string == complexityStrings[i]) return Complexity.values()[i]
-        return null
+        return complexityStrings
+                .withIndex()
+                .find { (_, label) -> string == label }
+                ?.let { (i, _    ) -> Complexity.values()[i]  }
     }
 
     fun complexity2string(context: Context, st: Complexity): String? {
@@ -125,10 +129,13 @@ object Utility {
     }
 
     //http://stackoverflow.com/questions/3013655/creating-hashmap-map-from-xml-resources
-    fun parseStringArray(context: Context, gender: Char, stringArrayResourceId: Int): String? {
+    private fun parseStringArray(context: Context, gender: Char, stringArrayResourceId: Int): String? {
         val stringArray = context.resources.getStringArray(stringArrayResourceId)
-        for (entry in stringArray) if (entry[0] == gender) return entry.substring(2)
-        return null
+
+        return stringArray
+                .find { entry -> entry[0] == gender } //format is gender|inflection, where gender has len 1
+                ?.let { i -> i.substring(2)  }
+
     }
 
     /**

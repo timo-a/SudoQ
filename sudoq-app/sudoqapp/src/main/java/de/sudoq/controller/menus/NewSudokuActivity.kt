@@ -37,13 +37,10 @@ import java.util.*
  * Hauptmenü -> "neues Sudoku" führt hierher
  */
 class NewSudokuActivity : SudoqCompatActivity() {
+
     private var sudokuType: SudokuTypes? = null
     private var complexity: Complexity? = null
-    /** Constructors  */
-    /**
-     * Instanziiert ein neues SudokuPreferences-Objekt.
-     */
-    /** Methods  */
+
     /**
      * Wird beim ersten Aufruf der SudokuPreferences aufgerufen. Die Methode
      * inflated das Layout der Preferences.
@@ -121,11 +118,12 @@ class NewSudokuActivity : SudoqCompatActivity() {
         val wantedSudokuTypes: MutableList<StringAndEnum<SudokuTypes>> = ArrayList() //user can choose to only have selected types offered, so here we filter
         check(stl.size != 0) { "list shouldn't be empty" }
 
-        /* convert */for (st in stl) {
+        /* convert */
+        for (st in stl) {
             val sae = StringAndEnum(Utility.type2string(this, st)!!, st)
             wantedSudokuTypes.add(sae)
         }
-        Collections.sort(wantedSudokuTypes, Comparator<StringAndEnum<SudokuTypes?>> { o1, o2 -> SudokuTypeOrder.getKey(o1.enum) - SudokuTypeOrder.getKey(o2.enum) })
+        wantedSudokuTypes.sortWith { o1, o2 -> SudokuTypeOrder.getKey(o1.enum) - SudokuTypeOrder.getKey(o2.enum) }
         Log.d(LOG_TAG, "Sudokutype_1: " + sudokuType)
         val typeAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, wantedSudokuTypes)
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

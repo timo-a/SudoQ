@@ -38,6 +38,7 @@ import java.io.IOException
  * @author Anrion
  */
 class GestureBuilder : SudoqCompatActivity(), OnGesturePerformedListener, InputListener {
+
     /**
      * Fängt Gesteneingaben des Benutzers ab
      */
@@ -67,6 +68,7 @@ class GestureBuilder : SudoqCompatActivity(), OnGesturePerformedListener, InputL
      * Virtuelles Keyboard, zum Auswählen des Symbols, für das eine Geste angelegt werden soll.
      */
     private var virtualKeyboard: VirtualKeyboardLayout? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.gesturebuilder)
@@ -167,7 +169,9 @@ class GestureBuilder : SudoqCompatActivity(), OnGesturePerformedListener, InputL
      */
     private fun markAlreadyCapturedSymbols() {
         val gestures = gestureStore.gestureEntries
-        for (sym in currentSymbolSet) if (gestures.contains(sym)) virtualKeyboard!!.markCell(getInstance().getAbstract(sym), CellViewStates.SELECTED_NOTE)
+        for (sym in currentSymbolSet)
+            if (gestures.contains(sym))
+                virtualKeyboard!!.markCell(getInstance().getAbstract(sym), CellViewStates.SELECTED_NOTE)
     }
 
     /**

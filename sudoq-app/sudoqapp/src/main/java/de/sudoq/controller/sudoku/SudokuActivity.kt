@@ -41,6 +41,7 @@ import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Position
 import de.sudoq.view.*
 import java.io.*
+import kotlin.math.abs
 
 /**
  * Diese Klasse stellt die Activity des Sudokuspiels dar. Die Klasse hält das
@@ -140,13 +141,13 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
     /** Methods  */
     private fun initializeSymbolSet() {
         currentSymbolSet = when (game!!.sudoku!!.sudokuType!!.numberOfSymbols) {
-            4 -> Symbol.Companion.MAPPING_NUMBERS_FOUR
-            6 -> Symbol.Companion.MAPPING_NUMBERS_SIX
-            9 -> Symbol.Companion.MAPPING_NUMBERS_NINE
-            16 -> Symbol.Companion.MAPPING_NUMBERS_HEX_LETTERS
-            else -> Symbol.Companion.MAPPING_NUMBERS_HEX_LETTERS
+            4 -> Symbol.MAPPING_NUMBERS_FOUR
+            6 -> Symbol.MAPPING_NUMBERS_SIX
+            9 -> Symbol.MAPPING_NUMBERS_NINE
+            16 -> Symbol.MAPPING_NUMBERS_HEX_LETTERS
+            else -> Symbol.MAPPING_NUMBERS_HEX_LETTERS
         }
-        Symbol.Companion.createSymbol(currentSymbolSet)
+        Symbol.createSymbol(currentSymbolSet)
     }
 
     var panel: ControlPanelFragment? = null
@@ -288,8 +289,8 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
      * Setzt den Text für Typ und Schwierigkeit des aktuellen Sudokus.
      */
     private fun setTypeText() {
-        val type = Utility.type2string(this, game!!.sudoku!!.sudokuType!!.enumType)
-        val comp = Utility.complexity2string(this, game!!.sudoku!!.complexity)
+        val type = Utility.type2string(this, game!!.sudoku!!.sudokuType!!.enumType!!)
+        val comp = Utility.complexity2string(this, game!!.sudoku!!.complexity!!)
         val ab = supportActionBar
         ab!!.title = type
         ab.subtitle = comp
@@ -376,7 +377,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
      * returns whether all Gestures are defined -> Gesture input possible
      */
     fun checkGesture(): Boolean {
-        val symbolSet = Symbol.Companion.getInstance()!!.symbolSet!!
+        val symbolSet = Symbol.getInstance().symbolSet!!
         val gestures = gestureStore.gestureEntries
 
         return symbolSet.all { gestures.contains(it) }
@@ -474,17 +475,8 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
         val ad: DialogFragment = AssistancesDialogFragment()
         ad.show(fm, "assistancesDialog")
     }
-    /**
-     * Gibt die aktuell ausgewählte FieldView zurück.
-     *
-     * @return Die aktuell ausgewählte FieldView
-     */
-    /**
-     * Setzt die aktuelle FieldView auf die spezifizierte.
-     *
-     * @param cellView
-     * Die als aktuell zu setzende FieldView
-     */
+
+    /** Die aktuell ausgewählte FieldView */
     var currentCellView: SudokuCellView?
         get() = sudokuLayout!!.currentCellView
         set(cellView) {
@@ -598,10 +590,10 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
             var time = gameTimeString
             var penealty = " (+ $assistancesTimeString)"
             val d = time.length - penealty.length
-            while (offset.length > Math.abs(d)) {
+            while (offset.length > abs(d)) {
                 offset.setLength(offset.length - 1)
             }
-            while (offset.length < Math.abs(d)) {
+            while (offset.length < abs(d)) {
                 offset.append(' ')
             }
             if (d > 0) penealty = offset.toString() + penealty

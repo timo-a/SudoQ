@@ -33,7 +33,7 @@ class RestrictTypesAdapter(context: Context, typesList: SudokuTypesList) : Array
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val rowView = inflater.inflate(R.layout.restricttypes_item, parent, false)
-        val type = super.getItem(position)
+        val type = super.getItem(position)!!
         val full = Utility.type2string(context, type) //translated name of Sudoku type;
         (rowView.findViewById(R.id.regular_languages_layout) as View).visibility = View.GONE
         (rowView.findViewById(R.id.irregular_languages_layout) as View).visibility = View.VISIBLE

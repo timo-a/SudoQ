@@ -3,14 +3,19 @@ package de.sudoq.controller.menus
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 
 object SudokuTypeOrder {
-    fun getKey(s: SudokuTypes?): Int {
-        return ordinals[s!!.ordinal]
+
+    //for a sudoku type, get its position in the drop down menu
+    fun getKey(s: SudokuTypes): Int {
+        return ordinals[s.ordinal]
     }
 
+    //type enum index -> position in ui
     private var ordinals: IntArray
 
     init {
-        val order = arrayOf(SudokuTypes.standard9x9,
+        // position in ui -> enum
+        val order = arrayOf(
+                SudokuTypes.standard9x9,
                 SudokuTypes.standard4x4,
                 SudokuTypes.standard6x6,
                 SudokuTypes.standard16x16,
@@ -20,9 +25,10 @@ object SudokuTypeOrder {
                 SudokuTypes.squigglya,
                 SudokuTypes.squigglyb,
                 SudokuTypes.stairstep)
+        //enum id -> ui pos
         ordinals = IntArray(SudokuTypes.values().size)
-        for (i in de.sudoq.controller.menus.order.indices) {
-            ordinals[de.sudoq.controller.menus.order.get(i).ordinal] = i
+        for ((uiPos, enum) in order.withIndex()) {
+            ordinals[enum.ordinal] = uiPos
         }
     }
 }

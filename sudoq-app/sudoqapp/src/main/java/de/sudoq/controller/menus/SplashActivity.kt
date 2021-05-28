@@ -7,6 +7,7 @@
  */
 package de.sudoq.controller.menus
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -82,14 +83,15 @@ class SplashActivity : SudoqCompatActivity() {
         // Get the preferences and look if assets where completely copied before
         val settings = getSharedPreferences("Prefs", 0)
 
-        /* get version value */try {
+        /* get version value */
+        try {
             currentVersionName = this.packageManager.getPackageInfo(this.packageName, 0).versionName
         } catch (e: PackageManager.NameNotFoundException) {
             Log.v(LOG_TAG, e.message)
         }
 
         /* is this a new version? */
-        val oldVersionName = settings.getString(VERSION_TAG, NO_VERSION_YET)
+        val oldVersionName = settings.getString(VERSION_TAG, NO_VERSION_YET)!!
         if (updateSituation(oldVersionName) && !startedCopying) {
 
             /*hint*/
@@ -97,9 +99,11 @@ class SplashActivity : SudoqCompatActivity() {
             Log.v(LOG_TAG, "we will do an initialization")
             Initialization().execute(null, null, null)
             startedCopying = true
-        } else Log.v(LOG_TAG, "we will not do an initialization")
+        } else
+            Log.v(LOG_TAG, "we will not do an initialization")
 
-        /* splash thread*/splashThread = object : Thread() {
+        /* splash thread*/
+        splashThread = object : Thread() {
             override fun run() {
                 try {
                     while (waited < splashTime) {
@@ -114,7 +118,7 @@ class SplashActivity : SudoqCompatActivity() {
                 }
             }
         }
-        splashThread.start()
+        (splashThread as Thread).start()
     }
 
     /* Specifies whether this is a regular start or an assets-update,
@@ -122,9 +126,8 @@ class SplashActivity : SudoqCompatActivity() {
 	 *
 	 * 'protected' for unit test
 	 */
-    protected fun updateSituation(oldVersionName: String?): Boolean {
-        val updateSituation: Boolean
-        updateSituation = try {
+    protected fun updateSituation(oldVersionName: String): Boolean {
+        val updateSituation: Boolean = try {
             older(oldVersionName, NEWEST_ASSET_VERSION)
         } catch (e: Exception) {
             true //when in doubt DO an update!
@@ -135,7 +138,7 @@ class SplashActivity : SudoqCompatActivity() {
     /** is version a older than b?
      * a,b = "12.68.87(abc..)"   */
     @Throws(Exception::class)
-    fun older(a: String?, b: String?): Boolean {
+    fun older(a: String, b: String): Boolean {
         val aTokenized = versionToNumbers(a)
         val bTokenized = versionToNumbers(b)
         assert(aTokenized.size == bTokenized.size)
@@ -148,14 +151,14 @@ class SplashActivity : SudoqCompatActivity() {
     }
 
     @Throws(Exception::class)
-    private fun versionToNumbers(version: String?): IntArray {
+    private fun versionToNumbers(version: String): IntArray {
         val pattern = "(\\d+)[.](\\d+)[.](\\d+)([a-z]?)"
         val r = Pattern.compile(pattern)
         val m = r.matcher(version)
         m.find()
         val result = IntArray(4)
         if (m.groupCount() == 4) {
-            val letter = m.group(4)
+            val letter = m.group(4)!!
             if (letter.length == 1) result[3] = letter[0] - 'a' + 1
         }
         for (i in intArrayOf(1, 2, 3)) result[i - 1] = m.group(i).toInt()
@@ -186,6 +189,7 @@ class SplashActivity : SudoqCompatActivity() {
     /**
      * Speichert die bereits im Splash gewartete Zeit.
      */
+    @SuppressLint("MissingSuperCall") //todo try out adding super call
     public override fun onSaveInstanceState(outState: Bundle) {
         outState.putInt(SAVE_WAITED.toString() + "", waited)
         outState.putBoolean(SAVE_STARTED_COPYING.toString() + "", startedCopying)
@@ -258,7 +262,8 @@ class SplashActivity : SudoqCompatActivity() {
 			 * Reason: people will probably want to play 9x9 first
 			 * kind of unnecessary because 9x9 is declared first in SudokuTypes, but maybe that will change*/types = swap99tothefront(types)
 
-            /* actual copying*/for (t in types) {
+            /* actual copying*/
+            for (t in types) {
                 val sourceType = HEAD_DIRECTORY + File.separator + t.toString() + File.separator // e.g. .../standard9x9/
                 val targetType = FileManager.getSudokuDir().absolutePath + File.separator + t.toString() + File.separator
                 copyFile("$sourceType$t.xml",
@@ -278,14 +283,14 @@ class SplashActivity : SudoqCompatActivity() {
         private fun swap99tothefront(types: Array<SudokuTypes>): Array<SudokuTypes> {
             if (types[0] !== SudokuTypes.standard9x9) {
                 /* find index */
-                var pos9x9: Int
-                pos9x9 = 0
+                var pos9x9: Int = 0
                 while (pos9x9 < types.size) {
                     if (types[pos9x9] === SudokuTypes.standard9x9) break
                     pos9x9++
                 }
 
-                /* swap */types[pos9x9] = types[0]
+                /* swap */
+                types[pos9x9] = types[0]
                 types[0] = SudokuTypes.standard9x9
             }
             return types
@@ -327,7 +332,7 @@ class SplashActivity : SudoqCompatActivity() {
             }
         }
 
-        protected override fun doInBackground(vararg params: Void): Void? {
+        protected override fun doInBackground(vararg params: Void?): Void? {
             Log.d(LOG_TAG, "Starting to copy templates")
             copyAssets()
             return null
@@ -353,6 +358,7 @@ class SplashActivity : SudoqCompatActivity() {
         /**
          * Die minimale Anzeigedauer des SplashScreens
          */
+        @JvmField
         var splashTime = 2500
         private const val HEAD_DIRECTORY = "sudokus"
         private const val INITIALIZED_TAG = "Initialized"
