@@ -17,6 +17,7 @@ import org.junit.Test;
 import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.Utility;
 import de.sudoq.model.files.FileManager;
+import de.sudoq.model.persistence.xml.game.GameRepo;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.complexity.Complexity;
@@ -63,8 +64,9 @@ public class GameManagerTests {
 
 	@After
 	public void deleteAllGames() {
-		for (int i = 1; i <= FileManager.getGamesDir(p).list().length; i++) {
-			FileManager.deleteGame(i, p);
+		GameRepo gr = new GameRepo(profileDir, p.getCurrentProfileID());
+		for (int i = 1; i <= gr.getGamesDir(p).list().length; i++) {
+			gr.deleteGame(i, p);
 		}
 		GameManager.Companion.getInstance(profileDir).updateGamesList();
 	}
