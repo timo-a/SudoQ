@@ -23,6 +23,7 @@ import org.junit.Test;
 import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.Utility;
 import de.sudoq.model.files.FileManager;
+import de.sudoq.model.persistence.xml.game.GameRepo;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
@@ -125,15 +126,16 @@ public class FileManagerTests extends TestWithInitCleanforSingletons {
 		Utility.clearDir(profileDir);
 		Profile p = Profile.Companion.getInstance(profileDir); //needs to be called first otherwise it failes as an indiviidual and sometimes as part of all the tests in this class
 
-		assertEquals(1, FileManager.getNextFreeGameId(p));//currentProfileID==-1
+		GameRepo gameRepo = new GameRepo(p.getProfilesDir(), p.getCurrentProfileID());
+		assertEquals(1, gameRepo.getNextFreeGameId(p));//currentProfileID==-1
 		assertTrue(FileManager.getGamesFile(p).exists());
-		File game  = FileManager.getGameFile(1, p);
-		File thumb = FileManager.getGameThumbnailFile(1, p);
+		File game  = gameRepo.getGameFile(1, p);
+		File thumb = gameRepo.getGameThumbnailFile(1, p);
 		assertEquals(game.getName(),  "game_1.xml");
 		assertEquals(thumb.getName(), "game_1.png");
 		assertTrue(game. createNewFile());
 		assertTrue(thumb.createNewFile());
-		assertTrue(FileManager.deleteGame(1, p));
+		assertTrue(gameRepo.deleteGame(1, p));
 	}
 	
 
