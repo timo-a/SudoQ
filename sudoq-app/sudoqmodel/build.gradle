@@ -136,6 +136,12 @@ compileTestKotlin {
     }
 }
 
+dokka {
+    outputFormat = 'html'
+    outputDirectory = "$buildDir/javadoc"
+}
+
+
 /*
 Was funktioniert?
 gradle otherTest
