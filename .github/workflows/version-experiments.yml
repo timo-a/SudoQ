@@ -52,6 +52,6 @@ jobs:
     steps:
     - run: |
         touch test.txt
-        echo "Log level: ${{ wc -l test.txt }}"
+        echo "Log level: $( wc -l test.txt )"
         echo "foo" >> test.txt
         sed --version 
