@@ -56,8 +56,11 @@ jobs:
         run: |
           echo "$(pwd)"
           FILE=sudoq-app/sudoqapp/src/main/AndroidManifest.xml
-          LINE_NUMBER=grep -n "android:versionCode=" $FILE | cut -f1 -d:
+          echo "get line number"
+          LINE_NUMBER=$(grep -n "android:versionCode=" $FILE | cut -f1 -d:)
+          echo "get version"
           VERSION=$(sed -n ${LINE_NUMBER}p $FILE | grep -oE '[0-9]+')
+          echo "replace version"
           sed -i "${LINE_NUMBER}s/${VERSION}/$((VERSION+1))/" $FILE
           
       - name: increase version number
