@@ -54,7 +54,8 @@ jobs:
       
       - name: increase version code
         run: |
-          FILE=SudoQ/sudoq-app/sudoqapp/src/main/AndroidManifest.xml
+          echo "$(pwd)"
+          FILE=sudoq-app/sudoqapp/src/main/AndroidManifest.xml
           LINE_NUMBER=grep -n "android:versionCode=" $FILE | cut -f1 -d:
           VERSION=$(sed -n ${LINE_NUMBER}p $FILE | grep -oE '[0-9]+')
           sed -i "${LINE_NUMBER}s/${VERSION}/$((VERSION+1))/" $FILE
