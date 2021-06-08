@@ -48,9 +48,10 @@ jobs:
       - uses: actions/checkout@v2
       
       - name: increase version code
+        env:
+          FILE: sudoq-app/sudoqapp/src/main/AndroidManifest.xml
         run: |
           echo "$(pwd)"
-          FILE=sudoq-app/sudoqapp/src/main/AndroidManifest.xml #todo try env instead
           echo "get line number"
           LINE_NUMBER=$(grep -n "android:versionCode=" $FILE | cut -f1 -d:)
           echo "get version"
@@ -61,8 +62,8 @@ jobs:
       - name: increase version number
         run : |
           FILE=sudoq-app/sudoqapp/src/main/AndroidManifest.xml
-          python incrementVersionName.py ${{ github.event.inputs.changeSeverity }} $FILE
-          
+          echo "$(ls)"
+          python .github/workflows/incrementVersionName.py ${{ github.event.inputs.changeSeverity }} $FILE
           echo "Log level: ${{ github.event.inputs.changeSeverity }}"
           echo "Tags: ${{ github.event.inputs.tags }}" 
           
