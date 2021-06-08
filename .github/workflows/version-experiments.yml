@@ -50,8 +50,16 @@ jobs:
   experiments:
     runs-on: ubuntu-latest
     steps:
-    - run: |
-        touch test.txt
-        echo "Log level: $( wc -l test.txt )"
-        echo "foo" >> test.txt
-        sed --version 
+      - uses: actions/checkout@v2
+      
+      - name: increase version code
+        run: |
+          FILE=SudoQ/sudoq-app/sudoqapp/src/main/AndroidManifest.xml
+          LINE_NUMBER=grep -n "android:versionCode=" $FILE | cut -f1 -d:
+          VERSION=$(sed -n ${LINE_NUMBER}p $FILE | grep -oE '[0-9]+')
+          sed -i "${LINE_NUMBER}s/${VERSION}/$((VERSION+1))/" $FILE
+          
+      - name: increase version number
+        run : |
+          echo "Log level: ${{ github.event.inputs.logLevel }}"
+          echo "Tags: ${{ github.event.inputs.tags }}" 
