@@ -7,7 +7,11 @@ import sys
 if not sys.argv[2]:
     print("Error: no position argument given", file = sys.stderr )
 
+print("file is: " + sys.argv[1])
+print("position argument is: " + sys.argv[2])
+    
 position = sys.argv[2][0]
+
 
 if position not in "bnp":
     print("Error: position argument is not valid", file = sys.stderr )
