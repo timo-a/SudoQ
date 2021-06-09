@@ -59,13 +59,12 @@ jobs:
           echo "replace version"
           sed -i "${LINE_NUMBER}s/${VERSION}/$((VERSION+1))/" $FILE
           
-      - name: increase version number
+      - name: increase version name
+        env:
+          FILE: sudoq-app/sudoqapp/src/main/AndroidManifest.xml
+          SCRIPT: .github/workflows/incrementVersionName.py
         run : |
-          FILE=sudoq-app/sudoqapp/src/main/AndroidManifest.xml
-          echo "$(ls)"
-          python .github/workflows/incrementVersionName.py $FILE ${{ github.event.inputs.changeSeverity }}
-          echo "Log level: ${{ github.event.inputs.changeSeverity }}"
-          echo "Tags: ${{ github.event.inputs.tags }}" 
+          python $SCRIPT $FILE ${{ github.event.inputs.changeSeverity }}
           
       - name: commit files
         uses: peter-evans/create-pull-request@v3
