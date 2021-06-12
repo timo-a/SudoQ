@@ -18,7 +18,7 @@ import de.sudoq.model.sudoku.*
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
-import de.sudoq.model.sudoku.sudokuTypes.SudokuType.Companion.getSudokuType
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider.getSudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.xml.SudokuXmlHandler
 import de.sudoq.model.xml.XmlAttribute
@@ -442,12 +442,14 @@ class GenerationAlgo(
             return p
         }
 
-        fun getSudoku(path: String, st: SudokuTypes): Sudoku? {
+        //nono usage found
+        /*fun getSudoku(path: String, st: SudokuTypes): Sudoku? {
             Profile.getInstance(File("/home/t/Code/SudoQ/DebugOnPC/profilefiles"))//todo is this used by the app??? try to delete
 
             FileManager.initialize(
                     File("/home/t/Code/SudoQ/sudoq-app/sudoqapp/src/main/assets/sudokus/"))
             val f = File(path)
+
             val s = Sudoku(getSudokuType(st)!!)
             try {
                 s.fillFromXml(XmlHelper().loadXml(f)!!)
@@ -457,7 +459,7 @@ class GenerationAlgo(
                 e.printStackTrace()
             }
             return null
-        }
+        }*/
     }
 
 }

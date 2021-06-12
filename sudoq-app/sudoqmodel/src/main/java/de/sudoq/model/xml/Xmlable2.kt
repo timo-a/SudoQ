@@ -7,22 +7,26 @@
  */
 package de.sudoq.model.xml
 
-import de.sudoq.model.files.FileManager
-import de.sudoq.model.game.Game
-import de.sudoq.model.persistence.xml.game.GameRepo
-import de.sudoq.model.profile.Profile
 import java.io.File
 
 /**
- * This class aids in converting concrete games into and from XML
+ * A class that can be (de-)serialised to/from XML.
  */
-class GameXmlHandler @JvmOverloads constructor(private val id: Int = -1, val p: Profile) : XmlHandler2<Game>() {
+interface Xmlable2 {
 
     /**
-     * {@inheritDoc}
+     * Creates an XmlTree Objekt, which contains all persist-worthy attributes.
+     *
+     * @return [XmlTree] representation of the implementing class
      */
-    protected override fun getFileFor(g: Game): File {
-        val gm = GameRepo(profilesDir = p.profilesDir!!, profileId = p.currentProfileID)
-        return gm.getGameFile(if (id > 0) id else g.id, p)
-    }
+    fun toXmlTree(): XmlTree?
+
+    /**
+     * Loads data from an xml representation into the implementing class
+     *
+     * @param xmlTreeRepresentation Representation of the implementing class.
+     * @throws IllegalArgumentException if the XML Representation has an unsupported structure.
+     */
+    @Throws(IllegalArgumentException::class)
+    fun fillFromXml(xmlTreeRepresentation: XmlTree, sudokuDir: File)
 }

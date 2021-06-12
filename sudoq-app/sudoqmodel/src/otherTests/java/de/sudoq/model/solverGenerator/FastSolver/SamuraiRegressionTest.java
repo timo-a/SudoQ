@@ -16,6 +16,7 @@ import de.sudoq.model.solverGenerator.solver.SudokuMockUps;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.xml.XmlHelper;
 
@@ -226,7 +227,7 @@ public class SamuraiRegressionTest {
                  new File("/home/t/Code/SudoQ/sudoq-app/sudoqapp/src/main/assets/sudokus/"));
         java.io.File f = new java.io.File(path);
 
-        Sudoku s = new Sudoku(SudokuType.getSudokuType(st));
+        Sudoku s = new Sudoku(SudokuTypeProvider.getSudokuType(st));
         try {
             s.fillFromXml(new XmlHelper().loadXml(f));
             s.setComplexity(Complexity.arbitrary);//justincase

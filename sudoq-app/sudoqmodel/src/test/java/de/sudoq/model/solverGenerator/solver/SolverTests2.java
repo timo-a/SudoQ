@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
 import static de.sudoq.model.sudoku.sudokuTypes.SudokuTypes.standard9x9;
@@ -34,10 +36,12 @@ import static org.junit.Assert.assertTrue;
 
 public class SolverTests2 extends Solver {
 
+	private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
+
 	@BeforeClass
 	public static void init() {
 		TestWithInitCleanforSingletons.legacyInit();
-		initialSudoku = new Sudoku(SudokuType.getSudokuType(standard9x9));
+		initialSudoku = new Sudoku(SudokuTypeProvider.getSudokuType(standard9x9, sudokuDir));
 		for (int i=0; i < 8; i++)
 			initialSudoku.getCell(Position.get(i,0)).setCurrentValue(i);
 
@@ -69,7 +73,7 @@ public class SolverTests2 extends Solver {
 		//sudoku = new SudokuBuilder(standard9x9).createSudoku();
 		//sudoku.setComplexity(Complexity.arbitrary);
 		solver = new Solver(solverSudoku);
-		sudoku16x16 = new SudokuBuilder(SudokuTypes.standard16x16).createSudoku();
+		sudoku16x16 = new SudokuBuilder(SudokuTypes.standard16x16, sudokuDir).createSudoku();
 		sudoku16x16.setComplexity(Complexity.arbitrary);
 		solution16x16 = new PositionMap<Integer>(sudoku16x16.getSudokuType().getSize());
 	}

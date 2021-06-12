@@ -65,7 +65,7 @@ public class GenerateSomeSudokus {
     }
 
     public void generate(Complexity c, SudokuTypes st){
-        Sudoku sudoku = new SudokuBuilder(st).createSudoku();
+        Sudoku sudoku = new SudokuBuilder(st, new File(SUDOKU_LOCATION2)).createSudoku();
 		sudoku.setComplexity(c);
 
 		GenerationAlgo ga = new GenerationAlgo(sudoku, getCallbackObj(), random);

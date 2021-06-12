@@ -204,10 +204,11 @@ open class SudokuType : Iterable<Constraint>, ComplexityFactory, Xmlable {
     /**
      * @return A list of the [Constraint]s of this SudokuType.
      */
-    @Deprecated(""" Gibt eine Liste der Constraints, welche zu diesem Sudokutyp gehören zurück. Hinweis: Wenn möglich stattdessen den
-	  Iterator benutzen.
-	  
-	  """)
+    @Deprecated("Gibt eine Liste der Constraints, welche zu diesem Sudokutyp gehören zurück. " +
+            "Hinweis: Wenn möglich stattdessen den Iterator benutzen.",
+            ReplaceWith("iterator()",
+                    "kotlin.collections.Iterator",
+                    "de.sudoq.model.sudoku.Constraint"))
     fun getConstraints(): ArrayList<Constraint> {
         return constraints as ArrayList<Constraint>
     }
@@ -283,35 +284,4 @@ open class SudokuType : Iterable<Constraint>, ComplexityFactory, Xmlable {
         for (c in constraints) for (p in c) if (!positions.contains(p)) positions.add(p)
     }
 
-    companion object {
-        @JvmStatic
-        fun getSudokuType(type: SudokuTypes): SudokuType? {
-            val f = FileManager.getSudokuTypeFile(type)
-            if (!f.exists()) {
-                return null
-            }
-            val helper = XmlHelper()
-            try {
-                val t = SudokuType()
-                val xt = helper.loadXml(f)!!
-                t.fillFromXml(xt)
-                return t
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            return null
-        }
-
-        val sudokuTypeIds: List<Int>
-            get() {
-                val ids: MutableList<Int> = ArrayList()
-                val f = FileManager.getSudokuDir()
-                for (id in f.listFiles()) {
-                    if (id.isDirectory) {
-                        ids.add(id.name.toInt())
-                    }
-                }
-                return ids
-            }
-    }
 }

@@ -21,7 +21,7 @@ import java.io.File
  */
 open class SudokuXmlHandler @JvmOverloads constructor(
         private val type: SudokuTypes? = null,
-        private val complexity: Complexity? = null) : XmlHandler<Sudoku>() {
+        private val complexity: Complexity? = null) : XmlHandler2<Sudoku>() {
 
     /**
      * {@inheritDoc}

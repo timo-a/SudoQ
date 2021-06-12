@@ -1,8 +1,10 @@
 package de.sudoq.model.solverGenerator.solver;
 
+import java.io.File;
 import java.util.List;
 import java.util.Stack;
 
+import de.sudoq.model.Utility;
 import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.ConstraintType;
@@ -18,22 +20,23 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
  * Created by timo on 02.09.16.
  */
 public class SudokuMockUps {
+    private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
 
     public static Sudoku stringTo9x9Sudoku(String pattern){
-        Sudoku s = new SudokuBuilder(SudokuTypes.standard9x9).createSudoku();
+        Sudoku s = new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku();
         s.setComplexity(Complexity.arbitrary);
         return transform(s, pattern);
     }
 
     public static Sudoku stringTo16x16Sudoku(String pattern){
-        Sudoku s = new SudokuBuilder(SudokuTypes.standard16x16).createSudoku();
+        Sudoku s = new SudokuBuilder(SudokuTypes.standard16x16, sudokuDir).createSudoku();
         s.setComplexity(Complexity.arbitrary);
         return transformX(16, s, pattern);
     }
 
     /* expects values in [1,9] */
     public static Sudoku stringToSamuraiSudoku(String pattern){
-        Sudoku s = new SudokuBuilder(SudokuTypes.samurai).createSudoku();
+        Sudoku s = new SudokuBuilder(SudokuTypes.samurai, sudokuDir).createSudoku();
         s.setComplexity(Complexity.arbitrary);
         int dim = 21;
         for(int y=0; y<dim; y++)
@@ -92,7 +95,7 @@ public class SudokuMockUps {
 
 
     public static Sudoku stringToSudoku(SudokuTypes type, String pattern){
-        Sudoku sudoku = new SudokuBuilder(type).createSudoku();
+        Sudoku sudoku = new SudokuBuilder(type, sudokuDir).createSudoku();
         sudoku.setComplexity(Complexity.arbitrary);
         int yLim = sudoku.getSudokuType().getSize().getY();
         int xLim = sudoku.getSudokuType().getSize().getX();

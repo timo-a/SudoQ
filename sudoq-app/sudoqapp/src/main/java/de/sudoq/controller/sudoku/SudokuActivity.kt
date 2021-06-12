@@ -163,18 +163,19 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val profilesFile = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        val sudokuFile   = getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE)
         Log.d(LOG_TAG, "Created")
         // Load the Game by using current game id
         if (savedInstanceState != null) {
             try {
-                game = GameManager.getInstance(profilesFile).load(savedInstanceState.getInt(SAVE_GAME_ID.toString() + ""))
+                game = GameManager.getInstance(profilesFile).load(savedInstanceState.getInt(SAVE_GAME_ID.toString() + ""), sudokuFile)
             } catch (e: Exception) {
                 finish()
             }
         } else {
             val pm = ProfileManager(profilesFile)
             pm.loadCurrentProfile()
-            game = GameManager.getInstance(profilesFile).load(pm.currentGame)
+            game = GameManager.getInstance(profilesFile).load(pm.currentGame, sudokuFile)
         }
         if (game != null) {
 

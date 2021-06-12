@@ -197,15 +197,6 @@ public final class FileManager {
 		return new File(getSudokuDir(s).getAbsolutePath(), "sudoku_" + s.getId() + ".xml");
 	}
 
-	 /**
-	 * Gibt die Sudoku-Typdatei für den spezifizierten Typ zurück.
-	 * @param type die Typ-Id
-	 * @return die entsprechende Sudoku-Typdatei
-	 */
-	public static File getSudokuTypeFile(SudokuTypes type) {
-		String ap = sudokus.getAbsolutePath();
-		return new File(ap + File.separator + type.toString() + File.separator + type.toString() +".xml");
-	}
 
 
 	/**

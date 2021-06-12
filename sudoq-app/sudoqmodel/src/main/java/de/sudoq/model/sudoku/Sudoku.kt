@@ -11,10 +11,13 @@ import de.sudoq.model.ModelChangeListener
 import de.sudoq.model.ObservableModelImpl
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
 import de.sudoq.model.xml.Xmlable
+import de.sudoq.model.xml.Xmlable2
+import java.io.File
 import java.util.*
 import kotlin.collections.Iterable
 import kotlin.collections.MutableMap
@@ -26,7 +29,7 @@ import kotlin.collections.set
 /**
  * This class represents a Sudoku with mit seinem Typ, seinen Feldern und seinem Schwierigkeitsgrad.
  */
-open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, Xmlable, ModelChangeListener<Cell> {
+open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, Xmlable2, ModelChangeListener<Cell> {
 
     /** An ID uniquely identifying the Sudoku */
     var id : Int = 0
@@ -219,7 +222,7 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, Xmlable, ModelCha
     /**
      * {@inheritDoc}
      */
-    override fun fillFromXml(xmlTreeRepresentation: XmlTree) {
+    override fun fillFromXml(xmlTreeRepresentation: XmlTree, sudokuDir: File) {
         // initialisation
         cellIdCounter = 1
         cellPositions = HashMap()
@@ -232,7 +235,7 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, Xmlable, ModelCha
            -1
         }
         val enumType = SudokuTypes.values()[xmlTreeRepresentation.getAttributeValue("type")!!.toInt()]
-        sudokuType = SudokuBuilder.createType(enumType)
+        sudokuType = SudokuTypeProvider.getSudokuType(enumType, sudokuDir)
         transformCount = xmlTreeRepresentation.getAttributeValue("transformCount")!!.toInt()
         val compl = xmlTreeRepresentation.getAttributeValue("complexity")
         complexity = if (compl == null) null else Complexity.values()[compl.toInt()]

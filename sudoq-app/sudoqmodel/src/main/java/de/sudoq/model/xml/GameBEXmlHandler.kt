@@ -17,7 +17,7 @@ import java.io.File
 /**
  * This class aids in converting concrete games into and from XML
  */
-class GameBEXmlHandler @JvmOverloads constructor(private val id: Int = -1, val p: Profile) : XmlHandler<GameBE>() {
+class GameBEXmlHandler @JvmOverloads constructor(private val id: Int = -1, val p: Profile) : XmlHandler2<GameBE>() {
 
     /**
      * {@inheritDoc}
