@@ -227,7 +227,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
                 }
                 2 -> {
                     val gameID = adapter!!.getItem(position)!!.id
-                    val gameFile = gameRepo.getGameFile(gameID, p)
+                    val gameFile = gameRepo.getGameFile(gameID)
                     var str = "there was an error reading the file, sorry"
                     var fis: FileInputStream? = null
                     try {
@@ -251,7 +251,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
                 3 -> {
                     //already defined under 2
                     val gameID = adapter!!.getItem(position)!!.id
-                    val gameFile = gameRepo.getGameFile(gameID, p)
+                    val gameFile = gameRepo.getGameFile(gameID)
                     /* we can only copy from 'files' subdir, so we have to move the file there first */
                     val tmpFile = File(filesDir, gameFile.getName())
                     val `in`: InputStream

@@ -7,12 +7,6 @@
  */
 package de.sudoq.model.game
 
-import de.sudoq.model.persistence.xml.game.GameBE.Companion.ID
-import de.sudoq.model.persistence.xml.game.GameBE.Companion.FINISHED
-import de.sudoq.model.persistence.xml.game.GameBE.Companion.PLAYED_AT
-import de.sudoq.model.persistence.xml.game.GameBE.Companion.SUDOKU_TYPE
-import de.sudoq.model.persistence.xml.game.GameBE.Companion.COMPLEXITY
-import de.sudoq.model.files.FileManager
 import de.sudoq.model.persistence.xml.game.GameBE
 import de.sudoq.model.persistence.xml.game.GameMapper
 import de.sudoq.model.persistence.xml.game.GameRepo
@@ -31,13 +25,15 @@ import java.util.*
  */
 class GameManager private constructor() {
 
-    private lateinit var xmlHandler: XmlHandler2<Game>
-
     private lateinit var xmlHandlerBE: XmlHandler2<GameBE>
 
     private lateinit var profile: Profile
 
     private lateinit var gameRepo: GameRepo
+
+    private lateinit var games: MutableList<GameData>
+
+    private lateinit var gamesFile: File
 
     /**
      * Creates a new gam and sets up the necessary files.
@@ -52,24 +48,23 @@ class GameManager private constructor() {
         val sudoku = SudokuManager.getNewSudoku(type, complexity, sudokuDir)
         SudokuManager(sudokuDir).usedSudoku(sudoku) //TODO warum instanziierung, wenn laut doc singleton?
 
-        val repo = GameRepo(
-                profilesDir = profile.profilesDir!!,
-                profileId = profile.currentProfileID)
-
-        val game = Game(repo.getNextFreeGameId(profile), sudoku)
+        val gameBE0 = gameRepo.create()
+        gameBE0.sudoku = sudoku
+        val game = GameMapper.fromBE(gameBE0);
         game.setAssistances(assistances)
-
-
         val gameBE = GameMapper.toBE(game)
-        xmlHandlerBE.saveAsXml(gameBE)
-        val games = gamesXml
-        val gameTree = XmlTree("game")
-        gameTree.addAttribute(XmlAttribute(ID, gameBE.id.toString()))
-        gameTree.addAttribute(XmlAttribute(SUDOKU_TYPE, gameBE.sudoku!!.sudokuType?.enumType!!.ordinal.toString()))
-        gameTree.addAttribute(XmlAttribute(COMPLEXITY, gameBE.sudoku!!.complexity?.ordinal.toString()))
-        gameTree.addAttribute(XmlAttribute(PLAYED_AT, SimpleDateFormat(GameData.dateFormat).format(Date())))
-        games.addChild(gameTree)
+        xmlHandlerBE.saveAsXml(gameBE) //todo use repo
+        val gameData = GameData(
+                gameBE.id,
+                SimpleDateFormat(GameData.dateFormat).format(Date()),
+                gameBE.finished,
+                gameBE.sudoku!!.sudokuType?.enumType!!,
+                gameBE.sudoku!!.complexity!!
+        )
+
+        games.add(gameData)
         saveGamesFile(games)
+
         return game
     }
 
@@ -82,35 +77,12 @@ class GameManager private constructor() {
      */
     fun load(id: Int, sudokuDir: File): Game {
         require(id > 0) { "invalid id" }
-        val game = Game()
+        val gameBE = GameBE()
         // throws IllegalArgumentException
-        GameXmlHandler(id, profile).createObjectFromXml(game, sudokuDir)
-        return game
+        GameBEXmlHandler(id, profile).createObjectFromXml(gameBE, sudokuDir)
+        return GameMapper.fromBE(gameBE)
     }
 
-    /**
-     * A list data of all games of a player.
-     * Sorted by unfinished first then by most recently played //TODO confirm with test
-     *
-     * @return the list
-     */
-    val gameList: List<GameData>
-        get() {
-            val list: MutableList<GameData> = ArrayList()
-            for (game in gamesXml) {
-                list.add(GameData(
-                        game.getAttributeValue(ID)!!.toInt(),
-                        game.getAttributeValue(PLAYED_AT)!!,
-                        game.getAttributeValue(FINISHED).toBoolean(),
-                        SudokuTypes.values()[game.getAttributeValue(SUDOKU_TYPE)!!.toInt()],
-                        Complexity.values()[game.getAttributeValue(COMPLEXITY)!!.toInt()]
-                )
-                )
-            }
-            list.sort()
-            list.reverse()
-            return list
-        }
 
     /**
      * Save a Game to XML.
@@ -118,35 +90,24 @@ class GameManager private constructor() {
      * @param game [Game] to save
      */
     fun save(game: Game, profile: Profile) {
-        xmlHandler.saveAsXml(game)
-        val games = gamesXml
+        val gameBE = GameMapper.toBE(game)
+        xmlHandlerBE.saveAsXml(gameBE)
 
-        for (g in games) {
-            if (g.getAttributeValue(ID)!!.toInt() == game.id) {
-                // TODO anpassen
-                g.updateAttribute(XmlAttribute(PLAYED_AT, SimpleDateFormat(GameData.dateFormat).format(Date())))
-                g.updateAttribute(XmlAttribute(FINISHED, (game.isFinished().toString())))
-                break
-            }
-        }
+        updateGameInList(game)
 
         profile.saveChanges()
         saveGamesFile(games)
     }
 
-    /**
-     * Deletes no longer existing [Game]s from the list.
-     *
-     */
-    fun updateGamesList() {
-        val games = gamesXml
-        val newGames = XmlTree(games.name)
-        for (g in games) {
-            if (gameRepo.getGameFile(g.getAttributeValue(ID)!!.toInt(), profile).exists()) {
-                newGames.addChild(g)
-            }
-        }
-        saveGamesFile(newGames)
+    private fun updateGameInList(game: Game) {
+        val oldGameData = games.find { it.id == game.id }!!
+        val newGameData = GameData(oldGameData.id,
+                SimpleDateFormat(GameData.dateFormat).format(Date()), game.isFinished(),
+                oldGameData.type, oldGameData.complexity)
+
+        games.remove(oldGameData)
+        games.add(newGameData)
+        games = games.sortedDescending().toMutableList()
     }
 
     /**
@@ -165,51 +126,73 @@ class GameManager private constructor() {
     }
 
     /**
+     * A list data of all games of a player.
+     * Sorted by unfinished first then by most recently played //TODO confirm with test
+     *
+     * @return the list
+     */
+    val gameList: List<GameData>
+        get() = games
+
+    /**
+     * Deletes no longer existing [Game]s from the list.
+     *
+     */
+    fun updateGamesList() {
+        saveGamesFile(games.filter { gameRepo.getGameFile(it.id).exists() })
+    }
+
+
+    /**
      * Deletes all finished [Games] from storage and the current list
      */
     fun deleteFinishedGames() {
-        val games = gamesXml
-        for (g in games) {
-            if (g.getAttributeValue(FINISHED).toBoolean()) {
-                gameRepo.deleteGame(g.getAttributeValue(ID)!!.toInt(), profile)
-            }
-        }
+        games.filter { it.isFinished }
+                .forEach { gameRepo.deleteGame(it.id, profile) }
+
         updateGamesList()
     }
 
-    private fun saveGamesFile(games: XmlTree) {
+    private fun saveGamesFile(games: List<GameData>) {
+        val xmlTree = XmlTree("games")
+        games.map { it.toXmlTree() }.forEach { xmlTree.addChild(it)  }
         try {
-            XmlHelper().saveXml(games, FileManager.getGamesFile(profile))
-        } catch (e: IOException) {
-            throw IllegalStateException("Profil broken", e)
-        }
-    }
-
-    private val gamesXml: XmlTree
-        get() = try {
-            val gf = FileManager.getGamesFile(profile)
-            XmlHelper().loadXml(gf)!!
+            XmlHelper().saveXml(xmlTree, gamesFile)
         } catch (e: IOException) {
             throw IllegalStateException("Profile broken", e)
         }
+    }
 
 
     companion object {
 
-        private var instance: GameManager? = null
+        private var instance: GameManager? = null //todo make class a non-singleton
 
         fun getInstance(f: File): GameManager {
             if (instance == null ) {
                 instance = GameManager()
                 val profile = Profile.getInstance(f)
                 instance!!.profile = profile
-                instance!!.xmlHandler = GameXmlHandler(p = profile)
                 instance!!.xmlHandlerBE = GameBEXmlHandler(p = profile)
                 instance!!.gameRepo = GameRepo(profile.profilesDir!!, profile.currentProfileID)
+                instance!!.gamesFile = File(profile.currentProfileDir, "games.xml")
+
+                instance!!.games = try {
+                    XmlHelper()
+                            .loadXml(instance!!.gamesFile)!!
+                            .map { GameData.fromXml(it) }
+                            .sortedDescending().toMutableList()
+                } catch (e: IOException) {
+                    throw IllegalStateException("Profile broken", e)
+                }
+
+
+
             }
 
             return instance!!
         }
+
     }
 
 }

@@ -19,6 +19,8 @@ import de.sudoq.model.Utility;
 import de.sudoq.model.actionTree.ActionTreeElement;
 import de.sudoq.model.actionTree.NoteActionFactory;
 import de.sudoq.model.actionTree.SolveActionFactory;
+import de.sudoq.model.persistence.xml.game.GameBE;
+import de.sudoq.model.persistence.xml.game.GameMapper;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.solverGenerator.Generator;
 import de.sudoq.model.solverGenerator.GeneratorCallback;
@@ -159,8 +161,10 @@ public class GameTests {
 		game.undo();
 
 		Game game2 = new Game();
-		game2.fillFromXml(game.toXmlTree(), sudokuDir);
-		assertEquals(game, game2);
+		GameBE gameBE  = GameMapper.INSTANCE.toBE(game);
+		GameBE game2BE = GameMapper.INSTANCE.toBE(game2);
+		game2BE.fillFromXml(gameBE.toXmlTree(), sudokuDir);
+		assertEquals(gameBE, game2BE);
 	}
 
 	// Regression Test for Issue-89
@@ -176,16 +180,21 @@ public class GameTests {
 		assertTrue(game.solveAll());
 		assertTrue(game.isFinished());
 
-		Game game2 = new Game();
-		game2.fillFromXml(game.toXmlTree(), sudokuDir);
+		Game game2 = convertAndBack(game);
 		assertTrue(game2.isFinished());
 
 		game2.undo();
 		assertTrue(game2.isFinished());
 
-		game = new Game();
-		game.fillFromXml(game2.toXmlTree(), sudokuDir);
+		game = convertAndBack(game2);
 		assertTrue(game.isFinished());
+	}
+
+	private Game convertAndBack(Game g) {
+		GameBE source = GameMapper.INSTANCE.toBE(g);
+		GameBE target = new GameBE();
+		target.fillFromXml(source.toXmlTree(), sudokuDir);
+		return GameMapper.INSTANCE.fromBE(target);
 	}
 
 	@Test(expected = NullPointerException.class)

@@ -22,7 +22,7 @@ import java.util.*
  * This class represents a sudoku game.
  * Functions as a Facade towards the controller.
  */
-class Game : Xmlable2 {
+class Game {
 
     /**
      * Unique id for the game
@@ -362,92 +362,6 @@ class Game : Xmlable2 {
     val isLefthandedModeActive: Boolean
         get() = gameSettings!!.isLefthandModeSet
 
-    /**
-     * {@inheritDoc}
-     */
-    override fun toXmlTree(): XmlTree {
-        val representation = XmlTree("game")
-        representation.addAttribute(XmlAttribute("id", "" + id))
-        representation.addAttribute(XmlAttribute("finished", "" + finished))
-        representation.addAttribute(XmlAttribute("time", "" + time))
-        representation.addAttribute(XmlAttribute("currentTurnId", "" + currentState.id))
-        representation.addChild(gameSettings!!.toXmlTree())
-        representation.addAttribute(XmlAttribute("assistancesCost", "" + assistancesCost))
-        representation.addChild(sudoku!!.toXmlTree())
-        val actionList = ArrayList<ActionTreeElement>()
-        for (ate in stateHandler!!.actionTree) {
-            actionList.add(ate)
-        }
-        actionList.sort()
-        for (ate in actionList) {
-
-            //add if not null
-            ate.toXml()?.let { representation.addChild(it) }
-
-        }
-        return representation
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    override fun fillFromXml(xmlTreeRepresentation: XmlTree, sudokuDir: File) {
-        id = xmlTreeRepresentation.getAttributeValue("id")!!.toInt()
-        time = xmlTreeRepresentation.getAttributeValue("time")!!.toInt()
-        val currentStateId = xmlTreeRepresentation.getAttributeValue("currentTurnId")!!.toInt()
-
-        // Problems:
-        // - What about corrupt files? is the game validated after it has been
-        // filled?
-        assistancesCost = xmlTreeRepresentation.getAttributeValue("assistancesCost")!!.toInt()
-        for (sub in xmlTreeRepresentation) {
-            if (sub.name == "sudoku") {
-                sudoku = SudokuManager.emptySudokuToFillWithXml
-                sudoku!!.fillFromXml(sub, sudokuDir)
-            } else if (sub.name == "gameSettings") {
-                gameSettings = GameSettings()
-                gameSettings!!.fillFromXml(sub)
-            }
-        }
-        stateHandler = GameStateHandler()
-        for (sub in xmlTreeRepresentation) {
-            if (sub.name == "action") {
-                val diff = sub.getAttributeValue(ActionTreeElement.DIFF)!!.toInt()
-
-                // put the action to the parent action
-                val attributeValue = sub.getAttributeValue(ActionTreeElement.PARENT)
-                val parentID = attributeValue!!.toInt()
-                val parent = stateHandler!!.actionTree.getElement(parentID)
-                goToState(parent!!)//since we don't serialize the root node there should always be a parent
-
-                // if(!sub.getAttributeValue(ActionTreeElement.PARENT).equals(""))
-                // is not necessary since the root action comes from the gsh so
-
-                // every element has e parent
-                val field_id = sub.getAttributeValue(ActionTreeElement.FIELD_ID)!!.toInt()
-                val f = sudoku!!.getCell(field_id)!!
-                if (sub.getAttributeValue(ActionTreeElement.ACTION_TYPE) == SolveAction::class.java.simpleName) {
-                    stateHandler!!.addAndExecute(SolveActionFactory().createAction(f.currentValue + diff,
-                            f))
-                } else { // if(sub.getAttributeValue(ActionTreeElement.ACTION_TYPE).equals(NoteAction.class.getSimpleName()))
-                    stateHandler!!.addAndExecute(NoteActionFactory().createAction(diff, f))
-                }
-                if (java.lang.Boolean.parseBoolean(sub.getAttributeValue(ActionTreeElement.MARKED))) {
-                    markCurrentState()
-                }
-                var s = sub.getAttributeValue(ActionTreeElement.MISTAKE)
-                if (s != null && java.lang.Boolean.parseBoolean(s)) {
-                    currentState.markWrong()
-                }
-                s = sub.getAttributeValue(ActionTreeElement.CORRECT)
-                if (s != null && java.lang.Boolean.parseBoolean(s)) {
-                    currentState.markCorrect()
-                }
-            }
-        }
-        finished = java.lang.Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("finished"))
-        goToState(stateHandler!!.actionTree.getElement(currentStateId)!!)
-    }
 
     /**
      * {@inheritDoc}
