@@ -24,6 +24,6 @@ class GameBEXmlHandler @JvmOverloads constructor(private val id: Int = -1, val p
      */
     protected override fun getFileFor(g: GameBE): File {
         val gm = GameRepo(profilesDir = p.profilesDir!!, profileId = p.currentProfileID)
-        return gm.getGameFile(if (id > 0) id else g.id, p)
+        return gm.getGameFile(if (id > 0) id else g.id)
     }
 }

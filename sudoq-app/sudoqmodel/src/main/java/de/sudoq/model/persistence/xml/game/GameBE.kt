@@ -96,7 +96,7 @@ class GameBE : Xmlable2 {
             }
         }
         stateHandler = GameStateHandler()
-        for (sub in xmlTreeRepresentation) {
+        for (sub in xmlTreeRepresentation) {//todo give xmltree handler its own xml capabilities
             if (sub.name == "action") {
                 val diff = sub.getAttributeValue(ActionTreeElement.DIFF)!!.toInt()
 
@@ -148,6 +148,12 @@ class GameBE : Xmlable2 {
     /** Marks the current state to better find it later */
     private fun markCurrentState() {
         stateHandler!!.markCurrentState() //TODO what doe this mean is it a book mark?
+    }
+
+    /**
+     * to fill from xml*/
+    constructor() {//TODO who uses this? can it be removed?
+        id = -1
     }
 
     constructor(id: Int,

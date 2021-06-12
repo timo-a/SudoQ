@@ -1,16 +1,41 @@
 package de.sudoq.model.persistence.xml.game
 
+import de.sudoq.model.game.GameSettings
+import de.sudoq.model.game.GameStateHandler
 import de.sudoq.model.persistence.IRepo
 import de.sudoq.model.persistence.xml.profile.ProfileRepo
 import de.sudoq.model.profile.Profile
 import de.sudoq.model.profile.ProfileManager
+import de.sudoq.model.xml.XmlHelper
+import de.sudoq.model.xml.XmlTree
 import java.io.File
+import java.io.IOException
 
+/**
+ * repo for the games of one specific profile
+ */
 class GameRepo(private val profilesDir: File, private val profileId: Int) : IRepo<GameBE> {
 
-    override fun create(): GameBE {
 
-        TODO("Not yet implemented")
+    private val gamesDir: File
+
+    val gamesFile: File
+
+
+    override fun create(): GameBE {
+        val newGame = GameBE()
+        newGame.id = getNextFreeGameId()
+        newGame.gameSettings = GameSettings()
+        newGame.time = 0
+        newGame.stateHandler = GameStateHandler()
+
+        val file = File(gamesDir, "game_${newGame.id}.xml")
+        try {
+            XmlHelper().saveXml(newGame.toXmlTree(), file)
+        } catch (e: IOException) {
+            throw IllegalStateException("Error saving game xml tree", e)
+        }
+        return newGame
     }
 
     /**
@@ -18,21 +43,10 @@ class GameRepo(private val profilesDir: File, private val profileId: Int) : IRep
      *
      * @return naechste verfuegbare ID
      */
-    fun getNextFreeGameId(p: Profile): Int {
-        val gamesDir = getGamesDir(p)
+    fun getNextFreeGameId(): Int {
         return gamesDir.list().size + 1
     }
 
-    /**
-     * Gibt das Game-Verzeichnis des aktuellen Profils zurueck
-     *
-     * @return File, welcher auf das Game-Verzeichnis des aktuellen Profils
-     * zeigt
-     */
-    fun getGamesDir(p: ProfileManager): File {
-        val currentProfile = p.currentProfileDir
-        return File(currentProfile, "games")
-    }
 
     /**
      * Gibt die XML eines Games des aktuellen Profils anhand seiner ID zurueck
@@ -41,8 +55,8 @@ class GameRepo(private val profilesDir: File, private val profileId: Int) : IRep
      * ID des Games
      * @return File, welcher auf die XML Datei des Games zeigt
      */
-    fun getGameFile(id: Int, p: Profile?): File {
-        return File(getGamesDir(p!!), "game_$id.xml")
+    fun getGameFile(id: Int): File {
+        return File(gamesDir, "game_$id.xml")
     }
 
     /**
@@ -54,7 +68,7 @@ class GameRepo(private val profilesDir: File, private val profileId: Int) : IRep
      * @return ob es geloescht wurde.
      */
     fun deleteGame(id: Int, p: Profile?): Boolean {
-        val game = getGameFile(id, p)!!.delete()
+        val game = getGameFile(id).delete()
         return game && getGameThumbnailFile(id, p).delete()
     }
 
@@ -71,7 +85,7 @@ class GameRepo(private val profilesDir: File, private val profileId: Int) : IRep
      * @return The thumbnail File.
      */
     fun getGameThumbnailFile(gameID: Int, p: ProfileManager?): File {
-        return File(getGamesDir(p!!).toString() + File.separator + "game_" +
+        return File(gamesDir.toString() + File.separator + "game_" +
                 gameID + ".png")
     }
 
@@ -91,6 +105,10 @@ class GameRepo(private val profilesDir: File, private val profileId: Int) : IRep
     init {
         val profileRepo = ProfileRepo(profilesDir)
         var pm : ProfileManager = ProfileManager()
+
+        val profile = File(profilesDir, "profile_$profileId")
+        this.gamesDir = File(profile, "games")
+        this.gamesFile = File(profile, "games.xml")
     }
 
 }
