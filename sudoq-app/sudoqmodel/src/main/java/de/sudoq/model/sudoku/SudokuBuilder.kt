@@ -8,8 +8,9 @@
 package de.sudoq.model.sudoku
 
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
-import de.sudoq.model.sudoku.sudokuTypes.SudokuType.Companion.getSudokuType
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider.getSudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
+import java.io.File
 
 /** Provides functions to create a [SudokuType] or an empty [Sudoku] */
 class SudokuBuilder(private val type: SudokuType?) {
@@ -23,7 +24,7 @@ class SudokuBuilder(private val type: SudokuType?) {
      * @param type Enum-Type of the [Sudoku] to create
      * @throws NullPointerException if type invalid.
      */
-    constructor(type: SudokuTypes) : this(createType(type)) {}
+    constructor(type: SudokuTypes, sudokuDir: File) : this(getSudokuType(type, sudokuDir)) {}
 
     /**
      * Creates a [Sudoku] with the SudokeType of this builder and the entered Solutions.
@@ -53,20 +54,6 @@ class SudokuBuilder(private val type: SudokuType?) {
      */
     fun setFixed(pos: Position?) {
         setValues.put(pos!!, true)
-    }
-
-    companion object {
-        /**
-         * Creates and returns a SudokuType subject to the specified Type Name.
-         * If the type cannot be mapped to a type null is returned.
-         *
-         * @param type Enum Type of the SudokuType to create.
-         * @return a [SudokuType] of null if type cannot be mapped
-         */
-		@JvmStatic
-		fun createType(type: SudokuTypes): SudokuType? {
-            return getSudokuType(type)
-        }
     }
 
 }

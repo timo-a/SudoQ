@@ -26,6 +26,7 @@ public class XmlHandlerTests {
 
 	private static File sudokus;
 	private static File profiles;
+	private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
 
 	@Before
 	public void init() {
@@ -90,10 +91,10 @@ public class XmlHandlerTests {
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateObjectFromXmlIllegalArgumentException() throws SecurityException, IllegalArgumentException, IOException, NoSuchFieldException, IllegalAccessException {
 		TypeBuilder.get99();
-		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard16x16).createSudoku();
+		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard16x16, sudokuDir).createSudoku();
 		sudoku.setComplexity(Complexity.difficult);
 
-		new SudokuXmlHandler().createObjectFromXml(sudoku);
+		new SudokuXmlHandler().createObjectFromXml(sudoku, sudokuDir);
 	}
 
 }

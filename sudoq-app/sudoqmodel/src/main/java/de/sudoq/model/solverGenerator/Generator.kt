@@ -13,6 +13,7 @@ import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.SudokuBuilder
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
+import java.io.File
 import java.util.*
 
 /**
@@ -26,7 +27,7 @@ import java.util.*
  *
  * @see Solver
  */
-class Generator {
+class Generator(val sudokuDir: File) {
 
     private var random: Random
 
@@ -56,7 +57,7 @@ class Generator {
         if (type == null || complexity == null || callbackObject == null) return false
 
         // Create sudoku
-        val sudoku = SudokuBuilder(type).createSudoku()
+        val sudoku = SudokuBuilder(type, sudokuDir).createSudoku()
         sudoku.complexity = complexity
         val t = Thread(GenerationAlgo(sudoku, callbackObject, random))
         t.start()

@@ -17,15 +17,16 @@ import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
 public class SudokuManagerTests extends TestWithInitCleanforSingletons {
+	private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
 
 	@Test(timeout = 120) // threw an exception and ran forever in the past -> timeout
 	public void test() {
 		assertEquals(21, FileManager.getSudokuCountOf(SudokuTypes.standard9x9, Complexity.infernal));
-		Sudoku s = SudokuManager.getNewSudoku(SudokuTypes.standard9x9, Complexity.infernal);
+		Sudoku s = SudokuManager.getNewSudoku(SudokuTypes.standard9x9, Complexity.infernal, sudokuDir);
 		for (int i = 0; i < 10; i++) {
 			s.increaseTransformCount();
 		}
-		SudokuManager sm = new SudokuManager() {
+		SudokuManager sm = new SudokuManager(sudokuDir) {
 			public void generationFinished(Sudoku sudoku) {
 				synchronized (SudokuManagerTests.this) {
 					super.generationFinished(sudoku);

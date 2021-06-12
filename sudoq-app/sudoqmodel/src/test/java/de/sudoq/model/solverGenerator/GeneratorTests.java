@@ -2,6 +2,7 @@ package de.sudoq.model.solverGenerator;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
@@ -28,6 +29,7 @@ import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 public class GeneratorTests implements GeneratorCallback {
 
 	private Generator generator;
+	private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
 
 	@BeforeClass
 	public static void init() throws IOException {
@@ -53,7 +55,7 @@ public class GeneratorTests implements GeneratorCallback {
 	@Before
 	public void beforeTest() {
 		TypeBuilder.get99();
-		generator = new Generator();
+		generator = new Generator(sudokuDir);
 	}
 
 	@Override

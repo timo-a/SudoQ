@@ -14,14 +14,15 @@ import de.sudoq.model.sudoku.SudokuManager
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
-import de.sudoq.model.xml.Xmlable
+import de.sudoq.model.xml.Xmlable2
+import java.io.File
 import java.util.*
 
 /**
  * This class represents a sudoku game.
  * Functions as a Facade towards the controller.
  */
-class Game : Xmlable {
+class Game : Xmlable2 {
 
     /**
      * Unique id for the game
@@ -390,7 +391,7 @@ class Game : Xmlable {
     /**
      * {@inheritDoc}
      */
-    override fun fillFromXml(xmlTreeRepresentation: XmlTree) {
+    override fun fillFromXml(xmlTreeRepresentation: XmlTree, sudokuDir: File) {
         id = xmlTreeRepresentation.getAttributeValue("id")!!.toInt()
         time = xmlTreeRepresentation.getAttributeValue("time")!!.toInt()
         val currentStateId = xmlTreeRepresentation.getAttributeValue("currentTurnId")!!.toInt()
@@ -402,7 +403,7 @@ class Game : Xmlable {
         for (sub in xmlTreeRepresentation) {
             if (sub.name == "sudoku") {
                 sudoku = SudokuManager.emptySudokuToFillWithXml
-                sudoku!!.fillFromXml(sub)
+                sudoku!!.fillFromXml(sub, sudokuDir)
             } else if (sub.name == "gameSettings") {
                 gameSettings = GameSettings()
                 gameSettings!!.fillFromXml(sub)

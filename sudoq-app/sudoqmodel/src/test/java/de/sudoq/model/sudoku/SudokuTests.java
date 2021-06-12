@@ -35,6 +35,7 @@ public class SudokuTests {
 
     private static File profiles;
 	private static File sudokus ;
+	private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
 
 	@BeforeClass
 	public static void beforeClass() {
@@ -42,7 +43,7 @@ public class SudokuTests {
         sudokus  = Utility.sudokus;
         profiles = Utility.profiles;
 
-		new Generator().generate(SudokuTypes.standard4x4, Complexity.easy, new GeneratorCallback() {
+		new Generator(sudokuDir).generate(SudokuTypes.standard4x4, Complexity.easy, new GeneratorCallback() {
 			@Override
 			public void generationFinished(Sudoku sudoku) {
 				SudokuTests.sudoku = sudoku;
@@ -204,7 +205,7 @@ public class SudokuTests {
 
 	@Test
 	public void testCellChangeNotification() {
-		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard9x9).createSudoku();
+		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku();
 		Listener listener = new Listener();
 
 		sudoku.getCell(Position.get(0, 0)).setCurrentValue(2);
@@ -227,7 +228,7 @@ public class SudokuTests {
 
 	@Test
 	public void testToXml() {
-		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard9x9).createSudoku();
+		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku();
 		sudoku.setId(4357);
 		sudoku.setComplexity(Complexity.easy);
 
@@ -244,13 +245,13 @@ public class SudokuTests {
 
 	@Test
 	public void testFillFromXml() throws IllegalArgumentException, IOException {
-		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard9x9).createSudoku();
+		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku();
 		sudoku.setId(6374);
 
 		XmlTree tree = sudoku.toXmlTree();
 		System.out.println(new XmlHelper().buildXmlStructure(tree));
 		Sudoku rebuilt = new Sudoku();
-		rebuilt.fillFromXml(tree);
+		rebuilt.fillFromXml(tree, sudokuDir);
 
 		assertEquals(sudoku, rebuilt);
 	}
@@ -296,7 +297,7 @@ public class SudokuTests {
 			}
 			assertTrue(sub.getNumberOfChildren() == 2);
 		}
-		sudoku.fillFromXml(tree);
+		sudoku.fillFromXml(tree, sudokuDir);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -312,7 +313,7 @@ public class SudokuTests {
 			}
 			sub.addChild(new XmlTree("Test"));
 		}
-		sudoku.fillFromXml(tree);
+		sudoku.fillFromXml(tree, sudokuDir);
 	}
 
 	@Test
@@ -321,7 +322,7 @@ public class SudokuTests {
 		XmlTree tree = sudoku.toXmlTree();
 		tree.addChild(new XmlTree("Test"));
 		Sudoku s2 = new Sudoku(TypeBuilder.get99());
-		s2.fillFromXml(tree);
+		s2.fillFromXml(tree, sudokuDir);
 		assertEquals(sudoku, s2);
 
 	}

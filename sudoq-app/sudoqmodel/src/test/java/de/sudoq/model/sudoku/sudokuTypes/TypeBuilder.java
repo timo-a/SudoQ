@@ -13,14 +13,14 @@ public class TypeBuilder {
 
 		FileManager.initialize(sudokus);
 
-		return SudokuType.getSudokuType(st);
+		return SudokuTypeProvider.getSudokuType(st, sudokus);
 	}
 	
 	public static SudokuType get99(){
 
 		FileManager.initialize(sudokus);
 
-		return SudokuType.getSudokuType(SudokuTypes.standard9x9);
+		return SudokuTypeProvider.getSudokuType(SudokuTypes.standard9x9, sudokus);
 	}
 
 

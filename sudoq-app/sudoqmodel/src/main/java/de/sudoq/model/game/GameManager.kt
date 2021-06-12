@@ -31,9 +31,9 @@ import java.util.*
  */
 class GameManager private constructor() {
 
-    private lateinit var xmlHandler: XmlHandler<Game>
+    private lateinit var xmlHandler: XmlHandler2<Game>
 
-    private lateinit var xmlHandlerBE: XmlHandler<GameBE>
+    private lateinit var xmlHandlerBE: XmlHandler2<GameBE>
 
     private lateinit var profile: Profile
 
@@ -48,9 +48,9 @@ class GameManager private constructor() {
      * @return The new [Game]
      *
      */
-    fun newGame(type: SudokuTypes, complexity: Complexity, assistances: GameSettings): Game {
-        val sudoku = SudokuManager.getNewSudoku(type, complexity)
-        SudokuManager().usedSudoku(sudoku) //TODO warum instanziierung, wenn laut doc singleton?
+    fun newGame(type: SudokuTypes, complexity: Complexity, assistances: GameSettings, sudokuDir: File): Game {
+        val sudoku = SudokuManager.getNewSudoku(type, complexity, sudokuDir)
+        SudokuManager(sudokuDir).usedSudoku(sudoku) //TODO warum instanziierung, wenn laut doc singleton?
 
         val repo = GameRepo(
                 profilesDir = profile.profilesDir!!,
@@ -80,11 +80,11 @@ class GameManager private constructor() {
      * @return Das geladene Spiel, null falls kein Spiel zur angegebenen id existiert
      * @throws IllegalArgumentException if there is no game with that id or if id is not positive.
      */
-    fun load(id: Int): Game {
+    fun load(id: Int, sudokuDir: File): Game {
         require(id > 0) { "invalid id" }
         val game = Game()
         // throws IllegalArgumentException
-        GameXmlHandler(id, profile).createObjectFromXml(game)
+        GameXmlHandler(id, profile).createObjectFromXml(game, sudokuDir)
         return game
     }
 

@@ -34,6 +34,8 @@ import de.sudoq.model.xml.SudokuXmlHandler;
 
 public class FileManagerTests extends TestWithInitCleanforSingletons {
 
+	private static File sudokuDir = new File(Utility.RES + "tmp_suds");
+
 	@Test
 	public void testInit() {
 		assertTrue(Utility.sudokus.exists());
@@ -83,7 +85,7 @@ public class FileManagerTests extends TestWithInitCleanforSingletons {
         }
         assertEquals(0, FileManager.getSudokuCountOf(SudokuTypes.standard16x16, Complexity.difficult));
 
-        Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard16x16).createSudoku();
+        Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard16x16, sudokuDir).createSudoku();
 		sudoku.setComplexity(Complexity.difficult);
 		new SudokuXmlHandler().saveAsXml(sudoku);
 		new SudokuXmlHandler().saveAsXml(sudoku);
@@ -95,7 +97,7 @@ public class FileManagerTests extends TestWithInitCleanforSingletons {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testFalseSudokuMangement() {
-		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard16x16).createSudoku();
+		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard16x16, sudokuDir).createSudoku();
 		sudoku.setComplexity(Complexity.difficult);
         FileManager.deleteSudoku(sudoku);
 	}

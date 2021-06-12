@@ -15,10 +15,12 @@ import de.sudoq.model.solverGenerator.transformations.Transformer
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.xml.SudokuXmlHandler
+import java.io.File
 
 /** Responsible for maintaining existing Sudokus. Implemented as Singleton. */
-open class SudokuManager : GeneratorCallback {
-    private val generator = Generator()
+open class SudokuManager(sudokuDir: File) : GeneratorCallback {
+
+    private val generator = Generator(sudokuDir)
 
     /** holds the old sudoku while the new sudoku is being generated. */
     private var used: Sudoku? = null
@@ -61,9 +63,9 @@ open class SudokuManager : GeneratorCallback {
          * @return the new [Sudoku]
          */
 		@JvmStatic
-		fun getNewSudoku(t: SudokuTypes?, c: Complexity?): Sudoku {
+		fun getNewSudoku(t: SudokuTypes?, c: Complexity?, sudokuDir: File): Sudoku {
             val sudoku = emptySudokuToFillWithXml
-            SudokuXmlHandler(t, c).createObjectFromXml(sudoku)
+            SudokuXmlHandler(t, c).createObjectFromXml(sudoku, sudokuDir)
             return sudoku
         }
 

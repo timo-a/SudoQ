@@ -29,12 +29,15 @@ import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
 public class GameTests {
 
 	private static Sudoku sudoku;
+
+	private static File sudokuDir = new File(Utility.RES + "tmp_suds");
 
 	@BeforeClass
 	public static void beforeClass() {
@@ -56,12 +59,12 @@ public class GameTests {
 			}
 		};
 		
-		new Generator().generate(SudokuTypes.standard9x9, Complexity.easy, gc);
+		new Generator(sudokuDir).generate(SudokuTypes.standard9x9, Complexity.easy, gc);
 	}
 
 	@Test
 	public void testInstanciation() {
-		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9).createSudoku());
+		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku());
 		assertEquals(game.getId(), 2);
 		assertNotNull(game.getStateHandler());
 		assertEquals(game.getSudoku().getCell(Position.get(8, 8)).getCurrentValue(), Cell.EMPTYVAL);
@@ -76,7 +79,7 @@ public class GameTests {
 
 	@Test
 	public void testGameInteraction() {
-		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9).createSudoku());
+		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku());
 
 		Position pos = Position.get(1, 1);
 		ActionTreeElement start = game.getCurrentState();
@@ -107,9 +110,9 @@ public class GameTests {
 
 	@Test
 	public void testEquals() {
-		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9).createSudoku());
+		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku());
 		assertEquals(game, game);
-		Game game2 = new Game(3, new SudokuBuilder(SudokuTypes.standard9x9).createSudoku());
+		Game game2 = new Game(3, new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku());
 		assertNotEquals(game, game2);
 
 		Position pos = Position.get(1, 1);
@@ -134,7 +137,7 @@ public class GameTests {
 
 	@Test
 	public void testGameXML() {
-		Sudoku s = new SudokuBuilder(SudokuTypes.standard9x9).createSudoku();
+		Sudoku s = new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku();
 		s.setId(5);
 		Game game = new Game(2, s);
 
@@ -156,14 +159,14 @@ public class GameTests {
 		game.undo();
 
 		Game game2 = new Game();
-		game2.fillFromXml(game.toXmlTree());
+		game2.fillFromXml(game.toXmlTree(), sudokuDir);
 		assertEquals(game, game2);
 	}
 
 	// Regression Test for Issue-89
 	@Test
 	public void testFinishedAttributeConsistency() {
-		SudokuBuilder sb = new SudokuBuilder(SudokuTypes.standard9x9);
+		SudokuBuilder sb = new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir);
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
 				sb.addSolution(Position.get(i, j), 1);
@@ -174,26 +177,26 @@ public class GameTests {
 		assertTrue(game.isFinished());
 
 		Game game2 = new Game();
-		game2.fillFromXml(game.toXmlTree());
+		game2.fillFromXml(game.toXmlTree(), sudokuDir);
 		assertTrue(game2.isFinished());
 
 		game2.undo();
 		assertTrue(game2.isFinished());
 
 		game = new Game();
-		game.fillFromXml(game2.toXmlTree());
+		game.fillFromXml(game2.toXmlTree(), sudokuDir);
 		assertTrue(game.isFinished());
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void testSetNullAssistances() {
-		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9).createSudoku());
+		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku());
 		game.setAssistances(null);
 	}
 
 	@Test
 	public void testAssistanceSetting() {
-		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9).createSudoku());
+		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku());
 
 		game.setAssistances(new GameSettings() {
 			@Override
@@ -214,7 +217,7 @@ public class GameTests {
 			private boolean errors = false;
 
 			public SudokuMock() {
-				super(SudokuBuilder.createType(SudokuTypes.standard9x9), new PositionMap<Integer>(Position.get(9, 9)),
+				super(SudokuTypeProvider.getSudokuType(SudokuTypes.standard9x9, sudokuDir), new PositionMap<Integer>(Position.get(9, 9)),
 						new PositionMap<Boolean>(Position.get(9, 9)));
 			}
 
@@ -261,7 +264,7 @@ public class GameTests {
 
 	@Test
 	public void testNoteAdjustment() {
-		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9).createSudoku());
+		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku());
 		GameSettings as = new GameSettings();
 		as.setAssistance(Assistances.autoAdjustNotes);
 		game.setAssistances(as);
@@ -402,7 +405,7 @@ public class GameTests {
 	// Regression Test for Issue-90
 	@Test
 	public void testAutoAdjustNotesForAutomaticSolving() {
-		SudokuBuilder sb = new SudokuBuilder(SudokuTypes.standard9x9);
+		SudokuBuilder sb = new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir);
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
 				sb.addSolution(Position.get(i, j), 1);

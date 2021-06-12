@@ -3,6 +3,7 @@ package de.sudoq.model.sudoku;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,9 +11,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.sudoq.model.TestWithInitCleanforSingletons;
+import de.sudoq.model.Utility;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
 public class SudokuBuilderTests extends TestWithInitCleanforSingletons {
+
+	private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
 
 	@BeforeClass
 	public static void initFileManager() {
@@ -43,7 +47,7 @@ public class SudokuBuilderTests extends TestWithInitCleanforSingletons {
 	}
 
 	private void testBuildergeneric(SudokuTypes t, int length) {
-		Sudoku sudoku = new SudokuBuilder(t).createSudoku();
+		Sudoku sudoku = new SudokuBuilder(t, sudokuDir).createSudoku();
 		for (int i = 0; i < length; i++) {
 			for (int j = 0; j < length; j++) {
 				cell = sudoku.getCell(Position.get(i, j));
@@ -55,7 +59,7 @@ public class SudokuBuilderTests extends TestWithInitCleanforSingletons {
 
 	@Test
 	public void testBuilderWithSolutions() {
-		SudokuBuilder sb = new SudokuBuilder(SudokuTypes.standard9x9);
+		SudokuBuilder sb = new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir);
 		sb.addSolution(Position.get(0, 0), 5);
 		sb.setFixed(Position.get(0, 0));
 		sb.addSolution(Position.get(0, 1), 3);

@@ -5,17 +5,22 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import java.io.File;
+
 import de.sudoq.model.TestWithInitCleanforSingletons;
+import de.sudoq.model.Utility;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
 public class UniqueConstraintBehaviorTests extends TestWithInitCleanforSingletons {
 
+	private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
+
 	@Test
 	public void testConstraint() {
 		TypeBuilder.get99();//just to force init of filemanager
-		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard9x9).createSudoku();
+		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku();
 
 		sudoku.getCell(Position.get(0, 0)).setCurrentValue(1);
 		sudoku.getCell(Position.get(0, 1)).setCurrentValue(2);

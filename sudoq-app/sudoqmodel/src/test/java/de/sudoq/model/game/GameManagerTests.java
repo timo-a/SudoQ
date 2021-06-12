@@ -27,6 +27,7 @@ public class GameManagerTests {
 
 	static File profileDir = new File("/tmp/sudoq/GameManagerTests/profile");
 	static Profile p;
+	private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
 
 	@BeforeClass
 	public static void init() throws IOException {
@@ -56,7 +57,7 @@ public class GameManagerTests {
 	@Test
 	public void testDeletingCurrentGame() {
 		GameManager gm = GameManager.Companion.getInstance(profileDir);
-		Game game = gm.newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings());
+		Game game = gm.newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings(), sudokuDir);
 		p.setCurrentGame(game.getId());
 		gm.deleteGame(p.getCurrentGame(), p);
 		assertEquals(Profile.NO_GAME, p.getCurrentGame());
@@ -73,7 +74,8 @@ public class GameManagerTests {
 
 	@Test
 	public void testCreatingAndSolving() {
-		Game game = GameManager.Companion.getInstance(profileDir).newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings());
+		Game game = GameManager.Companion.getInstance(profileDir).newGame(
+				SudokuTypes.standard9x9, Complexity.difficult, new GameSettings(), sudokuDir);
 		assertFalse(game.isFinished());
 		int count = 0;
 		for (Cell f : game.getSudoku()) {
@@ -101,7 +103,8 @@ public class GameManagerTests {
 	public void testAssistanceSetting() {
 		GameSettings set = new GameSettings();
 		set.setAssistance(Assistances.autoAdjustNotes);
-		Game game = GameManager.Companion.getInstance(profileDir).newGame(SudokuTypes.standard9x9, Complexity.difficult, set);
+		Game game = GameManager.Companion.getInstance(profileDir).newGame(
+				SudokuTypes.standard9x9, Complexity.difficult, set, sudokuDir);
 		assertTrue(game.isAssistanceAvailable(Assistances.autoAdjustNotes));
 		assertFalse(game.isAssistanceAvailable(Assistances.markRowColumn));
 		game.addTime(50);
@@ -112,20 +115,20 @@ public class GameManagerTests {
 	@Test
 	public void testLoadingAndSaving() {
 		GameManager gm = GameManager.Companion.getInstance(profileDir);
-		Game game = gm.newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings());
+		Game game = gm.newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings(), sudokuDir);
 		gm.save(game, p);
-		assertEquals(gm.load(game.getId()), game);
+		assertEquals(gm.load(game.getId(), sudokuDir), game);
 	}
 
 	@Test
 	public void testGameList() {
 		GameManager gm = GameManager.Companion.getInstance(profileDir);
 
-		Game game1 = gm.newGame(SudokuTypes.standard9x9, Complexity.easy, new GameSettings());
+		Game game1 = gm.newGame(SudokuTypes.standard9x9, Complexity.easy, new GameSettings(), sudokuDir);
 		gm.save(game1, p);
-		Game game2 = gm.newGame(SudokuTypes.standard9x9, Complexity.medium, new GameSettings());
+		Game game2 = gm.newGame(SudokuTypes.standard9x9, Complexity.medium, new GameSettings(), sudokuDir);
 		gm.save(game2, p);
-		Game game3 = gm.newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings());
+		Game game3 = gm.newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings(), sudokuDir);
 		gm.save(game3, p);
 		assertEquals(gm.getGameList().size(), 3);
 		game3.solveAll();
@@ -140,7 +143,7 @@ public class GameManagerTests {
 	@Test
 	public void testSudokuLoading() {
 		GameManager gm = GameManager.Companion.getInstance(profileDir);
-		Game game = gm.newGame(SudokuTypes.standard9x9, Complexity.medium, new GameSettings());
+		Game game = gm.newGame(SudokuTypes.standard9x9, Complexity.medium, new GameSettings(), sudokuDir);
 		int id = game.getId();
 		Cell cell = null;
 		for (Cell f : game.getSudoku()) {
@@ -152,7 +155,7 @@ public class GameManagerTests {
 		assertNotNull(cell);
 		assertTrue(game.solveCell());
 		gm.save(game, p);
-		assertTrue(game.equals(gm.load(id)));
+		assertTrue(game.equals(gm.load(id, sudokuDir)));
 		game.solveAll();
 		gm.save(game, p);
 		gm.deleteFinishedGames();
@@ -161,12 +164,12 @@ public class GameManagerTests {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testUnvalidLoadingIds() {
-		GameManager.Companion.getInstance(profileDir).load(-5);
+		GameManager.Companion.getInstance(profileDir).load(-5, sudokuDir);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testLoadingNonexistentGame() {
-		GameManager.Companion.getInstance(profileDir).load(2);
+		GameManager.Companion.getInstance(profileDir).load(2, sudokuDir);
 	}
 
 	@Test
