@@ -71,7 +71,7 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, Xmlable2, ModelCh
 
         // iterate over the constraints of the type and create the fields
         for (constraint in type) {
-            for (position in constraint) {
+            for (position in constraint) {0
                 if (!cells!!.containsKey(position)) {
                     var f: Cell
                     val solution = map?.get(position)
