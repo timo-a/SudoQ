@@ -47,6 +47,9 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
     private var adapter: SudokuLoadingAdapter? = null
     private var games: List<GameData>? = null
 
+    private lateinit var profilesDir : File
+    private lateinit var sudokuDir : File
+
     /*	protected static MenuItem menuDeleteFinished;
 	private static final int MENU_DELETE_FINISHED = 0;
 
@@ -67,8 +70,11 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        profilesDir  = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        sudokuDir = getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE)
+
         //needs to be called before setcontentview which calls onContentChanged
-        profileManager = ProfileManager(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+        profileManager = ProfileManager(profilesDir)
         check(!profileManager!!.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
         profileManager!!.loadCurrentProfile()
         setContentView(R.layout.sudokuloading)
@@ -122,12 +128,11 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
      * @return true, falls die Selection hier bearbeitet wird, false falls nicht
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
         when (item.itemId) {
-            R.id.action_sudokuloading_delete_finished -> GameManager.getInstance(profilesDir).deleteFinishedGames()
+            R.id.action_sudokuloading_delete_finished -> GameManager.getInstance(profilesDir, sudokuDir).deleteFinishedGames()
             R.id.action_sudokuloading_delete_all -> {
                 val p = Profile.getInstance(profilesDir)
-                val gm = GameManager.getInstance(profilesDir)
+                val gm = GameManager.getInstance(profilesDir, sudokuDir)
                 for (gd in gm.gameList) {
                     gm.deleteGame(gd.id, p)
                 }
@@ -140,8 +145,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
-        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val gamesList = GameManager.getInstance(profilesDir).gameList
+        val gamesList = GameManager.getInstance(profilesDir, sudokuDir).gameList
         val noGames = gamesList.isEmpty()
         menu.findItem(R.id.action_sudokuloading_delete_finished).isVisible = !noGames
         menu.findItem(R.id.action_sudokuloading_delete_all).isVisible = !noGames
@@ -187,9 +191,8 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         } else {
             /*selected in order to delete*/
-            val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
             val p = Profile.getInstance(profilesDir)
-            GameManager.getInstance(profilesDir).deleteGame(adapter!!.getItem(position)!!.id, p)
+            GameManager.getInstance(profilesDir, sudokuDir).deleteGame(adapter!!.getItem(position)!!.id, p)
             onContentChanged()
         }
     }
@@ -210,9 +213,8 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
             }
         }
         val builder = AlertDialog.Builder(this)
-        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
         val p = Profile.getInstance(profilesDir)
-        val gameRepo = GameRepo(p.profilesDir!!, p.currentProfileID)
+        val gameRepo = GameRepo(p.profilesDir!!, p.currentProfileID, sudokuDir)
         builder.setItems(temp_items.toTypedArray()) { dialog, item ->
             when (item) {
                 0 -> {
@@ -222,7 +224,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 }
                 1 -> {
-                    GameManager.getInstance(profilesDir).deleteGame(adapter!!.getItem(position)!!.id, p)
+                    GameManager.getInstance(profilesDir, sudokuDir).deleteGame(adapter!!.getItem(position)!!.id, p)
                     onContentChanged()
                 }
                 2 -> {
@@ -293,8 +295,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
     }
 
     private fun initialiseGames() {
-        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        games = GameManager.getInstance(profilesDir).gameList
+        games = GameManager.getInstance(profilesDir, sudokuDir).gameList
         // initialize ArrayAdapter for the profile names and set it
         adapter = SudokuLoadingAdapter(this, games!!)
         listAdapter = adapter

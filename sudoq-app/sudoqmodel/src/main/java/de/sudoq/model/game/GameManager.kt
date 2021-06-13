@@ -7,7 +7,6 @@
  */
 package de.sudoq.model.game
 
-import de.sudoq.model.persistence.xml.game.GameBE
 import de.sudoq.model.persistence.xml.game.GameMapper
 import de.sudoq.model.persistence.xml.game.GameRepo
 import de.sudoq.model.profile.Profile
@@ -25,8 +24,6 @@ import java.util.*
  */
 class GameManager private constructor() {
 
-    private lateinit var xmlHandlerBE: XmlHandler2<GameBE>
-
     private lateinit var profile: Profile
 
     private lateinit var gameRepo: GameRepo
@@ -34,6 +31,8 @@ class GameManager private constructor() {
     private lateinit var games: MutableList<GameData>
 
     private lateinit var gamesFile: File
+
+    private lateinit var sudokuDir: File
 
     /**
      * Creates a new gam and sets up the necessary files.
@@ -53,7 +52,7 @@ class GameManager private constructor() {
         val game = GameMapper.fromBE(gameBE0);
         game.setAssistances(assistances)
         val gameBE = GameMapper.toBE(game)
-        xmlHandlerBE.saveAsXml(gameBE) //todo use repo
+        gameRepo.update(gameBE)
         val gameData = GameData(
                 gameBE.id,
                 SimpleDateFormat(GameData.dateFormat).format(Date()),
@@ -75,11 +74,9 @@ class GameManager private constructor() {
      * @return Das geladene Spiel, null falls kein Spiel zur angegebenen id existiert
      * @throws IllegalArgumentException if there is no game with that id or if id is not positive.
      */
-    fun load(id: Int, sudokuDir: File): Game {
+    fun load(id: Int): Game {
         require(id > 0) { "invalid id" }
-        val gameBE = GameBE()
-        // throws IllegalArgumentException
-        GameBEXmlHandler(id, profile).createObjectFromXml(gameBE, sudokuDir)
+        val gameBE = gameRepo.read(id)
         return GameMapper.fromBE(gameBE)
     }
 
@@ -91,7 +88,7 @@ class GameManager private constructor() {
      */
     fun save(game: Game, profile: Profile) {
         val gameBE = GameMapper.toBE(game)
-        xmlHandlerBE.saveAsXml(gameBE)
+        gameRepo.update(gameBE)
 
         updateGameInList(game)
 
@@ -121,7 +118,7 @@ class GameManager private constructor() {
             profile.currentGame = Profile.NO_GAME
             profile.saveChanges() //save 'currentGameID' in xml (otherwise menu will offer 'continue')
         }
-        gameRepo.deleteGame(id, profile)
+        gameRepo.delete(id)
         updateGamesList()
     }
 
@@ -148,7 +145,7 @@ class GameManager private constructor() {
      */
     fun deleteFinishedGames() {
         games.filter { it.isFinished }
-                .forEach { gameRepo.deleteGame(it.id, profile) }
+                .forEach { gameRepo.delete(it.id) }
 
         updateGamesList()
     }
@@ -168,13 +165,13 @@ class GameManager private constructor() {
 
         private var instance: GameManager? = null //todo make class a non-singleton
 
-        fun getInstance(f: File): GameManager {
+        fun getInstance(f: File, sudokuDir: File): GameManager {
             if (instance == null ) {
                 instance = GameManager()
                 val profile = Profile.getInstance(f)
                 instance!!.profile = profile
-                instance!!.xmlHandlerBE = GameBEXmlHandler(p = profile)
-                instance!!.gameRepo = GameRepo(profile.profilesDir!!, profile.currentProfileID)
+                instance!!.sudokuDir = sudokuDir
+                instance!!.gameRepo = GameRepo(profile.profilesDir!!, profile.currentProfileID, sudokuDir)
                 instance!!.gamesFile = File(profile.currentProfileDir, "games.xml")
 
                 instance!!.games = try {
@@ -185,8 +182,6 @@ class GameManager private constructor() {
                 } catch (e: IOException) {
                     throw IllegalStateException("Profile broken", e)
                 }
-
-
 
             }
 

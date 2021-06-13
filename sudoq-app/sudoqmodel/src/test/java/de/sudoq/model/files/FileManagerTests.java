@@ -13,23 +13,17 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.Utility;
-import de.sudoq.model.files.FileManager;
 import de.sudoq.model.persistence.xml.game.GameRepo;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 import de.sudoq.model.xml.SudokuXmlHandler;
 
 public class FileManagerTests extends TestWithInitCleanforSingletons {
@@ -137,7 +131,7 @@ public class FileManagerTests extends TestWithInitCleanforSingletons {
 		assertEquals(thumb.getName(), "game_1.png");
 		assertTrue(game. createNewFile());
 		assertTrue(thumb.createNewFile());
-		assertTrue(gameRepo.deleteGame(1, p));
+		assertTrue(gameRepo.delete(1, p));
 	}
 	
 

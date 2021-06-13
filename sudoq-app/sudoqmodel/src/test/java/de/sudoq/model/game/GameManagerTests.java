@@ -14,7 +14,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.Utility;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.persistence.xml.game.GameRepo;
@@ -67,7 +66,7 @@ public class GameManagerTests {
 	public void deleteAllGames() {
 		GameRepo gr = new GameRepo(profileDir, p.getCurrentProfileID());
 		for (int i = 1; i <= gr.getGamesDir(p).list().length; i++) {
-			gr.deleteGame(i, p);
+			gr.delete(i, p);
 		}
 		GameManager.Companion.getInstance(profileDir).updateGamesList();
 	}

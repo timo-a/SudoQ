@@ -15,6 +15,13 @@ object GameMapper {
     }
 
     fun fromBE(gameBE: GameBE) : Game {
-        TODO("Not yet implemented")
+        return Game(gameBE.id,
+                gameBE.time,
+                gameBE.assistancesCost,
+                gameBE.sudoku!!,
+                gameBE.stateHandler!!,
+                gameBE.gameSettings!!,
+                gameBE.finished
+        )
     }
 }

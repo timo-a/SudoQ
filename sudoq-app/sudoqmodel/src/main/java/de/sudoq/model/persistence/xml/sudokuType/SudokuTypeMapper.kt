@@ -1,4 +1,4 @@
-package de.sudoq.model.persistence.xml.sudokuType
+ package de.sudoq.model.persistence.xml.sudokuType
 
 import de.sudoq.model.game.Game
 import de.sudoq.model.persistence.xml.game.GameBE
@@ -6,15 +6,6 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 
 object SudokuTypeMapper {
 
-    fun toBE(game: Game) : GameBE {
-        return GameBE(game.id,
-                game.time,
-                game.assistancesCost,
-                game.sudoku!!,
-                game.stateHandler!!,
-                game.gameSettings!!,
-                game.isFinished())
-    }
     fun toBE(sudokuType: SudokuType) : SudokuTypeBE {
         return SudokuTypeBE(sudokuType.enumType!!,
                 sudokuType.numberOfSymbols,
@@ -27,9 +18,13 @@ object SudokuTypeMapper {
     }
 
     fun fromBE(sudokuTypeBE: SudokuTypeBE) : SudokuType {
-        TODO("Not yet implemented")
-    }
-    fun fromBE(gameBE: GameBE) : Game {
-        TODO("Not yet implemented")
+        return SudokuType(sudokuTypeBE.enumType!!,
+                sudokuTypeBE.numberOfSymbols,
+                sudokuTypeBE.size!!,
+                sudokuTypeBE.blockSize,
+                sudokuTypeBE.constraints,
+                sudokuTypeBE.permutationProperties,
+                sudokuTypeBE.helperList,
+                sudokuTypeBE.ccb)
     }
 }

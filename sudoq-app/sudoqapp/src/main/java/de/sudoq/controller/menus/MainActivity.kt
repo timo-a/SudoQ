@@ -27,6 +27,7 @@ import de.sudoq.controller.sudoku.SudokuActivity
 import de.sudoq.model.game.GameManager
 import de.sudoq.model.profile.Profile
 import de.sudoq.model.profile.ProfileManager
+import java.io.File
 import java.util.*
 
 /**
@@ -38,11 +39,16 @@ class MainActivity : SudoqCompatActivity() {
      */
     private var currentLanguageCode: LanguageSetting? = null
 
+    private lateinit var profilesFile : File
+    private lateinit var sudokuFile : File
+
     /**
      * Wird beim ersten Anzeigen des Hauptmenüs aufgerufen. Inflated das Layout.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        profilesFile = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        sudokuFile   = getDir(getString(de.sudoq.R.string.path_rel_sudokus), MODE_PRIVATE)
         //Toast.makeText(this, "onCreate", Toast.LENGTH_LONG).show();
         setContentView(R.layout.mainmenu)
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
@@ -81,13 +87,12 @@ class MainActivity : SudoqCompatActivity() {
     public override fun onResume() {
         super.onResume()
         //Toast.makeText(this, "onResume", Toast.LENGTH_LONG).show();
-        val profilesFile = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
         val pm = ProfileManager(profilesFile)
         check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
         pm.loadCurrentProfile()
         val continueButton = findViewById<View>(R.id.button_mainmenu_continue) as Button
         continueButton.isEnabled = pm.currentGame > Profile.NO_GAME
-        val gm = GameManager.getInstance(profilesFile)
+        val gm = GameManager.getInstance(profilesFile, sudokuFile)
         val loadButton = findViewById<View>(R.id.button_mainmenu_load_sudoku) as Button
         //loadButton.setEnabled(!gm.getGameList().isEmpty());
         loadButton.isEnabled = true

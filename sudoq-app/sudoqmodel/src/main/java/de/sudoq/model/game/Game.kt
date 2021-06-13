@@ -64,6 +64,25 @@ class Game {
      */
     private var finished = false
 
+    /* used by persistence (mapper) */
+    constructor(id: Int,
+                time: Int,
+                assistancesCost: Int,
+                sudoku: Sudoku,
+                stateHandler: GameStateHandler,
+                gameSettings: GameSettings,
+                finished: Boolean) {
+
+        this.id = id
+        this.time = time
+        this.assistancesCost = assistancesCost
+        this.sudoku = sudoku
+        this.stateHandler = stateHandler
+        this.gameSettings = gameSettings
+        this.finished = finished
+    }
+
+
     /**
      * Protected constructor to prevent instatiation outside this package.
      * (apparently thats not possible in kotlin...)
