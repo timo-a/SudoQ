@@ -15,6 +15,7 @@ import android.graphics.Matrix
 import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import de.sudoq.R
 import de.sudoq.model.game.GameData
 import de.sudoq.model.persistence.xml.game.GameRepo
@@ -32,6 +33,11 @@ import java.util.*
 class SudokuLoadingAdapter (context: Context, private val gameDatas: List<GameData>) :
         ArrayAdapter<GameData?>(context, R.layout.sudokuloadingitem, gameDatas) {
     //todo make non nullable
+
+    private val profilesDir = context.getDir(context.getString(R.string.path_rel_profiles), AppCompatActivity.MODE_PRIVATE)
+    private val sudokuDir = context.getDir(context.getString(R.string.path_rel_sudokus), AppCompatActivity.MODE_PRIVATE)
+
+
     /**
      * {@inheritDoc}
      */
@@ -43,10 +49,10 @@ class SudokuLoadingAdapter (context: Context, private val gameDatas: List<GameDa
         val sudokuComplexity = rowView.findViewById<View>(R.id.complexity_label) as TextView
         val sudokuTime = rowView.findViewById<View>(R.id.time_label) as TextView
         val sudokuState = rowView.findViewById<View>(R.id.state_label) as TextView
-        val pm = ProfileManager(context.getDir(context.getString(R.string.path_rel_profiles), Context.MODE_PRIVATE))
+        val pm = ProfileManager(profilesDir)
         pm.loadCurrentProfile()
-        val gameRepo = GameRepo(pm.profilesDir!!, pm.currentProfileID)
-        val currentThumbnailFile = gameRepo.getGameThumbnailFile(gameDatas[position].id, pm)
+        val gameRepo = GameRepo(pm.profilesDir!!, pm.currentProfileID, sudokuDir)
+        val currentThumbnailFile = gameRepo.getGameThumbnailFile(gameDatas[position].id)
         try {
             val currentThumbnailBitmap = BitmapFactory.decodeStream(FileInputStream(currentThumbnailFile))
             val thumbnailWidth = currentThumbnailBitmap.width

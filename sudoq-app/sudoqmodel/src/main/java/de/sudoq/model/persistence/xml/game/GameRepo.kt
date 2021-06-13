@@ -4,17 +4,17 @@ import de.sudoq.model.game.GameSettings
 import de.sudoq.model.game.GameStateHandler
 import de.sudoq.model.persistence.IRepo
 import de.sudoq.model.persistence.xml.profile.ProfileRepo
-import de.sudoq.model.profile.Profile
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.xml.XmlHelper
-import de.sudoq.model.xml.XmlTree
 import java.io.File
 import java.io.IOException
 
 /**
  * repo for the games of one specific profile
  */
-class GameRepo(private val profilesDir: File, private val profileId: Int) : IRepo<GameBE> {
+class GameRepo(profilesDir: File,
+               profileId: Int,
+               private val sudokuDir: File) : IRepo<GameBE> {
 
 
     private val gamesDir: File
@@ -59,22 +59,35 @@ class GameRepo(private val profilesDir: File, private val profileId: Int) : IRep
         return File(gamesDir, "game_$id.xml")
     }
 
-    /**
-     * Loescht falls existierend das Spiel mit der gegebenen id des aktuellen
-     * Profils
-     *
-     * @param id
-     * die id des zu loeschenden Spiels
-     * @return ob es geloescht wurde.
-     */
-    fun deleteGame(id: Int, p: Profile?): Boolean {
-        val game = getGameFile(id).delete()
-        return game && getGameThumbnailFile(id, p).delete()
+    override fun read(id: Int): GameBE {
+        val obj = GameBE()
+        val helper: XmlHelper = XmlHelper()
+        val gameFile: File =getGameFile(id)
+        //todo is exception catching necessary? profilerepo doesn't catch them
+        try {
+            obj.fillFromXml(helper.loadXml(gameFile)!!, sudokuDir)
+        } catch (e: IOException) {
+            throw IllegalArgumentException("Something went wrong when reading xml $gameFile", e)
+        } catch (e: IllegalArgumentException) {
+            throw IllegalArgumentException("Something went wrong when filling obj from xml ", e)
+        }
+        return obj
     }
 
+    override fun update(g: GameBE): GameBE {
+        val file = File(gamesDir, "game_${g.id}.xml")
+        try {
+            XmlHelper().saveXml(g.toXmlTree(), file)
+        } catch (e: IOException) {
+            throw IllegalStateException("Error saving game xml tree", e)
+        }
+        return read(g.id)
+    }
 
-    // Thumbnails
-
+    override fun delete(id: Int) {
+        val game = getGameFile(id).delete()
+        getGameThumbnailFile(id).delete()
+    }
     // Thumbnails
     /**
      * Returns the .png File for thumbnail of the game with id gameID
@@ -84,28 +97,12 @@ class GameRepo(private val profilesDir: File, private val profileId: Int) : IRep
      *
      * @return The thumbnail File.
      */
-    fun getGameThumbnailFile(gameID: Int, p: ProfileManager?): File {
+    fun getGameThumbnailFile(gameID: Int): File {
         return File(gamesDir.toString() + File.separator + "game_" +
                 gameID + ".png")
     }
 
-
-    override fun read(id: Int): GameBE {
-        TODO("Not yet implemented")
-    }
-
-    override fun update(t: GameBE): GameBE {
-        TODO("Not yet implemented")
-    }
-
-    override fun delete(id: Int) {
-        TODO("Not yet implemented")
-    }
-
     init {
-        val profileRepo = ProfileRepo(profilesDir)
-        var pm : ProfileManager = ProfileManager()
-
         val profile = File(profilesDir, "profile_$profileId")
         this.gamesDir = File(profile, "games")
         this.gamesFile = File(profile, "games.xml")

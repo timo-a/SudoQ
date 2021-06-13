@@ -50,6 +50,10 @@ import kotlin.math.abs
  * welche Navigationselemente dem Nutzer angezeigt werden.
  */
 class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListener, ActionTreeNavListener {
+
+    private lateinit var profilesFile : File
+    private lateinit var sudokuFile   : File
+
     /**
      * Eine Referenz auf einen ActionTreeController, der die Verwaltung der
      * ActionTree-Anzeige und Benutzerinteraktion übernimmt
@@ -162,20 +166,24 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val profilesFile = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val sudokuFile   = getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE)
         Log.d(LOG_TAG, "Created")
+
+        profilesFile = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        sudokuFile   = getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE)
+
+
         // Load the Game by using current game id
+        val gm = GameManager.getInstance(profilesFile, sudokuFile)
         if (savedInstanceState != null) {
             try {
-                game = GameManager.getInstance(profilesFile).load(savedInstanceState.getInt(SAVE_GAME_ID.toString() + ""), sudokuFile)
+                game = gm.load(savedInstanceState.getInt(SAVE_GAME_ID.toString() + ""))
             } catch (e: Exception) {
                 finish()
             }
         } else {
             val pm = ProfileManager(profilesFile)
             pm.loadCurrentProfile()
-            game = GameManager.getInstance(profilesFile).load(pm.currentGame, sudokuFile)
+            game = gm.load(pm.currentGame)
         }
         if (game != null) {
 
@@ -397,10 +405,9 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
      * gelangt.
      */
     public override fun onPause() {
-        val profilesFile = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
         val p = Profile.getInstance(profilesFile)
         timeHandler.removeCallbacks(timeUpdate)
-        GameManager.getInstance(profilesFile).save(game!!, p)
+        GameManager.getInstance(profilesFile, sudokuFile).save(game!!, p)
         val prevZoomFactor = sudokuScrollView!!.zoomFactor
         sudokuLayout!!.isDrawingCacheEnabled = true
         sudokuScrollView!!.resetZoom()
@@ -412,8 +419,8 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
         val sudokuCapture = sudokuLayout!!.drawingCache
         try {
             if (sudokuCapture != null) {
-                val gameRepo = GameRepo(p.profilesDir!!, p.currentProfileID)
-                val thumbnail = gameRepo.getGameThumbnailFile(p.currentGame, p)
+                val gameRepo = GameRepo(p.profilesDir!!, p.currentProfileID, sudokuFile)
+                val thumbnail = gameRepo.getGameThumbnailFile(p.currentGame)
                 sudokuCapture.compress(CompressFormat.PNG, 100, FileOutputStream(thumbnail))
             } else {
                 Log.d(LOG_TAG, getString(R.string.error_thumbnail_get))
@@ -447,9 +454,8 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
      */
     override fun finish() {
         if (game != null) {
-            val profilesFile = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
             val p = Profile.getInstance(profilesFile)
-            GameManager.getInstance(profilesFile).save(game!!, p)
+            GameManager.getInstance(profilesFile, sudokuFile).save(game!!, p)
         }
         super.finish()
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
@@ -674,9 +680,8 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
 
     /** saves the whole game, purpose: save the action tree so a spontaneous crash doesn't lose us actions record  */
     private fun saveActionTree() {
-        val profilesFile = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
         val p = Profile.getInstance(profilesFile)
-        GameManager.getInstance(profilesFile).save(game!!, p)
+        GameManager.getInstance(profilesFile, sudokuFile).save(game!!, p)
     }
 
     companion object {
