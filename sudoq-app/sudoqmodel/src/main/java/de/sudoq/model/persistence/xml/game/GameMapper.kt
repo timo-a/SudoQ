@@ -2,7 +2,7 @@ package de.sudoq.model.persistence.xml.game
 
 import de.sudoq.model.game.Game
 
-object GameMapper {
+object GameMapper {//test
 
     fun toBE(game: Game) : GameBE {
         return GameBE(game.id,
