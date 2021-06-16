@@ -29,12 +29,14 @@ class GameRepo(profilesDir: File,
         newGame.time = 0
         newGame.stateHandler = GameStateHandler()
 
-        val file = File(gamesDir, "game_${newGame.id}.xml")
+        //serialization cannot handle null value for sudoku yet
+        // and I don't want to change it at this time
+        /*val file = File(gamesDir, "game_${newGame.id}.xml")
         try {
             XmlHelper().saveXml(newGame.toXmlTree(), file)
         } catch (e: IOException) {
             throw IllegalStateException("Error saving game xml tree", e)
-        }
+        }*/
         return newGame
     }
 

@@ -97,7 +97,8 @@ class SplashActivity : SudoqCompatActivity() {
             /*hint*/
             alertIfNoAssetFolder()
             Log.v(LOG_TAG, "we will do an initialization")
-            Initialization().execute(null, null, null)
+            val sudokus : File = getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE)
+            Initialization(sudokus).execute(null, null, null)
             startedCopying = true
         } else
             Log.v(LOG_TAG, "we will not do an initialization")
@@ -244,7 +245,10 @@ class SplashActivity : SudoqCompatActivity() {
      * Ein AsyncTask zur Initialisierung des Benutzers und der Vorlagen für den
      * ersten Start.
      */
-    private inner class Initialization : AsyncTask<Void?, Void?, Void?>() {
+    private inner class Initialization(val sudokuDir: File) : AsyncTask<Void?, Void?, Void?>() {
+
+
+
         public override fun onPostExecute(v: Void?) {
             val settings = getSharedPreferences("Prefs", 0)
             settings.edit().putBoolean(INITIALIZED_TAG, true).commit()
@@ -259,13 +263,13 @@ class SplashActivity : SudoqCompatActivity() {
             /* sudoku types*/
             var types = SudokuTypes.values()
             /* ensure sudoku9x9 is first element ->  will be finished first.
-			 * Reason: people will probably want to play 9x9 first
-			 * kind of unnecessary because 9x9 is declared first in SudokuTypes, but maybe that will change*/types = swap99tothefront(types)
+             * Reason: people will probably want to play 9x9 first
+             * kind of unnecessary because 9x9 is declared first in SudokuTypes, but maybe that will change*/types = swap99tothefront(types)
 
             /* actual copying*/
             for (t in types) {
                 val sourceType = HEAD_DIRECTORY + File.separator + t.toString() + File.separator // e.g. .../standard9x9/
-                val targetType = FileManager.getSudokuDir().absolutePath + File.separator + t.toString() + File.separator
+                val targetType = sudokuDir.absolutePath + File.separator + t.toString() + File.separator
                 copyFile("$sourceType$t.xml",
                         "$targetType$t.xml")
                 for (c in playableValues()) {

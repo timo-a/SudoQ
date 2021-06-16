@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import de.sudoq.model.persistence.xml.sudoku.SudokuMapper;
+import de.sudoq.model.persistence.xml.sudoku.SudokuRepo;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.profile.ProfileManager;
 import de.sudoq.model.sudoku.Sudoku;
@@ -53,13 +55,8 @@ public final class FileManager {
 	 */
 	public static void initialize(File s) {
 		if (s == null || !s.canWrite()) {
-			String err ="";
-			if(s==null)
-				   err += " s==null";
-			else
-					err += " s can't write";
-
-			throw new IllegalArgumentException("invalid directories:"+err);
+			String err = s == null ? "s == null" : "s can't write";
+			throw new IllegalArgumentException("invalid directories: " + err);
 		}
 		sudokus = s;
 
@@ -68,13 +65,6 @@ public final class FileManager {
 
 
 	// Profiles todo move all to profileManager
-
-
-
-
-
-
-
 
 	// Games
 
@@ -88,133 +78,7 @@ public final class FileManager {
 		return new File(currentProfile, "games.xml");
 	}
 
-
-
-
-
 	// Sudokus
-
-	/**
-	 * Gibt das Verzeichnis der Sudokus zurueck
-	 * 
-	 * @return File, welcher auf das Verzeichnis mit den Sudokus zeigt
-	 */
-	public static File getSudokuDir() {
-		return sudokus;
-	}
-
-	
-	/**
-	 * Gibt die Anzahl der Sudokus des gesuchten Typs zurueck
-	 * 
-	 * @param t
-	 *            der gesuchte SudokuTyp
-	 * @param c
-	 *            die gesuchte Sudoku Schwierigkeit
-	 * @return die Anzahl
-	 */
-	public static int getSudokuCountOf(SudokuTypes t, Complexity c) {
-		return getSudokuDir(t, c).list().length;
-	}
-
-	/**
-	 * Gibt ein freies File fuer das gegebene Sudokus zurueck
-	 * 
-	 * @param sudoku
-	 *            das zu speichernde Sudoku
-	 * @return File, welcher auf die Datei des Sudokus zeigt
-	 */
-	public static File getNewSudokuFile(Sudoku sudoku) {
-		return new File(getSudokuDir(sudoku).getAbsolutePath() + File.separator + "sudoku_" + getFreeSudokuIdFor(sudoku) + ".xml");
-	}
-
-	/**
-	 * Loescht das uebergebene Sudoku von der Platte
-	 * 
-	 * @param sudoku
-	 *            das zu loeschnde Sudoku
-	 */
-	public static void deleteSudoku(Sudoku sudoku) {
-		if (!getSudokuFile(sudoku).delete()) {
-			throw new IllegalArgumentException("Sudoku doesn't exist");
-		}
-	}
-
-	/**
-	 * Gibt eine Referenz auf ein zufaelliges zu den Parametern passendem Sudoku
-	 * zurueck und null falls keins existiert
-	 * 
-	 * @param type
-	 *            der Typ des Sudokus
-	 * @param complexity
-	 *            die Schwierigkeit des Sudokus
-	 * @return die Referenz auf die Datei
-	 */
-	public static File getRandomSudoku(SudokuTypes type, Complexity complexity) {
-		File dir = getSudokuDir(type, complexity);
-		if (dir.list().length > 0) {
-			String fileName = dir.list()[new Random().nextInt(dir.list().length)];
-			return new File(dir.getAbsolutePath() + File.separator + fileName);
-		} else {
-			return null;
-		}
-	}
-
-
-	/**
-	 * Gibt den die Sudokus mit den gegebenen Parametern enthaltennden Ordner
-	 * zurueck
-	 * 
-	 * @param type
-	 *            der Typ des Sudokus
-	 * @param complexity
-	 *            die Schwierigkeit des Sudokus
-	 * @return der Ordner
-	 */
-	private static File getSudokuDir(SudokuTypes type, Complexity complexity) {
-		return new File(sudokus.getAbsolutePath() + File.separator + type.toString() + File.separator + complexity.toString());
-	}
-	
-	/**
-	 * Gibt den zum Sudoku passenden Ordner zurueck
-	 * 
-	 * @param s
-	 *            das einzuordnende Sudoku
-	 * @return den Ordner
-	 */
-	private static File getSudokuDir(Sudoku s) {
-		return getSudokuDir(s.getSudokuType().getEnumType(), s.getComplexity());
-	}
-
-	/**
-	 * Gibt die zum gegebenen Sudoku gehoerende Datei zurueck
-	 * 
-	 * @param s
-	 *            das Sudoku
-	 * @return das File
-	 */
-	public static File getSudokuFile(Sudoku s) {
-		return new File(getSudokuDir(s).getAbsolutePath(), "sudoku_" + s.getId() + ".xml");
-	}
-
-
-
-	/**
-	 * Gibt die nächste verfügbare Sudoku ID zurück
-	 * 
-	 * @return nächste verfügbare Sudoku ID
-	 */
-	private static int getFreeSudokuIdFor(Sudoku sudoku) {
-		ArrayList<Integer> numbers = new ArrayList<>();
-		for (String s : getSudokuDir(sudoku).list()) {
-			numbers.add(Integer.parseInt(s.substring(7, s.length() - 4)));
-		}
-		int i = 1;
-		while (numbers.contains(i)) {
-			i++;
-		}
-		return i;
-	}
 
 	/**
 	 * Erzeugt falls noetig alle Sudoku Ordner fuer die Typen und

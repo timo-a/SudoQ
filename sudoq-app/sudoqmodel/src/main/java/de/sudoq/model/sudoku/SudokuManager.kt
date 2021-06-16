@@ -8,17 +8,21 @@
 package de.sudoq.model.sudoku
 
 import de.sudoq.model.files.FileManager
+import de.sudoq.model.persistence.xml.sudoku.SudokuBE
+import de.sudoq.model.persistence.xml.sudoku.SudokuMapper
+import de.sudoq.model.persistence.xml.sudoku.SudokuRepo
 import de.sudoq.model.solverGenerator.Generator
 import de.sudoq.model.solverGenerator.GeneratorCallback
 import de.sudoq.model.solverGenerator.solution.Solution
 import de.sudoq.model.solverGenerator.transformations.Transformer
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
-import de.sudoq.model.xml.SudokuXmlHandler
+import de.sudoq.model.xml.XmlHelper
 import java.io.File
 
-/** Responsible for maintaining existing Sudokus. Implemented as Singleton. */
-open class SudokuManager(sudokuDir: File) : GeneratorCallback {
+/** Responsible for maintaining existing Sudokus.
+ * Implemented as Singleton. */
+open class SudokuManager(val sudokuDir: File) : GeneratorCallback {
 
     private val generator = Generator(sudokuDir)
 
@@ -29,13 +33,21 @@ open class SudokuManager(sudokuDir: File) : GeneratorCallback {
      * Callback for the Generator
      */
     override fun generationFinished(sudoku: Sudoku) {
-        SudokuXmlHandler().saveAsXml(sudoku)
-        FileManager.deleteSudoku(used)
+        val sudokuRepo = SudokuRepo(sudokuDir, sudoku)
+        val i = sudokuRepo.create().id
+        val sudokuBE = SudokuMapper.toBE(sudoku)
+        sudokuBE.id = i
+        sudokuRepo.update(sudokuBE)
+        used?.also { sudokuRepo.delete(SudokuMapper.toBE(it)) }
     }
 
     override fun generationFinished(sudoku: Sudoku, sl: List<Solution>) {
-        SudokuXmlHandler().saveAsXml(sudoku)
-        FileManager.deleteSudoku(used)
+        val sudokuRepo = SudokuRepo(sudokuDir, sudoku)
+        val i = sudokuRepo.create().id
+        val sudokuBE = SudokuMapper.toBE(sudoku)
+        sudokuBE.id = i
+        sudokuRepo.update(sudokuBE)
+        used?.also { sudokuRepo.delete(SudokuMapper.toBE(it)) }
     }
 
     /**
@@ -50,7 +62,8 @@ open class SudokuManager(sudokuDir: File) : GeneratorCallback {
             generator.generate(sudoku.sudokuType!!.enumType, sudoku.complexity, this)
         } else {
             Transformer.transform(sudoku)
-            SudokuXmlHandler().saveAsXml(sudoku)
+            val sudokuRepo = SudokuRepo(sudokuDir, sudoku)
+            sudokuRepo.update(SudokuMapper.toBE(sudoku))
         }
     }
 
@@ -62,11 +75,14 @@ open class SudokuManager(sudokuDir: File) : GeneratorCallback {
          * @param c [Complexity] of the [Sudoku]
          * @return the new [Sudoku]
          */
-		@JvmStatic
-		fun getNewSudoku(t: SudokuTypes?, c: Complexity?, sudokuDir: File): Sudoku {
-            val sudoku = emptySudokuToFillWithXml
-            SudokuXmlHandler(t, c).createObjectFromXml(sudoku, sudokuDir)
-            return sudoku
+        @JvmStatic
+        fun getNewSudoku(t: SudokuTypes?, c: Complexity?, sudokuDir: File): Sudoku {
+            val sudokuRepo = SudokuRepo(sudokuDir, t!!, c!!)
+            val f = sudokuRepo.getRandomSudoku()!!
+
+            val sudokuBE = SudokuBE()
+            sudokuBE.fillFromXml(XmlHelper().loadXml(f)!!, sudokuDir)
+            return SudokuMapper.fromBE(sudokuBE)
         }
 
         /**

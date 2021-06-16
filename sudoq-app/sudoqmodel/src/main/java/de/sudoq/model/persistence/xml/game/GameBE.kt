@@ -6,6 +6,8 @@ import de.sudoq.model.actionTree.SolveAction
 import de.sudoq.model.actionTree.SolveActionFactory
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.game.GameStateHandler
+import de.sudoq.model.persistence.xml.sudoku.SudokuBE
+import de.sudoq.model.persistence.xml.sudoku.SudokuMapper
 import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.SudokuManager
 import de.sudoq.model.xml.XmlAttribute
@@ -62,7 +64,7 @@ class GameBE : Xmlable2 {
         representation.addAttribute(XmlAttribute("currentTurnId", "" + currentTurnId))
         representation.addChild(gameSettings!!.toXmlTree())
         representation.addAttribute(XmlAttribute("assistancesCost", "" + assistancesCost))
-        representation.addChild(sudoku!!.toXmlTree())
+        representation.addChild(SudokuMapper.toBE(sudoku!!).toXmlTree())
         val actionList = ArrayList<ActionTreeElement>()
         for (ate in stateHandler!!.actionTree) {
             actionList.add(ate)
@@ -88,8 +90,9 @@ class GameBE : Xmlable2 {
         assistancesCost = xmlTreeRepresentation.getAttributeValue("assistancesCost")!!.toInt()
         for (sub in xmlTreeRepresentation) {
             if (sub.name == "sudoku") {
-                sudoku = SudokuManager.emptySudokuToFillWithXml
-                sudoku!!.fillFromXml(sub, sudokuDir)
+                val sudokuBE = SudokuBE()
+                sudokuBE.fillFromXml(sub, sudokuDir)
+                sudoku = SudokuMapper.fromBE(sudokuBE)
             } else if (sub.name == "gameSettings") {
                 gameSettings = GameSettings()
                 gameSettings!!.fillFromXml(sub)

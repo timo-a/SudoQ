@@ -29,12 +29,12 @@ import kotlin.collections.set
 /**
  * This class represents a Sudoku with mit seinem Typ, seinen Feldern und seinem Schwierigkeitsgrad.
  */
-open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, Xmlable2, ModelChangeListener<Cell> {
+open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListener<Cell> {
 
     /** An ID uniquely identifying the Sudoku */
     var id : Int = 0
 
-    /** Counts how often the Sudokuw was already transformed */
+    /** Counts how often the Sudoku was already transformed */
     var transformCount = 0
         private set
 
@@ -42,7 +42,6 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, Xmlable2, ModelCh
 	@JvmField
 	var cells: HashMap<Position, Cell>? = null
 
-    private var cellIdCounter = 0
     private var cellPositions: MutableMap<Int, Position>? = null
 
     /** The Type of the Sudoku */
@@ -64,14 +63,14 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, Xmlable2, ModelCh
     constructor(type: SudokuType,
                 map: PositionMap<Int>? = PositionMap((type.size)!!),
                 setValues: PositionMap<Boolean>? = PositionMap((type.size)!!)) {
-        cellIdCounter = 1
+        var cellIdCounter = 1
         cellPositions = HashMap()
         sudokuType = type
         cells = HashMap()
 
         // iterate over the constraints of the type and create the fields
         for (constraint in type) {
-            for (position in constraint) {0
+            for (position in constraint) {
                 if (!cells!!.containsKey(position)) {
                     var f: Cell
                     val solution = map?.get(position)
@@ -95,6 +94,24 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, Xmlable2, ModelCh
     @Deprecated("DO NOT USE THIS METHOD (if you are not from us)")
     internal constructor() {
         id = -1
+    }
+
+    /*init from basic properties. use this to init from BE */
+    constructor(id : Int,
+                transformCount : Int,
+                sudokuType: SudokuType,
+                complexity: Complexity,
+                cells: HashMap<Position, Cell>) {
+        this.id = id
+        this.transformCount = transformCount
+        this.sudokuType = sudokuType
+        this.complexity = complexity
+        this.cells = cells
+
+        cellPositions = HashMap()
+        cells.forEach { (pos,c) -> cellPositions!![c.id] = pos }
+
+        cells.values.forEach { cell -> cell.registerListener(this) }
     }
 
     /** increases transform count by one */
@@ -148,7 +165,7 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, Xmlable2, ModelCh
         if (cellPositions == null)
             return false
 
-        var p : Position = cellPositions!![id] ?: return false
+        val p : Position = cellPositions!![id] ?: return false
 
         return cells?.get(p) != null
 
@@ -192,78 +209,6 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, Xmlable2, ModelCh
             return allCorrect
         }
 
-    /**
-     * {@inheritDoc}
-     */
-    override fun toXmlTree(): XmlTree {
-        val representation = XmlTree("sudoku")
-        if (id > 0) {
-            representation.addAttribute(XmlAttribute("id", "" + id))
-        }
-        representation.addAttribute(XmlAttribute("transformCount", "" + transformCount))
-        representation.addAttribute(XmlAttribute("type", "" + sudokuType!!.enumType!!.ordinal))
-        if (complexity != null) {
-            representation.addAttribute(XmlAttribute("complexity", "" + complexity!!.ordinal))
-        }
-        for ((key, value) in cells!!) {
-            val fieldmap = XmlTree("fieldmap")
-            fieldmap.addAttribute(XmlAttribute("id", "" + value.id))
-            fieldmap.addAttribute(XmlAttribute("editable", "" + value.isEditable))
-            fieldmap.addAttribute(XmlAttribute("solution", "" + value.solution))
-            val position = XmlTree("position")
-            position.addAttribute(XmlAttribute("x", "" + key.x))
-            position.addAttribute(XmlAttribute("y", "" + key.y))
-            fieldmap.addChild(position)
-            representation.addChild(fieldmap)
-        }
-        return representation
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    override fun fillFromXml(xmlTreeRepresentation: XmlTree, sudokuDir: File) {
-        // initialisation
-        cellIdCounter = 1
-        cellPositions = HashMap()
-        cells = HashMap()
-        id = try {
-            xmlTreeRepresentation.getAttributeValue("id")!!.toInt()
-        } catch (e: NullPointerException) {
-            -1
-        } catch (e: NumberFormatException) {
-           -1
-        }
-        val enumType = SudokuTypes.values()[xmlTreeRepresentation.getAttributeValue("type")!!.toInt()]
-        sudokuType = SudokuTypeProvider.getSudokuType(enumType, sudokuDir)
-        transformCount = xmlTreeRepresentation.getAttributeValue("transformCount")!!.toInt()
-        val compl = xmlTreeRepresentation.getAttributeValue("complexity")
-        complexity = if (compl == null) null else Complexity.values()[compl.toInt()]
-
-        // build the fields
-        for (sub in xmlTreeRepresentation) {
-            if (sub.name == "fieldmap") {
-                val fieldId = sub.getAttributeValue("id")!!.toInt()
-                val editable = java.lang.Boolean.parseBoolean(sub.getAttributeValue("editable"))
-                val solution = sub.getAttributeValue("solution")!!.toInt()
-                var x = -1
-                var y = -1
-                // check if there is only one child element
-                require(sub.numberOfChildren == 1)
-                val position = sub.getChildren().next()
-                if (position.name == "position") {
-                    x = position.getAttributeValue("x")!!.toInt()
-                    y = position.getAttributeValue("y")!!.toInt()
-                }
-                val pos = Position[x, y]
-                val cell = Cell(editable, solution, fieldId, sudokuType!!.numberOfSymbols)
-                cell.registerListener(this)
-                cells!![pos] = cell
-                cellPositions!![fieldId] = pos
-                cellIdCounter++
-            }
-        }
-    }
 
     /**
      * {@inheritDoc}
