@@ -7,25 +7,14 @@
  */
 package de.sudoq.model.solverGenerator
 
-import de.sudoq.model.files.FileManager
-import de.sudoq.model.profile.Profile
 import de.sudoq.model.solverGenerator.FastSolver.BranchAndBound.FastBranchAndBound
 import de.sudoq.model.solverGenerator.FastSolver.FastSolverFactory
 import de.sudoq.model.solverGenerator.solution.SolveDerivation
 import de.sudoq.model.solverGenerator.solver.ComplexityRelation
 import de.sudoq.model.solverGenerator.solver.Solver
 import de.sudoq.model.sudoku.*
-import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider.getSudokuType
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
-import de.sudoq.model.xml.SudokuXmlHandler
-import de.sudoq.model.xml.XmlAttribute
-import de.sudoq.model.xml.XmlHelper
-import de.sudoq.model.xml.XmlTree
-import java.io.File
-import java.io.IOException
 import java.util.*
 
 /**
@@ -411,8 +400,7 @@ class GenerationAlgo(
         println("This is the debug message from `Generator`")
     }
 
-    fun saveSudokuAllInOne(path: String, filename: String, sudoku: Sudoku) {
-        val sudokuLocation = FileManager.getSudokuDir()
+    /*fun saveSudokuAllInOne(path: String, filename: String, sudoku: Sudoku) {
         FileManager.initialize(File(path))
         object : SudokuXmlHandler() {
             override fun getFileFor(s: Sudoku): File {
@@ -423,7 +411,7 @@ class GenerationAlgo(
                 tree.addAttribute(XmlAttribute("id", "42"))
             }
         }.saveAsXml(sudoku)
-    }
+    }*/
 
     companion object {
         /**
