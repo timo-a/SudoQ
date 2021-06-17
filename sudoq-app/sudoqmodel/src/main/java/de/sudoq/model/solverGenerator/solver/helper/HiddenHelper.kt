@@ -22,21 +22,23 @@ import java.util.*
  * In that case, they are all the solutions to these n fields (in some order) and all other candidates within these n fields can be removed
  *
  */
-open class HiddenHelper(sudoku: SolverSudoku, level: Int, complexity: Int) : SubsetHelper(sudoku, level, complexity) {
+open class HiddenHelper(sudoku: SolverSudoku, level: Int, complexity: Int) :
+    SubsetHelper(sudoku, level, complexity) {
     private val labels = arrayOf(
-            HintTypes.HiddenSingle,
-            HintTypes.HiddenPair,
-            HintTypes.HiddenTriple,
-            HintTypes.HiddenQuadruple,
-            HintTypes.HiddenQuintuple,
-            HintTypes.Hidden__6_tuple,
-            HintTypes.Hidden__7_tuple,
-            HintTypes.Hidden__8_tuple,
-            HintTypes.Hidden__9_tuple,
-            HintTypes.Hidden_10_tuple,
-            HintTypes.Hidden_11_tuple,
-            HintTypes.Hidden_12_tuple,
-            HintTypes.Hidden_13_tuple)
+        HintTypes.HiddenSingle,
+        HintTypes.HiddenPair,
+        HintTypes.HiddenTriple,
+        HintTypes.HiddenQuadruple,
+        HintTypes.HiddenQuintuple,
+        HintTypes.Hidden__6_tuple,
+        HintTypes.Hidden__7_tuple,
+        HintTypes.Hidden__8_tuple,
+        HintTypes.Hidden__9_tuple,
+        HintTypes.Hidden_10_tuple,
+        HintTypes.Hidden_11_tuple,
+        HintTypes.Hidden_12_tuple,
+        HintTypes.Hidden_13_tuple
+    )
 
     /**
      * Collect all candidates appearing in this constraint.
@@ -87,7 +89,8 @@ open class HiddenHelper(sudoku: SolverSudoku, level: Int, complexity: Int) : Sub
                             val relevantCandidates = currentCandidates.clone() as BitSet
                             val irrelevantCandidates: BitSet = localCopy
                             irrelevantCandidates.andNot(currentSet)
-                            val field = DerivationCell(pos, relevantCandidates, irrelevantCandidates)
+                            val field =
+                                DerivationCell(pos, relevantCandidates, irrelevantCandidates)
                             derivation!!.addDerivationCell(field)
                         }
                         foundSubset = true

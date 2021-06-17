@@ -25,13 +25,12 @@ public class FastBranchAndBound extends Solver {
     }
 
 
-
-   	protected List<SolveHelper> makeHelperList(){
+    protected List<SolveHelper> makeHelperList() {
         List<SolveHelper> helpers = super.makeHelperList();
-        helpers.remove(helpers.size()-3); //remove LockedCandidateHelper
-        helpers.remove(helpers.size()-2); //remove XWing
+        helpers.remove(helpers.size() - 3); //remove LockedCandidateHelper
+        helpers.remove(helpers.size() - 2); //remove XWing
         return helpers;
-	}
+    }
 
 
     public boolean solveAll() {
@@ -63,15 +62,14 @@ public class FastBranchAndBound extends Solver {
             solved = isFilledCompletely();
 
             if (!solved && isInvalid()) {
-                if ( advanceBranching(false) == Branchresult.SUCCESS)
+                if (advanceBranching(false) == Branchresult.SUCCESS)
                     didUpdate = true;
                 else
                     isUnsolvable = true;
             }
 
-            if(!solved && !didUpdate && !isUnsolvable && useHelper())
+            if (!solved && !didUpdate && !isUnsolvable && useHelper())
                 didUpdate = true;
-
 
 
             solver_counter++;
@@ -114,7 +112,7 @@ public class FastBranchAndBound extends Solver {
             solved = isFilledCompletely();
 
             if (!solved && isInvalid()) {
-                if ( advanceBranching(false) == Branchresult.SUCCESS)
+                if (advanceBranching(false) == Branchresult.SUCCESS)
                     didUpdate = true;
                 else
                     isUnsolvable = true;
@@ -123,10 +121,10 @@ public class FastBranchAndBound extends Solver {
             // try to update naked singles
             // currently, NakedSolver(1) doesnt set any entries because it is made with 2-5 and just reducing notes in mind
             if (!solved && !didUpdate && !isUnsolvable && updateNakedSingles())
-                    didUpdate = true;
+                didUpdate = true;
 
 
-            if(!solved && !didUpdate && !isUnsolvable && useHelper())
+            if (!solved && !didUpdate && !isUnsolvable && useHelper())
                 didUpdate = true;
 
             solver_counter++;
@@ -143,22 +141,20 @@ public class FastBranchAndBound extends Solver {
     }
 
 
-
-
     protected boolean useHelper() {
-		for (int i = 0; i < numberOfHelpers; i++) {
-			SolveHelper hel = helper.get(i);
+        for (int i = 0; i < numberOfHelpers; i++) {
+            SolveHelper hel = helper.get(i);
 
-			//if a helper can be applied
-			if (hel.update(false)) {
+            //if a helper can be applied
+            if (hel.update(false)) {
                 this.solverSudoku.addComplexityValue(hel.getComplexityScore(), !(hel instanceof Backtracking));
-				return true;
-			}
-		}
+                return true;
+            }
+        }
 
-		return false;
+        return false;
 
-	}
+    }
 
     protected boolean updateNakedSingles() {
         boolean hasNakedSingle;   //indicates that one was found in the last iteration -> continue to iterate
@@ -171,21 +167,16 @@ public class FastBranchAndBound extends Solver {
                 BitSet b = this.solverSudoku.getCurrentCandidates(p);
                 if (b.cardinality() == 1) {
                     solverSudoku.setSolution(p, b.nextSetBit(0));//execute, since only one candidate, take first
-                    hasNakedSingle   = true;
+                    hasNakedSingle = true;
                     foundNakedSingle = true;
                     this.solverSudoku.addComplexityValue(10, true);
                 }
             }
-        } while(hasNakedSingle);
+        } while (hasNakedSingle);
 
 
         return foundNakedSingle;
     }
-
-
-
-
-
 
 
     /**
@@ -194,16 +185,16 @@ public class FastBranchAndBound extends Solver {
      * versucht das Sudoku mithilfe der im ComplexityConstraint für die im Sudoku definierte Schwierigkeit definierten
      * SolveHelper und Anzahl an Schritten versucht zu lösen. Das Ergbnis wird durch ein ComplexityRelation Objekt
      * zurückgegeben.
-     *
+     * <p>
      * Assumptions:
-     *   - the sudoku has a solution
+     * - the sudoku has a solution
      *
      * @return Ein ComplexityRelation-Objekt, welches die Constraint-gemäße Lösbarkeit beschreibt
      */
     public ComplexityRelation validate() {
         ComplexityRelation result = ComplexityRelation.INVALID;
 
-        boolean solved  = false;
+        boolean solved = false;
         ComplexityConstraint complConstr = solverSudoku.getSudokuType().buildComplexityConstraint(solverSudoku.getComplexity());
 
 
@@ -227,12 +218,11 @@ public class FastBranchAndBound extends Solver {
             solved = isFilledCompletely();
 
             if (!solved && isInvalid()) {
-                if ( advanceBranching(false) == Branchresult.SUCCESS){
+                if (advanceBranching(false) == Branchresult.SUCCESS) {
                     didUpdate = true;
                     if (solverSudoku.getBranchLevel() > 10)                   // we don't want to generate sudokus where it is necessary to backtrack more than 10 times
                         return ComplexityRelation.MUCH_TOO_DIFFICULT;   // so we can stop here.
-                }
-                else
+                } else
                     isUnsolvable = true;
             }
 
@@ -242,7 +232,7 @@ public class FastBranchAndBound extends Solver {
                 didUpdate = true;
 
 
-            if(!solved && !didUpdate && !isUnsolvable && useHelper())
+            if (!solved && !didUpdate && !isUnsolvable && useHelper())
                 didUpdate = true;
 
             solver_counter++;
@@ -267,11 +257,14 @@ public class FastBranchAndBound extends Solver {
 
         if (solved) {
 
-            if      (maxComplextiy * 1.2 < complexity                                      ) result = ComplexityRelation.MUCH_TOO_DIFFICULT;
-            else if (maxComplextiy       < complexity && complexity <= maxComplextiy * 1.2 ) result = ComplexityRelation.TOO_DIFFICULT;
-            else if (minComplextiy       < complexity && complexity <= maxComplextiy       ) result = ComplexityRelation.CONSTRAINT_SATURATION;
-            else if (minComplextiy * 0.8 < complexity && complexity <= minComplextiy       ) result = ComplexityRelation.TOO_EASY;
-            else if (                                    complexity <= minComplextiy * 0.8 ) result = ComplexityRelation.MUCH_TOO_EASY;
+            if (maxComplextiy * 1.2 < complexity) result = ComplexityRelation.MUCH_TOO_DIFFICULT;
+            else if (maxComplextiy < complexity && complexity <= maxComplextiy * 1.2)
+                result = ComplexityRelation.TOO_DIFFICULT;
+            else if (minComplextiy < complexity && complexity <= maxComplextiy)
+                result = ComplexityRelation.CONSTRAINT_SATURATION;
+            else if (minComplextiy * 0.8 < complexity && complexity <= minComplextiy)
+                result = ComplexityRelation.TOO_EASY;
+            else if (complexity <= minComplextiy * 0.8) result = ComplexityRelation.MUCH_TOO_EASY;
 			/*   0.8 minC      minC               maxC            1.2 maxC
 		    much too easy| too easy|   saturation     |too difficult      | Much too difficult         */
         }

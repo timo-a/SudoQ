@@ -11,8 +11,10 @@ import de.sudoq.model.solvingAssistant.HintTypes
  * @property sudoku SolverSudoku on which SolveHelper operates
  * @param complexity desired complexity for the final sudoku. Must be `>= 0`.
  */
-abstract class SolveHelper protected constructor(@JvmField protected var sudoku: SolverSudoku,
-                                                 complexity: Int) {
+abstract class SolveHelper protected constructor(
+    @JvmField protected var sudoku: SolverSudoku,
+    complexity: Int
+) {
 
     /**
      * Difficulty score of this helper e.g.
@@ -35,7 +37,7 @@ abstract class SolveHelper protected constructor(@JvmField protected var sudoku:
     var derivation: SolveDerivation? = null
         protected set
 
-	var hintType : HintTypes? = null //public only for debugging
+    var hintType: HintTypes? = null //public only for debugging
 
     /**
      * Tries to apply this helper to the Sudoku until it succeeds for the first time or cannot be applied.

@@ -17,21 +17,23 @@ import java.util.*
  *
  * If there are n fields with only n distinct candidates in them, those candidates can't appear anywhere else.
  */
-open class NakedHelper(sudoku: SolverSudoku, level: Int, complexity: Int) : SubsetHelper(sudoku, level, complexity) {
+open class NakedHelper(sudoku: SolverSudoku, level: Int, complexity: Int) :
+    SubsetHelper(sudoku, level, complexity) {
     private val labels = arrayOf(
-            HintTypes.NakedSingle,
-            HintTypes.NakedPair,
-            HintTypes.NakedTriple,
-            HintTypes.NakedQuadruple,
-            HintTypes.NakedQuintuple,
-            HintTypes.Naked__6_tuple,
-            HintTypes.Naked__7_tuple,
-            HintTypes.Naked__8_tuple,
-            HintTypes.Naked__9_tuple,
-            HintTypes.Naked_10_tuple,
-            HintTypes.Naked_11_tuple,
-            HintTypes.Naked_12_tuple,
-            HintTypes.Naked_13_tuple)
+        HintTypes.NakedSingle,
+        HintTypes.NakedPair,
+        HintTypes.NakedTriple,
+        HintTypes.NakedQuadruple,
+        HintTypes.NakedQuintuple,
+        HintTypes.Naked__6_tuple,
+        HintTypes.Naked__7_tuple,
+        HintTypes.Naked__8_tuple,
+        HintTypes.Naked__9_tuple,
+        HintTypes.Naked_10_tuple,
+        HintTypes.Naked_11_tuple,
+        HintTypes.Naked_12_tuple,
+        HintTypes.Naked_13_tuple
+    )
 
     /**
      * collect all candidates appearing in fields with maximum `level` candidates.
@@ -61,7 +63,8 @@ open class NakedHelper(sudoku: SolverSudoku, level: Int, complexity: Int) : Subs
         val positions = Stack<Position>()
         for (p in constraint.getPositions()) if (sudoku.getCell(p)!!.isNotSolved) positions.add(p)
         do {
-            val subsetCount = filterForSubsets(positions) //subsetPositions = {p | p ∈ positions, p.candidates ⊆ currentSet && |p.candidates| ∈ [1,level]}
+            val subsetCount =
+                filterForSubsets(positions) //subsetPositions = {p | p ∈ positions, p.candidates ⊆ currentSet && |p.candidates| ∈ [1,level]}
             if (subsetCount == level) {
                 /* store all fields other than the n fields of the subset in externalPositions */
                 val externalPositions: MutableList<Position> = Stack()
@@ -69,7 +72,10 @@ open class NakedHelper(sudoku: SolverSudoku, level: Int, complexity: Int) : Subs
                 externalPositions.removeAll(subsetPositions)
                 for (pos in externalPositions) {
                     val currentPosCandidates: BitSet = sudoku.getCurrentCandidates(pos)
-                    /* if currentPosCandidates contains candidates from the current subset i.e. something can be deleted */if (currentPosCandidates.intersects(currentSet)) {
+                    /* if currentPosCandidates contains candidates from the current subset i.e. something can be deleted */if (currentPosCandidates.intersects(
+                            currentSet
+                        )
+                    ) {
                         //save original candidates
                         localCopy.assignWith(currentPosCandidates)
 

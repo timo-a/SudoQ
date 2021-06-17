@@ -5,7 +5,6 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.xml.XmlHelper
 import java.io.File
-import java.lang.IllegalStateException
 
 class SudokuTypeRepo(private val sudokuDir: File) : IRepo<SudokuTypeBE> {
     override fun create(): SudokuTypeBE {
@@ -13,7 +12,7 @@ class SudokuTypeRepo(private val sudokuDir: File) : IRepo<SudokuTypeBE> {
     }
 
     override fun read(id: Int): SudokuTypeBE {
-        val st : SudokuTypes = SudokuTypes.values()[id]
+        val st: SudokuTypes = SudokuTypes.values()[id]
         return getSudokuType(st)
     }
 

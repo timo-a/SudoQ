@@ -5,11 +5,14 @@ import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.ConstraintType
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.UniqueConstraintBehavior
-import de.sudoq.model.sudoku.sudokuTypes.*
+import de.sudoq.model.sudoku.sudokuTypes.ComplexityConstraintBuilder
+import de.sudoq.model.sudoku.sudokuTypes.PermutationProperties
+import de.sudoq.model.sudoku.sudokuTypes.SetOfPermutationProperties
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
 import de.sudoq.model.xml.Xmlable
-import java.util.ArrayList
+import java.util.*
 
 class SudokuTypeBE : Xmlable {
 
@@ -17,7 +20,7 @@ class SudokuTypeBE : Xmlable {
 
     var numberOfSymbols: Int = 0
 
-    var standardAllocationFactor : Float = 0f
+    var standardAllocationFactor: Float = 0f
 
     var size: Position? = null
 
@@ -39,14 +42,16 @@ class SudokuTypeBE : Xmlable {
     }
 
 
-    constructor(enumType : SudokuTypes,
-                numberOfSymbols : Int,
-                size : Position,
-                blockSize: Position,
-                constraints: MutableList<Constraint>,
-                permutationProperties: List<PermutationProperties>,
-                helperList: MutableList<Helpers>,
-                ccb: ComplexityConstraintBuilder
+    constructor(
+        enumType: SudokuTypes,
+        numberOfSymbols: Int,
+        standardAllocationFactor: Float,
+        size: Position,
+        blockSize: Position,
+        constraints: MutableList<Constraint>,
+        permutationProperties: List<PermutationProperties>,
+        helperList: MutableList<Helpers>,
+        ccb: ComplexityConstraintBuilder
     ) {
         this.enumType = enumType
         this.numberOfSymbols = numberOfSymbols
@@ -63,7 +68,12 @@ class SudokuTypeBE : Xmlable {
         val representation = XmlTree("sudokutype")
         representation.addAttribute(XmlAttribute("typename", "" + enumType!!.ordinal))
         representation.addAttribute(XmlAttribute("numberOfSymbols", "" + numberOfSymbols))
-        representation.addAttribute(XmlAttribute("standardAllocationFactor", standardAllocationFactor.toString()))
+        representation.addAttribute(
+            XmlAttribute(
+                "standardAllocationFactor",
+                standardAllocationFactor.toString()
+            )
+        )
         representation.addChild(size!!.toXmlTree("size"))
         representation.addChild(blockSize.toXmlTree("blockSize"))
         for (c in constraints) {
@@ -83,9 +93,11 @@ class SudokuTypeBE : Xmlable {
 
     @Throws(IllegalArgumentException::class)
     override fun fillFromXml(xmlTreeRepresentation: XmlTree) {
-        enumType = SudokuTypes.values()[xmlTreeRepresentation.getAttributeValue("typename")!!.toInt()]
+        enumType =
+            SudokuTypes.values()[xmlTreeRepresentation.getAttributeValue("typename")!!.toInt()]
         numberOfSymbols = xmlTreeRepresentation.getAttributeValue("numberOfSymbols")!!.toInt()
-        standardAllocationFactor = xmlTreeRepresentation.getAttributeValue("standardAllocationFactor")!!.toFloat()
+        standardAllocationFactor =
+            xmlTreeRepresentation.getAttributeValue("standardAllocationFactor")!!.toFloat()
         for (sub in xmlTreeRepresentation) {
             when (sub.name) {
                 "size" -> size = Position.fillFromXmlStatic(sub)

@@ -3,8 +3,6 @@ package de.sudoq.model.persistence.xml.game
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.game.GameStateHandler
 import de.sudoq.model.persistence.IRepo
-import de.sudoq.model.persistence.xml.profile.ProfileRepo
-import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.xml.XmlHelper
 import java.io.File
 import java.io.IOException
@@ -12,9 +10,11 @@ import java.io.IOException
 /**
  * repo for the games of one specific profile
  */
-class GameRepo(profilesDir: File,
-               profileId: Int,
-               private val sudokuDir: File) : IRepo<GameBE> {
+class GameRepo(
+    profilesDir: File,
+    profileId: Int,
+    private val sudokuDir: File
+) : IRepo<GameBE> {
 
 
     private val gamesDir: File
@@ -64,7 +64,7 @@ class GameRepo(profilesDir: File,
     override fun read(id: Int): GameBE {
         val obj = GameBE()
         val helper: XmlHelper = XmlHelper()
-        val gameFile: File =getGameFile(id)
+        val gameFile: File = getGameFile(id)
         //todo is exception catching necessary? profilerepo doesn't catch them
         try {
             obj.fillFromXml(helper.loadXml(gameFile)!!, sudokuDir)
@@ -100,8 +100,10 @@ class GameRepo(profilesDir: File,
      * @return The thumbnail File.
      */
     fun getGameThumbnailFile(gameID: Int): File {
-        return File(gamesDir.toString() + File.separator + "game_" +
-                gameID + ".png")
+        return File(
+            gamesDir.toString() + File.separator + "game_" +
+                    gameID + ".png"
+        )
     }
 
     init {

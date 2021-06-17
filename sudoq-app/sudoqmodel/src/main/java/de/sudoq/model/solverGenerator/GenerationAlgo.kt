@@ -26,36 +26,37 @@ import java.util.*
  * @property Das Objekt, auf dem nach Abschluss der Generierung die Callback-Methode aufgerufen wird
  */
 class GenerationAlgo(
-        protected var sudoku: Sudoku,
-        protected var callbackObject: GeneratorCallback,
-        random: Random) : Runnable {
+    private var sudoku: Sudoku,
+    private var callbackObject: GeneratorCallback,
+    random: Random
+) : Runnable {
 
     /**
      * Das Zufallsobjekt für den Generator
      */
-    protected var random: Random = random
+    private var random: Random = random
 
     /**
      * Der Solver, der für Validierungsvorgänge genutzt wird
      */
-    protected var solver: Solver = Solver(sudoku)
+    private var solver: Solver = Solver(sudoku)
 
     /**
      * List of currently defined(occupied) Fields.
      * If we gave the current sudoku to the user tey wouldn't have to solve these fields
      * as they'd already be filled in.
      */
-    protected var definedCells: MutableList<Position> = ArrayList()
+    private var definedCells: MutableList<Position> = ArrayList()
 
     /**
      * Die noch freien, also nicht belegten Felder des Sudokus
      */
-    protected var freeCells: MutableList<Position> = ArrayList(getPositions(sudoku))
+    private var freeCells: MutableList<Position> = ArrayList(getPositions(sudoku))
 
     /**
      * Das gelöste Sudoku
      */
-    protected var solvedSudoku: Sudoku? = null
+    private var solvedSudoku: Sudoku? = null
 
     /**
      * Die Anzahl der Felder, die fest zu definieren ist
@@ -69,9 +70,8 @@ class GenerationAlgo(
      * ComplexityConstraint für ein Sudoku des definierten
      * Schwierigkeitsgrades
      */
-    private val desiredComplexityConstraint: ComplexityConstraint? = sudoku.sudokuType!!.buildComplexityConstraint(sudoku.complexity)
-
-
+    private val desiredComplexityConstraint: ComplexityConstraint? =
+        sudoku.sudokuType!!.buildComplexityConstraint(sudoku.complexity)
 
 
     /**
@@ -113,7 +113,7 @@ class GenerationAlgo(
         //System.out.println("Fields to define: "+fieldsToDefine);
 
         //define fields
-        (0 until cellsToDefine).forEach { addDefinedCell() }
+        repeat(cellsToDefine + 1) { addDefinedCell() }
         var fieldsToDefineDynamic = cellsToDefine
 
         /* until a solution is found, remove 5 random fields and add new ones */
@@ -232,7 +232,7 @@ class GenerationAlgo(
     }
 
     private fun reduceStringList(sl: List<String>): String {
-        if (sl.size == 0) return "[]" else if (sl.size == 1) return "[" + sl[0] + "]"
+        if (sl.isEmpty()) return "[]" else if (sl.size == 1) return "[" + sl[0] + "]"
         var s = ""
         val i = sl.iterator()
         var counter = 1
@@ -262,11 +262,15 @@ class GenerationAlgo(
     // the number is determined as the smaller of
     //        - the standard allocation factor defined in the type
     //        - the average #fields per difficulty level defined in the type
-    private fun getNumberOfCellsToDefine(type: SudokuType?, desiredComplexityConstraint: ComplexityConstraint?): Int {
+    private fun getNumberOfCellsToDefine(
+        type: SudokuType?,
+        desiredComplexityConstraint: ComplexityConstraint?
+    ): Int {
         //TODO What do we have the allocation factor for??? can't it always be expressed through avg-fields?
         val standardAllocationFactor = type!!.getStandardAllocationFactor()
         val cellsOnSudokuBoard = type.size!!.x * type.size!!.y
-        val cellsByType = (cellsOnSudokuBoard * standardAllocationFactor).toInt() //TODO wäre freeFields.size nicht passender?
+        val cellsByType =
+            (cellsOnSudokuBoard * standardAllocationFactor).toInt() //TODO wäre freeFields.size nicht passender?
         val cellsByComp = desiredComplexityConstraint!!.averageCells
         return Math.min(cellsByType, cellsByComp)
     }
@@ -276,7 +280,8 @@ class GenerationAlgo(
     private fun getReallocationAmount(st: SudokuType, percentage: Double): Int {
         var numberOfPositions = 0
         for (p in sudoku.sudokuType!!.validPositions) numberOfPositions++
-        val reallocationAmount = (numberOfPositions * percentage).toInt() //remove/delete up to 10% of board
+        val reallocationAmount =
+            (numberOfPositions * percentage).toInt() //remove/delete up to 10% of board
         return Math.max(1, reallocationAmount) // at least 1
     }
 
@@ -392,7 +397,7 @@ class GenerationAlgo(
      * @return list of removed positions
      */
     private fun removeDefinedCells(numberOfCellsToRemove: Int): List<Position> {
-        return (0 until numberOfCellsToRemove).mapNotNull { _ -> removeDefinedCell() }
+        return (0 until numberOfCellsToRemove).mapNotNull { removeDefinedCell() }
     }
 
     /* debugging, remove when done */

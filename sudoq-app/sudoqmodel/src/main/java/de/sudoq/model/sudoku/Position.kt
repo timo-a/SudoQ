@@ -107,11 +107,11 @@ class Position(var x: Int, var y: Int) : Xmlable {
          * @throws IllegalArgumentException if either coordinate is > 0
          */
         @JvmStatic
-		operator fun get(x: Int, y: Int): Position {
+        operator fun get(x: Int, y: Int): Position {
             require(x >= 0 && y >= 0) { "a parameter is less than zero" }
 
             if (positions == null) {
-                initializePositions();
+                initializePositions()
             }
 
             return if (x < 25 && y < 25) {
@@ -127,7 +127,7 @@ class Position(var x: Int, var y: Int) : Xmlable {
          * Initialises the Position Array for efficient Position storage.
          */
         private fun initializePositions() {
-            positions = Array(25) { Array(25) { Position(0,0) } }
+            positions = Array(25) { Array(25) { Position(0, 0) } }
             for (x in 0..24) {
                 for (y in 0..24) {
                     positions!![x][y] = Position(x, y)

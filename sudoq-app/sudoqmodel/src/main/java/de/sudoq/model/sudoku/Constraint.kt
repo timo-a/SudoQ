@@ -10,9 +10,7 @@ package de.sudoq.model.sudoku
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
 import de.sudoq.model.xml.Xmlable
-import java.lang.IllegalArgumentException
-import java.util.ArrayList
-import kotlin.Throws
+import java.util.*
 
 /**
  * A Constraint comprises [Cell]s (or rather their [Position]s) in a Sudoku, so that they have to
@@ -22,7 +20,8 @@ import kotlin.Throws
  * @property behavior Describes the constraint that the cells have to satisfy
  * @param type Type of the Constraint
  */
-class Constraint (private var behavior: ConstraintBehavior, type: ConstraintType) : Iterable<Position>, Xmlable {
+class Constraint(private var behavior: ConstraintBehavior, type: ConstraintType) :
+    Iterable<Position>, Xmlable {
 
     /** A List of [Position]s of all [Cells], that together satisfy a constraint */
     private var positions: MutableList<Position> = ArrayList()
@@ -45,8 +44,11 @@ class Constraint (private var behavior: ConstraintBehavior, type: ConstraintType
      *
      * @param name Name of the Constraint should start with one of "extra block", "Block", "Column", "Row".
      */
-    constructor(behavior: ConstraintBehavior, type: ConstraintType, name: String?) : this(behavior, type) {
-        if(name != null)
+    constructor(behavior: ConstraintBehavior, type: ConstraintType, name: String?) : this(
+        behavior,
+        type
+    ) {
+        if (name != null)
             this.name = name
     }
 

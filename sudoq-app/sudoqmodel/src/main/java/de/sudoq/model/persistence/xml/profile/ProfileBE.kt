@@ -7,11 +7,11 @@ import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
 import de.sudoq.model.xml.Xmlable
 
-class ProfileBE(val id : Int) : Xmlable {
+class ProfileBE(val id: Int) : Xmlable {
 
-    var currentGame : Int = 0
+    var currentGame: Int = 0
 
-    var name : String? = null
+    var name: String? = null
 
     var assistances = GameSettings()
 
@@ -38,7 +38,8 @@ class ProfileBE(val id : Int) : Xmlable {
         }
         statistics = IntArray(Statistics.values().size)
         for (stat in Statistics.values()) {
-            statistics!![stat.ordinal] = xmlTreeRepresentation.getAttributeValue(stat.name)!!.toInt()
+            statistics!![stat.ordinal] =
+                xmlTreeRepresentation.getAttributeValue(stat.name)!!.toInt()
         }
     }
 
@@ -52,7 +53,12 @@ class ProfileBE(val id : Int) : Xmlable {
         representation.addAttribute(XmlAttribute("name", name!!))
         representation.addChild(assistances.toXmlTree())
         for (stat in Statistics.values()) {
-            representation.addAttribute(XmlAttribute(stat.name, statistics!![stat.ordinal].toString() + ""))
+            representation.addAttribute(
+                XmlAttribute(
+                    stat.name,
+                    statistics!![stat.ordinal].toString() + ""
+                )
+            )
         }
         representation.addChild(appSettings.toXmlTree())
         return representation

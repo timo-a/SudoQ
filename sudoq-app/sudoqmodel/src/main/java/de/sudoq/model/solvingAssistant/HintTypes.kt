@@ -1,4 +1,4 @@
-package de.sudoq.model.solvingAssistant;
+package de.sudoq.model.solvingAssistant
 
 enum class HintTypes {
     LastDigit,

@@ -53,7 +53,11 @@ class Generator(val sudokuDir: File) {
      * @return true, falls ein leeres Sudoku erzeugt und der Warteschlange
      * hinzugefügt werden konnte, false andernfalls
      */
-    fun generate(type: SudokuTypes?, complexity: Complexity?, callbackObject: GeneratorCallback?): Boolean {
+    fun generate(
+        type: SudokuTypes?,
+        complexity: Complexity?,
+        callbackObject: GeneratorCallback?
+    ): Boolean {
         if (type == null || complexity == null || callbackObject == null) return false
 
         // Create sudoku
@@ -92,8 +96,10 @@ class Generator(val sudokuDir: File) {
             val xLim = sudoku.sudokuType!!.size!!.x
             val yLim = sudoku.sudokuType!!.size!!.y
 
-            val allPositions = (0 until xLim).flatMap { x -> (0 until yLim)
-                        .map { y -> Position[x,y] } }
+            val allPositions = (0 until xLim).flatMap { x ->
+                (0 until yLim)
+                    .map { y -> Position[x, y] }
+            }
 
             return allPositions.filter { sudoku.getCell(it) != null }
         }

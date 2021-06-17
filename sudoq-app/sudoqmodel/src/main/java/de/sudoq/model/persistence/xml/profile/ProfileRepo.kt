@@ -18,7 +18,7 @@ class ProfileRepo(private val profilesDir: File) : IRepo<ProfileBE> {
         return create(newProfileID)
     }
 
-    private fun create(id : Int): ProfileBE {
+    private fun create(id: Int): ProfileBE {
 
         val newProfile = ProfileBE(id)
         newProfile.name = Profile.DEFAULT_PROFILE_NAME
@@ -41,8 +41,6 @@ class ProfileRepo(private val profilesDir: File) : IRepo<ProfileBE> {
     fun createFirstProfile(): ProfileBE {
         return create(1)
     }
-
-
 
 
     /**
@@ -118,11 +116,9 @@ class ProfileRepo(private val profilesDir: File) : IRepo<ProfileBE> {
      *
      * @return File, welcher auf das Profilverzeichnis zeigt
      */
-    public fun getProfileDirFor(id: Int): File {
+    fun getProfileDirFor(id: Int): File {
         return File(profilesDir.absolutePath + File.separator + "profile_$id")
     }
-
-
 
 
     /**
@@ -139,8 +135,6 @@ class ProfileRepo(private val profilesDir: File) : IRepo<ProfileBE> {
             while (used.contains(i)) i++
             return i
         }
-
-
 
 
     private fun getProfileIdsList(): List<Int> {

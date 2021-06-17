@@ -42,8 +42,8 @@ class Profile private constructor(f: File) : ProfileManager(f) {
          * @return Die Instanz dieses Profile Singletons
          */
         //@JvmStatic
-		//@get:Synchronized
-        fun getInstance(f: File) : Profile {
+        //@get:Synchronized
+        fun getInstance(f: File): Profile {
             if (instance == null || instance!!.profilesDir != f) {
                 instance = Profile(f)
                 instance!!.loadCurrentProfile()

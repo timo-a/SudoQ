@@ -31,19 +31,21 @@ open class Solver(sudoku: Sudoku) {
     @JvmField //todo remove when migration to kotlin complete
     var solverSudoku: SolverSudoku
 
-    fun getSolverSudoku() : SolverSudoku { return solverSudoku}
+    fun getSolverSudoku(): SolverSudoku {
+        return solverSudoku
+    }
 
     /**
      * Eine Liste von SolveHelpern, welche zum Lösen des Sudokus genutzt werden
      */
     @JvmField
-	protected var helper: List<SolveHelper>
+    protected var helper: List<SolveHelper>
 
     /**
      * Die Anzahl der verfügbaren Helfer;
      */
     @JvmField
-	protected var numberOfHelpers: Int
+    protected var numberOfHelpers: Int
 
     /**
      * Eine Liste der Lösungen des letzten solveAll-Aufrufes
@@ -77,8 +79,10 @@ open class Solver(sudoku: Sudoku) {
         //if a naked set $n$ exists with size $|n|$ then there exists a hidden set $h$ with size $|h| = |empty fields in constraint| - |n|$
         //the maximum number of empty fields is #Symbols -> if we look at naked sets up to $a$ we only need to look for hidden sets up to #Symbols - a -1
         // => we don't need to add all possible helpers:
-        val numberOfNakedHelpers = solverSudoku.sudokuType!!.numberOfSymbols / 2 //half if #symbols is even, less than half otherwise
-        val numberOfHiddenHelpers = solverSudoku.sudokuType!!.numberOfSymbols - numberOfNakedHelpers - 1 //we don't need the complement -> one less
+        val numberOfNakedHelpers =
+            solverSudoku.sudokuType!!.numberOfSymbols / 2 //half if #symbols is even, less than half otherwise
+        val numberOfHiddenHelpers =
+            solverSudoku.sudokuType!!.numberOfSymbols - numberOfNakedHelpers - 1 //we don't need the complement -> one less
 
         //no naked single at this point, they're hardcoded later in the program
         //TODO add naked single here and remove its extra loop in the solveX method
@@ -143,13 +147,25 @@ open class Solver(sudoku: Sudoku) {
                 if (b.cardinality() == 1) { //we found a field where only one note remains
                     if (!solverSudoku.hasBranch()) {
                         //if there are no branches create solution-object
-                        solution.action = SolveActionFactory().createAction(b.nextSetBit(0), solverSudoku.getCell(p)!!)
+                        solution.action = SolveActionFactory().createAction(
+                            b.nextSetBit(0),
+                            solverSudoku.getCell(p)!!
+                        )
                         val deriv = SolveDerivation()
-                        deriv.addDerivationCell(DerivationCell(p, (b.clone() as BitSet), BitSet())) //since only one bit set, complement is an empty set
+                        deriv.addDerivationCell(
+                            DerivationCell(
+                                p,
+                                (b.clone() as BitSet),
+                                BitSet()
+                            )
+                        ) //since only one bit set, complement is an empty set
                         solution.addDerivation(deriv)
                         solvedField = true
                     } else {
-                        solverSudoku.setSolution(p, b.nextSetBit(0)) //set solution that can be removed again (in case it's the wrong branch)
+                        solverSudoku.setSolution(
+                            p,
+                            b.nextSetBit(0)
+                        ) //set solution that can be removed again (in case it's the wrong branch)
                         didUpdate = true
                     }
                 }
@@ -244,12 +260,12 @@ open class Solver(sudoku: Sudoku) {
 
     private fun getHintScore(h: HintTypes): Int {
         return if (h === HintTypes.NakedSingle)
-                    10
-               else {
-                 if (hintscores.isEmpty())
-                   for (sh in helper)
-                     hintscores[sh.hintType!!] = sh.complexityScore
-                 hintscores[h]!!
+            10
+        else {
+            if (hintscores.isEmpty())
+                for (sh in helper)
+                    hintscores[sh.hintType!!] = sh.complexityScore
+            hintscores[h]!!
         }
     }
 
@@ -307,7 +323,8 @@ open class Solver(sudoku: Sudoku) {
         //this.sudoku.complexityValue is overwritten by the attempt at finding a second solution
 
         // restore initial state
-        for (p in solverSudoku.positions!!) solverSudoku.getCell(p)!!.setCurrentValue(copy[p]!!, false)
+        for (p in solverSudoku.positions!!) solverSudoku.getCell(p)!!
+            .setCurrentValue(copy[p]!!, false)
 
 
         // depending on the result, return an int
@@ -317,7 +334,12 @@ open class Solver(sudoku: Sudoku) {
         //if (ambiguous)
         //	result = ComplexityRelation.AMBIGUOUS;
         /*else*/if (solved) {
-            if (maxComplextiy * 1.2 < complexity) result = ComplexityRelation.MUCH_TOO_DIFFICULT else if (maxComplextiy < complexity && complexity <= maxComplextiy * 1.2) result = ComplexityRelation.TOO_DIFFICULT else if (minComplextiy < complexity && complexity <= maxComplextiy) result = ComplexityRelation.CONSTRAINT_SATURATION else if (minComplextiy * 0.8 < complexity && complexity <= minComplextiy) result = ComplexityRelation.TOO_EASY else if (complexity <= minComplextiy * 0.8) result = ComplexityRelation.MUCH_TOO_EASY
+            if (maxComplextiy * 1.2 < complexity) result =
+                ComplexityRelation.MUCH_TOO_DIFFICULT else if (maxComplextiy < complexity && complexity <= maxComplextiy * 1.2) result =
+                ComplexityRelation.TOO_DIFFICULT else if (complexity in (minComplextiy + 1)..maxComplextiy) result =
+                ComplexityRelation.CONSTRAINT_SATURATION else if (minComplextiy * 0.8 < complexity && complexity <= minComplextiy) result =
+                ComplexityRelation.TOO_EASY else if (complexity <= minComplextiy * 0.8) result =
+                ComplexityRelation.MUCH_TOO_EASY
             /*   0.8 minC      minC               maxC            1.2 maxC
 		    much too easy| too easy|   saturation     |too difficult      | Much too difficult         */
         }
@@ -351,7 +373,12 @@ open class Solver(sudoku: Sudoku) {
         //if we want to call getSolutions later on we'll be interested in the first solution anyway
 
         //List<Solution> ls = lastSolutions; //we just don't build a derivation, ls should be left unchanged
-        while (advanceBranching(false) == Branchresult.SUCCESS) if (solveAll(false, false, true)) //why is it invalid if solved and another solve?
+        while (advanceBranching(false) == Branchresult.SUCCESS) if (solveAll(
+                false,
+                false,
+                true
+            )
+        ) //why is it invalid if solved and another solve?
             return true
 
         //lastSolutions = ls;
@@ -377,13 +404,19 @@ open class Solver(sudoku: Sudoku) {
      * Wird geworfen, falls followComplexityConstraints true ist, jedoch keine Constraint-Definition für den
      * Sudokutyp und die Schwierigkeit vorhanden ist
      */
-    fun solveAll(buildDerivation: Boolean, followComplexityConstraints: Boolean, validation: Boolean): Boolean {
+    fun solveAll(
+        buildDerivation: Boolean,
+        followComplexityConstraints: Boolean,
+        validation: Boolean
+    ): Boolean {
         if (!validation) solverSudoku.resetCandidates()
         try {
             if (followComplexityConstraints) {
                 //if complexity is relevant restrict helpers
-                complConstr = solverSudoku.sudokuType!!.buildComplexityConstraint(solverSudoku.complexity)
-                numberOfHelpers = complConstr!!.numberOfAllowedHelpers //TODO specifying a max helper would be clearer
+                complConstr =
+                    solverSudoku.sudokuType!!.buildComplexityConstraint(solverSudoku.complexity)
+                numberOfHelpers =
+                    complConstr!!.numberOfAllowedHelpers //TODO specifying a max helper would be clearer
             } else {
                 numberOfHelpers = helper.size
             }
@@ -404,8 +437,9 @@ open class Solver(sudoku: Sudoku) {
         }
         var solver_counter = 0
         while (!solved //if `solved` we're done
-                && didUpdate //if we didn't do an update in the last iteration, we won't do one the next iteration either
-                && !isUnsolvable) { //if we found out there is no solution, no need to try further
+            && didUpdate //if we didn't do an update in the last iteration, we won't do one the next iteration either
+            && !isUnsolvable
+        ) { //if we found out there is no solution, no need to try further
             didUpdate = false
 
 
@@ -503,13 +537,16 @@ open class Solver(sudoku: Sudoku) {
                     branchPoints!!.push(lastSolutions!!.size)
                     //copied from class Backtracking (because we need a custom candidate here).
                     val lastDerivation = SolveDerivation(HintTypes.Backtracking)
-                    val irrelevantCandidates: BitSet = candidates //startNewBranch() deletes candidates in currendCandidates, and branchpool can't be accessed from here, so we need to use saved bitset
+                    val irrelevantCandidates: BitSet =
+                        candidates //startNewBranch() deletes candidates in currendCandidates, and branchpool can't be accessed from here, so we need to use saved bitset
                     val relevantCandidates = BitSet()
                     relevantCandidates.set(nextCandidate)
                     irrelevantCandidates.clear(nextCandidate)
-                    val derivField = DerivationCell(branchingPos,
-                            relevantCandidates,
-                            irrelevantCandidates)
+                    val derivField = DerivationCell(
+                        branchingPos,
+                        relevantCandidates,
+                        irrelevantCandidates
+                    )
                     lastDerivation.addDerivationCell(derivField)
                     lastDerivation.setDescription("Backtrack different candidate")
                 }
@@ -536,7 +573,13 @@ if there is another candidate -> advance
      * @param validation should difficulty scores be collected?
      * @return true if any helper could be applied, false if no helper could be applied
      */
-    protected fun useHelper(solved: Boolean, didUpdate: Boolean, isUnsolvable: Boolean, buildDerivation: Boolean, validation: Boolean): Boolean {
+    private fun useHelper(
+        solved: Boolean,
+        didUpdate: Boolean,
+        isUnsolvable: Boolean,
+        buildDerivation: Boolean,
+        validation: Boolean
+    ): Boolean {
         if (!solved && !didUpdate && !isUnsolvable) {
             for (i in 0 until numberOfHelpers) {
                 val hel = helper[i]
@@ -572,7 +615,7 @@ if there is another candidate -> advance
      * Bestimmt, ob der Schwierigkeitswert beim Finden eines NakedSingles dem Sudoku hinzugefügt werden soll
      * @return Eine Liste der Herleitungen der Lösungen oder null, falls keine gefunden wurde
      */
-    protected fun updateNakedSingles(addDerivations: Boolean, addComplexity: Boolean): Boolean {
+    private fun updateNakedSingles(addDerivations: Boolean, addComplexity: Boolean): Boolean {
         var hasNakedSingle: Boolean //indicates that one was found in the last iteration -> continue to iterate
         var foundNakedSingle = false //indicates that at least one was found
         // Iterate trough the fields to look if each field has only one
@@ -585,8 +628,12 @@ if there is another candidate -> advance
                 if (b.cardinality() == 1) {
                     if (addDerivations) {
                         val deriv = SolveDerivation(HintTypes.NakedSingle)
-                        deriv.addDerivationCell(DerivationCell(p, (b.clone() as BitSet),
-                                BitSet()))
+                        deriv.addDerivationCell(
+                            DerivationCell(
+                                p, (b.clone() as BitSet),
+                                BitSet()
+                            )
+                        )
                         deriv.setDescription("debug: naked single via Solver.updateNakedSingles")
                         /*
 						we dont do actions for the other helpers either and
@@ -597,7 +644,10 @@ if there is another candidate -> advance
                         newSolution.addDerivation(deriv)
                         //lastSolutions.add(new Solution());
                     }
-                    solverSudoku.setSolution(p, b.nextSetBit(0)) //execute, since only one candidate, take first
+                    solverSudoku.setSolution(
+                        p,
+                        b.nextSetBit(0)
+                    ) //execute, since only one candidate, take first
                     if (addComplexity) {
                         solverSudoku.addComplexityValue(10, true)
                     }
@@ -619,8 +669,8 @@ if there is another candidate -> advance
     protected val isInvalid: Boolean
         get() {
             fun invalid(vp: Position): Boolean =
-                    solverSudoku.getCurrentCandidates(vp).isEmpty //no solution entered
-                    && solverSudoku.getCell(vp)!!.isNotSolved //no candidates left
+                solverSudoku.getCurrentCandidates(vp).isEmpty //no solution entered
+                        && solverSudoku.getCell(vp)!!.isNotSolved //no candidates left
 
             return solverSudoku.sudokuType!!.validPositions.any(::invalid)
         }
@@ -633,7 +683,7 @@ if there is another candidate -> advance
      */
     protected val isFilledCompletely: Boolean
         get() = solverSudoku.positions!!.map(solverSudoku::getCell)
-                                        .none { it!!.isNotSolved }
+            .none { it!!.isNotSolved }
 
 
     /**

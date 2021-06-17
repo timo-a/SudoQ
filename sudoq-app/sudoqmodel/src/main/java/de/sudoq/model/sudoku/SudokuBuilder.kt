@@ -24,7 +24,7 @@ class SudokuBuilder(private val type: SudokuType?) {
      * @param type Enum-Type of the [Sudoku] to create
      * @throws NullPointerException if type invalid.
      */
-    constructor(type: SudokuTypes, sudokuDir: File) : this(getSudokuType(type, sudokuDir)) {}
+    constructor(type: SudokuTypes, sudokuDir: File) : this(getSudokuType(type, sudokuDir))
 
     /**
      * Creates a [Sudoku] with the SudokeType of this builder and the entered Solutions.

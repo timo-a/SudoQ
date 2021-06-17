@@ -12,7 +12,8 @@ import java.util.*
 /**
  * Created by timo on 04.10.16.
  */
-class LeftoverNoteDerivation(val constraint: Constraint, val note: Int) : SolveDerivation(HintTypes.LeftoverNote) {
+class LeftoverNoteDerivation(val constraint: Constraint, val note: Int) :
+    SolveDerivation(HintTypes.LeftoverNote) {
 
     private val actionlist: MutableList<Action> = ArrayList()
 

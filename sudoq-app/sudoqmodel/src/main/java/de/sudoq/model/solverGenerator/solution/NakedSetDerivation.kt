@@ -42,7 +42,9 @@ class NakedSetDerivation(technique: HintTypes) : SolveDerivation(technique) {
     override fun getActionList(sudoku: Sudoku): List<Action> {
         val actionlist: MutableList<Action> = ArrayList()
         val af = NoteActionFactory()
-        for (df in externalCells) for (note in fromBitSet(df.relevantCandidates).setBits) actionlist.add(af.createAction(note, sudoku.getCell(df.position)!!))
+        for (df in externalCells) for (note in fromBitSet(df.relevantCandidates).setBits) actionlist.add(
+            af.createAction(note, sudoku.getCell(df.position)!!)
+        )
         return actionlist
     }
 

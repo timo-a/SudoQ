@@ -119,7 +119,7 @@ class XmlTree(name: String) : Iterable<XmlTree> {
      */
     fun updateAttribute(attribute: XmlAttribute?) {//todo can we require nonnull?
         if (attribute != null) {
-            var existingAttribute = attributes.firstOrNull { it.isSameAttribute(attribute) }
+            val existingAttribute = attributes.firstOrNull { it.isSameAttribute(attribute) }
 
             if (existingAttribute != null)
                 existingAttribute.value = attribute.value

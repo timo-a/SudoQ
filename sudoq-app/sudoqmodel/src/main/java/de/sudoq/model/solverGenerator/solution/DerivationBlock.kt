@@ -7,4 +7,4 @@ import de.sudoq.model.sudoku.Constraint
  *
  * @property block the relevant block
  */
-class DerivationBlock(val block: Constraint) {}
+class DerivationBlock(val block: Constraint)

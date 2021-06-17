@@ -7,7 +7,6 @@
  */
 package de.sudoq.model.sudoku
 
-import de.sudoq.model.files.FileManager
 import de.sudoq.model.persistence.xml.sudoku.SudokuBE
 import de.sudoq.model.persistence.xml.sudoku.SudokuMapper
 import de.sudoq.model.persistence.xml.sudoku.SudokuRepo

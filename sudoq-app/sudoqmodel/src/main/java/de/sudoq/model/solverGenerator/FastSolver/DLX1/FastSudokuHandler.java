@@ -2,7 +2,7 @@ package de.sudoq.model.solverGenerator.FastSolver.DLX1;
 
 import java.util.List;
 
-public class FastSudokuHandler extends SudokuHandler{
+public class FastSudokuHandler extends SudokuHandler {
 
     private final List<int[][]> solutions;
 
@@ -12,7 +12,7 @@ public class FastSudokuHandler extends SudokuHandler{
     }
 
     @Override
-    public void handleSolution(List<DancingLinks.DancingNode> answer){
+    public void handleSolution(List<DancingLinks.DancingNode> answer) {
         int[][] result = parseBoard(answer);
         solutions.add(result);
     }

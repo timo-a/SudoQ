@@ -21,7 +21,7 @@ abstract class XmlHandler2<T : Xmlable2> {
     private val helper: XmlHelper = XmlHelper()
 
     @JvmField
-	protected var file: File? = null
+    protected var file: File? = null
 
     /**
      * Stores the passed [Xmlable] in an xml file.
@@ -51,7 +51,10 @@ abstract class XmlHandler2<T : Xmlable2> {
         try {
             obj.fillFromXml(helper.loadXml(getFileFor(obj))!!, sudokuDir)
         } catch (e: IOException) {
-            throw IllegalArgumentException("Something went wrong when reading xml " + getFileFor(obj), e)
+            throw IllegalArgumentException(
+                "Something went wrong when reading xml " + getFileFor(obj),
+                e
+            )
         } catch (e: IllegalArgumentException) {
             throw IllegalArgumentException("Something went wrong when filling obj from xml ", e)
         }

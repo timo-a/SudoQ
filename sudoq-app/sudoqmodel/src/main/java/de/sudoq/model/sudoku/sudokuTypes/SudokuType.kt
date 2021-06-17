@@ -7,16 +7,13 @@
  */
 package de.sudoq.model.sudoku.sudokuTypes
 
-import de.sudoq.model.files.FileManager
 import de.sudoq.model.solverGenerator.solver.helper.Helpers
-import de.sudoq.model.sudoku.*
+import de.sudoq.model.sudoku.Constraint
+import de.sudoq.model.sudoku.Position
+import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint
 import de.sudoq.model.sudoku.complexity.ComplexityFactory
-import de.sudoq.model.xml.XmlAttribute
-import de.sudoq.model.xml.XmlHelper
-import de.sudoq.model.xml.XmlTree
-import de.sudoq.model.xml.Xmlable
 import java.util.*
 
 /**
@@ -31,7 +28,7 @@ open class SudokuType : Iterable<Constraint>, ComplexityFactory {
 
     /** The ratio of fields that are to be allocated i.e. already filled when starting  a sudoku game  */
     @JvmField
-    var standardAllocationFactor : Float = 0f
+    var standardAllocationFactor: Float = 0f
 
     /**
      * Gibt den Standard Belegungsfaktor zurück
@@ -80,9 +77,9 @@ open class SudokuType : Iterable<Constraint>, ComplexityFactory {
     var permutationProperties: List<PermutationProperties>
 
     var helperList: MutableList<Helpers>
+
     @JvmField
     var ccb: ComplexityConstraintBuilder
-
 
 
     /**
@@ -111,14 +108,17 @@ open class SudokuType : Iterable<Constraint>, ComplexityFactory {
     /**
      * used to initialize from SudokuTypeBE
      */
-    constructor(enumType : SudokuTypes,
-                numberOfSymbols : Int,
-                size : Position,
-                blockSize: Position,
-                constraints: MutableList<Constraint>,
-                permutationProperties: List<PermutationProperties>,
-                helperList: MutableList<Helpers>,
-                ccb: ComplexityConstraintBuilder) {
+    constructor(
+        enumType: SudokuTypes,
+        numberOfSymbols: Int,
+        standardAllocationFactor: Float,
+        size: Position,
+        blockSize: Position,
+        constraints: MutableList<Constraint>,
+        permutationProperties: List<PermutationProperties>,
+        helperList: MutableList<Helpers>,
+        ccb: ComplexityConstraintBuilder
+    ) {
         this.enumType = enumType
         this.numberOfSymbols = numberOfSymbols
         this.standardAllocationFactor = standardAllocationFactor
@@ -222,11 +222,15 @@ open class SudokuType : Iterable<Constraint>, ComplexityFactory {
     /**
      * @return A list of the [Constraint]s of this SudokuType.
      */
-    @Deprecated("Gibt eine Liste der Constraints, welche zu diesem Sudokutyp gehören zurück. " +
-            "Hinweis: Wenn möglich stattdessen den Iterator benutzen.",
-            ReplaceWith("iterator()",
-                    "kotlin.collections.Iterator",
-                    "de.sudoq.model.sudoku.Constraint"))
+    @Deprecated(
+        "Gibt eine Liste der Constraints, welche zu diesem Sudokutyp gehören zurück. " +
+                "Hinweis: Wenn möglich stattdessen den Iterator benutzen.",
+        ReplaceWith(
+            "iterator()",
+            "kotlin.collections.Iterator",
+            "de.sudoq.model.sudoku.Constraint"
+        )
+    )
     fun getConstraints(): ArrayList<Constraint> {
         return constraints as ArrayList<Constraint>
     }

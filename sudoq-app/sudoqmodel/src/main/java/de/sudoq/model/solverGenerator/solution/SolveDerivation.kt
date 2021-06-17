@@ -27,7 +27,8 @@ open class SolveDerivation constructor(var type: HintTypes?) {
      */
     private val blocks: MutableList<DerivationBlock> = ArrayList()
 
-    protected var hasActionListCapability = false //maybe cleaner to have classes implement interface ActionList
+    protected var hasActionListCapability =
+        false //maybe cleaner to have classes implement interface ActionList
 
     constructor() : this(null)
 

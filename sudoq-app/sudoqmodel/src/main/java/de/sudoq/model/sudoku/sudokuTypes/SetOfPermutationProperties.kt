@@ -31,7 +31,9 @@ class SetOfPermutationProperties : ArrayList<PermutationProperties>(), Xmlable {
     override fun fillFromXml(xmlTreeRepresentation: XmlTree) {
         for (sub in xmlTreeRepresentation) {
             if (sub.name == PERMUTATION_PROPERTY) {
-                add(PermutationProperties.values()[sub.getAttributeValue(TAG_PROPERTY_NR)!!.toInt()])
+                add(
+                    PermutationProperties.values()[sub.getAttributeValue(TAG_PROPERTY_NR)!!.toInt()]
+                )
             }
         }
     }

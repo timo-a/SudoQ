@@ -10,26 +10,28 @@ import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
 import de.sudoq.model.xml.Xmlable2
 import java.io.File
-import java.util.HashMap
+import java.util.*
 
 class SudokuBE() : Xmlable2 {
 
-    var id : Int = 0
+    var id: Int = 0
 
     var transformCount = 0
 
-    var sudokuType : SudokuType? = null
+    var sudokuType: SudokuType? = null
 
     var complexity: Complexity? = null
 
     var cells: HashMap<Position, Cell>? = null
 
-//todo switch noargs and 5args constructor
-    constructor(id : Int,
-                transformCount : Int,
-                sudokuType: SudokuType,
-                complexity: Complexity,
-                cells: HashMap<Position, Cell>) : this() {
+    //todo switch noargs and 5args constructor
+    constructor(
+        id: Int,
+        transformCount: Int,
+        sudokuType: SudokuType,
+        complexity: Complexity,
+        cells: HashMap<Position, Cell>
+    ) : this() {
         this.id = id
         this.transformCount = transformCount
         this.sudokuType = sudokuType
@@ -78,7 +80,8 @@ class SudokuBE() : Xmlable2 {
         } catch (e: NumberFormatException) {
             -1
         }
-        val enumType = SudokuTypes.values()[xmlTreeRepresentation.getAttributeValue("type")!!.toInt()]
+        val enumType =
+            SudokuTypes.values()[xmlTreeRepresentation.getAttributeValue("type")!!.toInt()]
         sudokuType = SudokuTypeProvider.getSudokuType(enumType, sudokuDir)
         transformCount = xmlTreeRepresentation.getAttributeValue("transformCount")!!.toInt()
         val compl = xmlTreeRepresentation.getAttributeValue("complexity")

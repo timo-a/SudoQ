@@ -27,15 +27,17 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
 //private constructor because class is static
 //TODO split into profile handler and profile
 
-     lateinit var currentProfile : ProfileBE //initialized in loadCurrentProfile
+    lateinit var currentProfile: ProfileBE //initialized in loadCurrentProfile
 
 
     /**
      * Name of the current player profiles
      */
     var name: String?
-       get() = currentProfile.name
-       set(value) {currentProfile.name = value}
+        get() = currentProfile.name
+        set(value) {
+            currentProfile.name = value
+        }
 
     /**
      * ID of the player profile
@@ -49,7 +51,9 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
      */
     var currentGame
         get() = currentProfile.currentGame
-        set(value) { currentProfile.currentGame = value }
+        set(value) {
+            currentProfile.currentGame = value
+        }
 
     /**
      * AssistanceSet representing the available Assistances
@@ -67,16 +71,18 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
 
     var statistics: IntArray?
         get() = currentProfile.statistics
-        set(value) {currentProfile.statistics = value}
+        set(value) {
+            currentProfile.statistics = value
+        }
 
-    var profileRepo : ProfileRepo? = null //TODO refactor initialization, set it right
-    var profilesListRepo : ProfilesListRepo? = null //TODO refactor initialization, set it right
+    var profileRepo: ProfileRepo? = null //TODO refactor initialization, set it right
+    var profilesListRepo: ProfilesListRepo? = null //TODO refactor initialization, set it right
 
     var currentProfileDir: File? = null
         get() = profileRepo!!.getProfileDirFor(currentProfileID)
         private set
 
-    var profilesDir : File? = null //todo remove noargs constructor, make non-nullable
+    var profilesDir: File? = null //todo remove noargs constructor, make non-nullable
         set(value) {
             if (value == null)
                 throw IllegalArgumentException("profiles dir is null")
@@ -96,7 +102,11 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
         this.profilesDir = profilesDir
     }
 
-    constructor(profileRepo: ProfileRepo, profilesListRepo: ProfilesListRepo, profilesDir: File) : this() {//todo pas just file and init here?
+    constructor(
+        profileRepo: ProfileRepo,
+        profilesListRepo: ProfilesListRepo,
+        profilesDir: File
+    ) : this() {//todo pas just file and init here?
         this.profileRepo = profileRepo
         this.profilesListRepo = profilesListRepo
 
@@ -131,7 +141,7 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
             return
         }
 
-        if(profilesDir!!.list().isEmpty() || !File(profilesDir, "profiles.xml").exists()){
+        if (profilesDir!!.list().isEmpty() || !File(profilesDir, "profiles.xml").exists()) {
             profilesListRepo!!.createProfilesFile()
         }
 
@@ -144,7 +154,8 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
         }
 
 
-        val currentProfileID = profilesListRepo!!.getCurrentProfileId()//todo put directly into setter of currentProfileID???
+        val currentProfileID =
+            profilesListRepo!!.getCurrentProfileId()//todo put directly into setter of currentProfileID???
 
         currentProfile = profileRepo!!.read(currentProfileID)
 
@@ -197,8 +208,13 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
 		for(String s: profiles.list())
 			System.out.println(profiles.list());
 		System.out.println("getnrpEND");*/
-        var count = profilesDir!!.list()!!.size //one folder for each profile + file listing all profiles
-        if (File(profilesDir, "profiles.xml").exists()) {  //if profiles.xml exists subtract it from count
+        var count =
+            profilesDir!!.list()!!.size //one folder for each profile + file listing all profiles
+        if (File(
+                profilesDir,
+                "profiles.xml"
+            ).exists()
+        ) {  //if profiles.xml exists subtract it from count
             count--
         }
         return count == 0
@@ -301,7 +317,6 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
     fun getCurrentGestureFile(): File = File(profilesDir, "gestures")
 
 
-
     /*Advanced Settings*/
     fun setLefthandActive(value: Boolean) {
         assistances.setLefthandMode(value)
@@ -344,7 +359,9 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
      * true um die Assistance anzuschalten, sonst false
      */
     fun setAssistance(assistance: Assistances?, value: Boolean) {
-        if (value) assistances.setAssistance(assistance!!) else assistances.clearAssistance(assistance!!)
+        if (value) assistances.setAssistance(assistance!!) else assistances.clearAssistance(
+            assistance!!
+        )
         // notifyListeners(this);
     }
 
@@ -363,9 +380,6 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
     fun getAssistance(asst: Assistances?): Boolean {
         return assistances.getAssistance(asst!!)
     }
-
-
-
 
 
     /**

@@ -46,7 +46,7 @@ class ComplexityConstraint : Cloneable, Xmlable {
     var numberOfAllowedHelpers = 0
         private set
 
-    constructor() {} //this is needed for fillFromXML todo refactor fillFromXML into a static method that returns an object
+    constructor()  //this is needed for fillFromXML todo refactor fillFromXML into a static method that returns an object
 
     /**
      * Creates a new ComplexityConstraint.
@@ -59,8 +59,10 @@ class ComplexityConstraint : Cloneable, Xmlable {
      * @throws IllegalArgumentException if numbers are zero and lower or if min > max
      *
      */
-    constructor(complexity: Complexity, averageFields: Int, minComplexityIdentifier: Int,
-                maxComplexityIdentifier: Int, numberOfAllowedHelpers: Int) {
+    constructor(
+        complexity: Complexity, averageFields: Int, minComplexityIdentifier: Int,
+        maxComplexityIdentifier: Int, numberOfAllowedHelpers: Int
+    ) {
         require(minComplexityIdentifier > 0) { "minComplexityIdentifier < 0: $minComplexityIdentifier" }
         require(averageFields > 0) { "averageFields < 0: $averageFields" }
         require(numberOfAllowedHelpers > 0) { "minComplexityIdentifier < 0: $numberOfAllowedHelpers" }
@@ -85,19 +87,38 @@ class ComplexityConstraint : Cloneable, Xmlable {
         val representation = XmlTree(COMPLEXITY_CONSTRAINT)
         representation.addAttribute(XmlAttribute(COMPLEXITY, "" + complexity.ordinal))
         representation.addAttribute(XmlAttribute(AVERAGE_FIELDS, "" + averageCells))
-        representation.addAttribute(XmlAttribute(MIN_COMPLEXITY_IDENTIFIER, "" + minComplexityIdentifier))
-        representation.addAttribute(XmlAttribute(MAX_COMPLEXITY_IDENTIFIER, "" + maxComplexityIdentifier))
-        representation.addAttribute(XmlAttribute(NUMBER_OF_ALLOWED_HELPERS, "" + numberOfAllowedHelpers))
+        representation.addAttribute(
+            XmlAttribute(
+                MIN_COMPLEXITY_IDENTIFIER,
+                "" + minComplexityIdentifier
+            )
+        )
+        representation.addAttribute(
+            XmlAttribute(
+                MAX_COMPLEXITY_IDENTIFIER,
+                "" + maxComplexityIdentifier
+            )
+        )
+        representation.addAttribute(
+            XmlAttribute(
+                NUMBER_OF_ALLOWED_HELPERS,
+                "" + numberOfAllowedHelpers
+            )
+        )
         return representation
     }
 
     @Throws(IllegalArgumentException::class)
     override fun fillFromXml(xmlTreeRepresentation: XmlTree) {
-        complexity = Complexity.values()[xmlTreeRepresentation.getAttributeValue(COMPLEXITY)!!.toInt()]
+        complexity =
+            Complexity.values()[xmlTreeRepresentation.getAttributeValue(COMPLEXITY)!!.toInt()]
         averageCells = xmlTreeRepresentation.getAttributeValue(AVERAGE_FIELDS)!!.toInt()
-        minComplexityIdentifier = xmlTreeRepresentation.getAttributeValue(MIN_COMPLEXITY_IDENTIFIER)!!.toInt()
-        maxComplexityIdentifier = xmlTreeRepresentation.getAttributeValue(MAX_COMPLEXITY_IDENTIFIER)!!.toInt()
-        numberOfAllowedHelpers = xmlTreeRepresentation.getAttributeValue(NUMBER_OF_ALLOWED_HELPERS)!!.toInt()
+        minComplexityIdentifier =
+            xmlTreeRepresentation.getAttributeValue(MIN_COMPLEXITY_IDENTIFIER)!!.toInt()
+        maxComplexityIdentifier =
+            xmlTreeRepresentation.getAttributeValue(MAX_COMPLEXITY_IDENTIFIER)!!.toInt()
+        numberOfAllowedHelpers =
+            xmlTreeRepresentation.getAttributeValue(NUMBER_OF_ALLOWED_HELPERS)!!.toInt()
     }
 
     companion object {

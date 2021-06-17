@@ -43,7 +43,9 @@ open class GameSettings : Xmlable {
      * @param assistance The assistance to set
      */
     fun setAssistance(assistance: Assistances) {
-        assistances.set(2.0.pow((assistance.ordinal + 1).toDouble()).toInt()) //TODO that looks wrong...
+        assistances.set(
+            2.0.pow((assistance.ordinal + 1).toDouble()).toInt()
+        ) //TODO that looks wrong...
     }
 
     /**
@@ -81,7 +83,12 @@ open class GameSettings : Xmlable {
     /* to and from string */
     override fun toXmlTree(): XmlTree {
         val representation = XmlTree("gameSettings")
-        representation.addAttribute(XmlAttribute("assistances", convertAssistancesToString())) //TODO scrap that, representation as 0,1 is ugly -> save all with name, then make all of the boolean assistances enums
+        representation.addAttribute(
+            XmlAttribute(
+                "assistances",
+                convertAssistancesToString()
+            )
+        ) //TODO scrap that, representation as 0,1 is ugly -> save all with name, then make all of the boolean assistances enums
         representation.addAttribute(XmlAttribute("gestures", isGesturesSet))
         representation.addAttribute(XmlAttribute("left", isLefthandModeSet))
         representation.addAttribute(XmlAttribute("helper", isHelperSet))
@@ -91,16 +98,21 @@ open class GameSettings : Xmlable {
 
     @Throws(IllegalArgumentException::class)
     override fun fillFromXml(xmlTreeRepresentation: XmlTree) {
-        AssistancesfromString(xmlTreeRepresentation.getAttributeValue("assistances")!!)
-        isGesturesSet = java.lang.Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("gestures"))
-        isLefthandModeSet = java.lang.Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("left"))
-        isHelperSet = java.lang.Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("helper"))
-        for (xt in xmlTreeRepresentation) if (xt.name == SudokuTypesList.ROOT_NAME) wantedTypesList.fillFromXml(xt)
+        assistancesfromString(xmlTreeRepresentation.getAttributeValue("assistances")!!)
+        isGesturesSet =
+            java.lang.Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("gestures"))
+        isLefthandModeSet =
+            java.lang.Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("left"))
+        isHelperSet =
+            java.lang.Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("helper"))
+        for (xt in xmlTreeRepresentation) if (xt.name == SudokuTypesList.ROOT_NAME) wantedTypesList.fillFromXml(
+            xt
+        )
     }
 
     /**
      * Generates a String of "0" and "1" from the AssistanceSet.
-     * The String car be parsed again with [AssistancesfromString].
+     * The String car be parsed again with [assistancesfromString].
      *
      * @return String representation of the AssistanceSet
      */
@@ -118,7 +130,7 @@ open class GameSettings : Xmlable {
      * @throws IllegalArgumentException on parse error
      */
     @Throws(IllegalArgumentException::class)
-    private fun AssistancesfromString(representation: String) {
+    private fun assistancesfromString(representation: String) {
 
         for ((i, assist) in Assistances.values().withIndex()) {
             try {

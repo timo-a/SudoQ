@@ -16,20 +16,26 @@ import java.util.*
  */
 object Transformer {
 
-    private val elementaryList: List<Permutation> = Vector(listOf(
+    private val elementaryList: List<Permutation> = Vector(
+        listOf(
             Rotate90(),
             Rotate180(),
             Rotate270(),
             MirrorHorizontally(),
             MirrorVertically(),
             MirrorDiagonallyDown(),
-            MirrorDiagonallyUp()))
+            MirrorDiagonallyUp()
+        )
+    )
 
-    private val subtleList: List<Permutation> = Vector(listOf(
+    private val subtleList: List<Permutation> = Vector(
+        listOf(
             HorizontalBlockPermutation(),
             VerticalBlockPermutation(),
             InBlockColumnPermutation(),
-            InBlockRowPermutation()))
+            InBlockRowPermutation()
+        )
+    )
 
 
     /**
@@ -37,8 +43,8 @@ object Transformer {
      * Is reset to nondeterministic after every execution of transform().
      *
      */
-	@JvmStatic
-	var random: Random = Random()
+    @JvmStatic
+    var random: Random = Random()
 
 
     /**
@@ -54,8 +60,8 @@ object Transformer {
      *
      * @param sudoku [Sudoku] to transform
      */
-	@JvmStatic
-	fun transform(sudoku: Sudoku) {
+    @JvmStatic
+    fun transform(sudoku: Sudoku) {
         // not rotateClockwise and mirror! results in Clockrotation(grouptheory)
         elementaryPermutation(sudoku)
         subtlePermutation(sudoku)
@@ -96,7 +102,9 @@ object Transformer {
     private fun subtlePermutation(sudoku: Sudoku) {
         /* make sure only allowed permutations are executed by intersecting subtleList with properties of the sudoku */
         val l: MutableList<Permutation> = Vector()
-        for (p in subtleList) if (sudoku.sudokuType!!.permutationProperties.contains(p.condition)) l.add(p)
+        for (p in subtleList) if (sudoku.sudokuType!!.permutationProperties.contains(p.condition)) l.add(
+            p
+        )
         for (p in l) p.permutate(sudoku)
 
 

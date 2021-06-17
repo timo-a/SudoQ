@@ -6,9 +6,9 @@ import de.sudoq.model.xml.Xmlable
 
 class ProfilesListBE : ArrayList<ProfilesListBE.P>(), Xmlable {
 
-    var currentProfileId : Int? = null
+    private var currentProfileId: Int? = null
 
-    data class P(var id : Int, var name : String);
+    data class P(var id: Int, var name: String)
 
     override fun toXmlTree(): XmlTree {
         val xmlTree = XmlTree("profiles")//as defined in FileManager

@@ -14,8 +14,6 @@ import java.util.*
  * An xmlable ArrayList of [SudokuTypes]
  */
 class SudokuTypesList : ArrayList<SudokuTypes>(), Xmlable {
-    private val ELEMENT_NAME = "Type"
-    private val TYPE_ID = "TypeID"
 
     val allTypes: ArrayList<SudokuTypes>
         get() = ArrayList(listOf(*SudokuTypes.values()))
@@ -28,7 +26,12 @@ class SudokuTypesList : ArrayList<SudokuTypes>(), Xmlable {
         val representation = XmlTree(ROOT_NAME)
         for (p in this) {
             val index = Integer.toString(representation.numberOfAttributes)
-            representation.addAttribute(XmlAttribute(TYPE_ID + "_" + index, Integer.toString(p.ordinal)))
+            representation.addAttribute(
+                XmlAttribute(
+                    TYPE_ID + "_" + index,
+                    Integer.toString(p.ordinal)
+                )
+            )
         }
         return representation
     }
@@ -46,6 +49,9 @@ class SudokuTypesList : ArrayList<SudokuTypes>(), Xmlable {
 
     companion object {
         const val ROOT_NAME = "SudokuTypesList"
+        private const val ELEMENT_NAME = "Type"
+        private const val TYPE_ID = "TypeID"
+
     }
 
     init {

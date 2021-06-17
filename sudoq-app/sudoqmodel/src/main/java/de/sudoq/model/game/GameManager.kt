@@ -43,22 +43,27 @@ class GameManager private constructor() {
      * @return The new [Game]
      *
      */
-    fun newGame(type: SudokuTypes, complexity: Complexity, assistances: GameSettings, sudokuDir: File): Game {
+    fun newGame(
+        type: SudokuTypes,
+        complexity: Complexity,
+        assistances: GameSettings,
+        sudokuDir: File
+    ): Game {
         val sudoku = SudokuManager.getNewSudoku(type, complexity, sudokuDir)
         SudokuManager(sudokuDir).usedSudoku(sudoku) //TODO warum instanziierung, wenn laut doc singleton?
 
         val gameBE0 = gameRepo.create()
         gameBE0.sudoku = sudoku
-        val game = GameMapper.fromBE(gameBE0);
+        val game = GameMapper.fromBE(gameBE0)
         game.setAssistances(assistances)
         val gameBE = GameMapper.toBE(game)
         gameRepo.update(gameBE)
         val gameData = GameData(
-                gameBE.id,
-                SimpleDateFormat(GameData.dateFormat).format(Date()),
-                gameBE.finished,
-                gameBE.sudoku!!.sudokuType?.enumType!!,
-                gameBE.sudoku!!.complexity!!
+            gameBE.id,
+            SimpleDateFormat(GameData.dateFormat).format(Date()),
+            gameBE.finished,
+            gameBE.sudoku!!.sudokuType?.enumType!!,
+            gameBE.sudoku!!.complexity!!
         )
 
         games.add(gameData)
@@ -98,9 +103,11 @@ class GameManager private constructor() {
 
     private fun updateGameInList(game: Game) {
         val oldGameData = games.find { it.id == game.id }!!
-        val newGameData = GameData(oldGameData.id,
-                SimpleDateFormat(GameData.dateFormat).format(Date()), game.isFinished(),
-                oldGameData.type, oldGameData.complexity)
+        val newGameData = GameData(
+            oldGameData.id,
+            SimpleDateFormat(GameData.dateFormat).format(Date()), game.isFinished(),
+            oldGameData.type, oldGameData.complexity
+        )
 
         games.remove(oldGameData)
         games.add(newGameData)
@@ -145,14 +152,14 @@ class GameManager private constructor() {
      */
     fun deleteFinishedGames() {
         games.filter { it.isFinished }
-                .forEach { gameRepo.delete(it.id) }
+            .forEach { gameRepo.delete(it.id) }
 
         updateGamesList()
     }
 
     private fun saveGamesFile(games: List<GameData>) {
         val xmlTree = XmlTree("games")
-        games.map { it.toXmlTree() }.forEach { xmlTree.addChild(it)  }
+        games.map { it.toXmlTree() }.forEach { xmlTree.addChild(it) }
         try {
             XmlHelper().saveXml(xmlTree, gamesFile)
         } catch (e: IOException) {
@@ -166,19 +173,20 @@ class GameManager private constructor() {
         private var instance: GameManager? = null //todo make class a non-singleton
 
         fun getInstance(f: File, sudokuDir: File): GameManager {
-            if (instance == null ) {
+            if (instance == null) {
                 instance = GameManager()
                 val profile = Profile.getInstance(f)
                 instance!!.profile = profile
                 instance!!.sudokuDir = sudokuDir
-                instance!!.gameRepo = GameRepo(profile.profilesDir!!, profile.currentProfileID, sudokuDir)
+                instance!!.gameRepo =
+                    GameRepo(profile.profilesDir!!, profile.currentProfileID, sudokuDir)
                 instance!!.gamesFile = File(profile.currentProfileDir, "games.xml")
 
                 instance!!.games = try {
                     XmlHelper()
-                            .loadXml(instance!!.gamesFile)!!
-                            .map { GameData.fromXml(it) }
-                            .sortedDescending().toMutableList()
+                        .loadXml(instance!!.gamesFile)!!
+                        .map { GameData.fromXml(it) }
+                        .sortedDescending().toMutableList()
                 } catch (e: IOException) {
                     throw IllegalStateException("Profile broken", e)
                 }

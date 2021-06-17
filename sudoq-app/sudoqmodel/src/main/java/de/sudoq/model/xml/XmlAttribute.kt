@@ -23,7 +23,7 @@ class XmlAttribute(name: String, var value: String) {
         this.name = name
     }
 
-    constructor(name: String, value: Boolean) : this(name, "" + value) {}
+    constructor(name: String, value: Boolean) : this(name, "" + value)
 
 
     override fun toString(): String {

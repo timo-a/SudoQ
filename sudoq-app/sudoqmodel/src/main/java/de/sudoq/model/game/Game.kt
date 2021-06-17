@@ -10,13 +10,9 @@ package de.sudoq.model.game
 import de.sudoq.model.actionTree.*
 import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Sudoku
-import de.sudoq.model.sudoku.SudokuManager
 import de.sudoq.model.sudoku.complexity.Complexity
-import de.sudoq.model.xml.XmlAttribute
-import de.sudoq.model.xml.XmlTree
-import de.sudoq.model.xml.Xmlable2
-import java.io.File
 import java.util.*
+import kotlin.math.pow
 
 /**
  * This class represents a sudoku game.
@@ -65,13 +61,15 @@ class Game {
     private var finished = false
 
     /* used by persistence (mapper) */
-    constructor(id: Int,
-                time: Int,
-                assistancesCost: Int,
-                sudoku: Sudoku,
-                stateHandler: GameStateHandler,
-                gameSettings: GameSettings,
-                finished: Boolean) {
+    constructor(
+        id: Int,
+        time: Int,
+        assistancesCost: Int,
+        sudoku: Sudoku,
+        stateHandler: GameStateHandler,
+        gameSettings: GameSettings,
+        finished: Boolean
+    ) {
 
         this.id = id
         this.time = time
@@ -122,12 +120,14 @@ class Game {
     val score: Int
         get() {
             var scoreFactor = 0
-            fun power(expo : Double) : Int = sudoku!!.sudokuType?.numberOfSymbols?.let { Math.pow(it.toDouble(), expo).toInt()}!!
+            fun power(expo: Double): Int = sudoku!!.sudokuType?.numberOfSymbols?.let {
+                it.toDouble().pow(expo).toInt()
+            }!!
             when (sudoku!!.complexity) {
-                Complexity.infernal ->  scoreFactor = power(4.0)
+                Complexity.infernal -> scoreFactor = power(4.0)
                 Complexity.difficult -> scoreFactor = power(3.5)
-                Complexity.medium ->    scoreFactor = power(3.0)
-                Complexity.easy ->      scoreFactor = power(2.5)
+                Complexity.medium -> scoreFactor = power(3.0)
+                Complexity.easy -> scoreFactor = power(2.5)
             }
             return (scoreFactor * 10 / ((time + assistancesTimeCost) / 60.0f)).toInt()
         }
@@ -194,7 +194,12 @@ class Game {
             if (c.includes(editedPos!!)) {
                 for (changePos in c) {
                     if (sudoku!!.getCell(changePos)?.isNoteSet(value)!!) {
-                        addAndExecute(NoteActionFactory().createAction(value, sudoku!!.getCell(changePos)!!))
+                        addAndExecute(
+                            NoteActionFactory().createAction(
+                                value,
+                                sudoku!!.getCell(changePos)!!
+                            )
+                        )
                     }
                 }
             }
@@ -347,7 +352,8 @@ class Game {
      */
     fun goToLastBookmark() {
         while (stateHandler!!.currentState != stateHandler!!.actionTree.root
-                && !stateHandler!!.currentState!!.isMarked) {
+            && !stateHandler!!.currentState!!.isMarked
+        ) {
             undo()
         }
     }

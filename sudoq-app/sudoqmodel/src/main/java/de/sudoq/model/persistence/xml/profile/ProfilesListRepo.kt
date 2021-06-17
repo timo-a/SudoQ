@@ -67,7 +67,6 @@ class ProfilesListRepo(private val profilesDir: File) : IRepo<ProfilesListBE> {
     }
 
 
-
     /**
      * Gibt die Profilliste Datei zurueck
      *
@@ -97,11 +96,11 @@ class ProfilesListRepo(private val profilesDir: File) : IRepo<ProfilesListBE> {
     }
 
     //todo make property
-    fun getCurrentProfileId() : Int {
+    fun getCurrentProfileId(): Int {
         return profilesXml.getAttributeValue(name = CURRENT)!!.toInt()
     }
 
-    fun setCurrentProfileId(id: Int){
+    fun setCurrentProfileId(id: Int) {
         profilesXml.updateAttribute(XmlAttribute(CURRENT, id.toString()))
         saveProfilesFile(profilesXml)
     }
@@ -110,17 +109,17 @@ class ProfilesListRepo(private val profilesDir: File) : IRepo<ProfilesListBE> {
         val oldProfiles = profilesXml
         val profiles = XmlTree(oldProfiles.name)
         oldProfiles
-                .filter { it.getAttributeValue(ID)!!.toInt() != id }
-                .forEach { profiles.addChild(it) }
+            .filter { it.getAttributeValue(ID)!!.toInt() != id }
+            .forEach { profiles.addChild(it) }
 
         saveProfilesFile(profiles)
     }
 
-    fun getNextProfile() : Int {
+    fun getNextProfile(): Int {
         return profilesXml.getChildren().next().getAttributeValue(ID)!!.toInt()
     }
 
-    fun getProfilesCount() : Int = profilesXml.numberOfChildren
+    fun getProfilesCount(): Int = profilesXml.numberOfChildren
 
     fun getProfileNamesList(): List<String> {
         return profilesXml.map { it.getAttributeValue(NAME)!! }

@@ -32,15 +32,28 @@ package de.sudoq.model.solverGenerator.FastSolver.DLX2;
 import java.util.List;
 import java.util.Stack;
 
-public class Hexadoku
-{
-    List<int[][]> solutions;
-	Hexadoku(){
-		solutions = new Stack<>();
-	}
+public class Hexadoku {
+    static final int PUZZLE_SIDE = 16;
+    static final int SQUARE_SIDE = 4;
+    static final int PUZZLE_SIZE = 256;
 
-    public static void main(String[] args)
-    {
+    // Solve a puzzle.
+    static final int COLUMN_SIZE = 1024;
+
+    // Print a puzzle or solution.
+    List<int[][]> solutions;
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Define constants for the dimensions of the puzzle.
+//
+///////////////////////////////////////////////////////////////////////////////
+
+    Hexadoku() {
+        solutions = new Stack<>();
+    }
+
+    public static void main(String[] args) {
         // Create an instance.
 
         Hexadoku hexadoku = new Hexadoku();
@@ -48,78 +61,67 @@ public class Hexadoku
         // Define some puzzles.
 
         int[][] puzzle1 =
-                {{11, 3, 7,12, -1,15,-1,-1,  2, 6,-1, 0,  8,-1,-1,-1},
-                        { 8,-1, 6,-1, -1,11,14,-1, 15,-1,-1, 4,  9, 5,-1,-1},
-                        {-1,-1,-1,-1, -1,-1,-1, 0,  5,-1,-1,-1, -1, 2,15,11},
-                        {-1, 0,-1, 5, -1,-1,-1,-1, -1,-1, 8,-1, 12,-1,-1, 6},
+                {{11, 3, 7, 12, -1, 15, -1, -1, 2, 6, -1, 0, 8, -1, -1, -1},
+                        {8, -1, 6, -1, -1, 11, 14, -1, 15, -1, -1, 4, 9, 5, -1, -1},
+                        {-1, -1, -1, -1, -1, -1, -1, 0, 5, -1, -1, -1, -1, 2, 15, 11},
+                        {-1, 0, -1, 5, -1, -1, -1, -1, -1, -1, 8, -1, 12, -1, -1, 6},
 
-                        {-1,-1,10, 1, -1, 5,-1,14, -1,15, 4,-1,  7,-1,-1,-1},
-                        { 2, 4,-1,-1, 12, 8,-1,-1, -1,-1, 6,10, -1,11,13, 1},
-                        {-1,-1,-1,-1,  6,-1, 0,10, -1,12,-1,-1, -1, 4,-1,14},
-                        {-1,-1, 3,-1,  4,-1,-1, 2,  9, 0, 5,14,  6,15,-1,-1},
+                        {-1, -1, 10, 1, -1, 5, -1, 14, -1, 15, 4, -1, 7, -1, -1, -1},
+                        {2, 4, -1, -1, 12, 8, -1, -1, -1, -1, 6, 10, -1, 11, 13, 1},
+                        {-1, -1, -1, -1, 6, -1, 0, 10, -1, 12, -1, -1, -1, 4, -1, 14},
+                        {-1, -1, 3, -1, 4, -1, -1, 2, 9, 0, 5, 14, 6, 15, -1, -1},
 
-                        {-1,-1, 9, 0, 14, 3, 7,15, 11,-1,-1, 6, -1,13,-1,-1},
-                        { 5,-1, 4,-1, -1,-1, 9,-1, 10,14,-1, 8, -1,-1,-1,-1},
-                        { 7, 6,12,-1,  2, 0,-1,-1, -1,-1, 3,15, -1,-1,10, 5},
-                        {-1,-1,-1, 3, -1,10, 4,-1, 12,-1, 0,-1, 15, 1,-1,-1},
+                        {-1, -1, 9, 0, 14, 3, 7, 15, 11, -1, -1, 6, -1, 13, -1, -1},
+                        {5, -1, 4, -1, -1, -1, 9, -1, 10, 14, -1, 8, -1, -1, -1, -1},
+                        {7, 6, 12, -1, 2, 0, -1, -1, -1, -1, 3, 15, -1, -1, 10, 5},
+                        {-1, -1, -1, 3, -1, 10, 4, -1, 12, -1, 0, -1, 15, 1, -1, -1},
 
-                        { 0,-1,-1, 9, -1,14,-1,-1, -1,-1,-1,-1,  3,-1, 5,-1},
-                        { 3,12,13,-1, -1,-1,-1,11, 14,-1,-1,-1, -1,-1,-1,-1},
-                        {-1,-1, 1, 7, 15,-1,-1, 8, -1,10, 9,-1, -1,14,-1,12},
-                        {-1,-1,-1, 6,  0,-1,12, 3, -1,-1,13,-1, 10, 8, 2,15}};
+                        {0, -1, -1, 9, -1, 14, -1, -1, -1, -1, -1, -1, 3, -1, 5, -1},
+                        {3, 12, 13, -1, -1, -1, -1, 11, 14, -1, -1, -1, -1, -1, -1, -1},
+                        {-1, -1, 1, 7, 15, -1, -1, 8, -1, 10, 9, -1, -1, 14, -1, 12},
+                        {-1, -1, -1, 6, 0, -1, 12, 3, -1, -1, 13, -1, 10, 8, 2, 15}};
 
         int[][] puzzle2 =
-                {{10,-1,-1,-1, -1,-1, 4, 5,  8,-1, 6, 2, -1,12, 1, 7},
-                        { 4, 3,12,-1, -1,-1,-1,14, -1,11,-1,-1, -1, 0,-1, 6},
-                        {-1,-1, 9,15,  1,-1,-1,-1, -1,-1,13,-1,  4,-1,-1,-1},
-                        { 2,-1,11,-1, 13,-1,10,12, -1,-1,-1, 1,  8,-1,-1, 9},
+                {{10, -1, -1, -1, -1, -1, 4, 5, 8, -1, 6, 2, -1, 12, 1, 7},
+                        {4, 3, 12, -1, -1, -1, -1, 14, -1, 11, -1, -1, -1, 0, -1, 6},
+                        {-1, -1, 9, 15, 1, -1, -1, -1, -1, -1, 13, -1, 4, -1, -1, -1},
+                        {2, -1, 11, -1, 13, -1, 10, 12, -1, -1, -1, 1, 8, -1, -1, 9},
 
-                        { 5,-1,-1,14,  8, 1, 3,15, -1, 7,-1,-1, 13,-1,-1,-1},
-                        {11, 2,-1,-1, -1,-1,13,-1,  1,-1, 8,-1, -1, 4,15,-1},
-                        {-1,-1,-1,-1, -1,-1,-1, 2, -1,-1,-1,-1, -1,-1, 6,-1},
-                        {-1,-1,-1,-1,  7,-1,-1, 9, -1,-1, 0,10,  1, 2,-1,-1},
+                        {5, -1, -1, 14, 8, 1, 3, 15, -1, 7, -1, -1, 13, -1, -1, -1},
+                        {11, 2, -1, -1, -1, -1, 13, -1, 1, -1, 8, -1, -1, 4, 15, -1},
+                        {-1, -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, -1, -1, -1, 6, -1},
+                        {-1, -1, -1, -1, 7, -1, -1, 9, -1, -1, 0, 10, 1, 2, -1, -1},
 
-                        {-1,-1, 8,11,  4, 6,-1,-1,  2,-1,-1, 0, -1,-1,-1,-1},
-                        {-1, 1,-1,-1, -1,-1,-1,-1,  3,-1,-1,-1, -1,-1,-1,-1},
-                        {-1,14, 4,-1, -1,15,-1, 0, -1, 8,-1,-1, -1,-1,12, 1},
-                        {-1,-1,-1, 9, -1,-1,11,-1, 10,15, 4, 7,  6,-1,-1, 8},
+                        {-1, -1, 8, 11, 4, 6, -1, -1, 2, -1, -1, 0, -1, -1, -1, -1},
+                        {-1, 1, -1, -1, -1, -1, -1, -1, 3, -1, -1, -1, -1, -1, -1, -1},
+                        {-1, 14, 4, -1, -1, 15, -1, 0, -1, 8, -1, -1, -1, -1, 12, 1},
+                        {-1, -1, -1, 9, -1, -1, 11, -1, 10, 15, 4, 7, 6, -1, -1, 8},
 
-                        { 1,-1,-1, 3,  6,-1,-1,-1,  7, 2,-1,11, -1, 8,-1,15},
-                        {-1,-1,-1, 5, -1, 9,-1,-1, -1,-1,-1, 6,  0, 7,-1,-1},
-                        {14,-1, 6,-1, -1,-1,15,-1,  9,-1,-1,-1, -1, 1,10,11},
-                        {15, 9,13,-1,  5, 7,-1,11,  4, 3,-1,-1, -1,-1,-1,14}};
+                        {1, -1, -1, 3, 6, -1, -1, -1, 7, 2, -1, 11, -1, 8, -1, 15},
+                        {-1, -1, -1, 5, -1, 9, -1, -1, -1, -1, -1, 6, 0, 7, -1, -1},
+                        {14, -1, 6, -1, -1, -1, 15, -1, 9, -1, -1, -1, -1, 1, 10, 11},
+                        {15, 9, 13, -1, 5, 7, -1, 11, 4, 3, -1, -1, -1, -1, -1, 14}};
 
         int[][] puzzle3 =
-                {{  8,  0, -1,  2, -1, -1, -1, -1,  -1,  5, -1, -1, -1,  6,  3, -1},
-                        {-1,  9, -1, -1,  8, -1, 10, -1,  2, -1,  6, -1, 11, -1, 15, -1 },
-                        {-1, -1,  6, -1,  1, 13, -1,  0, -1, -1, -1, 12, -1, -1,  8, -1 },
-                        {-1, -1, -1, -1,  2,  3, -1, -1, -1, -1, -1, -1,  7, -1, 10, -1 },
+                {{8, 0, -1, 2, -1, -1, -1, -1, -1, 5, -1, -1, -1, 6, 3, -1},
+                        {-1, 9, -1, -1, 8, -1, 10, -1, 2, -1, 6, -1, 11, -1, 15, -1},
+                        {-1, -1, 6, -1, 1, 13, -1, 0, -1, -1, -1, 12, -1, -1, 8, -1},
+                        {-1, -1, -1, -1, 2, 3, -1, -1, -1, -1, -1, -1, 7, -1, 10, -1},
 
-                        { 0, -1, 11, 13, -1, -1, -1, -1,  1,  3, -1, -1,  9, 10, -1, -1 },
-                        {-1, -1, 15, -1,  5,  7, -1, 10, -1, -1, -1, -1, -1, -1, 11, -1 },
-                        { 2,  1, -1,  6, 15, -1,  9,  8, 13, -1, 11, -1, -1, -1, -1,  3 },
-                        {-1, -1, -1, -1, -1, -1, -1,  1, -1, -1,  9, -1, -1, -1, -1,  8 },
+                        {0, -1, 11, 13, -1, -1, -1, -1, 1, 3, -1, -1, 9, 10, -1, -1},
+                        {-1, -1, 15, -1, 5, 7, -1, 10, -1, -1, -1, -1, -1, -1, 11, -1},
+                        {2, 1, -1, 6, 15, -1, 9, 8, 13, -1, 11, -1, -1, -1, -1, 3},
+                        {-1, -1, -1, -1, -1, -1, -1, 1, -1, -1, 9, -1, -1, -1, -1, 8},
 
-                        {13, -1, -1,  8, -1, -1, -1, 15, -1, -1, -1, -1, -1, -1,  9, 10 },
-                        {11, -1, -1, -1,  4,  6, -1,  3, -1, -1,  0, -1, -1, -1, 13,  7 },
-                        {-1, 10, -1,  1, 12, -1, -1, -1, -1,  8,  2, -1, -1, -1, -1, -1 },
-                        { 3, -1, -1, 12, -1, -1, -1,  2, -1,  6, -1, 13, -1, 11, -1, -1 },
+                        {13, -1, -1, 8, -1, -1, -1, 15, -1, -1, -1, -1, -1, -1, 9, 10},
+                        {11, -1, -1, -1, 4, 6, -1, 3, -1, -1, 0, -1, -1, -1, 13, 7},
+                        {-1, 10, -1, 1, 12, -1, -1, -1, -1, 8, 2, -1, -1, -1, -1, -1},
+                        {3, -1, -1, 12, -1, -1, -1, 2, -1, 6, -1, 13, -1, 11, -1, -1},
 
-                        {-1, 13, 12,  3,  7, 15, -1, -1,  0, -1,  5, -1, -1, -1, -1, -1 },
-                        {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 12 },
-                        { 4, -1,  1, 11, -1, -1, 12,  6, -1, -1, -1, -1, 10, -1, -1, -1 },
-                        {-1, -1, -1, 14, -1, -1,  2, -1, -1,  1, -1, -1, -1,  3,  4, -1 }};
-
-
-
-
-
-
-
-
-
-
-
+                        {-1, 13, 12, 3, 7, 15, -1, -1, 0, -1, 5, -1, -1, -1, -1, -1},
+                        {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 12},
+                        {4, -1, 1, 11, -1, -1, 12, 6, -1, -1, -1, -1, 10, -1, -1, -1},
+                        {-1, -1, -1, 14, -1, -1, 2, -1, -1, 1, -1, -1, -1, 3, 4, -1}};
 
 
         // Solve them.
@@ -129,10 +131,7 @@ public class Hexadoku
         hexadoku.solve(puzzle3);
     }
 
-    // Solve a puzzle.
-
-    void solve(int[][] puzzle)
-    {
+    void solve(int[][] puzzle) {
         // Create a new Dancing Links.
 
         DancingLinks dl = new DancingLinks(puzzle);
@@ -146,12 +145,8 @@ public class Hexadoku
         dl.solve(this);
     }
 
-    // Print a puzzle or solution.
-
-    void printSudoku(int[][] result)
-    {
-        for (int r = 0; r < PUZZLE_SIDE; r++)
-        {
+    void printSudoku(int[][] result) {
+        for (int r = 0; r < PUZZLE_SIDE; r++) {
             for (int c = 0; c < PUZZLE_SIDE; c++)
 
                 // Print a '.' if empty.
@@ -173,24 +168,12 @@ public class Hexadoku
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  Define constants for the dimensions of the puzzle.
-//
-///////////////////////////////////////////////////////////////////////////////
-
-    static final int PUZZLE_SIDE = 16;
-    static final int SQUARE_SIDE = 4;
-    static final int PUZZLE_SIZE = 256;
-    static final int COLUMN_SIZE = 1024;
-
-///////////////////////////////////////////////////////////////////////////////
-//
 //  Class DancingLinks implements the Dancing Links algorithm adapted
 //  for Sudoku puzzles.
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-    class DancingLinks
-    {
+    class DancingLinks {
         Hexadoku hexadoku;
         boolean stop;
         int index;
@@ -202,8 +185,7 @@ public class Hexadoku
         // columns. If a row is part of the puzzle it is removed from
         // the matrix and added to the solution.
 
-        DancingLinks(int[][] p)
-        {
+        DancingLinks(int[][] p) {
             // Column row head.
 
             h = new Column(null, 0);
@@ -223,8 +205,7 @@ public class Hexadoku
 
             for (int r = 0; r < PUZZLE_SIDE; r++)
                 for (int c = 0; c < PUZZLE_SIDE; c++)
-                    for (int d = 0; d < PUZZLE_SIDE; d++)
-                    {
+                    for (int d = 0; d < PUZZLE_SIDE; d++) {
                         // Calculate row number.
 
                         int k = (r * PUZZLE_SIZE) + (c * PUZZLE_SIDE) + d;
@@ -254,8 +235,7 @@ public class Hexadoku
 
             // Remove the rows in the list and add them to the output.
 
-            for (int j = 0; j < i; j++)
-            {
+            for (int j = 0; j < i; j++) {
                 l[j].remove();
                 o[index++] = l[j];
             }
@@ -265,16 +245,14 @@ public class Hexadoku
 
         // Rearrange the output to match the puzzle.
 
-        void report(int[] o)
-        {
+        void report(int[] o) {
             // Create an array for the result.
 
-            int a[][] = new int[PUZZLE_SIDE][PUZZLE_SIDE];
+            int[][] a = new int[PUZZLE_SIDE][PUZZLE_SIDE];
 
             // Convert the row number back to row, column, digit.
 
-            for (int i = 0; i < PUZZLE_SIZE; i++)
-            {
+            for (int i = 0; i < PUZZLE_SIZE; i++) {
                 int v = o[i];
 
                 int d = v % PUZZLE_SIDE;
@@ -293,8 +271,7 @@ public class Hexadoku
 
         // Start the search process.
 
-        void solve(Hexadoku h)
-        {
+        void solve(Hexadoku h) {
             hexadoku = h;
             search(index);
         }
@@ -303,8 +280,7 @@ public class Hexadoku
         // algorithm with an added feature to printSudoku only one
         // solution.
 
-        void search(int k)
-        {
+        void search(int k) {
             // If a result has already been found, return.
 
             if (stop)
@@ -312,8 +288,7 @@ public class Hexadoku
 
             // If there are no more columns, printSudoku the result.
 
-            if (h.r == h)
-            {
+            if (h.r == h) {
                 int[] a = new int[k];
 
                 // Extract the row numbers.
@@ -329,18 +304,15 @@ public class Hexadoku
 
             // Else find the shortest column and cover it.
 
-            else
-            {
+            else {
                 Column c = null;
                 int s = Integer.MAX_VALUE;
-
 
 
                 // Find the shortest column.
 
                 for (Column j = (Column) h.r; j != h; j = (Column) j.r)
-                    if (s > j.s)
-                    {
+                    if (s > j.s) {
                         c = j;
                         s = j.s;
                     }
@@ -351,8 +323,7 @@ public class Hexadoku
 
                 // For each row in the column...
 
-                for (Node r = c.d; r != c; r = r.d)
-                {
+                for (Node r = c.d; r != c; r = r.d) {
                     // Skip this if a result has been found.
 
                     if (stop)
@@ -392,8 +363,7 @@ public class Hexadoku
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-    class Node
-    {
+    class Node {
         Node l;
         Node r;
         Node u;
@@ -403,8 +373,7 @@ public class Hexadoku
 
         // Create a self referencing node.
 
-        Node(Column c, int n)
-        {
+        Node(Column c, int n) {
             this.l = this;
             this.r = this;
 
@@ -424,14 +393,12 @@ public class Hexadoku
 
         // Remove a row of nodes.
 
-        void remove()
-        {
+        void remove() {
             Node n = this;
 
             // Cover this node's column and move on to the next right.
 
-            do
-            {
+            do {
                 n.c.cover();
                 n = n.r;
             }
@@ -443,8 +410,7 @@ public class Hexadoku
 
         // Add a node to the left of this node.
 
-        void add(Node n)
-        {
+        void add(Node n) {
             n.l = this.l;
             n.r = this;
 
@@ -459,14 +425,12 @@ public class Hexadoku
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-    class Column extends Node
-    {
+    class Column extends Node {
         int s;
 
         // Create a self referencing column using the Node constructor.
 
-        Column(Column c, int n)
-        {
+        Column(Column c, int n) {
             super(null, n);
 
             // If the column isn't null, add this one to it.
@@ -478,8 +442,7 @@ public class Hexadoku
         // This is the procedure cover(c) from the Dancing Links
         // algorithm.
 
-        void cover()
-        {
+        void cover() {
             // Cover this column.
 
             r.l = l;
@@ -492,8 +455,7 @@ public class Hexadoku
                 // For all the nodes in this row except this one,
                 // going right...
 
-                for (Node j = i.r; j != i; j = j.r)
-                {
+                for (Node j = i.r; j != i; j = j.r) {
                     // Cover this row.
 
                     j.u.d = j.d;
@@ -508,8 +470,7 @@ public class Hexadoku
         // This is the procedure uncover(c) from the Dancing Links
         // algorithm.
 
-        void uncover()
-        {
+        void uncover() {
             // For all the rows in this column going up...
 
             for (Node i = u; i != this; i = i.u)
@@ -517,8 +478,7 @@ public class Hexadoku
                 // For all the nodes in this row except this one,
                 // going left...
 
-                for (Node j = i.l; j != i; j = j.l)
-                {
+                for (Node j = i.l; j != i; j = j.l) {
                     // Uncover this row.
 
                     j.u.d = j;
@@ -537,8 +497,7 @@ public class Hexadoku
 
         // Add a column to the left of this column.
 
-        void add(Column c)
-        {
+        void add(Column c) {
             c.l = this.l;
             c.r = this;
 
@@ -548,8 +507,7 @@ public class Hexadoku
 
         // Add a node to the end of this column.
 
-        void add(Node n)
-        {
+        void add(Node n) {
             n.u = this.u;
             n.d = this;
 

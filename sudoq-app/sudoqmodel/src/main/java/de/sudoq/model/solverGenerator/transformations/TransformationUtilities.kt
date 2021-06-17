@@ -11,8 +11,6 @@ import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.Sudoku
 import java.util.*
-import kotlin.collections.Map
-import kotlin.collections.MutableMap
 import kotlin.collections.set
 
 /**
@@ -55,9 +53,11 @@ internal fun mirrorDiagonallyDown(sudoku: Sudoku) {
     val width = sudoku.sudokuType!!.size!!.x
     for (i in 0 until width - 1) { // zeilen
         for (j in i + 1 until width) { // zeilenElemente
-            swapCells(sudoku,
-                    Position[i, j],
-                    Position[j, i])
+            swapCells(
+                sudoku,
+                Position[i, j],
+                Position[j, i]
+            )
         }
     }
 }
@@ -122,11 +122,18 @@ internal fun verticalBlockPermutation(sudoku: Sudoku) {
 }
 
 // columns from 0 to numberOfColumnsInBlock - 1
-private fun swapColumnOfBlocks(sudoku: Sudoku, column1: Int, column2: Int, numberOfColumnsInBlock: Int) {
+private fun swapColumnOfBlocks(
+    sudoku: Sudoku,
+    column1: Int,
+    column2: Int,
+    numberOfColumnsInBlock: Int
+) {
     if (column1 != column2) {
         for (i in 0 until numberOfColumnsInBlock) {
-            swap_columns(sudoku, column1 * numberOfColumnsInBlock + i, column2
-                    * numberOfColumnsInBlock + i)
+            swap_columns(
+                sudoku, column1 * numberOfColumnsInBlock + i, column2
+                        * numberOfColumnsInBlock + i
+            )
         }
     }
 }
@@ -142,12 +149,25 @@ private fun swap_columns(sudoku: Sudoku, column1: Int, column2: Int) {
 }
 
 /* moves each block to the right */
-private fun rotate_horizontally_By1(sudoku: Sudoku, numberOfHorizontalBlocks: Int, blocklength: Int) {
-    for (i in 0 until numberOfHorizontalBlocks - 1) swapColumnOfBlocks(sudoku, i, i + 1, blocklength)
+private fun rotate_horizontally_By1(
+    sudoku: Sudoku,
+    numberOfHorizontalBlocks: Int,
+    blocklength: Int
+) {
+    for (i in 0 until numberOfHorizontalBlocks - 1) swapColumnOfBlocks(
+        sudoku,
+        i,
+        i + 1,
+        blocklength
+    )
 }
 
 /* swaps columns of blocks */
-private fun horizontalBlockSwaps(sudoku: Sudoku, numberOfHorizontalBlocks: Int, collumnsPerBlock: Int) {
+private fun horizontalBlockSwaps(
+    sudoku: Sudoku,
+    numberOfHorizontalBlocks: Int,
+    collumnsPerBlock: Int
+) {
     val limit = numberOfHorizontalBlocks / 2 - (1 - numberOfHorizontalBlocks % 2)
     for (i in 0 until limit) {
         val first = Transformer.random.nextInt(numberOfHorizontalBlocks)
@@ -168,7 +188,11 @@ private fun inBlockColumnPermutation(sudoku: Sudoku, blockWidth: Int) {
     for (i in 0 until numberOfHorizontalBlocks) {
         for (j in 0 until blockWidth) {
             val first = Transformer.random.nextInt(blockWidth)
-            swap_columns(sudoku, i * blockWidth + first, i * blockWidth + randomOtherNumber(first, blockWidth))
+            swap_columns(
+                sudoku,
+                i * blockWidth + first,
+                i * blockWidth + randomOtherNumber(first, blockWidth)
+            )
         }
     }
 }
