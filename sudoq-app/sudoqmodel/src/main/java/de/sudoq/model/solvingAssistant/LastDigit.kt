@@ -17,7 +17,11 @@ object LastDigit {
                 val solutionField = v[0] //position that needs to be filled
                 //make List with all values entered in this constraint
                 val otherSolutions: MutableList<Int> = ArrayList()
-                for (p in c.getPositions()) if (p !== solutionField) otherSolutions.add(sudoku.getCell(p)!!.currentValue)
+                for (p in c.getPositions()) if (p !== solutionField) otherSolutions.add(
+                    sudoku.getCell(
+                        p
+                    )!!.currentValue
+                )
                 //make list with all possible values
                 val possibleSolutions: MutableList<Int> = ArrayList()
                 for (i in sudoku.sudokuType!!.symbolIterator) possibleSolutions.add(i)

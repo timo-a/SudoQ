@@ -1,28 +1,33 @@
 package de.sudoq.model.solverGenerator.FastSolver.DLX1;
 
-import de.sudoq.model.solverGenerator.FastSolver.DLX1.DancingLinks.*;
-import java.util.*;
+import java.util.List;
 
-public interface SolutionHandler{
+import de.sudoq.model.solverGenerator.FastSolver.DLX1.DancingLinks.DancingNode;
+
+public interface SolutionHandler {
     void handleSolution(List<DancingNode> solution);
 }
 
-class SudokuHandler implements SolutionHandler{
+class SudokuHandler implements SolutionHandler {
     int size = 9;
 
-    public void handleSolution(List<DancingNode> answer){
+    public SudokuHandler(int boardSize) {
+        size = boardSize;
+    }
+
+    public void handleSolution(List<DancingNode> answer) {
         int[][] result = parseBoard(answer);
         AbstractSudokuSolver.printSolution(result);
     }
 
-    protected int[][] parseBoard(List<DancingNode> answer){
+    protected int[][] parseBoard(List<DancingNode> answer) {
         int[][] result = new int[size][size];
-        for(DancingNode n : answer){
+        for (DancingNode n : answer) {
             DancingNode rcNode = n;
             int min = Integer.parseInt(rcNode.C.name);
-            for(DancingNode tmp = n.R; tmp != n; tmp = tmp.R){
+            for (DancingNode tmp = n.R; tmp != n; tmp = tmp.R) {
                 int val = Integer.parseInt(tmp.C.name);
-                if (val < min){
+                if (val < min) {
                     min = val;
                     rcNode = tmp;
                 }
@@ -37,21 +42,15 @@ class SudokuHandler implements SolutionHandler{
         return result;
     }
 
-
-
-    public SudokuHandler(int boardSize){
-        size = boardSize;
-    }
-
 }
 
-class DefaultHandler implements SolutionHandler{
-    public void handleSolution(List<DancingNode> answer){
-        for(DancingNode n : answer){
+class DefaultHandler implements SolutionHandler {
+    public void handleSolution(List<DancingNode> answer) {
+        for (DancingNode n : answer) {
             String ret = "";
             ret += n.C.name + " ";
             DancingNode tmp = n.R;
-            while (tmp != n){
+            while (tmp != n) {
                 ret += tmp.C.name + " ";
                 tmp = tmp.R;
             }

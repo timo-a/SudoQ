@@ -12,7 +12,8 @@ import java.util.*
 /** Do never ever try to do this generic. NEVER
  * An xmlable ArrayList of PermutationProperties
  */
-abstract class XmlableEnumList(val rootName: String, var enumType: String) : ArrayList<Int?>(), Xmlable {
+abstract class XmlableEnumList(val rootName: String, var enumType: String) : ArrayList<Int?>(),
+    Xmlable {
     //TODO replace setofpermutationproperties by this
 
     fun add(h: Enum<*>): Boolean {

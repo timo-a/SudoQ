@@ -62,8 +62,10 @@ class Backtracking(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku, 
             val relevantCandidates = BitSet()
             relevantCandidates.set(chosenCandidate)
             candidates.clear(chosenCandidate)
-            val derivField = DerivationCell(leastCandidatesPosition, relevantCandidates,
-                    candidates)
+            val derivField = DerivationCell(
+                leastCandidatesPosition, relevantCandidates,
+                candidates
+            )
             derivation!!.addDerivationCell(derivField)
             derivation!!.setDescription("Backtrack")
         }

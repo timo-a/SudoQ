@@ -22,7 +22,8 @@ import java.util.*
 class XmlHelper {
 
     /** Unterstützte Typen von Xml Dateien */
-    private val SUPPORTEDDTDS = arrayOf("sudoku", "game", "games", "profile", "profiles", "sudokutype")
+    private val SUPPORTEDDTDS =
+        arrayOf("sudoku", "game", "games", "profile", "profiles", "sudokutype")
 
     /** Preamble for written Xml Files
      */
@@ -98,8 +99,10 @@ class XmlHelper {
         val oustream = FileOutputStream(xmlFile)
         val osw = OutputStreamWriter(oustream)
         osw.write(XmlPREAMBLE)
-        osw.write("""<!DOCTYPE ${xmlTree.name} SYSTEM "$XmlDTDPATH${xmlTree.name}.dtd">
-""")//todo can \n be used for next line?
+        osw.write(
+            """<!DOCTYPE ${xmlTree.name} SYSTEM "$XmlDTDPATH${xmlTree.name}.dtd">
+"""
+        )//todo can \n be used for next line?
         osw.write(buildXmlStructure(xmlTree))
         osw.flush()
         osw.close()
@@ -170,7 +173,12 @@ class XmlHelper {
                     xmlReadTreeRoot = XmlTree(qName)
                     // read and add attributes of the current element
                     for (i in 0 until atts.length) {
-                        xmlReadTreeRoot!!.addAttribute(XmlAttribute(atts.getQName(i), atts.getValue(i)))
+                        xmlReadTreeRoot!!.addAttribute(
+                            XmlAttribute(
+                                atts.getQName(i),
+                                atts.getValue(i)
+                            )
+                        )
                     }
                     // move one layer deeper into xml hirarchie
                     xmlReadStack!!.push(xmlReadTreeRoot)

@@ -20,7 +20,9 @@ import java.util.*
  * @property parent the parent node
  *
  */
-class ActionTreeElement(val id: Int, val action: Action, val parent: ActionTreeElement?) : ObservableModelImpl<ActionTreeElement>(), Comparable<ActionTreeElement>, Iterable<ActionTreeElement> {
+class ActionTreeElement(val id: Int, val action: Action, val parent: ActionTreeElement?) :
+    ObservableModelImpl<ActionTreeElement>(), Comparable<ActionTreeElement>,
+    Iterable<ActionTreeElement> {
 
     /**
      * The list of all child elements.
@@ -76,7 +78,7 @@ class ActionTreeElement(val id: Int, val action: Action, val parent: ActionTreeE
      *
      * @return true if node has child nodes, false otherwise
      */
-    public fun hasChildren(): Boolean {
+    fun hasChildren(): Boolean {
         return childrenList.isNotEmpty()
     }
 
@@ -154,7 +156,7 @@ class ActionTreeElement(val id: Int, val action: Action, val parent: ActionTreeE
      * {@inheritDoc}
      */
     override fun equals(other: Any?): Boolean {
-        if (other !is ActionTreeElement) return false;
+        if (other !is ActionTreeElement) return false
 
         return id == other.id
                 && isMarked == other.isMarked
@@ -174,13 +176,13 @@ class ActionTreeElement(val id: Int, val action: Action, val parent: ActionTreeE
      * {@inheritDoc}
      */
     override fun iterator(): Iterator<ActionTreeElement> {
-        return childrenList.iterator();
+        return childrenList.iterator()
     }
 
     //kept for compatibility with callers
     //TODO rename to iterateChildren, analyse use, replace with get first child:optional
-    fun getChildren() : Iterator<ActionTreeElement> {
-        return iterator();
+    fun getChildren(): Iterator<ActionTreeElement> {
+        return iterator()
     }
 
     companion object {

@@ -10,7 +10,7 @@ object AmbiguityChecker {
      * Call only after an `isAmbiguous` call that returned `true`. Otherwise it is null.
      * @return position of the first branchingPoint, i.e. where backtracking was first applied or `null` if last call to `isAmbiguous` was unsuccessful.
      */
-    var firstBranchPosition: Position? = null
+    private var firstBranchPosition: Position? = null
         private set
 
     /**
@@ -21,8 +21,10 @@ object AmbiguityChecker {
     @JvmStatic
     fun isAmbiguous(sudoku: Sudoku?): Boolean {
         val solver = Solver(sudoku!!)
-        val result = solver.solveAll(false, false, false)
-        firstBranchPosition = if (solver.getSolverSudoku().hasBranch()) solver.getSolverSudoku().firstBranchPosition else null //lest old values persist
+        val result = solver.solveAll(buildDerivation = false, false, false)
+        firstBranchPosition = if (solver.getSolverSudoku()
+                .hasBranch()
+        ) solver.getSolverSudoku().firstBranchPosition else null //lest old values persist
         return result && solver.severalSolutionsExist()
     }
 }

@@ -33,7 +33,6 @@ class HiddenSetDerivation(technique: HintTypes) : SolveDerivation(technique) {
     }
 
 
-
     fun addSubsetCell(f: DerivationCell) {
         subsetMembers.add(f)
     }

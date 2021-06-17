@@ -20,20 +20,24 @@ public class DLXSolver implements FastSolver {
 
     private List<int[][]> solutions;
 
-    private AbstractSudokuSolver solver;
-    private int[][] array;
+    private final AbstractSudokuSolver solver;
+    private final int[][] array;
 
-    public DLXSolver(Sudoku s){
+    public DLXSolver(Sudoku s) {
 
-        switch (s.getSudokuType().getEnumType()){
+        switch (s.getSudokuType().getEnumType()) {
             case standard16x16:
-                solver = new Sudoku16DLX(); break;
+                solver = new Sudoku16DLX();
+                break;
             case samurai:
-                solver = new DLXSudokuSamurai(); break;
+                solver = new DLXSudokuSamurai();
+                break;
             case Xsudoku:
-                solver = new DLXSudokuX(); break;
+                solver = new DLXSudokuX();
+                break;
             case standard9x9:
-                solver = new SudokuDLX(); break;
+                solver = new SudokuDLX();
+                break;
 
             default:
                 throw new IllegalArgumentException("only 16x16 are accepted at the moment!!!");
@@ -42,19 +46,19 @@ public class DLXSolver implements FastSolver {
         array = sudoku2Array(s);
 
         // SudokuDLX solver = new SudokuDLX();
-       // solver.solve(hardest);
+        // solver.solve(hardest);
 
     }
 
-    private static int[][] sudoku2Array(Sudoku s){
+    private static int[][] sudoku2Array(Sudoku s) {
         Position dim = s.getSudokuType().getSize();
         int[][] sarray = new int[dim.getY()][dim.getX()];
         for (int r = 0; r < sarray.length; r++)
-            for (int c = 0; c < sarray[0].length; c++){
-                Cell f = s.getCell(Position.get(c,r));
-                sarray[r][c] = f==null ? -1 //if pos doesn't exist e.g. (9,0) in SamuraiSudoku
-                                       : f.isSolved() ? f.getCurrentValue() + 1
-                                                      : 0;
+            for (int c = 0; c < sarray[0].length; c++) {
+                Cell f = s.getCell(Position.get(c, r));
+                sarray[r][c] = f == null ? -1 //if pos doesn't exist e.g. (9,0) in SamuraiSudoku
+                        : f.isSolved() ? f.getCurrentValue() + 1
+                        : 0;
             }
         return sarray;
     }
@@ -62,27 +66,27 @@ public class DLXSolver implements FastSolver {
 
     @Override
     public boolean hasSolution() {
-        if (!calculationDone){
+        if (!calculationDone) {
             solver.solve(array);
             solutions = solver.getSolutions();
-            calculationDone=true;
+            calculationDone = true;
         }
         return solutions.size() > 0;
     }
 
     @Override
     public boolean isAmbiguous() {
-        if (!calculationDone){
+        if (!calculationDone) {
             /*
-            * If the sudoku only has one solution, we have to go through the whole search space
-            * to rule out further solutions.
-            * as this takes a long time we rather want to stop after x minutes and treat it as if there are no further solution
-            *
-            * */
+             * If the sudoku only has one solution, we have to go through the whole search space
+             * to rule out further solutions.
+             * as this takes a long time we rather want to stop after x minutes and treat it as if there are no further solution
+             *
+             * */
             ExecutorService executor = Executors.newSingleThreadExecutor();
             Collection c = Collections.singletonList(new AmbiguousTask());
             try {
-                executor.invokeAll(c , 5, TimeUnit.MINUTES); // Timeout of 5 minutes.
+                executor.invokeAll(c, 5, TimeUnit.MINUTES); // Timeout of 5 minutes.
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -93,51 +97,46 @@ public class DLXSolver implements FastSolver {
         return solutions != null && solutions.size() > 1;
     }
 
-
-
-    private class AmbiguousTask implements Callable{
-        @Override
-        public Object call() throws Exception {
-            solver.solve(array);
-            solutions = solver.getSolutions();
-            calculationDone=true;
-            return null;
-        }
-    }
-
-
-
-
     @Override
     public Position getAmbiguousPos() {
         int[][] first = solutions.get(0);
-        int[][] second= solutions.get(1);
+        int[][] second = solutions.get(1);
 
         for (int r = 0; r < first.length; r++) {
             for (int c = 0; c < first[0].length; c++) {
                 if (first[r][c] != second[r][c])
-                    return Position.get(c,r);
+                    return Position.get(c, r);
             }
         }
         throw new IllegalStateException();
     }
 
     @Override
-    public PositionMap<Integer> getSolutions(){
+    public PositionMap<Integer> getSolutions() {
         int[][] solution = solutions.get(0);
-        PositionMap<Integer> pm = new PositionMap<>(Position.get(solution[0].length,solution.length));
+        PositionMap<Integer> pm = new PositionMap<>(Position.get(solution[0].length, solution.length));
 
         for (int r = 0; r < solution.length; r++)
-            for (int c = 0; c < solution[0].length; c++){
+            for (int c = 0; c < solution[0].length; c++) {
                 if (solution[r][c] != -1)
-                    pm.put(Position.get(c,r), solution[r][c]-1);
+                    pm.put(Position.get(c, r), solution[r][c] - 1);
             }
         return pm;
     }
 
     @Deprecated
-    public List<int[][]> getBothSolutionsForDebugPurposes(){
+    public List<int[][]> getBothSolutionsForDebugPurposes() {
         return solutions;
+    }
+
+    private class AmbiguousTask implements Callable {
+        @Override
+        public Object call() throws Exception {
+            solver.solve(array);
+            solutions = solver.getSolutions();
+            calculationDone = true;
+            return null;
+        }
     }
 
 }

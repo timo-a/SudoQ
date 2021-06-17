@@ -9,12 +9,11 @@ import de.sudoq.model.game.GameStateHandler
 import de.sudoq.model.persistence.xml.sudoku.SudokuBE
 import de.sudoq.model.persistence.xml.sudoku.SudokuMapper
 import de.sudoq.model.sudoku.Sudoku
-import de.sudoq.model.sudoku.SudokuManager
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
 import de.sudoq.model.xml.Xmlable2
 import java.io.File
-import java.util.ArrayList
+import java.util.*
 
 class GameBE : Xmlable2 {
 
@@ -32,7 +31,7 @@ class GameBE : Xmlable2 {
 
     /** id of current ActionTree node */
     private val currentTurnId: Int
-       get() = currentState.id
+        get() = currentState.id
 
     /**
      * The action tree node of the current state.
@@ -116,8 +115,12 @@ class GameBE : Xmlable2 {
                 val field_id = sub.getAttributeValue(ActionTreeElement.FIELD_ID)!!.toInt()
                 val f = sudoku!!.getCell(field_id)!!
                 if (sub.getAttributeValue(ActionTreeElement.ACTION_TYPE) == SolveAction::class.java.simpleName) {
-                    stateHandler!!.addAndExecute(SolveActionFactory().createAction(f.currentValue + diff,
-                            f))
+                    stateHandler!!.addAndExecute(
+                        SolveActionFactory().createAction(
+                            f.currentValue + diff,
+                            f
+                        )
+                    )
                 } else { // if(sub.getAttributeValue(ActionTreeElement.ACTION_TYPE).equals(NoteAction.class.getSimpleName()))
                     stateHandler!!.addAndExecute(NoteActionFactory().createAction(diff, f))
                 }
@@ -134,7 +137,8 @@ class GameBE : Xmlable2 {
                 }
             }
         }
-        finished = java.lang.Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("finished"))
+        finished =
+            java.lang.Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("finished"))
         goToState(stateHandler!!.actionTree.getElement(currentStateId)!!)
     }
 
@@ -148,6 +152,7 @@ class GameBE : Xmlable2 {
     private fun goToState(ate: ActionTreeElement) {
         stateHandler!!.goToState(ate)
     }
+
     /** Marks the current state to better find it later */
     private fun markCurrentState() {
         stateHandler!!.markCurrentState() //TODO what doe this mean is it a book mark?
@@ -159,13 +164,15 @@ class GameBE : Xmlable2 {
         id = -1
     }
 
-    constructor(id: Int,
-                time: Int,
-                assistancesCost: Int,
-                sudoku: Sudoku,
-                stateHandler: GameStateHandler,
-                gameSettings: GameSettings,
-                finished: Boolean) {
+    constructor(
+        id: Int,
+        time: Int,
+        assistancesCost: Int,
+        sudoku: Sudoku,
+        stateHandler: GameStateHandler,
+        gameSettings: GameSettings,
+        finished: Boolean
+    ) {
 
         this.id = id
         this.time = time

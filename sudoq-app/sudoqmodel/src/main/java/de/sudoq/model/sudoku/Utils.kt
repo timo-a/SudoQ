@@ -1,5 +1,7 @@
 package de.sudoq.model.sudoku
 
+import kotlin.math.abs
+
 //fun oneplusone (): Int = 2
 
 /**
@@ -13,7 +15,12 @@ fun getGroupShape(c: Constraint): Utils.ConstraintShape {
 
 
 fun getGroupShape(pList: List<Position>): Utils.ConstraintShape {
-    return if (Utils.isRow(pList)) Utils.ConstraintShape.Row else if (Utils.isColumn(pList)) Utils.ConstraintShape.Column else if (Utils.isDiagonal(pList)) Utils.ConstraintShape.Diagonal else Utils.ConstraintShape.Block
+    return when {
+        Utils.isRow(pList) -> Utils.ConstraintShape.Row
+        Utils.isColumn(pList) -> Utils.ConstraintShape.Column
+        Utils.isDiagonal(pList) -> Utils.ConstraintShape.Diagonal
+        else -> Utils.ConstraintShape.Block
+    }
 }
 
 
@@ -23,8 +30,10 @@ fun getGroupShape(pList: List<Position>): Utils.ConstraintShape {
 object Utils {
     @JvmStatic
     fun positionToRealWorld(p: Position): Position {
-        return Position(p.x + 1,
-                p.y + 1)
+        return Position(
+            p.x + 1,
+            p.y + 1
+        )
     }
 
     @JvmStatic
@@ -72,7 +81,7 @@ object Utils {
         val reference = list[1]
         for (i in 2 until list.size) {
             val d = reference.distance(list[i])
-            if (Math.abs(d.x * diff.y) != Math.abs(diff.x * d.y)) //ratio comparison trick: a/b==c/d <=> a*d == b*c, abs for 180° difference
+            if (abs(d.x * diff.y) != abs(diff.x * d.y)) //ratio comparison trick: a/b==c/d <=> a*d == b*c, abs for 180° difference
                 diag = false
         }
         return diag

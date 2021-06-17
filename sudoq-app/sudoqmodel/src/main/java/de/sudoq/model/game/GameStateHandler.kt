@@ -85,11 +85,14 @@ class GameStateHandler : ObservableModelImpl<ActionTreeElement>() {
 
     /* check if action already in Tree,
 	      i.e. we went back in actionTree but are doing same steps again */
-    fun isActionRedundant(mountingElement: ActionTreeElement?, action: Action): Boolean {
-        return !findExistingChildren(mountingElement, action).isEmpty()
+    private fun isActionRedundant(mountingElement: ActionTreeElement?, action: Action): Boolean {
+        return findExistingChildren(mountingElement, action).isNotEmpty()
     }
 
-    private fun findExistingChildren(mountingElement: ActionTreeElement?, action: Action): List<ActionTreeElement> {
+    private fun findExistingChildren(
+        mountingElement: ActionTreeElement?,
+        action: Action
+    ): List<ActionTreeElement> {
         val l: MutableList<ActionTreeElement> = Stack()
         if (mountingElement != null) {
             for (ateI in mountingElement.childrenList) if (ateI.actionEquals(action)) l.add(ateI)

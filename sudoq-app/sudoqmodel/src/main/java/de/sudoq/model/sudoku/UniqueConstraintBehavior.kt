@@ -13,7 +13,7 @@ import java.util.*
 class UniqueConstraintBehavior : ConstraintBehavior {
 
     /** list of symbols found in the check method. */
-    var foundNumbers: MutableList<Int> = ArrayList()
+    private var foundNumbers: MutableList<Int> = ArrayList()
 
     /**
      * Checkcs if the passed Constraint satisfies Unique behaviour, i.e.

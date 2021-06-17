@@ -7,7 +7,8 @@ import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.Sudoku
 import java.util.*
 
-class LastCandidateDerivation(val position: Position, private val remainingNote: Int) : SolveDerivation(HintTypes.LastCandidate) {
+class LastCandidateDerivation(val position: Position, private val remainingNote: Int) :
+    SolveDerivation(HintTypes.LastCandidate) {
 
     private val actionlist: MutableList<Action> = ArrayList()
 

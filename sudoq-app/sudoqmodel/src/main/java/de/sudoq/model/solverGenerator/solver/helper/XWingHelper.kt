@@ -22,7 +22,11 @@ class XWingHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku, c
         hintType = HintTypes.XWing
     }
 
-    private fun separateIntoRowColumn(pool: Iterable<Constraint>, rows: MutableList<Constraint>, cols: MutableList<Constraint>) {
+    private fun separateIntoRowColumn(
+        pool: Iterable<Constraint>,
+        rows: MutableList<Constraint>,
+        cols: MutableList<Constraint>
+    ) {
         for (c in pool) {
             when (getGroupShape(c.getPositions())) {
                 Utils.ConstraintShape.Row -> rows.add(c)
@@ -61,10 +65,19 @@ class XWingHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku, c
                     val bottomRight = intersectionPoint(col2, row2)
                     val bottomLeft = intersectionPoint(row2, col1)
                     if (bottomRight != null && sudoku.getCell(bottomRight)!!.isNotSolved
-                     && bottomLeft  != null && sudoku.getCell(bottomLeft)!!.isNotSolved) {
+                        && bottomLeft != null && sudoku.getCell(bottomLeft)!!.isNotSolved
+                    ) {
                         /* we found a # of 2rows, 2 cols now check if 2 are locked ...*/
                         val intersectionPoints = arrayOf(topLeft, topRight, bottomLeft, bottomRight)
-                        if (testForLockedness(row1, row2, col1, col2, intersectionPoints, buildDerivation))
+                        if (testForLockedness(
+                                row1,
+                                row2,
+                                col1,
+                                col2,
+                                intersectionPoints,
+                                buildDerivation
+                            )
+                        )
                             return true
                     }
                 }
@@ -73,25 +86,41 @@ class XWingHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku, c
         return false
     }
 
-    private fun testForLockedness(row1: Constraint, row2: Constraint,
-                                  col1: Constraint, col2: Constraint,
-                                  intersectionPoints: Array<Position>, buildDerivation: Boolean): Boolean {
-        val candidateNotes = intersectNotes(Arrays.asList(*intersectionPoints))
-        for (note in candidateNotes.setBits) if (xWing(row1, row2, col1, col2, note, intersectionPoints, buildDerivation) ||
-                xWing(col1, col2, row1, row2, note, intersectionPoints, buildDerivation)) return true
+    private fun testForLockedness(
+        row1: Constraint, row2: Constraint,
+        col1: Constraint, col2: Constraint,
+        intersectionPoints: Array<Position>, buildDerivation: Boolean
+    ): Boolean {
+        val candidateNotes = intersectNotes(listOf(*intersectionPoints))
+        for (note in candidateNotes.setBits) if (xWing(
+                row1,
+                row2,
+                col1,
+                col2,
+                note,
+                intersectionPoints,
+                buildDerivation
+            ) ||
+            xWing(col1, col2, row1, row2, note, intersectionPoints, buildDerivation)
+        ) return true
         return false //in case candidateNotes.getSetBits() == {}
     }
 
-    private fun xWing(row1: Constraint,
-                      row2: Constraint,
-                      col1: Constraint,
-                      col2: Constraint,
-                      note: Int,
-                      intersectionPoints: Array<Position>,
-                      buildDerivation: Boolean): Boolean {
+    private fun xWing(
+        row1: Constraint,
+        row2: Constraint,
+        col1: Constraint,
+        col2: Constraint,
+        note: Int,
+        intersectionPoints: Array<Position>,
+        buildDerivation: Boolean
+    ): Boolean {
         //Xwing: row1, row2 haben in den schnittpunkten eine note die bez. Zeile nur dort vorkommt.
         //       note is therefor locked, can be deletd elsewhere in col1,col2
-        val rowLocked = countOccurrences(note.toShort(), row1).toInt() == 2 && countOccurrences(note.toShort(), row2).toInt() == 2
+        val rowLocked = countOccurrences(note.toShort(), row1).toInt() == 2 && countOccurrences(
+            note.toShort(),
+            row2
+        ).toInt() == 2
         val removableStuffInColumns = countOccurrences(note.toShort(), col1) > 2 ||
                 countOccurrences(note.toShort(), col2) > 2
         return if (rowLocked && removableStuffInColumns) {
@@ -101,10 +130,14 @@ class XWingHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku, c
         } else false
     }
 
-    private fun deleteNote(col1: Constraint, col2: Constraint, note: Int,
-                           intersectionPoints: Array<Position>): List<Position> {
+    private fun deleteNote(
+        col1: Constraint, col2: Constraint, note: Int,
+        intersectionPoints: Array<Position>
+    ): List<Position> {
         val canBeDeleted: MutableList<Position> = ArrayList()
-        for (p in col1.getPositions()) if (sudoku.getCurrentCandidates(p).isSet(note)) //don't Try getField.isNoteSet! that accesses the actual sudokus candidates
+        for (p in col1.getPositions()) if (sudoku.getCurrentCandidates(p)
+                .isSet(note)
+        ) //don't Try getField.isNoteSet! that accesses the actual sudokus candidates
             canBeDeleted.add(p)
         for (p in col2) if (sudoku.getCurrentCandidates(p).isSet(note)) canBeDeleted.add(p)
         for (p in intersectionPoints) canBeDeleted.remove(p)
@@ -114,8 +147,10 @@ class XWingHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku, c
         return canBeDeleted
     }
 
-    private fun buildDerivation(row1: Constraint, row2: Constraint, col1: Constraint, col2: Constraint,
-                                canBeDeleted: Iterable<Position>, note: Int) {
+    private fun buildDerivation(
+        row1: Constraint, row2: Constraint, col1: Constraint, col2: Constraint,
+        canBeDeleted: Iterable<Position>, note: Int
+    ) {
         val internalDerivation = XWingDerivation()
         internalDerivation.setLockedConstraints(row1, row2)
         internalDerivation.setReducibleConstraints(col1, col2)
@@ -150,9 +185,9 @@ class XWingHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku, c
     *
     * */
     private fun countOccurrences(note: Short, positions: Iterable<Position>): Short {
-        return positions.filter { p ->  sudoku.getCurrentCandidates(p).isSet(note.toInt()) }
-                        .size
-                        .toShort()
+        return positions.filter { p -> sudoku.getCurrentCandidates(p).isSet(note.toInt()) }
+            .size
+            .toShort()
     }
 
     companion object {

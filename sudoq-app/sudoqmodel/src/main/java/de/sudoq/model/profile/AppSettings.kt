@@ -39,7 +39,8 @@ class AppSettings : Xmlable {
 
     @Throws(IllegalArgumentException::class)
     override fun fillFromXml(xmlTreeRepresentation: XmlTree) {
-        isDebugSet = java.lang.Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("debug"))
+        isDebugSet =
+            java.lang.Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("debug"))
         language = xmlTreeRepresentation.getAttributeValue("language") ?: "system"
         //if language hasn't been used before it will be null -> assume system
     }

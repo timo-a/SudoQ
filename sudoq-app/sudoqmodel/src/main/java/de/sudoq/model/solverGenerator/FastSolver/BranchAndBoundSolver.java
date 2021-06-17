@@ -10,7 +10,7 @@ public class BranchAndBoundSolver implements FastSolver {
     private final Sudoku s;
 
 
-    public BranchAndBoundSolver(Sudoku s){
+    public BranchAndBoundSolver(Sudoku s) {
         this.s = s;
     }
 

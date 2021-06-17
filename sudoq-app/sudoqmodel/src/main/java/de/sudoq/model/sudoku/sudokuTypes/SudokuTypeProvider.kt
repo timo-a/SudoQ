@@ -2,7 +2,6 @@ package de.sudoq.model.sudoku.sudokuTypes
 
 import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeMapper
 import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeRepo
-import de.sudoq.model.xml.XmlHelper
 import java.io.File
 
 object SudokuTypeProvider {

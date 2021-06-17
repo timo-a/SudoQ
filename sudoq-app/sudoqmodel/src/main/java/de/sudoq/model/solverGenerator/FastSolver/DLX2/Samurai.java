@@ -58,184 +58,148 @@ package de.sudoq.model.solverGenerator.FastSolver.DLX2;/////////////////////////
 import java.util.List;
 import java.util.Stack;
 
-class Samurai
-{
-	List<int[][]> solutions;
-	Samurai(){
-		solutions = new Stack<>();
-	}
-
-    public static void main(String args[])
-    {
-	// Create an instance.
-
-	Samurai samurai = new Samurai();
-
-	// Define some puzzles.
-
-	int[][] puzzle1 =
-	    {{0,0,0,0,0,5,0,0,0, 0,0,0, 0,0,0,0,2,0,6,0,0},
-	     {0,0,7,3,0,0,9,0,0, 0,0,0, 0,0,0,0,0,3,0,0,5},
-	     {0,5,0,0,9,0,0,6,3, 0,0,0, 0,0,8,0,0,0,0,4,0},
-
-	     {0,8,0,0,7,3,0,0,0, 0,0,0, 0,4,0,3,0,0,8,0,0},
-	     {0,0,6,2,0,0,8,0,0, 0,0,0, 7,0,0,0,9,0,5,0,0},
-	     {4,0,0,5,0,0,0,9,0, 0,0,0, 0,0,0,0,5,0,0,7,0},
-
-	     {0,3,0,0,5,0, 0,0,0,7,0,0,0,0,0, 0,0,1,0,0,0},
-	     {0,0,8,0,0,9, 0,3,0,0,4,9,6,8,0, 4,0,0,2,0,0},
-	     {0,0,9,0,0,0, 0,0,2,0,0,0,0,0,5, 0,0,0,0,8,0},
-
-	     {0,0,0,0,0,0, 9,0,0,6,0,0,0,5,0, 0,0,0,0,0,0},
-	     {0,0,0,0,0,0, 0,6,0,0,0,0,2,0,0, 0,0,0,0,0,0},
-	     {0,0,0,0,0,0, 0,5,0,0,0,0,7,0,0, 0,0,0,0,0,0},
-
-	     {0,0,0,0,3,0, 0,4,0,0,1,5,8,0,0, 0,0,6,0,0,0},
-	     {0,0,0,9,0,0, 0,2,0,3,0,0,0,9,0, 0,0,4,0,0,6},
-	     {0,0,2,0,0,0, 0,0,1,0,0,0,0,0,0, 0,0,8,0,2,0},
-
-	     {0,0,0,3,0,0,0,5,0, 0,0,0, 0,0,0,0,4,0,3,0,0},
-	     {7,0,0,0,1,9,0,0,0, 0,0,0, 0,0,0,5,0,0,7,0,0},
-	     {0,6,0,0,0,0,2,0,0, 0,0,0, 3,5,6,0,0,0,0,8,0},
-
-	     {3,0,0,2,9,0,0,7,0, 0,0,0, 0,0,0,2,6,0,0,0,1},
-	     {0,0,5,0,0,4,0,0,8, 0,0,0, 0,0,3,0,0,5,0,0,0},
-	     {0,8,0,0,0,0,0,0,0, 0,0,0, 0,7,0,0,0,0,9,0,0}};
-
-	int[][] puzzle2 =
-	    {{4,9,7,0,0,0,0,0,0, 0,0,0, 0,1,8,0,0,0,6,7,9},
-	     {8,0,0,0,0,0,0,9,7, 0,0,0, 0,4,0,8,0,0,0,0,3},
-	     {1,0,0,0,0,0,6,0,8, 0,0,0, 0,0,2,0,9,0,0,0,4},
-
-	     {0,0,0,3,0,5,0,7,0, 0,0,0, 0,0,0,2,0,6,0,0,0},
-	     {0,0,5,0,4,0,1,0,0, 0,0,0, 0,0,0,0,5,0,0,0,0},
-	     {0,8,0,2,0,6,0,0,0, 0,0,0, 0,0,0,7,0,9,0,0,0},
-
-	     {7,0,3,0,0,0, 0,0,5,0,0,0,7,0,0, 0,2,0,1,0,0},
-	     {2,6,0,0,0,0, 0,0,4,0,0,0,1,0,0, 0,0,7,0,2,0},
-	     {0,0,0,0,0,0, 7,1,6,0,5,0,4,2,9,0, 0,0,7,3,0},
-
-	     {0,0,0,0,0,0, 0,0,0,1,0,5,0,0,0, 0,0,0,0,0,0},
-	     {0,0,0,0,0,0, 0,0,3,0,0,0,2,0,0, 0,0,0,0,0,0},
-	     {0,0,0,0,0,0, 0,0,0,4,0,9,0,0,0, 0,0,0,0,0,0},
-
-	     {0,9,7,0,0,0, 3,4,8,0,1,0,9,7,6, 0,0,0,0,0,0},
-	     {0,3,0,7,0,0, 0,0,9,0,0,0,5,0,0, 0,0,0,0,9,2},
-	     {0,0,4,0,9,0, 0,0,7,0,0,0,3,0,0, 0,0,0,1,0,8},
-
-	     {0,0,0,8,0,3,0,0,0, 0,0,0, 0,0,0,3,0,9,0,8,0},
-	     {0,0,0,0,6,0,0,0,0, 0,0,0, 0,0,3,0,8,0,4,0,0},
-	     {0,0,0,5,0,7,0,0,0, 0,0,0, 0,2,0,4,0,1,0,0,0},
-
-	     {7,0,0,0,5,0,2,0,0, 0,0,0, 7,0,5,0,0,0,0,0,6},
-	     {5,0,0,0,0,9,0,8,0, 0,0,0, 2,8,0,0,0,0,0,0,9},
-	     {4,6,9,0,0,0,5,7,0, 0,0,0, 0,0,0,0,0,0,2,1,5}};
-
-        int[][] mypuzzle = {
-                { 0, 0, 0, 0, 2, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0, 6, 0, 0 },
-                { 0, 6, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0 },
-                { 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0 },
-                { 7, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 8, 4, 2, 0, 0, 0, 0 },
-                { 0, 0, 8, 0, 1, 6, 0, 0, 0, 0, 0, 0, 1, 0, 0, 5, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 5, 0 },
-                { 1, 8, 9, 0, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 5, 0, 4, 2, 0, 0, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 0, 0, 0, 9, 6, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 0, 0, 4, 7, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                { 7, 0, 9, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 7, 0, 0, 1, 0 },
-                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 9, 0, 0, 2, 0, 0 },
-                { 0, 5, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0 },
-                { 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 6, 0, 8, 0, 0, 9, 0 },
-                { 8, 0, 0, 2, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 5, 0, 4 },
-                { 0, 2, 3, 0, 1, 6, 5, 0, 0, 0, 0, 0, 0, 4, 7, 0, 2, 0, 0, 0, 0 },
-                { 5, 1, 7, 4, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 3, 1, 4, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
-	};
-
-	int[][] mypuzzle1 = new int[21][21];
-	
-	// Solve them.
-
-	samurai.solve(puzzle1);
-	samurai.solve(puzzle2);
-	samurai.solve(mypuzzle);
-	for(int i=1; i<9; i++)
-            samurai.solve(shift(mypuzzle, i));
-    }
+class Samurai {
+    static final int PUZZLE_SIDE = 21;
+    static final int PUZZLE_SIZE = 441;
+    static final int SUDOKU_SIDE = 9;
+    static final int SUDOKU_SIZE = 81;
 
 
-
-    static int[][] shift(int[][] orig, int offset){
-	int[][] newpuzzle = new int[21][21];
-	for(int r=0; r < 21; r++)
-	    for(int c=0; c<21;c++)
-		if(orig[r][c] != 0)
-		    newpuzzle[r][c] = (orig[r][c] + offset -1) % 9 +1;
-
-	return newpuzzle;    	
-    }
-
-
-
-    
-
-
-
-
-
-
-    
     // Solve a puzzle.
-
-    void solve(int[][] puzzle)
-    {
-	// Create a new Dancing Links.
-
-	DancingLinks dl = new DancingLinks(puzzle);
-
-	// Print the puzzle for checking.
-
-	//printSudoku(puzzle);
-
-	// Solve the puzzle.
-
-	dl.solve(this);
-    }
+    static final int SQUARE_SIDE = 3;
 
     // Print the solution.
-
-    public static void printSudoku(int[][] solution)
-    {
-	for (int r = 0; r < PUZZLE_SIDE; r++)
-	{
-	    for (int c = 0; c < PUZZLE_SIDE; c++)
-		if (solution[r][c] > 0)
-		    System.out.print(solution[r][c] + " ");
-
-		else
-		    System.out.print(". ");
-
-	    System.out.println();
-	}
-
-	System.out.println("-----------------------------------------");
-    }
+    static final int COLUMN_SIZE = 1692;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 //  Define constants for the dimensions of the puzzle.
 //
 ///////////////////////////////////////////////////////////////////////////////
+    static final int[][] SAMURAI_SQUARE =
+            {{0}, {0}, {0}, {}, {1}, {1}, {1},
+                    {0}, {0}, {0}, {}, {1}, {1}, {1},
+                    {0}, {0}, {0, 2}, {2}, {1, 2}, {1}, {1},
+                    {}, {}, {2}, {2}, {2}, {}, {},
+                    {3}, {3}, {2, 3}, {2}, {2, 4}, {4}, {4},
+                    {3}, {3}, {3}, {}, {4}, {4}, {4},
+                    {3}, {3}, {3}, {}, {4}, {4}, {4}};
+    static final int[][] SUDOKU_ROW =
+            {{0, 1, 2, 3, 4, 5, 6, 7, 8},
+                    {0, 1, 2, 3, 4, 5, 6, 7, 8},
+                    {-1, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8},
+                    {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8},
+                    {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8}};
+    static final int[][] SUDOKU_COLUMN =
+            {{0, 1, 2, 3, 4, 5, 6, 7, 8},
+                    {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8},
+                    {-1, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8},
+                    {0, 1, 2, 3, 4, 5, 6, 7, 8},
+                    {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8}};
+    List<int[][]> solutions;
+    Samurai() {
+        solutions = new Stack<>();
+    }
 
-    static final int PUZZLE_SIDE = 21;
-    static final int PUZZLE_SIZE = 441;
-    static final int SUDOKU_SIDE = 9;
-    static final int SUDOKU_SIZE = 81;
-    static final int SQUARE_SIDE = 3;
-    static final int COLUMN_SIZE = 1692;
+    public static void main(String[] args) {
+        // Create an instance.
+
+        Samurai samurai = new Samurai();
+
+        // Define some puzzles.
+
+        int[][] puzzle1 =
+                {{0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 6, 0, 0},
+                        {0, 0, 7, 3, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 5},
+                        {0, 5, 0, 0, 9, 0, 0, 6, 3, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 4, 0},
+
+                        {0, 8, 0, 0, 7, 3, 0, 0, 0, 0, 0, 0, 0, 4, 0, 3, 0, 0, 8, 0, 0},
+                        {0, 0, 6, 2, 0, 0, 8, 0, 0, 0, 0, 0, 7, 0, 0, 0, 9, 0, 5, 0, 0},
+                        {4, 0, 0, 5, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 7, 0},
+
+                        {0, 3, 0, 0, 5, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+                        {0, 0, 8, 0, 0, 9, 0, 3, 0, 0, 4, 9, 6, 8, 0, 4, 0, 0, 2, 0, 0},
+                        {0, 0, 9, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 8, 0},
+
+                        {0, 0, 0, 0, 0, 0, 9, 0, 0, 6, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0},
+                        {0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0},
+                        {0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0},
+
+                        {0, 0, 0, 0, 3, 0, 0, 4, 0, 0, 1, 5, 8, 0, 0, 0, 0, 6, 0, 0, 0},
+                        {0, 0, 0, 9, 0, 0, 0, 2, 0, 3, 0, 0, 0, 9, 0, 0, 0, 4, 0, 0, 6},
+                        {0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 2, 0},
+
+                        {0, 0, 0, 3, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 3, 0, 0},
+                        {7, 0, 0, 0, 1, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 7, 0, 0},
+                        {0, 6, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 3, 5, 6, 0, 0, 0, 0, 8, 0},
+
+                        {3, 0, 0, 2, 9, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 2, 6, 0, 0, 0, 1},
+                        {0, 0, 5, 0, 0, 4, 0, 0, 8, 0, 0, 0, 0, 0, 3, 0, 0, 5, 0, 0, 0},
+                        {0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 9, 0, 0}};
+
+        int[][] puzzle2 =
+                {{4, 9, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 8, 0, 0, 0, 6, 7, 9},
+                        {8, 0, 0, 0, 0, 0, 0, 9, 7, 0, 0, 0, 0, 4, 0, 8, 0, 0, 0, 0, 3},
+                        {1, 0, 0, 0, 0, 0, 6, 0, 8, 0, 0, 0, 0, 0, 2, 0, 9, 0, 0, 0, 4},
+
+                        {0, 0, 0, 3, 0, 5, 0, 7, 0, 0, 0, 0, 0, 0, 0, 2, 0, 6, 0, 0, 0},
+                        {0, 0, 5, 0, 4, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0},
+                        {0, 8, 0, 2, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 9, 0, 0, 0},
+
+                        {7, 0, 3, 0, 0, 0, 0, 0, 5, 0, 0, 0, 7, 0, 0, 0, 2, 0, 1, 0, 0},
+                        {2, 6, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 1, 0, 0, 0, 0, 7, 0, 2, 0},
+                        {0, 0, 0, 0, 0, 0, 7, 1, 6, 0, 5, 0, 4, 2, 9, 0, 0, 0, 7, 3, 0},
+
+                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                        {0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0},
+                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+
+                        {0, 9, 7, 0, 0, 0, 3, 4, 8, 0, 1, 0, 9, 7, 6, 0, 0, 0, 0, 0, 0},
+                        {0, 3, 0, 7, 0, 0, 0, 0, 9, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 9, 2},
+                        {0, 0, 4, 0, 9, 0, 0, 0, 7, 0, 0, 0, 3, 0, 0, 0, 0, 0, 1, 0, 8},
+
+                        {0, 0, 0, 8, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 9, 0, 8, 0},
+                        {0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 8, 0, 4, 0, 0},
+                        {0, 0, 0, 5, 0, 7, 0, 0, 0, 0, 0, 0, 0, 2, 0, 4, 0, 1, 0, 0, 0},
+
+                        {7, 0, 0, 0, 5, 0, 2, 0, 0, 0, 0, 0, 7, 0, 5, 0, 0, 0, 0, 0, 6},
+                        {5, 0, 0, 0, 0, 9, 0, 8, 0, 0, 0, 0, 2, 8, 0, 0, 0, 0, 0, 0, 9},
+                        {4, 6, 9, 0, 0, 0, 5, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 5}};
+
+        int[][] mypuzzle = {
+                {0, 0, 0, 0, 2, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0, 6, 0, 0},
+                {0, 6, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0},
+                {5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0},
+                {7, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 8, 4, 2, 0, 0, 0, 0},
+                {0, 0, 8, 0, 1, 6, 0, 0, 0, 0, 0, 0, 1, 0, 0, 5, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 5, 0},
+                {1, 8, 9, 0, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 5, 0, 4, 2, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 9, 6, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 4, 7, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {7, 0, 9, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 7, 0, 0, 1, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 9, 0, 0, 2, 0, 0},
+                {0, 5, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 6, 0, 8, 0, 0, 9, 0},
+                {8, 0, 0, 2, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 5, 0, 4},
+                {0, 2, 3, 0, 1, 6, 5, 0, 0, 0, 0, 0, 0, 4, 7, 0, 2, 0, 0, 0, 0},
+                {5, 1, 7, 4, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 3, 1, 4, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+        };
+
+        int[][] mypuzzle1 = new int[21][21];
+
+        // Solve them.
+
+        samurai.solve(puzzle1);
+        samurai.solve(puzzle2);
+        samurai.solve(mypuzzle);
+        for (int i = 1; i < 9; i++)
+            samurai.solve(shift(mypuzzle, i));
+    }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -247,28 +211,44 @@ class Samurai
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-    static final int[][] SAMURAI_SQUARE = 
-    {{0}, {0},    {0},  {},    {1}, {1}, {1},
-     {0}, {0},    {0},  {},    {1}, {1}, {1},
-     {0}, {0}, {0, 2}, {2}, {1, 2}, {1}, {1},
-      {},  {},    {2}, {2},    {2},  {},  {},
-     {3}, {3}, {2, 3}, {2}, {2, 4}, {4}, {4},
-     {3}, {3},    {3}, {},     {4}, {4}, {4},
-     {3}, {3},    {3}, {},     {4}, {4}, {4}};
+    static int[][] shift(int[][] orig, int offset) {
+        int[][] newpuzzle = new int[21][21];
+        for (int r = 0; r < 21; r++)
+            for (int c = 0; c < 21; c++)
+                if (orig[r][c] != 0)
+                    newpuzzle[r][c] = (orig[r][c] + offset - 1) % 9 + 1;
 
-    static final int[][] SUDOKU_ROW =
-    {{0, 1, 2, 3, 4, 5, 6, 7, 8},
-     {0, 1, 2, 3, 4, 5, 6, 7, 8},
-     {-1,-1,-1,-1,-1,-1, 0, 1, 2, 3, 4, 5, 6, 7, 8},
-     {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 0, 1, 2, 3, 4, 5, 6, 7, 8},
-     {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 0, 1, 2, 3, 4, 5, 6, 7, 8}};
+        return newpuzzle;
+    }
 
-    static final int[][] SUDOKU_COLUMN =
-    {{0, 1, 2, 3, 4, 5, 6, 7, 8},
-     {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 0, 1, 2, 3, 4, 5, 6, 7, 8},
-     {-1,-1,-1,-1,-1,-1, 0, 1, 2, 3, 4, 5, 6, 7, 8},
-     {0, 1, 2, 3, 4, 5, 6, 7, 8},
-     {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 0, 1, 2, 3, 4, 5, 6, 7, 8}};
+    public static void printSudoku(int[][] solution) {
+        for (int r = 0; r < PUZZLE_SIDE; r++) {
+            for (int c = 0; c < PUZZLE_SIDE; c++)
+                if (solution[r][c] > 0)
+                    System.out.print(solution[r][c] + " ");
+
+                else
+                    System.out.print(". ");
+
+            System.out.println();
+        }
+
+        System.out.println("-----------------------------------------");
+    }
+
+    void solve(int[][] puzzle) {
+        // Create a new Dancing Links.
+
+        DancingLinks dl = new DancingLinks(puzzle);
+
+        // Print the puzzle for checking.
+
+        //printSudoku(puzzle);
+
+        // Solve the puzzle.
+
+        dl.solve(this);
+    }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -277,245 +257,231 @@ class Samurai
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-    class DancingLinks
-    {
-	Samurai samurai;
-	boolean stop;
-	int index;
-	Column h;
-	Node[] o;
+    class DancingLinks {
+        Samurai samurai;
+        boolean stop;
+        int index;
+        Column h;
+        Node[] o;
 
-	// Create a column head and add 1692 (21 x 21 = 441 slots + 5
-	// puzzles x 9 rows x 9 digits = 405 + 5 puzzles x 9 columns x
-	// 9 digits = 405 + 49 slots x 9 digits = 441) columns. Empty
-	// columns will be removed. 3645 (9 rows x 9 columns x 9
-	// digits x 5 puzzles) rows of nodes are added to the
-	// columns. Those rows corresponding to slots in one puzzle
-	// will have four nodes, those overlapping two puzzles will
-	// have six nodes. If a row is part of the puzzle it is
-	// removed from the matrix and added to the solution.
+        // Create a column head and add 1692 (21 x 21 = 441 slots + 5
+        // puzzles x 9 rows x 9 digits = 405 + 5 puzzles x 9 columns x
+        // 9 digits = 405 + 49 slots x 9 digits = 441) columns. Empty
+        // columns will be removed. 3645 (9 rows x 9 columns x 9
+        // digits x 5 puzzles) rows of nodes are added to the
+        // columns. Those rows corresponding to slots in one puzzle
+        // will have four nodes, those overlapping two puzzles will
+        // have six nodes. If a row is part of the puzzle it is
+        // removed from the matrix and added to the solution.
 
-	DancingLinks(int[][] p)
-	{
-	    // Column row head.
+        DancingLinks(int[][] p) {
+            // Column row head.
 
-	    h = new Column(null, 0);
-	    Column[] m = new Column[COLUMN_SIZE];
+            h = new Column(null, 0);
+            Column[] m = new Column[COLUMN_SIZE];
 
-	    // Create the row of columns.
+            // Create the row of columns.
 
-	    for (int i = 0; i < COLUMN_SIZE; i++)
-		m[i] = new Column(h, 0);
+            for (int i = 0; i < COLUMN_SIZE; i++)
+                m[i] = new Column(h, 0);
 
-	    // List of rows that are part of the solution.
+            // List of rows that are part of the solution.
 
-	    Node[] l = new Node[PUZZLE_SIZE];
-	    int i = 0;
+            Node[] l = new Node[PUZZLE_SIZE];
+            int i = 0;
 
-	    // For each samurai (big) row, column and possible digit.
+            // For each samurai (big) row, column and possible digit.
 
-	    for (int r = 0; r < PUZZLE_SIDE; r++)
-		for (int c = 0; c < PUZZLE_SIDE; c++)
-		    for (int d = 0; d < SUDOKU_SIDE; d++)
-		    {
-			// Calculate row number for possible
-			// move in samurai (big) puzzle.
+            for (int r = 0; r < PUZZLE_SIDE; r++)
+                for (int c = 0; c < PUZZLE_SIDE; c++)
+                    for (int d = 0; d < SUDOKU_SIDE; d++) {
+                        // Calculate row number for possible
+                        // move in samurai (big) puzzle.
 
-			int k = 1 + (r * PUZZLE_SIDE * SUDOKU_SIDE) +
-			    (c * SUDOKU_SIDE) + d;
+                        int k = 1 + (r * PUZZLE_SIDE * SUDOKU_SIDE) +
+                                (c * SUDOKU_SIDE) + d;
 
-			// See what samurai (big) square we're in.
+                        // See what samurai (big) square we're in.
 
-			int s = (c / 3) + ((r / 3) * 7);
+                        int s = (c / 3) + ((r / 3) * 7);
 
-			// If the slot is in a puzzle create a row of
-			// nodes.
+                        // If the slot is in a puzzle create a row of
+                        // nodes.
 
-			if (SAMURAI_SQUARE[s].length > 0)
-			{
-			    // Create a node for the slot.
+                        if (SAMURAI_SQUARE[s].length > 0) {
+                            // Create a node for the slot.
 
-			    Node n = new Node(m[(r * PUZZLE_SIDE) + c], k);
+                            Node n = new Node(m[(r * PUZZLE_SIDE) + c], k);
 
-			    // For each puzzle that this slot is in...
+                            // For each puzzle that this slot is in...
 
-			    for (int j = 0; j < SAMURAI_SQUARE[s].length; j++)
-			    {
-				// Find which puzzle the slot is in.
+                            for (int j = 0; j < SAMURAI_SQUARE[s].length; j++) {
+                                // Find which puzzle the slot is in.
 
-				int pz = SAMURAI_SQUARE[s][j];
+                                int pz = SAMURAI_SQUARE[s][j];
 
-				// Find the puzzle row and column.
+                                // Find the puzzle row and column.
 
-				int pr = SUDOKU_ROW[pz][r];
-				int pc = SUDOKU_COLUMN[pz][c];
+                                int pr = SUDOKU_ROW[pz][r];
+                                int pc = SUDOKU_COLUMN[pz][c];
 
-				// Add a node for the puzzle, row and
-				// digit.
+                                // Add a node for the puzzle, row and
+                                // digit.
 
-				n.add(new Node(m[PUZZLE_SIZE +
-						 (pz * SUDOKU_SIZE) +
-						 (pr * SUDOKU_SIDE) + d], k));
+                                n.add(new Node(m[PUZZLE_SIZE +
+                                        (pz * SUDOKU_SIZE) +
+                                        (pr * SUDOKU_SIDE) + d], k));
 
-				// Add a node for the puzzle, column
-				// and digit.
+                                // Add a node for the puzzle, column
+                                // and digit.
 
-				n.add(new Node(m[PUZZLE_SIZE + 405 +
-						 (pz * SUDOKU_SIZE) +
-						 (pc * SUDOKU_SIDE) + d], k));
-			    }
+                                n.add(new Node(m[PUZZLE_SIZE + 405 +
+                                        (pz * SUDOKU_SIZE) +
+                                        (pc * SUDOKU_SIDE) + d], k));
+                            }
 
-			    // Add a node for the samurai (big) square
-			    // and digit.
+                            // Add a node for the samurai (big) square
+                            // and digit.
 
-			    n.add(new Node(m[PUZZLE_SIZE + 405 + 405 +
-					     (s * SUDOKU_SIDE) + d], k));
+                            n.add(new Node(m[PUZZLE_SIZE + 405 + 405 +
+                                    (s * SUDOKU_SIDE) + d], k));
 
-			    // If this row is in the puzzle, add it to the
-			    // list.
+                            // If this row is in the puzzle, add it to the
+                            // list.
 
-			    if (p[c][r] == (d + 1))
-				l[i++] = n;
-			}
-		    }
+                            if (p[c][r] == (d + 1))
+                                l[i++] = n;
+                        }
+                    }
 
-	    // There will be empty columns corresponding to the unused
-	    // slots in the samurai (big) puzzle. Remove the empty
-	    // columns.
+            // There will be empty columns corresponding to the unused
+            // slots in the samurai (big) puzzle. Remove the empty
+            // columns.
 
-	    for (Column c = (Column) h.r; c != h; c = (Column) c.r)
-		if (c.s == 0)
-		    c.cover();
+            for (Column c = (Column) h.r; c != h; c = (Column) c.r)
+                if (c.s == 0)
+                    c.cover();
 
-	    // Create an array for the output.
+            // Create an array for the output.
 
-	    o = new Node[PUZZLE_SIZE];
+            o = new Node[PUZZLE_SIZE];
 
-	    // Remove the rows in the list and add them to the output.
+            // Remove the rows in the list and add them to the output.
 
-	    for (int j = 0; j < i; j++)
-	    {
-		l[j].remove();
-		o[index++] = l[j];
-	    }
+            for (int j = 0; j < i; j++) {
+                l[j].remove();
+                o[index++] = l[j];
+            }
 
-	}
+        }
 
-	// Rearrange the output to match the puzzle.
+        // Rearrange the output to match the puzzle.
 
-	void report(int[] o)
-	{
-	    // Create an array for the result.
+        void report(int[] o) {
+            // Create an array for the result.
 
-	    int a[][] = new int[PUZZLE_SIDE][PUZZLE_SIDE];
+            int[][] a = new int[PUZZLE_SIDE][PUZZLE_SIDE];
 
-	    // Convert the row number back to row, column, digit.
+            // Convert the row number back to row, column, digit.
 
-	    for (int i = 0; i < o.length; i++)
-	    {
-		int v = o[i];
+            for (int i = 0; i < o.length; i++) {
+                int v = o[i];
 
-		int d = v % SUDOKU_SIDE;
-		int c = (v / SUDOKU_SIDE) % PUZZLE_SIDE;
-		int r = (v / (PUZZLE_SIDE * SUDOKU_SIDE)) % PUZZLE_SIDE;
+                int d = v % SUDOKU_SIDE;
+                int c = (v / SUDOKU_SIDE) % PUZZLE_SIDE;
+                int r = (v / (PUZZLE_SIDE * SUDOKU_SIDE)) % PUZZLE_SIDE;
 
-		a[c][r] = d + 1;
-	    }
+                a[c][r] = d + 1;
+            }
 
-	    solutions.add(a);
-	    //System.out.println("found solution");
-	}
+            solutions.add(a);
+            //System.out.println("found solution");
+        }
 
-	// Start the search process.
+        // Start the search process.
 
-	void solve(Samurai s)
-	{
-	    samurai = s;
-	    search(index);
-	}
+        void solve(Samurai s) {
+            samurai = s;
+            search(index);
+        }
 
-	// This is the procedure search(k) from the Dancing Links
-	// algorithm with an added feature to printSudoku only one
-	// solution.
+        // This is the procedure search(k) from the Dancing Links
+        // algorithm with an added feature to printSudoku only one
+        // solution.
 
-	void search(int k)
-	{
-	    // If a result has already been found, return.
+        void search(int k) {
+            // If a result has already been found, return.
 
-	    if (stop)
-		return;
+            if (stop)
+                return;
 
-	    // If there are no more columns, printSudoku the result.
+            // If there are no more columns, printSudoku the result.
 
-	    if (h.r == h)
-	    {
-		int[] a = new int[k];
+            if (h.r == h) {
+                int[] a = new int[k];
 
-		// Extract the row numbers.
+                // Extract the row numbers.
 
-		for (int i = 0; i < k; i++)
-		    a[i] = o[i].n - 1;
+                for (int i = 0; i < k; i++)
+                    a[i] = o[i].n - 1;
 
-		// Report the result and set the stop flag.
+                // Report the result and set the stop flag.
 
-		report(a);
-		if (solutions.size() >= 2)
-			stop = true;
-	    }
+                report(a);
+                if (solutions.size() >= 2)
+                    stop = true;
+            }
 
-	    // Else find the shortest column and cover it.
+            // Else find the shortest column and cover it.
 
-	    else
-	    {
-		Column c = null;
-		int s = Integer.MAX_VALUE;
+            else {
+                Column c = null;
+                int s = Integer.MAX_VALUE;
 
-		// Find the shortest column.
+                // Find the shortest column.
 
-		for (Column j = (Column) h.r; j != h; j = (Column) j.r)
-		    if (s > j.s)
-		    {
-			c = j;
-			s = j.s;
-		    }
+                for (Column j = (Column) h.r; j != h; j = (Column) j.r)
+                    if (s > j.s) {
+                        c = j;
+                        s = j.s;
+                    }
 
-		// Cover it.
+                // Cover it.
 
-		c.cover();
+                c.cover();
 
-		// For each row in the column...
+                // For each row in the column...
 
-		for (Node r = c.d; r != c; r = r.d)
-		{
-		    // Skip this if a result has been found.
+                for (Node r = c.d; r != c; r = r.d) {
+                    // Skip this if a result has been found.
 
-		    if (stop)
-			break;
+                    if (stop)
+                        break;
 
-		    // Save the row in the output array.
+                    // Save the row in the output array.
 
-		    o[k] = r;
+                    o[k] = r;
 
-		    // For each node in this row, cover it's column.
+                    // For each node in this row, cover it's column.
 
-		    for (Node j = r.r; j != r; j = j.r)
-			j.c.cover();
+                    for (Node j = r.r; j != r; j = j.r)
+                        j.c.cover();
 
-		    // Recurse with k + 1.
+                    // Recurse with k + 1.
 
-		    search(k + 1);
+                    search(k + 1);
 
-		    // For each node in this row, uncover it's column.
+                    // For each node in this row, uncover it's column.
 
-		    for (Node j = r.l; j != r; j = j.l)
-			j.c.uncover();
-		}
+                    for (Node j = r.l; j != r; j = j.l)
+                        j.c.uncover();
+                }
 
-		// Uncover the column.
+                // Uncover the column.
 
-		c.uncover();
-	    }
-	}
+                c.uncover();
+            }
+        }
     }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -526,65 +492,60 @@ class Samurai
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-    class Node
-    {
-	Node l;
-	Node r;
-	Node u;
-	Node d;
-	Column c;
-	int n;
+    class Node {
+        Node l;
+        Node r;
+        Node u;
+        Node d;
+        Column c;
+        int n;
 
-	// Create a self referencing node.
+        // Create a self referencing node.
 
-	Node(Column c, int n)
-	{
-	    this.l = this;
-	    this.r = this;
+        Node(Column c, int n) {
+            this.l = this;
+            this.r = this;
 
-	    this.u = this;
-	    this.d = this;
+            this.u = this;
+            this.d = this;
 
-	    // Column and row number.
+            // Column and row number.
 
-	    this.c = c;
-	    this.n = n;
+            this.c = c;
+            this.n = n;
 
-	    // If the column isn't null, add this node to it.
+            // If the column isn't null, add this node to it.
 
-	    if (c != null)
-		c.add(this);
-	}
- 
-	// Remove a row of nodes.
+            if (c != null)
+                c.add(this);
+        }
 
-	void remove()
-	{
-	    Node n = this;
+        // Remove a row of nodes.
 
-	    // Cover this node's column and move on to the next right.
+        void remove() {
+            Node n = this;
 
-	    do
-	    {
-		n.c.cover();
-		n = n.r;
-	    }
+            // Cover this node's column and move on to the next right.
 
-	    // While we haven't got back to this node.
+            do {
+                n.c.cover();
+                n = n.r;
+            }
 
-	    while (n != this);
-	}
+            // While we haven't got back to this node.
 
-	// Add a node to the left of this node.
+            while (n != this);
+        }
 
-	void add(Node n)
-	{
-	    n.l = this.l;
-	    n.r = this;
+        // Add a node to the left of this node.
 
-	    this.l.r = n;
-	    this.l = n;
-	}
+        void add(Node n) {
+            n.l = this.l;
+            n.r = this;
+
+            this.l.r = n;
+            this.l = n;
+        }
     }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -593,105 +554,97 @@ class Samurai
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-    class Column extends Node
-    {
-	int s;
+    class Column extends Node {
+        int s;
 
-	// Create a self referencing column using the Node constructor.
+        // Create a self referencing column using the Node constructor.
 
-	Column(Column c, int n)
-	{
-	    super(null, n);
+        Column(Column c, int n) {
+            super(null, n);
 
-	    if (c != null)
-		c.add(this);
-	}
+            if (c != null)
+                c.add(this);
+        }
 
-	// This is the procedure cover(c) from the Dancing Links
-	// algorithm.
+        // This is the procedure cover(c) from the Dancing Links
+        // algorithm.
 
-	void cover()
-	{
-	    // Cover this column.
+        void cover() {
+            // Cover this column.
 
-	    r.l = l;
-	    l.r = r;
+            r.l = l;
+            l.r = r;
 
-	    // For all the rows in this column going down...
+            // For all the rows in this column going down...
 
-	    for (Node i = d; i != this; i = i.d)
+            for (Node i = d; i != this; i = i.d)
 
-		// For all the nodes in this row except this one,
-		// going right...
+                // For all the nodes in this row except this one,
+                // going right...
 
-		for (Node j = i.r; j != i; j = j.r)
-		{
-		    // Cover this row.
+                for (Node j = i.r; j != i; j = j.r) {
+                    // Cover this row.
 
-		    j.u.d = j.d;
-		    j.d.u = j.u;
+                    j.u.d = j.d;
+                    j.d.u = j.u;
 
-		    // Adjust the column size.
+                    // Adjust the column size.
 
-		    j.c.s--;
-		}
-	}
+                    j.c.s--;
+                }
+        }
 
-	// This is the procedure uncover(c) from the Dancing Links
-	// algorithm.
+        // This is the procedure uncover(c) from the Dancing Links
+        // algorithm.
 
-	void uncover()
-	{
-	    // For all the rows in this column going up...
+        void uncover() {
+            // For all the rows in this column going up...
 
-	    for (Node i = u; i != this; i = i.u)
+            for (Node i = u; i != this; i = i.u)
 
-		// For all the nodes in this row except this one,
-		// going left...
+                // For all the nodes in this row except this one,
+                // going left...
 
-		for (Node j = i.l; j != i; j = j.l)
-		{
-		    // Uncover this row.
+                for (Node j = i.l; j != i; j = j.l) {
+                    // Uncover this row.
 
-		    j.u.d = j;
-		    j.d.u = j;
+                    j.u.d = j;
+                    j.d.u = j;
 
-		    // Adjust the column size.
+                    // Adjust the column size.
 
-		    j.c.s++;
-		}
+                    j.c.s++;
+                }
 
-	    // Uncover this column.
+            // Uncover this column.
 
-	    r.l = this;
-	    l.r = this;
-	}
+            r.l = this;
+            l.r = this;
+        }
 
-	// Add a column to the left of this column.
+        // Add a column to the left of this column.
 
-	void add(Column c)
-	{
-	    c.l = this.l;
-	    c.r = this;
+        void add(Column c) {
+            c.l = this.l;
+            c.r = this;
 
-	    this.l.r = c;
-	    this.l = c;
-	}
+            this.l.r = c;
+            this.l = c;
+        }
 
-	// Add a node to the end of this column.
+        // Add a node to the end of this column.
 
-	void add(Node n)
-	{
-	    n.u = this.u;
-	    n.d = this;
+        void add(Node n) {
+            n.u = this.u;
+            n.d = this;
 
-	    this.u.d = n;
-	    this.u = n;
+            this.u.d = n;
+            this.u = n;
 
-	    // Increment the column size.
+            // Increment the column size.
 
-	    s++;
-	}
+            s++;
+        }
     }
 }
 

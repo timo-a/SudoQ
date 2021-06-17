@@ -10,14 +10,18 @@ import java.util.*
  * @param relevantCandidates relevant Candidates as BitSet
  * @param irrelevantCandidates irrelevant Candidates as BitSet
  */
-class DerivationCell(val position: Position, relevantCandidates: BitSet, irrelevantCandidates: BitSet) {
+class DerivationCell(
+    val position: Position,
+    relevantCandidates: BitSet,
+    irrelevantCandidates: BitSet
+) {
 
     /**
      * Candidates relevant to the Derivation.
      *
      * @return A clone of the [BitSet] representing candidates relevant to the Derivation.
      */
-    public val relevantCandidates: BitSet = relevantCandidates.clone() as BitSet
+    val relevantCandidates: BitSet = relevantCandidates.clone() as BitSet
         get() {
             return field.clone() as BitSet
         }
@@ -27,7 +31,7 @@ class DerivationCell(val position: Position, relevantCandidates: BitSet, irrelev
      *
      * @return A clone of the [BitSet] representing candidates not relevant to the Derivation.
      */
-    public val irrelevantCandidates: BitSet = irrelevantCandidates.clone() as BitSet
+    val irrelevantCandidates: BitSet = irrelevantCandidates.clone() as BitSet
         get() {
             return field.clone() as BitSet
         }

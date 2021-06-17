@@ -23,6 +23,7 @@ class SolveActionLastDigit(target: Position, solution: Int, list: List<Position>
             break
         }
         val structure = if (xSame) "column" else if (ySame) "row" else "block"
-        message = "Field at row " + rwPosition.x + ", column " + rwPosition.y + " must be " + rwSolution + ", because all other fields in it's " + structure + " are occupied"
+        message =
+            "Field at row " + rwPosition.x + ", column " + rwPosition.y + " must be " + rwSolution + ", because all other fields in it's " + structure + " are occupied"
     }
 }

@@ -88,7 +88,7 @@ class BranchingPool {
          * Die Liste von Positionen an denen in diesem Branch eine Lösung eingetragen wurde.
          */
         //TODO rename to sol..LIST??
-        val solutionsSet : MutableList<Position> = ArrayList()
+        val solutionsSet: MutableList<Position> = ArrayList()
 
         /**
          * Eine Map, welche für jede Position dessen Kandidaten vor dem Branchen speichert.

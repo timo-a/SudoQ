@@ -61,7 +61,7 @@ class ActionTree : ObservableModelImpl<ActionTreeElement>(), Iterable<ActionTree
      */
     fun getElement(id: Int): ActionTreeElement? {
 
-        if (1 <= id && id < idCounter) { //TODO is range check necessary?
+        if (id in 1 until idCounter) { //TODO is range check necessary?
             for (ate in this)
                 if (ate.id == id)
                     return ate
@@ -110,7 +110,7 @@ class ActionTree : ObservableModelImpl<ActionTreeElement>(), Iterable<ActionTree
          * @throws NullPointerException
          * falls start oder end null sind
          */
-		 fun findPath(start: ActionTreeElement, end: ActionTreeElement): List<ActionTreeElement>? {
+        fun findPath(start: ActionTreeElement, end: ActionTreeElement): List<ActionTreeElement>? {
             //Assumptions:
             //    every tree has a root with id == 0, so there is a common ancestor node by definition
             if (start.id == end.id) {
@@ -144,7 +144,8 @@ class ActionTree : ObservableModelImpl<ActionTreeElement>(), Iterable<ActionTree
                 commonAncestor = startToRoot.removeLast()
                 endToRoot.removeLast()
             } while (!startToRoot.isEmpty() && !endToRoot.isEmpty()
-                    && startToRoot.last === endToRoot.last)
+                && startToRoot.last === endToRoot.last
+            )
 
             // add the end-root way backwards
             startToRoot.addLast(commonAncestor)
@@ -155,11 +156,15 @@ class ActionTree : ObservableModelImpl<ActionTreeElement>(), Iterable<ActionTree
             return startToRoot
         }
 
-        private fun noCommonAncestorFoundMoreToGo(startToRoot: LinkedList<ActionTreeElement>, endToRoot: LinkedList<ActionTreeElement>): Boolean {
+        private fun noCommonAncestorFoundMoreToGo(
+            startToRoot: LinkedList<ActionTreeElement>,
+            endToRoot: LinkedList<ActionTreeElement>
+        ): Boolean {
             val lastId1 = startToRoot.last.id
             val lastId2 = endToRoot.last.id
             val lastElementsDiffer = lastId1 != lastId2
-            val notBothRoot = lastId1 > 1 || lastId2 > 1 //not necessary when we are absolutely sure to end up at the same root node
+            val notBothRoot =
+                lastId1 > 1 || lastId2 > 1 //not necessary when we are absolutely sure to end up at the same root node
             //maybe compare ids in last elements differ
             return lastElementsDiffer && notBothRoot
         }
@@ -167,7 +172,10 @@ class ActionTree : ObservableModelImpl<ActionTreeElement>(), Iterable<ActionTree
         /**
          * adds parents to current until current's last element has an id lesser or equal other's
          */
-        private fun catchUp(current: LinkedList<ActionTreeElement>, other: LinkedList<ActionTreeElement>) {
+        private fun catchUp(
+            current: LinkedList<ActionTreeElement>,
+            other: LinkedList<ActionTreeElement>
+        ) {
             while (current.last.id > other.last.id) {
                 val parent = current.last.parent
                 current.addLast(parent)

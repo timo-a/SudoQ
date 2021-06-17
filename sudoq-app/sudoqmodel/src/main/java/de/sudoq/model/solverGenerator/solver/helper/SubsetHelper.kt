@@ -12,33 +12,36 @@ import java.util.*
  * satisfy the `Naked` constrain.
  *  @param complexity desired complexity for the final sudoku. Must be `>= 0`.
  */
-abstract class SubsetHelper protected constructor(sudoku: SolverSudoku,
-                                                  protected var level: Int,
-                                                  complexity: Int) : SolveHelper(sudoku, complexity) {
+abstract class SubsetHelper protected constructor(
+    sudoku: SolverSudoku,
+    protected var level: Int,
+    complexity: Int
+) : SolveHelper(sudoku, complexity) {
 
     /**
      * A BitSet comprising all candidates of the currently inspected constraint.
      */
     @JvmField
-	protected var constraintSet : BitSet  = BitSet()//TODO call it candidateset?
+    protected var constraintSet: BitSet = BitSet()//TODO call it candidateset?
 
     /**
      * A CandidateSet comprising all candidates of the currently inspected subset.
      */
     @JvmField
-	protected var currentSet: CandidateSet = CandidateSet()
+    protected var currentSet: CandidateSet = CandidateSet()
 
     /**
      * The positions of the currently inspected subset.
      */
     @JvmField
-	protected var subsetPositions : MutableList<Position> = Stack() //TODO make Stack? might be far more readable
+    protected var subsetPositions: MutableList<Position> =
+        Stack() //TODO make Stack? might be far more readable
 
     /**
      * Ein BitSet to compare local copies.
      */
     @JvmField
-	protected var localCopy: CandidateSet = CandidateSet()
+    protected var localCopy: CandidateSet = CandidateSet()
     //this is for performance so no new object has to be created
 
 
@@ -46,7 +49,7 @@ abstract class SubsetHelper protected constructor(sudoku: SolverSudoku,
      * All [Constraint]s of the Sudoku.
      */
     //TODO see if it can be replaced by iterator or just the sudokutype, because we dont want to modify the list of constraints!!!
-    protected var allConstraints : ArrayList<Constraint> = this.sudoku.sudokuType!!.getConstraints()
+    private var allConstraints: Iterator<Constraint> = this.sudoku.sudokuType!!.iterator()
 
     /**
      * Searches for a subset with the size `level` (specified in the constructor),
@@ -116,13 +119,15 @@ abstract class SubsetHelper protected constructor(sudoku: SolverSudoku,
      */
     protected fun getNextSubset(): Boolean {
         var nextSetExists = false
-        val allCandidates = constraintSet //rename for clarity, holds all candiates(set to 1) in the current constraint
+        val allCandidates =
+            constraintSet //rename for clarity, holds all candiates(set to 1) in the current constraint
         val lastBitSet = currentSet.length() - 1
         // Get the last set candidate
 
         // Calculate next candidate set if existing
         var nextCandidate = lastBitSet
-        var currentCandidate = allCandidates.nextSetBit(lastBitSet + 1) //test if there is another candidate -> we can shift
+        var currentCandidate =
+            allCandidates.nextSetBit(lastBitSet + 1) //test if there is another candidate -> we can shift
         if (currentCandidate != -1) //if we found one
             currentCandidate++ //increment for coming 'if' namely 'if (allCandidates.nextSetBit(nextCandidate + 1) != currentCandidate) {' left side is either -1 => no next set or currentCandidate, but we want ineq in that case , so increment it. Why not writing '-1' in the left side? because loop: the limit won't always be the last bit, it is shifted to the left.
         while (!nextSetExists && nextCandidate != -1) { //initially true iff currentSet not empty
@@ -145,7 +150,8 @@ abstract class SubsetHelper protected constructor(sudoku: SolverSudoku,
                 currentCandidate = nextCandidate
                 nextCandidate = -1 //
                 while (currentSet.nextSetBit(nextCandidate + 1) < currentCandidate) { // == nextCandidate = currentSet.previousSetBit(nextCandidate)
-                    nextCandidate = currentSet.nextSetBit(nextCandidate + 1) // but we don't have the api for it
+                    nextCandidate =
+                        currentSet.nextSetBit(nextCandidate + 1) // but we don't have the api for it
                 }
                 currentSet.clear(currentCandidate)
             }
@@ -159,7 +165,8 @@ abstract class SubsetHelper protected constructor(sudoku: SolverSudoku,
 
         /* are all true bits at the end? == are all k bits at the end true?*/
         var lastElement = true
-        for (i in 0 until constraintSet.cardinality()) lastElement = lastElement and current[constraintSet.cardinality() - i]
+        for (i in 0 until constraintSet.cardinality()) lastElement =
+            lastElement and current[constraintSet.cardinality() - i]
         return if (lastElement) false // we're done
         else {
             //advance to next combination, project back to our candidates

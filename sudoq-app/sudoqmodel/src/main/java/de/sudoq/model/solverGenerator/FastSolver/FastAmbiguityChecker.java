@@ -11,10 +11,11 @@ public class FastAmbiguityChecker {
 
     /**
      * Determines whether there are multiple solutions to the passed sudoku.
+     *
      * @param sudoku Sudoku object to be tested for multiple solutions
      * @return true if there are several solutions false otherwise
      */
-    public static boolean isAmbiguous(Sudoku sudoku){
+    public static boolean isAmbiguous(Sudoku sudoku) {
         FastBranchAndBound solver = new FastBranchAndBound(sudoku);
 
         boolean result = solver.solveAll();
@@ -25,7 +26,7 @@ public class FastAmbiguityChecker {
         return result && solver.severalSolutionsExist();
     }
 
-    public static boolean isAmbiguous2(Sudoku sudoku){
+    public static boolean isAmbiguous2(Sudoku sudoku) {
         FastBranchAndBound solver = new FastBranchAndBound(sudoku);
 
         //looking for first solution
@@ -40,21 +41,10 @@ public class FastAmbiguityChecker {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * If there are several solutions, this method holds the position of the first branch point.
      * Call only after an `isAmbiguous` call that returned `true`. Otherwise it is null.
+     *
      * @return position of the first branchingPoint, i.e. where backtracking was first applied or `null` if last call to `isAmbiguous` was unsuccessful.
      */
     public static Position getFirstBranchPosition() {

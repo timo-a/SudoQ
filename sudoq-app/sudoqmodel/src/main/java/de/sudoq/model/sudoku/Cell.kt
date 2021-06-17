@@ -15,7 +15,8 @@ import java.util.*
  * editierbility, notes and the correct solution. It extends OberservableModel so changes in value
  * und notes can be observed.
  */
-class Cell(editable: Boolean, solution: Int, id: Int, numberOfValues: Int) : ObservableModelImpl<Cell>(), Cloneable {
+class Cell(editable: Boolean, solution: Int, id: Int, numberOfValues: Int) :
+    ObservableModelImpl<Cell>(), Cloneable {
 
     /** A unique number identifying the cell in the scope of the sudoku */
     val id: Int
@@ -42,7 +43,7 @@ class Cell(editable: Boolean, solution: Int, id: Int, numberOfValues: Int) : Obs
      * @param id id of this cell
      * @param numberOfValues the number of values this cell can take (e.g. 9 for regular sudoku)
      */
-    constructor(id: Int, numberOfValues: Int) : this(true, EMPTYVAL, id, numberOfValues) {}
+    constructor(id: Int, numberOfValues: Int) : this(true, EMPTYVAL, id, numberOfValues)
 
     /** The current value in this cell */
     var currentValue: Int
@@ -193,10 +194,12 @@ class Cell(editable: Boolean, solution: Int, id: Int, numberOfValues: Int) : Obs
      * the created object is a perfect clone: even the id attribute is cloned
      */
     public override fun clone(): Any {
-        val clone = Cell(isEditable,
-                solution,
-                id,
-                numberOfValues)
+        val clone = Cell(
+            isEditable,
+            solution,
+            id,
+            numberOfValues
+        )
         clone.currentValue = currentVal
         clone.noticeFlags = noticeFlags.clone() as BitSet
         return clone

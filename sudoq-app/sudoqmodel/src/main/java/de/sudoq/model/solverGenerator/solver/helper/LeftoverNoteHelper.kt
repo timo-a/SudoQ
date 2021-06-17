@@ -9,7 +9,8 @@ import de.sudoq.model.sudoku.Constraint
 /**
  * @param complexity desired complexity for the final sudoku. Must be `>= 0`.
  */
-open class LeftoverNoteHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku, complexity) {
+open class LeftoverNoteHelper(sudoku: SolverSudoku, complexity: Int) :
+    SolveHelper(sudoku, complexity) {
 
     override fun update(buildDerivation: Boolean): Boolean {
         var foundOne = false

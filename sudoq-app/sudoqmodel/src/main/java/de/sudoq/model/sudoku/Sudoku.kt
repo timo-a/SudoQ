@@ -11,19 +11,9 @@ import de.sudoq.model.ModelChangeListener
 import de.sudoq.model.ObservableModelImpl
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
-import de.sudoq.model.xml.XmlAttribute
-import de.sudoq.model.xml.XmlTree
-import de.sudoq.model.xml.Xmlable
-import de.sudoq.model.xml.Xmlable2
-import java.io.File
 import java.util.*
-import kotlin.collections.Iterable
-import kotlin.collections.MutableMap
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.iterator
 import kotlin.collections.set
 
 /**
@@ -32,15 +22,15 @@ import kotlin.collections.set
 open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListener<Cell> {
 
     /** An ID uniquely identifying the Sudoku */
-    var id : Int = 0
+    var id: Int = 0
 
     /** Counts how often the Sudoku was already transformed */
     var transformCount = 0
         private set
 
     /** Eine Map, welche jeder Position des Sudokus ein Feld zuweist */
-	@JvmField
-	var cells: HashMap<Position, Cell>? = null
+    @JvmField
+    var cells: HashMap<Position, Cell>? = null
 
     private var cellPositions: MutableMap<Int, Position>? = null
 
@@ -60,9 +50,11 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
      * @param setValues A Map from Position to whether the value is pre-filled.
      */
     @JvmOverloads
-    constructor(type: SudokuType,
-                map: PositionMap<Int>? = PositionMap((type.size)!!),
-                setValues: PositionMap<Boolean>? = PositionMap((type.size)!!)) {
+    constructor(
+        type: SudokuType,
+        map: PositionMap<Int>? = PositionMap((type.size)!!),
+        setValues: PositionMap<Boolean>? = PositionMap((type.size)!!)
+    ) {
         var cellIdCounter = 1
         cellPositions = HashMap()
         sudokuType = type
@@ -97,11 +89,13 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
     }
 
     /*init from basic properties. use this to init from BE */
-    constructor(id : Int,
-                transformCount : Int,
-                sudokuType: SudokuType,
-                complexity: Complexity,
-                cells: HashMap<Position, Cell>) {
+    constructor(
+        id: Int,
+        transformCount: Int,
+        sudokuType: SudokuType,
+        complexity: Complexity,
+        cells: HashMap<Position, Cell>
+    ) {
         this.id = id
         this.transformCount = transformCount
         this.sudokuType = sudokuType
@@ -109,7 +103,7 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
         this.cells = cells
 
         cellPositions = HashMap()
-        cells.forEach { (pos,c) -> cellPositions!![c.id] = pos }
+        cells.forEach { (pos, c) -> cellPositions!![c.id] = pos }
 
         cells.values.forEach { cell -> cell.registerListener(this) }
     }
@@ -165,7 +159,7 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
         if (cellPositions == null)
             return false
 
-        val p : Position = cellPositions!![id] ?: return false
+        val p: Position = cellPositions!![id] ?: return false
 
         return cells?.get(p) != null
 
@@ -218,7 +212,6 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
     }
 
 
-
     /**
      * {@inheritDoc}
      */
@@ -228,7 +221,7 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
             val typeMatch = sudokuType!!.enumType === other.sudokuType!!.enumType
             var fieldsMatch = true
             for (f in cells!!.values) {
-                if (!other.hasCell(f.id) || f != other.getCell(f.id)){
+                if (!other.hasCell(f.id) || f != other.getCell(f.id)) {
                     fieldsMatch = false
                     break
                 }
@@ -265,7 +258,8 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
                 var op: String
                 if (f != null) { //feld existiert
                     val value = f.currentValue
-                    op = if (value == -1) EMPTY else if (value < 10) OFFSET + value else value.toString() + ""
+                    op =
+                        if (value == -1) EMPTY else if (value < 10) OFFSET + value else value.toString() + ""
                     sb.append(op)
                 } else {
                     sb.append(NONE)

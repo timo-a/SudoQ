@@ -16,7 +16,8 @@ import java.util.*
  * it has to be in intersection and cannot be in J_only
  *
  */
-class LockedCandandidatesHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku, complexity) {
+class LockedCandandidatesHelper(sudoku: SolverSudoku, complexity: Int) :
+    SolveHelper(sudoku, complexity) {
 
     override fun update(buildDerivation: Boolean): Boolean {
         var success = false
@@ -69,7 +70,12 @@ class LockedCandandidatesHelper(sudoku: SolverSudoku, complexity: Int) : SolveHe
                 if (!removableNotes.isEmpty) {
                     success = true
                     if (buildDerivation) {
-                        buildDerivation(lockedConstraint, reducibleConstraint, removableNotes, toBeRemovedFrom)
+                        buildDerivation(
+                            lockedConstraint,
+                            reducibleConstraint,
+                            removableNotes,
+                            toBeRemovedFrom
+                        )
                     }
 
                     //remove first of all removable notes
@@ -82,8 +88,10 @@ class LockedCandandidatesHelper(sudoku: SolverSudoku, complexity: Int) : SolveHe
         return false
     }
 
-    private fun buildDerivation(lockedConstraint: Constraint, reducibleConstraint: Constraint,
-                                removableNotes: BitSet, toBeRemovedFrom: List<Position>) {
+    private fun buildDerivation(
+        lockedConstraint: Constraint, reducibleConstraint: Constraint,
+        removableNotes: BitSet, toBeRemovedFrom: List<Position>
+    ) {
         /* since the derivations seem to be never used, I'm a bit sloppy here...
                             *  as Blocks the intersecting constraints are added
                             *  as fields all fields that have a note removed are added*/
@@ -97,7 +105,13 @@ class LockedCandandidatesHelper(sudoku: SolverSudoku, complexity: Int) : SolveHe
         for (p in toBeRemovedFrom) if (sudoku.getCurrentCandidates(p)[first]) {
             val irrelevantCandidates = sudoku.getCurrentCandidates(p).clone() as BitSet
             irrelevantCandidates.clear(first)
-            lastDerivation.addDerivationCell(DerivationCell(p, relevantCandidates, irrelevantCandidates))
+            lastDerivation.addDerivationCell(
+                DerivationCell(
+                    p,
+                    relevantCandidates,
+                    irrelevantCandidates
+                )
+            )
         }
         //Todo better: list fields where it is removed
         lastDerivation.setDescription("Note " + (first + 1))

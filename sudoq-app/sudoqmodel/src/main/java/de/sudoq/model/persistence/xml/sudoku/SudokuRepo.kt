@@ -10,19 +10,21 @@ import java.io.IOException
 import java.util.*
 
 //todo parametrize, so that an instance is per type, complexity
-class SudokuRepo(private val outerSudokusDir: File,
-                 type: SudokuTypes,
-                 complexity: Complexity) : IRepo<SudokuBE> {
+class SudokuRepo(
+    private val outerSudokusDir: File,
+    type: SudokuTypes,
+    complexity: Complexity
+) : IRepo<SudokuBE> {
 
-    private val sudokusDir : File = getSudokuDir(type, complexity)
-    private val type: SudokuTypes = type
-    private val complexity: Complexity = complexity
+    private val sudokusDir: File = getSudokuDir(type, complexity)
 
-    constructor(sudokusDir: File, sudoku: Sudoku) : this(sudokusDir, sudoku.sudokuType!!.enumType!!, sudoku.complexity!!)
-    constructor(sudokusDir: File, sudoku: SudokuBE) : this(sudokusDir, sudoku.sudokuType!!.enumType!!, sudoku.complexity!!)
+    constructor(sudokusDir: File, sudoku: Sudoku) : this(
+        sudokusDir,
+        sudoku.sudokuType!!.enumType!!,
+        sudoku.complexity!!
+    )
 
     private val helper: XmlHelper = XmlHelper()
-
 
 
     override fun create(): SudokuBE {
@@ -39,7 +41,7 @@ class SudokuRepo(private val outerSudokusDir: File,
         return read(sudokuBE.id)
     }
 
-    private fun getSudokuFile(id: Int) : File {
+    private fun getSudokuFile(id: Int): File {
         return File(sudokusDir.absolutePath + File.separator + "sudoku_$id.xml")
     }
 
@@ -59,7 +61,12 @@ class SudokuRepo(private val outerSudokusDir: File,
     }
 
     override fun update(t: SudokuBE): SudokuBE {
-        val file = File(getSudokuDir(t.sudokuType!!.enumType!!, t.complexity!!).absolutePath + File.separator + "sudoku_" + t.id + ".xml")
+        val file = File(
+            getSudokuDir(
+                t.sudokuType!!.enumType!!,
+                t.complexity!!
+            ).absolutePath + File.separator + "sudoku_" + t.id + ".xml"
+        )
 
         try {
             val tree = t.toXmlTree()

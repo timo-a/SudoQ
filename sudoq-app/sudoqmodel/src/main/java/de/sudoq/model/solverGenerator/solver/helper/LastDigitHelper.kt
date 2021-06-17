@@ -26,7 +26,10 @@ class LastDigitHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudok
      * @return the only position in `positions` not solved by the user, if there is one
      * null otherwise
      */
-    private fun onlyOneLeft(positions: List<Position>, remaining: MutableList<Position>): Position? {
+    private fun onlyOneLeft(
+        positions: List<Position>,
+        remaining: MutableList<Position>
+    ): Position? {
         assert(remaining.isEmpty())
         var candidate: Position? = null //no empty fields found
         for (p in positions) if (sudoku.getCell(p)!!.isNotSolved) {
@@ -57,7 +60,8 @@ class LastDigitHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudok
                 for (p in remaining) otherSolutions.add(sudoku.getCell(p!!)!!.currentValue)
 
                 //make list with all possible values
-                val possibleSolutions: MutableList<Int> = ArrayList(sudoku.sudokuType!!.symbolIterator as AbstractList<Int>)
+                val possibleSolutions: MutableList<Int> =
+                    ArrayList(sudoku.sudokuType!!.symbolIterator as AbstractList<Int>)
 
                 /* cut away all other solutions */possibleSolutions.removeAll(otherSolutions)
                 if (possibleSolutions.size == 1) {
@@ -70,9 +74,19 @@ class LastDigitHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudok
                         relevant.set(solutionValue) //set solution to 1
                         val irrelevant = BitSet()
                         irrelevant.xor(relevant) // create complement to relevant
-                        derivation!!.addDerivationCell(DerivationCell(candidate, relevant, irrelevant))
+                        derivation!!.addDerivationCell(
+                            DerivationCell(
+                                candidate,
+                                relevant,
+                                irrelevant
+                            )
+                        )
                         derivation!!.addDerivationBlock(DerivationBlock(c))
-                        derivation!!.setDescription("Look at " + classifyGroup(c.getPositions()) + "! Only field " + positionToRealWorld(candidate) + "is empty.")
+                        derivation!!.setDescription(
+                            "Look at " + classifyGroup(c.getPositions()) + "! Only field " + positionToRealWorld(
+                                candidate
+                            ) + "is empty."
+                        )
                     }
                 }
             }

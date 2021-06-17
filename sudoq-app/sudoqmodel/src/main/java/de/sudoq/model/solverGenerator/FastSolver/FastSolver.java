@@ -9,6 +9,7 @@ public interface FastSolver {
 
     /**
      * assumes prior call to hasSolution, undefined behaviour if no solution
+     *
      * @return a PositionMap of the solutions for each Position
      */
     PositionMap<Integer> getSolutions();
@@ -17,6 +18,7 @@ public interface FastSolver {
 
     /**
      * assumes prior call of `isAmbiguous`, undef behaviour if not ambiguous
+     *
      * @return a Position that is ambiguous.
      */
     Position getAmbiguousPos();
