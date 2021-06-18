@@ -33,7 +33,8 @@ import java.util.*
  * @param context Der Kontext, in dem diese View angezeigt wird
 
  */
-class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellInteraction, ZoomableView {
+class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellInteraction,
+    ZoomableView {
 
     /**
      * Das Game, welches diese Anzeige verwaltet
@@ -94,7 +95,8 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
                 val params = LayoutParams(currentCellViewSize, defaultCellViewSize)
                 params.topMargin = y * currentCellViewSize + y
                 params.leftMargin = x * currentCellViewSize + x
-                sudokuCellViews!![x][y] = SudokuCellView(context, game, cell, isMarkWrongSymbolAvailable)
+                sudokuCellViews!![x][y] =
+                    SudokuCellView(context, game, cell, isMarkWrongSymbolAvailable)
                 cell.registerListener(sudokuCellViews!![x][y]!!)
                 this.addView(sudokuCellViews!![x][y], params)
             }
@@ -104,7 +106,12 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
         val params = LayoutParams(currentCellViewSize, defaultCellViewSize)
         params.topMargin = (y - 1) * currentCellViewSize + (y - 1) + currentTopMargin
         params.leftMargin = (x - 1) * currentCellViewSize + (x - 1) + currentLeftMargin
-        sudokuCellViews!![x][y] = SudokuCellView(context, game, game.sudoku!!.getCell(Position[x - 1, y - 1])!!, isMarkWrongSymbolAvailable)
+        sudokuCellViews!![x][y] = SudokuCellView(
+            context,
+            game,
+            game.sudoku!!.getCell(Position[x - 1, y - 1])!!,
+            isMarkWrongSymbolAvailable
+        )
         this.addView(sudokuCellViews!![x][y], params)
         sudokuCellViews!![x][y]!!.visibility = INVISIBLE
 
@@ -225,8 +232,10 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
         val numberOfCells = if (width < height) sudokuType!!.size!!.x else sudokuType!!.size!!.y
         defaultCellViewSize = (size - (numberOfCells + 1) * spacing) / numberOfCells
         // this.currentCellViewSize = this.defaultCellViewSize;
-        val cellSizeX = sudokuType.size!!.x * currentCellViewSize + (sudokuType.size!!.x - 1) * spacing
-        val cellSizeY = sudokuType.size!!.y * currentCellViewSize + (sudokuType.size!!.y - 1) * spacing
+        val cellSizeX =
+            sudokuType.size!!.x * currentCellViewSize + (sudokuType.size!!.x - 1) * spacing
+        val cellSizeY =
+            sudokuType.size!!.y * currentCellViewSize + (sudokuType.size!!.y - 1) * spacing
         leftMargin = (width - cellSizeX) / 2
         topMargin = (height - cellSizeY) / 2
         Log.d(LOG_TAG, "Sudoku width: $width")

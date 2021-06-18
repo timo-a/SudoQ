@@ -18,7 +18,7 @@ import de.sudoq.model.actionTree.ActionTreeElement
  * Elements innerhalb des Aktionsbaumes.
  */
 class ActiveElement(context: Context, inner: ActionTreeElementView, ate: ActionTreeElement) :
-        ActionTreeElementView(context, inner, ate) {
+    ActionTreeElementView(context, inner, ate) {
 
     /**
      * {@inheritDoc}
@@ -31,7 +31,12 @@ class ActiveElement(context: Context, inner: ActionTreeElementView, ate: ActionT
         activePaint.style = Paint.Style.STROKE
         activePaint.isAntiAlias = true
         val radius = (ActionTreeController.MAX_ELEMENT_VIEW_SIZE.toFloat() / 2.1).toInt()
-        canvas.drawCircle((ActionTreeController.MAX_ELEMENT_VIEW_SIZE / 2).toFloat(), (ActionTreeController.MAX_ELEMENT_VIEW_SIZE / 2).toFloat(), radius.toFloat(), activePaint)
+        canvas.drawCircle(
+            (ActionTreeController.MAX_ELEMENT_VIEW_SIZE / 2).toFloat(),
+            (ActionTreeController.MAX_ELEMENT_VIEW_SIZE / 2).toFloat(),
+            radius.toFloat(),
+            activePaint
+        )
     }
 
     companion object {

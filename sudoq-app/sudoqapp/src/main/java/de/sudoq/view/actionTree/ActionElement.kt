@@ -17,7 +17,8 @@ import de.sudoq.model.actionTree.ActionTreeElement
  * Die ActionElementView stellt im ActionTree eine einfache Aktion dar.
  *
  */
-class ActionElement(context: Context, inner: ActionTreeElementView?, ate: ActionTreeElement) : ActionTreeElementView(context, inner, ate) {
+class ActionElement(context: Context, inner: ActionTreeElementView?, ate: ActionTreeElement) :
+    ActionTreeElementView(context, inner, ate) {
 
     /**
      * {@inheritDoc}
@@ -26,6 +27,12 @@ class ActionElement(context: Context, inner: ActionTreeElementView?, ate: Action
         val elementPaint = Paint()
         elementPaint.color = actionColor
         val rectSize = (ActionTreeController.MAX_ELEMENT_VIEW_SIZE.toFloat() / 3).toInt()
-        canvas.drawRect(rectSize.toFloat(), rectSize.toFloat(), (ActionTreeController.MAX_ELEMENT_VIEW_SIZE - rectSize).toFloat(), (ActionTreeController.MAX_ELEMENT_VIEW_SIZE - rectSize).toFloat(), elementPaint)
+        canvas.drawRect(
+            rectSize.toFloat(),
+            rectSize.toFloat(),
+            (ActionTreeController.MAX_ELEMENT_VIEW_SIZE - rectSize).toFloat(),
+            (ActionTreeController.MAX_ELEMENT_VIEW_SIZE - rectSize).toFloat(),
+            elementPaint
+        )
     }
 }

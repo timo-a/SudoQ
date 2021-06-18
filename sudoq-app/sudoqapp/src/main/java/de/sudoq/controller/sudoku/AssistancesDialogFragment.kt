@@ -32,10 +32,23 @@ class AssistancesDialogFragment : DialogFragment() {
         game = activity.game
         controller = activity.sudokuController
         val itemStack = Stack<CharSequence?>()
-        itemStack.addAll(Arrays.asList(getString(R.string.sf_sudoku_assistances_solve_surrender), getString(R.string.sf_sudoku_assistances_back_to_valid_state), getString(R.string.sf_sudoku_assistances_back_to_bookmark), getString(R.string.sf_sudoku_assistances_check), getString(R.string.sf_sudoku_assistances_solve_random)))
+        itemStack.addAll(
+            Arrays.asList(
+                getString(R.string.sf_sudoku_assistances_solve_surrender),
+                getString(R.string.sf_sudoku_assistances_back_to_valid_state),
+                getString(R.string.sf_sudoku_assistances_back_to_bookmark),
+                getString(R.string.sf_sudoku_assistances_check),
+                getString(R.string.sf_sudoku_assistances_solve_random)
+            )
+        )
         val v = (getActivity() as SudokuActivity).currentCellView
         if (v != null && v.cell.isNotSolved) itemStack.add(getString(R.string.sf_sudoku_assistances_solve_specific))
-        val p = Profile.getInstance(activity.getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE))
+        val p = Profile.getInstance(
+            activity.getDir(
+                getString(R.string.path_rel_profiles),
+                Context.MODE_PRIVATE
+            )
+        )
         if (p.assistances.isHelperSet) itemStack.add(getString(R.string.sf_sudoku_assistances_give_hint))
         if (p.appSettings.isDebugSet) itemStack.add(getString(R.string.sf_sudoku_assistances_crash))
 
@@ -45,11 +58,27 @@ class AssistancesDialogFragment : DialogFragment() {
         builder.setTitle(getString(R.string.sf_sudoku_assistances_title))
         builder.setItems(items) { dialog, item ->
             when (item) {
-                0 -> if (!controller!!.onSolveAll()) Toast.makeText(activity, R.string.toast_solved_wrong, Toast.LENGTH_SHORT).show()
+                0 -> if (!controller!!.onSolveAll()) Toast.makeText(
+                    activity,
+                    R.string.toast_solved_wrong,
+                    Toast.LENGTH_SHORT
+                ).show()
                 1 -> game!!.goToLastCorrectState()
                 2 -> game!!.goToLastBookmark()
-                3 -> if (game!!.checkSudoku()) Toast.makeText(activity, R.string.toast_solved_correct, Toast.LENGTH_SHORT).show() else Toast.makeText(activity, R.string.toast_solved_wrong, Toast.LENGTH_LONG).show()
-                4 -> if (!controller!!.onSolveOne()) Toast.makeText(activity, R.string.toast_solved_wrong, Toast.LENGTH_SHORT).show()
+                3 -> if (game!!.checkSudoku()) Toast.makeText(
+                    activity,
+                    R.string.toast_solved_correct,
+                    Toast.LENGTH_SHORT
+                ).show() else Toast.makeText(
+                    activity,
+                    R.string.toast_solved_wrong,
+                    Toast.LENGTH_LONG
+                ).show()
+                4 -> if (!controller!!.onSolveOne()) Toast.makeText(
+                    activity,
+                    R.string.toast_solved_wrong,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             /* not inside switch, because they are at variable positions */
             if (items[item] === getString(R.string.sf_sudoku_assistances_solve_specific)) {

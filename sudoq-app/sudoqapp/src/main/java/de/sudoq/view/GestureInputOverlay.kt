@@ -25,9 +25,10 @@ class GestureInputOverlay(context: Context?) : GestureOverlayView(context) {
         removeView(this.title)
         this.title.text = title
         val layoutParams = LayoutParams(
-                LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT,
-                Gravity.CENTER_HORIZONTAL)
+            LayoutParams.WRAP_CONTENT,
+            LayoutParams.WRAP_CONTENT,
+            Gravity.CENTER_HORIZONTAL
+        )
         addView(this.title, layoutParams)
     }
 

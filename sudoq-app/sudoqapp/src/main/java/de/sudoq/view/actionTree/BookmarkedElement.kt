@@ -18,7 +18,7 @@ import de.sudoq.model.actionTree.ActionTreeElement
  * Lesezeichen markierten Elements.
  */
 class BookmarkedElement(context: Context, inner: ActionTreeElementView, ate: ActionTreeElement) :
-        ActionTreeElementView(context, inner, ate) {
+    ActionTreeElementView(context, inner, ate) {
     /**
      * {@inheritDoc}
      */
@@ -35,7 +35,12 @@ class BookmarkedElement(context: Context, inner: ActionTreeElementView, ate: Act
         innerPaint.color = actionColor
         innerPaint.isAntiAlias = true
         val innerRadius = (ActionTreeController.MAX_ELEMENT_VIEW_SIZE.toFloat() / 6 * 1.42).toInt()
-        canvas!!.drawCircle((ActionTreeController.MAX_ELEMENT_VIEW_SIZE / 2).toFloat(), (ActionTreeController.MAX_ELEMENT_VIEW_SIZE / 2).toFloat(), innerRadius.toFloat(), innerPaint)
+        canvas!!.drawCircle(
+            (ActionTreeController.MAX_ELEMENT_VIEW_SIZE / 2).toFloat(),
+            (ActionTreeController.MAX_ELEMENT_VIEW_SIZE / 2).toFloat(),
+            innerRadius.toFloat(),
+            innerPaint
+        )
     }
 
     companion object {

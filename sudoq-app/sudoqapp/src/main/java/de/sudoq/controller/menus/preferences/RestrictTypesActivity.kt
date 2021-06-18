@@ -88,7 +88,8 @@ class RestrictTypesActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
         super.onPrepareOptionsMenu(menu)
 
         //Toast.makeText(getApplicationContext(), "prepOpt called. s_1: "+types.size()+" s_2: "+types.getAllTypes().size(), Toast.LENGTH_LONG).show();
-        menu.findItem(R.id.action_restore_all).isVisible = types!!.size < types!!.allTypes.size //offer option to restore all only when some are disabled...
+        menu.findItem(R.id.action_restore_all).isVisible =
+            types!!.size < types!!.allTypes.size //offer option to restore all only when some are disabled...
         return true
     }
 
@@ -126,13 +127,22 @@ class RestrictTypesActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
         /* toggle item */
         val st = adapter!!.getItem(position)
         if (types!!.contains(st!!) && types!!.size == 1) //trying to remove last element -> deny and warn
-            Toast.makeText(this, R.string.advanced_settings_restrict_types_empty_warning, Toast.LENGTH_SHORT) else if (types!!.contains(st)) types!!.remove(st) else types!!.add(st)
+            Toast.makeText(
+                this,
+                R.string.advanced_settings_restrict_types_empty_warning,
+                Toast.LENGTH_SHORT
+            ) else if (types!!.contains(st)) types!!.remove(st) else types!!.add(st)
         val p = getInstance(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
         p.saveChanges()
         adapter!!.notifyDataSetChanged()
     }
 
-    override fun onItemLongClick(parent: AdapterView<*>?, view: View, position: Int, id: Long): Boolean {
+    override fun onItemLongClick(
+        parent: AdapterView<*>?,
+        view: View,
+        position: Int,
+        id: Long
+    ): Boolean {
 
         /* nothing */
         return true //prevent itemclick from fire-ing as well

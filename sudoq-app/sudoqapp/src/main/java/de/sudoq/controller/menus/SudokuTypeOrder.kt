@@ -15,16 +15,17 @@ object SudokuTypeOrder {
     init {
         // position in ui -> enum
         val order = arrayOf(
-                SudokuTypes.standard9x9,
-                SudokuTypes.standard4x4,
-                SudokuTypes.standard6x6,
-                SudokuTypes.standard16x16,
-                SudokuTypes.samurai,
-                SudokuTypes.Xsudoku,
-                SudokuTypes.HyperSudoku,
-                SudokuTypes.squigglya,
-                SudokuTypes.squigglyb,
-                SudokuTypes.stairstep)
+            SudokuTypes.standard9x9,
+            SudokuTypes.standard4x4,
+            SudokuTypes.standard6x6,
+            SudokuTypes.standard16x16,
+            SudokuTypes.samurai,
+            SudokuTypes.Xsudoku,
+            SudokuTypes.HyperSudoku,
+            SudokuTypes.squigglya,
+            SudokuTypes.squigglyb,
+            SudokuTypes.stairstep
+        )
         //enum id -> ui pos
         ordinals = IntArray(SudokuTypes.values().size)
         for ((uiPos, enum) in order.withIndex()) {

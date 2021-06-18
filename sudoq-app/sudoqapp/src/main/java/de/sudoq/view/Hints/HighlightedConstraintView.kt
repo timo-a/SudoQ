@@ -24,9 +24,11 @@ import de.sudoq.view.SudokuLayout
  * einzelnes Feld innerhalb eines Sudokus dar. Es erweitert den Android View um
  * Funktionalität zur Benutzerinteraktion und Färben.
  */
-class HighlightedConstraintView(context: Context, sl: SudokuLayout,
-                                /** The Constraint represented by this View */
-                                private val constraint: Constraint, color: Int) : View(context) {
+class HighlightedConstraintView(
+    context: Context, sl: SudokuLayout,
+    /** The Constraint represented by this View */
+    private val constraint: Constraint, color: Int
+) : View(context) {
 
     /**
      * Color of the margin
@@ -100,7 +102,8 @@ class HighlightedConstraintView(context: Context, sl: SudokuLayout,
                 canvas.drawLine(startX, bottomY, stopX, bottomY, paint)
             }
 
-            /* Cells at corners of their block draw a circle for a round circumference*/paint.style = Paint.Style.FILL_AND_STROKE
+            /* Cells at corners of their block draw a circle for a round circumference*/paint.style =
+                Paint.Style.FILL_AND_STROKE
             val radius = edgeRadius + spacing / 2
             val angle = (90 + 10).toShort()
             /*TopLeft*/if (isLeft && isTop) {
@@ -142,27 +145,45 @@ class HighlightedConstraintView(context: Context, sl: SudokuLayout,
 					 * */
             /*  */if (isRight && !isBottom && !belowRightMember) {
                 canvas.drawLine(
-                        rightX,
-                        topMargin + (p.y + 1) * cellSizeAndSpacing - spacing - edgeRadius,
-                        rightX,
-                        topMargin + (p.y + 1) * cellSizeAndSpacing + edgeRadius,
-                        paint)
+                    rightX,
+                    topMargin + (p.y + 1) * cellSizeAndSpacing - spacing - edgeRadius,
+                    rightX,
+                    topMargin + (p.y + 1) * cellSizeAndSpacing + edgeRadius,
+                    paint
+                )
             }
             /*For a cell at the bottom, initializeWith edge to right neighbour */if (isBottom && !isRight && !belowRightMember) {
                 canvas.drawLine(
-                        leftMargin + (p.x + 1) * cellSizeAndSpacing - edgeRadius - spacing,
-                        bottomY,
-                        leftMargin + (p.x + 1) * cellSizeAndSpacing + edgeRadius,
-                        bottomY,
-                        paint)
+                    leftMargin + (p.x + 1) * cellSizeAndSpacing - edgeRadius - spacing,
+                    bottomY,
+                    leftMargin + (p.x + 1) * cellSizeAndSpacing + edgeRadius,
+                    bottomY,
+                    paint
+                )
             }
-            /*For a cell on the left border, initializeWith edge to upper neighbour*/if (isLeft && !isTop && (p.x == 0 || !c.includes(Position[p.x - 1, p.y - 1]))) {
+            /*For a cell on the left border, initializeWith edge to upper neighbour*/if (isLeft && !isTop && (p.x == 0 || !c.includes(
+                    Position[p.x - 1, p.y - 1]
+                ))
+            ) {
                 canvas.drawLine(
-                        leftX, topMargin + p.y * cellSizeAndSpacing - spacing - edgeRadius, leftX, topMargin + p.y * cellSizeAndSpacing + edgeRadius, paint)
+                    leftX,
+                    topMargin + p.y * cellSizeAndSpacing - spacing - edgeRadius,
+                    leftX,
+                    topMargin + p.y * cellSizeAndSpacing + edgeRadius,
+                    paint
+                )
             }
 
-            /*For a cell at the top initializeWith to the left*/if (isTop && !isLeft && (p.y == 0 || !c.includes(Position[p.x - 1, p.y - 1]))) {
-                canvas.drawLine(leftMargin + p.x * cellSizeAndSpacing - edgeRadius - spacing, topY, leftMargin + p.x * cellSizeAndSpacing + edgeRadius, topY, paint
+            /*For a cell at the top initializeWith to the left*/if (isTop && !isLeft && (p.y == 0 || !c.includes(
+                    Position[p.x - 1, p.y - 1]
+                ))
+            ) {
+                canvas.drawLine(
+                    leftMargin + p.x * cellSizeAndSpacing - edgeRadius - spacing,
+                    topY,
+                    leftMargin + p.x * cellSizeAndSpacing + edgeRadius,
+                    topY,
+                    paint
                 )
             }
         }
@@ -194,9 +215,13 @@ class HighlightedConstraintView(context: Context, sl: SudokuLayout,
         for (i in 0 until Symbol.getInstance().getNumberOfSymbols()) {
             if (cell.isNoteSet(i)) {
                 val note = Symbol.getInstance().getMapping(i)
-                canvas.drawText(note + "",
-                        (i % Symbol.getInstance().getRasterSize() * noteTextSize + noteTextSize / 2).toFloat(),
-                        (i / Symbol.getInstance().getRasterSize() * noteTextSize + noteTextSize).toFloat(), notePaint)
+                canvas.drawText(
+                    note + "",
+                    (i % Symbol.getInstance()
+                        .getRasterSize() * noteTextSize + noteTextSize / 2).toFloat(),
+                    (i / Symbol.getInstance()
+                        .getRasterSize() * noteTextSize + noteTextSize).toFloat(), notePaint
+                )
             }
         }
     }

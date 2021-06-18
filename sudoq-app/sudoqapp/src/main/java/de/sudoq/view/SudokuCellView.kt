@@ -31,8 +31,12 @@ import java.util.*
  * @property cell The cell associated with this view
  * @property markWrongSymbol should wrong symbols be highlighted
  */
-class SudokuCellView(context: Context?, game: Game, val cell: Cell, private val markWrongSymbol: Boolean)
-    : View(context), ModelChangeListener<Cell>, ObservableCellInteraction {
+class SudokuCellView(
+    context: Context?,
+    game: Game,
+    val cell: Cell,
+    private val markWrongSymbol: Boolean
+) : View(context), ModelChangeListener<Cell>, ObservableCellInteraction {
 
     /**
      * List of the  selektion listeners
@@ -91,7 +95,13 @@ class SudokuCellView(context: Context?, game: Game, val cell: Cell, private val 
         super.onDraw(canvas)
         //Log.d(LOG_TAG, "SudokuFieldView.onDraw()");
         symbol = Symbol.getInstance()!!.getMapping(cell.currentValue)
-        CellViewPainter.instance!!.markCell(canvas, this, symbol, false, isInExtraConstraint && !cellSelected)
+        CellViewPainter.instance!!.markCell(
+            canvas,
+            this,
+            symbol,
+            false,
+            isInExtraConstraint && !cellSelected
+        )
 
         // Draw notes if cell has no value
         if (cell.isNotSolved) {
@@ -115,10 +125,14 @@ class SudokuCellView(context: Context?, game: Game, val cell: Cell, private val 
         for (i in 0 until Symbol.getInstance()!!.getNumberOfSymbols()) {
             if (cell.isNoteSet(i)) {
                 val note = Symbol.getInstance()!!.getMapping(i)
-                canvas.drawText(note + "", (
-                        i % Symbol.getInstance()!!.getRasterSize() * noteTextSize + noteTextSize / 2).toFloat(), (
-                        i / Symbol.getInstance()!!.getRasterSize() * noteTextSize + noteTextSize).toFloat(),
-                        notePaint)
+                canvas.drawText(
+                    note + "", (
+                            i % Symbol.getInstance()!!
+                                .getRasterSize() * noteTextSize + noteTextSize / 2).toFloat(), (
+                            i / Symbol.getInstance()!!
+                                .getRasterSize() * noteTextSize + noteTextSize).toFloat(),
+                    notePaint
+                )
             }
         }
     }
@@ -228,24 +242,24 @@ class SudokuCellView(context: Context?, game: Game, val cell: Cell, private val 
         //TODO no idea what 'wrong' is doing, i just etracted it for clarity
         val wrong = markWrongSymbol && !cell.isNotWrong && checkConstraint()
         val state: CellViewStates =
-                if (connected)
-                    if (editable)
-                        if (wrong) CellViewStates.CONNECTED_WRONG
-                        else CellViewStates.CONNECTED
-                    else CellViewStates.SELECTED_FIXED
-                else if (cellSelected)
-                    if (editable)
-                        if (isNoteMode)
-                            if (wrong)
-                                CellViewStates.SELECTED_NOTE_WRONG
-                            else CellViewStates.SELECTED_NOTE
-                        else if (wrong) CellViewStates.SELECTED_INPUT_WRONG
-                        else CellViewStates.SELECTED_INPUT
-                    else CellViewStates.SELECTED_FIXED
-                else if (editable)
-                    if (wrong) CellViewStates.DEFAULT_WRONG
-                    else CellViewStates.DEFAULT
-                else CellViewStates.FIXED
+            if (connected)
+                if (editable)
+                    if (wrong) CellViewStates.CONNECTED_WRONG
+                    else CellViewStates.CONNECTED
+                else CellViewStates.SELECTED_FIXED
+            else if (cellSelected)
+                if (editable)
+                    if (isNoteMode)
+                        if (wrong)
+                            CellViewStates.SELECTED_NOTE_WRONG
+                        else CellViewStates.SELECTED_NOTE
+                    else if (wrong) CellViewStates.SELECTED_INPUT_WRONG
+                    else CellViewStates.SELECTED_INPUT
+                else CellViewStates.SELECTED_FIXED
+            else if (editable)
+                if (wrong) CellViewStates.DEFAULT_WRONG
+                else CellViewStates.DEFAULT
+            else CellViewStates.FIXED
         CellViewPainter.instance!!.setMarking(this, state)
         invalidate()
     }
@@ -267,7 +281,8 @@ class SudokuCellView(context: Context?, game: Game, val cell: Cell, private val 
                     for (pos in c.getPositions()) {
                         //if a different position has the same value
                         if (pos !== sudoku.getPosition(cell.id)
-                                && sudoku.getCell(pos)!!.currentValue == cell.currentValue) {
+                            && sudoku.getCell(pos)!!.currentValue == cell.currentValue
+                        ) {
                             return true
                         }
                     }
@@ -324,7 +339,8 @@ class SudokuCellView(context: Context?, game: Game, val cell: Cell, private val 
         val constraints: Iterable<Constraint>? = game.sudoku!!.sudokuType
         for (c in constraints!!) {
             if (c.type == ConstraintType.EXTRA &&
-                    c.includes(game.sudoku!!.getPosition(cell.id)!!)) {
+                c.includes(game.sudoku!!.getPosition(cell.id)!!)
+            ) {
                 isInExtraConstraint = true
                 break
             }

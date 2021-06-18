@@ -45,7 +45,8 @@ class BoardPainter(var sl: SudokuLayout, var type: SudokuType) {
                     canvas.drawLine(x, startY, x, stopY, paint)
                 }
                 if (isRight) {
-                    val x = (leftMargin + (p.x + 1) * cellSizeAndSpacing - spacing - 1 + i).toFloat()
+                    val x =
+                        (leftMargin + (p.x + 1) * cellSizeAndSpacing - spacing - 1 + i).toFloat()
                     val startY = topMargin + p.y * cellSizeAndSpacing + edgeRadius
                     val stopY = topMargin + (p.y + 1) * cellSizeAndSpacing - edgeRadius - spacing
                     canvas.drawLine(x, startY, x, stopY, paint)
@@ -68,40 +69,44 @@ class BoardPainter(var sl: SudokuLayout, var type: SudokuType) {
                 if (isLeft && isTop) {
                     //paint.setColor(Color.MAGENTA);
                     canvas.drawCircle(
-                            leftMargin + p.x * cellSizeAndSpacing + edgeRadius,  //center-x
-                            topMargin + p.y * cellSizeAndSpacing + edgeRadius,  //center-y
-                            edgeRadius + i,  //radius
-                            paint)
+                        leftMargin + p.x * cellSizeAndSpacing + edgeRadius,  //center-x
+                        topMargin + p.y * cellSizeAndSpacing + edgeRadius,  //center-y
+                        edgeRadius + i,  //radius
+                        paint
+                    )
                 }
 
                 /* Top Right*/
                 if (isRight && isTop) {
                     //paint.setColor(Color.BLUE);
                     canvas.drawCircle(
-                            leftMargin + (p.x + 1) * cellSizeAndSpacing - spacing - edgeRadius,
-                            topMargin + p.y * cellSizeAndSpacing + edgeRadius,
-                            edgeRadius + i,
-                            paint)
+                        leftMargin + (p.x + 1) * cellSizeAndSpacing - spacing - edgeRadius,
+                        topMargin + p.y * cellSizeAndSpacing + edgeRadius,
+                        edgeRadius + i,
+                        paint
+                    )
                 }
 
                 /*Bottom Left*/
                 if (isLeft && isBottom) {
                     //paint.setColor(Color.CYAN);
                     canvas.drawCircle(
-                            leftMargin + p.x * cellSizeAndSpacing + edgeRadius,
-                            topMargin + (p.y + 1) * cellSizeAndSpacing - edgeRadius - spacing,
-                            edgeRadius + i,
-                            paint)
+                        leftMargin + p.x * cellSizeAndSpacing + edgeRadius,
+                        topMargin + (p.y + 1) * cellSizeAndSpacing - edgeRadius - spacing,
+                        edgeRadius + i,
+                        paint
+                    )
                 }
 
                 /*BottomRight*/
                 if (isRight && isBottom) {
                     //paint.setColor(Color.RED);
                     canvas.drawCircle(
-                            leftMargin + (p.x + 1) * cellSizeAndSpacing - edgeRadius - spacing,
-                            topMargin + (p.y + 1) * cellSizeAndSpacing - edgeRadius - spacing,
-                            edgeRadius + i,
-                            paint)
+                        leftMargin + (p.x + 1) * cellSizeAndSpacing - edgeRadius - spacing,
+                        topMargin + (p.y + 1) * cellSizeAndSpacing - edgeRadius - spacing,
+                        edgeRadius + i,
+                        paint
+                    )
                 }
 
 
@@ -114,40 +119,46 @@ class BoardPainter(var sl: SudokuLayout, var type: SudokuType) {
                  *  3rd condition excludes: corner to the right-> member below right          i.e. unwanted filling
                  */
                 if (isRight && !isBottom && !belowRightMember) {
-                    canvas.drawLine((
-                            leftMargin + (p.x + 1) * cellSizeAndSpacing - spacing - 1 + i).toFloat(),
-                            topMargin + (p.y + 1) * cellSizeAndSpacing - spacing - edgeRadius, (
-                            leftMargin + (p.x + 1) * cellSizeAndSpacing - spacing - 1 + i).toFloat(),
-                            topMargin + (p.y + 1) * cellSizeAndSpacing + edgeRadius,
-                            paint)
+                    canvas.drawLine(
+                        (
+                                leftMargin + (p.x + 1) * cellSizeAndSpacing - spacing - 1 + i).toFloat(),
+                        topMargin + (p.y + 1) * cellSizeAndSpacing - spacing - edgeRadius, (
+                                leftMargin + (p.x + 1) * cellSizeAndSpacing - spacing - 1 + i).toFloat(),
+                        topMargin + (p.y + 1) * cellSizeAndSpacing + edgeRadius,
+                        paint
+                    )
                 }
                 /*For a cell at the bottom, initializeWith edge to right neighbour */
                 if (isBottom && !isRight && !belowRightMember) {
                     canvas.drawLine(
-                            leftMargin + (p.x + 1) * cellSizeAndSpacing - edgeRadius - spacing, (
-                            topMargin + (p.y + 1) * cellSizeAndSpacing - spacing - 1 + i).toFloat(),
-                            leftMargin + (p.x + 1) * cellSizeAndSpacing + edgeRadius, (
-                            topMargin + (p.y + 1) * cellSizeAndSpacing - spacing - 1 + i).toFloat(),
-                            paint)
+                        leftMargin + (p.x + 1) * cellSizeAndSpacing - edgeRadius - spacing, (
+                                topMargin + (p.y + 1) * cellSizeAndSpacing - spacing - 1 + i).toFloat(),
+                        leftMargin + (p.x + 1) * cellSizeAndSpacing + edgeRadius, (
+                                topMargin + (p.y + 1) * cellSizeAndSpacing - spacing - 1 + i).toFloat(),
+                        paint
+                    )
                 }
 
                 /*For a cell on the left border, initializeWith edge to upper neighbour*/
                 if (isLeft && !isTop && (p.x == 0 || !c.includes(Position[p.x - 1, p.y - 1]))) {
-                    canvas.drawLine((
-                            leftMargin + p.x * cellSizeAndSpacing - i).toFloat(),
-                            topMargin + p.y * cellSizeAndSpacing - spacing - edgeRadius, (
-                            leftMargin + p.x * cellSizeAndSpacing - i).toFloat(),
-                            topMargin + p.y * cellSizeAndSpacing + edgeRadius,
-                            paint)
+                    canvas.drawLine(
+                        (
+                                leftMargin + p.x * cellSizeAndSpacing - i).toFloat(),
+                        topMargin + p.y * cellSizeAndSpacing - spacing - edgeRadius, (
+                                leftMargin + p.x * cellSizeAndSpacing - i).toFloat(),
+                        topMargin + p.y * cellSizeAndSpacing + edgeRadius,
+                        paint
+                    )
                 }
                 /*For a cell at the top initializeWith to the left*/
                 if (isTop && !isLeft && (p.y == 0 || !c.includes(Position[p.x - 1, p.y - 1]))) {
                     canvas.drawLine(
-                            leftMargin + p.x * cellSizeAndSpacing - edgeRadius - spacing, (
-                            topMargin + p.y * cellSizeAndSpacing - i).toFloat(),
-                            leftMargin + p.x * cellSizeAndSpacing + edgeRadius, (
-                            topMargin + p.y * cellSizeAndSpacing - i).toFloat(),
-                            paint)
+                        leftMargin + p.x * cellSizeAndSpacing - edgeRadius - spacing, (
+                                topMargin + p.y * cellSizeAndSpacing - i).toFloat(),
+                        leftMargin + p.x * cellSizeAndSpacing + edgeRadius, (
+                                topMargin + p.y * cellSizeAndSpacing - i).toFloat(),
+                        paint
+                    )
                 }
             }
         }

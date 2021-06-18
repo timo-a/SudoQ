@@ -38,8 +38,8 @@ object LanguageUtility {
         val langEnum = if (langSetting.isSystemLanguage) LanguageCode.system else langSetting.language
         val sp = a.getSharedPreferences(SUDOQ_SHARED_PREFS_FILE, MODE_PRIVATE)
         sp.edit()
-                .putString("language", langEnum.name)
-                .apply()
+            .putString("language", langEnum.name)
+            .apply()
     }
 
     /* save language to enum */

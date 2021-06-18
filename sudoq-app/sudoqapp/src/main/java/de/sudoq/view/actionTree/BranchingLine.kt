@@ -36,7 +36,13 @@ class BranchingLine(context: Context?, fromX: Int, fromY: Int, toX: Int, toY: In
         linePaint.color = ActionTreeElementView.DEFAULT_COLOR
         linePaint.alpha = 180
         linePaint.isAntiAlias = true
-        canvas.drawLine((ActionTreeController.AT_RASTER_SIZE / 2).toFloat(), (ActionTreeController.AT_RASTER_SIZE / 2).toFloat(), (width + ActionTreeController.AT_RASTER_SIZE / 2).toFloat(), height.toFloat(), linePaint)
+        canvas.drawLine(
+            (ActionTreeController.AT_RASTER_SIZE / 2).toFloat(),
+            (ActionTreeController.AT_RASTER_SIZE / 2).toFloat(),
+            (width + ActionTreeController.AT_RASTER_SIZE / 2).toFloat(),
+            height.toFloat(),
+            linePaint
+        )
     }
 
     companion object {

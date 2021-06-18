@@ -73,7 +73,8 @@ class GestureBuilder : SudoqCompatActivity(), OnGesturePerformedListener, InputL
         super.onCreate(savedInstanceState)
         setContentView(R.layout.gesturebuilder)
         createSymbol(currentSymbolSet)
-        virtualKeyboard = findViewById<View>(R.id.gesture_builder_virtual_keyboard) as VirtualKeyboardLayout
+        virtualKeyboard =
+            findViewById<View>(R.id.gesture_builder_virtual_keyboard) as VirtualKeyboardLayout
         inflateGestures()
         refreshKeyboard()
     }
@@ -105,7 +106,10 @@ class GestureBuilder : SudoqCompatActivity(), OnGesturePerformedListener, InputL
         }
         gestureOverlay = GestureOverlayView(this)
         gestureOverlay!!.addOnGesturePerformedListener(this)
-        val gestureLayoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        val gestureLayoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
         gestureOverlay!!.layoutParams = gestureLayoutParams
         gestureOverlay!!.setBackgroundColor(Color.BLACK)
         gestureOverlay!!.background.alpha = 127
@@ -171,7 +175,10 @@ class GestureBuilder : SudoqCompatActivity(), OnGesturePerformedListener, InputL
         val gestures = gestureStore.gestureEntries
         for (sym in currentSymbolSet)
             if (gestures.contains(sym))
-                virtualKeyboard!!.markCell(getInstance().getAbstract(sym), CellViewStates.SELECTED_NOTE)
+                virtualKeyboard!!.markCell(
+                    getInstance().getAbstract(sym),
+                    CellViewStates.SELECTED_NOTE
+                )
     }
 
     /**
@@ -214,9 +221,17 @@ class GestureBuilder : SudoqCompatActivity(), OnGesturePerformedListener, InputL
             currentSelectedSymbol = getInstance().getMapping(symbol)
             val textView = TextView(gestureOverlay!!.context)
             textView.setTextColor(Color.YELLOW)
-            textView.text = " " + gestureOverlay!!.context.getString(R.string.gesture_builder_define_gesture) + " "
+            textView.text =
+                " " + gestureOverlay!!.context.getString(R.string.gesture_builder_define_gesture) + " "
             textView.textSize = 18f
-            gestureOverlay!!.addView(textView, FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL))
+            gestureOverlay!!.addView(
+                textView,
+                FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    Gravity.CENTER_HORIZONTAL
+                )
+            )
             gestureOverlay!!.visibility = View.VISIBLE
         }
     }

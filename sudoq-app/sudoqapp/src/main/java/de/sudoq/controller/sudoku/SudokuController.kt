@@ -23,10 +23,11 @@ import de.sudoq.model.sudoku.complexity.Complexity
  * Spielfeld zu reagieren.
  */
 class SudokuController(
-        /** Hält eine Referenz auf das Game, welches Daten über das aktuelle Spiel enthält */
-        private val game: Game,
-        /** Die SudokuActivity. */
-        private val context: SudokuActivity) : AssistanceRequestListener, ActionListener {
+    /** Hält eine Referenz auf das Game, welches Daten über das aktuelle Spiel enthält */
+    private val game: Game,
+    /** Die SudokuActivity. */
+    private val context: SudokuActivity
+) : AssistanceRequestListener, ActionListener {
 
     /**
      * Debugging
@@ -63,7 +64,12 @@ class SudokuController(
      * {@inheritDoc}
      */
     override fun onNoteDelete(cell: Cell, value: Int) {
-        game.addAndExecute(NoteActionFactory().createAction(value, cell)) //TODO same code as onNoteAdd why?
+        game.addAndExecute(
+            NoteActionFactory().createAction(
+                value,
+                cell
+            )
+        ) //TODO same code as onNoteAdd why?
     }
 
     /**
@@ -151,7 +157,12 @@ class SudokuController(
             Complexity.easy -> incrementStatistic(Statistics.playedEasySudokus)
         }
         incrementStatistic(Statistics.playedSudokus)
-        val p = Profile.getInstance(context.getDir(context.getString(R.string.path_rel_profiles), Context.MODE_PRIVATE))
+        val p = Profile.getInstance(
+            context.getDir(
+                context.getString(R.string.path_rel_profiles),
+                Context.MODE_PRIVATE
+            )
+        )
         if (p.getStatistic(Statistics.fastestSolvingTime) > game.time) {
             p.setStatistic(Statistics.fastestSolvingTime, game.time)
         }
@@ -161,7 +172,12 @@ class SudokuController(
     }
 
     private fun incrementStatistic(s: Statistics) { //TODO this should probably be in model...
-        val p = Profile.getInstance(context.getDir(context.getString(R.string.path_rel_profiles), Context.MODE_PRIVATE))
+        val p = Profile.getInstance(
+            context.getDir(
+                context.getString(R.string.path_rel_profiles),
+                Context.MODE_PRIVATE
+            )
+        )
         p.setStatistic(s, p.getStatistic(s) + 1)
     }
 }

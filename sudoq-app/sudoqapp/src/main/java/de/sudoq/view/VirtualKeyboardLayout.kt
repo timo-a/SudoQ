@@ -28,33 +28,35 @@ import kotlin.math.sqrt
  *
  * @param context der Applikationskontext
  * @param attrs das Android AttributeSet
-*/
-class VirtualKeyboardLayout(context: Context?, attrs: AttributeSet?) : LinearLayout(context, attrs), ObservableInput, Iterable<View?> {
+ */
+class VirtualKeyboardLayout(context: Context?, attrs: AttributeSet?) : LinearLayout(context, attrs),
+    ObservableInput, Iterable<View?> {
     /**
      * Die Buttons des VirtualKeyboard
      */
     private var buttons: Array<Array<VirtualKeyboardButtonView>>? = null
 
-    private val buttonIterator: Iterable<VirtualKeyboardButtonView> = object : Iterable<VirtualKeyboardButtonView> {
-        override fun iterator(): Iterator<VirtualKeyboardButtonView> {
-            return object : Iterator<VirtualKeyboardButtonView> {
-                var i = 0
-                var j = 0
-                override fun hasNext(): Boolean {
-                    return i < buttons!!.size
-                }
-
-                override fun next(): VirtualKeyboardButtonView {
-                    val current = buttons!![i][j++]
-                    if (j == buttons!![i].size) {
-                        j = 0
-                        i++
+    private val buttonIterator: Iterable<VirtualKeyboardButtonView> =
+        object : Iterable<VirtualKeyboardButtonView> {
+            override fun iterator(): Iterator<VirtualKeyboardButtonView> {
+                return object : Iterator<VirtualKeyboardButtonView> {
+                    var i = 0
+                    var j = 0
+                    override fun hasNext(): Boolean {
+                        return i < buttons!!.size
                     }
-                    return current
+
+                    override fun next(): VirtualKeyboardButtonView {
+                        val current = buttons!![i][j++]
+                        if (j == buttons!![i].size) {
+                            j = 0
+                            i++
+                        }
+                        return current
+                    }
                 }
             }
         }
-    }
 
     /**
      * Beschreibt, ob die Tastatur deaktiviert ist.
@@ -88,13 +90,16 @@ class VirtualKeyboardLayout(context: Context?, attrs: AttributeSet?) : LinearLay
 
         buttons = Array(buttonsPerRow) { r ->
             Array(buttonsPerColumn) { c ->
-                VirtualKeyboardButtonView(context, r + c * buttonsPerRow)} }
+                VirtualKeyboardButtonView(context, r + c * buttonsPerRow)
+            }
+        }
 
         for (y in 0 until buttonsPerColumn) {
             val la = LinearLayout(context)
             for (x in 0 until buttonsPerRow) {
                 buttons!![x][y].visibility = INVISIBLE
-                val params = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1.0f)
+                val params =
+                    LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1.0f)
                 params.leftMargin = 2
                 params.bottomMargin = 2
                 params.topMargin = 2
@@ -159,7 +164,10 @@ class VirtualKeyboardLayout(context: Context?, attrs: AttributeSet?) : LinearLay
      */
     fun markCell(symbol: Int, state: CellViewStates?) {
         val buttonsPerRow = buttons!!.size
-        CellViewPainter.instance!!.setMarking(buttons!![symbol % buttonsPerRow][symbol / buttonsPerRow], state!!)
+        CellViewPainter.instance!!.setMarking(
+            buttons!![symbol % buttonsPerRow][symbol / buttonsPerRow],
+            state!!
+        )
         buttons!![symbol % buttonsPerRow][symbol / buttonsPerRow].invalidate()
     }
 

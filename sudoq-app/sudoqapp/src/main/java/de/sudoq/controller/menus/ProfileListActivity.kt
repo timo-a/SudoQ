@@ -68,11 +68,13 @@ class ProfileListActivity : SudoqListActivity(), OnItemClickListener {
      * ID der ausgewählten View
      */
     override fun onItemClick(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
-        Log.d(LOG_TAG, "Clicked on name " + profileNames!![position] + " with id:" + profileIds!![position])
+        val profileName = profileNames!![position]
+        val profileId = profileIds!![position]
+        Log.d(LOG_TAG, "Clicked on name $profileName with id:$profileId")
         val pm = ProfileManager(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
         check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
         pm.loadCurrentProfile()
-        pm.changeProfile(profileIds!![position])
+        pm.changeProfile(profileId)
         finish()
     }
 

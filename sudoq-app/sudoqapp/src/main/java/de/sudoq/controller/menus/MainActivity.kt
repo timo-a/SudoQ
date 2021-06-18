@@ -39,8 +39,8 @@ class MainActivity : SudoqCompatActivity() {
      */
     private var currentLanguageCode: LanguageSetting? = null
 
-    private lateinit var profilesFile : File
-    private lateinit var sudokuFile : File
+    private lateinit var profilesFile: File
+    private lateinit var sudokuFile: File
 
     /**
      * Wird beim ersten Anzeigen des Hauptmenüs aufgerufen. Inflated das Layout.
@@ -48,7 +48,7 @@ class MainActivity : SudoqCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         profilesFile = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        sudokuFile   = getDir(getString(de.sudoq.R.string.path_rel_sudokus), MODE_PRIVATE)
+        sudokuFile = getDir(getString(de.sudoq.R.string.path_rel_sudokus), MODE_PRIVATE)
         //Toast.makeText(this, "onCreate", Toast.LENGTH_LONG).show();
         setContentView(R.layout.mainmenu)
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
