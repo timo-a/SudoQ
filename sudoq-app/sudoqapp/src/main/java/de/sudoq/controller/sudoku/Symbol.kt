@@ -7,6 +7,9 @@
  */
 package de.sudoq.controller.sudoku
 
+import kotlin.math.ceil
+import kotlin.math.sqrt
+
 /**
  * Klasse zum Mapping der intern genutzen Zahlen auf darstellbare Zeichen
  */
@@ -15,7 +18,7 @@ class Symbol private constructor(mapping: Array<String>) : Iterable<Int> {
      * Der aktuell verwendete Satz von Symbolen.
      */
     var symbolSet: Array<String>?
-        protected set
+        private set
 
     /**
      * Diese Methode gibt das gemappte Symbol zurueck, das von der View
@@ -63,7 +66,7 @@ class Symbol private constructor(mapping: Array<String>) : Iterable<Int> {
      */
     fun getRasterSize(): Int {
         return if (symbolSet != null) {
-            Math.ceil(Math.sqrt(symbolSet!!.size.toDouble())).toInt()
+            ceil(sqrt(symbolSet!!.size.toDouble())).toInt()
         } else {
             throw IllegalStateException("No symbol set! Symbol not instanciated!")
         }
@@ -90,7 +93,7 @@ class Symbol private constructor(mapping: Array<String>) : Iterable<Int> {
 
     companion object {
         /**
-         * Die Standardsymbole für 1-4 Sudokus
+         * Die Standardsymbole für 1-4 Sudokus todo move from array to list
          */
         val MAPPING_NUMBERS_FOUR = arrayOf("1", "2", "3", "4")
 
@@ -110,24 +113,7 @@ class Symbol private constructor(mapping: Array<String>) : Iterable<Int> {
         @JvmField
         val MAPPING_NUMBERS_HEX_LETTERS =
             arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G")
-        val MAPPING_NUMBERS_HEX_DIGITS = arrayOf(
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
-            "10",
-            "11",
-            "12",
-            "13",
-            "14",
-            "15",
-            "16"
-        )
+        val MAPPING_NUMBERS_HEX_DIGITS = (1..16).map { it.toString() }.toTypedArray()
 
         /**
          * Die statische Instanz dieses Singletons.

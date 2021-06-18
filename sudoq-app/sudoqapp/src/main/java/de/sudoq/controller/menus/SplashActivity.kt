@@ -126,13 +126,12 @@ class SplashActivity : SudoqCompatActivity() {
 	 *
 	 * 'protected' for unit test
 	 */
-    protected fun updateSituation(oldVersionName: String): Boolean {
-        val updateSituation: Boolean = try {
+    private fun updateSituation(oldVersionName: String): Boolean {
+        return try {
             older(oldVersionName, NEWEST_ASSET_VERSION)
         } catch (e: Exception) {
             true //when in doubt DO an update!
         }
-        return updateSituation
     }
 
     /** is version a older than b?
@@ -168,7 +167,7 @@ class SplashActivity : SudoqCompatActivity() {
     private fun alertIfNoAssetFolder() {
         try {
             val l = assets.list("")
-            val foundSudokusInAssetfolder = Arrays.asList(*l).contains(HEAD_DIRECTORY)
+            val foundSudokusInAssetfolder = l!!.contains(HEAD_DIRECTORY)
             //TODO make this work:
             //boolean fsaf = Stream.of(l).anyMatch(s -> s.equals(HEAD_DIRECTORY));
             if (!foundSudokusInAssetfolder) {
@@ -341,7 +340,7 @@ class SplashActivity : SudoqCompatActivity() {
             }
         }
 
-        protected override fun doInBackground(vararg params: Void?): Void? {
+        override fun doInBackground(vararg params: Void?): Void? {
             Log.d(LOG_TAG, "Starting to copy templates")
             copyAssets()
             return null
@@ -373,7 +372,7 @@ class SplashActivity : SudoqCompatActivity() {
         private const val INITIALIZED_TAG = "Initialized"
         private const val VERSION_TAG = "version"
         private const val NO_VERSION_YET = "0.0.0"
-        protected const val NEWEST_ASSET_VERSION = "1.1.0b"
+        private const val NEWEST_ASSET_VERSION = "1.1.0b"
         private var currentVersionName = ""
     }
 }

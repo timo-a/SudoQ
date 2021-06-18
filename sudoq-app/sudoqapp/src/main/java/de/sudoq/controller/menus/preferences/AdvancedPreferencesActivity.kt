@@ -35,10 +35,9 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
     var lefthand: CheckBox? = null
 
     //    override var restricttypes: Button? = null
-    var helper: CheckBox? = null
-    var debug: CheckBox? = null
-    var debugCounter: Byte = 0
-    private val lastSelectedLanguageItem = 0
+    private var helper: CheckBox? = null
+    private var debug: CheckBox? = null
+    private var debugCounter: Byte = 0
     private var langSpinnerInit = true
 
     /**
@@ -245,8 +244,6 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
     }
 
     companion object {
-        /** Attributes  */
-        private val LOG_TAG = AdvancedPreferencesActivity::class.java.simpleName
 
         /*this is still a hack! this activity can be called in newSudoku-pref and in player(profile)Pref, but has different behaviours*/
         var caller = ParentActivity.NOT_SPECIFIED

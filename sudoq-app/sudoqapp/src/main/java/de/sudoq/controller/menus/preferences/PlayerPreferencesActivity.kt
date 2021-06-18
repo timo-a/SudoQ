@@ -28,7 +28,7 @@ import de.sudoq.model.profile.Profile.Companion.getInstance
  */
 class PlayerPreferencesActivity : PreferencesActivity() {
     var name: EditText? = null
-    var firstStartup = false
+    private var firstStartup = false
     var gameSettings: GameSettings? = null
 
     /**
@@ -247,8 +247,6 @@ class PlayerPreferencesActivity : PreferencesActivity() {
     }
 
     companion object {
-        /** Attributes  */
-        private val LOG_TAG = PlayerPreferencesActivity::class.java.simpleName
 
         /**
          * Konstante um anzuzeigen, dass nur die Assistences konfiguriert werden

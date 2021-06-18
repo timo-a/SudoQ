@@ -33,7 +33,7 @@ class AssistancesDialogFragment : DialogFragment() {
         controller = activity.sudokuController
         val itemStack = Stack<CharSequence?>()
         itemStack.addAll(
-            Arrays.asList(
+            listOf(
                 getString(R.string.sf_sudoku_assistances_solve_surrender),
                 getString(R.string.sf_sudoku_assistances_back_to_valid_state),
                 getString(R.string.sf_sudoku_assistances_back_to_bookmark),
@@ -53,7 +53,7 @@ class AssistancesDialogFragment : DialogFragment() {
         if (p.appSettings.isDebugSet) itemStack.add(getString(R.string.sf_sudoku_assistances_crash))
 
         // TODO why this no work? final CharSequence[] items = (CharSequence[]) itemStack.toArray();
-        val items = itemStack.toArray(arrayOfNulls<CharSequence>(0))
+        val items = itemStack.toTypedArray()
         val builder = AlertDialog.Builder(getActivity()!!)
         builder.setTitle(getString(R.string.sf_sudoku_assistances_title))
         builder.setItems(items) { dialog, item ->

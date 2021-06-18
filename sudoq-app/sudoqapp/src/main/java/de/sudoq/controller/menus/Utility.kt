@@ -157,7 +157,7 @@ object Utility {
 
         return stringArray
             .find { entry -> entry[0] == gender } //format is gender|inflection, where gender has len 1
-            ?.let { i -> i.substring(2) }
+            ?.substring(2)
 
     }
 

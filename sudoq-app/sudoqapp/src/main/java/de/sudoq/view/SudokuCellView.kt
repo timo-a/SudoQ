@@ -94,7 +94,7 @@ class SudokuCellView(
     public override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         //Log.d(LOG_TAG, "SudokuFieldView.onDraw()");
-        symbol = Symbol.getInstance()!!.getMapping(cell.currentValue)
+        symbol = Symbol.getInstance().getMapping(cell.currentValue)
         CellViewPainter.instance!!.markCell(
             canvas,
             this,
@@ -118,18 +118,18 @@ class SudokuCellView(
     private fun drawNotes(canvas: Canvas) {
         val notePaint = Paint()
         notePaint.isAntiAlias = true
-        val noteTextSize = height / Symbol.getInstance()!!.getRasterSize()
+        val noteTextSize = height / Symbol.getInstance().getRasterSize()
         notePaint.textSize = noteTextSize.toFloat()
         notePaint.textAlign = Paint.Align.CENTER
         notePaint.color = Color.BLACK
-        for (i in 0 until Symbol.getInstance()!!.getNumberOfSymbols()) {
+        for (i in 0 until Symbol.getInstance().getNumberOfSymbols()) {
             if (cell.isNoteSet(i)) {
-                val note = Symbol.getInstance()!!.getMapping(i)
+                val note = Symbol.getInstance().getMapping(i)
                 canvas.drawText(
                     note + "", (
-                            i % Symbol.getInstance()!!
+                            i % Symbol.getInstance()
                                 .getRasterSize() * noteTextSize + noteTextSize / 2).toFloat(), (
-                            i / Symbol.getInstance()!!
+                            i / Symbol.getInstance()
                                 .getRasterSize() * noteTextSize + noteTextSize).toFloat(),
                     notePaint
                 )
@@ -309,8 +309,6 @@ class SudokuCellView(
 		}
 	}*/
     companion object {
-        /* Attributes */
-        private val LOG_TAG = SudokuCellView::class.java.simpleName
     }
     /* Constructors */ /**
      * Instantiates a SudokuCellView.
@@ -328,7 +326,7 @@ class SudokuCellView(
      * if one of the arguments is null
      */
     init {
-        symbol = Symbol.getInstance()!!.getMapping(cell.currentValue)
+        symbol = Symbol.getInstance().getMapping(cell.currentValue)
         this.game = game
         cellSelectListener = ArrayList()
         connectedCells = ArrayList()

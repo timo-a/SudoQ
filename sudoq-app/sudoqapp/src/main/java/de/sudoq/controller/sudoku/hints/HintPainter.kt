@@ -23,7 +23,7 @@ class HintPainter(private val sl: SudokuLayout) {
     private val context: Context = sl.context
 
     fun realizeHint(sd: SolveDerivation) {
-        var v: View? = when (sd.type) {
+        val v: View? = when (sd.type) {
             HintTypes.LastDigit -> LastDigitView(context, sl, sd)
             HintTypes.LastCandidate -> LastCandidateView(context, sl, sd)
             HintTypes.LeftoverNote -> LeftoverNoteView(context, sl, (sd as LeftoverNoteDerivation))
@@ -78,8 +78,6 @@ class HintPainter(private val sl: SudokuLayout) {
     }
 
     companion object {
-        /** Attributes  */
-        private val LOG_TAG = HintPainter::class.java.simpleName
     }
 
 }

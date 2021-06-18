@@ -134,12 +134,12 @@ class NewSudokuActivity : SudoqCompatActivity() {
                 o2.enum
             )
         }
-        Log.d(LOG_TAG, "Sudokutype_1: " + sudokuType)
+        Log.d(LOG_TAG, "Sudokutype_1: $sudokuType")
         val typeAdapter =
             ArrayAdapter(this, android.R.layout.simple_spinner_item, wantedSudokuTypes)
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         typeSpinner.adapter = typeAdapter
-        Log.d(LOG_TAG, "Sudokutype_4: " + sudokuType)
+        Log.d(LOG_TAG, "Sudokutype_4: $sudokuType")
 
         /* add onItemSelectListener */typeSpinner.onItemSelectedListener =
             object : OnItemSelectedListener {
@@ -181,7 +181,7 @@ class NewSudokuActivity : SudoqCompatActivity() {
                 startActivity(Intent(this, SudokuActivity::class.java))
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             } catch (e: IllegalArgumentException) {
-                Log.e(LOG_TAG, "exception: " + e)
+                Log.e(LOG_TAG, "exception: $e")
                 Toast.makeText(
                     this,
                     getString(R.string.sf_sudokupreferences_copying),

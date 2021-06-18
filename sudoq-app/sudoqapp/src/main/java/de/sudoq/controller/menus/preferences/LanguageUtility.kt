@@ -14,7 +14,7 @@ object LanguageUtility {
     fun loadLanguageFromSharedPreferences(a: Activity): LanguageSetting {
         val sp = a.getSharedPreferences(SUDOQ_SHARED_PREFS_FILE, MODE_PRIVATE)
         val code = sp.getString("language", "system_en")
-        return LanguageSetting.Companion.fromStorableString(code)
+        return LanguageSetting.fromStorableString(code)
     }
 
     /* save language to enum */
