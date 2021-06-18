@@ -19,8 +19,8 @@ import de.sudoq.model.actionTree.ActionTreeElement
  */
 class BranchingElement
 /** Constructors  */
-(context: Context, inner: ActionTreeElementView, ate: ActionTreeElement) :
-        ActionTreeElementView(context, inner, ate) {
+    (context: Context, inner: ActionTreeElementView, ate: ActionTreeElement) :
+    ActionTreeElementView(context, inner, ate) {
 
     /**
      * {@inheritDoc}
@@ -32,7 +32,12 @@ class BranchingElement
         elementPaint.strokeWidth = 8f
         elementPaint.isAntiAlias = true
         val radius = (ActionTreeController.MAX_ELEMENT_VIEW_SIZE.toFloat() / 3).toInt()
-        canvas.drawCircle((ActionTreeController.MAX_ELEMENT_VIEW_SIZE / 2).toFloat(), (ActionTreeController.MAX_ELEMENT_VIEW_SIZE / 2).toFloat(), radius.toFloat(), elementPaint)
+        canvas.drawCircle(
+            (ActionTreeController.MAX_ELEMENT_VIEW_SIZE / 2).toFloat(),
+            (ActionTreeController.MAX_ELEMENT_VIEW_SIZE / 2).toFloat(),
+            radius.toFloat(),
+            elementPaint
+        )
 
         // Paint innerPaint = new Paint();
         // innerPaint.setColor(actionColor);

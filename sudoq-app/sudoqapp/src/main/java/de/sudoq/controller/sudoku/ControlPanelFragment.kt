@@ -32,7 +32,11 @@ class ControlPanelFragment : Fragment() {
         controller = activity.sudokuController!!
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         val frameLayout = FrameLayout(getActivity()!!)
         populateViewForOrientation(inflater, frameLayout)
         return frameLayout
@@ -81,12 +85,17 @@ class ControlPanelFragment : Fragment() {
     fun inflateButtons() {
         Buttons.redoButton = view!!.findViewById<View>(R.id.button_sudoku_redo) as ImageButton
         Buttons.undoButton = view!!.findViewById<View>(R.id.button_sudoku_undo) as ImageButton
-        Buttons.actionTreeButton = view!!.findViewById<View>(R.id.button_sudoku_actionTree) as ImageButton
-        Buttons.gestureButton = view!!.findViewById<View>(R.id.button_sudoku_toggle_gesture) as ImageButton
-        Buttons.assistancesButton = view!!.findViewById<View>(R.id.button_sudoku_help) as ImageButton
+        Buttons.actionTreeButton =
+            view!!.findViewById<View>(R.id.button_sudoku_actionTree) as ImageButton
+        Buttons.gestureButton =
+            view!!.findViewById<View>(R.id.button_sudoku_toggle_gesture) as ImageButton
+        Buttons.assistancesButton =
+            view!!.findViewById<View>(R.id.button_sudoku_help) as ImageButton
         val activity = getActivity() as SudokuActivity
-        Buttons.bookmarkButton = activity.findViewById<View>(R.id.sudoku_action_tree_button_bookmark) as Button
-        Buttons.closeButton = activity.findViewById<View>(R.id.sudoku_action_tree_button_close) as Button
+        Buttons.bookmarkButton =
+            activity.findViewById<View>(R.id.sudoku_action_tree_button_bookmark) as Button
+        Buttons.closeButton =
+            activity.findViewById<View>(R.id.sudoku_action_tree_button_close) as Button
     }
 
     /**
@@ -122,7 +131,12 @@ class ControlPanelFragment : Fragment() {
         } else if (v === Buttons.actionTreeButton) {
             activity.toogleActionTree()
         } else if (v === Buttons.gestureButton) {
-            val profile = Profile.getInstance(activity.getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE))
+            val profile = Profile.getInstance(
+                activity.getDir(
+                    getString(R.string.path_rel_profiles),
+                    Context.MODE_PRIVATE
+                )
+            )
             if (activity.checkGesture()) {
                 /* toggle 'gesture active'
 				 * toggle button icon as well */
@@ -131,7 +145,11 @@ class ControlPanelFragment : Fragment() {
             } else {
                 profile.isGestureActive = false
                 v.setSelected(false)
-                Toast.makeText(activity, getString(R.string.error_gestures_not_complete), Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    activity,
+                    getString(R.string.error_gestures_not_complete),
+                    Toast.LENGTH_LONG
+                ).show()
             }
         } else if (v === Buttons.assistancesButton) {
             activity.showAssistancesDialog()
@@ -154,7 +172,8 @@ class ControlPanelFragment : Fragment() {
         game = activity.game!!
         viewGroup!!.removeAllViewsInLayout()
         val conf = resources.configuration
-        val portraitLeft = conf.orientation == Configuration.ORIENTATION_PORTRAIT && game.isLefthandedModeActive
+        val portraitLeft =
+            conf.orientation == Configuration.ORIENTATION_PORTRAIT && game.isLefthandedModeActive
         val layout = if (portraitLeft) R.layout.bottom_panel_left else R.layout.bottom_panel
         val subview = inflater.inflate(layout, viewGroup)
 
@@ -165,12 +184,14 @@ class ControlPanelFragment : Fragment() {
     private val controlPanel: View
         private get() {
             val conf = resources.configuration
-            val portraitLeft = conf.orientation == Configuration.ORIENTATION_PORTRAIT && game.isLefthandedModeActive
+            val portraitLeft =
+                conf.orientation == Configuration.ORIENTATION_PORTRAIT && game.isLefthandedModeActive
             return activity.findViewById(
-                    if (portraitLeft)
-                        R.id.controlPanelLeft //sl.find... doesn't seem to work
-                    else
-                        R.id.controlPanel)
+                if (portraitLeft)
+                    R.id.controlPanelLeft //sl.find... doesn't seem to work
+                else
+                    R.id.controlPanel
+            )
         }
 
     fun hide() {

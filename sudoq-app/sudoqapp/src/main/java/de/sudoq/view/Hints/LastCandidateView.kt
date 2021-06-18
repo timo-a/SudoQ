@@ -19,7 +19,8 @@ import de.sudoq.view.SudokuLayout
  * einzelnes Feld innerhalb eines Sudokus dar. Es erweitert den Android View um
  * Funktionalität zur Benutzerinteraktion und Färben.
  */
-class LastCandidateView(context: Context, sl: SudokuLayout, d: SolveDerivation) : HintView(context, sl, d) {
+class LastCandidateView(context: Context, sl: SudokuLayout, d: SolveDerivation) :
+    HintView(context, sl, d) {
     /**
      * Erstellt einen LastDigitView
      *
@@ -27,7 +28,8 @@ class LastCandidateView(context: Context, sl: SudokuLayout, d: SolveDerivation) 
      * @throws IllegalArgumentException Wird geworfen, falls eines der Argumente null ist
      */
     init {
-        val constraintV: View = HighlightedCellView(context, sl, (d as LastCandidateDerivation).position, Color.GREEN)
+        val constraintV: View =
+            HighlightedCellView(context, sl, (d as LastCandidateDerivation).position, Color.GREEN)
         highlightedObjects.add(constraintV)
     }
 }

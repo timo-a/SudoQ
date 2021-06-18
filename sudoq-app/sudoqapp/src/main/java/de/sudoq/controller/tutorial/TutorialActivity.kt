@@ -79,7 +79,10 @@ class TutorialActivity : AppCompatActivity() {
     private fun setupViewPager(viewPager: ViewPager) {
         val adapter = Adapter(supportFragmentManager)
         adapter.addFragment(FragmentSudoku(), getString(R.string.sf_tutorial_sudoku_title))
-        adapter.addFragment(FragmentAssistances(), getString(R.string.sf_tutorial_assistances_title))
+        adapter.addFragment(
+            FragmentAssistances(),
+            getString(R.string.sf_tutorial_assistances_title)
+        )
         adapter.addFragment(FragmentActionTree(), getString(R.string.sf_tutorial_action_title))
         viewPager.adapter = adapter
     }

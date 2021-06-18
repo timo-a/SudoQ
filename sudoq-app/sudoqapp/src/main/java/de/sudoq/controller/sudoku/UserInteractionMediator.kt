@@ -35,8 +35,13 @@ import java.util.*
  * Ein Vermittler zwischen einem Sudoku und den verschiedenen
  * Eingabemöglichkeiten, also insbesondere Tastatur und Gesten-View.
  */
-class UserInteractionMediator(virtualKeyboard: VirtualKeyboardLayout, sudokuView: SudokuLayout?, game: Game?, gestureOverlay: GestureInputOverlay?,
-                              gestureStore: GestureStore) : OnGesturePerformedListener, InputListener, CellInteractionListener, ObservableActionCaster {
+class UserInteractionMediator(
+    virtualKeyboard: VirtualKeyboardLayout,
+    sudokuView: SudokuLayout?,
+    game: Game?,
+    gestureOverlay: GestureInputOverlay?,
+    gestureStore: GestureStore
+) : OnGesturePerformedListener, InputListener, CellInteractionListener, ObservableActionCaster {
     /**
      * Flag für den Notizmodus.
      */
@@ -98,7 +103,12 @@ class UserInteractionMediator(virtualKeyboard: VirtualKeyboardLayout, sudokuView
     override fun onCellSelected(view: SudokuCellView, e: SelectEvent) {
         if (!game!!.isFinished()) {
             val c = view.context
-            val p = Profile.getInstance(c.getDir(c.getString(R.string.path_rel_profiles), Context.MODE_PRIVATE))
+            val p = Profile.getInstance(
+                c.getDir(
+                    c.getString(R.string.path_rel_profiles),
+                    Context.MODE_PRIVATE
+                )
+            )
             if (p.isGestureActive) {
                 cellSelectedGestureMode(view, e)
             } else {
@@ -188,7 +198,11 @@ class UserInteractionMediator(virtualKeyboard: VirtualKeyboardLayout, sudokuView
         val currentField = sudokuView!!.currentCellView
         for (i in game!!.sudoku!!.sudokuType!!.symbolIterator) {
             var state: CellViewStates
-            state = if (currentField != null && i == currentField.cell.currentValue && !noteMode) CellViewStates.SELECTED_INPUT_BORDER else if (currentField != null && currentField.cell.isNoteSet(i) && noteMode) CellViewStates.SELECTED_NOTE_BORDER else CellViewStates.DEFAULT_BORDER
+            state =
+                if (currentField != null && i == currentField.cell.currentValue && !noteMode) CellViewStates.SELECTED_INPUT_BORDER else if (currentField != null && currentField.cell.isNoteSet(
+                        i
+                    ) && noteMode
+                ) CellViewStates.SELECTED_NOTE_BORDER else CellViewStates.DEFAULT_BORDER
             virtualKeyboard.markCell(i, state)
         }
         virtualKeyboard.invalidate()
@@ -234,7 +248,10 @@ class UserInteractionMediator(virtualKeyboard: VirtualKeyboardLayout, sudokuView
         val prediction = predictions[0]
         if (prediction.score > 1.5) {
             for (listener in actionListener) {
-                if (noteMode) updateNoteFromGesture(listener, prediction) else updateEntryFromGesture(listener, prediction)
+                if (noteMode) updateNoteFromGesture(
+                    listener,
+                    prediction
+                ) else updateEntryFromGesture(listener, prediction)
             }
         }
         overlay.removeAllViews()
@@ -263,11 +280,16 @@ class UserInteractionMediator(virtualKeyboard: VirtualKeyboardLayout, sudokuView
                 listener!!.onAddEntry(currentCell, number)
                 gestureOverlay!!.visibility = View.INVISIBLE
             } else if (number == -1) {
-                Toast.makeText(sudokuView.context,
-                        sudokuView.context.getString(R.string.toast_invalid_symbol), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    sudokuView.context,
+                    sudokuView.context.getString(R.string.toast_invalid_symbol), Toast.LENGTH_SHORT
+                ).show()
             } else if (number == -2) {
-                Toast.makeText(sudokuView.context,
-                        sudokuView.context.getString(R.string.toast_restricted_symbol), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    sudokuView.context,
+                    sudokuView.context.getString(R.string.toast_restricted_symbol),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -294,11 +316,16 @@ class UserInteractionMediator(virtualKeyboard: VirtualKeyboardLayout, sudokuView
                 listener!!.onNoteAdd(currentCell, predictedNote)
                 gestureOverlay!!.visibility = View.INVISIBLE
             } else if (predictedNote == -1) {
-                Toast.makeText(sudokuView.context,
-                        sudokuView.context.getString(R.string.toast_invalid_symbol), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    sudokuView.context,
+                    sudokuView.context.getString(R.string.toast_invalid_symbol), Toast.LENGTH_SHORT
+                ).show()
             } else if (predictedNote == -2) {
-                Toast.makeText(sudokuView.context,
-                        sudokuView.context.getString(R.string.toast_restricted_symbol), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    sudokuView.context,
+                    sudokuView.context.getString(R.string.toast_restricted_symbol),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -312,9 +339,14 @@ class UserInteractionMediator(virtualKeyboard: VirtualKeyboardLayout, sudokuView
         //maybe there is no focus, then pass
         val currentCell = currectFieldView.cell
         val type = game!!.sudoku!!.sudokuType
-        /* only if assistance 'input assistance' if enabled */if (game.isAssistanceAvailable(Assistances.restrictCandidates)) {
+        /* only if assistance 'input assistance' if enabled */if (game.isAssistanceAvailable(
+                Assistances.restrictCandidates
+            )
+        ) {
             val allPossible = getRestrictedSymbolSet(game.sudoku, currentCell, noteMode)
-            for (i in type!!.symbolIterator) if (!allPossible.contains(i)) virtualKeyboard.disableButton(i)
+            for (i in type!!.symbolIterator) if (!allPossible.contains(i)) virtualKeyboard.disableButton(
+                i
+            )
         }
     }
 
@@ -323,12 +355,16 @@ class UserInteractionMediator(virtualKeyboard: VirtualKeyboardLayout, sudokuView
        caution
           */
     @Synchronized
-    private fun getRestrictedSymbolSet(s: Sudoku?, currentCell: Cell,
-                                       noteMode: Boolean): Set<Int> {
+    private fun getRestrictedSymbolSet(
+        s: Sudoku?, currentCell: Cell,
+        noteMode: Boolean
+    ): Set<Int> {
         val restrictedSet: MutableSet<Int> = HashSet()
         val type = s!!.sudokuType
         val relevantConstraints: MutableList<Constraint> = ArrayList()
-        for (c in type!!) if (c.getPositions().contains(s.getPosition(currentCell.id))) relevantConstraints.add(c)
+        for (c in type!!) if (c.getPositions()
+                .contains(s.getPosition(currentCell.id))
+        ) relevantConstraints.add(c)
 
         /* save val of current view */
         val save = currentCell.currentValue

@@ -66,9 +66,11 @@ class NewSudokuActivity : SudoqCompatActivity() {
         gameSettings!!.fillFromXml(xt)
         /** complexity spinner  */
         val complexitySpinner = findViewById<View>(R.id.spinner_sudokucomplexity) as Spinner
-        val complexityAdapter = ArrayAdapter.createFromResource(this,
-                R.array.sudokucomplexity_values,
-                android.R.layout.simple_spinner_item)
+        val complexityAdapter = ArrayAdapter.createFromResource(
+            this,
+            R.array.sudokucomplexity_values,
+            android.R.layout.simple_spinner_item
+        )
         complexityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         complexitySpinner.adapter = complexityAdapter
 
@@ -82,7 +84,10 @@ class NewSudokuActivity : SudoqCompatActivity() {
                 // do nothing
             }
         }
-        Log.d("gameSettings", "NewSudokuActivity onCreate end is gameSettings null?" + (gameSettings == null))
+        Log.d(
+            "gameSettings",
+            "NewSudokuActivity onCreate end is gameSettings null?" + (gameSettings == null)
+        )
     }
 
     /**
@@ -115,7 +120,8 @@ class NewSudokuActivity : SudoqCompatActivity() {
     private fun initTypeSpinner(stl: SudokuTypesList) {
         val typeSpinner = findViewById<Spinner>(R.id.spinner_sudokutype)
         //List<String> translatedSudokuTypes = Arrays.asList(getResources().getStringArray(R.array.sudokutype_values));
-        val wantedSudokuTypes: MutableList<StringAndEnum<SudokuTypes>> = ArrayList() //user can choose to only have selected types offered, so here we filter
+        val wantedSudokuTypes: MutableList<StringAndEnum<SudokuTypes>> =
+            ArrayList() //user can choose to only have selected types offered, so here we filter
         check(stl.size != 0) { "list shouldn't be empty" }
 
         /* convert */
@@ -123,23 +129,34 @@ class NewSudokuActivity : SudoqCompatActivity() {
             val sae = StringAndEnum(Utility.type2string(this, st)!!, st)
             wantedSudokuTypes.add(sae)
         }
-        wantedSudokuTypes.sortWith { o1, o2 -> SudokuTypeOrder.getKey(o1.enum) - SudokuTypeOrder.getKey(o2.enum) }
+        wantedSudokuTypes.sortWith { o1, o2 ->
+            SudokuTypeOrder.getKey(o1.enum) - SudokuTypeOrder.getKey(
+                o2.enum
+            )
+        }
         Log.d(LOG_TAG, "Sudokutype_1: " + sudokuType)
-        val typeAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, wantedSudokuTypes)
+        val typeAdapter =
+            ArrayAdapter(this, android.R.layout.simple_spinner_item, wantedSudokuTypes)
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         typeSpinner.adapter = typeAdapter
         Log.d(LOG_TAG, "Sudokutype_4: " + sudokuType)
 
-        /* add onItemSelectListener */typeSpinner.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, pos: Int, id: Long) {
-                val item = parent.getItemAtPosition(pos) as StringAndEnum<SudokuTypes>
-                setSudokuType(item.enum)
-            }
+        /* add onItemSelectListener */typeSpinner.onItemSelectedListener =
+            object : OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>,
+                    view: View,
+                    pos: Int,
+                    id: Long
+                ) {
+                    val item = parent.getItemAtPosition(pos) as StringAndEnum<SudokuTypes>
+                    setSudokuType(item.enum)
+                }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // do nothing
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    // do nothing
+                }
             }
-        }
     }
 
     /**
@@ -155,7 +172,8 @@ class NewSudokuActivity : SudoqCompatActivity() {
                 val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
                 val pm = ProfileManager(profilesDir)
                 val sudokuDir = getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE)
-                val game = GameManager.getInstance(profilesDir, sudokuDir).newGame(sudokuType!!, complexity!!, gameSettings!!, sudokuDir)
+                val game = GameManager.getInstance(profilesDir, sudokuDir)
+                    .newGame(sudokuType!!, complexity!!, gameSettings!!, sudokuDir)
                 check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
                 pm.loadCurrentProfile()
                 pm.currentGame = game.id
@@ -164,11 +182,19 @@ class NewSudokuActivity : SudoqCompatActivity() {
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             } catch (e: IllegalArgumentException) {
                 Log.e(LOG_TAG, "exception: " + e)
-                Toast.makeText(this, getString(R.string.sf_sudokupreferences_copying), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    getString(R.string.sf_sudokupreferences_copying),
+                    Toast.LENGTH_SHORT
+                ).show()
                 Log.d(LOG_TAG, "no template found- 'wait please'")
             }
         } else {
-            Toast.makeText(this, getString(R.string.error_sudoku_preference_incomplete), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                getString(R.string.error_sudoku_preference_incomplete),
+                Toast.LENGTH_SHORT
+            ).show()
             if (sudokuType == null) Toast.makeText(this, "sudokuType", Toast.LENGTH_SHORT).show()
             if (complexity == null) Toast.makeText(this, "complexity", Toast.LENGTH_SHORT).show()
             if (gameSettings == null) Toast.makeText(this, "gameSetting", Toast.LENGTH_SHORT).show()

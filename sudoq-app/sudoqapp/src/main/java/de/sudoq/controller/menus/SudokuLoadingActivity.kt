@@ -47,8 +47,8 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
     private var adapter: SudokuLoadingAdapter? = null
     private var games: List<GameData>? = null
 
-    private lateinit var profilesDir : File
-    private lateinit var sudokuDir : File
+    private lateinit var profilesDir: File
+    private lateinit var sudokuDir: File
 
     /*	protected static MenuItem menuDeleteFinished;
 	private static final int MENU_DELETE_FINISHED = 0;
@@ -70,7 +70,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        profilesDir  = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
         sudokuDir = getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE)
 
         //needs to be called before setcontentview which calls onContentChanged
@@ -129,7 +129,10 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_sudokuloading_delete_finished -> GameManager.getInstance(profilesDir, sudokuDir).deleteFinishedGames()
+            R.id.action_sudokuloading_delete_finished -> GameManager.getInstance(
+                profilesDir,
+                sudokuDir
+            ).deleteFinishedGames()
             R.id.action_sudokuloading_delete_all -> {
                 val p = Profile.getInstance(profilesDir)
                 val gm = GameManager.getInstance(profilesDir, sudokuDir)
@@ -192,12 +195,18 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
         } else {
             /*selected in order to delete*/
             val p = Profile.getInstance(profilesDir)
-            GameManager.getInstance(profilesDir, sudokuDir).deleteGame(adapter!!.getItem(position)!!.id, p)
+            GameManager.getInstance(profilesDir, sudokuDir)
+                .deleteGame(adapter!!.getItem(position)!!.id, p)
             onContentChanged()
         }
     }
 
-    override fun onItemLongClick(parent: AdapterView<*>?, view: View, position: Int, id: Long): Boolean {
+    override fun onItemLongClick(
+        parent: AdapterView<*>?,
+        view: View,
+        position: Int,
+        id: Long
+    ): Boolean {
         Log.d(LOG_TAG, "LongClick on $position")
 
         /*gather all options */
@@ -224,7 +233,8 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 }
                 1 -> {
-                    GameManager.getInstance(profilesDir, sudokuDir).deleteGame(adapter!!.getItem(position)!!.id, p)
+                    GameManager.getInstance(profilesDir, sudokuDir)
+                        .deleteGame(adapter!!.getItem(position)!!.id, p)
                     onContentChanged()
                 }
                 2 -> {
@@ -275,8 +285,10 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
                     Log.v("file-share", "gamefile getAbsolutePath " + gameFile.getAbsolutePath())
                     Log.v("file-share", "gamefile getName " + gameFile.getName())
                     Log.v("file-share", "gamefile getParent " + gameFile.getParent())
-                    val fileUri = FileProvider.getUriForFile(this@SudokuLoadingActivity,
-                            "de.sudoq.fileprovider", tmpFile)
+                    val fileUri = FileProvider.getUriForFile(
+                        this@SudokuLoadingActivity,
+                        "de.sudoq.fileprovider", tmpFile
+                    )
                     Log.v("file-share", "uri is null? " + (fileUri == null))
                     val sendIntent = Intent()
                     sendIntent.setAction(Intent.ACTION_SEND) //
@@ -305,7 +317,12 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
         if (games!!.isEmpty()) {
             noGamesTextView.visibility = View.VISIBLE
             val fab = findViewById<FloatingActionButton>(R.id.fab)
-            fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_arrow_back_white_24dp))
+            fab.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this,
+                    R.drawable.ic_arrow_back_white_24dp
+                )
+            )
             fabstate = FAB_STATES.GO_BACK
         } else {
             noGamesTextView.visibility = View.INVISIBLE

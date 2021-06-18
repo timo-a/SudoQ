@@ -33,7 +33,8 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
     }
 
     var lefthand: CheckBox? = null
-//    override var restricttypes: Button? = null
+
+    //    override var restricttypes: Button? = null
     var helper: CheckBox? = null
     var debug: CheckBox? = null
     var debugCounter: Byte = 0
@@ -95,16 +96,21 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
         // Profile.Companion.getInstance().registerListener(this);
         /** language spinner  */
         val languageSpinner = findViewById<Spinner>(R.id.spinner_language)
-        val languageAdapter = ArrayAdapter.createFromResource(this,
-                R.array.language_choice_values,
-                android.R.layout.simple_spinner_item)
+        val languageAdapter = ArrayAdapter.createFromResource(
+            this,
+            R.array.language_choice_values,
+            android.R.layout.simple_spinner_item
+        )
         languageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         languageSpinner.adapter = languageAdapter
         val thishere: Activity = this
 
         //set language
         currentLanguageCode = LanguageUtility.loadLanguageFromSharedPreferences2(this)
-        Log.d("lang", "set language to AdvancedPreferencesActivity.onCreate() after setLocaleFromMemory.")
+        Log.d(
+            "lang",
+            "set language to AdvancedPreferencesActivity.onCreate() after setLocaleFromMemory."
+        )
         languageSpinner.setSelection(if (currentLanguageCode!!.isSystemLanguage) 0 else currentLanguageCode!!.language.ordinal)
         // nested Listener for languageSpinner
         languageSpinner.onItemSelectedListener = object : OnItemSelectedListener {
@@ -184,7 +190,9 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
         builder.setPositiveButton(getString(R.string.dialog_yes)) { dialog, which ->
             // pass
         }
-        builder.setNegativeButton(getString(R.string.dialog_no)) { dialog, which -> cb.isChecked = false }
+        builder.setNegativeButton(getString(R.string.dialog_no)) { dialog, which ->
+            cb.isChecked = false
+        }
         builder.setMessage("This feature is still in development. Are you sure you want to activate it?")
         val alertDialog = builder.create()
         alertDialog.show()
@@ -195,7 +203,8 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
             ParentActivity.NEW_SUDOKU -> {
                 saveToGameSettings()
                 if (debug != null) {
-                    val pm = ProfileManager(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+                    val pm =
+                        ProfileManager(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
                     check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
                     pm.loadCurrentProfile()
                     pm.setDebugActive(debug!!.isChecked)

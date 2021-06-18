@@ -25,8 +25,10 @@ import de.sudoq.view.SudokuLayout
  *
  * @property position Position of the cell represented by this View
  */
-class HighlightedCellView(context: Context, sl: SudokuLayout,
-                          private val position: Position, color: Int) : View(context) {
+class HighlightedCellView(
+    context: Context, sl: SudokuLayout,
+    private val position: Position, color: Int
+) : View(context) {
     /* Attributes */
 
     /**
@@ -65,27 +67,34 @@ class HighlightedCellView(context: Context, sl: SudokuLayout,
         /* cells that touch the edge: Paint your edge but leave space at the corners*/paint.reset()
         paint.strokeWidth = (thickness * sl.currentSpacing).toFloat()
         paint.color = marginColor
-        val leftX: Float   = (sl.currentLeftMargin + p.x * cellSizeAndSpacing - sl.currentSpacing / 2).toFloat()
-        val rightX: Float  = (sl.currentLeftMargin + (p.x + 1) * cellSizeAndSpacing - sl.currentSpacing / 2).toFloat()
-        val topY: Float    = (sl.currentTopMargin + p.y * cellSizeAndSpacing - sl.currentSpacing / 2).toFloat()
-        val bottomY: Float = (sl.currentTopMargin + (p.y + 1) * cellSizeAndSpacing - sl.currentSpacing / 2).toFloat()
+        val leftX: Float =
+            (sl.currentLeftMargin + p.x * cellSizeAndSpacing - sl.currentSpacing / 2).toFloat()
+        val rightX: Float =
+            (sl.currentLeftMargin + (p.x + 1) * cellSizeAndSpacing - sl.currentSpacing / 2).toFloat()
+        val topY: Float =
+            (sl.currentTopMargin + p.y * cellSizeAndSpacing - sl.currentSpacing / 2).toFloat()
+        val bottomY: Float =
+            (sl.currentTopMargin + (p.y + 1) * cellSizeAndSpacing - sl.currentSpacing / 2).toFloat()
 
         /* left edge */
         val startY: Float = sl.currentTopMargin + p.y * cellSizeAndSpacing + edgeRadius
-        val stopY: Float = sl.currentTopMargin + (p.y + 1) * cellSizeAndSpacing - edgeRadius - sl.currentSpacing
+        val stopY: Float =
+            sl.currentTopMargin + (p.y + 1) * cellSizeAndSpacing - edgeRadius - sl.currentSpacing
         canvas.drawLine(leftX, startY, leftX, stopY, paint)
 
         /* right edge */canvas.drawLine(rightX, startY, rightX, stopY, paint)
 
         /* top edge */
         val startX: Float = sl.currentLeftMargin + p.x * cellSizeAndSpacing + edgeRadius
-        val stopX: Float = sl.currentLeftMargin + (p.x + 1) * cellSizeAndSpacing - edgeRadius - sl.currentSpacing
+        val stopX: Float =
+            sl.currentLeftMargin + (p.x + 1) * cellSizeAndSpacing - edgeRadius - sl.currentSpacing
         canvas.drawLine(startX, topY, stopX, topY, paint)
 
         /* bottom edge */canvas.drawLine(startX, bottomY, stopX, bottomY, paint)
 
 
-        /* Cells at corners of their block draw a circle for a round circumference*/paint.style = Paint.Style.FILL_AND_STROKE
+        /* Cells at corners of their block draw a circle for a round circumference*/paint.style =
+            Paint.Style.FILL_AND_STROKE
         val radius = edgeRadius + sl.currentSpacing / 2
         val angle = (90 + 10).toShort()
         /*TopLeft*/
@@ -94,18 +103,22 @@ class HighlightedCellView(context: Context, sl: SudokuLayout,
         oval[centerX - radius, centerY - radius, centerX + radius] = centerY + radius
         canvas.drawArc(oval, (180 - 5).toFloat(), angle.toFloat(), false, paint)
 
-        /* Top Right*/centerX = sl.currentLeftMargin + (p.x + 1) * cellSizeAndSpacing - sl.currentSpacing - edgeRadius
+        /* Top Right*/centerX =
+            sl.currentLeftMargin + (p.x + 1) * cellSizeAndSpacing - sl.currentSpacing - edgeRadius
         centerY = sl.currentTopMargin + p.y * cellSizeAndSpacing + edgeRadius
         oval[centerX - radius, centerY - radius, centerX + radius] = centerY + radius
         canvas.drawArc(oval, (270 - 5).toFloat(), angle.toFloat(), false, paint)
 
         /*Bottom Left*/centerX = sl.currentLeftMargin + p.x * cellSizeAndSpacing + edgeRadius
-        centerY = sl.currentTopMargin + (p.y + 1) * cellSizeAndSpacing - edgeRadius - sl.currentSpacing
+        centerY =
+            sl.currentTopMargin + (p.y + 1) * cellSizeAndSpacing - edgeRadius - sl.currentSpacing
         oval[centerX - radius, centerY - radius, centerX + radius] = centerY + radius
         canvas.drawArc(oval, (90 - 5).toFloat(), angle.toFloat(), false, paint)
 
-        /*BottomRight*/centerX = sl.currentLeftMargin + (p.x + 1) * cellSizeAndSpacing - edgeRadius - sl.currentSpacing
-        centerY = sl.currentTopMargin + (p.y + 1) * cellSizeAndSpacing - edgeRadius - sl.currentSpacing
+        /*BottomRight*/centerX =
+            sl.currentLeftMargin + (p.x + 1) * cellSizeAndSpacing - edgeRadius - sl.currentSpacing
+        centerY =
+            sl.currentTopMargin + (p.y + 1) * cellSizeAndSpacing - edgeRadius - sl.currentSpacing
         oval[centerX - radius, centerY - radius, centerX + radius] = centerY + radius
         canvas.drawArc(oval, (0 - 5).toFloat(), angle.toFloat(), false, paint)
     }
@@ -118,11 +131,19 @@ class HighlightedCellView(context: Context, sl: SudokuLayout,
         val thickness = 10
         paint.strokeWidth = (thickness * sl.currentSpacing).toFloat()
         val cellSizeAndSpacing = sl.currentCellViewSize + sl.currentSpacing
-        val left = (sl.currentLeftMargin + p.x * cellSizeAndSpacing - sl.currentSpacing / 2).toFloat()
+        val left =
+            (sl.currentLeftMargin + p.x * cellSizeAndSpacing - sl.currentSpacing / 2).toFloat()
         val top = (sl.currentTopMargin + p.y * cellSizeAndSpacing - sl.currentSpacing / 2).toFloat()
-        val right = (sl.currentLeftMargin + (p.x + 1) * cellSizeAndSpacing - sl.currentSpacing / 2).toFloat()
-        val bottom = (sl.currentTopMargin + (p.y + 1) * cellSizeAndSpacing - sl.currentSpacing / 2).toFloat()
-        canvas.drawRoundRect(RectF(left, top, right, bottom), edgeRadius + sl.currentSpacing / 2, edgeRadius + sl.currentSpacing / 2, paint)
+        val right =
+            (sl.currentLeftMargin + (p.x + 1) * cellSizeAndSpacing - sl.currentSpacing / 2).toFloat()
+        val bottom =
+            (sl.currentTopMargin + (p.y + 1) * cellSizeAndSpacing - sl.currentSpacing / 2).toFloat()
+        canvas.drawRoundRect(
+            RectF(left, top, right, bottom),
+            edgeRadius + sl.currentSpacing / 2,
+            edgeRadius + sl.currentSpacing / 2,
+            paint
+        )
     }
 
     /** TODO may come in handy later for highlighting notes. or do that seperately
@@ -144,9 +165,13 @@ class HighlightedCellView(context: Context, sl: SudokuLayout,
         for (i in 0 until Symbol.getInstance().getNumberOfSymbols()) {
             if (cell.isNoteSet(i)) {
                 val note = Symbol.getInstance().getMapping(i)
-                canvas.drawText(note + "",
-                        (i % Symbol.getInstance().getRasterSize() * noteTextSize + noteTextSize / 2).toFloat(),
-                        (i / Symbol.getInstance().getRasterSize() * noteTextSize + noteTextSize).toFloat(), notePaint)
+                canvas.drawText(
+                    note + "",
+                    (i % Symbol.getInstance()
+                        .getRasterSize() * noteTextSize + noteTextSize / 2).toFloat(),
+                    (i / Symbol.getInstance()
+                        .getRasterSize() * noteTextSize + noteTextSize).toFloat(), notePaint
+                )
             }
         }
     }

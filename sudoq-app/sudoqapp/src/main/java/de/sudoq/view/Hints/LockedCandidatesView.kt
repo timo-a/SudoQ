@@ -18,7 +18,8 @@ import de.sudoq.view.SudokuLayout
  * einzelnes Feld innerhalb eines Sudokus dar. Es erweitert den Android View um
  * Funktionalität zur Benutzerinteraktion und Färben.
  */
-class LockedCandidatesView(context: Context, sl: SudokuLayout, d: LockedCandidatesDerivation) : HintView(context, sl, d) {
+class LockedCandidatesView(context: Context, sl: SudokuLayout, d: LockedCandidatesDerivation) :
+    HintView(context, sl, d) {
     /**
      * Erstellt einen SudokuFieldView und initialisiert die Attribute der
      * Klasse.
@@ -27,9 +28,11 @@ class LockedCandidatesView(context: Context, sl: SudokuLayout, d: LockedCandidat
      * @throws IllegalArgumentException Wird geworfen, falls eines der Argumente null ist
      */
     init {
-        val lockedConstraintV: View = HighlightedConstraintView(context, sl, d.lockedConstraint!!, Color.BLUE)
+        val lockedConstraintV: View =
+            HighlightedConstraintView(context, sl, d.lockedConstraint!!, Color.BLUE)
         highlightedObjects.add(lockedConstraintV)
-        val reducibleConstraintV: View = HighlightedConstraintView(context, sl, d.reducibleConstraint!!, Color.GREEN)
+        val reducibleConstraintV: View =
+            HighlightedConstraintView(context, sl, d.reducibleConstraint!!, Color.GREEN)
         highlightedObjects.add(reducibleConstraintV)
     }
 }

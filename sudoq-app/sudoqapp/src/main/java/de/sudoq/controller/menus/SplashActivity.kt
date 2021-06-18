@@ -18,7 +18,6 @@ import android.view.Menu
 import android.widget.Toast
 import de.sudoq.R
 import de.sudoq.controller.SudoqCompatActivity
-import de.sudoq.model.files.FileManager
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.sudoku.complexity.Complexity.Companion.playableValues
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
@@ -248,7 +247,6 @@ class SplashActivity : SudoqCompatActivity() {
     private inner class Initialization(val sudokuDir: File) : AsyncTask<Void?, Void?, Void?>() {
 
 
-
         public override fun onPostExecute(v: Void?) {
             val settings = getSharedPreferences("Prefs", 0)
             settings.edit().putBoolean(INITIALIZED_TAG, true).commit()
@@ -264,21 +262,28 @@ class SplashActivity : SudoqCompatActivity() {
             var types = SudokuTypes.values()
             /* ensure sudoku9x9 is first element ->  will be finished first.
              * Reason: people will probably want to play 9x9 first
-             * kind of unnecessary because 9x9 is declared first in SudokuTypes, but maybe that will change*/types = swap99tothefront(types)
+             * kind of unnecessary because 9x9 is declared first in SudokuTypes, but maybe that will change*/types =
+                swap99tothefront(types)
 
             /* actual copying*/
             for (t in types) {
-                val sourceType = HEAD_DIRECTORY + File.separator + t.toString() + File.separator // e.g. .../standard9x9/
-                val targetType = sudokuDir.absolutePath + File.separator + t.toString() + File.separator
-                copyFile("$sourceType$t.xml",
-                        "$targetType$t.xml")
+                val sourceType =
+                    HEAD_DIRECTORY + File.separator + t.toString() + File.separator // e.g. .../standard9x9/
+                val targetType =
+                    sudokuDir.absolutePath + File.separator + t.toString() + File.separator
+                copyFile(
+                    "$sourceType$t.xml",
+                    "$targetType$t.xml"
+                )
                 for (c in playableValues()) {
                     val sourceComplexity = sourceType + c.toString() + File.separator
                     val targetComplexity = targetType + c.toString() + File.separator
                     val fnames = getSubfiles(sourceType + c.toString())
                     for (filename in fnames!!) {
-                        copyFile(sourceComplexity + filename,
-                                targetComplexity + filename)
+                        copyFile(
+                            sourceComplexity + filename,
+                            targetComplexity + filename
+                        )
                     }
                 }
             }

@@ -18,7 +18,8 @@ import de.sudoq.view.SudokuLayout
  * einzelnes Feld innerhalb eines Sudokus dar. Es erweitert den Android View um
  * Funktionalität zur Benutzerinteraktion und Färben.
  */
-class LastDigitView(context: Context, sl: SudokuLayout, d: SolveDerivation) : HintView(context, sl, d) {
+class LastDigitView(context: Context, sl: SudokuLayout, d: SolveDerivation) :
+    HintView(context, sl, d) {
     /**
      * Erstellt einen LastDigitView
      *

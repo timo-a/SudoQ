@@ -60,9 +60,9 @@ object HintFormulator {
         val shapeDeterminer = Utility.gender2AccDeterminer(context, shapeGender)
         val highlightSuffix = Utility.gender2AccSufix(context, shapeGender)
         return context.getString(R.string.hint_lastdigit)
-                .replace("{shape}", shapeString!!)
-                .replace("{determiner}", shapeDeterminer!!)
-                .replace("{suffix}", highlightSuffix!!)
+            .replace("{shape}", shapeString!!)
+            .replace("{determiner}", shapeDeterminer!!)
+            .replace("{suffix}", highlightSuffix!!)
     }
 
     private fun lastCandidateText(context: Context, sd: SolveDerivation): String {
@@ -87,10 +87,10 @@ object HintFormulator {
         }
         Log.d(LOG_TAG, "leftovernotetext is called. and versionNumber is: $versionNumber")
         return context.getString(R.string.hint_leftovernote)
-                .replace("{note}", (d.note + 1).toString())
-                .replace("{shape}", shapeString!!)
-                .replace("{determiner}", shapeDeterminer!!)
-                .replace("{suffix}", highlightSuffix!!)
+            .replace("{note}", (d.note + 1).toString())
+            .replace("{shape}", shapeString!!)
+            .replace("{determiner}", shapeDeterminer!!)
+            .replace("{suffix}", highlightSuffix!!)
     }
 
     private fun nakedSingleText(context: Context, sd: SolveDerivation): String {
@@ -100,21 +100,26 @@ object HintFormulator {
         val sb = StringBuilder()
         sb.append(context.getString(R.string.hint_nakedsingle_look))
         sb.append(' ')
-        sb.append(context.getString(R.string.hint_nakedsingle_note)
-                .replace("{note}", note.toString() + ""))
+        sb.append(
+            context.getString(R.string.hint_nakedsingle_note)
+                .replace("{note}", note.toString() + "")
+        )
         sb.append(' ')
-        val shapeString = Utility.constraintShapeGenDet2string(context, getGroupShape(d.constraint!!))
+        val shapeString =
+            Utility.constraintShapeGenDet2string(context, getGroupShape(d.constraint!!))
         val shapePrepDet = Utility.getGender(context, getGroupShape(d.constraint!!))
         val prepDet = Utility.gender2inThe(context, shapePrepDet!!)
-        sb.append(context.getString(R.string.hint_nakedsingle_remove)
+        sb.append(
+            context.getString(R.string.hint_nakedsingle_remove)
                 .replace("{prep det}", prepDet!!)
-                .replace("{shape}", shapeString!!))
+                .replace("{shape}", shapeString!!)
+        )
         return sb.toString()
     }
 
     private fun nakedMultiple(context: Context, sd: SolveDerivation): String {
         val bs: BitSet = (sd as NakedSetDerivation).subsetCandidates!!
-        val symbols : MutableList<Int> = mutableListOf()
+        val symbols: MutableList<Int> = mutableListOf()
 
         //collect all set bits, we assume there will never be an overflow
         var i = bs.nextSetBit(0)
@@ -124,13 +129,16 @@ object HintFormulator {
         }
 
         val symbolsString = symbols
-                .map { + 1 } //add one for user representation
-                .joinToString(", ", "{", "}", transform = {it.toString()})
+            .map { +1 } //add one for user representation
+            .joinToString(", ", "{", "}", transform = { it.toString() })
 
         return context.getString(R.string.hint_nakedset).replace("{symbols}", symbolsString)
     }
 
-    private fun hiddenSingleText(context: Context, sd: SolveDerivation): String { //TODO this should never be used but already be taken by a special hit that just says: Look at this cell, only one left can go;
+    private fun hiddenSingleText(
+        context: Context,
+        sd: SolveDerivation
+    ): String { //TODO this should never be used but already be taken by a special hit that just says: Look at this cell, only one left can go;
         val bs = (sd as HiddenSetDerivation).getSubsetMembers()[0].relevantCandidates
         val note = (bs.nextSetBit(0) + 1).toString()
         return context.getString(R.string.hint_hiddensingle).replace("{note}", note)
@@ -139,8 +147,8 @@ object HintFormulator {
     private fun hiddenMultiple(context: Context, sd: SolveDerivation): String {
         val bs = (sd as HiddenSetDerivation).subsetCandidates
         val hiddenMultiples = bs!!.setBits
-                .map { + 1 }
-                .joinToString(", ", "{", "}", transform = {it.toString()})
+            .map { +1 }
+            .joinToString(", ", "{", "}", transform = { it.toString() })
 
         return context.getString(R.string.hint_hiddenset).replace("{symbols}", hiddenMultiples)
     }

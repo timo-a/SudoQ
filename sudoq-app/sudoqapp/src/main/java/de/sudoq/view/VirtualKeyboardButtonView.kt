@@ -25,7 +25,8 @@ import java.util.*
  *
  * @property symbol The symbol associated with this VirtualKeyboardButtonView.
  */
-class VirtualKeyboardButtonView(context: Context?, private val symbol: Int) : View(context), ObservableInput {
+class VirtualKeyboardButtonView(context: Context?, private val symbol: Int) : View(context),
+    ObservableInput {
 
     /**
      * Das Symbol, welches in diesem Button steht so, wie es gemalt wird
@@ -116,7 +117,11 @@ class VirtualKeyboardButtonView(context: Context?, private val symbol: Int) : Vi
      * Wird geworfen, falls der übergebene Kontext null ist
      */
     init {
-        this.layoutParams = TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 1.0f)
+        this.layoutParams = TableLayout.LayoutParams(
+            TableLayout.LayoutParams.WRAP_CONTENT,
+            TableLayout.LayoutParams.WRAP_CONTENT,
+            1.0f
+        )
         drawnSymbol = Symbol.getInstance().getMapping(symbol)
         inputListener = ArrayList()
         CellViewPainter.instance!!.setMarking(this, CellViewStates.DEFAULT_BORDER)

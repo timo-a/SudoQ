@@ -44,11 +44,31 @@ class StatisticsActivity : SudoqCompatActivity() {
         ab!!.setHomeAsUpIndicator(R.drawable.launcher)
         ab.setDisplayHomeAsUpEnabled(true)
         ab.setDisplayShowTitleEnabled(true)
-        setScore(R.id.text_played_sudokus, R.string.statistics_played_sudokus, Statistics.playedSudokus)
-        setScore(R.id.text_played_easy_sudokus, R.string.statistics_played_easy_sudokus, Statistics.playedEasySudokus)
-        setScore(R.id.text_played_medium_sudokus, R.string.statistics_played_medium_sudokus, Statistics.playedMediumSudokus)
-        setScore(R.id.text_played_difficult_sudokus, R.string.statistics_played_difficult_sudokus, Statistics.playedDifficultSudokus)
-        setScore(R.id.text_played_infernal_sudokus, R.string.statistics_played_infernal_sudokus, Statistics.playedInfernalSudokus)
+        setScore(
+            R.id.text_played_sudokus,
+            R.string.statistics_played_sudokus,
+            Statistics.playedSudokus
+        )
+        setScore(
+            R.id.text_played_easy_sudokus,
+            R.string.statistics_played_easy_sudokus,
+            Statistics.playedEasySudokus
+        )
+        setScore(
+            R.id.text_played_medium_sudokus,
+            R.string.statistics_played_medium_sudokus,
+            Statistics.playedMediumSudokus
+        )
+        setScore(
+            R.id.text_played_difficult_sudokus,
+            R.string.statistics_played_difficult_sudokus,
+            Statistics.playedDifficultSudokus
+        )
+        setScore(
+            R.id.text_played_infernal_sudokus,
+            R.string.statistics_played_infernal_sudokus,
+            Statistics.playedInfernalSudokus
+        )
         setScore(R.id.text_score, R.string.statistics_score, Statistics.maximumPoints)
         val current = findViewById<View>(R.id.text_fastest_solving_time) as TextView
         val pm = ProfileManager(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))

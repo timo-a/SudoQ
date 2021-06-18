@@ -37,8 +37,12 @@ class HintPainter(private val sl: SudokuLayout) {
             HintTypes.HiddenTriple,
             HintTypes.HiddenQuadruple,
             HintTypes.HiddenQuintuple -> HiddenSetView(context, sl, (sd as HiddenSetDerivation))
-            HintTypes.LockedCandidatesExternal -> LockedCandidatesView(context, sl, (sd as LockedCandidatesDerivation))
-            HintTypes.XWing ->   XWingView(context, sl, (sd as XWingDerivation))
+            HintTypes.LockedCandidatesExternal -> LockedCandidatesView(
+                context,
+                sl,
+                (sd as LockedCandidatesDerivation)
+            )
+            HintTypes.XWing -> XWingView(context, sl, (sd as XWingDerivation))
             HintTypes.NoNotes -> NoNotesView(context, sl, (sd as NoNotesDerivation))
             else -> null
         }

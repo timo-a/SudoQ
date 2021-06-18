@@ -23,10 +23,11 @@ import de.sudoq.view.actionTree.*
  * Reagiert auf Interaktionen des Benutzers mit dem Aktionsbaum.
  */
 class ActionTreeController(
-        /**
-         * Kontext, von dem der ActionTreeController verwendet wird
-         */
-        private val context: SudokuActivity) : ActionTreeNavListener, ModelChangeListener<ActionTreeElement> {
+    /**
+     * Kontext, von dem der ActionTreeController verwendet wird
+     */
+    private val context: SudokuActivity
+) : ActionTreeNavListener, ModelChangeListener<ActionTreeElement> {
 
     /**
      * Die ScrolLView des ActionTrees
@@ -142,8 +143,10 @@ class ActionTreeController(
         Log.d(LOG_TAG, "ActionTree width: $actionTreeWidth")
         val view = View(context)
         val viewLayoutParams = RelativeLayout.LayoutParams(AT_RASTER_SIZE, AT_RASTER_SIZE)
-        viewLayoutParams.topMargin = (if (orientation == Configuration.ORIENTATION_PORTRAIT) actionTreeHeight else actionTreeWidth + 1) * AT_RASTER_SIZE
-        viewLayoutParams.leftMargin = (if (orientation == Configuration.ORIENTATION_PORTRAIT) actionTreeWidth else actionTreeHeight + 1) * AT_RASTER_SIZE
+        viewLayoutParams.topMargin =
+            (if (orientation == Configuration.ORIENTATION_PORTRAIT) actionTreeHeight else actionTreeWidth + 1) * AT_RASTER_SIZE
+        viewLayoutParams.leftMargin =
+            (if (orientation == Configuration.ORIENTATION_PORTRAIT) actionTreeWidth else actionTreeHeight + 1) * AT_RASTER_SIZE
         view.layoutParams = viewLayoutParams
         relativeLayout!!.addView(view)
 
@@ -224,14 +227,18 @@ class ActionTreeController(
             activeElementView = ActiveElement(context, view, element)
             activeX = x * AT_RASTER_SIZE
             activeY = y * AT_RASTER_SIZE
-            val viewLayoutParams = RelativeLayout.LayoutParams(AT_RASTER_SIZE,
-                    AT_RASTER_SIZE)
+            val viewLayoutParams = RelativeLayout.LayoutParams(
+                AT_RASTER_SIZE,
+                AT_RASTER_SIZE
+            )
             viewLayoutParams.topMargin = x * AT_RASTER_SIZE
             viewLayoutParams.leftMargin = y * AT_RASTER_SIZE
             activeElementView!!.layoutParams = viewLayoutParams
         } else {
-            val viewLayoutParams = RelativeLayout.LayoutParams(AT_RASTER_SIZE,
-                    AT_RASTER_SIZE)
+            val viewLayoutParams = RelativeLayout.LayoutParams(
+                AT_RASTER_SIZE,
+                AT_RASTER_SIZE
+            )
             viewLayoutParams.topMargin = x * AT_RASTER_SIZE
             viewLayoutParams.leftMargin = y * AT_RASTER_SIZE
             view.layoutParams = viewLayoutParams
@@ -278,17 +285,20 @@ class ActionTreeController(
      * Endposition y-Richtung
      */
     private fun drawLineP(fromX: Int, fromY: Int, toX: Int, toY: Int) {
-        val branchingLine = BranchingLine(context, fromX * AT_RASTER_SIZE, fromY * AT_RASTER_SIZE,
-                toX * AT_RASTER_SIZE + AT_RASTER_SIZE / 2, toY * AT_RASTER_SIZE)
-        val branchingLineLayoutParams = RelativeLayout.LayoutParams(toY * AT_RASTER_SIZE
-                - fromY * AT_RASTER_SIZE + AT_RASTER_SIZE,
-                toX * AT_RASTER_SIZE - fromX * AT_RASTER_SIZE + AT_RASTER_SIZE)
+        val branchingLine = BranchingLine(
+            context, fromX * AT_RASTER_SIZE, fromY * AT_RASTER_SIZE,
+            toX * AT_RASTER_SIZE + AT_RASTER_SIZE / 2, toY * AT_RASTER_SIZE
+        )
+        val branchingLineLayoutParams = RelativeLayout.LayoutParams(
+            toY * AT_RASTER_SIZE
+                    - fromY * AT_RASTER_SIZE + AT_RASTER_SIZE,
+            toX * AT_RASTER_SIZE - fromX * AT_RASTER_SIZE + AT_RASTER_SIZE
+        )
         branchingLineLayoutParams.topMargin = fromX * AT_RASTER_SIZE
         branchingLineLayoutParams.leftMargin = fromY * AT_RASTER_SIZE
         branchingLine.layoutParams = branchingLineLayoutParams
         relativeLayout!!.addView(branchingLine)
     }
-
 
 
     /**
@@ -322,9 +332,14 @@ class ActionTreeController(
     fun setVisibility(show: Boolean) {
         if (show) {
             inflateActionTree()
-            Log.d(LOG_TAG, "Show action tree: Element: (" + activeY + AT_RASTER_SIZE / 2 + ", " + activeX + AT_RASTER_SIZE / 2 + ")")
-            actionTreeScroll.scrollTo(activeY + AT_RASTER_SIZE / 2, activeX + AT_RASTER_SIZE
-                    / 2)
+            Log.d(
+                LOG_TAG,
+                "Show action tree: Element: (" + activeY + AT_RASTER_SIZE / 2 + ", " + activeX + AT_RASTER_SIZE / 2 + ")"
+            )
+            actionTreeScroll.scrollTo(
+                activeY + AT_RASTER_SIZE / 2, activeX + AT_RASTER_SIZE
+                        / 2
+            )
             actionTreeLayout.visibility = View.VISIBLE
         } else {
             actionTreeLayout.visibility = View.INVISIBLE
@@ -370,7 +385,9 @@ class ActionTreeController(
      */
     init {
         this.context.game!!.stateHandler!!.registerListener(this)
-        actionTreeLayout = context.findViewById<View>(R.id.sudoku_action_tree_layout) as RelativeLayout
-        actionTreeScroll = context.findViewById<View>(R.id.sudoku_action_tree_scroll) as FullScrollLayout
+        actionTreeLayout =
+            context.findViewById<View>(R.id.sudoku_action_tree_layout) as RelativeLayout
+        actionTreeScroll =
+            context.findViewById<View>(R.id.sudoku_action_tree_scroll) as FullScrollLayout
     }
 }

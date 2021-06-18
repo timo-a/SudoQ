@@ -20,16 +20,26 @@ object Utility {
         //we want to be independent of the order in which the enum fields are defined in their class
         //so we first create an empty array and fill it in an order unknown to us
         val typeStrings = arrayOfNulls<String>(SudokuTypes.values().size)
-        typeStrings[SudokuTypes.standard4x4.ordinal] = context.getString(R.string.advanced_settings_restrict_item_standard_4x4)
-        typeStrings[SudokuTypes.standard6x6.ordinal] = context.getString(R.string.advanced_settings_restrict_item_standard_6x6)
-        typeStrings[SudokuTypes.standard9x9.ordinal] = context.getString(R.string.advanced_settings_restrict_item_standard_9x9)
-        typeStrings[SudokuTypes.standard16x16.ordinal] = context.getString(R.string.advanced_settings_restrict_item_standard_16x16)
-        typeStrings[SudokuTypes.Xsudoku.ordinal] = context.getString(R.string.advanced_settings_restrict_item_xsudoku)
-        typeStrings[SudokuTypes.HyperSudoku.ordinal] = context.getString(R.string.advanced_settings_restrict_item_hyper)
-        typeStrings[SudokuTypes.stairstep.ordinal] = context.getString(R.string.advanced_settings_restrict_item_stairstep_9x9)
-        typeStrings[SudokuTypes.squigglya.ordinal] = context.getString(R.string.advanced_settings_restrict_item_squiggly_a_9x9)
-        typeStrings[SudokuTypes.squigglyb.ordinal] = context.getString(R.string.advanced_settings_restrict_item_squiggly_b_9x9)
-        typeStrings[SudokuTypes.samurai.ordinal] = context.getString(R.string.advanced_settings_restrict_item_samurai)
+        typeStrings[SudokuTypes.standard4x4.ordinal] =
+            context.getString(R.string.advanced_settings_restrict_item_standard_4x4)
+        typeStrings[SudokuTypes.standard6x6.ordinal] =
+            context.getString(R.string.advanced_settings_restrict_item_standard_6x6)
+        typeStrings[SudokuTypes.standard9x9.ordinal] =
+            context.getString(R.string.advanced_settings_restrict_item_standard_9x9)
+        typeStrings[SudokuTypes.standard16x16.ordinal] =
+            context.getString(R.string.advanced_settings_restrict_item_standard_16x16)
+        typeStrings[SudokuTypes.Xsudoku.ordinal] =
+            context.getString(R.string.advanced_settings_restrict_item_xsudoku)
+        typeStrings[SudokuTypes.HyperSudoku.ordinal] =
+            context.getString(R.string.advanced_settings_restrict_item_hyper)
+        typeStrings[SudokuTypes.stairstep.ordinal] =
+            context.getString(R.string.advanced_settings_restrict_item_stairstep_9x9)
+        typeStrings[SudokuTypes.squigglya.ordinal] =
+            context.getString(R.string.advanced_settings_restrict_item_squiggly_a_9x9)
+        typeStrings[SudokuTypes.squigglyb.ordinal] =
+            context.getString(R.string.advanced_settings_restrict_item_squiggly_b_9x9)
+        typeStrings[SudokuTypes.samurai.ordinal] =
+            context.getString(R.string.advanced_settings_restrict_item_samurai)
         return typeStrings
     }
 
@@ -46,16 +56,17 @@ object Utility {
         typeStrings[Complexity.medium.ordinal] = context.getString(R.string.complexity_medium)
         typeStrings[Complexity.difficult.ordinal] = context.getString(R.string.complexity_difficult)
         typeStrings[Complexity.infernal.ordinal] = context.getString(R.string.complexity_infernal)
-        typeStrings[Complexity.arbitrary.ordinal] = "error" //only for compatibility. There's no reason to convert 'arbitrary' to a string 
+        typeStrings[Complexity.arbitrary.ordinal] =
+            "error" //only for compatibility. There's no reason to convert 'arbitrary' to a string
         return typeStrings
     }
 
     fun string2complexity(context: Context, string: String): Complexity? {
         val complexityStrings = getComplexityValues(context)
         return complexityStrings
-                .withIndex()
-                .find { (_, label) -> string == label }
-                ?.let { (i, _    ) -> Complexity.values()[i]  }
+            .withIndex()
+            .find { (_, label) -> string == label }
+            ?.let { (i, _) -> Complexity.values()[i] }
     }
 
     fun complexity2string(context: Context, st: Complexity): String? {
@@ -67,19 +78,27 @@ object Utility {
     /* Shapes */
     private fun getConstraintShapeValuesAccusativeDetermined(context: Context): Array<String?> {
         val typeStrings = arrayOfNulls<String>(ConstraintShape.values().size)
-        typeStrings[ConstraintShape.Row.ordinal] = context.getString(R.string.constraintshape_row_accusative_determined)
-        typeStrings[ConstraintShape.Column.ordinal] = context.getString(R.string.constraintshape_column_accusative_determined)
-        typeStrings[ConstraintShape.Diagonal.ordinal] = context.getString(R.string.constraintshape_diagonal_accusative_determined)
-        typeStrings[ConstraintShape.Block.ordinal] = context.getString(R.string.constraintshape_block_accusative_determined)
+        typeStrings[ConstraintShape.Row.ordinal] =
+            context.getString(R.string.constraintshape_row_accusative_determined)
+        typeStrings[ConstraintShape.Column.ordinal] =
+            context.getString(R.string.constraintshape_column_accusative_determined)
+        typeStrings[ConstraintShape.Diagonal.ordinal] =
+            context.getString(R.string.constraintshape_diagonal_accusative_determined)
+        typeStrings[ConstraintShape.Block.ordinal] =
+            context.getString(R.string.constraintshape_block_accusative_determined)
         return typeStrings
     }
 
     private fun getConstraintShapeValuesGenitiveDetermined(context: Context): Array<String?> {
         val typeStrings = arrayOfNulls<String>(ConstraintShape.values().size)
-        typeStrings[ConstraintShape.Row.ordinal] = context.getString(R.string.constraintshape_row_genitive_determined)
-        typeStrings[ConstraintShape.Column.ordinal] = context.getString(R.string.constraintshape_column_genitive_determined)
-        typeStrings[ConstraintShape.Diagonal.ordinal] = context.getString(R.string.constraintshape_diagonal_genitive_determined)
-        typeStrings[ConstraintShape.Block.ordinal] = context.getString(R.string.constraintshape_block_genitive_determined)
+        typeStrings[ConstraintShape.Row.ordinal] =
+            context.getString(R.string.constraintshape_row_genitive_determined)
+        typeStrings[ConstraintShape.Column.ordinal] =
+            context.getString(R.string.constraintshape_column_genitive_determined)
+        typeStrings[ConstraintShape.Diagonal.ordinal] =
+            context.getString(R.string.constraintshape_diagonal_genitive_determined)
+        typeStrings[ConstraintShape.Block.ordinal] =
+            context.getString(R.string.constraintshape_block_genitive_determined)
         return typeStrings
     }
 
@@ -129,12 +148,16 @@ object Utility {
     }
 
     //http://stackoverflow.com/questions/3013655/creating-hashmap-map-from-xml-resources
-    private fun parseStringArray(context: Context, gender: Char, stringArrayResourceId: Int): String? {
+    private fun parseStringArray(
+        context: Context,
+        gender: Char,
+        stringArrayResourceId: Int
+    ): String? {
         val stringArray = context.resources.getStringArray(stringArrayResourceId)
 
         return stringArray
-                .find { entry -> entry[0] == gender } //format is gender|inflection, where gender has len 1
-                ?.let { i -> i.substring(2)  }
+            .find { entry -> entry[0] == gender } //format is gender|inflection, where gender has len 1
+            ?.let { i -> i.substring(2) }
 
     }
 

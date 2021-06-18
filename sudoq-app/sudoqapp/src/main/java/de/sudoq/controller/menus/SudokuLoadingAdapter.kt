@@ -13,7 +13,10 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Matrix
 import android.util.Log
-import android.view.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import de.sudoq.R
@@ -30,12 +33,16 @@ import java.util.*
  *
  * @property @param games die Liste der games
  */
-class SudokuLoadingAdapter (context: Context, private val gameDatas: List<GameData>) :
-        ArrayAdapter<GameData?>(context, R.layout.sudokuloadingitem, gameDatas) {
+class SudokuLoadingAdapter(context: Context, private val gameDatas: List<GameData>) :
+    ArrayAdapter<GameData?>(context, R.layout.sudokuloadingitem, gameDatas) {
     //todo make non nullable
 
-    private val profilesDir = context.getDir(context.getString(R.string.path_rel_profiles), AppCompatActivity.MODE_PRIVATE)
-    private val sudokuDir = context.getDir(context.getString(R.string.path_rel_sudokus), AppCompatActivity.MODE_PRIVATE)
+    private val profilesDir = context.getDir(
+        context.getString(R.string.path_rel_profiles),
+        AppCompatActivity.MODE_PRIVATE
+    )
+    private val sudokuDir =
+        context.getDir(context.getString(R.string.path_rel_sudokus), AppCompatActivity.MODE_PRIVATE)
 
 
     /**
@@ -54,22 +61,35 @@ class SudokuLoadingAdapter (context: Context, private val gameDatas: List<GameDa
         val gameRepo = GameRepo(pm.profilesDir!!, pm.currentProfileID, sudokuDir)
         val currentThumbnailFile = gameRepo.getGameThumbnailFile(gameDatas[position].id)
         try {
-            val currentThumbnailBitmap = BitmapFactory.decodeStream(FileInputStream(currentThumbnailFile))
+            val currentThumbnailBitmap =
+                BitmapFactory.decodeStream(FileInputStream(currentThumbnailFile))
             val thumbnailWidth = currentThumbnailBitmap.width
             val thumbnailHeight = currentThumbnailBitmap.height
             val matrix = Matrix() //identity matrix
             matrix.postScale(THUMBNAIL_SIZE, THUMBNAIL_SIZE) //scaled matrix
-            val resizedBitmap = Bitmap.createBitmap(currentThumbnailBitmap, 0, 0, thumbnailWidth, thumbnailHeight, matrix, false)
+            val resizedBitmap = Bitmap.createBitmap(
+                currentThumbnailBitmap,
+                0,
+                0,
+                thumbnailWidth,
+                thumbnailHeight,
+                matrix,
+                false
+            )
 
             //Setting Layout of the ImageView
-            val visibleLayoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            val visibleLayoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
             visibleLayoutParams.gravity = Gravity.CENTER
             thumbnail.layoutParams = visibleLayoutParams
             thumbnail.setImageBitmap(resizedBitmap)
         } catch (e: FileNotFoundException) {
             Log.w(LOG_TAG, context.getString(R.string.error_thumbnail_load))
         } catch (e: OutOfMemoryError) {
-            Toast.makeText(context, context.getString(R.string.toast_stop_that), Toast.LENGTH_LONG).show()
+            Toast.makeText(context, context.getString(R.string.toast_stop_that), Toast.LENGTH_LONG)
+                .show()
             (context as SudokuLoadingActivity).finish()
         }
         sudokuType.text = Utility.type2string(context, gameDatas[position].type)

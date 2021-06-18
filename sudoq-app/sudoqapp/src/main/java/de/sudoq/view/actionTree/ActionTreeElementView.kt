@@ -20,13 +20,15 @@ import java.util.*
  * Interaktionselement genutzt wird. Es wird die Benutzerinteraktion sowie die
  * Erscheinung definiert.
  */
-abstract class ActionTreeElementView(context: Context, inner: ActionTreeElementView?,
-                                     /**
-                                      * Das Element des Aktionsbaumes das von diesem View representiert wird
-                                      */
-                                     private val actionTreeElement: ActionTreeElement) : View(context) {
+abstract class ActionTreeElementView(
+    context: Context, inner: ActionTreeElementView?,
+    /**
+     * Das Element des Aktionsbaumes das von diesem View representiert wird
+     */
+    private val actionTreeElement: ActionTreeElement
+) : View(context) {
     @JvmField
-	protected var actionColor = DEFAULT_COLOR
+    protected var actionColor = DEFAULT_COLOR
     protected var inner: ActionTreeElementView? = null
 
     /**

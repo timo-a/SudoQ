@@ -105,12 +105,24 @@ class CellViewPainter private constructor() {
                     drawBackground(canvas, cell, Color.rgb(250, 250, 250), true, darken)
                     drawText(canvas, cell, Color.BLACK, false, symbol)
                 }
-                CellViewStates.CONTROLS -> drawBackground(canvas, cell, Color.rgb(40, 40, 40), false, darken)
+                CellViewStates.CONTROLS -> drawBackground(
+                    canvas,
+                    cell,
+                    Color.rgb(40, 40, 40),
+                    false,
+                    darken
+                )
                 CellViewStates.KEYBOARD -> {
                     drawBackground(canvas, cell, Color.rgb(230, 230, 230), false, darken)
                     drawInner(canvas, cell, Color.rgb(40, 40, 40), false, darken)
                 }
-                CellViewStates.SUDOKU -> drawBackground(canvas, cell, Color.rgb(200, 200, 200), false, darken)
+                CellViewStates.SUDOKU -> drawBackground(
+                    canvas,
+                    cell,
+                    Color.rgb(200, 200, 200),
+                    false,
+                    darken
+                )
             }
         } else if (cellState != null) {
             when (cellState) {
@@ -168,7 +180,13 @@ class CellViewPainter private constructor() {
      * @param darken
      * Gibt an, ob das Feld verdunkelt werden soll
      */
-    private fun drawBackground(canvas: Canvas, cell: View, color: Int, round: Boolean, darken: Boolean) {
+    private fun drawBackground(
+        canvas: Canvas,
+        cell: View,
+        color: Int,
+        round: Boolean,
+        darken: Boolean
+    ) {
         val mainPaint = Paint()
         var darkenPaint: Paint? = null
         if (darken) {
@@ -249,7 +267,12 @@ class CellViewPainter private constructor() {
         paint.isAntiAlias = true
         paint.textSize = Math.min(cell.height * 3 / 4, cell.width * 3 / 4).toFloat()
         paint.textAlign = Paint.Align.CENTER
-        canvas.drawText(symbol + "", (cell.width / 2).toFloat(), (cell.height / 2 + Math.min(cell.height / 4, cell.width / 4)).toFloat(), paint)
+        canvas.drawText(
+            symbol + "",
+            (cell.width / 2).toFloat(),
+            (cell.height / 2 + Math.min(cell.height / 4, cell.width / 4)).toFloat(),
+            paint
+        )
     }
 
     /**
