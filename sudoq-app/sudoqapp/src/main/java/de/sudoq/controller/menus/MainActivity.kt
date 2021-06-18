@@ -48,7 +48,7 @@ class MainActivity : SudoqCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         profilesFile = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        sudokuFile = getDir(getString(de.sudoq.R.string.path_rel_sudokus), MODE_PRIVATE)
+        sudokuFile = getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE)
         //Toast.makeText(this, "onCreate", Toast.LENGTH_LONG).show();
         setContentView(R.layout.mainmenu)
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
@@ -155,9 +155,5 @@ class MainActivity : SudoqCompatActivity() {
     }
 
     companion object {
-        /**
-         * Der Log-Tag für den LogCat
-         */
-        private val LOG_TAG = MainActivity::class.java.simpleName
     }
 }

@@ -243,7 +243,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
             mediator!!.registerListener(sudokuController!!)
             mediator!!.registerListener(this)
             if (game!!.isFinished()) {
-                setFinished(false, false)
+                setFinished(showWinDialog = false, surrendered = false)
             }
             setTypeText()
             updateButtons()
@@ -552,7 +552,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
         timeHandler.removeCallbacks(timeUpdate)
     }
 
-    protected val assistancesTimeString: String
+    private val assistancesTimeString: String
         get() = getTimeString(game!!.assistancesTimeCost)
 
     /**
@@ -560,7 +560,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
      *
      * @return Den String für die Zeitanzeige
      */
-    protected val gameTimeString: String
+    private val gameTimeString: String
         get() = getTimeString(game!!.time)
 
     /**

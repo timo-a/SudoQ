@@ -146,7 +146,7 @@ class NewSudokuPreferencesActivity : PreferencesActivity() {
     /* parameter View only needed to be foud by xml who clicks this*/
     fun switchToAdvancedPreferences(view: View?) {
         val advIntent = Intent(this, AdvancedPreferencesActivity::class.java)
-        AdvancedPreferencesActivity.Companion.caller = ParentActivity.NEW_SUDOKU
+        AdvancedPreferencesActivity.caller = ParentActivity.NEW_SUDOKU
         startActivity(advIntent)
     }
 }

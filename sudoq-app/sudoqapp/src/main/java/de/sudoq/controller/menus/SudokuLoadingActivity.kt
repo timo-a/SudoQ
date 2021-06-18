@@ -265,7 +265,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
                     val gameID = adapter!!.getItem(position)!!.id
                     val gameFile = gameRepo.getGameFile(gameID)
                     /* we can only copy from 'files' subdir, so we have to move the file there first */
-                    val tmpFile = File(filesDir, gameFile.getName())
+                    val tmpFile = File(filesDir, gameFile.name)
                     val `in`: InputStream
                     val out: OutputStream
                     try {
@@ -281,20 +281,20 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
                     }
                     Log.v("file-share", "tmpfile: " + tmpFile.absolutePath)
                     Log.v("file-share", "gamefile is null? " + (gameFile == null))
-                    Log.v("file-share", "gamefile getPath " + gameFile.getPath())
-                    Log.v("file-share", "gamefile getAbsolutePath " + gameFile.getAbsolutePath())
-                    Log.v("file-share", "gamefile getName " + gameFile.getName())
-                    Log.v("file-share", "gamefile getParent " + gameFile.getParent())
+                    Log.v("file-share", "gamefile getPath " + gameFile.path)
+                    Log.v("file-share", "gamefile getAbsolutePath " + gameFile.absolutePath)
+                    Log.v("file-share", "gamefile getName " + gameFile.name)
+                    Log.v("file-share", "gamefile getParent " + gameFile.parent)
                     val fileUri = FileProvider.getUriForFile(
                         this@SudokuLoadingActivity,
                         "de.sudoq.fileprovider", tmpFile
                     )
                     Log.v("file-share", "uri is null? " + (fileUri == null))
                     val sendIntent = Intent()
-                    sendIntent.setAction(Intent.ACTION_SEND) //
+                    sendIntent.action = Intent.ACTION_SEND //
                     //sendIntent.putExtra(Intent.EXTRA_FROM_STORAGE, gameFile);
                     sendIntent.putExtra(Intent.EXTRA_STREAM, fileUri)
-                    sendIntent.setType("text/plain")
+                    sendIntent.type = "text/plain"
                     sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     //startActivity(Intent.createChooser(sendIntent, "Share to"));
                     startActivity(sendIntent)

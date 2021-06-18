@@ -46,7 +46,6 @@ class RestrictTypesAdapter(context: Context, typesList: SudokuTypesList) :
     }
 
     companion object {
-        private val LOG_TAG = RestrictTypesAdapter::class.java.simpleName
     }
 
     /**

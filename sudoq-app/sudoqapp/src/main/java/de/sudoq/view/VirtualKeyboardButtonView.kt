@@ -65,7 +65,7 @@ class VirtualKeyboardButtonView(context: Context?, private val symbol: Int) : Vi
      */
     public override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        CellViewPainter.instance!!.markCell(canvas, this, drawnSymbol, false, false)
+        CellViewPainter.instance!!.markCell(canvas, this, drawnSymbol, justText = false, darken = false)
         if (!this.isEnabled) {
             canvas.drawARGB(100, 10, 10, 10)
         }

@@ -150,7 +150,7 @@ class UserInteractionMediator(
         if (freshlySelected) {
             Log.d("gesture-verify", "cellSelectedGestureMode: freshly selected")
             noteMode = e == SelectEvent.Long
-            Log.d("gesture-verify", "cellSelectedGestureMode: this.noteMode =" + noteMode)
+            Log.d("gesture-verify", "cellSelectedGestureMode: this.noteMode =$noteMode")
             sudokuView.currentCellView = view
             currentCellView?.deselect(true)
             currentCellView = view

@@ -169,9 +169,5 @@ class RestrictTypesActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
     }
 
     companion object {
-        /**
-         * Der Log-Tag für das LogCat
-         */
-        private val LOG_TAG = RestrictTypesActivity::class.java.simpleName
     }
 }

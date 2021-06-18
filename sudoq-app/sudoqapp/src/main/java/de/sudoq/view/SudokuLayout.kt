@@ -54,7 +54,7 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
      * Die aktuell ausgewählte CellView
      */
     var currentCellView: SudokuCellView? = null
-    var zoomFactor: Float
+    private var zoomFactor: Float
         private set
 
     /**
