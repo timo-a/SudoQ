@@ -22,7 +22,7 @@ android {
 
     sourceSets {
         main {
-            /* this allows us to group resources(layouts, values) by topic */
+            // this allows us to group resources(layouts, values) by topic
             res.srcDirs =
             [
                     'src/main/res/layouts/sudoku',
@@ -52,7 +52,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.2'
     //implementation 'androidx.recyclerview:recyclerview:1.0.0'
 
-    implementation 'org.apache.commons:commons-lang3:3.11'
 
     //compile 'com.android.support:support-v4:21.0.0'
     //androidTestImplementation 'com.jayway.android.robotium:robotium-solo:5.4.1'
