@@ -17,7 +17,7 @@ android {
         targetSdkVersion 29
         resConfigs "en", "de", "fr"
         testApplicationId "de.sudoq.test"
-        testInstrumentationRunner "android.test.InstrumentationTestRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     sourceSets {
@@ -51,6 +51,26 @@ dependencies {
     //implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.0.2'
     //implementation 'androidx.recyclerview:recyclerview:1.0.0'
+
+    testImplementation 'junit:junit:4.12'
+
+    androidTestImplementation('androidx.test:core:1.3.0')
+    androidTestImplementation 'androidx.test:core-ktx:1.3.0'
+    androidTestImplementation('androidx.test:runner:1.3.0')
+    androidTestImplementation('androidx.test:rules:1.3.0')
+    androidTestImplementation('androidx.test.ext:junit-ktx:1.1.2')
+    androidTestImplementation('androidx.test.ext:truth:1.3.0')
+    androidTestImplementation('com.google.truth:truth:1.0')
+
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.3.0')
+    androidTestImplementation('androidx.test.espresso:espresso-contrib:3.3.0')
+    androidTestImplementation('androidx.test.espresso:espresso-intents:3.3.0')
+    androidTestImplementation('androidx.test.espresso:espresso-accessibility:3.3.0')
+    androidTestImplementation('androidx.test.espresso:espresso-web:3.3.0')
+    androidTestImplementation('androidx.test.espresso.idling:idling-concurrent:3.3.0')
+
+
+    //androidTestImplementation 'com.android.support.test.espresso:espressocore:3.0.2'
 
 
     //compile 'com.android.support:support-v4:21.0.0'

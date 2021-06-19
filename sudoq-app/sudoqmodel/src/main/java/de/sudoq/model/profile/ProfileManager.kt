@@ -53,6 +53,7 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
         get() = currentProfile.currentGame
         set(value) {
             currentProfile.currentGame = value
+            profileRepo!!.update(currentProfile)
         }
 
     /**
