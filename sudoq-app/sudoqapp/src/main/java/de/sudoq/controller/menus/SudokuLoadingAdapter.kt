@@ -37,12 +37,8 @@ class SudokuLoadingAdapter(context: Context, private val gameDatas: List<GameDat
     ArrayAdapter<GameData?>(context, R.layout.sudokuloadingitem, gameDatas) {
     //todo make non nullable
 
-    private val profilesDir = context.getDir(
-        context.getString(R.string.path_rel_profiles),
-        AppCompatActivity.MODE_PRIVATE
-    )
-    private val sudokuDir =
-        context.getDir(context.getString(R.string.path_rel_sudokus), AppCompatActivity.MODE_PRIVATE)
+    private val profilesDir = context.getDir(context.getString(R.string.path_rel_profiles), AppCompatActivity.MODE_PRIVATE)
+    private val sudokuDir = context.getDir(context.getString(R.string.path_rel_sudokus), AppCompatActivity.MODE_PRIVATE)
 
 
     /**

@@ -440,7 +440,10 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
     public override fun onPause() {
         val p = Profile.getInstance(profilesFile)
         timeHandler.removeCallbacks(timeUpdate)
-        GameManager.getInstance(profilesFile, sudokuFile).save(game!!, p)
+        val gm = GameManager.getInstance(profilesFile, sudokuFile)
+        //gameid = 1
+        gm.save(game!!, p)
+        //gameid = -1
         val prevZoomFactor = sudokuScrollView!!.zoomFactor
         sudokuLayout!!.isDrawingCacheEnabled = true
         sudokuScrollView!!.resetZoom()
@@ -491,6 +494,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
     override fun finish() {
         if (game != null) {
             val p = Profile.getInstance(profilesFile)
+            p.loadCurrentProfile()
             GameManager.getInstance(profilesFile, sudokuFile).save(game!!, p)
         }
         super.finish()
