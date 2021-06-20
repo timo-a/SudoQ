@@ -25,7 +25,6 @@ import androidx.core.content.FileProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.sudoq.R
 import de.sudoq.controller.SudoqListActivity
-import de.sudoq.controller.menus.SudokuLoadingActivity
 import de.sudoq.controller.sudoku.SudokuActivity
 import de.sudoq.model.game.GameData
 import de.sudoq.model.game.GameManager
@@ -55,13 +54,12 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
 
 	protected static MenuItem menuDeleteSpecific;
 	private static final int MENU_DELETE_SPECIFIC = 1; commented out to make sure it's not needed*/
-    private enum class FAB_STATES {
+    private enum class FabStates {
         DELETE, INACTIVE, GO_BACK
     } //Floating Action Button
 
-    private var fabstate = FAB_STATES.INACTIVE
-    /** Constructors  */
-    /** Methods  */
+    private var fabState = FabStates.INACTIVE
+
     /**
      * Wird aufgerufen, wenn SudokuLoading nach Programmstart zum ersten Mal
      * geladen aufgerufen wird. Hier wird das Layout inflated und es werden
@@ -78,34 +76,48 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
         check(!profileManager!!.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
         profileManager!!.loadCurrentProfile()
         setContentView(R.layout.sudokuloading)
+
+        //toolbar
+        initToolBar()
+
+        initFAB(this)
+
+        initialiseGames()
+    }
+
+    private fun initToolBar() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         val ab = supportActionBar
         ab!!.setHomeAsUpIndicator(R.drawable.launcher)
         ab.setDisplayHomeAsUpEnabled(true)
         ab.setDisplayShowTitleEnabled(true)
-        val ctx: Context = this
+    }
+
+    private fun initFAB(ctx: Context) {
         val fab = findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener(object : View.OnClickListener {
             var trash = ContextCompat.getDrawable(ctx, R.drawable.ic_delete_white_24dp)
             var close = ContextCompat.getDrawable(ctx, R.drawable.ic_close_white_24dp)
             override fun onClick(view: View) {
-                when (fabstate) {
-                    FAB_STATES.INACTIVE -> {
-                        fabstate = FAB_STATES.DELETE
+                when (fabState) {
+                    FabStates.INACTIVE -> {
+                        // ...
+                        fabState = FabStates.DELETE
                         fab.setImageDrawable(close)
                         Toast.makeText(ctx, R.string.fab_go_back, Toast.LENGTH_LONG).show()
                     }
-                    FAB_STATES.DELETE -> {
-                        fabstate = FAB_STATES.INACTIVE
+                    FabStates.DELETE -> {
+                        fabState = FabStates.INACTIVE
                         fab.setImageDrawable(trash)
                     }
-                    FAB_STATES.GO_BACK -> goBack(view)
+                    FabStates.GO_BACK -> goBack(view)
                 }
             }
         })
-        initialiseGames()
     }
+
+    /// Action Bar
 
     /**
      * Wird beim ersten Anzeigen des Options-Menü von SudokuLoading aufgerufen
@@ -129,10 +141,10 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_sudokuloading_delete_finished -> GameManager.getInstance(
-                profilesDir,
-                sudokuDir
-            ).deleteFinishedGames()
+            R.id.action_sudokuloading_delete_finished -> {
+                val gm = GameManager.getInstance(profilesDir, sudokuDir)
+                gm.deleteFinishedGames()
+            }
             R.id.action_sudokuloading_delete_all -> {
                 val p = Profile.getInstance(profilesDir)
                 val gm = GameManager.getInstance(profilesDir, sudokuDir)
@@ -154,6 +166,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
         menu.findItem(R.id.action_sudokuloading_delete_all).isVisible = !noGames
         return true
     }
+
 
     /**
      * {@inheritDoc}
@@ -187,7 +200,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
      */
     override fun onItemClick(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
         Log.d(LOG_TAG, position.toString() + "")
-        if (fabstate == FAB_STATES.INACTIVE) {
+        if (fabState == FabStates.INACTIVE) {
             /* selected in order to play */
             profileManager!!.currentGame = adapter!!.getItem(position)!!.id
             startActivity(Intent(this, SudokuActivity::class.java))
@@ -225,20 +238,19 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
         val p = Profile.getInstance(profilesDir)
         val gameRepo = GameRepo(p.profilesDir!!, p.currentProfileID, sudokuDir)
         builder.setItems(temp_items.toTypedArray()) { dialog, item ->
+            val gameID = adapter!!.getItem(position)!!.id
             when (item) {
-                0 -> {
-                    profileManager!!.currentGame = adapter!!.getItem(position)!!.id
+                0 -> { // play
+                    profileManager!!.currentGame = gameID
                     val i = Intent(this@SudokuLoadingActivity, SudokuActivity::class.java)
                     startActivity(i)
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 }
-                1 -> {
-                    GameManager.getInstance(profilesDir, sudokuDir)
-                        .deleteGame(adapter!!.getItem(position)!!.id, p)
+                1 -> { // delete
+                    GameManager(profilesDir, sudokuDir).deleteGame(gameID, p)
                     onContentChanged()
                 }
                 2 -> {
-                    val gameID = adapter!!.getItem(position)!!.id
                     val gameFile = gameRepo.getGameFile(gameID)
                     var str = "there was an error reading the file, sorry"
                     var fis: FileInputStream? = null
@@ -262,7 +274,6 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
                 }
                 3 -> {
                     //already defined under 2
-                    val gameID = adapter!!.getItem(position)!!.id
                     val gameFile = gameRepo.getGameFile(gameID)
                     /* we can only copy from 'files' subdir, so we have to move the file there first */
                     val tmpFile = File(filesDir, gameFile.name)
@@ -307,7 +318,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
     }
 
     private fun initialiseGames() {
-        games = GameManager.getInstance(profilesDir, sudokuDir).gameList
+        games = GameManager(profilesDir, sudokuDir).gameList
         // initialize ArrayAdapter for the profile names and set it
         adapter = SudokuLoadingAdapter(this, games!!)
         listAdapter = adapter
@@ -323,7 +334,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
                     R.drawable.ic_arrow_back_white_24dp
                 )
             )
-            fabstate = FAB_STATES.GO_BACK
+            fabState = FabStates.GO_BACK
         } else {
             noGamesTextView.visibility = View.INVISIBLE
             //pass
@@ -349,12 +360,12 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
         get() = games!!.size
 
     private inner class FAB(context: Context?) : FloatingActionButton(context) {
-        private var fs: FAB_STATES? = null
-        fun setState(fs: FAB_STATES?) {
+        private var fs: FabStates? = null
+        fun setState(fs: FabStates?) {
             this.fs = fs
             val id: Int = when (fs) {
-                FAB_STATES.DELETE -> R.drawable.ic_close_white_24dp
-                FAB_STATES.INACTIVE -> R.drawable.ic_delete_white_24dp
+                FabStates.DELETE -> R.drawable.ic_close_white_24dp
+                FabStates.INACTIVE -> R.drawable.ic_delete_white_24dp
                 else -> R.drawable.ic_arrow_back_white_24dp
             }
             super.setImageDrawable(ContextCompat.getDrawable(this.context, id))

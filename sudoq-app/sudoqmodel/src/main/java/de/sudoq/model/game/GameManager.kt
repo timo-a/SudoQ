@@ -10,6 +10,7 @@ package de.sudoq.model.game
 import de.sudoq.model.persistence.xml.game.GameMapper
 import de.sudoq.model.persistence.xml.game.GameRepo
 import de.sudoq.model.profile.Profile
+import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.sudoku.SudokuManager
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
@@ -22,9 +23,9 @@ import java.util.*
 /**
  * Singleton for creating and loading sudoku games.
  */
-class GameManager private constructor() {
+class GameManager {
 
-    private lateinit var profile: Profile
+    private lateinit var profile: ProfileManager
 
     private lateinit var gameRepo: GameRepo
 
@@ -167,6 +168,25 @@ class GameManager private constructor() {
         }
     }
 
+    constructor(f: File, sudokuDir: File) {
+        this.profile = ProfileManager(f)
+        profile.loadCurrentProfile()
+        this.sudokuDir = sudokuDir
+        this.gameRepo = GameRepo(
+            profile.profilesDir!!,
+            profile.currentProfileID,
+            sudokuDir)
+        this.gamesFile = File(profile.currentProfileDir, "games.xml")
+
+        this.games = try {
+            XmlHelper()
+                .loadXml(this.gamesFile)!!
+                .map { GameData.fromXml(it) }
+                .sortedDescending().toMutableList()
+        } catch (e: IOException) {
+            throw IllegalStateException("Profile broken", e)
+        }
+    }
 
     companion object {
 
@@ -174,25 +194,8 @@ class GameManager private constructor() {
 
         fun getInstance(f: File, sudokuDir: File): GameManager {
             if (instance == null) {
-                instance = GameManager()
-                val profile = Profile.getInstance(f)
-                instance!!.profile = profile
-                instance!!.sudokuDir = sudokuDir
-                instance!!.gameRepo =
-                    GameRepo(profile.profilesDir!!, profile.currentProfileID, sudokuDir)
-                instance!!.gamesFile = File(profile.currentProfileDir, "games.xml")
-
-                instance!!.games = try {
-                    XmlHelper()
-                        .loadXml(instance!!.gamesFile)!!
-                        .map { GameData.fromXml(it) }
-                        .sortedDescending().toMutableList()
-                } catch (e: IOException) {
-                    throw IllegalStateException("Profile broken", e)
-                }
-
+                instance = GameManager(f, sudokuDir)
             }
-
             return instance!!
         }
 
