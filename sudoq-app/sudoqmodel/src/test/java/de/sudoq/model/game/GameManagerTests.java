@@ -55,7 +55,7 @@ public class GameManagerTests {
 
 	@Test
 	public void testDeletingCurrentGame() {
-		GameManager gm = GameManager.Companion.getInstance(profileDir);
+		GameManager gm = new GameManager(profileDir, sudokuDir);
 		Game game = gm.newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings(), sudokuDir);
 		p.setCurrentGame(game.getId());
 		gm.deleteGame(p.getCurrentGame(), p);
@@ -64,17 +64,17 @@ public class GameManagerTests {
 
 	@After
 	public void deleteAllGames() {
-		GameRepo gr = new GameRepo(profileDir, p.getCurrentProfileID());
-		for (int i = 1; i <= gr.getGamesDir(p).list().length; i++) {
-			gr.delete(i, p);
+		GameRepo gr = new GameRepo(profileDir, p.getCurrentProfileID(), sudokuDir);
+		for (int i = 1; i <= gr.getGamesFile().list().length; i++) {
+			gr.delete(i);
 		}
-		GameManager.Companion.getInstance(profileDir).updateGamesList();
+		new GameManager(profileDir, sudokuDir).updateGamesList();
 	}
 
 	@Test
 	public void testCreatingAndSolving() {
-		Game game = GameManager.Companion.getInstance(profileDir).newGame(
-				SudokuTypes.standard9x9, Complexity.difficult, new GameSettings(), sudokuDir);
+		Game game = new GameManager(profileDir, sudokuDir)
+				.newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings(), sudokuDir);
 		assertFalse(game.isFinished());
 		int count = 0;
 		for (Cell f : game.getSudoku()) {
@@ -102,8 +102,8 @@ public class GameManagerTests {
 	public void testAssistanceSetting() {
 		GameSettings set = new GameSettings();
 		set.setAssistance(Assistances.autoAdjustNotes);
-		Game game = GameManager.Companion.getInstance(profileDir).newGame(
-				SudokuTypes.standard9x9, Complexity.difficult, set, sudokuDir);
+		Game game = new GameManager(profileDir, sudokuDir)
+				.newGame(SudokuTypes.standard9x9, Complexity.difficult, set, sudokuDir);
 		assertTrue(game.isAssistanceAvailable(Assistances.autoAdjustNotes));
 		assertFalse(game.isAssistanceAvailable(Assistances.markRowColumn));
 		game.addTime(50);
@@ -113,15 +113,15 @@ public class GameManagerTests {
 
 	@Test
 	public void testLoadingAndSaving() {
-		GameManager gm = GameManager.Companion.getInstance(profileDir);
+		GameManager gm = new GameManager(profileDir, sudokuDir);
 		Game game = gm.newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings(), sudokuDir);
 		gm.save(game, p);
-		assertEquals(gm.load(game.getId(), sudokuDir), game);
+		assertEquals(gm.load(game.getId()), game);
 	}
 
 	@Test
 	public void testGameList() {
-		GameManager gm = GameManager.Companion.getInstance(profileDir);
+		GameManager gm = new GameManager(profileDir, sudokuDir);
 
 		Game game1 = gm.newGame(SudokuTypes.standard9x9, Complexity.easy, new GameSettings(), sudokuDir);
 		gm.save(game1, p);
@@ -141,7 +141,7 @@ public class GameManagerTests {
 
 	@Test
 	public void testSudokuLoading() {
-		GameManager gm = GameManager.Companion.getInstance(profileDir);
+		GameManager gm = new GameManager(profileDir, sudokuDir);
 		Game game = gm.newGame(SudokuTypes.standard9x9, Complexity.medium, new GameSettings(), sudokuDir);
 		int id = game.getId();
 		Cell cell = null;
@@ -154,7 +154,7 @@ public class GameManagerTests {
 		assertNotNull(cell);
 		assertTrue(game.solveCell());
 		gm.save(game, p);
-		assertTrue(game.equals(gm.load(id, sudokuDir)));
+		assertTrue(game.equals(gm.load(id)));
 		game.solveAll();
 		gm.save(game, p);
 		gm.deleteFinishedGames();
@@ -163,12 +163,12 @@ public class GameManagerTests {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testUnvalidLoadingIds() {
-		GameManager.Companion.getInstance(profileDir).load(-5, sudokuDir);
+		new GameManager(profileDir, sudokuDir).load(-5);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testLoadingNonexistentGame() {
-		GameManager.Companion.getInstance(profileDir).load(2, sudokuDir);
+		new GameManager(profileDir, sudokuDir).load(2);
 	}
 
 	@Test
@@ -176,7 +176,7 @@ public class GameManagerTests {
 		FileManager.getGamesFile(p).setWritable(false);
 		assertFalse(FileManager.getGamesFile(p).canWrite());
 		try {
-			GameManager.Companion.getInstance(profileDir).deleteFinishedGames();
+			new GameManager(profileDir, sudokuDir).deleteFinishedGames();
 			fail("No Exception");
 		} catch (IllegalStateException e) {
 			// fine
@@ -190,7 +190,7 @@ public class GameManagerTests {
 		File other = new File(FileManager.getGamesFile(p).getParentFile(), "foo");
 		FileManager.getGamesFile(p).renameTo(new File(FileManager.getGamesFile(p).getParentFile(), "foo"));
 		try {
-			GameManager.Companion.getInstance(profileDir).deleteFinishedGames();
+			new GameManager(profileDir, sudokuDir).deleteFinishedGames();
 			fail("No Exception");
 		} catch (IllegalStateException e) {
 			other.renameTo(FileManager.getGamesFile(p));

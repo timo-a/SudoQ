@@ -92,7 +92,7 @@ class MainActivity : SudoqCompatActivity() {
         pm.loadCurrentProfile()
         val continueButton = findViewById<View>(R.id.button_mainmenu_continue) as Button
         continueButton.isEnabled = pm.currentGame > Profile.NO_GAME
-        val gm = GameManager.getInstance(profilesFile, sudokuFile)
+
         val loadButton = findViewById<View>(R.id.button_mainmenu_load_sudoku) as Button
         //loadButton.setEnabled(!gm.getGameList().isEmpty());
         loadButton.isEnabled = true
