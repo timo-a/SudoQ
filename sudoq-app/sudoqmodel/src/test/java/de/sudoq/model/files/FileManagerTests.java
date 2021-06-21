@@ -2,10 +2,8 @@ package de.sudoq.model.files;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -24,7 +22,6 @@ import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.xml.SudokuXmlHandler;
 
 public class FileManagerTests extends TestWithInitCleanforSingletons {
 
@@ -35,7 +32,7 @@ public class FileManagerTests extends TestWithInitCleanforSingletons {
 		assertTrue(Utility.sudokus.exists());
 		assertTrue(Utility.profiles.exists());
 		assertTrue(profileManager.getProfilesDir().getAbsolutePath().equals(Utility.profiles.getAbsolutePath()));
-		assertTrue(FileManager.getSudokuDir().  getAbsolutePath().equals(Utility.sudokus.getAbsolutePath()));
+		assertTrue(sudokuDir.  getAbsolutePath().equals(Utility.sudokus.getAbsolutePath()));
 		assertTrue(Utility.sudokus.list().length > 0);
 	}
 
@@ -122,16 +119,17 @@ public class FileManagerTests extends TestWithInitCleanforSingletons {
 		Utility.clearDir(profileDir);
 		Profile p = Profile.Companion.getInstance(profileDir); //needs to be called first otherwise it failes as an indiviidual and sometimes as part of all the tests in this class
 
-		GameRepo gameRepo = new GameRepo(p.getProfilesDir(), p.getCurrentProfileID());
-		assertEquals(1, gameRepo.getNextFreeGameId(p));//currentProfileID==-1
+		GameRepo gameRepo = new GameRepo(p.getProfilesDir(), p.getCurrentProfileID(), sudokuDir);
+		assertEquals(1, gameRepo.getNextFreeGameId());//currentProfileID==-1
 		assertTrue(FileManager.getGamesFile(p).exists());
-		File game  = gameRepo.getGameFile(1, p);
-		File thumb = gameRepo.getGameThumbnailFile(1, p);
+		File game  = gameRepo.getGameFile(1);
+		File thumb = gameRepo.getGameThumbnailFile(1);
 		assertEquals(game.getName(),  "game_1.xml");
 		assertEquals(thumb.getName(), "game_1.png");
 		assertTrue(game. createNewFile());
 		assertTrue(thumb.createNewFile());
-		assertTrue(gameRepo.delete(1, p));
+		//cleanup
+		gameRepo.delete(1);
 	}
 	
 

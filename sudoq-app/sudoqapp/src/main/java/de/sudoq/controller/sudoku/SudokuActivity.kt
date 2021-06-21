@@ -56,6 +56,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
 
     private lateinit var profilesFile: File
     private lateinit var sudokuFile: File
+    private lateinit var gameManager: GameManager
 
     /**
      * Eine Referenz auf einen ActionTreeController, der die Verwaltung der
@@ -174,23 +175,23 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
 
         profilesFile = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
         sudokuFile = getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE)
+        gameManager = GameManager(profilesFile, sudokuFile)
 
 
         // Load the Game by using current game id
-        val gm = GameManager.getInstance(profilesFile, sudokuFile)
         if (savedInstanceState != null) {
             try {
-                game = gm.load(savedInstanceState.getInt(SAVE_GAME_ID.toString() + ""))
+                game = gameManager.load(savedInstanceState.getInt(SAVE_GAME_ID.toString() + ""))
             } catch (e: Exception) {
                 finish()
             }
         } else {
             val pm = ProfileManager(profilesFile)
             pm.loadCurrentProfile()
-            game = gm.load(pm.currentGame)
+            game = gameManager.load(pm.currentGame)
         }
-        if (game != null) {
 
+        if (game != null) {
 
             /* Determine how many numbers are needed. 1-9 or 1-16 ? */
             initializeSymbolSet()
@@ -223,10 +224,10 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
                             sudokuLayout!!.zoom(zoomFactor)
                             sudokuScrollView!!.zoomFactor = zoomFactor
                         }
-                        val scrollX =
-                            savedInstanceState.getFloat(SAVE_SCROLL_X.toString() + "") + sudokuLayout!!.currentLeftMargin
-                        val scrollY =
-                            savedInstanceState.getFloat(SAVE_SCROLL_Y.toString() + "") + sudokuLayout!!.currentTopMargin
+                        val scrollX = savedInstanceState.getFloat(SAVE_SCROLL_X.toString()) +
+                                sudokuLayout!!.currentLeftMargin
+                        val scrollY = savedInstanceState.getFloat(SAVE_SCROLL_Y.toString()) +
+                                sudokuLayout!!.currentTopMargin
                         sudokuScrollView!!.scrollTo(scrollX.toInt(), scrollY.toInt())
                     }
                     obs.removeGlobalOnLayoutListener(this)
@@ -247,7 +248,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
             }
             setTypeText()
             updateButtons()
-            val p = Profile.getInstance(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+            val p = Profile.getInstance(profilesFile)
             panel!!.gestureButton!!.isSelected = p.isGestureActive
         }
     }
@@ -440,9 +441,8 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
     public override fun onPause() {
         val p = Profile.getInstance(profilesFile)
         timeHandler.removeCallbacks(timeUpdate)
-        val gm = GameManager.getInstance(profilesFile, sudokuFile)
         //gameid = 1
-        gm.save(game!!, p)
+        gameManager.save(game!!, p)
         //gameid = -1
         val prevZoomFactor = sudokuScrollView!!.zoomFactor
         sudokuLayout!!.isDrawingCacheEnabled = true
@@ -495,7 +495,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
         if (game != null) {
             val p = Profile.getInstance(profilesFile)
             p.loadCurrentProfile()
-            GameManager.getInstance(profilesFile, sudokuFile).save(game!!, p)
+            gameManager.save(game!!, p)
         }
         super.finish()
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
@@ -724,7 +724,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
     /** saves the whole game, purpose: save the action tree so a spontaneous crash doesn't lose us actions record  */
     private fun saveActionTree() {
         val p = Profile.getInstance(profilesFile)
-        GameManager.getInstance(profilesFile, sudokuFile).save(game!!, p)
+        gameManager.save(game!!, p)
     }
 
     companion object {

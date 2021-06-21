@@ -25,15 +25,15 @@ import java.util.*
  */
 class GameManager {
 
-    private lateinit var profile: ProfileManager
+    private var profile: ProfileManager
 
-    private lateinit var gameRepo: GameRepo
+    private var gameRepo: GameRepo
 
-    private lateinit var games: MutableList<GameData>
+    private var games: MutableList<GameData>
 
-    private lateinit var gamesFile: File
+    private var gamesFile: File
 
-    private lateinit var sudokuDir: File
+    private var sudokuDir: File
 
     /**
      * Creates a new gam and sets up the necessary files.
@@ -168,8 +168,8 @@ class GameManager {
         }
     }
 
-    constructor(f: File, sudokuDir: File) {
-        this.profile = ProfileManager(f)
+    constructor(profilesDir: File, sudokuDir: File) {
+        this.profile = ProfileManager(profilesDir)
         profile.loadCurrentProfile()
         this.sudokuDir = sudokuDir
         this.gameRepo = GameRepo(
@@ -186,19 +186,6 @@ class GameManager {
         } catch (e: IOException) {
             throw IllegalStateException("Profile broken", e)
         }
-    }
-
-    companion object {
-
-        private var instance: GameManager? = null //todo make class a non-singleton
-
-        fun getInstance(f: File, sudokuDir: File): GameManager {
-            if (instance == null) {
-                instance = GameManager(f, sudokuDir)
-            }
-            return instance!!
-        }
-
     }
 
 }
