@@ -23,17 +23,15 @@ import java.util.*
 /**
  * Singleton for creating and loading sudoku games.
  */
-class GameManager {
+class GameManager(profilesDir: File, sudokuDir: File) {
 
-    private var profile: ProfileManager
+    private var profile: ProfileManager = ProfileManager(profilesDir)
 
     private var gameRepo: GameRepo
 
     private var games: MutableList<GameData>
 
     private var gamesFile: File
-
-    private var sudokuDir: File
 
     /**
      * Creates a new gam and sets up the necessary files.
@@ -168,10 +166,8 @@ class GameManager {
         }
     }
 
-    constructor(profilesDir: File, sudokuDir: File) {
-        this.profile = ProfileManager(profilesDir)
+    init{
         profile.loadCurrentProfile()
-        this.sudokuDir = sudokuDir
         this.gameRepo = GameRepo(
             profile.profilesDir!!,
             profile.currentProfileID,
