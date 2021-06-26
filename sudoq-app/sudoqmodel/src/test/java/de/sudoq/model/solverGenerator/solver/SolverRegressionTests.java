@@ -9,6 +9,8 @@ import java.io.File;
 import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.Utility;
 import de.sudoq.model.files.FileManagerTests;
+import de.sudoq.model.persistence.IRepo;
+import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE;
 import de.sudoq.model.solverGenerator.FastSolver.FastSolver;
 import de.sudoq.model.solverGenerator.FastSolver.FastSolverFactory;
 import de.sudoq.model.sudoku.Position;
@@ -40,10 +42,50 @@ public class SolverRegressionTests {
     @Before
     public void before() {
         TestWithInitCleanforSingletons.legacyInit();
-        sudoku = new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku();
+
+        IRepo<SudokuTypeBE> str = new IRepo<SudokuTypeBE>() {
+            @Override
+            public SudokuTypeBE create() {
+                return null;
+            }
+
+            @Override
+            public SudokuTypeBE read(int id) {
+                SudokuTypes e = SudokuTypes.values()[id];
+                SudokuTypeBE stbe = null;
+                switch (e){
+                    case standard9x9:
+                        stbe = new SudokuTypeBE();
+                        stbe.setEnumType(SudokuTypes.standard9x9);
+                        stbe.setSize(Position.get(9,9));
+                        stbe.setNumberOfSymbols(9);
+                        stbe.setBlockSize(Position.get(3,3));
+                    case standard16x16:
+                        stbe = new SudokuTypeBE();
+                        stbe.setEnumType(SudokuTypes.standard16x16);
+                        stbe.setSize(Position.get(16,16));
+                        stbe.setNumberOfSymbols(16);
+                        stbe.setBlockSize(Position.get(4,4));
+                }
+                return stbe;
+            }
+
+            @Override
+            public SudokuTypeBE update(SudokuTypeBE sudokuTypeBE) {
+                return null;
+            }
+
+            @Override
+            public void delete(int id) {
+
+            }
+        };
+
+
+        sudoku = new SudokuBuilder(SudokuTypes.standard9x9, str).createSudoku();
         sudoku.setComplexity(Complexity.arbitrary);
         solver = new Solver(sudoku);
-        sudoku16x16 = new SudokuBuilder(SudokuTypes.standard16x16, sudokuDir).createSudoku();
+        sudoku16x16 = new SudokuBuilder(SudokuTypes.standard16x16, str).createSudoku();
         sudoku16x16.setComplexity(Complexity.arbitrary);
         solution16x16 = new PositionMap<Integer>(sudoku16x16.getSudokuType().getSize());
     }

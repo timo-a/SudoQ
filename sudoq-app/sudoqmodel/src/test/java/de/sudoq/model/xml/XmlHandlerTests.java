@@ -47,10 +47,6 @@ public class XmlHandlerTests {
 		Utility.deleteDir(sudokus);
 	}
 
-	@Test
-	public void testGameXmlHandlerConstructor() {
-		new GameXmlHandler(Profile.Companion.getInstance(profiles));
-	}
 
 	@Test
 	public void testSaveAsXmlStringIllegalArgumentException() throws SecurityException, IllegalArgumentException, IOException, NoSuchFieldException, IllegalAccessException {
@@ -86,15 +82,6 @@ public class XmlHandlerTests {
 		}
 
 		assertTrue(new File("foo").delete());
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testCreateObjectFromXmlIllegalArgumentException() throws SecurityException, IllegalArgumentException, IOException, NoSuchFieldException, IllegalAccessException {
-		TypeBuilder.get99();
-		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard16x16, sudokuDir).createSudoku();
-		sudoku.setComplexity(Complexity.difficult);
-
-		new SudokuXmlHandler().createObjectFromXml(sudoku, sudokuDir);
 	}
 
 }

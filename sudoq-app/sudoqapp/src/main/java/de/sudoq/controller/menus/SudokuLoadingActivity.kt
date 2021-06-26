@@ -31,6 +31,7 @@ import de.sudoq.model.game.GameManager
 import de.sudoq.model.persistence.xml.game.GameRepo
 import de.sudoq.model.profile.Profile
 import de.sudoq.model.profile.ProfileManager
+import de.sudoq.persistence.SudokuTypeRepo
 import java.io.*
 import java.nio.charset.Charset
 import java.util.*
@@ -46,8 +47,10 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
     private var adapter: SudokuLoadingAdapter? = null
     private var games: List<GameData>? = null
 
+
     private lateinit var profilesDir: File
     private lateinit var sudokuDir: File
+    private lateinit var sudokuTypeRepo: SudokuTypeRepo
     private lateinit var gameManager: GameManager
 
     /*	protected static MenuItem menuDeleteFinished;
@@ -71,6 +74,8 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
 
         profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
         sudokuDir = getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE)
+        sudokuTypeRepo = SudokuTypeRepo(sudokuDir)
+        gameManager = GameManager(profilesDir, sudokuDir, sudokuTypeRepo)
 
 
         //needs to be called before setcontentview which calls onContentChanged
@@ -233,7 +238,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
         }
         val builder = AlertDialog.Builder(this)
         val p = Profile.getInstance(profilesDir)
-        val gameRepo = GameRepo(p.profilesDir!!, p.currentProfileID, sudokuDir)
+        val gameRepo = GameRepo(p.profilesDir!!, p.currentProfileID, sudokuDir, sudokuTypeRepo)
         builder.setItems(temp_items.toTypedArray()) { dialog, item ->
             val gameID = adapter!!.getItem(position)!!.id
             when (item) {

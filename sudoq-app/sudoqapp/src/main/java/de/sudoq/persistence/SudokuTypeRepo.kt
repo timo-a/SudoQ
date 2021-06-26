@@ -1,6 +1,7 @@
-package de.sudoq.model.persistence.xml.sudokuType
+package de.sudoq.persistence
 
 import de.sudoq.model.persistence.IRepo
+import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.xml.XmlHelper
