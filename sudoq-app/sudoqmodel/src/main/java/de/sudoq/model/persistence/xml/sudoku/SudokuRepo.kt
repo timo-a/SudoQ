@@ -1,6 +1,7 @@
 package de.sudoq.model.persistence.xml.sudoku
 
 import de.sudoq.model.persistence.IRepo
+import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE
 import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
@@ -9,19 +10,20 @@ import java.io.File
 import java.io.IOException
 import java.util.*
 
-//todo parametrize, so that an instance is per type, complexity
 class SudokuRepo(
     private val outerSudokusDir: File,
     type: SudokuTypes,
-    complexity: Complexity
+    complexity: Complexity,
+    private val sudokuTypeRepo: IRepo<SudokuTypeBE>
 ) : IRepo<SudokuBE> {
 
     private val sudokusDir: File = getSudokuDir(type, complexity)
 
-    constructor(sudokusDir: File, sudoku: Sudoku) : this(
+    constructor(sudokusDir: File, sudoku: Sudoku, sudokuTypeRepo: IRepo<SudokuTypeBE>) : this(
         sudokusDir,
         sudoku.sudokuType!!.enumType!!,
-        sudoku.complexity!!
+        sudoku.complexity!!,
+        sudokuTypeRepo
     )
 
     private val helper: XmlHelper = XmlHelper()
@@ -50,7 +52,7 @@ class SudokuRepo(
         val file = getSudokuFile(id)
 
         try {
-            obj.fillFromXml(helper.loadXml(file)!!, outerSudokusDir)
+            obj.fillFromXml(helper.loadXml(file)!!, sudokuTypeRepo)
         } catch (e: IOException) {
             throw IllegalArgumentException("Something went wrong when reading xml $file", e)
         } catch (e: IllegalArgumentException) {

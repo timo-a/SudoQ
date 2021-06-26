@@ -1,5 +1,7 @@
 package de.sudoq.model.persistence.xml.sudoku
 
+import de.sudoq.model.persistence.IRepo
+import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE
 import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.complexity.Complexity
@@ -9,10 +11,11 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
 import de.sudoq.model.xml.Xmlable2
+import de.sudoq.model.xml.Xmlable3
 import java.io.File
 import java.util.*
 
-class SudokuBE() : Xmlable2 {
+class SudokuBE() : Xmlable3<SudokuTypeBE> {
 
     var id: Int = 0
 
@@ -69,7 +72,7 @@ class SudokuBE() : Xmlable2 {
     /**
      * {@inheritDoc}
      */
-    override fun fillFromXml(xmlTreeRepresentation: XmlTree, sudokuDir: File) {
+    override fun fillFromXml(xmlTreeRepresentation: XmlTree, sudokuTypeRepo: IRepo<SudokuTypeBE>) {
         // initialisation
         var cellIdCounter = 1
         cells = HashMap()
@@ -82,7 +85,7 @@ class SudokuBE() : Xmlable2 {
         }
         val enumType =
             SudokuTypes.values()[xmlTreeRepresentation.getAttributeValue("type")!!.toInt()]
-        sudokuType = SudokuTypeProvider.getSudokuType(enumType, sudokuDir)
+        sudokuType = SudokuTypeProvider.getSudokuType(enumType, sudokuTypeRepo)
         transformCount = xmlTreeRepresentation.getAttributeValue("transformCount")!!.toInt()
         val compl = xmlTreeRepresentation.getAttributeValue("complexity")
         complexity = if (compl == null) null else Complexity.values()[compl.toInt()]

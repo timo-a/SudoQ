@@ -7,6 +7,8 @@
  */
 package de.sudoq.model.sudoku
 
+import de.sudoq.model.persistence.IRepo
+import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider.getSudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
@@ -24,7 +26,7 @@ class SudokuBuilder(private val type: SudokuType?) {
      * @param type Enum-Type of the [Sudoku] to create
      * @throws NullPointerException if type invalid.
      */
-    constructor(type: SudokuTypes, sudokuDir: File) : this(getSudokuType(type, sudokuDir))
+    constructor(type: SudokuTypes, sudokuTypeRepo: IRepo<SudokuTypeBE>) : this(getSudokuType(type, sudokuTypeRepo))
 
     /**
      * Creates a [Sudoku] with the SudokeType of this builder and the entered Solutions.

@@ -41,6 +41,7 @@ import de.sudoq.model.profile.Profile
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Position
+import de.sudoq.persistence.SudokuTypeRepo
 import de.sudoq.view.*
 import java.io.*
 import kotlin.math.abs
@@ -56,6 +57,8 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
 
     private lateinit var profilesFile: File
     private lateinit var sudokuFile: File
+
+    private lateinit var sudokuTypeRepo: SudokuTypeRepo
     private lateinit var gameManager: GameManager
 
     /**
@@ -175,8 +178,8 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
 
         profilesFile = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
         sudokuFile = getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE)
-        gameManager = GameManager(profilesFile, sudokuFile)
-
+        sudokuTypeRepo = SudokuTypeRepo(sudokuFile)
+        gameManager = GameManager(profilesFile, sudokuFile, sudokuTypeRepo)
 
         // Load the Game by using current game id
         if (savedInstanceState != null) {
@@ -458,7 +461,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
         val sudokuCapture = sudokuLayout!!.drawingCache
         try {
             if (sudokuCapture != null) {
-                val gameRepo = GameRepo(p.profilesDir!!, p.currentProfileID, sudokuFile)
+                val gameRepo = GameRepo(p.profilesDir!!, p.currentProfileID, sudokuFile, sudokuTypeRepo)
                 val thumbnail = gameRepo.getGameThumbnailFile(p.currentGame)
                 sudokuCapture.compress(CompressFormat.PNG, 100, FileOutputStream(thumbnail))
             } else {

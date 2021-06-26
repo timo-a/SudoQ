@@ -16,7 +16,9 @@ import org.junit.Test;
 
 import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.Utility;
+import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.persistence.xml.game.GameRepo;
+import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
@@ -65,51 +67,7 @@ public class FileManagerTests extends TestWithInitCleanforSingletons {
 	}
 
 
-    @Test
-	public void testSudokuManagement() {
-        //assure empty directory
-        String p=StringUtils.join(new String[]{Utility.RES,"tmp_suds","standard16x16","difficult"},File.separator);
-        try {
-            FileUtils.cleanDirectory(new File(p));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        assertEquals(0, FileManager.getSudokuCountOf(SudokuTypes.standard16x16, Complexity.difficult));
 
-        Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard16x16, sudokuDir).createSudoku();
-		sudoku.setComplexity(Complexity.difficult);
-		new SudokuXmlHandler().saveAsXml(sudoku);
-		new SudokuXmlHandler().saveAsXml(sudoku);
-		assertEquals(2, FileManager.getSudokuCountOf(SudokuTypes.standard16x16, Complexity.difficult));
-		assertTrue(FileManager.getRandomSudoku(SudokuTypes.standard16x16, Complexity.difficult).delete());
-		assertTrue(FileManager.getRandomSudoku(SudokuTypes.standard16x16, Complexity.difficult).delete());
-		assertEquals(0, FileManager.getSudokuCountOf(SudokuTypes.standard16x16, Complexity.difficult));
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testFalseSudokuMangement() {
-		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard16x16, sudokuDir).createSudoku();
-		sudoku.setComplexity(Complexity.difficult);
-        FileManager.deleteSudoku(sudoku);
-	}
-
-	@Test
-	public void testLoadingOfNonexistentSudoku() {
-        //assure empty directory
-        String p=StringUtils.join(new String[]{Utility.RES,"tmp_suds","samurai","difficult"},File.separator);
-        try {
-            FileUtils.cleanDirectory(new File(p));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        assertEquals(0, FileManager.getSudokuCountOf(SudokuTypes.samurai, Complexity.difficult));
-
-		File f = FileManager.getRandomSudoku(SudokuTypes.samurai, Complexity.difficult);
-		assertNull(f);
-	}
-
-//	@Test
-//	public void
 
 	@Test
 	public void getGameThumbnailFile() throws IOException {
@@ -119,9 +77,32 @@ public class FileManagerTests extends TestWithInitCleanforSingletons {
 		Utility.clearDir(profileDir);
 		Profile p = Profile.Companion.getInstance(profileDir); //needs to be called first otherwise it failes as an indiviidual and sometimes as part of all the tests in this class
 
-		GameRepo gameRepo = new GameRepo(p.getProfilesDir(), p.getCurrentProfileID(), sudokuDir);
+		IRepo<SudokuTypeBE> str = new IRepo<SudokuTypeBE>() {
+			@Override
+			public SudokuTypeBE create() {
+				return null;
+			}
+
+			@Override
+			public SudokuTypeBE read(int id) {
+				return null;
+			}
+
+			@Override
+			public SudokuTypeBE update(SudokuTypeBE sudokuTypeBE) {
+				return null;
+			}
+
+			@Override
+			public void delete(int id) {
+
+			}
+		};
+
+		GameRepo gameRepo = new GameRepo(p.getProfilesDir(), p.getCurrentProfileID(), sudokuDir, str);
 		assertEquals(1, gameRepo.getNextFreeGameId());//currentProfileID==-1
 		assertTrue(FileManager.getGamesFile(p).exists());
+		//todo ab hier gehört es in gamerepotest
 		File game  = gameRepo.getGameFile(1);
 		File thumb = gameRepo.getGameThumbnailFile(1);
 		assertEquals(game.getName(),  "game_1.xml");

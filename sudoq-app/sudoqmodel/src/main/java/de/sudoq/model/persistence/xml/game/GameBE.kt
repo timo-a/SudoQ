@@ -6,16 +6,19 @@ import de.sudoq.model.actionTree.SolveAction
 import de.sudoq.model.actionTree.SolveActionFactory
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.game.GameStateHandler
+import de.sudoq.model.persistence.IRepo
 import de.sudoq.model.persistence.xml.sudoku.SudokuBE
 import de.sudoq.model.persistence.xml.sudoku.SudokuMapper
+import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE
 import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
 import de.sudoq.model.xml.Xmlable2
+import de.sudoq.model.xml.Xmlable3
 import java.io.File
 import java.util.*
 
-class GameBE : Xmlable2 {
+class GameBE : Xmlable3<SudokuTypeBE> {
 
     /** Unique id for the game */
     var id: Int = -1
@@ -78,7 +81,7 @@ class GameBE : Xmlable2 {
         return representation
     }
 
-    override fun fillFromXml(xmlTreeRepresentation: XmlTree, sudokuDir: File) {
+    override fun fillFromXml(xmlTreeRepresentation: XmlTree, sudokuTypeRepo: IRepo<SudokuTypeBE>) {
         id = xmlTreeRepresentation.getAttributeValue("id")!!.toInt()
         time = xmlTreeRepresentation.getAttributeValue("time")!!.toInt()
         val currentStateId = xmlTreeRepresentation.getAttributeValue("currentTurnId")!!.toInt()
@@ -90,7 +93,7 @@ class GameBE : Xmlable2 {
         for (sub in xmlTreeRepresentation) {
             if (sub.name == "sudoku") {
                 val sudokuBE = SudokuBE()
-                sudokuBE.fillFromXml(sub, sudokuDir)
+                sudokuBE.fillFromXml(sub, sudokuTypeRepo)
                 sudoku = SudokuMapper.fromBE(sudokuBE)
             } else if (sub.name == "gameSettings") {
                 gameSettings = GameSettings()

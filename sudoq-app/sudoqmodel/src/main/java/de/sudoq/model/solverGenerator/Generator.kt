@@ -7,6 +7,8 @@
  */
 package de.sudoq.model.solverGenerator
 
+import de.sudoq.model.persistence.IRepo
+import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE
 import de.sudoq.model.solverGenerator.solver.Solver
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.Sudoku
@@ -27,7 +29,7 @@ import java.util.*
  *
  * @see Solver
  */
-class Generator(val sudokuDir: File) {
+class Generator(private val sudokuTypeRepo: IRepo<SudokuTypeBE>) {
 
     private var random: Random
 
@@ -61,7 +63,7 @@ class Generator(val sudokuDir: File) {
         if (type == null || complexity == null || callbackObject == null) return false
 
         // Create sudoku
-        val sudoku = SudokuBuilder(type, sudokuDir).createSudoku()
+        val sudoku = SudokuBuilder(type, sudokuTypeRepo).createSudoku()
         sudoku.complexity = complexity
         val t = Thread(GenerationAlgo(sudoku, callbackObject, random))
         t.start()

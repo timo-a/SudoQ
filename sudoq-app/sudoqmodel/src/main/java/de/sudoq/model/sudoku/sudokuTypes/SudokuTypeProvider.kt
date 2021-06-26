@@ -1,8 +1,8 @@
 package de.sudoq.model.sudoku.sudokuTypes
 
+import de.sudoq.model.persistence.IRepo
+import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE
 import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeMapper
-import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeRepo
-import java.io.File
 
 object SudokuTypeProvider {
 
@@ -14,9 +14,8 @@ object SudokuTypeProvider {
      * @return a [SudokuType] of null if type cannot be mapped
      */
     @JvmStatic
-    fun getSudokuType(type: SudokuTypes, sudokuDir: File): SudokuType {
-        val repo = SudokuTypeRepo(sudokuDir)
-        val stBE = repo.read(type.ordinal)
+    fun getSudokuType(type: SudokuTypes, sudokuTypeRepo: IRepo<SudokuTypeBE>): SudokuType {
+        val stBE = sudokuTypeRepo.read(type.ordinal)
         return SudokuTypeMapper.fromBE(stBE)
     }
 }

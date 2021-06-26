@@ -1,10 +1,14 @@
 package de.sudoq.model.solverGenerator.solver;
 
+import org.junit.rules.TemporaryFolder;
+
 import java.io.File;
 import java.util.List;
 import java.util.Stack;
 
 import de.sudoq.model.Utility;
+import de.sudoq.model.persistence.IRepo;
+import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE;
 import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.ConstraintType;
@@ -20,23 +24,70 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
  * Created by timo on 02.09.16.
  */
 public class SudokuMockUps {
+
+    static TemporaryFolder tmpSudokus = new TemporaryFolder();
+
     private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
 
+    private static IRepo<SudokuTypeBE> str = new IRepo<SudokuTypeBE>() {
+        @Override
+        public SudokuTypeBE create() {
+            return null;
+        }
+
+        @Override
+        public SudokuTypeBE read(int id) {
+            SudokuTypes e = SudokuTypes.values()[id];
+            SudokuTypeBE stbe = null;
+            switch (e){
+                case standard9x9:
+                    stbe = new SudokuTypeBE();
+                    stbe.setEnumType(SudokuTypes.standard9x9);
+                    stbe.setSize(Position.get(9,9));
+                    stbe.setNumberOfSymbols(9);
+                    stbe.setBlockSize(Position.get(3,3));
+                case standard16x16:
+                    stbe = new SudokuTypeBE();
+                    stbe.setEnumType(SudokuTypes.standard16x16);
+                    stbe.setSize(Position.get(16,16));
+                    stbe.setNumberOfSymbols(16);
+                    stbe.setBlockSize(Position.get(4,4));
+                case samurai:
+                    stbe = new SudokuTypeBE();
+                    stbe.setEnumType(SudokuTypes.samurai);
+                    stbe.setSize(Position.get(25,25));
+                    stbe.setNumberOfSymbols(25);
+                    stbe.setBlockSize(Position.get(5,5));
+            }
+            return stbe;
+        }
+
+        @Override
+        public SudokuTypeBE update(SudokuTypeBE sudokuTypeBE) {
+            return null;
+        }
+
+        @Override
+        public void delete(int id) {
+
+        }
+    };
+
     public static Sudoku stringTo9x9Sudoku(String pattern){
-        Sudoku s = new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku();
+        Sudoku s = new SudokuBuilder(SudokuTypes.standard9x9, str).createSudoku();
         s.setComplexity(Complexity.arbitrary);
         return transform(s, pattern);
     }
 
     public static Sudoku stringTo16x16Sudoku(String pattern){
-        Sudoku s = new SudokuBuilder(SudokuTypes.standard16x16, sudokuDir).createSudoku();
+        Sudoku s = new SudokuBuilder(SudokuTypes.standard16x16, str).createSudoku();
         s.setComplexity(Complexity.arbitrary);
         return transformX(16, s, pattern);
     }
 
     /* expects values in [1,9] */
     public static Sudoku stringToSamuraiSudoku(String pattern){
-        Sudoku s = new SudokuBuilder(SudokuTypes.samurai, sudokuDir).createSudoku();
+        Sudoku s = new SudokuBuilder(SudokuTypes.samurai, str).createSudoku();
         s.setComplexity(Complexity.arbitrary);
         int dim = 21;
         for(int y=0; y<dim; y++)
@@ -95,7 +146,7 @@ public class SudokuMockUps {
 
 
     public static Sudoku stringToSudoku(SudokuTypes type, String pattern){
-        Sudoku sudoku = new SudokuBuilder(type, sudokuDir).createSudoku();
+        Sudoku sudoku = new SudokuBuilder(type, str).createSudoku();
         sudoku.setComplexity(Complexity.arbitrary);
         int yLim = sudoku.getSudokuType().getSize().getY();
         int xLim = sudoku.getSudokuType().getSize().getX();
@@ -194,7 +245,7 @@ public class SudokuMockUps {
     }
 
 
-    /* untested */
+    /* untested
     private static Sudoku transform1Constraint(String pattern){
         pattern = "2 4 5 ²⁴³ ⁶";
         String[] candidates = pattern.split("\\s+");
@@ -223,7 +274,7 @@ public class SudokuMockUps {
             }
         }
         return sudoku;
-    }
+    }*/
 }
 
 

@@ -7,8 +7,10 @@
  */
 package de.sudoq.model.game
 
+import de.sudoq.model.persistence.IRepo
 import de.sudoq.model.persistence.xml.game.GameMapper
 import de.sudoq.model.persistence.xml.game.GameRepo
+import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE
 import de.sudoq.model.profile.Profile
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.sudoku.SudokuManager
@@ -23,7 +25,7 @@ import java.util.*
 /**
  * Singleton for creating and loading sudoku games.
  */
-class GameManager(profilesDir: File, sudokuDir: File) {
+class GameManager(profilesDir: File, sudokuDir: File, val sudokuTypeRepo: IRepo<SudokuTypeBE>) {
 
     private var profile: ProfileManager = ProfileManager(profilesDir)
 
@@ -48,8 +50,9 @@ class GameManager(profilesDir: File, sudokuDir: File) {
         assistances: GameSettings,
         sudokuDir: File
     ): Game {
-        val sudoku = SudokuManager.getNewSudoku(type, complexity, sudokuDir)
-        SudokuManager(sudokuDir).usedSudoku(sudoku) //TODO warum instanziierung, wenn laut doc singleton?
+        val sm = SudokuManager(sudokuDir, sudokuTypeRepo)
+        val sudoku = sm.getNewSudoku(type, complexity, sudokuDir)
+        sm.usedSudoku(sudoku) //TODO warum instanziierung, wenn laut doc singleton?
 
         val gameBE0 = gameRepo.create()
         gameBE0.sudoku = sudoku
@@ -171,7 +174,8 @@ class GameManager(profilesDir: File, sudokuDir: File) {
         this.gameRepo = GameRepo(
             profile.profilesDir!!,
             profile.currentProfileID,
-            sudokuDir)
+            sudokuDir,
+            sudokuTypeRepo)
         this.gamesFile = File(profile.currentProfileDir, "games.xml")
 
         this.games = try {

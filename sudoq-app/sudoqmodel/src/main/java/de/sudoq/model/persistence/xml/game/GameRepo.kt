@@ -3,6 +3,7 @@ package de.sudoq.model.persistence.xml.game
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.game.GameStateHandler
 import de.sudoq.model.persistence.IRepo
+import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE
 import de.sudoq.model.xml.XmlHelper
 import java.io.File
 import java.io.IOException
@@ -13,7 +14,8 @@ import java.io.IOException
 class GameRepo(
     profilesDir: File,
     profileId: Int,
-    private val sudokuDir: File
+    private val sudokuDir: File,
+    private val sudokuTypeRepo: IRepo<SudokuTypeBE>
 ) : IRepo<GameBE> {
 
 
@@ -63,11 +65,11 @@ class GameRepo(
 
     override fun read(id: Int): GameBE {
         val obj = GameBE()
-        val helper: XmlHelper = XmlHelper()
+        val helper = XmlHelper()
         val gameFile: File = getGameFile(id)
         //todo is exception catching necessary? profilerepo doesn't catch them
         try {
-            obj.fillFromXml(helper.loadXml(gameFile)!!, sudokuDir)
+            obj.fillFromXml(helper.loadXml(gameFile)!!, sudokuTypeRepo)
         } catch (e: IOException) {
             throw IllegalArgumentException("Something went wrong when reading xml $gameFile", e)
         } catch (e: IllegalArgumentException) {
