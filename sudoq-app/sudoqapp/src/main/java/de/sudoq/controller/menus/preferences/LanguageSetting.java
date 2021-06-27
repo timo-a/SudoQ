@@ -32,29 +32,43 @@ public class LanguageSetting {
     }
 
 
+    /**
+     * parse a string loaded from shared prefs
+     * */
     public static LanguageSetting fromStorableString(String s){
         //format: de or system_fr
-        LanguageSetting ls = new LanguageSetting();
+        LanguageSetting ls;
 
-        if (s.length()==2){
-            try{
-                ls = new LanguageSetting(LanguageCode.valueOf(s), false);
-            } catch(IllegalArgumentException e) {
-                Log.d("lang", "Value from SharedPreferences " + s + " not recognized, defaulting to system language.");
-
-                ls = new LanguageSetting();
-            }
+        if (s.length()==2){ //de,en,fr or unsupported like it,pl,...
+            ls = parseLanguageSettings(s, false);
         } else if (s.startsWith("system_")){
-            s = s.substring("system_".length());
-            try {
-                ls = new LanguageSetting(LanguageCode.valueOf(s),true);
-            } catch(IllegalArgumentException e){
-                ls = new LanguageSetting();
-            }
+            String s2 = s.substring("system_".length());
+            ls = parseLanguageSettings(s2, true);
+
         } else {
             ls = new LanguageSetting();
+            Log.d("lang", "Value from SharedPreferences " + s + "has unsupported format, defaulting to system language.");
         }
         return ls;
+    }
+
+    private static LanguageSetting parseLanguageSettings(String languageString, boolean systemLanguage){
+        LanguageCode lc = parseEnum(languageString);
+
+        if (lc != null) {
+            return new LanguageSetting(lc, systemLanguage);
+        } else {
+            Log.d("lang", "Value from SharedPreferences not recognized, defaulting to system language.");
+            return new LanguageSetting();
+        }
+    }
+    private static LanguageCode parseEnum(String s){
+        for (LanguageCode lc: LanguageCode.values()) {
+            if (lc.name().equals(s))
+                return LanguageCode.valueOf(s);
+        }
+        Log.d("lang", "cannot parse " + s + " to language string.");
+        return null;
     }
 
     //private static LanguageSetting makeDefault(){}

@@ -104,7 +104,6 @@ public class MainActivity extends SudoqCompatActivity {
 		continueButton.setEnabled(p.getCurrentGame() > Profile.NO_GAME);
 
 
-		GameManager gm = GameManager.getInstance();
 		Button loadButton = (Button) findViewById(R.id.button_mainmenu_load_sudoku);
 		//loadButton.setEnabled(!gm.getGameList().isEmpty());
 		loadButton.setEnabled(true);
