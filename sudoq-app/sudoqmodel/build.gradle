@@ -16,8 +16,6 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.0.3'
 
 //testCompile 'junit:junit:4.7'
-testImplementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
-testImplementation 'org.kie.modules:org-apache-commons-lang3:6.3.0.CR1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
 //    otherTestsImplementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
