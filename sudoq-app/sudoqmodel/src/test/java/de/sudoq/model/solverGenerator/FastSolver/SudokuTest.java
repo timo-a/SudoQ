@@ -34,7 +34,7 @@ public class SudokuTest {
     @Test
 	public void testSolveSudoku() {
 
-        Sudoku s = getSudoku(FileManager.getSudokuDir(), SudokuTypes.standard9x9, Complexity.easy, 1);
+        Sudoku s = getSudoku(sudokuDir, SudokuTypes.standard9x9, Complexity.easy, 1);
         System.out.println(s);
         FastSolver fs = FastSolverFactory.getSolver(s);
 
@@ -72,14 +72,14 @@ public class SudokuTest {
                 + File.separator
                 + "sudoku_" + i + ".xml");
 
-        Sudoku s = new Sudoku(SudokuTypeProvider.getSudokuType(st, sudokuDir));
-        try {
-            s.fillFromXml(new XmlHelper().loadXml(f), sudokuDir);
-            s.setComplexity(Complexity.arbitrary);//justincase
-            return s;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        Sudoku s = new Sudoku(SudokuTypeProvider.getSudokuType(st, sudokuDir));
+//        try {
+//            s.fillFromXml(new XmlHelper().loadXml(f), sudokuDir);
+//            s.setComplexity(Complexity.arbitrary);//justincase
+//            return s;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } todo load from resources
         return null;
     }
 }

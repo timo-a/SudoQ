@@ -12,6 +12,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -19,8 +20,10 @@ import de.sudoq.model.Utility;
 import de.sudoq.model.actionTree.ActionTreeElement;
 import de.sudoq.model.actionTree.NoteActionFactory;
 import de.sudoq.model.actionTree.SolveActionFactory;
+import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.persistence.xml.game.GameBE;
 import de.sudoq.model.persistence.xml.game.GameMapper;
+import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.solverGenerator.Generator;
 import de.sudoq.model.solverGenerator.GeneratorCallback;
@@ -39,7 +42,25 @@ public class GameTests {
 
 	private static Sudoku sudoku;
 
-	private static File sudokuDir = new File(Utility.RES + "tmp_suds");
+	//this is a dummy so it compiles todo use xmls from resources
+	private static IRepo<SudokuTypeBE> sudokuTypeRepo = new IRepo<SudokuTypeBE>() {
+		@Override
+		public void delete(int id) { throw new NotImplementedException(); }
+
+		@Override
+		public SudokuTypeBE update(SudokuTypeBE sudokuBE) { throw new NotImplementedException(); }
+
+		@Override
+		public SudokuTypeBE read(int id) {
+			throw new NotImplementedException();
+		}
+
+		@Override
+		public SudokuTypeBE create() { throw new NotImplementedException(); }
+
+	};
+
+
 
 	@BeforeClass
 	public static void beforeClass() {
@@ -61,12 +82,12 @@ public class GameTests {
 			}
 		};
 		
-		new Generator(sudokuDir).generate(SudokuTypes.standard9x9, Complexity.easy, gc);
+		new Generator(sudokuTypeRepo).generate(SudokuTypes.standard9x9, Complexity.easy, gc);
 	}
 
 	@Test
 	public void testInstanciation() {
-		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku());
+		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku());
 		assertEquals(game.getId(), 2);
 		assertNotNull(game.getStateHandler());
 		assertEquals(game.getSudoku().getCell(Position.get(8, 8)).getCurrentValue(), Cell.EMPTYVAL);
@@ -81,7 +102,7 @@ public class GameTests {
 
 	@Test
 	public void testGameInteraction() {
-		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku());
+		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku());
 
 		Position pos = Position.get(1, 1);
 		ActionTreeElement start = game.getCurrentState();
@@ -112,9 +133,9 @@ public class GameTests {
 
 	@Test
 	public void testEquals() {
-		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku());
+		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku());
 		assertEquals(game, game);
-		Game game2 = new Game(3, new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku());
+		Game game2 = new Game(3, new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku());
 		assertNotEquals(game, game2);
 
 		Position pos = Position.get(1, 1);
@@ -139,7 +160,7 @@ public class GameTests {
 
 	@Test
 	public void testGameXML() {
-		Sudoku s = new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku();
+		Sudoku s = new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku();
 		s.setId(5);
 		Game game = new Game(2, s);
 
@@ -163,14 +184,14 @@ public class GameTests {
 		Game game2 = new Game();
 		GameBE gameBE  = GameMapper.INSTANCE.toBE(game);
 		GameBE game2BE = GameMapper.INSTANCE.toBE(game2);
-		game2BE.fillFromXml(gameBE.toXmlTree(), sudokuDir);
+		game2BE.fillFromXml(gameBE.toXmlTree(), sudokuTypeRepo);
 		assertEquals(gameBE, game2BE);
 	}
 
 	// Regression Test for Issue-89
 	@Test
 	public void testFinishedAttributeConsistency() {
-		SudokuBuilder sb = new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir);
+		SudokuBuilder sb = new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo);
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
 				sb.addSolution(Position.get(i, j), 1);
@@ -193,19 +214,19 @@ public class GameTests {
 	private Game convertAndBack(Game g) {
 		GameBE source = GameMapper.INSTANCE.toBE(g);
 		GameBE target = new GameBE();
-		target.fillFromXml(source.toXmlTree(), sudokuDir);
+		target.fillFromXml(source.toXmlTree(), sudokuTypeRepo);
 		return GameMapper.INSTANCE.fromBE(target);
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void testSetNullAssistances() {
-		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku());
+		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku());
 		game.setAssistances(null);
 	}
 
 	@Test
 	public void testAssistanceSetting() {
-		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku());
+		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku());
 
 		game.setAssistances(new GameSettings() {
 			@Override
@@ -226,7 +247,7 @@ public class GameTests {
 			private boolean errors = false;
 
 			public SudokuMock() {
-				super(SudokuTypeProvider.getSudokuType(SudokuTypes.standard9x9, sudokuDir), new PositionMap<Integer>(Position.get(9, 9)),
+				super(SudokuTypeProvider.getSudokuType(SudokuTypes.standard9x9, sudokuTypeRepo), new PositionMap<Integer>(Position.get(9, 9)),
 						new PositionMap<Boolean>(Position.get(9, 9)));
 			}
 
@@ -273,7 +294,7 @@ public class GameTests {
 
 	@Test
 	public void testNoteAdjustment() {
-		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku());
+		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku());
 		GameSettings as = new GameSettings();
 		as.setAssistance(Assistances.autoAdjustNotes);
 		game.setAssistances(as);
@@ -414,7 +435,7 @@ public class GameTests {
 	// Regression Test for Issue-90
 	@Test
 	public void testAutoAdjustNotesForAutomaticSolving() {
-		SudokuBuilder sb = new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir);
+		SudokuBuilder sb = new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo);
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
 				sb.addSolution(Position.get(i, j), 1);

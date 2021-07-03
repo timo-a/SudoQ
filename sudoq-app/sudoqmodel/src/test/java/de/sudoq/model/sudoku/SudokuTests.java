@@ -12,14 +12,19 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.sudoq.model.Utility;
 import de.sudoq.model.ModelChangeListener;
+import de.sudoq.model.persistence.IRepo;
+import de.sudoq.model.persistence.xml.sudoku.SudokuBE;
+import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE;
 import de.sudoq.model.solverGenerator.Generator;
 import de.sudoq.model.solverGenerator.GeneratorCallback;
 import de.sudoq.model.solverGenerator.solution.Solution;
@@ -33,17 +38,29 @@ import de.sudoq.model.xml.XmlTree;
 public class SudokuTests {
 	private static Sudoku sudoku;
 
-    private static File profiles;
-	private static File sudokus ;
-	private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
+	//this is a dummy so it compiles todo use xmls from resources
+	private static IRepo<SudokuTypeBE> sudokuTypeRepo = new IRepo<SudokuTypeBE>() {
+		@Override
+		public void delete(int id) { throw new NotImplementedException(); }
+
+		@Override
+		public SudokuTypeBE update(SudokuTypeBE sudokuBE) { throw new NotImplementedException(); }
+
+		@Override
+		public SudokuTypeBE read(int id) {
+			throw new NotImplementedException();
+		}
+
+		@Override
+		public SudokuTypeBE create() { throw new NotImplementedException(); }
+
+	};
 
 	@BeforeClass
 	public static void beforeClass() {
         Utility.copySudokus();
-        sudokus  = Utility.sudokus;
-        profiles = Utility.profiles;
 
-		new Generator(sudokuDir).generate(SudokuTypes.standard4x4, Complexity.easy, new GeneratorCallback() {
+		new Generator(sudokuTypeRepo).generate(SudokuTypes.standard4x4, Complexity.easy, new GeneratorCallback() {
 			@Override
 			public void generationFinished(Sudoku sudoku) {
 				SudokuTests.sudoku = sudoku;
@@ -205,7 +222,7 @@ public class SudokuTests {
 
 	@Test
 	public void testCellChangeNotification() {
-		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku();
+		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku();
 		Listener listener = new Listener();
 
 		sudoku.getCell(Position.get(0, 0)).setCurrentValue(2);
@@ -228,30 +245,31 @@ public class SudokuTests {
 
 	@Test
 	public void testToXml() {
-		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku();
-		sudoku.setId(4357);
-		sudoku.setComplexity(Complexity.easy);
+		SudokuBE sudoku = new SudokuBE(4357, 0,
+				new SudokuType(9,9,9),
+				Complexity.easy, new HashMap<Position, Cell>());
 
 		XmlTree tree = sudoku.toXmlTree();
 		assertTrue(tree.getNumberOfChildren() > 0);
 
-		assertEquals(tree.getAttributeValue("id"), "4357");
-		assertEquals(tree.getAttributeValue("type"), "" + SudokuTypes.standard9x9.ordinal());
-		assertEquals(tree.getAttributeValue("complexity"), "" + Complexity.easy.ordinal());
-		assertEquals(tree.getNumberOfChildren(), 81);
+		assertEquals("4357", tree.getAttributeValue("id"));
+		assertEquals("" + SudokuTypes.standard9x9.ordinal(), tree.getAttributeValue("type"));
+		assertEquals("" + Complexity.easy.ordinal(), tree.getAttributeValue("complexity"));
+		assertEquals(81, tree.getNumberOfChildren());
 
 		// System.out.println(new XmlHelper().buildXmlStructure(tree));
 	}
 
 	@Test
 	public void testFillFromXml() throws IllegalArgumentException, IOException {
-		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard9x9, sudokuDir).createSudoku();
-		sudoku.setId(6374);
+		SudokuBE sudoku = new SudokuBE(6374, 0,
+				new SudokuType(9,9,9),
+				Complexity.easy, new HashMap<Position, Cell>());
 
 		XmlTree tree = sudoku.toXmlTree();
 		System.out.println(new XmlHelper().buildXmlStructure(tree));
-		Sudoku rebuilt = new Sudoku();
-		rebuilt.fillFromXml(tree, sudokuDir);
+		SudokuBE rebuilt = new SudokuBE();
+		rebuilt.fillFromXml(tree, sudokuTypeRepo);
 
 		assertEquals(sudoku, rebuilt);
 	}
@@ -278,7 +296,7 @@ public class SudokuTests {
 		PositionMap<Integer> solutions = new PositionMap<Integer>(Position.get(9, 9));
 		for (int x = 0; x < 9; x++) {
 			for (int y = 0; y < 9; y++) {
-				solutions.put(Position.get(x, y), new Integer(0));
+				solutions.put(Position.get(x, y), 0);
 			}
 		}
 		Sudoku sudoku = new Sudoku(sudokuType, solutions, null);
@@ -289,7 +307,9 @@ public class SudokuTests {
 	@Test(expected = IllegalArgumentException.class)
 	public void testFromXmlError() {
 		Sudoku sudoku = new Sudoku(TypeBuilder.get99());
-		XmlTree tree = sudoku.toXmlTree();
+		SudokuBE sudokuBE = new SudokuBE(sudoku.getId(), sudoku.getTransformCount(),
+				sudoku.getSudokuType(), sudoku.getComplexity(), sudoku.cells);
+		XmlTree tree = sudokuBE.toXmlTree();
 		for (Iterator<XmlTree> iterator = tree.getChildren(); iterator.hasNext();) {
 			XmlTree sub = iterator.next();
 			if (sub.getName().equals("fieldmap")) {
@@ -297,13 +317,14 @@ public class SudokuTests {
 			}
 			assertTrue(sub.getNumberOfChildren() == 2);
 		}
-		sudoku.fillFromXml(tree, sudokuDir);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testFromXmlError2() {
 		Sudoku sudoku = new Sudoku(TypeBuilder.get99());
-		XmlTree tree = sudoku.toXmlTree();
+		SudokuBE sudokuBE = new SudokuBE(sudoku.getId(), sudoku.getTransformCount(),
+				sudoku.getSudokuType(), sudoku.getComplexity(), sudoku.cells);
+		XmlTree tree = sudokuBE.toXmlTree();
 		for (Iterator<XmlTree> iterator = tree.getChildren(); iterator.hasNext();) {
 			XmlTree sub = iterator.next();
 			Iterator<XmlTree> it = sub.getChildren();
@@ -313,16 +334,18 @@ public class SudokuTests {
 			}
 			sub.addChild(new XmlTree("Test"));
 		}
-		sudoku.fillFromXml(tree, sudokuDir);
+		sudokuBE.fillFromXml(tree, sudokuTypeRepo);
 	}
 
 	@Test
 	public void testFromXmlAdditionalChild() {
 		Sudoku sudoku = new Sudoku(TypeBuilder.get99());
-		XmlTree tree = sudoku.toXmlTree();
+		SudokuBE sudokuBE = new SudokuBE(sudoku.getId(), sudoku.getTransformCount(),
+				sudoku.getSudokuType(), sudoku.getComplexity(), sudoku.cells);
+		XmlTree tree = sudokuBE.toXmlTree();
 		tree.addChild(new XmlTree("Test"));
-		Sudoku s2 = new Sudoku(TypeBuilder.get99());
-		s2.fillFromXml(tree, sudokuDir);
+		SudokuBE s2 = new SudokuBE();
+		s2.fillFromXml(tree, sudokuTypeRepo);
 		assertEquals(sudoku, s2);
 
 	}

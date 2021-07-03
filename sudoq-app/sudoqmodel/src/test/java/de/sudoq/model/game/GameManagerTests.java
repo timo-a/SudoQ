@@ -9,6 +9,7 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -16,7 +17,9 @@ import org.junit.Test;
 
 import de.sudoq.model.Utility;
 import de.sudoq.model.files.FileManager;
+import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.persistence.xml.game.GameRepo;
+import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.complexity.Complexity;
@@ -27,6 +30,24 @@ public class GameManagerTests {
 	static File profileDir = new File("/tmp/sudoq/GameManagerTests/profile");
 	static Profile p;
 	private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
+
+	//this is a dummy so it compiles todo use xmls from resources
+	private static IRepo<SudokuTypeBE> sudokuTypeRepo = new IRepo<SudokuTypeBE>() {
+		@Override
+		public void delete(int id) { throw new NotImplementedException(); }
+
+		@Override
+		public SudokuTypeBE update(SudokuTypeBE sudokuBE) { throw new NotImplementedException(); }
+
+		@Override
+		public SudokuTypeBE read(int id) {
+			throw new NotImplementedException();
+		}
+
+		@Override
+		public SudokuTypeBE create() { throw new NotImplementedException(); }
+
+	};
 
 	@BeforeClass
 	public static void init() throws IOException {
@@ -55,7 +76,7 @@ public class GameManagerTests {
 
 	@Test
 	public void testDeletingCurrentGame() {
-		GameManager gm = new GameManager(profileDir, sudokuDir);
+		GameManager gm = new GameManager(profileDir, sudokuDir, sudokuTypeRepo);
 		Game game = gm.newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings(), sudokuDir);
 		p.setCurrentGame(game.getId());
 		gm.deleteGame(p.getCurrentGame(), p);
@@ -64,16 +85,16 @@ public class GameManagerTests {
 
 	@After
 	public void deleteAllGames() {
-		GameRepo gr = new GameRepo(profileDir, p.getCurrentProfileID(), sudokuDir);
+		GameRepo gr = new GameRepo(profileDir, p.getCurrentProfileID(), sudokuDir, sudokuTypeRepo);
 		for (int i = 1; i <= gr.getGamesFile().list().length; i++) {
 			gr.delete(i);
 		}
-		new GameManager(profileDir, sudokuDir).updateGamesList();
+		new GameManager(profileDir, sudokuDir, sudokuTypeRepo).updateGamesList();
 	}
 
 	@Test
 	public void testCreatingAndSolving() {
-		Game game = new GameManager(profileDir, sudokuDir)
+		Game game = new GameManager(profileDir, sudokuDir, sudokuTypeRepo)
 				.newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings(), sudokuDir);
 		assertFalse(game.isFinished());
 		int count = 0;
@@ -102,7 +123,7 @@ public class GameManagerTests {
 	public void testAssistanceSetting() {
 		GameSettings set = new GameSettings();
 		set.setAssistance(Assistances.autoAdjustNotes);
-		Game game = new GameManager(profileDir, sudokuDir)
+		Game game = new GameManager(profileDir, sudokuDir, sudokuTypeRepo)
 				.newGame(SudokuTypes.standard9x9, Complexity.difficult, set, sudokuDir);
 		assertTrue(game.isAssistanceAvailable(Assistances.autoAdjustNotes));
 		assertFalse(game.isAssistanceAvailable(Assistances.markRowColumn));
@@ -113,7 +134,7 @@ public class GameManagerTests {
 
 	@Test
 	public void testLoadingAndSaving() {
-		GameManager gm = new GameManager(profileDir, sudokuDir);
+		GameManager gm = new GameManager(profileDir, sudokuDir, sudokuTypeRepo);
 		Game game = gm.newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings(), sudokuDir);
 		gm.save(game, p);
 		assertEquals(gm.load(game.getId()), game);
@@ -121,7 +142,7 @@ public class GameManagerTests {
 
 	@Test
 	public void testGameList() {
-		GameManager gm = new GameManager(profileDir, sudokuDir);
+		GameManager gm = new GameManager(profileDir, sudokuDir, sudokuTypeRepo);
 
 		Game game1 = gm.newGame(SudokuTypes.standard9x9, Complexity.easy, new GameSettings(), sudokuDir);
 		gm.save(game1, p);
@@ -141,7 +162,7 @@ public class GameManagerTests {
 
 	@Test
 	public void testSudokuLoading() {
-		GameManager gm = new GameManager(profileDir, sudokuDir);
+		GameManager gm = new GameManager(profileDir, sudokuDir, sudokuTypeRepo);
 		Game game = gm.newGame(SudokuTypes.standard9x9, Complexity.medium, new GameSettings(), sudokuDir);
 		int id = game.getId();
 		Cell cell = null;
@@ -163,12 +184,12 @@ public class GameManagerTests {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testUnvalidLoadingIds() {
-		new GameManager(profileDir, sudokuDir).load(-5);
+		new GameManager(profileDir, sudokuDir, sudokuTypeRepo).load(-5);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testLoadingNonexistentGame() {
-		new GameManager(profileDir, sudokuDir).load(2);
+		new GameManager(profileDir, sudokuDir, sudokuTypeRepo).load(2);
 	}
 
 	@Test
@@ -176,7 +197,7 @@ public class GameManagerTests {
 		FileManager.getGamesFile(p).setWritable(false);
 		assertFalse(FileManager.getGamesFile(p).canWrite());
 		try {
-			new GameManager(profileDir, sudokuDir).deleteFinishedGames();
+			new GameManager(profileDir, sudokuDir, sudokuTypeRepo).deleteFinishedGames();
 			fail("No Exception");
 		} catch (IllegalStateException e) {
 			// fine
@@ -190,7 +211,7 @@ public class GameManagerTests {
 		File other = new File(FileManager.getGamesFile(p).getParentFile(), "foo");
 		FileManager.getGamesFile(p).renameTo(new File(FileManager.getGamesFile(p).getParentFile(), "foo"));
 		try {
-			new GameManager(profileDir, sudokuDir).deleteFinishedGames();
+			new GameManager(profileDir, sudokuDir, sudokuTypeRepo).deleteFinishedGames();
 			fail("No Exception");
 		} catch (IllegalStateException e) {
 			other.renameTo(FileManager.getGamesFile(p));

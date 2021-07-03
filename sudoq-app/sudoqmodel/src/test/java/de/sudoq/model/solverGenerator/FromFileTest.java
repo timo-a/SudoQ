@@ -33,18 +33,18 @@ public class FromFileTest {
 
 
     public static Sudoku getSudoku(String path, SudokuTypes st){
-        FileManager.initialize(
-                new File("/home/t/Code/SudoQ/sudoq-app/sudoqapp/src/main/assets/sudokus/"));
-        File f = new File(path);
-
-        Sudoku s = new Sudoku(SudokuTypeProvider.getSudokuType(st, sudokuDir));
-        try {
-            s.fillFromXml(new XmlHelper().loadXml(f), sudokuDir);
-            s.setComplexity(Complexity.arbitrary);//justincase
-            return s;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        FileManager.initialize(
+//                new File("/home/t/Code/SudoQ/sudoq-app/sudoqapp/src/main/assets/sudokus/"));
+//        File f = new File(path);
+//
+//        Sudoku s = new Sudoku(SudokuTypeProvider.getSudokuType(st, sudokuDir));
+//        try {
+//            s.fillFromXml(new XmlHelper().loadXml(f), sudokuDir);
+//            s.setComplexity(Complexity.arbitrary);//justincase
+//            return s;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         return null;
     }
 

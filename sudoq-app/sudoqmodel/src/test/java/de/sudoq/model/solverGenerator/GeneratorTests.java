@@ -16,6 +16,8 @@ import org.junit.BeforeClass;
 
 import de.sudoq.model.Utility;
 import de.sudoq.model.files.FileManager;
+import de.sudoq.model.persistence.IRepo;
+import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solver.ComplexityRelation;
@@ -55,7 +57,28 @@ public class GeneratorTests implements GeneratorCallback {
 	@Before
 	public void beforeTest() {
 		TypeBuilder.get99();
-		generator = new Generator(sudokuDir);
+		IRepo<SudokuTypeBE> dummySoItCompiles = new IRepo<SudokuTypeBE>() {
+			@Override
+			public SudokuTypeBE create() {
+				return null;
+			}
+
+			@Override
+			public SudokuTypeBE read(int id) {
+				return null;
+			}
+
+			@Override
+			public SudokuTypeBE update(SudokuTypeBE sudokuTypeBE) {
+				return null;
+			}
+
+			@Override
+			public void delete(int id) {
+
+			}
+		};
+		generator = new Generator(dummySoItCompiles/*sudokuDir*/);
 	}
 
 	@Override

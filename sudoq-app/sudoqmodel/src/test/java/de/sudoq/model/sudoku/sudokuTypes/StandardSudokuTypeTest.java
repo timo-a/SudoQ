@@ -67,6 +67,7 @@ public class StandardSudokuTypeTest {
 
 	public class SST18x18 extends SudokuType {
 		public SST18x18() {
+			super(18,18,18);
 			//TODO somehow create this super(18);
 		}
 

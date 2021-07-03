@@ -1,5 +1,6 @@
 package de.sudoq.model.solverGenerator.solver;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -11,8 +12,8 @@ import java.util.Map;
 
 import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.Utility;
-import de.sudoq.model.files.FileManagerTests;
-import de.sudoq.model.profile.Profile;
+import de.sudoq.model.persistence.IRepo;
+import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.sudoku.Cell;
@@ -22,7 +23,6 @@ import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
@@ -36,12 +36,28 @@ import static org.junit.Assert.assertTrue;
 
 public class SolverTests2 extends Solver {
 
-	private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
+	//this is a dummy so it compiles todo use xmls from resources
+	private static IRepo<SudokuTypeBE> sudokuTypeRepo = new IRepo<SudokuTypeBE>() {
+		@Override
+		public void delete(int id) { throw new NotImplementedException(); }
+
+		@Override
+		public SudokuTypeBE update(SudokuTypeBE sudokuBE) { throw new NotImplementedException(); }
+
+		@Override
+		public SudokuTypeBE read(int id) {
+			throw new NotImplementedException();
+		}
+
+		@Override
+		public SudokuTypeBE create() { throw new NotImplementedException(); }
+
+	};
 
 	@BeforeClass
 	public static void init() {
 		TestWithInitCleanforSingletons.legacyInit();
-		initialSudoku = new Sudoku(SudokuTypeProvider.getSudokuType(standard9x9, sudokuDir));
+		initialSudoku = new Sudoku(SudokuTypeProvider.getSudokuType(standard9x9, sudokuTypeRepo));
 		for (int i=0; i < 8; i++)
 			initialSudoku.getCell(Position.get(i,0)).setCurrentValue(i);
 
@@ -73,7 +89,7 @@ public class SolverTests2 extends Solver {
 		//sudoku = new SudokuBuilder(standard9x9).createSudoku();
 		//sudoku.setComplexity(Complexity.arbitrary);
 		solver = new Solver(solverSudoku);
-		sudoku16x16 = new SudokuBuilder(SudokuTypes.standard16x16, sudokuDir).createSudoku();
+		sudoku16x16 = new SudokuBuilder(SudokuTypes.standard16x16, sudokuTypeRepo).createSudoku();
 		sudoku16x16.setComplexity(Complexity.arbitrary);
 		solution16x16 = new PositionMap<Integer>(sudoku16x16.getSudokuType().getSize());
 	}

@@ -51,7 +51,7 @@ public class Pseudotest {
 		return s;
 	}
 	
-	private void filestuff(SudokuType st){
+/*	private void filestuff(SudokuType st){
 		System.out.println(st.getEnumType());
 		
 		try {
@@ -63,7 +63,7 @@ public class Pseudotest {
 			e.printStackTrace();
 		}
 		st.fillFromXml(st.toXmlTree());
-	}
+	}*/
 	
 	@Test
 	public void createXmlTypes() {
