@@ -1,4 +1,4 @@
-package de.sudoq.model.persistence.xml.sudokuType
+package de.sudoq.model.utility.persistence.sudokuType
 
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 

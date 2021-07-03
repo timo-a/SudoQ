@@ -8,14 +8,13 @@
 package de.sudoq.model.solverGenerator
 
 import de.sudoq.model.persistence.IRepo
-import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE
 import de.sudoq.model.solverGenerator.solver.Solver
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.SudokuBuilder
 import de.sudoq.model.sudoku.complexity.Complexity
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
-import java.io.File
 import java.util.*
 
 /**
@@ -29,7 +28,7 @@ import java.util.*
  *
  * @see Solver
  */
-class Generator(private val sudokuTypeRepo: IRepo<SudokuTypeBE>) {
+class Generator(private val sudokuTypeRepo: IRepo<SudokuType>) {
 
     private var random: Random
 

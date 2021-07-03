@@ -1,4 +1,4 @@
-package de.sudoq.model.persistence.xml.sudokuType
+package de.sudoq.persistence.sudokuType
 
 import de.sudoq.model.solverGenerator.solver.helper.Helpers
 import de.sudoq.model.sudoku.Constraint

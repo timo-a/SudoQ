@@ -5,15 +5,12 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import de.sudoq.model.TestWithInitCleanforSingletons;
-import de.sudoq.model.Utility;
 import de.sudoq.model.persistence.IRepo;
-import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.sudoku.Cell;
@@ -23,8 +20,10 @@ import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
+import de.sudoq.model.utility.persistence.sudokuType.SudokuTypeRepo;
 
 import static de.sudoq.model.sudoku.sudokuTypes.SudokuTypes.standard9x9;
 import static org.junit.Assert.assertEquals;
@@ -37,22 +36,7 @@ import static org.junit.Assert.assertTrue;
 public class SolverTests2 extends Solver {
 
 	//this is a dummy so it compiles todo use xmls from resources
-	private static IRepo<SudokuTypeBE> sudokuTypeRepo = new IRepo<SudokuTypeBE>() {
-		@Override
-		public void delete(int id) { throw new NotImplementedException(); }
-
-		@Override
-		public SudokuTypeBE update(SudokuTypeBE sudokuBE) { throw new NotImplementedException(); }
-
-		@Override
-		public SudokuTypeBE read(int id) {
-			throw new NotImplementedException();
-		}
-
-		@Override
-		public SudokuTypeBE create() { throw new NotImplementedException(); }
-
-	};
+	private static IRepo<SudokuType> sudokuTypeRepo = new SudokuTypeRepo();
 
 	@BeforeClass
 	public static void init() {

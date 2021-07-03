@@ -23,7 +23,6 @@ import de.sudoq.model.actionTree.SolveActionFactory;
 import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.persistence.xml.game.GameBE;
 import de.sudoq.model.persistence.xml.game.GameMapper;
-import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.solverGenerator.Generator;
 import de.sudoq.model.solverGenerator.GeneratorCallback;
@@ -34,33 +33,18 @@ import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
+import de.sudoq.model.utility.persistence.sudokuType.SudokuTypeRepo;
 
 public class GameTests {
 
 	private static Sudoku sudoku;
 
 	//this is a dummy so it compiles todo use xmls from resources
-	private static IRepo<SudokuTypeBE> sudokuTypeRepo = new IRepo<SudokuTypeBE>() {
-		@Override
-		public void delete(int id) { throw new NotImplementedException(); }
-
-		@Override
-		public SudokuTypeBE update(SudokuTypeBE sudokuBE) { throw new NotImplementedException(); }
-
-		@Override
-		public SudokuTypeBE read(int id) {
-			throw new NotImplementedException();
-		}
-
-		@Override
-		public SudokuTypeBE create() { throw new NotImplementedException(); }
-
-	};
-
-
+	private static IRepo<SudokuType> sudokuTypeRepo = new SudokuTypeRepo();
 
 	@BeforeClass
 	public static void beforeClass() {

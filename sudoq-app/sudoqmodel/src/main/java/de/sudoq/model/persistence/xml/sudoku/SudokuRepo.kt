@@ -1,9 +1,9 @@
 package de.sudoq.model.persistence.xml.sudoku
 
 import de.sudoq.model.persistence.IRepo
-import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE
 import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.complexity.Complexity
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.xml.XmlHelper
 import java.io.File
@@ -14,12 +14,12 @@ class SudokuRepo(
     private val outerSudokusDir: File,
     type: SudokuTypes,
     complexity: Complexity,
-    private val sudokuTypeRepo: IRepo<SudokuTypeBE>
+    private val sudokuTypeRepo: IRepo<SudokuType>
 ) : IRepo<SudokuBE> {
 
     private val sudokusDir: File = getSudokuDir(type, complexity)
 
-    constructor(sudokusDir: File, sudoku: Sudoku, sudokuTypeRepo: IRepo<SudokuTypeBE>) : this(
+    constructor(sudokusDir: File, sudoku: Sudoku, sudokuTypeRepo: IRepo<SudokuType>) : this(
         sudokusDir,
         sudoku.sudokuType!!.enumType!!,
         sudoku.complexity!!,

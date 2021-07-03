@@ -19,7 +19,7 @@ import de.sudoq.model.Utility;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.persistence.xml.game.GameRepo;
-import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.complexity.Complexity;
@@ -32,20 +32,20 @@ public class GameManagerTests {
 	private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
 
 	//this is a dummy so it compiles todo use xmls from resources
-	private static IRepo<SudokuTypeBE> sudokuTypeRepo = new IRepo<SudokuTypeBE>() {
+	private static IRepo<SudokuType> sudokuTypeRepo = new IRepo<SudokuType>() {
 		@Override
 		public void delete(int id) { throw new NotImplementedException(); }
 
 		@Override
-		public SudokuTypeBE update(SudokuTypeBE sudokuBE) { throw new NotImplementedException(); }
+		public SudokuType update(SudokuType sudokuBE) { throw new NotImplementedException(); }
 
 		@Override
-		public SudokuTypeBE read(int id) {
+		public SudokuType read(int id) {
 			throw new NotImplementedException();
 		}
 
 		@Override
-		public SudokuTypeBE create() { throw new NotImplementedException(); }
+		public SudokuType create() { throw new NotImplementedException(); }
 
 	};
 
@@ -85,7 +85,7 @@ public class GameManagerTests {
 
 	@After
 	public void deleteAllGames() {
-		GameRepo gr = new GameRepo(profileDir, p.getCurrentProfileID(), sudokuDir, sudokuTypeRepo);
+		GameRepo gr = new GameRepo(profileDir, p.getCurrentProfileID(), sudokuTypeRepo);
 		for (int i = 1; i <= gr.getGamesFile().list().length; i++) {
 			gr.delete(i);
 		}

@@ -11,36 +11,16 @@ import java.io.File;
 
 import de.sudoq.model.Utility;
 import de.sudoq.model.persistence.IRepo;
-import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE;
-import de.sudoq.model.sudoku.Constraint;
-import de.sudoq.model.sudoku.ConstraintType;
-import de.sudoq.model.sudoku.Position;
-import de.sudoq.model.sudoku.Sudoku;
-import de.sudoq.model.sudoku.SudokuBuilder;
-import de.sudoq.model.sudoku.SumConstraintBehavior;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
+import de.sudoq.model.utility.persistence.sudokuType.SudokuTypeRepo;
 
 public class SumConstraintBehaviorTests {
 	private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
 
 	//this is a dummy so it compiles todo use xmls from resources
-	private IRepo<SudokuTypeBE> sudokuTypeRepo = new IRepo<SudokuTypeBE>() {
-		@Override
-		public void delete(int id) { throw new NotImplementedException(); }
-
-		@Override
-		public SudokuTypeBE update(SudokuTypeBE sudokuBE) { throw new NotImplementedException(); }
-
-		@Override
-		public SudokuTypeBE read(int id) {
-			throw new NotImplementedException();
-		}
-
-		@Override
-		public SudokuTypeBE create() { throw new NotImplementedException(); }
-
-	};
+	private IRepo<SudokuType> sudokuTypeRepo = new SudokuTypeRepo();
 
 	@BeforeClass
 	public static void init() {

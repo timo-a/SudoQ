@@ -3,7 +3,7 @@ package de.sudoq.model.persistence.xml.game
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.game.GameStateHandler
 import de.sudoq.model.persistence.IRepo
-import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.xml.XmlHelper
 import java.io.File
 import java.io.IOException
@@ -14,8 +14,7 @@ import java.io.IOException
 class GameRepo(
     profilesDir: File,
     profileId: Int,
-    private val sudokuDir: File,
-    private val sudokuTypeRepo: IRepo<SudokuTypeBE>
+    private val sudokuTypeRepo: IRepo<SudokuType>
 ) : IRepo<GameBE> {
 
 

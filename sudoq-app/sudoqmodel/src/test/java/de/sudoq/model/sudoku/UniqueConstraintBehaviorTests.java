@@ -6,35 +6,17 @@ import static org.junit.Assert.assertTrue;
 import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Test;
 
-import java.io.File;
-
 import de.sudoq.model.TestWithInitCleanforSingletons;
-import de.sudoq.model.Utility;
 import de.sudoq.model.persistence.IRepo;
-import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE;
-import de.sudoq.model.profile.Profile;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
+import de.sudoq.model.utility.persistence.sudokuType.SudokuTypeRepo;
 
 public class UniqueConstraintBehaviorTests extends TestWithInitCleanforSingletons {
 
 	//this is a dummy so it compiles todo use xmls from resources
-	private IRepo<SudokuTypeBE> sudokuTypeRepo = new IRepo<SudokuTypeBE>() {
-		@Override
-		public void delete(int id) { throw new NotImplementedException(); }
-
-		@Override
-		public SudokuTypeBE update(SudokuTypeBE sudokuBE) { throw new NotImplementedException(); }
-
-		@Override
-		public SudokuTypeBE read(int id) {
-			throw new NotImplementedException();
-		}
-
-		@Override
-		public SudokuTypeBE create() { throw new NotImplementedException(); }
-
-	};
+	private IRepo<SudokuType> sudokuTypeRepo = new SudokuTypeRepo();
 
 	@Test
 	public void testConstraint() {

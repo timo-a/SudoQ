@@ -31,7 +31,7 @@ import de.sudoq.model.game.GameManager
 import de.sudoq.model.persistence.xml.game.GameRepo
 import de.sudoq.model.profile.Profile
 import de.sudoq.model.profile.ProfileManager
-import de.sudoq.persistence.SudokuTypeRepo
+import de.sudoq.persistence.sudokuType.SudokuTypeRepo
 import java.io.*
 import java.nio.charset.Charset
 import java.util.*
@@ -238,7 +238,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
         }
         val builder = AlertDialog.Builder(this)
         val p = Profile.getInstance(profilesDir)
-        val gameRepo = GameRepo(p.profilesDir!!, p.currentProfileID, sudokuDir, sudokuTypeRepo)
+        val gameRepo = GameRepo(p.profilesDir!!, p.currentProfileID, sudokuTypeRepo)
         builder.setItems(temp_items.toTypedArray()) { dialog, item ->
             val gameID = adapter!!.getItem(position)!!.id
             when (item) {

@@ -11,19 +11,19 @@ import de.sudoq.model.persistence.IRepo
 import de.sudoq.model.persistence.xml.sudoku.SudokuBE
 import de.sudoq.model.persistence.xml.sudoku.SudokuMapper
 import de.sudoq.model.persistence.xml.sudoku.SudokuRepo
-import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE
 import de.sudoq.model.solverGenerator.Generator
 import de.sudoq.model.solverGenerator.GeneratorCallback
 import de.sudoq.model.solverGenerator.solution.Solution
 import de.sudoq.model.solverGenerator.transformations.Transformer
 import de.sudoq.model.sudoku.complexity.Complexity
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.xml.XmlHelper
 import java.io.File
 
 /** Responsible for maintaining existing Sudokus.
  * Implemented as Singleton. */
-open class SudokuManager(val sudokuDir: File, val sudokuTypeRepo: IRepo<SudokuTypeBE>) : GeneratorCallback {
+open class SudokuManager(val sudokuDir: File, val sudokuTypeRepo: IRepo<SudokuType>) : GeneratorCallback {
 
     private val generator = Generator(sudokuTypeRepo)
 

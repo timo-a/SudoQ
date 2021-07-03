@@ -9,16 +9,14 @@ import de.sudoq.model.game.GameStateHandler
 import de.sudoq.model.persistence.IRepo
 import de.sudoq.model.persistence.xml.sudoku.SudokuBE
 import de.sudoq.model.persistence.xml.sudoku.SudokuMapper
-import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE
 import de.sudoq.model.sudoku.Sudoku
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
-import de.sudoq.model.xml.Xmlable2
 import de.sudoq.model.xml.Xmlable3
-import java.io.File
 import java.util.*
 
-class GameBE : Xmlable3<SudokuTypeBE> {
+class GameBE : Xmlable3<SudokuType> {//todo move back to sudokuTypeBE once this class is in app
 
     /** Unique id for the game */
     var id: Int = -1
@@ -81,7 +79,7 @@ class GameBE : Xmlable3<SudokuTypeBE> {
         return representation
     }
 
-    override fun fillFromXml(xmlTreeRepresentation: XmlTree, sudokuTypeRepo: IRepo<SudokuTypeBE>) {
+    override fun fillFromXml(xmlTreeRepresentation: XmlTree, sudokuTypeRepo: IRepo<SudokuType>) {
         id = xmlTreeRepresentation.getAttributeValue("id")!!.toInt()
         time = xmlTreeRepresentation.getAttributeValue("time")!!.toInt()
         val currentStateId = xmlTreeRepresentation.getAttributeValue("currentTurnId")!!.toInt()

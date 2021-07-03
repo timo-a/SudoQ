@@ -23,7 +23,7 @@ import de.sudoq.R
 import de.sudoq.model.game.GameData
 import de.sudoq.model.persistence.xml.game.GameRepo
 import de.sudoq.model.profile.ProfileManager
-import de.sudoq.persistence.SudokuTypeRepo
+import de.sudoq.persistence.sudokuType.SudokuTypeRepo
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.text.SimpleDateFormat
@@ -56,7 +56,7 @@ class SudokuLoadingAdapter(context: Context, private val gameDatas: List<GameDat
         val sudokuState = rowView.findViewById<View>(R.id.state_label) as TextView
         val pm = ProfileManager(profilesDir)
         pm.loadCurrentProfile()
-        val gameRepo = GameRepo(pm.profilesDir!!, pm.currentProfileID, sudokuDir, sudokuTypeRepo)
+        val gameRepo = GameRepo(pm.profilesDir!!, pm.currentProfileID, sudokuTypeRepo)
         val currentThumbnailFile = gameRepo.getGameThumbnailFile(gameDatas[position].id)
         try {
             val currentThumbnailBitmap =

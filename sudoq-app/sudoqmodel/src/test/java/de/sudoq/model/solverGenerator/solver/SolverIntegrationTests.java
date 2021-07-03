@@ -8,17 +8,15 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-
 import de.sudoq.model.Utility;
 import de.sudoq.model.persistence.IRepo;
-import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
 public class SolverIntegrationTests {
@@ -31,20 +29,20 @@ public class SolverIntegrationTests {
 	private static final boolean PRINT_SOLUTIONS = false ;
 
 	//this is a dummy so it compiles todo use xmls from resources
-	private IRepo<SudokuTypeBE> sudokuTypeRepo = new IRepo<SudokuTypeBE>() {
+	private IRepo<SudokuType> sudokuTypeRepo = new IRepo<SudokuType>() {
 		@Override
 		public void delete(int id) { throw new NotImplementedException(); }
 
 		@Override
-		public SudokuTypeBE update(SudokuTypeBE sudokuBE) { throw new NotImplementedException(); }
+		public SudokuType update(SudokuType sudokuBE) { throw new NotImplementedException(); }
 
 		@Override
-		public SudokuTypeBE read(int id) {
+		public SudokuType read(int id) {
 			throw new NotImplementedException();
 		}
 
 		@Override
-		public SudokuTypeBE create() { throw new NotImplementedException(); }
+		public SudokuType create() { throw new NotImplementedException(); }
 
 	};
 

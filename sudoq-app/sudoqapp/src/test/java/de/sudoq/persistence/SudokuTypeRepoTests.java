@@ -12,8 +12,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE;
+import de.sudoq.persistence.sudokuType.SudokuTypeBE;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
+import de.sudoq.persistence.sudokuType.SudokuTypeRepo;
 import kotlin.NotImplementedError;
 
 public class SudokuTypeRepoTests {

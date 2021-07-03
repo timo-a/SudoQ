@@ -14,12 +14,8 @@ import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.Utility;
 import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.persistence.xml.game.GameRepo;
-import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.profile.Profile;
-import de.sudoq.model.sudoku.Sudoku;
-import de.sudoq.model.sudoku.SudokuBuilder;
-import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
 public class FileManagerTests extends TestWithInitCleanforSingletons {
 
@@ -73,19 +69,19 @@ public class FileManagerTests extends TestWithInitCleanforSingletons {
 		Utility.clearDir(profileDir);
 		Profile p = Profile.Companion.getInstance(profileDir); //needs to be called first otherwise it failes as an indiviidual and sometimes as part of all the tests in this class
 
-		IRepo<SudokuTypeBE> str = new IRepo<SudokuTypeBE>() {
+		IRepo<SudokuType> str = new IRepo<SudokuType>() {
 			@Override
-			public SudokuTypeBE create() {
+			public SudokuType create() {
 				return null;
 			}
 
 			@Override
-			public SudokuTypeBE read(int id) {
+			public SudokuType read(int id) {
 				return null;
 			}
 
 			@Override
-			public SudokuTypeBE update(SudokuTypeBE sudokuTypeBE) {
+			public SudokuType update(SudokuType SudokuType) {
 				return null;
 			}
 
@@ -95,7 +91,7 @@ public class FileManagerTests extends TestWithInitCleanforSingletons {
 			}
 		};
 
-		GameRepo gameRepo = new GameRepo(p.getProfilesDir(), p.getCurrentProfileID(), sudokuDir, str);
+		GameRepo gameRepo = new GameRepo(p.getProfilesDir(), p.getCurrentProfileID(), str);
 		assertEquals(1, gameRepo.getNextFreeGameId());//currentProfileID==-1
 		assertTrue(FileManager.getGamesFile(p).exists());
 		//todo ab hier gehört es in gamerepotest

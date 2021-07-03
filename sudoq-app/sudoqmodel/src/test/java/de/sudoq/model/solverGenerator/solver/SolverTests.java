@@ -7,7 +7,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,10 +17,8 @@ import org.junit.Test;
 import org.apache.commons.lang3.NotImplementedException;
 
 import de.sudoq.model.TestWithInitCleanforSingletons;
-import de.sudoq.model.Utility;
 import de.sudoq.model.persistence.IRepo;
-import de.sudoq.model.persistence.xml.sudoku.SudokuBE;
-import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.sudoku.Cell;
@@ -43,20 +40,20 @@ public class SolverTests {
 	private static final boolean PRINT_SOLUTIONS = false;
 
 	//this is a dummy so it compiles todo use xmls from resources
-	private IRepo<SudokuTypeBE> sudokuTypeRepo = new IRepo<SudokuTypeBE>() {
+	private IRepo<SudokuType> sudokuTypeRepo = new IRepo<SudokuType>() {
 		@Override
 		public void delete(int id) { throw new NotImplementedException(); }
 
 		@Override
-		public SudokuTypeBE update(SudokuTypeBE sudokuBE) { throw new NotImplementedException(); }
+		public SudokuType update(SudokuType sudokuBE) { throw new NotImplementedException(); }
 
 		@Override
-		public SudokuTypeBE read(int id) {
+		public SudokuType read(int id) {
 			throw new NotImplementedException();
 		}
 
 		@Override
-		public SudokuTypeBE create() { throw new NotImplementedException(); }
+		public SudokuType create() { throw new NotImplementedException(); }
 
 	};
 

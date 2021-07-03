@@ -10,7 +10,6 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,7 +23,6 @@ import de.sudoq.model.Utility;
 import de.sudoq.model.ModelChangeListener;
 import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.persistence.xml.sudoku.SudokuBE;
-import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE;
 import de.sudoq.model.solverGenerator.Generator;
 import de.sudoq.model.solverGenerator.GeneratorCallback;
 import de.sudoq.model.solverGenerator.solution.Solution;
@@ -32,6 +30,7 @@ import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
+import de.sudoq.model.utility.persistence.sudokuType.SudokuTypeRepo;
 import de.sudoq.model.xml.XmlHelper;
 import de.sudoq.model.xml.XmlTree;
 
@@ -39,22 +38,7 @@ public class SudokuTests {
 	private static Sudoku sudoku;
 
 	//this is a dummy so it compiles todo use xmls from resources
-	private static IRepo<SudokuTypeBE> sudokuTypeRepo = new IRepo<SudokuTypeBE>() {
-		@Override
-		public void delete(int id) { throw new NotImplementedException(); }
-
-		@Override
-		public SudokuTypeBE update(SudokuTypeBE sudokuBE) { throw new NotImplementedException(); }
-
-		@Override
-		public SudokuTypeBE read(int id) {
-			throw new NotImplementedException();
-		}
-
-		@Override
-		public SudokuTypeBE create() { throw new NotImplementedException(); }
-
-	};
+	private static IRepo<SudokuType> sudokuTypeRepo = new SudokuTypeRepo();
 
 	@BeforeClass
 	public static void beforeClass() {

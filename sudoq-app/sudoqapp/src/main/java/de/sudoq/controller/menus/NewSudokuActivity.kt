@@ -28,7 +28,7 @@ import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.xml.SudokuTypesList
-import de.sudoq.persistence.SudokuTypeRepo
+import de.sudoq.persistence.sudokuType.SudokuTypeRepo
 import java.util.*
 
 /**

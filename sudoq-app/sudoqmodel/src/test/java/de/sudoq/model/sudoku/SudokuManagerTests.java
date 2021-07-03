@@ -3,19 +3,14 @@ package de.sudoq.model.sudoku;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.Utility;
-import de.sudoq.model.files.FileManager;
 import de.sudoq.model.persistence.IRepo;
-import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE;
-import de.sudoq.model.profile.Profile;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
@@ -23,20 +18,20 @@ public class SudokuManagerTests extends TestWithInitCleanforSingletons {
 	private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
 
 	//this is a dummy so it compiles todo use xmls from resources
-	private IRepo<SudokuTypeBE> sudokuTypeRepo = new IRepo<SudokuTypeBE>() {
+	private IRepo<SudokuType> sudokuTypeRepo = new IRepo<SudokuType>() {
 		@Override
 		public void delete(int id) { throw new NotImplementedException(); }
 
 		@Override
-		public SudokuTypeBE update(SudokuTypeBE sudokuBE) { throw new NotImplementedException(); }
+		public SudokuType update(SudokuType sudokuBE) { throw new NotImplementedException(); }
 
 		@Override
-		public SudokuTypeBE read(int id) {
+		public SudokuType read(int id) {
 			throw new NotImplementedException();
 		}
 
 		@Override
-		public SudokuTypeBE create() { throw new NotImplementedException(); }
+		public SudokuType create() { throw new NotImplementedException(); }
 
 	};
 

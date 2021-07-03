@@ -1,8 +1,6 @@
 package de.sudoq.model.sudoku.sudokuTypes
 
 import de.sudoq.model.persistence.IRepo
-import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE
-import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeMapper
 
 object SudokuTypeProvider {
 
@@ -14,8 +12,7 @@ object SudokuTypeProvider {
      * @return a [SudokuType] of null if type cannot be mapped
      */
     @JvmStatic
-    fun getSudokuType(type: SudokuTypes, sudokuTypeRepo: IRepo<SudokuTypeBE>): SudokuType {
-        val stBE = sudokuTypeRepo.read(type.ordinal)
-        return SudokuTypeMapper.fromBE(stBE)
+    fun getSudokuType(type: SudokuTypes, sudokuTypeRepo: IRepo<SudokuType>): SudokuType {
+        return sudokuTypeRepo.read(type.ordinal)
     }
 }

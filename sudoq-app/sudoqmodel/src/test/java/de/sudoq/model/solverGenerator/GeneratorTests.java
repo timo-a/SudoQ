@@ -17,7 +17,6 @@ import org.junit.BeforeClass;
 import de.sudoq.model.Utility;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.persistence.IRepo;
-import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solver.ComplexityRelation;
@@ -25,6 +24,7 @@ import de.sudoq.model.solverGenerator.solver.Solver;
 import de.sudoq.model.solverGenerator.transformations.Transformer;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.complexity.Complexity;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
@@ -57,19 +57,19 @@ public class GeneratorTests implements GeneratorCallback {
 	@Before
 	public void beforeTest() {
 		TypeBuilder.get99();
-		IRepo<SudokuTypeBE> dummySoItCompiles = new IRepo<SudokuTypeBE>() {
+		IRepo<SudokuType> dummySoItCompiles = new IRepo<SudokuType>() {
 			@Override
-			public SudokuTypeBE create() {
+			public SudokuType create() {
 				return null;
 			}
 
 			@Override
-			public SudokuTypeBE read(int id) {
+			public SudokuType read(int id) {
 				return null;
 			}
 
 			@Override
-			public SudokuTypeBE update(SudokuTypeBE sudokuTypeBE) {
+			public SudokuType update(SudokuType SudokuType) {
 				return null;
 			}
 

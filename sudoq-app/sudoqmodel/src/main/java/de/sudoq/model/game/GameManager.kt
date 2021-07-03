@@ -10,11 +10,11 @@ package de.sudoq.model.game
 import de.sudoq.model.persistence.IRepo
 import de.sudoq.model.persistence.xml.game.GameMapper
 import de.sudoq.model.persistence.xml.game.GameRepo
-import de.sudoq.model.persistence.xml.sudokuType.SudokuTypeBE
 import de.sudoq.model.profile.Profile
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.sudoku.SudokuManager
 import de.sudoq.model.sudoku.complexity.Complexity
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.xml.*
 import java.io.File
@@ -25,7 +25,7 @@ import java.util.*
 /**
  * Singleton for creating and loading sudoku games.
  */
-class GameManager(profilesDir: File, sudokuDir: File, val sudokuTypeRepo: IRepo<SudokuTypeBE>) {
+class GameManager(profilesDir: File, sudokuDir: File, val sudokuTypeRepo: IRepo<SudokuType>) {
 
     private var profile: ProfileManager = ProfileManager(profilesDir)
 
@@ -174,7 +174,6 @@ class GameManager(profilesDir: File, sudokuDir: File, val sudokuTypeRepo: IRepo<
         this.gameRepo = GameRepo(
             profile.profilesDir!!,
             profile.currentProfileID,
-            sudokuDir,
             sudokuTypeRepo)
         this.gamesFile = File(profile.currentProfileDir, "games.xml")
 

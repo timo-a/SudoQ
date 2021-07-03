@@ -18,7 +18,7 @@ public class Standard16x16RegressionTest {
     }
 
     //should work just fine
-    @Test
+    @Test(timeout = 60)
     public void testR2(){
 
         FastBranchAndBound solver = new FastBranchAndBound(RegressionBoards16.r2);
