@@ -23,9 +23,10 @@ allprojects {
 }
 
 
-repositories {
-    mavenCentral()
-}
+//repositories {
+//    mavenCentral()
+//}
+
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }

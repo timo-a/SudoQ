@@ -75,7 +75,7 @@ open class SudokuManager(val sudokuDir: File, val sudokuTypeRepo: IRepo<SudokuTy
      * @param c [Complexity] of the [Sudoku]
      * @return the new [Sudoku]
      */
-    fun getNewSudoku(t: SudokuTypes?, c: Complexity?, sudokuDir: File): Sudoku {
+    fun getNewSudoku(t: SudokuTypes?, c: Complexity?): Sudoku {
         val sudokuRepo = SudokuRepo(sudokuDir, t!!, c!!, sudokuTypeRepo)
         val f = sudokuRepo.getRandomSudoku()!!
 

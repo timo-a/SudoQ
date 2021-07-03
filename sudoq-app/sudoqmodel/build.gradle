@@ -11,13 +11,15 @@ sourceCompatibility = '1.7'
 
 //* for debug of creating jar
 dependencies {
+    implementation 'junit:junit:4.12' //todo switch to junit5 entirely
+
     //implementation 'org.testng:testng:6.9.6'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.0.3'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.0.3'
 
 //testCompile 'junit:junit:4.7'
 testImplementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
-testImplementation 'org.kie.modules:org-apache-commons-lang3:6.3.0.CR1'
+    testImplementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
 //    otherTestsImplementation 'org.apache.directory.studio:org.apache.commons.io:2.4'

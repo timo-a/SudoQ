@@ -51,7 +51,7 @@ class GameManager(profilesDir: File, sudokuDir: File, val sudokuTypeRepo: IRepo<
         sudokuDir: File
     ): Game {
         val sm = SudokuManager(sudokuDir, sudokuTypeRepo)
-        val sudoku = sm.getNewSudoku(type, complexity, sudokuDir)
+        val sudoku = sm.getNewSudoku(type, complexity)
         sm.usedSudoku(sudoku) //TODO warum instanziierung, wenn laut doc singleton?
 
         val gameBE0 = gameRepo.create()
