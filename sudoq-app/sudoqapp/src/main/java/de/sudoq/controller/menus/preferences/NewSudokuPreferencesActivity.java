@@ -8,11 +8,15 @@
 package de.sudoq.controller.menus.preferences;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.Toast;
 
 import de.sudoq.R;
 import de.sudoq.controller.menus.NewSudokuActivity;
@@ -27,7 +31,12 @@ public class NewSudokuPreferencesActivity extends PreferencesActivity {
 
 	/* shortcut for NewSudokuActivity.gameSettings */
 	GameSettings confSettings;
-	
+
+	/**
+	 * stores language at activity start to compare if language changed in advanced preferences
+	 */
+	private LanguageSetting currentLanguageCode;
+
 	/**
 	 * Wird aufgerufen, falls die Activity zum ersten Mal gestartet wird. ?Läd
 	 * die Preferences anhand der zur Zeit aktiven Profil-ID.?
@@ -36,7 +45,9 @@ public class NewSudokuPreferencesActivity extends PreferencesActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.preferences_newsudoku);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		Log.i("gameSettings", "NewSudokuPreferencesActivity onCreate beginning");
+
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         final ActionBar ab = getSupportActionBar();
@@ -50,6 +61,8 @@ public class NewSudokuPreferencesActivity extends PreferencesActivity {
 		markRowColumn =      (CheckBox) findViewById(R.id.checkbox_markRowColumn);
 		markWrongSymbol =    (CheckBox) findViewById(R.id.checkbox_markWrongSymbol);
 		restrictCandidates = (CheckBox) findViewById(R.id.checkbox_restrictCandidates);
+		Log.i("gameSettings", "NewSudokuPreferencesActivity onCreate end is gameSettings null?" +(NewSudokuActivity.gameSettings == null));
+		Log.d("gameSettings", "NewSudokuPreferencesActivity onCreate end is gameSettings null?" +(NewSudokuActivity.gameSettings == null));
 
 		confSettings = NewSudokuActivity.gameSettings;
         gesture.           setChecked(confSettings.isGesturesSet());
@@ -59,12 +72,34 @@ public class NewSudokuPreferencesActivity extends PreferencesActivity {
 		restrictCandidates.setChecked(confSettings.getAssistance(Assistances.restrictCandidates));
 		
 		Profile.getInstance().registerListener(this);
+
+		//set and store language at beginning of activity lifecycle
+		currentLanguageCode = LanguageUtility.loadLanguageFromSharedPreferences(this);
+
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		//load language from memory
+		LanguageSetting fromMemory = LanguageUtility.loadLanguageFromSharedPreferences(this);
+		if (!fromMemory.language.equals(currentLanguageCode.language)){
+			Intent refresh = new Intent(this, this.getClass());
+			this.finish();
+			this.startActivity(refresh);
+		}
+
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+	}
 
 	/**
-	 * Aktualisiert die Werte in den Views
-	 */
+         * Aktualisiert die Werte in den Views
+         */
 	protected void refreshValues() {
 		/*
 		gesture.           setChecked(confSettings.isGesturesSet());

@@ -15,8 +15,8 @@ import android.widget.LinearLayout;
 
 import java.util.Iterator;
 
-import de.sudoq.controller.sudoku.board.FieldViewPainter;
-import de.sudoq.controller.sudoku.board.FieldViewStates;
+import de.sudoq.controller.sudoku.board.CellViewPainter;
+import de.sudoq.controller.sudoku.board.CellViewStates;
 import de.sudoq.controller.sudoku.InputListener;
 import de.sudoq.controller.sudoku.ObservableInput;
 
@@ -174,9 +174,9 @@ public class VirtualKeyboardLayout extends LinearLayout implements ObservableInp
 	 * @param state
 	 *            Der zu setzende Status
 	 */
-	public void markField(int symbol, FieldViewStates state) {
+	public void markCell(int symbol, CellViewStates state) {
 		int buttonsPerRow = this.buttons.length;
-		FieldViewPainter.getInstance().setMarking(this.buttons[symbol % buttonsPerRow][symbol / buttonsPerRow], state);
+		CellViewPainter.getInstance().setMarking(this.buttons[symbol % buttonsPerRow][symbol / buttonsPerRow], state);
 		this.buttons[symbol % buttonsPerRow][symbol / buttonsPerRow].invalidate();
 	}
 

@@ -56,7 +56,7 @@ public enum Complexity {
 	
 	public static Iterable<Complexity> playableValues(){
 		
-		List<Complexity> l = new ArrayList<Complexity>(Arrays.asList(values()));
+		List<Complexity> l = new ArrayList<>(Arrays.asList(values()));
 		l.remove(arbitrary);
 		return l;
 	}

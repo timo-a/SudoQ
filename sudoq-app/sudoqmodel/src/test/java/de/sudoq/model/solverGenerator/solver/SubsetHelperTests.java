@@ -146,7 +146,7 @@ public class SubsetHelperTests extends HiddenHelper{
      * @param val value starting with 1
      */
 	public static void setVal(Sudoku s, int x, int y, int val){
-		s.getField(Position.get(x-1, y-1)).setCurrentValue(val-1);
+		s.getCell(Position.get(x-1, y-1)).setCurrentValue(val-1);
 	}
 
 	public static int getCardinality(SolverSudoku s, int x, int y){

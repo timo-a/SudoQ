@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Vector;
 
 import de.sudoq.model.solverGenerator.solution.DerivationBlock;
-import de.sudoq.model.solverGenerator.solution.DerivationField;
+import de.sudoq.model.solverGenerator.solution.DerivationCell;
 import de.sudoq.model.solverGenerator.solution.LastDigitDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.solvingAssistant.HintTypes;
@@ -16,7 +16,7 @@ import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Utils;
 
 /**
- * Helper that searches for an `open Single`, a constraint in which exactly one field is not solved -> can be be solved by principle of exclusion.
+ * Helper that searches for an `open Single`, a constraint in which exactly one field is not solved {@literal ->} can be be solved by principle of exclusion.
  * (update does not modify the sudoku passed in the constructor)
  * Difference to Naked Single: Naked single looks at candidates, LastDigitHelper does not.
  *                             if candidates are constantly updated, naked single catches everything LastDigitHelper catches and more:
@@ -42,7 +42,7 @@ public class LastDigitHelper extends SolveHelper {
         assert remaining.isEmpty();
         Position candidate = null;//no empty fields found
         for(Position p : positions)
-            if(sudoku.getField(p).isNotSolved()){
+            if(sudoku.getCell(p).isNotSolved()){
                 if(candidate==null)//found our first empty field
                     candidate = p;
                 else{
@@ -62,7 +62,7 @@ public class LastDigitHelper extends SolveHelper {
         boolean foundOne = false;
         Position candidate;
         Vector<Position> remaining = new Vector<>();
-        for (Constraint c : sudoku.getSudokuType().getConstraints())
+        for (Constraint c : sudoku.getSudokuType())
             if(c.hasUniqueBehavior()) {
                 remaining.clear();
                 candidate = onlyOneLeft(c.getPositions(), remaining);
@@ -75,10 +75,10 @@ public class LastDigitHelper extends SolveHelper {
                     //make List with all values entered in this constraint
                     List<Integer> otherSolutions = new ArrayList<>();
                     for(Position p : remaining)
-                        otherSolutions.add(sudoku.getField(p).getCurrentValue());
+                        otherSolutions.add(sudoku.getCell(p).getCurrentValue());
 
                     //make list with all possible values
-                    List<Integer> possibleSolutions = new ArrayList<>((AbstractList)sudoku.getSudokuType().getSymbolIterator());
+                    List<Integer> possibleSolutions = new ArrayList<>((AbstractList<Integer>)sudoku.getSudokuType().getSymbolIterator());
 
                     /* cut away all other solutions */
                     possibleSolutions.removeAll(otherSolutions);
@@ -95,7 +95,7 @@ public class LastDigitHelper extends SolveHelper {
                             relevant.set(solutionValue); //set solution to 1
                             BitSet irrelevant = new BitSet();
                             irrelevant.xor(relevant); // create complement to relevant
-                            lastDerivation.addDerivationField(new DerivationField(candidate, relevant, irrelevant));
+                            lastDerivation.addDerivationCell(new DerivationCell(candidate, relevant, irrelevant));
 
                             lastDerivation.addDerivationBlock(new DerivationBlock(c));
                             lastDerivation.setDescription("Look at "+ Utils.classifyGroup(c.getPositions())+"! Only field "+Utils.positionToRealWorld(candidate) + "is empty.");

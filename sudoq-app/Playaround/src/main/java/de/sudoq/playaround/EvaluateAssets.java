@@ -1,20 +1,15 @@
 package de.sudoq.playaround;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.solverGenerator.solver.Solver;
 import de.sudoq.model.solverGenerator.solver.helper.SolveHelper;
-import de.sudoq.model.sudoku.Field;
-import de.sudoq.model.sudoku.Position;
+import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.xml.XmlHelper;
 
 
 public class EvaluateAssets {
@@ -78,7 +73,7 @@ public class EvaluateAssets {
         String ambiguous = solver.severalSolutionsExist() ? " a " : "   ";
 
         int predefined = 0;
-        for (Field f : s)
+        for (Cell f : s)
             if(f.isSolved())
                 predefined++;
 

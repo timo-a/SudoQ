@@ -2,7 +2,7 @@ package de.sudoq.controller.sudoku;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import androidx.annotation.LayoutRes;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -118,7 +118,7 @@ public class ControlPanelFragment extends Fragment {
         Buttons.assistancesButton.setEnabled(!actionTreeShown && !finished);
         Buttons.    gestureButton.setEnabled(!actionTreeShown);
         SudokuLayout sudokuView = sl;
-        activity.getMediator().setKeyboardState(!finished && sudokuView.getCurrentFieldView() != null);
+        activity.getMediator().setKeyboardState(!finished && sudokuView.getCurrentCellView() != null);
     }
 
     ImageButton getGestureButton(){

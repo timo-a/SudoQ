@@ -6,13 +6,12 @@ import java.util.List;
 import java.util.Stack;
 
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
-import de.sudoq.model.solvingAssistant.HintTypes;
 import de.sudoq.model.sudoku.CandidateSet;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
 
 public abstract class SubsetHelper extends SolveHelper {
-	/** Attributes */
+	/* Attributes */
 
 	/**
 	 * Die Stufe des Helpers, wobei diese die Anzahl der Ziffern und Felder angibt, welche die Naked-Bedingung erfüllen
@@ -96,7 +95,6 @@ public abstract class SubsetHelper extends SolveHelper {
 	 * @return true, falls ein Subset gefunden wurde, false falls nicht
 	 */
 	public boolean update(boolean buildDerivation) {
-		int currentCandidate = -1;
 		lastDerivation = null;
 		boolean found = false;
 
@@ -113,7 +111,7 @@ public abstract class SubsetHelper extends SolveHelper {
 					//initializeWith currentSet with the first 'level' candidates in constraintSet
 					//TODO is there a better, clearer way?
 					currentSet.clear();
-					currentCandidate = -1;
+					int currentCandidate = -1;
 					for (int i = 0; i < this.level; i++) {
 						currentCandidate = constraintSet.nextSetBit(currentCandidate + 1);
 						currentSet.set(currentCandidate);
@@ -219,10 +217,10 @@ public abstract class SubsetHelper extends SolveHelper {
 	/**
 	 * Provided a combination and values n,k calculate the next step in a loop of 'n choose k' combinations.
 	 *
-	 * @param bitSet
+	 * @param bitSet an initial or intermediate combination
 	 * @param n supposed length of bitSet i.e. nr of bits to choose from
 	 * @param k size of the subsets
-     * @return
+     * @return the next combination
      */
 	private static BitSet step(BitSet bitSet, int n, int k){
 		//idea: looking from right if there is a '1' that can be moved to the right, do so
@@ -282,9 +280,12 @@ public abstract class SubsetHelper extends SolveHelper {
 	}
 
 	/**
-	 * Sucht das nächste Subset der im Konstruktor definierten Größe {@code level} im spezifizierten {@link Constraint}
-	 * mit dem spezifizierten Kandidaten-Set {@code set}, sowie dem aktuellen Subset. Es werden alle mittels der
-	 * {@link this.getNextSubset}-Methode ab dem spezifizierten Subset ermittelten Kandidatenlisten überprüft.
+	 * Searches for the next subset of the size {@code level} (defined in constructor) in the passed
+	 * {@link de.sudoq.model.sudoku.Constraint} with the specified candidate-Set
+	 * {@code de.sudoq.model.solverGenerator.solver.helper.SubsetHelper#candidateSet}, as well as
+	 * the current Subset. All candidate lists are checked that have been found via
+	 * {@link de.sudoq.model.solverGenerator.solver.helper.SubsetHelper#getNextSubset()} from the
+	 * specified Subset on.
 	 * 
 	 * @param constraint
 	 *            Der Constraint, in dem ein NakedSubset gesucht werden soll

@@ -5,8 +5,8 @@
 <!-- This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.sudoq"
-    android:versionCode="27"
-    android:versionName="1.1.1"
+    android:versionCode="31"
+    android:versionName="1.2.0"
     android:installLocation="auto" >
 
     <application
@@ -23,8 +23,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".controller.SudoqCompatActivity" />
-        <activity android:name=".controller.menus.MainActivity" />
-        <activity android:name=".controller.menus.NewSudokuActivity"           android:label="@string/sf_sudokupreferences_title"/>
+        <activity android:name=".controller.menus.MainActivity" android:configChanges="layoutDirection|locale" />
+        <activity android:name=".controller.menus.NewSudokuActivity"      android:label="@string/sf_sudokupreferences_title"
+                                                                          android:configChanges="layoutDirection|locale" />
         <activity android:name=".controller.menus.preferences.NewSudokuPreferencesActivity" android:label="@string/sf_sudokupreferences_title"/>
         <activity android:name=".controller.menus.SudokuLoadingActivity"  android:label="@string/sf_sudokuloading_title"
                                                                           android:noHistory="true"
@@ -32,10 +33,11 @@
 
         <activity android:name=".controller.menus.GestureBuilder" android:label="@string/gesture_builder_title"/>
         <activity android:name=".controller.sudoku.SudokuActivity"/>
+        <activity android:name=".controller.menus.preferences.PlayerPreferencesActivity"    android:label="@string/profile_preference_title"
+                                                                                            android:configChanges="layoutDirection|locale"
+                                                                                            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".controller.menus.preferences.AdvancedPreferencesActivity"  android:label="@string/sf_advancedpreferences_title"/>
         <activity android:name=".controller.menus.preferences.RestrictTypesActivity"        android:label="@string/sf_advancedpreferences_restricttypes_title"/>
-        <activity android:name=".controller.menus.preferences.PlayerPreferencesActivity"    android:label="@string/profile_preference_title"
-                                                                                            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".controller.menus.StatisticsActivity"  android:label="@string/statistics_title"/>
         <activity android:name=".controller.menus.ProfileListActivity" android:theme="@style/Theme.DesignDemo.Dialog"/>
 

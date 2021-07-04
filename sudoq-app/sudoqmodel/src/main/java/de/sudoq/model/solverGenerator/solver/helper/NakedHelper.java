@@ -4,7 +4,7 @@ import java.util.BitSet;
 import java.util.List;
 import java.util.Stack;
 
-import de.sudoq.model.solverGenerator.solution.DerivationField;
+import de.sudoq.model.solverGenerator.solution.DerivationCell;
 import de.sudoq.model.solverGenerator.solution.NakedSetDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.solvingAssistant.HintTypes;
@@ -17,7 +17,7 @@ import de.sudoq.model.sudoku.Position;
  * Der NakedHelper sucht innerhalb der Constraints eines Sudokus nach n elementigen Teilmengen der Kandidaten, die in n Feldern vorkommen. (n
  * entspricht dem level des Helpers). Kommen in n Feldern lediglich dieselben n Kandidaten vor, so können diese
  * Kandidaten aus den anderen Listen des Constraints entfernt werden.
- * <p/>
+ * <p>
  * If there are n fields with only n distinct candidates in them, those candidates can't appear anywhere else.
  */
 public class NakedHelper extends SubsetHelper {
@@ -62,7 +62,7 @@ public class NakedHelper extends SubsetHelper {
      * This is 'naked'-specific code for the template method in superclass
      *
      * @param constraint Constraint whose candidates are to be filtered
-     * @return
+     * @return the possible candidates
      */
     @Override
     protected BitSet collectPossibleCandidates(Constraint constraint) {
@@ -87,7 +87,7 @@ public class NakedHelper extends SubsetHelper {
         derivation=null;
         Stack<Position> positions = new Stack<>();
         for(Position p: constraint.getPositions())
-            if(sudoku.getField(p).isNotSolved())
+            if(sudoku.getCell(p).isNotSolved())
                 positions.add(p);
 
         do {
@@ -122,8 +122,8 @@ public class NakedHelper extends SubsetHelper {
                             BitSet irrelevant = (BitSet) localCopy.clone();
                             relevant.and(currentSet);       //deleted notes
                             irrelevant.andNot(currentSet);  //remaining notes
-                            DerivationField field = new DerivationField(pos, relevant, irrelevant);
-                            derivation.addExternalField(field);
+                            DerivationCell field = new DerivationCell(pos, relevant, irrelevant);
+                            derivation.addExternalCell(field);
                         }
                         foundSubset = true;
                     }
@@ -160,8 +160,8 @@ public class NakedHelper extends SubsetHelper {
         derivation.setSubsetCandidates(currentSet);
         for (Position p : subsetPositions) {
             BitSet relevantCandidates = (BitSet) this.sudoku.getCurrentCandidates(p).clone();
-            DerivationField field = new DerivationField(p, relevantCandidates, new BitSet());
-            derivation.addSubsetField(field);
+            DerivationCell field = new DerivationCell(p, relevantCandidates, new BitSet());
+            derivation.addSubsetCell(field);
         }
         return derivation;
     }

@@ -19,7 +19,7 @@ import java.util.List;
  */
 public abstract class ObservableModelImpl<T> implements ObservableModel<T> {
 
-	private List<ModelChangeListener<T>> listeners = new ArrayList<ModelChangeListener<T>>();
+	private List<ModelChangeListener<T>> listeners = new ArrayList<>();
 
 	/**
 	 * {@inheritDoc}

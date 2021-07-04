@@ -40,8 +40,10 @@ public class Utils {
     }
 
     /**
-     *
-     * */
+     * Determines the group shape from a constraint holding the positions
+     * @param c the constraint
+     * @return shape of constraint as enum
+     */
     public static ConstraintShape getGroupShape(Constraint c) {
         return getGroupShape(c.getPositions());
     }

@@ -19,30 +19,29 @@ import java.util.Hashtable;
 import de.sudoq.view.SudokuLayout;
 
 /**
- * Stellt eine Klasse zur Verfügung, welche für Animationen bzw. Markierungen
- * von Feldern zuständig ist. TODO does it have to be singleton?
+ * This class is responsible for Animationens and highlighting of cells.
+ * TODO does it have to be singleton?
  */
-public class FieldViewPainter {
-	/** Attributes */
+public class CellViewPainter {
+	/* Attributes */
 
 	/**
-	 * Mappt ein Field auf einen Animation-Wert, welcher beschreibt, wie das
-	 * Feld zu zeichnen ist
+	 * Maps a cell onto an Animation value that describes how to draw the cell
 	 */
-	private Hashtable<View, FieldViewStates> markings;
+	private Hashtable<View, CellViewStates> markings;
 
 	/**
 	 * Die Singleton-Instanz des Handlers
 	 */
-	private static FieldViewPainter instance;
+	private static CellViewPainter instance;
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Privater Konstruktor, da diese Klasse statisch ist.
 	 */
-	private FieldViewPainter() {
-		this.markings = new Hashtable<View, FieldViewStates>();
+	private CellViewPainter() {
+		this.markings = new Hashtable<View, CellViewStates>();
 	}
 
 	/**
@@ -50,9 +49,9 @@ public class FieldViewPainter {
 	 * 
 	 * @return Die Instanz dieses Handlers
 	 */
-	public static FieldViewPainter getInstance() {
+	public static CellViewPainter getInstance() {
 		if (instance == null) {
-			instance = new FieldViewPainter();
+			instance = new CellViewPainter();
 		}
 
 		return instance;
@@ -63,7 +62,7 @@ public class FieldViewPainter {
 		this.sl=sl;
 	}
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Bemalt das spezifizierte Canvas entsprechend der in der Hashtable für das
@@ -72,7 +71,7 @@ public class FieldViewPainter {
 	 * 
 	 * @param canvas
 	 *            Das Canvas, welches bemalt werden soll
-	 * @param field
+	 * @param cell
 	 *            Das Feld, anhand dessen Animation-Einstellung das Canvas
 	 *            bemalt werden soll
 	 * @param symbol
@@ -82,81 +81,81 @@ public class FieldViewPainter {
 	 * @param darken
 	 *            Verdunkelt das Feld
 	 */
-	public void markField(Canvas canvas, View field, String symbol, boolean justText, boolean darken) {
-		FieldViewStates fieldState = this.markings.get(field);
-		/*if(true){}else //to suppress fielddrawing TODO remove again*/
-		if (fieldState != null && !justText) {
-			switch (fieldState) {
+	public void markCell(Canvas canvas, View cell, String symbol, boolean justText, boolean darken) {
+		CellViewStates cellState = this.markings.get(cell);
+		/*if(true){}else //to suppress celldrawing TODO remove again*/
+		if (cellState != null && !justText) {
+			switch (cellState) {
 			case SELECTED_INPUT_BORDER:
-				drawBackground(canvas, field, Color.DKGRAY, true, darken);
-				drawInner(canvas, field, Color.rgb(255, 100, 100), true, darken);
-				drawText(canvas, field, Color.BLACK, false, symbol);
+				drawBackground(canvas, cell, Color.DKGRAY, true, darken);
+				drawInner(canvas, cell, Color.rgb(255, 100, 100), true, darken);
+				drawText(canvas, cell, Color.BLACK, false, symbol);
 				break;
 			case SELECTED_INPUT:
-				drawBackground(canvas, field, Color.rgb(255, 100, 100), true, darken);
-				drawText(canvas, field, Color.BLACK, false, symbol);
+				drawBackground(canvas, cell, Color.rgb(255, 100, 100), true, darken);
+				drawText(canvas, cell, Color.BLACK, false, symbol);
 				break;
 			case SELECTED_INPUT_WRONG:
-				drawBackground(canvas, field, Color.rgb(255, 100, 100), true, darken);
-				drawText(canvas, field, Color.RED, false, symbol);
+				drawBackground(canvas, cell, Color.rgb(255, 100, 100), true, darken);
+				drawText(canvas, cell, Color.RED, false, symbol);
 				break;
 			case SELECTED_NOTE_BORDER:
-				drawBackground(canvas, field, Color.DKGRAY, true, darken);
-				drawInner(canvas, field, Color.YELLOW, true, darken);
-				drawText(canvas, field, Color.BLACK, false, symbol);
+				drawBackground(canvas, cell, Color.DKGRAY, true, darken);
+				drawInner(canvas, cell, Color.YELLOW, true, darken);
+				drawText(canvas, cell, Color.BLACK, false, symbol);
 				break;
 			case SELECTED_NOTE:
-				drawBackground(canvas, field, Color.YELLOW, true, darken);
-				drawText(canvas, field, Color.BLACK, false, symbol);
+				drawBackground(canvas, cell, Color.YELLOW, true, darken);
+				drawText(canvas, cell, Color.BLACK, false, symbol);
 				break;
 			case SELECTED_NOTE_WRONG:
-				drawBackground(canvas, field, Color.YELLOW, true, darken);
-				drawText(canvas, field, Color.RED, false, symbol);
+				drawBackground(canvas, cell, Color.YELLOW, true, darken);
+				drawText(canvas, cell, Color.RED, false, symbol);
 				break;
 			case SELECTED_FIXED:
-				drawBackground(canvas, field, Color.rgb(220, 220, 255), true, darken);
-				drawText(canvas, field, Color.rgb(0, 100, 0), true, symbol);
+				drawBackground(canvas, cell, Color.rgb(220, 220, 255), true, darken);
+				drawText(canvas, cell, Color.rgb(0, 100, 0), true, symbol);
 				break;
 			case CONNECTED:
-				drawBackground(canvas, field, Color.rgb(220, 220, 255), true, darken);
-				drawText(canvas, field, Color.BLACK, false, symbol);
+				drawBackground(canvas, cell, Color.rgb(220, 220, 255), true, darken);
+				drawText(canvas, cell, Color.BLACK, false, symbol);
 				break;
 			case CONNECTED_WRONG:
-				drawBackground(canvas, field, Color.rgb(220, 220, 255), true, darken);
-				drawText(canvas, field, Color.RED, false, symbol);
+				drawBackground(canvas, cell, Color.rgb(220, 220, 255), true, darken);
+				drawText(canvas, cell, Color.RED, false, symbol);
 				break;
 			case FIXED:
-				drawBackground(canvas, field, Color.rgb(250, 250, 250), true, darken);
-				drawText(canvas, field, Color.rgb(0, 100, 0), true, symbol);
+				drawBackground(canvas, cell, Color.rgb(250, 250, 250), true, darken);
+				drawText(canvas, cell, Color.rgb(0, 100, 0), true, symbol);
 				break;
 			case DEFAULT_BORDER:
-				drawBackground(canvas, field, Color.DKGRAY, true, darken);
-				drawInner(canvas, field, Color.rgb(250, 250, 250), true, darken);
-				drawText(canvas, field, Color.BLACK, false, symbol);
+				drawBackground(canvas, cell, Color.DKGRAY, true, darken);
+				drawInner(canvas, cell, Color.rgb(250, 250, 250), true, darken);
+				drawText(canvas, cell, Color.BLACK, false, symbol);
 				break;
 			case DEFAULT_WRONG:
-				drawBackground(canvas, field, Color.rgb(250, 250, 250), true, darken);
-				drawText(canvas, field, Color.RED, false, symbol);
+				drawBackground(canvas, cell, Color.rgb(250, 250, 250), true, darken);
+				drawText(canvas, cell, Color.RED, false, symbol);
 				break;
 			case DEFAULT:
-				drawBackground(canvas, field, Color.rgb(250, 250, 250), true, darken);
-				drawText(canvas, field, Color.BLACK, false, symbol);
+				drawBackground(canvas, cell, Color.rgb(250, 250, 250), true, darken);
+				drawText(canvas, cell, Color.BLACK, false, symbol);
 				break;
 			case CONTROLS:
-				drawBackground(canvas, field, Color.rgb(40, 40, 40), false, darken);
-				// drawInner(canvas, field, Color.rgb(40, 40, 40), false);
+				drawBackground(canvas, cell, Color.rgb(40, 40, 40), false, darken);
+				// drawInner(canvas, cell, Color.rgb(40, 40, 40), false);
 				break;
 			case KEYBOARD:
-				drawBackground(canvas, field, Color.rgb(230, 230, 230), false, darken);
-				drawInner(canvas, field, Color.rgb(40, 40, 40), false, darken);
+				drawBackground(canvas, cell, Color.rgb(230, 230, 230), false, darken);
+				drawInner(canvas, cell, Color.rgb(40, 40, 40), false, darken);
 				break;
 			case SUDOKU:
-				drawBackground(canvas, field, Color.rgb(200, 200, 200), false, darken);
-				// drawInner(canvas, field, Color.LTGRAY, false);
+				drawBackground(canvas, cell, Color.rgb(200, 200, 200), false, darken);
+				// drawInner(canvas, cell, Color.LTGRAY, false);
 				break;
 			}
-		} else if (fieldState != null) {
-			switch (fieldState) {
+		} else if (cellState != null) {
+			switch (cellState) {
 			case SELECTED_INPUT_BORDER:
 			case SELECTED_INPUT:
 			case SELECTED_NOTE_BORDER:
@@ -164,17 +163,17 @@ public class FieldViewPainter {
 			case CONNECTED:
 			case DEFAULT_BORDER:
 			case DEFAULT:
-				drawText(canvas, field, Color.BLACK, false, symbol);
+				drawText(canvas, cell, Color.BLACK, false, symbol);
 				break;
 			case SELECTED_INPUT_WRONG:
 			case SELECTED_NOTE_WRONG:
 			case DEFAULT_WRONG:
 			case CONNECTED_WRONG:
-				drawText(canvas, field, Color.RED, false, symbol);
+				drawText(canvas, cell, Color.RED, false, symbol);
 				break;
 			case SELECTED_FIXED:
 			case FIXED:
-				drawText(canvas, field, Color.rgb(0, 100, 0), true, symbol);
+				drawText(canvas, cell, Color.rgb(0, 100, 0), true, symbol);
 				break;
 			}
 		}
@@ -210,7 +209,7 @@ public class FieldViewPainter {
 	 * 
 	 * @param canvas
 	 *            Das Canvas
-	 * @param field
+	 * @param cell
 	 *            Das Field, das gezeichnet wird
 	 * @param color
 	 *            Die Hintergrundfarbe
@@ -219,7 +218,7 @@ public class FieldViewPainter {
 	 * @param darken
 	 *            Gibt an, ob das Feld verdunkelt werden soll
 	 */
-	private void drawBackground(Canvas canvas, View field, int color, boolean round, boolean darken) {
+	private void drawBackground(Canvas canvas, View cell, int color, boolean round, boolean darken) {
 		Paint mainPaint = new Paint();
 		Paint darkenPaint = null;
 		if (darken) {
@@ -227,11 +226,11 @@ public class FieldViewPainter {
 			darkenPaint.setARGB(60, 0, 0, 0);
 		}
 		mainPaint.setColor(color);
-		RectF rect = new RectF(0, 0, field.getWidth(), field.getHeight());
+		RectF rect = new RectF(0, 0, cell.getWidth(), cell.getHeight());
 		if (round) {
-			canvas.drawRoundRect(rect, field.getWidth() / 20.0f, field.getHeight() / 20.0f, mainPaint);
+			canvas.drawRoundRect(rect, cell.getWidth() / 20.0f, cell.getHeight() / 20.0f, mainPaint);
 			if (darken) {
-				canvas.drawRoundRect(rect, field.getWidth() / 20.0f, field.getHeight() / 20.0f, darkenPaint);
+				canvas.drawRoundRect(rect, cell.getWidth() / 20.0f, cell.getHeight() / 20.0f, darkenPaint);
 			}
 		} else {
 			canvas.drawRect(rect, mainPaint);
@@ -246,16 +245,16 @@ public class FieldViewPainter {
 	 * 
 	 * @param canvas
 	 *            Das Canvas
-	 * @param field
-	 *            Das Field, das gezeichnet wird
+	 * @param cell
+	 *            The cell to draw
 	 * @param color
 	 *            Die Farbe
 	 * @param round
 	 *            Gibt an, ob die Ecken rund gezeichnet werden sollen
 	 * @param darken
-	 *            Gibt an, ob das Feld verdunkelt werden soll
+	 *            determines whether the cell should be darkened
 	 */
-	private void drawInner(Canvas canvas, View field, int color, boolean round, boolean darken) {
+	private void drawInner(Canvas canvas, View cell, int color, boolean round, boolean darken) {
 		Paint mainPaint = new Paint();
 		Paint darkenPaint = null;
 		if (darken) {
@@ -263,11 +262,11 @@ public class FieldViewPainter {
 			darkenPaint.setARGB(60, 0, 0, 0);
 		}
 		mainPaint.setColor(color);
-		RectF rect = new RectF(2, 2, field.getWidth() - 2, field.getHeight() - 2);
+		RectF rect = new RectF(2, 2, cell.getWidth() - 2, cell.getHeight() - 2);
 		if (round) {
-			canvas.drawRoundRect(rect, field.getWidth() / 20.0f, field.getHeight() / 20.0f, mainPaint);
+			canvas.drawRoundRect(rect, cell.getWidth() / 20.0f, cell.getHeight() / 20.0f, mainPaint);
 			if (darken) {
-				canvas.drawRoundRect(rect, field.getWidth() / 20.0f, field.getHeight() / 20.0f, darkenPaint);
+				canvas.drawRoundRect(rect, cell.getWidth() / 20.0f, cell.getHeight() / 20.0f, darkenPaint);
 			}
 		} else {
 			canvas.drawRect(rect, mainPaint);
@@ -282,8 +281,8 @@ public class FieldViewPainter {
 	 * 
 	 * @param canvas
 	 *            Das Canvas
-	 * @param field
-	 *            Das Field, das gezeichnet wird
+	 * @param cell
+	 *            The cell on which to draw
 	 * @param color
 	 *            Die Farbe des Textes
 	 * @param bold
@@ -291,31 +290,30 @@ public class FieldViewPainter {
 	 * @param symbol
 	 *            Das Symbol, welches geschrieben wird
 	 */
-	private void drawText(Canvas canvas, View field, int color, boolean bold, String symbol) {
+	private void drawText(Canvas canvas, View cell, int color, boolean bold, String symbol) {
 		Paint paint = new Paint();
 		paint.setColor(color);
 		if (bold) {
 			paint.setTypeface(Typeface.DEFAULT_BOLD);
 		}
 		paint.setAntiAlias(true);
-		paint.setTextSize(Math.min(field.getHeight() * 3 / 4, field.getWidth() * 3 / 4));
+		paint.setTextSize(Math.min(cell.getHeight() * 3 / 4, cell.getWidth() * 3 / 4));
 		paint.setTextAlign(Paint.Align.CENTER);
-		canvas.drawText(symbol + "", field.getWidth() / 2, field.getHeight() / 2 + Math.min(field.getHeight() / 4, field.getWidth() / 4), paint);
+		canvas.drawText(symbol + "", cell.getWidth() / 2, cell.getHeight() / 2 + Math.min(cell.getHeight() / 4, cell.getWidth() / 4), paint);
 	}
 
 	/**
-	 * Setzt die spezifizierte Animation für das spezifizierte Feld, sodass beim
-	 * Aufruf der markField Methode für dieses Feld die übergebene Animation auf
-	 * diesem gezeichnet wird. Ist eines der beiden Argumente null, so wird
-	 * nichts getan.
+	 * Sets the specified animation for the passed cell, so that it is drawn when markCell is
+	 * called. If either parameter is null, nothing happens.
+	 *
 	 * 
-	 * @param field
-	 *            Das Field für das Animation eingetragen werden soll
+	 * @param cell
+	 *            The cell for which the animation is to be stored
 	 * @param marking
 	 *            Die Animation die eingetragen werden soll
 	 */
-	public void setMarking(View field, FieldViewStates marking) {
-		this.markings.put(field, marking);
+	public void setMarking(View cell, CellViewStates marking) {
+		this.markings.put(cell, marking);
 	}
 
 	/**

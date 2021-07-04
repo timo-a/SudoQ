@@ -9,7 +9,6 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -18,7 +17,7 @@ import org.junit.Test;
 import de.sudoq.model.Utility;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.profile.Profile;
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
@@ -70,17 +69,17 @@ public class GameManagerTests {
 		Game game = GameManager.getInstance().newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings());
 		assertFalse(game.isFinished());
 		int count = 0;
-		for (Field f : game.getSudoku()) {
+		for (Cell f : game.getSudoku()) {
 			if (f.isNotSolved()) {
 				if (count == 0) {
-					game.solveField(f);
+					game.solveCell(f);
 					assertTrue(f.isSolvedCorrect());
 				}
 				count++;
 			}
 		}
-		game.solveField();
-		for (Field f : game.getSudoku()) {
+		game.solveCell();
+		for (Cell f : game.getSudoku()) {
 			if (f.isNotSolved()) {
 				count--;
 			}
@@ -133,15 +132,15 @@ public class GameManagerTests {
 		GameManager gm = GameManager.getInstance();
 		Game game = gm.newGame(SudokuTypes.standard9x9, Complexity.medium, new GameSettings());
 		int id = game.getId();
-		Field field = null;
-		for (Field f : game.getSudoku()) {
+		Cell cell = null;
+		for (Cell f : game.getSudoku()) {
 			if (f.isNotSolved()) {
-				field = f;
+				cell = f;
 				break;
 			}
 		}
-		assertNotNull(field);
-		assertTrue(game.solveField());
+		assertNotNull(cell);
+		assertTrue(game.solveCell());
 		gm.save(game);
 		assertTrue(game.equals(gm.load(id)));
 		game.solveAll();

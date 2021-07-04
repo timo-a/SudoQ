@@ -20,7 +20,7 @@ public class HiddenSetDerivation extends SolveDerivation {
 
 
     private Constraint constraint;
-    private List<DerivationField> subsetMembers;
+    private List<DerivationCell> subsetMembers;
     private CandidateSet subsetCandidates;
 
     public HiddenSetDerivation(HintTypes technique) {
@@ -35,7 +35,7 @@ public class HiddenSetDerivation extends SolveDerivation {
 
     public void setConstraint(Constraint c){ constraint = c; }
 
-    public void addSubsetField(DerivationField f){
+    public void addSubsetCell(DerivationCell f){
         subsetMembers.add(f);
     }
 
@@ -44,7 +44,7 @@ public class HiddenSetDerivation extends SolveDerivation {
 
     public Constraint getConstraint(){ return constraint; }
 
-    public List<DerivationField> getSubsetMembers(){ return subsetMembers; }
+    public List<DerivationCell> getSubsetMembers(){ return subsetMembers; }
 
     /* creates a list of actions in case the user want the app to execute the hints */
     @Override
@@ -52,10 +52,10 @@ public class HiddenSetDerivation extends SolveDerivation {
         List<Action> actionlist = new ArrayList<>();
         NoteActionFactory af = new NoteActionFactory();
 
-        for (Iterator<DerivationField> it = getFieldIterator(); it.hasNext(); ) {
-            DerivationField df = it.next();
+        for (Iterator<DerivationCell> it = getCellIterator(); it.hasNext(); ) {
+            DerivationCell df = it.next();
             for(int note: CandidateSet.fromBitSet(df.getIrrelevantCandidates()).getSetBits())
-                actionlist.add(af.createAction(note, sudoku.getField(df.getPosition())));
+                actionlist.add(af.createAction(note, sudoku.getCell(df.getPosition())));
         }
 
         return actionlist;

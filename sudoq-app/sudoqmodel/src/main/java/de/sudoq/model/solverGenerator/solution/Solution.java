@@ -13,7 +13,7 @@ import de.sudoq.model.actionTree.Action;
  * beschreiben (siehe dazu die Klassen SolveDerivation und Action).
  */
 public class Solution {
-	/** Attributes */
+	/* Attributes */
 
 	/**
 	 * Die Action, die das zu dieser Solution gehörige Feld löst oder null,
@@ -27,16 +27,16 @@ public class Solution {
 	 */
 	private List<SolveDerivation> derivations;
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Initiiert ein neues Solution-Objekt.
 	 */
 	public Solution() {
-		derivations = new ArrayList<SolveDerivation>();
+		derivations = new ArrayList<>();
 	}
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Diese Methode setzt die Action dieses Solution-Objektes auf die

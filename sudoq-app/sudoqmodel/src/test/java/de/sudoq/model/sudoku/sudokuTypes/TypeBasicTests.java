@@ -6,7 +6,7 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
@@ -41,10 +41,10 @@ public class TypeBasicTests {
 		SudokuType s99 = TypeBuilder.getType(SudokuTypes.standard9x9);
 		
 		Sudoku sudoku1 = new Sudoku(s99, map, new PositionMap<Boolean>(Position.get(9, 9)));
-		for (Field f : sudoku1)
+		for (Cell f : sudoku1)
 			f.setCurrentValue(f.getSolution());
 		assertTrue(sudoku1.getSudokuType().checkSudoku(sudoku1));
-		sudoku1.getField(Position.get(0, 0)).setCurrentValue(5);
+		sudoku1.getCell(Position.get(0, 0)).setCurrentValue(5);
 		assertFalse(sudoku1.getSudokuType().checkSudoku(sudoku1));
 		assertFalse(sudoku1.getSudokuType().checkSudoku(null));
 

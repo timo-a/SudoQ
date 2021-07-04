@@ -12,7 +12,7 @@ package de.sudoq.model.sudoku.complexity;
  * ComplexityConstraints entsprechend einer vorgegebenen Schwierigkeit.
  */
 public interface ComplexityFactory {
-	/** Methods */
+    /* Methods */
 	
     /**
      * Diese Methode erzeugt ein ComplexityConstraint, welches Vorgaben für ein Sudokus des spezifizierten Schwierigkeites enthält.
@@ -21,7 +21,7 @@ public interface ComplexityFactory {
      * @param complexity Die Schwierigkeit für die ein ComplexityConstraint-Objekt erzeugt werden soll
      * @return Ein ComplexityConstraint-Objekt für die spezifizierten Schwierigkeit oder null, falls diese ungültig ist
      */
-    public ComplexityConstraint buildComplexityConstraint(Complexity complexity);
+    ComplexityConstraint buildComplexityConstraint(Complexity complexity);
     
     /**
      * Gibt den Faktor zurück, der die Anzahl der Felder angibt, welche mit dem das Sudoku durch den Generierungsalgorithmus gut zufällig belegt und
@@ -29,5 +29,5 @@ public interface ComplexityFactory {
      * 
      * @return Der Standardfaktor für die Felderbelegung dieses Sudokutyps
      */
-    public float getStandardAllocationFactor();
+    float getStandardAllocationFactor();
 }

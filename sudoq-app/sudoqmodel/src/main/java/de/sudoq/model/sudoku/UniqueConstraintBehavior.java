@@ -20,16 +20,16 @@ public class UniqueConstraintBehavior implements ConstraintBehavior {
 	 */
 	List<Integer> foundNumbers;
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Instanziiert ein neues UniqueConstraintBehavior-Objekt.
 	 */
 	public UniqueConstraintBehavior() {
-		this.foundNumbers = new ArrayList<Integer>();
+		this.foundNumbers = new ArrayList<>();
 	}
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Überprüft, ob das spezifizierte Constraint das Unique-Verhalten erfüllt. D.h. es wird überprüft, ob innerhalb des
@@ -45,7 +45,7 @@ public class UniqueConstraintBehavior implements ConstraintBehavior {
 
 		ArrayList<Position> positions = constraint.getPositions();
 		for (Position pos: positions) {
-			currentValue = sudoku.getField(pos).getCurrentValue();
+			currentValue = sudoku.getCell(pos).getCurrentValue();
 			if (currentValue != -1)
 				if (foundNumbers.contains(currentValue))
 					return false;

@@ -66,7 +66,7 @@ public class GameSettings implements Xmlable{
 
 	/**
 	 * Gibt zurück, ob in diesem AssistanceSet die gegebene Hilfestellung
-	 * gesetzt ist. Ist diese< ungültig, so wird false zurückgegeben.
+	 * gesetzt ist. Ist diese ungültig, so wird false zurückgegeben.
 	 * 
 	 * @param assistance
 	 *            Die Hilfestellung die abgefragt werden soll

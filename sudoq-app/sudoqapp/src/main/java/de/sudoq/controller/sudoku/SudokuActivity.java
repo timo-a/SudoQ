@@ -46,18 +46,19 @@ import java.util.Set;
 import de.sudoq.R;
 import de.sudoq.controller.SudoqCompatActivity;
 import de.sudoq.controller.menus.Utility;
-import de.sudoq.controller.sudoku.board.FieldViewPainter;
-import de.sudoq.controller.sudoku.board.FieldViewStates;
+import de.sudoq.controller.sudoku.board.CellViewPainter;
+import de.sudoq.controller.sudoku.board.CellViewStates;
 import de.sudoq.model.actionTree.ActionTreeElement;
 import de.sudoq.model.files.FileManager;
 import de.sudoq.model.game.Assistances;
 import de.sudoq.model.game.Game;
 import de.sudoq.model.game.GameManager;
 import de.sudoq.model.profile.Profile;
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.view.FullScrollLayout;
-import de.sudoq.view.SudokuFieldView;
+import de.sudoq.view.GestureInputOverlay;
+import de.sudoq.view.SudokuCellView;
 import de.sudoq.view.SudokuLayout;
 import de.sudoq.view.VirtualKeyboardLayout;
 
@@ -145,7 +146,7 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 	/**
 	 * Fängt Gesteneingaben des Benutzers ab
 	 */
-	private GestureOverlayView gestureOverlay;
+	private GestureInputOverlay gestureOverlay;
 
 	/**
 	 * Hält die von der Activity unterstützten Gesten
@@ -300,9 +301,9 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 		outState.putBoolean(SAVE_ACTION_TREE_SHOWN + "", this.actionTreeShown);
 		outState.putInt(SAVE_GAME_ID + "", game.getId());
 		outState.putBoolean(SAVE_GESTURE_ACTIVE + "", this.gestureOverlay != null && this.gestureOverlay.getVisibility() == View.VISIBLE);
-		if (this.sudokuView.getCurrentFieldView() != null) {
-			outState.putInt(SAVE_FIELD_X + "", game.getSudoku().getPosition(this.sudokuView.getCurrentFieldView().getField().getId()).getX());
-			outState.putInt(SAVE_FIELD_Y + "", game.getSudoku().getPosition(this.sudokuView.getCurrentFieldView().getField().getId()).getY());
+		if (this.sudokuView.getCurrentCellView() != null) {
+			outState.putInt(SAVE_FIELD_X + "", game.getSudoku().getPosition(this.sudokuView.getCurrentCellView().getCell().getId()).getX());
+			outState.putInt(SAVE_FIELD_Y + "", game.getSudoku().getPosition(this.sudokuView.getCurrentCellView().getCell().getId()).getY());
 		} else {
 			outState.putInt(SAVE_FIELD_X + "", -1);
 		}
@@ -330,12 +331,12 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 			});
 		}
 		if (state.getInt(SAVE_FIELD_X + "") != -1) {
-			this.sudokuView.getSudokuFieldView(Position.get(state.getInt(SAVE_FIELD_X + "")
+			this.sudokuView.getSudokuCellView(Position.get(state.getInt(SAVE_FIELD_X + "")
 			                                               ,state.getInt(SAVE_FIELD_Y + ""))).onTouchEvent(null);
 		}
 
 		if (state.getBoolean(SAVE_GESTURE_ACTIVE + "")) {
-			this.mediator.onFieldSelected(this.sudokuView.getCurrentFieldView());
+			this.mediator.onCellSelected(this.sudokuView.getCurrentCellView(), CellInteractionListener.SelectEvent.Short);
 		}
 
 		if(mode==Mode.HintMode) {
@@ -393,12 +394,7 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 			}
 		}
 
-		this.gestureOverlay = new GestureOverlayView(this);
-		LayoutParams gestureLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-		this.gestureOverlay.setLayoutParams(gestureLayoutParams);
-		this.gestureOverlay.setBackgroundColor(Color.BLACK);
-		this.gestureOverlay.getBackground().setAlpha(127);
-		this.gestureOverlay.setVisibility(View.INVISIBLE);
+		this.gestureOverlay = new GestureInputOverlay(this);
 
 		FrameLayout frameLayout = findViewById(R.id.sudoku_frame_layout);
 		frameLayout.addView(this.gestureOverlay);
@@ -409,7 +405,7 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 	 */
 	private void inflateViewAndButtons() {
 
-		this.sudokuScrollView = findViewById(R.id.sudoku_field);
+		this.sudokuScrollView = findViewById(R.id.sudoku_cell);
 		this.sudokuView = new SudokuLayout(this);
 		Log.d(LOG_TAG, "Inflated sudoku layout");
 		this.sudokuView.setGravity(Gravity.CENTER);
@@ -423,11 +419,11 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 		LinearLayout currentControlsView;/* = (LinearLayout) findViewById(R.id.sudoku_time_border);
 		FieldViewPainter.getInstance().setMarking(currentControlsView, FieldViewStates.CONTROLS);*/
 		currentControlsView = findViewById(R.id.sudoku_border);
-		FieldViewPainter.getInstance().setMarking(currentControlsView, FieldViewStates.SUDOKU);
+		CellViewPainter.getInstance().setMarking(currentControlsView, CellViewStates.SUDOKU);
 		currentControlsView = findViewById(R.id.controls);
-		FieldViewPainter.getInstance().setMarking(currentControlsView, FieldViewStates.KEYBOARD);
+		CellViewPainter.getInstance().setMarking(currentControlsView, CellViewStates.KEYBOARD);
 		VirtualKeyboardLayout keyboardView = findViewById(R.id.virtual_keyboard);
-		FieldViewPainter.getInstance().setMarking(keyboardView, FieldViewStates.KEYBOARD);
+		CellViewPainter.getInstance().setMarking(keyboardView, CellViewStates.KEYBOARD);
 		keyboardView.refresh(this.game.getSudoku().getSudokuType().getNumberOfSymbols());
 	}
 
@@ -578,18 +574,18 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 	 *
 	 * @return Die aktuell ausgewählte FieldView
 	 */
-	public SudokuFieldView getCurrentFieldView() {
-		return this.sudokuView.getCurrentFieldView();
+	public SudokuCellView getCurrentCellView() {
+		return this.sudokuView.getCurrentCellView();
 	}
 
 	/**
 	 * Setzt die aktuelle FieldView auf die spezifizierte.
 	 *
-	 * @param fieldView
+	 * @param cellView
 	 *            Die als aktuell zu setzende FieldView
 	 */
-	public void setCurrentFieldView(SudokuFieldView fieldView) {
-		this.sudokuView.setCurrentFieldView(fieldView);
+	public void setCurrentCellView(SudokuCellView cellView) {
+		this.sudokuView.setCurrentCellView(cellView);
 	}
 
 	/**
@@ -614,8 +610,8 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 		this.finished = true;
 
 		this.updateButtons();
-		if (this.sudokuView.getCurrentFieldView() != null)
-			this.sudokuView.getCurrentFieldView().select(this.game.isAssistanceAvailable(Assistances.markRowColumn));
+		if (this.sudokuView.getCurrentCellView() != null)
+			this.sudokuView.getCurrentCellView().select(this.game.isAssistanceAvailable(Assistances.markRowColumn));
 
 		VirtualKeyboardLayout keyView = findViewById(R.id.virtual_keyboard);
 		for (int i = 0; i < keyView.getChildCount(); i++) {
@@ -799,28 +795,28 @@ public class SudokuActivity extends SudoqCompatActivity implements OnClickListen
 	/**
 	 * {@inheritDoc}
 	 */
-	public void onNoteAdd(Field field, int value) {
+	public void onNoteAdd(Cell cell, int value) {
 		onInputAction();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void onNoteDelete(Field field, int value) {
+	public void onNoteDelete(Cell cell, int value) {
 		onInputAction();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void onAddEntry(Field field, int value) {
+	public void onAddEntry(Cell cell, int value) {
 		onInputAction();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void onDeleteEntry(Field field) {
+	public void onDeleteEntry(Cell cell) {
 		onInputAction();
 	}
 

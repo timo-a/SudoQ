@@ -20,7 +20,7 @@ import de.sudoq.model.game.Game;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solvingAssistant.SolvingAssistant;
-import de.sudoq.view.SudokuFieldView;
+import de.sudoq.view.SudokuCellView;
 import de.sudoq.view.SudokuLayout;
 
 /**
@@ -51,14 +51,14 @@ public class AssistancesDialogFragment extends DialogFragment {
                 , getString(R.string.sf_sudoku_assistances_check)
                 , getString(R.string.sf_sudoku_assistances_solve_random)));
 
-        SudokuFieldView v = ((SudokuActivity)getActivity()).getCurrentFieldView();
-        if (v != null && v.getField().isNotSolved())
+        SudokuCellView v = ((SudokuActivity)getActivity()).getCurrentCellView();
+        if (v != null && v.getCell().isNotSolved())
             itemStack.add(getString(R.string.sf_sudoku_assistances_solve_specific));
 
         if (Profile.getInstance().getAssistances().isHelperSet())
             itemStack.add(getString(R.string.sf_sudoku_assistances_give_hint));
 
-        if (Profile.getInstance().isDebugSet())
+        if (Profile.getInstance().getAppSettings().isDebugSet())
             itemStack.add(getString(R.string.sf_sudoku_assistances_crash));
 
         // TODO why this no work? final CharSequence[] items = (CharSequence[]) itemStack.toArray();
@@ -95,7 +95,7 @@ public class AssistancesDialogFragment extends DialogFragment {
                 }
 				/* not inside switch, because they are at variable positions */
                 if (items[item] == getString(R.string.sf_sudoku_assistances_solve_specific)){
-                    if (!controller.onSolveCurrent(activity.getCurrentFieldView().getField())) {
+                    if (!controller.onSolveCurrent(activity.getCurrentCellView().getCell())) {
                         Toast.makeText(activity, R.string.toast_solved_wrong, Toast.LENGTH_SHORT).show();
                     }
 
@@ -155,7 +155,7 @@ public class AssistancesDialogFragment extends DialogFragment {
 
                     controller.onHintAction(a);
                     activity.onInputAction();
-                    /* in case we delete a note in the focussed field */
+                    /* in case we delete a note in the focussed cell */
                     activity.getMediator().restrictCandidates();
                 }
             }
@@ -179,7 +179,7 @@ public class AssistancesDialogFragment extends DialogFragment {
 //
 //			/* iterate over all symbols e.g. 0-8 */
 //			for (int i = 0; i < type.getNumberOfSymbols(); i++) {
-//				/* set fieldval to current symbol */
+//				/* set cellval to current symbol */
 //				currentField.setCurrentValue(i, false);
 //				/* for every constraint */
 //				for (Constraint c : type) {

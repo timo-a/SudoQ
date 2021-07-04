@@ -15,19 +15,18 @@ import de.sudoq.model.actionTree.Action;
 import de.sudoq.model.actionTree.ActionTree;
 import de.sudoq.model.actionTree.ActionTreeElement;
 import de.sudoq.model.actionTree.SolveAction;
-import de.sudoq.model.sudoku.Field;
 
 /**
  * Diese Klasse verwaltet den Zustand eines Spiels durch einen ActionTree und stellt Funktionalität für die Verwaltung
  * des Zustandes zur Verfügung.
  */
 public class GameStateHandler extends ObservableModelImpl<ActionTreeElement> {
-	/** Attributes */
+	/* Attributes */
 
 	/**
 	 * Die Datenstruktur um die Züge und ihre Abfolge zu speichern
 	 */
-	private ActionTree actionTree;
+	private final ActionTree actionTree;
 	/**
 	 * Der aktuelle Zustand, die Aktion darin muss bereits ausgeführt sein
 	 */
@@ -35,7 +34,7 @@ public class GameStateHandler extends ObservableModelImpl<ActionTreeElement> {
 	/**
 	 * Ein Stack um bei undo über Verzweigungen hinweg den Rückweg zu speichern
 	 */
-	private Stack<ActionTreeElement> undoStack;
+	private final Stack<ActionTreeElement> undoStack;
 
 	/**
 	 * Eine locking Variable um zu verhindern, dass durch Listener waehrend Veraenderungen weitere Veraenderung
@@ -43,14 +42,14 @@ public class GameStateHandler extends ObservableModelImpl<ActionTreeElement> {
 	 */
 	private boolean locked;
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Erzeugt und instanziiert einen neuen GameStateHandler.
 	 */
 	public GameStateHandler() {
 		actionTree = new ActionTree();
-		undoStack = new Stack<ActionTreeElement>();
+		undoStack = new Stack<>();
 
 		currentState = actionTree.getRoot();
 
@@ -104,7 +103,7 @@ public class GameStateHandler extends ObservableModelImpl<ActionTreeElement> {
 			currentState = currentState.getParent();
 			action.execute();
 
-		}else if(isSolveOnSameField(action)) {
+		}else if(isSolveOnSameCell(action)) {
 
 			SolveAction intended = (SolveAction) action;
 			SolveAction above = (SolveAction) currentState.getAction();
@@ -112,7 +111,6 @@ public class GameStateHandler extends ObservableModelImpl<ActionTreeElement> {
 			currentState.undo();
 			currentState = currentState.getParent();
 			addStrategic(liftedAction);
-			return;
 		} else	{
 			currentState = actionTree.add(action, currentState);
 			currentState.execute();
@@ -144,8 +142,8 @@ public class GameStateHandler extends ObservableModelImpl<ActionTreeElement> {
 		return mountingElement.getAction().inverse(action);
 	}
 
-	private boolean isSolveOnSameField(Action action){
-		return currentState != actionTree.getRoot() && bothSolveActions(currentState, action) && isActionOnSameField(currentState, action);
+	private boolean isSolveOnSameCell(Action action){
+		return currentState != actionTree.getRoot() && bothSolveActions(currentState, action) && isActionOnSameCell(currentState, action);
 	}
 
 	private boolean bothSolveActions(ActionTreeElement mountingElement, Action action) {
@@ -153,10 +151,10 @@ public class GameStateHandler extends ObservableModelImpl<ActionTreeElement> {
 		return (action instanceof SolveAction) && (actionAbove instanceof SolveAction);
 	}
 
-	private boolean isActionOnSameField(ActionTreeElement mountingElement, Action action) {
+	private boolean isActionOnSameCell(ActionTreeElement mountingElement, Action action) {
 
-		boolean sameField = mountingElement.getAction().getField().equals(action.getField());
-		return (action instanceof SolveAction) && sameField;
+		boolean sameCell = mountingElement.getAction().getCell().equals(action.getCell());
+		return (action instanceof SolveAction) && sameCell;
 	}
 
 

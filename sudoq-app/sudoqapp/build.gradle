@@ -1,5 +1,13 @@
 apply plugin: 'com.android.application'
 
+allprojects {
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:deprecation"
+        }
+    }
+}
+
 android {
     compileSdkVersion 29
 
@@ -14,14 +22,16 @@ android {
 
     sourceSets {
         main {
+            /* this allows us to group resources(layouts, values) by topic */
             res.srcDirs =
             [
                     'src/main/res/layouts/sudoku',
                     'src/main/res/layouts/tutorial',
                     'src/main/res/layout',
                     'src/main/res',
-                    'src/main/res-screen/preferences/',
-                    'src/main/res-screen/hints/'
+                    'src/main/res-screen/hints/',
+                    'src/main/res-screen/main_menu/',
+                    'src/main/res-screen/preferences/'
             ]
         }
     }
@@ -39,7 +49,7 @@ dependencies {
     implementation project(':sudoqmodel')
     implementation 'com.google.android.material:material:1.0.0'
     //implementation 'androidx.cardview:cardview:1.0.0'
-    //implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
     //implementation 'androidx.recyclerview:recyclerview:1.0.0'
 
 

@@ -11,9 +11,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
 
-import java.util.List;
-
-import de.sudoq.model.solverGenerator.solution.DerivationBlock;
 import de.sudoq.model.solverGenerator.solution.LastCandidateDerivation;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.view.SudokuLayout;
@@ -35,7 +32,7 @@ public class LastCandidateView extends HintView {
 	public LastCandidateView(Context context, SudokuLayout sl, SolveDerivation d) {
 		super(context, sl, d);
 
-		View constraintV = new HighlightedFieldView(context, sl, ((LastCandidateDerivation)d).getPosition(), Color.GREEN);
+		View constraintV = new HighlightedCellView(context, sl, ((LastCandidateDerivation)d).getPosition(), Color.GREEN);
 		highlightedObjects.add(constraintV);
 	}
 }

@@ -39,7 +39,7 @@ public class XWingView extends HintView {
 			highlightedObjects.add(reducibleConstraintV);
 		}
 
-		for (Constraint c: d.getLockedConstraints()) {//'note' appears only in intersection. this is painted after the blue ones so people don't mistakenly remove notes of the intersection cause the field is green
+		for (Constraint c: d.getLockedConstraints()) {//'note' appears only in intersection. this is painted after the blue ones so people don't mistakenly remove notes of the intersection cause the cell is green
 			View lockedConstraintV = new HighlightedConstraintView(context, sl, c, Color.BLUE);
 			highlightedObjects.add(lockedConstraintV);
 		}

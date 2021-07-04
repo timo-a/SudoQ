@@ -67,12 +67,7 @@
 	<!-- Player Preferences Button -->
 	<string name="player_preferences_button_changeprofile">Profil wechseln</string>
 	
-    <!-- MainMenu Buttons -->
-    <string name="sf_mainmenu_new_sudoku">Neues Sudoku</string>
-    <string name="sf_mainmenu_continue">Fortsetzen</string>
-    <string name="sf_mainmenu_load_sudoku">Sudoku Laden</string>
-    <string name="sf_mainmenu_profile">Profil</string>
-    
+
     <!-- GestureBuilder -->
     <string name="gesture_builder_title">Gesten definieren</string>
     <string name="gesture_builder_define_gesture">Zeichne die gewünschte Geste</string>
@@ -91,9 +86,7 @@
     <string name="sf_sudokupreferences_sudokucomplexity">Schwierigkeitsgrad auswählen</string>
     <string name="sf_sudokupreferences_assistances">Hilfestellungen konfigurieren</string>
     <string name="sf_sudokupreferences_copying">Vorlagen werden gerade kopiert. Bitte warten Sie einen Moment.</string>
-    <string name="sf_sudokupreferences_all_disabled_1">Du hast alle Sudoku Typen deaktiviert…</string>
-    <string name="sf_sudokupreferences_all_disabled_2">In \'Erweiterte Einstellungen\' kannst du sie wieder Aktivieren.</string>
-    
+
     <!-- SudokuActivity -->
     <string name="sf_sudoku_button_bookmark">Lesezeichen</string>
     <string name="sf_sudoku_button_close">Schließen</string>
@@ -105,7 +98,10 @@
     <string name="sf_sudoku_assistances_back_to_valid_state">Zurück zum letzten korrekten Stand</string>
     <string name="sf_sudoku_assistances_back_to_bookmark">Zurück zum letzten Lesezeichen</string>
     <string name="sf_sudoku_assistances_give_hint">Einen Tipp geben</string>
-    <string name="sf_sudoku_title_gesture_input">Symboleingabe durch Geste</string>
+
+    <string name="sf_sudoku_title_gesture_input_entry">Symboleingabe durch Geste</string>
+    <string name="sf_sudoku_title_gesture_input_note">Kandidat eingeben durch Geste</string>
+
     <string name="sf_sudoku_title_action_tree">Aktionsverlauf</string>
     <string name="sf_sudoku_assistances_crash">App abstürzen lassen</string>
 
@@ -130,7 +126,7 @@
     <string name="sudoku_type_standard_4x4"  >Standard-Sudoku 4x4</string>
     <string name="sudoku_type_squiggly_a_9x9">Squiggly-Sudoku 9x9</string>
     <string name="sudoku_type_squiggly_b_9x9">Squoggly-Sudoku 9x9</string>
-    <string name="sudoku_type_stairstep_9x9" >Stairstep-Sudoku 9x9</string>
+    <string name="sudoku_type_stairstep_9x9" >Treppen-Sudoku 9x9</string>
     <string name="sudoku_type_samurai"       >Samurai-Sudoku</string>
     <string name="sudoku_type_hyper"         >Hyper-Sudoku</string>
     <string name="sudoku_type_xsudoku"       >X-Sudoku</string>
@@ -211,7 +207,6 @@
     <string name="gender_maskulin">m</string>
     <string name="gender_feminin">f</string>
     <string name="gender_neutral">n</string>
-
 
 
 </resources>

@@ -16,12 +16,12 @@ class BranchingPool {
 	/**
 	 * Stores discarded branching objects ready to be reused (we want to save on object instantiation for performance)
 	 */
-	private Stack<Branching> branchingsReservoir;
+	private final Stack<Branching> branchingsReservoir;
 
 	/**
 	 * Ein Stack der erstellten und bereits vergebenen Maps
 	 */
-	private Stack<Branching> branchingsInUse;
+	private final Stack<Branching> branchingsInUse;
 
 
 	/**
@@ -100,7 +100,7 @@ class BranchingPool {
 		/**
 		 * Die Liste von Positionen an denen in diesem Branch eine Lösung eingetragen wurde.
 		 */
-		List<Position> solutionsSet; //TODO rename to sol..LIST??
+        final List<Position> solutionsSet; //TODO rename to sol..LIST??
 
 		/**
 		 * Eine Map, welche für jede Position dessen Kandidaten vor dem Branchen speichert.
@@ -117,7 +117,7 @@ class BranchingPool {
 		 * position and candidate are set by parameter values, complexity value is set to 0
 		 */
 		protected Branching(Position p, int candidate) {
-			this.solutionsSet = new ArrayList<Position>();
+			this.solutionsSet = new ArrayList<>();
 			initializeWith(p, candidate);
 		}
 

@@ -5,6 +5,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
+import androidx.core.content.pm.PackageInfoCompat;
+
 import java.util.BitSet;
 
 import de.sudoq.R;
@@ -16,9 +18,8 @@ import de.sudoq.model.solverGenerator.solution.LeftoverNoteDerivation;
 import de.sudoq.model.solverGenerator.solution.LockedCandidatesDerivation;
 import de.sudoq.model.solverGenerator.solution.NakedSetDerivation;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
-import de.sudoq.model.solverGenerator.solution.XWingDerivation;
 import de.sudoq.model.sudoku.CandidateSet;
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.Utils;
 import de.sudoq.model.sudoku.Utils.ConstraintShape;
@@ -91,9 +92,9 @@ public class HintFormulator {
         return text;
     }
 
-    private static boolean aFieldIsEmpty(SudokuActivity sActivity){
+    private static boolean aCellIsEmpty(SudokuActivity sActivity){
         Sudoku sudoku = sActivity.getGame().getSudoku();
-        for (Field f : sudoku)
+        for (Cell f : sudoku)
             if (f.isCompletelyEmpty()){
                 return true;
             }
@@ -132,8 +133,10 @@ public class HintFormulator {
 
         int versionNumber = -1;
         try {
-            PackageInfo pinfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            versionNumber = pinfo.versionCode;
+            PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            long longVersionCode= PackageInfoCompat.getLongVersionCode(pInfo);
+            versionNumber = (int) longVersionCode;
+            //versionNumber = pinfo.versionCode;
 
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -183,7 +186,7 @@ public class HintFormulator {
         return context.getString(R.string.hint_nakedset).replace("{symbols}",seq.toString());
     }
 
-    private static String hiddenSingleText(Context context, SolveDerivation sd){//TODO this should never be used but already be taken by a special hit that just says: Look at this field, only one left can go;
+    private static String hiddenSingleText(Context context, SolveDerivation sd){//TODO this should never be used but already be taken by a special hit that just says: Look at this cell, only one left can go;
         BitSet bs = ((HiddenSetDerivation) sd).getSubsetMembers().get(0).getRelevantCandidates();
         String note = (bs.nextSetBit(0)+1)+"";
         return context.getString(R.string.hint_hiddensingle).replace("{note}", note);

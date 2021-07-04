@@ -9,8 +9,8 @@
 	<string name="sf_tutorial_sudoku_description1">A sudoku is a logic-based, combinatorial number-placement puzzle. The original sudoku
 	    is a 9x9 grid that has to be filled with digits so hat each column, each row and each of the nine 3x3 sub-grids contains
 	    all the digits from 1 to 9. At the beginning a sudoku is partially completed and has only one correct solution.</string>
-	<string name="sf_tutorial_sudoku_description2">Further sudoku types do not define the 3x3 sub-grids but other sets of fields which are 
-	    represented by a black edging or gray shaded fields in this app. The following images show both types of representation which can 
+	<string name="sf_tutorial_sudoku_description2">Further sudoku types do not define the 3x3 sub-grids but other sets of cells which are
+	    represented by a black edging or gray shaded cells in this app. The following images show both types of representation which can
 	    overlap:</string>
 	<string name="sf_tutorial_sudoku_squiggly">Squiggly Type A Sudoku</string>
 	<string name="sf_tutorial_sudoku_xsudoku">X-Sudoku Type</string>
@@ -28,31 +28,31 @@
 	    starting a game. These assistances do not have to be called in a game but therefore they cannot be activated or deactivated in the
 	    game.</string>
 	<string name="sf_tutorial_assistances_passive_markrowcolumn_title">Mark row / column</string>
-	<string name="sf_tutorial_assistances_passive_markrowcolumn_description1">Activating this assistance emphasises the fields in the
+	<string name="sf_tutorial_assistances_passive_markrowcolumn_description1">Activating this assistance emphasises the cells in the
 	    currently selected row and column.</string>
 	<string name="sf_tutorial_assistances_passive_autoadjustnotes_title">Auto adjust notes</string>
-	<string name="sf_tutorial_assistances_passive_autoadjustnotes_description1">This assistance updates your notes when a digit is put into a field. 
-	    If that digit is in the notes of a field in the same row, column or block you put it in, it is removed from those notes. </string>
+	<string name="sf_tutorial_assistances_passive_autoadjustnotes_description1">This assistance updates your notes when a digit is put into a cell.
+	    If that digit is in the notes of a cell in the same row, column or block you put it in, it is removed from those notes. </string>
 	<string name="sf_tutorial_assistances_passive_markwrongsymbols_title">Mark wrong symbols</string>
-	<string name="sf_tutorial_assistances_passive_markwrongsymbols_description1">If a digit is put into a field although it is already 
-	    in a field of the same row, column or block it is marked red because there cannot be the same digit in both fields.</string>
+	<string name="sf_tutorial_assistances_passive_markwrongsymbols_description1">If a digit is put into a cell although it is already
+	    in a cell of the same row, column or block it is marked red because there cannot be the same digit in both cells.</string>
 	<string name="sf_tutorial_assistances_passive_inputassistance_title">Input assistance</string>
 	<string name="sf_tutorial_assistances_passive_inputassistance_description1">With this assistance activated you can only put a digit into a
-	    field that is not in one of the fields of the same row, column or block yet. All other digits are grayed out.</string>
+	    cell that is not in one of the cells of the same row, column or block yet. All other digits are grayed out.</string>
 	
 	<string name="sf_tutorial_assistances_active_title">Active assistances</string>
 	<string name="sf_tutorial_assistances_active_description1">Active assistances can be used as you need them during a game.
 	    You can reach them by clicking on the button shown left.</string>
-	<string name="sf_tutorial_assistances_active_solverandomfield_title">Solve random field</string>
-	<string name="sf_tutorial_assistances_active_solverandomfield_description1">A random field is automatically solved for you.</string>
-	<string name="sf_tutorial_assistances_active_solvecurrentfield_title">Solve current field</string>
-	<string name="sf_tutorial_assistances_active_solvecurrentfield_description1">The field you have currently selected is solved for you.</string>
+	<string name="sf_tutorial_assistances_active_solverandomcell_title">Solve random cell</string>
+	<string name="sf_tutorial_assistances_active_solverandomcell_description1">A random cell is automatically solved for you.</string>
+	<string name="sf_tutorial_assistances_active_solvecurrentcell_title">Solve current cell</string>
+	<string name="sf_tutorial_assistances_active_solvecurrentcell_description1">The cell you have currently selected is solved for you.</string>
 	<string name="sf_tutorial_assistances_active_check_title">Check solution</string>
 	<string name="sf_tutorial_assistances_active_check_description1">Your current solution is checked and a message tells you if your
-	    currently solved fields are all correct or if there is a field that is solved wrong.</string>
+	    currently solved cells are all correct or if there is a cell that is solved wrong.</string>
 	<string name="sf_tutorial_assistances_active_backtolastcorrect_title">Back to last correct status</string>
 	<string name="sf_tutorial_assistances_active_backtolastcorrect_description1">Using this assistance reverts the game to the last state
-	    where all fields you have solved were correct. Although all your action that are reverted are saved in the action history and can
+	    where all cells you have solved were correct. Although all your action that are reverted are saved in the action history and can
 	    be redone.</string>
 	<string name="sf_tutorial_assistances_active_surrender_title">Surrender</string>
 	<string name="sf_tutorial_assistances_active_surrender_description1">This is not an ordinary assistance. Using this the whole sudoku
@@ -60,7 +60,7 @@
 	    
 	<!-- ActionTree Tutorial -->
 	<string name="sf_tutorial_action_title">Action History</string>
-	<string name="sf_tutorial_action_description1">The action history saves everything you do in a sudoku game. Every field you modify by either
+	<string name="sf_tutorial_action_description1">The action history saves everything you do in a sudoku game. Every cell you modify by either
 	    solving it or by setting notes is saved into an action history. This enables you to try a solution and go back if it was
 	    wrong without having to memorise every step you made since your solution was right for the last time.</string>
 	<string name="sf_tutorial_action_description2">With the button at the left you can open this history in a game and navigate through the

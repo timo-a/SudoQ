@@ -7,80 +7,74 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import de.sudoq.model.actionTree.Action;
-import de.sudoq.model.actionTree.ActionFactory;
-import de.sudoq.model.actionTree.NoteAction;
-import de.sudoq.model.actionTree.NoteActionFactory;
-import de.sudoq.model.actionTree.SolveAction;
-import de.sudoq.model.actionTree.SolveActionFactory;
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 
 public class ActionTests {
 
 	@Test
 	public void testNoteActionExecution() {
-		Field field = new Field(-1, 1);
+		Cell cell = new Cell(-1, 1);
 		ActionFactory factory = new NoteActionFactory();
-		Action action = factory.createAction(5, field);
-		assertFalse(field.isNoteSet(5));
+		Action action = factory.createAction(5, cell);
+		assertFalse(cell.isNoteSet(5));
 
 		action.execute();
-		assertTrue(field.isNoteSet(5));
+		assertTrue(cell.isNoteSet(5));
 
 		action.undo();
-		assertFalse(field.isNoteSet(5));
+		assertFalse(cell.isNoteSet(5));
 	}
 
 	@Test
 	public void testSolveActionExecution() {
-		Field field = new Field(-1, 9);
+		Cell cell = new Cell(-1, 9);
 		ActionFactory factory = new SolveActionFactory();
-		Action action = factory.createAction(5, field);
-		int value = field.getCurrentValue();
+		Action action = factory.createAction(5, cell);
+		int value = cell.getCurrentValue();
 		assertFalse(value == 5);
 
 		action.execute();
-		assertTrue(field.getCurrentValue() == 5);
+		assertTrue(cell.getCurrentValue() == 5);
 
 		action.undo();
-		assertTrue(field.getCurrentValue() == value);
+		assertTrue(cell.getCurrentValue() == value);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testNullFieldInstantiationForSolveAction() {
+	public void testNullCellInstantiationForSolveAction() {
 		ActionFactory factory = new SolveActionFactory();
 		factory.createAction(5, null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testNullFieldInstantiationForNoteAction() {
+	public void testNullCellInstantiationForNoteAction() {
 		ActionFactory factory = new NoteActionFactory();
 		factory.createAction(5, null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testNullFieldInstantiationForSolveActionWithoutFactory() {
+	public void testNullCellInstantiationForSolveActionWithoutFactory() {
 		new SolveAction(5, null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testNullFieldInstantiationForNoteActionWithoutFactory() {
+	public void testNullCellInstantiationForNoteActionWithoutFactory() {
 		new NoteAction(5, null);
 	}
 
 	@Test
 	public void testEquals() {
-		Field f = new Field(1, 9);
+		Cell f = new Cell(1, 9);
 		assertFalse(new SolveAction(1, f).equals(new NoteAction(1, f)));
 		assertTrue(new SolveAction(1, f).equals(new SolveAction(1, f)));
 		assertFalse(new SolveAction(2, f).equals(new SolveAction(1, f)));
-		assertFalse(new SolveAction(1, f).equals(new SolveAction(1, new Field(2, 9))));
+		assertFalse(new SolveAction(1, f).equals(new SolveAction(1, new Cell(2, 9))));
 	}
 
 	@Test
 	public void testGetId() {
-		Field f = new Field(1, 9);
+		Cell f = new Cell(1, 9);
 		Action a = new SolveAction(1, f);
-		assertEquals(a.getFieldId(), 1);
+		assertEquals(a.getCellId(), 1);
 	}
 }

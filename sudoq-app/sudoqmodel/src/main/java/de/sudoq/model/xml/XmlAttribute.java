@@ -14,7 +14,7 @@ package de.sudoq.model.xml;
  */
 public class XmlAttribute {
 
-	/** Attributes */
+	/* Attributes */
 
 	/**
 	 * Name des Attributes
@@ -26,7 +26,7 @@ public class XmlAttribute {
 	 */
 	private String value;
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Dieser Konstruktor initialisiert ein neues Attribut mit gegebenem Wert.
@@ -53,7 +53,7 @@ public class XmlAttribute {
 
 
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Diese Methode gibt des Namen des Attributes zurück.

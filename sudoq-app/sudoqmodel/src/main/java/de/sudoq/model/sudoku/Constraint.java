@@ -21,7 +21,7 @@ import de.sudoq.model.xml.Xmlable;
  * Standardsudoku sind beispielsweise die Zeilen, Spalten und Blöcke Constraint-Objekte.
  */
 public class Constraint implements Iterable<Position>, Xmlable {
-	/** Attributes */
+	/* Attributes */
 
 	/**
 	 * Eine Liste der Positionen aller Felder, die zusammen eine Vorgabe erfüllen müssen
@@ -43,7 +43,7 @@ public class Constraint implements Iterable<Position>, Xmlable {
 	 */
 	private ConstraintType type;
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Dieser Konstruktor instanziiert ein neues Constraint-Objekt mit dem spezifizierten ConstraintBehavior. Ist dieses
@@ -59,7 +59,7 @@ public class Constraint implements Iterable<Position>, Xmlable {
 	public Constraint(ConstraintBehavior behavior, ConstraintType type) {
 		if (behavior != null && type != null) {
 			this.behavior = behavior;
-			positions = new ArrayList<Position>();
+			positions = new ArrayList<>();
 			this.type = type;
 		} else {
 			throw new IllegalArgumentException();
@@ -85,7 +85,7 @@ public class Constraint implements Iterable<Position>, Xmlable {
 	public Constraint(ConstraintBehavior behavior, ConstraintType type, String name) {
 		if (behavior != null && type != null) {
 			this.behavior = behavior;
-			positions = new ArrayList<Position>();
+			positions = new ArrayList<>();
 			this.type = type;
 		} else {
 			throw new IllegalArgumentException();
@@ -93,12 +93,12 @@ public class Constraint implements Iterable<Position>, Xmlable {
 		this.name = name == null ? "Constraint with " + behavior : name;
 	}
 
-	/** Methods */
+	/* Methods */
 
-	/** @deprecated mostly used in tests TODO make those tests sublasses and set method to private
+	/**
 	 * Diese Methode fügt diesem Constraint-Objekt die spezifizierte Position hinzu. Ist diese null, so wird nichts
 	 * getan.
-	 * 
+	 * @deprecated mostly used in tests TODO make those tests sublasses and set method to private
 	 * @param position
 	 *            Die Position die diesem Constraint hinzugefügt werden soll
 	 */

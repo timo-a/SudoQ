@@ -7,7 +7,7 @@
  */
 package de.sudoq.model.actionTree;
 
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 
 /**
  * Diese Klasse repräsentiert eine Aktion auf den Notizeinträgen eines
@@ -23,13 +23,13 @@ public class NoteAction extends Action {
 	 * 
 	 * @param diff
 	 *            Der Unterschied zwischen altem und neuem Wert
-	 * @param field
+	 * @param cell
 	 *            Das zu bearbeitende Feld
 	 * @throws IllegalArgumentException
 	 *             Wird geworfen, falls das übergebene Field null ist
 	 */
-	protected NoteAction(int diff, Field field) {
-		super(diff, field);
+	protected NoteAction(int diff, Cell cell) {
+		super(diff, cell);
 	}
 
 	/**
@@ -37,7 +37,7 @@ public class NoteAction extends Action {
 	 */
 	@Override
 	public void execute() {
-		field.toggleNote(diff);
+		cell.toggleNote(diff);
 	}
 
 	/**
@@ -45,7 +45,7 @@ public class NoteAction extends Action {
 	 */
 	@Override
 	public void undo() {
-		field.toggleNote(diff);
+		cell.toggleNote(diff);
 	}
 
 	//as we just toggle, inverse means field and diff same on a

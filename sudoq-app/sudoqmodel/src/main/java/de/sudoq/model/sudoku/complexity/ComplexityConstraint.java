@@ -17,7 +17,7 @@ import de.sudoq.model.xml.Xmlable;
  * sowie die Anzahl der überhaupt notwendigen verschiedenen Vorgehensweisen.
  */
 public class ComplexityConstraint implements Cloneable, Xmlable {
-	/** Attributes */
+    /* Attributes */
 
 	/**
 	 * Der Schwierigkeitsgrade für den die Vorgaben gemacht werden
@@ -27,7 +27,7 @@ public class ComplexityConstraint implements Cloneable, Xmlable {
 	/**
 	 * Die durchschnittliche Anzahl Felder, die bei dieser Schwierigkeit belegt sein sollte
 	 */
-	private int averageFields;
+	private int averageCells;
 
 	/**
 	 * Die minimale Höhe der Summe der Schwierigkeitsgrade (vorgegeben vom Lösungsalgorithmus als Ganzzahl) der zum
@@ -47,7 +47,7 @@ public class ComplexityConstraint implements Cloneable, Xmlable {
 	 */
 	private int numberOfAllowedHelpers;
 
-	/** Constructors */
+    /* Constructors */
 
 	/**
 	 * Instanziiert ein neues ComplexityConstraint-Objekt mit den spezifizierten Attributen.
@@ -85,7 +85,7 @@ public class ComplexityConstraint implements Cloneable, Xmlable {
 					+ minComplexityIdentifier + " > " + maxComplexityIdentifier);
 
 		this.complexity = complexity;
-		this.averageFields = averageFields;
+		this.averageCells = averageFields;
 		this.minComplexityIdentifier = minComplexityIdentifier;
 		this.maxComplexityIdentifier = maxComplexityIdentifier;
 		this.numberOfAllowedHelpers = numberOfAllowedHelpers;
@@ -110,8 +110,8 @@ public class ComplexityConstraint implements Cloneable, Xmlable {
 	 * 
 	 * @return Die durchschnittliche Anzahl belegter Felder in dieser Schwierigkeit
 	 */
-	public int getAverageFields() {
-		return this.averageFields;
+	public int getAverageCells() {
+		return this.averageCells;
 	}
 
 	/**
@@ -163,7 +163,7 @@ public class ComplexityConstraint implements Cloneable, Xmlable {
 	public XmlTree toXmlTree() {
 		XmlTree representation = new XmlTree(COMPLEXITY_CONSTRAINT);
 		representation.addAttribute(new XmlAttribute(COMPLEXITY,                "" + complexity.ordinal() ));
-		representation.addAttribute(new XmlAttribute(AVERAGE_FIELDS,            "" + averageFields ));
+		representation.addAttribute(new XmlAttribute(AVERAGE_FIELDS,            "" + averageCells));
 		representation.addAttribute(new XmlAttribute(MIN_COMPLEXITY_IDENTIFIER, "" + minComplexityIdentifier ));
 		representation.addAttribute(new XmlAttribute(MAX_COMPLEXITY_IDENTIFIER, "" + maxComplexityIdentifier ));
 		representation.addAttribute(new XmlAttribute(NUMBER_OF_ALLOWED_HELPERS, "" + numberOfAllowedHelpers ));
@@ -173,7 +173,7 @@ public class ComplexityConstraint implements Cloneable, Xmlable {
 	@Override
 	public void fillFromXml(XmlTree xmlTreeRepresentation) throws IllegalArgumentException {
 		this.complexity    = Complexity.values()[Integer.parseInt(xmlTreeRepresentation.getAttributeValue(COMPLEXITY))];
-		this.averageFields           = Integer.parseInt(xmlTreeRepresentation.getAttributeValue(AVERAGE_FIELDS));
+		this.averageCells = Integer.parseInt(xmlTreeRepresentation.getAttributeValue(AVERAGE_FIELDS));
 		this.minComplexityIdentifier = Integer.parseInt(xmlTreeRepresentation.getAttributeValue(MIN_COMPLEXITY_IDENTIFIER));
 		this.maxComplexityIdentifier = Integer.parseInt(xmlTreeRepresentation.getAttributeValue(MAX_COMPLEXITY_IDENTIFIER));
 		this.numberOfAllowedHelpers  = Integer.parseInt(xmlTreeRepresentation.getAttributeValue(NUMBER_OF_ALLOWED_HELPERS));

@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.Toast;
 
 import de.sudoq.R;
 import de.sudoq.controller.SudoqListActivity;
@@ -57,6 +58,7 @@ public class RestrictTypesActivity extends SudoqListActivity implements OnItemCl
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.restricttypes);
+		Log.d("gameSettings","RestrictTypesActivity.onCreate");
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 
@@ -150,11 +152,13 @@ public class RestrictTypesActivity extends SudoqListActivity implements OnItemCl
 	 *            ID der angeklickten View
 	 */
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		Log.d(LOG_TAG, position + "");
 
 		/* toggle item */
 		SudokuTypes st = adapter.getItem(position);
-		if (types.contains(st))
+		if (types.contains(st) && types.size()==1)
+			//trying to remove last element -> deny and warn
+			Toast.makeText(this, R.string.advanced_settings_restrict_types_empty_warning, Toast.LENGTH_SHORT);
+		else if(types.contains(st))
 			types.remove(st);
 		else
 			types.add(st);
@@ -164,8 +168,7 @@ public class RestrictTypesActivity extends SudoqListActivity implements OnItemCl
 
 	@Override
 	public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-		Log.d(LOG_TAG, "LongClick on "+ position + "");
-		
+
 		/* nothing */
 			
 		return true;//prevent itemclick from fire-ing as well

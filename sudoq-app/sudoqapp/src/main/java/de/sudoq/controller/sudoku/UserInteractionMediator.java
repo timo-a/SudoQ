@@ -13,6 +13,7 @@ import android.gesture.GestureOverlayView.OnGesturePerformedListener;
 import android.gesture.GestureStore;
 import android.gesture.Prediction;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -25,23 +26,26 @@ import java.util.List;
 import java.util.Set;
 
 import de.sudoq.R;
-import de.sudoq.controller.sudoku.board.FieldViewStates;
+import de.sudoq.controller.sudoku.board.CellViewStates;
 import de.sudoq.model.game.Assistances;
 import de.sudoq.model.game.Game;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.sudoku.Constraint;
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
-import de.sudoq.view.SudokuFieldView;
+import de.sudoq.view.GestureInputOverlay;
+import de.sudoq.view.SudokuCellView;
 import de.sudoq.view.SudokuLayout;
 import de.sudoq.view.VirtualKeyboardLayout;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Ein Vermittler zwischen einem Sudoku und den verschiedenen
  * Eingabemöglichkeiten, also insbesondere Tastatur und Gesten-View.
  */
-public class UserInteractionMediator implements OnGesturePerformedListener, InputListener, FieldInteractionListener, ObservableActionCaster {
+public class UserInteractionMediator implements OnGesturePerformedListener, InputListener, CellInteractionListener, ObservableActionCaster {
 
 	/**
 	 * Flag für den Notizmodus.
@@ -72,7 +76,7 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 	/**
 	 * Die Gesten-View.
 	 */
-	private GestureOverlayView gestureOverlay;
+	private GestureInputOverlay gestureOverlay;
 
 	/**
 	 * Die Bibliothek für die Gesteneingabe.
@@ -94,7 +98,7 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 	 * @param gestureStore
 	 *            Die Bibliothek der Gesten
 	 */
-	public UserInteractionMediator(VirtualKeyboardLayout virtualKeyboard, SudokuLayout sudokuView, Game game, GestureOverlayView gestureOverlay,
+	public UserInteractionMediator(VirtualKeyboardLayout virtualKeyboard, SudokuLayout sudokuView, Game game, GestureInputOverlay gestureOverlay,
 			GestureStore gestureStore) {
 		this.actionListener = new ArrayList<ActionListener>();
 
@@ -105,27 +109,26 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 		this.gestureOverlay = gestureOverlay;
 		this.gestureStore = gestureStore;
 		this.gestureOverlay.addOnGesturePerformedListener(this);
-		this.gestureOverlay.setGestureStrokeType(GestureOverlayView.GESTURE_STROKE_TYPE_MULTIPLE);
 		this.sudokuView.registerListener(this);
 	}
 
 	public void onInput(int symbol) {
-		SudokuFieldView currentField = this.sudokuView.getCurrentFieldView();
+		SudokuCellView currentField = this.sudokuView.getCurrentCellView();
 		for (ActionListener listener : actionListener) {
 			if (this.noteMode) {
-				if (currentField.getField().isNoteSet(symbol)) {
-					listener.onNoteDelete(currentField.getField(), symbol);
+				if (currentField.getCell().isNoteSet(symbol)) {
+					listener.onNoteDelete(currentField.getCell(), symbol);
 					restrictCandidates();//because github issue #116 see below
 					                     //in case we deleted a now impossible,
 					                     // we immediately restrict so it cant be selected again
 				} else {
-					listener.onNoteAdd(currentField.getField(), symbol);
+					listener.onNoteAdd(currentField.getCell(), symbol);
 				}
 			} else {
-				if (symbol == currentField.getField().getCurrentValue()) {
-					listener.onDeleteEntry(currentField.getField());
+				if (symbol == currentField.getCell().getCurrentValue()) {
+					listener.onDeleteEntry(currentField.getCell());
 				} else {
-					listener.onAddEntry(currentField.getField(), symbol);
+					listener.onAddEntry(currentField.getCell(), symbol);
 				}
 			}
 		}
@@ -133,65 +136,147 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 		updateKeyboard();
 	}
 
-	public void onFieldSelected(SudokuFieldView view) {
-		SudokuFieldView currentField = this.sudokuView.getCurrentFieldView();
-		/* select for the first time -> set a solution */
-		if (currentField != view) {
-			this.noteMode = Profile.getInstance().isGestureActive() && !game.isFinished();
+	public void onCellSelected(SudokuCellView view, SelectEvent e) {
 
+		if(!game.isFinished()) {
+			if (Profile.getInstance().isGestureActive()) {
+				cellSelectedGestureMode(view, e);
+			} else {
+				cellSelectedNumPadMode(view, e);
+			}
+		}
+		updateKeyboard();
+
+	}
+
+	private void cellSelectedNumPadMode(SudokuCellView view, SelectEvent e) {
+		SudokuCellView currentField = this.sudokuView.getCurrentCellView();
+
+		boolean freshlySelected = currentField != view;
+
+		if (freshlySelected) {
+			this.noteMode = e == SelectEvent.Long;
+
+			this.sudokuView.setCurrentCellView(view);
+
+			//unpdate currentField
 			if (currentField != null)
 				currentField.deselect(true);
 
-			this.sudokuView.setCurrentFieldView(view);
 			currentField = view;
+
 			if (currentField != null)
 				currentField.setNoteState(this.noteMode);
+
 			currentField.select(this.game.isAssistanceAvailable(Assistances.markRowColumn));
-			if (currentField.getField().isEditable() && !game.isFinished()) {
+
+		} else {
+			this.noteMode = !this.noteMode;
+			currentField.setNoteState(this.noteMode);
+		}
+		if (currentField.getCell().isEditable()) {
+			restrictCandidates();
+			this.virtualKeyboard.setActivated(true);
+		} else {
+			this.virtualKeyboard.setActivated(false);
+		}
+	}
+
+	private void cellSelectedGestureMode(SudokuCellView view, SelectEvent e) {
+
+		SudokuCellView currentCellView = this.sudokuView.getCurrentCellView();
+		Cell currentCell;
+		/* select for the first time -> set a solution */
+		boolean freshlySelected = currentCellView != view;
+
+		if (freshlySelected) {
+			Log.d("gesture-verify", "cellSelectedGestureMode: freshly selected");
+
+			this.noteMode = e == SelectEvent.Long;
+			Log.d("gesture-verify", "cellSelectedGestureMode: this.noteMode =" + this.noteMode);
+
+			this.sudokuView.setCurrentCellView(view);
+
+			if (currentCellView != null)
+				currentCellView.deselect(true);
+
+			currentCellView = view;
+
+			if (currentCellView != null)
+				currentCellView.setNoteState(this.noteMode);
+
+			currentCellView.select(this.game.isAssistanceAvailable(Assistances.markRowColumn));
+
+			currentCell = currentCellView.getCell();
+
+			if (currentCell.isEditable()) {
 				restrictCandidates();
 				this.virtualKeyboard.setActivated(true);
 			} else {
 				this.virtualKeyboard.setActivated(false);
 			}
-		/* second click */
-		} else if (!game.isFinished()) {
-			/* gestures are enabled -> set solution via touchy swypy*/
-			if (Profile.getInstance().isGestureActive() && this.sudokuView.getCurrentFieldView().getField().isEditable()) {
-				this.gestureOverlay.setVisibility(View.VISIBLE);
+
+			if (e == SelectEvent.Long && currentCell.isEditable()) {
+				//Long press -> user can input note directly
+
+				Log.d("gesture-verify", "cellSelectedGestureMode: noteMode: " + noteMode);
+
 				restrictCandidates();
-				final TextView textView = new TextView(gestureOverlay.getContext());
-				textView.setTextColor(Color.YELLOW);
-				textView.setText(" " + gestureOverlay.getContext().getString(R.string.sf_sudoku_title_gesture_input) + " ");
-				textView.setTextSize(18);
-				this.gestureOverlay.addView(textView, new GestureOverlayView.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL));
-			/* no gestures -> toogle noteMode*/	
-			} else {
-				this.noteMode = !this.noteMode;
-				restrictCandidates();
+
+				if(noteMode)
+					gestureOverlay.activateForNote();
+				else
+					gestureOverlay.activateForEntry();
+
 			}
-			currentField.setNoteState(this.noteMode);
+		/* second click on the same cell*/
+		} else {
+			currentCell = currentCellView.getCell();
+			/* set solution via touchy swypy*/
+			if (currentCell.isEditable()) {
+
+				//long press switches between selected for note / entry
+				if(e == SelectEvent.Long) {
+					this.noteMode = !this.noteMode;
+					currentCellView.setNoteState(this.noteMode);
+					return;
+				}
+
+				restrictCandidates();
+
+
+				if(noteMode)
+					gestureOverlay.activateForNote();
+				else
+					gestureOverlay.activateForEntry();
+
+			} else {
+				//if it is not editable don't do anything
+				//this.noteMode = !this.noteMode;
+				//restrictCandidates();
+			}
 		}
 
-		updateKeyboard();
 	}
+
 
 	/**
 	 * Aktualisiert die Anzeige der Tastatur.
 	 */
 	void updateKeyboard() {
-		SudokuFieldView currentField = this.sudokuView.getCurrentFieldView();
+		SudokuCellView currentField = this.sudokuView.getCurrentCellView();
 		for (int i : this.game.getSudoku().getSudokuType().getSymbolIterator()) {
-			FieldViewStates state;
-			if      (currentField != null && i == currentField.getField().getCurrentValue() && !this.noteMode)
-				state = FieldViewStates.SELECTED_INPUT_BORDER;
+			CellViewStates state;
+			if      (currentField != null && i == currentField.getCell().getCurrentValue() && !this.noteMode)
+				state = CellViewStates.SELECTED_INPUT_BORDER;
 
-			else if (currentField != null &&      currentField.getField().isNoteSet(i)      && this.noteMode)
-				state = FieldViewStates.SELECTED_NOTE_BORDER;
+			else if (currentField != null &&      currentField.getCell().isNoteSet(i)      && this.noteMode)
+				state = CellViewStates.SELECTED_NOTE_BORDER;
 
 			else
-				state = FieldViewStates.DEFAULT_BORDER;
+				state = CellViewStates.DEFAULT_BORDER;
 
-			this.virtualKeyboard.markField(i, state);
+			this.virtualKeyboard.markCell(i, state);
 		}
 
 		this.virtualKeyboard.invalidate();
@@ -220,7 +305,7 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 		this.virtualKeyboard.setActivated(activated);
 	}
 
-	public void onFieldChanged(SudokuFieldView view) {
+	public void onCellChanged(SudokuCellView view) {
 		updateKeyboard();
 
 	}
@@ -237,39 +322,83 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 	 */
 	public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
 		ArrayList<Prediction> predictions = this.gestureStore.recognize(gesture);
-		if (predictions.size() > 0) {
-			Prediction prediction = predictions.get(0);
-			if (prediction.score > 1.5) {
-				for (ActionListener listener : this.actionListener) {
-					if (prediction.name.equals(String.valueOf(Symbol.getInstance().getMapping(this.sudokuView.getCurrentFieldView().getField().getCurrentValue())))) {
-						listener.onDeleteEntry(this.sudokuView.getCurrentFieldView().getField());
-					} else {
-						int number = Symbol.getInstance().getAbstract(prediction.name);
-						int save = this.sudokuView.getCurrentFieldView().getField().getCurrentValue();
-						if (number >= this.game.getSudoku().getSudokuType().getNumberOfSymbols())
-							number = -1;
-						if (number != -1 && this.game.isAssistanceAvailable(Assistances.restrictCandidates)) {
-							this.sudokuView.getCurrentFieldView().getField().setCurrentValue(number, false);
-							for (Constraint c : this.game.getSudoku().getSudokuType()) {
-								if (!c.isSaturated(this.game.getSudoku())) {
-									number = -2;
-									break;
-								}
-							}
-							this.sudokuView.getCurrentFieldView().getField().setCurrentValue(save, false);
-						}
-						if (number != -1 && number != -2) {
-							listener.onAddEntry(this.sudokuView.getCurrentFieldView().getField(), number);
-							this.gestureOverlay.setVisibility(View.INVISIBLE);
-						} else if (number == -1) {
-							Toast.makeText(this.sudokuView.getContext(),
-									this.sudokuView.getContext().getString(R.string.toast_invalid_symbol), Toast.LENGTH_SHORT).show();
-						} else if (number == -2) {
-							Toast.makeText(this.sudokuView.getContext(),
-									this.sudokuView.getContext().getString(R.string.toast_restricted_symbol), Toast.LENGTH_SHORT).show();
-						}
+		if (predictions.isEmpty())
+			return;//no predictions made
+
+		Prediction prediction = predictions.get(0);
+		if (prediction.score > 1.5) {
+			for (ActionListener listener : this.actionListener) {
+				if(noteMode)
+					updateNoteFromGesture(listener, prediction);
+				else
+					updateEntryFromGesture(listener, prediction);
+			}
+		}
+		overlay.removeAllViews();
+	}
+
+	private void updateEntryFromGesture(ActionListener listener, Prediction prediction) {
+		Cell currentCell = this.sudokuView.getCurrentCellView().getCell();
+		String currentValue = Symbol.getInstance().getMapping(currentCell.getCurrentValue());
+		if (prediction.name.equals(currentValue)) {
+			listener.onDeleteEntry(currentCell);
+		} else {
+			int number = Symbol.getInstance().getAbstract(prediction.name);
+			int save = currentCell.getCurrentValue();
+			if (number >= this.game.getSudoku().getSudokuType().getNumberOfSymbols())
+				number = -1;
+			if (number != -1 && this.game.isAssistanceAvailable(Assistances.restrictCandidates)) {
+				currentCell.setCurrentValue(number, false);
+				for (Constraint c : this.game.getSudoku().getSudokuType()) {
+					if (!c.isSaturated(this.game.getSudoku())) {
+						number = -2;
+						break;
 					}
 				}
+				currentCell.setCurrentValue(save, false);
+			}
+			if (number != -1 && number != -2) {
+				listener.onAddEntry(currentCell, number);
+				this.gestureOverlay.setVisibility(View.INVISIBLE);
+			} else if (number == -1) {
+				Toast.makeText(this.sudokuView.getContext(),
+						this.sudokuView.getContext().getString(R.string.toast_invalid_symbol), Toast.LENGTH_SHORT).show();
+			} else if (number == -2) {
+				Toast.makeText(this.sudokuView.getContext(),
+						this.sudokuView.getContext().getString(R.string.toast_restricted_symbol), Toast.LENGTH_SHORT).show();
+			}
+		}
+	}
+
+	private void updateNoteFromGesture(ActionListener listener, Prediction prediction) {
+		Cell currentCell = this.sudokuView.getCurrentCellView().getCell();
+		int predictedNote = Symbol.getInstance().getAbstract(prediction.name);
+
+		if (currentCell.isNoteSet(predictedNote)) {
+			listener.onNoteDelete(currentCell, predictedNote);
+		} else {
+			int save = this.sudokuView.getCurrentCellView().getCell().getCurrentValue();
+			if (predictedNote >= this.game.getSudoku().getSudokuType().getNumberOfSymbols())
+				predictedNote = -1;
+			if (predictedNote != -1 && this.game.isAssistanceAvailable(Assistances.restrictCandidates)) {
+				this.sudokuView.getCurrentCellView().getCell().setCurrentValue(predictedNote, false);
+				for (Constraint c : this.game.getSudoku().getSudokuType()) {
+					if (!c.isSaturated(this.game.getSudoku())) {
+						predictedNote = -2;
+						break;
+					}
+				}
+				currentCell.toggleNote(predictedNote);
+			}
+			if (predictedNote != -1 && predictedNote != -2) {
+				listener.onNoteAdd(currentCell, predictedNote);
+				this.gestureOverlay.setVisibility(View.INVISIBLE);
+			} else if (predictedNote == -1) {
+				Toast.makeText(this.sudokuView.getContext(),
+						this.sudokuView.getContext().getString(R.string.toast_invalid_symbol), Toast.LENGTH_SHORT).show();
+			} else if (predictedNote == -2) {
+				Toast.makeText(this.sudokuView.getContext(),
+						this.sudokuView.getContext().getString(R.string.toast_restricted_symbol), Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
@@ -279,16 +408,16 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 	 */
 	void restrictCandidates() {
 		this.virtualKeyboard.enableAllButtons();
-		SudokuFieldView currectFieldView = this.sudokuView.getCurrentFieldView();
+		SudokuCellView currectFieldView = this.sudokuView.getCurrentCellView();
 		if (currectFieldView == null)
 			return;//maybe there is no focus, then pass
 
-		Field currentField = currectFieldView.getField();
+		Cell currentCell = currectFieldView.getCell();
 		SudokuType type = this.game.getSudoku().getSudokuType();
 		/* only if assistance 'input assistance' if enabled */
 		if (this.game.isAssistanceAvailable(Assistances.restrictCandidates)) {
 
-			Set<Integer> allPossible = getRestrictedSymbolSet(this.game.getSudoku(), currentField, noteMode);
+			Set<Integer> allPossible = getRestrictedSymbolSet(this.game.getSudoku(), currentCell, noteMode);
 
 			for (int i : type.getSymbolIterator())
 				if (!allPossible.contains(i))
@@ -302,23 +431,23 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
           i.e. "grey out values that apprear in the same constraint" is selected.
        caution
           */
-	private synchronized Set<Integer> getRestrictedSymbolSet(Sudoku s, Field currentField,
+	private synchronized Set<Integer> getRestrictedSymbolSet(Sudoku s, Cell currentCell,
 																      boolean noteMode){
 		Set<Integer> restrictedSet = new HashSet<>();
         SudokuType type = s.getSudokuType();
 		List<Constraint> relevantConstraints = new ArrayList<>();
 		for (Constraint c : type)
-			if(c.getPositions().contains(s.getPosition(currentField.getId())))
+			if(c.getPositions().contains(s.getPosition(currentCell.getId())))
 				relevantConstraints.add(c);
 
 		/* save val of current view */
-		int save = currentField.getCurrentValue();
+		int save = currentCell.getCurrentValue();
 
 		/* iterate over all symbols e.g. 0-8 */
 		for (int i : type.getSymbolIterator()) {
 
-			/* set fieldval to current symbol */
-			currentField.setCurrentValue(i, false);
+			/* set cellval to current symbol */
+			currentCell.setCurrentValue(i, false);
 
 			boolean possible = true;
 			/* for every constraint */
@@ -334,9 +463,9 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 			if (possible)
 				restrictedSet.add(i);
 
-			currentField.setCurrentValue(Field.EMPTYVAL, false); // unneccessary
+			currentCell.setCurrentValue(Cell.EMPTYVAL, false); // unneccessary
 		}
-		currentField.setCurrentValue(save, false);
+		currentCell.setCurrentValue(save, false);
 
 		/* Github Issue #116
 		 * it would be stupid if we were in the mode where notes are set
@@ -345,7 +474,7 @@ public class UserInteractionMediator implements OnGesturePerformedListener, Inpu
 		Set<Integer> setNotes =	new HashSet<>();
 		if (noteMode)
 			for (int i : type.getSymbolIterator())
-				if (currentField.isNoteSet(i))
+				if (currentCell.isNoteSet(i))
 					setNotes.add(i);
 
 

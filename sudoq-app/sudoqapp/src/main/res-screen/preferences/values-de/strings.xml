@@ -9,8 +9,8 @@
     <string name="profile_preference_title_assistance_markRowColumn">Zeile/Spalte markieren</string>
     <string name="profile_preference_title_assistance_markWrongSymbol">Falsche Symbole markieren</string>
     <string name="profile_preference_title_assistance_restrictCandidates">Eingabehilfe</string>
-    <string name="profile_preference_title_assistance_allowSolveSpecificField">Ausgewähltes Feld lösen</string>
-    <string name="profile_preference_title_assistance_allowSolveRandomField">Zufälliges Feld lösen</string>
+    <string name="profile_preference_title_assistance_allowSolveSpecificCell">Ausgewähltes Feld lösen</string>
+    <string name="profile_preference_title_assistance_allowSolveRandomCell">Zufälliges Feld lösen</string>
     <string name="profile_preference_title_assistance_allowGetHint">Tipps</string>
     <string name="profile_preference_title_assistance_autoAdjustNotes">Notizen automatisch anpassen</string>
     <string name="profile_preference_title_profile">Profil</string>
@@ -22,8 +22,28 @@
 
     <string name="profile_preference_new_profile">unbennant</string>
 
+    <!-- restrict types -->
+    <string name="advanced_settings_restrict_types_empty_warning">Du musst einen Typ übriglassen. Sonst kannst du nicht spielen.</string>
+    <!-- Sudoku Types -->
+    <string name="advanced_settings_restrict_item_standard_9x9"  >Standard</string>
+    <string name="advanced_settings_restrict_item_standard_16x16">16x16</string>
+    <string name="advanced_settings_restrict_item_standard_6x6"  >6x6</string>
+    <string name="advanced_settings_restrict_item_standard_4x4"  >4x4</string>
+    <string name="advanced_settings_restrict_item_squiggly_a_9x9">Squiggly-Sudoku 9x9</string>
+    <string name="advanced_settings_restrict_item_squiggly_b_9x9">Squoggly-Sudoku 9x9</string>
+    <string name="advanced_settings_restrict_item_stairstep_9x9" >Treppen-Sudoku 9x9</string>
+    <string name="advanced_settings_restrict_item_samurai"       >Samurai-Sudoku</string>
+    <string name="advanced_settings_restrict_item_hyper"         >Hyper-Sudoku</string>
+    <string name="advanced_settings_restrict_item_xsudoku"       >X-Sudoku</string>
+
     <string name="profile_preference_title_crash_trigger">App abstürzen lassen</string>
     <string name="profile_preference_title_intelligent_assistant">Intelligenter Assistent</string>
+    <string name="language_english">Englisch</string>
+    <string name="language_french">Französisch</string>
+    <string name="language_german">Deutsch</string>
+    <string name="language_system">Systemsprache</string>
+    <string name="advanced_settings_language_spinner_label">Sprache</string>
+    <string name="advanced_settings_language_spinner_dummy">Wähle eine Sprache</string>
 
 
 </resources>

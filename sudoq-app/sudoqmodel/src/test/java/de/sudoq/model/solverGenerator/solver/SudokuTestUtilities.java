@@ -13,7 +13,7 @@ public final class SudokuTestUtilities {
 		StringBuilder sb = new StringBuilder();
 		for (int j = 0; j < sudoku.getSudokuType().getSize().getY(); j++) {
 			for (int i = 0; i < sudoku.getSudokuType().getSize().getX(); i++) {
-				int value = sudoku.getField(Position.get(i, j)).getCurrentValue();
+				int value = sudoku.getCell(Position.get(i, j)).getCurrentValue();
 				String op = value + "";
 				if (String.valueOf(value).length() < 2)
 					op = " " + value;

@@ -11,14 +11,13 @@ import java.util.Map;
 import de.sudoq.model.files.FileManagerTests;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
+import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Constraint;
-import de.sudoq.model.sudoku.Field;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.sudokuTypes.StandardSudokuType6x6Tests;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
@@ -37,7 +36,7 @@ public class SolverTests2 extends Solver {
 		FileManagerTests.init();
 		initialSudoku = new Sudoku(SudokuType.getSudokuType(standard9x9));
 		for (int i=0; i < 8; i++)
-			initialSudoku.getField(Position.get(i,0)).setCurrentValue(i);
+			initialSudoku.getCell(Position.get(i,0)).setCurrentValue(i);
 
 	}
 
@@ -95,29 +94,29 @@ public class SolverTests2 extends Solver {
 		          "8     0  "+
 		          " 7  1  6 ";
 
-		sudoku.getField(Position.get(0, 0)).setCurrentValue(0);
-		sudoku.getField(Position.get(5, 0)).setCurrentValue(6);
-		sudoku.getField(Position.get(7, 0)).setCurrentValue(8);
-		sudoku.getField(Position.get(1, 1)).setCurrentValue(2);
-		sudoku.getField(Position.get(4, 1)).setCurrentValue(1);
-		sudoku.getField(Position.get(8, 1)).setCurrentValue(7);
-		sudoku.getField(Position.get(2, 2)).setCurrentValue(8);
-		sudoku.getField(Position.get(3, 2)).setCurrentValue(5);
-		sudoku.getField(Position.get(6, 2)).setCurrentValue(4);
-		sudoku.getField(Position.get(2, 3)).setCurrentValue(4);
-		sudoku.getField(Position.get(3, 3)).setCurrentValue(2);
-		sudoku.getField(Position.get(6, 3)).setCurrentValue(8);
-		sudoku.getField(Position.get(1, 4)).setCurrentValue(0);
-		sudoku.getField(Position.get(4, 4)).setCurrentValue(7);
-		sudoku.getField(Position.get(8, 4)).setCurrentValue(1);
-		sudoku.getField(Position.get(0, 5)).setCurrentValue(5);
-		sudoku.getField(Position.get(5, 5)).setCurrentValue(3);
-		sudoku.getField(Position.get(0, 6)).setCurrentValue(2);
-		sudoku.getField(Position.get(7, 6)).setCurrentValue(0);
-		sudoku.getField(Position.get(1, 7)).setCurrentValue(3);
-		sudoku.getField(Position.get(8, 7)).setCurrentValue(6);
-		sudoku.getField(Position.get(2, 8)).setCurrentValue(6);
-		sudoku.getField(Position.get(6, 8)).setCurrentValue(2);
+		sudoku.getCell(Position.get(0, 0)).setCurrentValue(0);
+		sudoku.getCell(Position.get(5, 0)).setCurrentValue(6);
+		sudoku.getCell(Position.get(7, 0)).setCurrentValue(8);
+		sudoku.getCell(Position.get(1, 1)).setCurrentValue(2);
+		sudoku.getCell(Position.get(4, 1)).setCurrentValue(1);
+		sudoku.getCell(Position.get(8, 1)).setCurrentValue(7);
+		sudoku.getCell(Position.get(2, 2)).setCurrentValue(8);
+		sudoku.getCell(Position.get(3, 2)).setCurrentValue(5);
+		sudoku.getCell(Position.get(6, 2)).setCurrentValue(4);
+		sudoku.getCell(Position.get(2, 3)).setCurrentValue(4);
+		sudoku.getCell(Position.get(3, 3)).setCurrentValue(2);
+		sudoku.getCell(Position.get(6, 3)).setCurrentValue(8);
+		sudoku.getCell(Position.get(1, 4)).setCurrentValue(0);
+		sudoku.getCell(Position.get(4, 4)).setCurrentValue(7);
+		sudoku.getCell(Position.get(8, 4)).setCurrentValue(1);
+		sudoku.getCell(Position.get(0, 5)).setCurrentValue(5);
+		sudoku.getCell(Position.get(5, 5)).setCurrentValue(3);
+		sudoku.getCell(Position.get(0, 6)).setCurrentValue(2);
+		sudoku.getCell(Position.get(7, 6)).setCurrentValue(0);
+		sudoku.getCell(Position.get(1, 7)).setCurrentValue(3);
+		sudoku.getCell(Position.get(8, 7)).setCurrentValue(6);
+		sudoku.getCell(Position.get(2, 8)).setCurrentValue(6);
+		sudoku.getCell(Position.get(6, 8)).setCurrentValue(2);
 	}
 
 	@Test
@@ -131,13 +130,13 @@ public class SolverTests2 extends Solver {
 			SolveDerivation sd = null;
 			for (SolveDerivation d: solution.getDerivations()) sd = d; //getLastelement
 			if (solution.getAction() != null) {
-				assertNotEquals(this.sudoku.getField(sd.getFieldIterator().next().getPosition()).getCurrentValue(),Field.EMPTYVAL);
+				assertNotEquals(this.sudoku.getCell(sd.getCellIterator().next().getPosition()).getCurrentValue(), Cell.EMPTYVAL);
 			} else {
 				solution = null;
 			}
 		}
 
-		for (Field f : this.sudoku) {
+		for (Cell f : this.sudoku) {
 			assertNotEquals(f.getCurrentValue(), -1);
 		}
 	}
@@ -154,22 +153,22 @@ public class SolverTests2 extends Solver {
 			for (SolveDerivation d: solution.getDerivations()) sd = d; //getLastelement
 			if (solution.getAction() != null) {
 				solution.getAction().execute();
-				assertNotEquals(this.sudoku.getField(sd.getFieldIterator().next().getPosition()).getCurrentValue()
-						       ,Field.EMPTYVAL);
+				assertNotEquals(this.sudoku.getCell(sd.getCellIterator().next().getPosition()).getCurrentValue()
+						       , Cell.EMPTYVAL);
 			} else {
 				solution = null;
 			}
 		}
 
-		for (Field f : this.sudoku) {
+		for (Cell f : this.sudoku) {
 			assertNotEquals(f.getCurrentValue(), -1);
 		}
 	}
 
 	@Test
 	public void solveOneIncorrect() {
-		sudoku.getField(Position.get(0, 0)).setCurrentValue(0);
-		sudoku.getField(Position.get(1, 0)).setCurrentValue(0);
+		sudoku.getCell(Position.get(0, 0)).setCurrentValue(0);
+		sudoku.getCell(Position.get(1, 0)).setCurrentValue(0);
 		assertNull(solver.solveOne(true));
 	}
 
@@ -185,8 +184,8 @@ public class SolverTests2 extends Solver {
 				assertNotNull(sd);
 		}
 
-		for (Field f : this.sudoku)
-			assertNotEquals(f.getCurrentValue(), Field.EMPTYVAL);
+		for (Cell f : this.sudoku)
+			assertNotEquals(f.getCurrentValue(), Cell.EMPTYVAL);
 
 	}
 
@@ -204,15 +203,15 @@ public class SolverTests2 extends Solver {
 
 		SudokuTestUtilities.printSudoku(sudoku);
 
-		for (Field f : this.sudoku) {
-			assertNotEquals(f.getCurrentValue(),Field.EMPTYVAL);
+		for (Cell f : this.sudoku) {
+			assertNotEquals(f.getCurrentValue(), Cell.EMPTYVAL);
 		}
 	}
 
 	@Test
 	public void solveAllIncorrect() {
-		sudoku.getField(Position.get(0, 0)).setCurrentValue(0);
-		sudoku.getField(Position.get(1, 0)).setCurrentValue(0);
+		sudoku.getCell(Position.get(0, 0)).setCurrentValue(0);
+		sudoku.getCell(Position.get(1, 0)).setCurrentValue(0);
 		assertFalse(solver.solveAll(true, false));
 	}
 
@@ -247,118 +246,118 @@ public class SolverTests2 extends Solver {
 
 	@Test
 	public void testStandard16x16() {
-		sudoku16x16.getField(Position.get( 2, 0)).setCurrentValue(15);
-		sudoku16x16.getField(Position.get( 4, 0)).setCurrentValue(9);
-		sudoku16x16.getField(Position.get( 6, 0)).setCurrentValue(12);
-		sudoku16x16.getField(Position.get( 7, 0)).setCurrentValue(7);
-		sudoku16x16.getField(Position.get( 8, 0)).setCurrentValue(3);
-		sudoku16x16.getField(Position.get( 9, 0)).setCurrentValue(4);
-		sudoku16x16.getField(Position.get(11, 0)).setCurrentValue(5);
-		sudoku16x16.getField(Position.get(12, 0)).setCurrentValue(10);
-		sudoku16x16.getField(Position.get(13, 0)).setCurrentValue(14);
-		sudoku16x16.getField(Position.get( 0, 1)).setCurrentValue(12);
-		sudoku16x16.getField(Position.get( 4, 1)).setCurrentValue(5);
-		sudoku16x16.getField(Position.get(11, 1)).setCurrentValue(11);
-		sudoku16x16.getField(Position.get(12, 1)).setCurrentValue(13);
-		sudoku16x16.getField(Position.get(13, 1)).setCurrentValue(9);
-		sudoku16x16.getField(Position.get(14, 1)).setCurrentValue(3);
-		sudoku16x16.getField(Position.get(1, 2)).setCurrentValue(6);
-		sudoku16x16.getField(Position.get(2, 2)).setCurrentValue(3);
-		sudoku16x16.getField(Position.get(3, 2)).setCurrentValue(10);
-		sudoku16x16.getField(Position.get(4, 2)).setCurrentValue(0);
-		sudoku16x16.getField(Position.get(6, 2)).setCurrentValue(14);
-		sudoku16x16.getField(Position.get(8, 2)).setCurrentValue(9);
-		sudoku16x16.getField(Position.get(11, 2)).setCurrentValue(13);
-		sudoku16x16.getField(Position.get(12, 2)).setCurrentValue(5);
-		sudoku16x16.getField(Position.get(13, 2)).setCurrentValue(11);
-		sudoku16x16.getField(Position.get(15, 2)).setCurrentValue(1);
-		sudoku16x16.getField(Position.get(0, 3)).setCurrentValue(4);
-		sudoku16x16.getField(Position.get(1, 3)).setCurrentValue(5);
-		sudoku16x16.getField(Position.get(2, 3)).setCurrentValue(8);
-		sudoku16x16.getField(Position.get(4, 3)).setCurrentValue(3);
-		sudoku16x16.getField(Position.get(5, 3)).setCurrentValue(13);
-		sudoku16x16.getField(Position.get(9, 3)).setCurrentValue(2);
-		sudoku16x16.getField(Position.get(11, 3)).setCurrentValue(0);
-		sudoku16x16.getField(Position.get(12, 3)).setCurrentValue(15);
-		sudoku16x16.getField(Position.get(14, 3)).setCurrentValue(12);
-		sudoku16x16.getField(Position.get(0, 4)).setCurrentValue(15);
-		sudoku16x16.getField(Position.get(2, 4)).setCurrentValue(5);
-		sudoku16x16.getField(Position.get(5, 4)).setCurrentValue(4);
-		sudoku16x16.getField(Position.get(6, 4)).setCurrentValue(6);
-		sudoku16x16.getField(Position.get(9, 4)).setCurrentValue(13);
-		sudoku16x16.getField(Position.get(11, 4)).setCurrentValue(3);
-		sudoku16x16.getField(Position.get(13, 4)).setCurrentValue(2);
-		sudoku16x16.getField(Position.get(0, 5)).setCurrentValue(8);
-		sudoku16x16.getField(Position.get(1, 5)).setCurrentValue(11);
-		sudoku16x16.getField(Position.get(5, 5)).setCurrentValue(12);
-		sudoku16x16.getField(Position.get(8, 5)).setCurrentValue(2);
-		sudoku16x16.getField(Position.get(11, 5)).setCurrentValue(4);
-		sudoku16x16.getField(Position.get(12, 5)).setCurrentValue(1);
-		sudoku16x16.getField(Position.get(0, 6)).setCurrentValue(2);
-		sudoku16x16.getField(Position.get(3, 6)).setCurrentValue(12);
-		sudoku16x16.getField(Position.get(4, 6)).setCurrentValue(14);
-		sudoku16x16.getField(Position.get(7, 6)).setCurrentValue(10);
-		sudoku16x16.getField(Position.get(9, 6)).setCurrentValue(0);
-		sudoku16x16.getField(Position.get(12, 6)).setCurrentValue(3);
-		sudoku16x16.getField(Position.get(15, 6)).setCurrentValue(9);
-		sudoku16x16.getField(Position.get(0, 7)).setCurrentValue(3);
-		sudoku16x16.getField(Position.get(1, 7)).setCurrentValue(9);
-		sudoku16x16.getField(Position.get(2, 7)).setCurrentValue(1);
-		sudoku16x16.getField(Position.get(3, 7)).setCurrentValue(14);
-		sudoku16x16.getField(Position.get(5, 7)).setCurrentValue(2);
-		sudoku16x16.getField(Position.get(8, 7)).setCurrentValue(10);
-		sudoku16x16.getField(Position.get(9, 7)).setCurrentValue(7);
-		sudoku16x16.getField(Position.get(10, 7)).setCurrentValue(8);
-		sudoku16x16.getField(Position.get(11, 7)).setCurrentValue(6);
-		sudoku16x16.getField(Position.get(0, 8)).setCurrentValue(11);
-		sudoku16x16.getField(Position.get(1, 8)).setCurrentValue(14);
-		sudoku16x16.getField(Position.get(2, 8)).setCurrentValue(7);
-		sudoku16x16.getField(Position.get(3, 8)).setCurrentValue(5);
-		sudoku16x16.getField(Position.get(5, 8)).setCurrentValue(0);
-		sudoku16x16.getField(Position.get(6, 8)).setCurrentValue(3);
-		sudoku16x16.getField(Position.get(10, 8)).setCurrentValue(13);
-		sudoku16x16.getField(Position.get(1, 9)).setCurrentValue(8);
-		sudoku16x16.getField(Position.get(2, 9)).setCurrentValue(12);
-		sudoku16x16.getField(Position.get(4, 9)).setCurrentValue(2);
-		sudoku16x16.getField(Position.get(11, 9)).setCurrentValue(7);
-		sudoku16x16.getField(Position.get(14, 9)).setCurrentValue(1);
-		sudoku16x16.getField(Position.get(1, 10)).setCurrentValue(10);
-		sudoku16x16.getField(Position.get(2, 10)).setCurrentValue(9);
-		sudoku16x16.getField(Position.get(5, 10)).setCurrentValue(1);
-		sudoku16x16.getField(Position.get(6, 10)).setCurrentValue(15);
-		sudoku16x16.getField(Position.get(7, 10)).setCurrentValue(13);
-		sudoku16x16.getField(Position.get(8, 10)).setCurrentValue(5);
-		sudoku16x16.getField(Position.get(9, 10)).setCurrentValue(11);
-		sudoku16x16.getField(Position.get(10, 10)).setCurrentValue(2);
-		sudoku16x16.getField(Position.get(11, 10)).setCurrentValue(8);
-		sudoku16x16.getField(Position.get(12, 10)).setCurrentValue(14);
-		sudoku16x16.getField(Position.get(3, 11)).setCurrentValue(13);
-		sudoku16x16.getField(Position.get(7, 11)).setCurrentValue(11);
-		sudoku16x16.getField(Position.get(9, 11)).setCurrentValue(12);
-		sudoku16x16.getField(Position.get(15, 11)).setCurrentValue(6);
-		sudoku16x16.getField(Position.get(0, 12)).setCurrentValue(14);
-		sudoku16x16.getField(Position.get(2, 12)).setCurrentValue(13);
-		sudoku16x16.getField(Position.get(4, 12)).setCurrentValue(8);
-		sudoku16x16.getField(Position.get(6, 12)).setCurrentValue(1);
-		sudoku16x16.getField(Position.get(8, 12)).setCurrentValue(6);
-		sudoku16x16.getField(Position.get(9, 12)).setCurrentValue(10);
-		sudoku16x16.getField(Position.get(13, 12)).setCurrentValue(5);
-		sudoku16x16.getField(Position.get(15, 12)).setCurrentValue(15);
-		sudoku16x16.getField(Position.get(2, 13)).setCurrentValue(0);
-		sudoku16x16.getField(Position.get(4, 13)).setCurrentValue(10);
-		sudoku16x16.getField(Position.get(5, 13)).setCurrentValue(9);
-		sudoku16x16.getField(Position.get(12, 13)).setCurrentValue(2);
-		sudoku16x16.getField(Position.get(6, 14)).setCurrentValue(13);
-		sudoku16x16.getField(Position.get(12, 14)).setCurrentValue(6);
-		sudoku16x16.getField(Position.get(13, 14)).setCurrentValue(12);
-		sudoku16x16.getField(Position.get(14, 14)).setCurrentValue(7);
-		sudoku16x16.getField(Position.get(15, 14)).setCurrentValue(10);
-		sudoku16x16.getField(Position.get(3, 15)).setCurrentValue(1);
-		sudoku16x16.getField(Position.get(5, 15)).setCurrentValue(11);
-		sudoku16x16.getField(Position.get(7, 15)).setCurrentValue(2);
-		sudoku16x16.getField(Position.get(9, 15)).setCurrentValue(15);
-		sudoku16x16.getField(Position.get(12, 15)).setCurrentValue(0);
-		sudoku16x16.getField(Position.get(14, 15)).setCurrentValue(14);
+		sudoku16x16.getCell(Position.get( 2, 0)).setCurrentValue(15);
+		sudoku16x16.getCell(Position.get( 4, 0)).setCurrentValue(9);
+		sudoku16x16.getCell(Position.get( 6, 0)).setCurrentValue(12);
+		sudoku16x16.getCell(Position.get( 7, 0)).setCurrentValue(7);
+		sudoku16x16.getCell(Position.get( 8, 0)).setCurrentValue(3);
+		sudoku16x16.getCell(Position.get( 9, 0)).setCurrentValue(4);
+		sudoku16x16.getCell(Position.get(11, 0)).setCurrentValue(5);
+		sudoku16x16.getCell(Position.get(12, 0)).setCurrentValue(10);
+		sudoku16x16.getCell(Position.get(13, 0)).setCurrentValue(14);
+		sudoku16x16.getCell(Position.get( 0, 1)).setCurrentValue(12);
+		sudoku16x16.getCell(Position.get( 4, 1)).setCurrentValue(5);
+		sudoku16x16.getCell(Position.get(11, 1)).setCurrentValue(11);
+		sudoku16x16.getCell(Position.get(12, 1)).setCurrentValue(13);
+		sudoku16x16.getCell(Position.get(13, 1)).setCurrentValue(9);
+		sudoku16x16.getCell(Position.get(14, 1)).setCurrentValue(3);
+		sudoku16x16.getCell(Position.get(1, 2)).setCurrentValue(6);
+		sudoku16x16.getCell(Position.get(2, 2)).setCurrentValue(3);
+		sudoku16x16.getCell(Position.get(3, 2)).setCurrentValue(10);
+		sudoku16x16.getCell(Position.get(4, 2)).setCurrentValue(0);
+		sudoku16x16.getCell(Position.get(6, 2)).setCurrentValue(14);
+		sudoku16x16.getCell(Position.get(8, 2)).setCurrentValue(9);
+		sudoku16x16.getCell(Position.get(11, 2)).setCurrentValue(13);
+		sudoku16x16.getCell(Position.get(12, 2)).setCurrentValue(5);
+		sudoku16x16.getCell(Position.get(13, 2)).setCurrentValue(11);
+		sudoku16x16.getCell(Position.get(15, 2)).setCurrentValue(1);
+		sudoku16x16.getCell(Position.get(0, 3)).setCurrentValue(4);
+		sudoku16x16.getCell(Position.get(1, 3)).setCurrentValue(5);
+		sudoku16x16.getCell(Position.get(2, 3)).setCurrentValue(8);
+		sudoku16x16.getCell(Position.get(4, 3)).setCurrentValue(3);
+		sudoku16x16.getCell(Position.get(5, 3)).setCurrentValue(13);
+		sudoku16x16.getCell(Position.get(9, 3)).setCurrentValue(2);
+		sudoku16x16.getCell(Position.get(11, 3)).setCurrentValue(0);
+		sudoku16x16.getCell(Position.get(12, 3)).setCurrentValue(15);
+		sudoku16x16.getCell(Position.get(14, 3)).setCurrentValue(12);
+		sudoku16x16.getCell(Position.get(0, 4)).setCurrentValue(15);
+		sudoku16x16.getCell(Position.get(2, 4)).setCurrentValue(5);
+		sudoku16x16.getCell(Position.get(5, 4)).setCurrentValue(4);
+		sudoku16x16.getCell(Position.get(6, 4)).setCurrentValue(6);
+		sudoku16x16.getCell(Position.get(9, 4)).setCurrentValue(13);
+		sudoku16x16.getCell(Position.get(11, 4)).setCurrentValue(3);
+		sudoku16x16.getCell(Position.get(13, 4)).setCurrentValue(2);
+		sudoku16x16.getCell(Position.get(0, 5)).setCurrentValue(8);
+		sudoku16x16.getCell(Position.get(1, 5)).setCurrentValue(11);
+		sudoku16x16.getCell(Position.get(5, 5)).setCurrentValue(12);
+		sudoku16x16.getCell(Position.get(8, 5)).setCurrentValue(2);
+		sudoku16x16.getCell(Position.get(11, 5)).setCurrentValue(4);
+		sudoku16x16.getCell(Position.get(12, 5)).setCurrentValue(1);
+		sudoku16x16.getCell(Position.get(0, 6)).setCurrentValue(2);
+		sudoku16x16.getCell(Position.get(3, 6)).setCurrentValue(12);
+		sudoku16x16.getCell(Position.get(4, 6)).setCurrentValue(14);
+		sudoku16x16.getCell(Position.get(7, 6)).setCurrentValue(10);
+		sudoku16x16.getCell(Position.get(9, 6)).setCurrentValue(0);
+		sudoku16x16.getCell(Position.get(12, 6)).setCurrentValue(3);
+		sudoku16x16.getCell(Position.get(15, 6)).setCurrentValue(9);
+		sudoku16x16.getCell(Position.get(0, 7)).setCurrentValue(3);
+		sudoku16x16.getCell(Position.get(1, 7)).setCurrentValue(9);
+		sudoku16x16.getCell(Position.get(2, 7)).setCurrentValue(1);
+		sudoku16x16.getCell(Position.get(3, 7)).setCurrentValue(14);
+		sudoku16x16.getCell(Position.get(5, 7)).setCurrentValue(2);
+		sudoku16x16.getCell(Position.get(8, 7)).setCurrentValue(10);
+		sudoku16x16.getCell(Position.get(9, 7)).setCurrentValue(7);
+		sudoku16x16.getCell(Position.get(10, 7)).setCurrentValue(8);
+		sudoku16x16.getCell(Position.get(11, 7)).setCurrentValue(6);
+		sudoku16x16.getCell(Position.get(0, 8)).setCurrentValue(11);
+		sudoku16x16.getCell(Position.get(1, 8)).setCurrentValue(14);
+		sudoku16x16.getCell(Position.get(2, 8)).setCurrentValue(7);
+		sudoku16x16.getCell(Position.get(3, 8)).setCurrentValue(5);
+		sudoku16x16.getCell(Position.get(5, 8)).setCurrentValue(0);
+		sudoku16x16.getCell(Position.get(6, 8)).setCurrentValue(3);
+		sudoku16x16.getCell(Position.get(10, 8)).setCurrentValue(13);
+		sudoku16x16.getCell(Position.get(1, 9)).setCurrentValue(8);
+		sudoku16x16.getCell(Position.get(2, 9)).setCurrentValue(12);
+		sudoku16x16.getCell(Position.get(4, 9)).setCurrentValue(2);
+		sudoku16x16.getCell(Position.get(11, 9)).setCurrentValue(7);
+		sudoku16x16.getCell(Position.get(14, 9)).setCurrentValue(1);
+		sudoku16x16.getCell(Position.get(1, 10)).setCurrentValue(10);
+		sudoku16x16.getCell(Position.get(2, 10)).setCurrentValue(9);
+		sudoku16x16.getCell(Position.get(5, 10)).setCurrentValue(1);
+		sudoku16x16.getCell(Position.get(6, 10)).setCurrentValue(15);
+		sudoku16x16.getCell(Position.get(7, 10)).setCurrentValue(13);
+		sudoku16x16.getCell(Position.get(8, 10)).setCurrentValue(5);
+		sudoku16x16.getCell(Position.get(9, 10)).setCurrentValue(11);
+		sudoku16x16.getCell(Position.get(10, 10)).setCurrentValue(2);
+		sudoku16x16.getCell(Position.get(11, 10)).setCurrentValue(8);
+		sudoku16x16.getCell(Position.get(12, 10)).setCurrentValue(14);
+		sudoku16x16.getCell(Position.get(3, 11)).setCurrentValue(13);
+		sudoku16x16.getCell(Position.get(7, 11)).setCurrentValue(11);
+		sudoku16x16.getCell(Position.get(9, 11)).setCurrentValue(12);
+		sudoku16x16.getCell(Position.get(15, 11)).setCurrentValue(6);
+		sudoku16x16.getCell(Position.get(0, 12)).setCurrentValue(14);
+		sudoku16x16.getCell(Position.get(2, 12)).setCurrentValue(13);
+		sudoku16x16.getCell(Position.get(4, 12)).setCurrentValue(8);
+		sudoku16x16.getCell(Position.get(6, 12)).setCurrentValue(1);
+		sudoku16x16.getCell(Position.get(8, 12)).setCurrentValue(6);
+		sudoku16x16.getCell(Position.get(9, 12)).setCurrentValue(10);
+		sudoku16x16.getCell(Position.get(13, 12)).setCurrentValue(5);
+		sudoku16x16.getCell(Position.get(15, 12)).setCurrentValue(15);
+		sudoku16x16.getCell(Position.get(2, 13)).setCurrentValue(0);
+		sudoku16x16.getCell(Position.get(4, 13)).setCurrentValue(10);
+		sudoku16x16.getCell(Position.get(5, 13)).setCurrentValue(9);
+		sudoku16x16.getCell(Position.get(12, 13)).setCurrentValue(2);
+		sudoku16x16.getCell(Position.get(6, 14)).setCurrentValue(13);
+		sudoku16x16.getCell(Position.get(12, 14)).setCurrentValue(6);
+		sudoku16x16.getCell(Position.get(13, 14)).setCurrentValue(12);
+		sudoku16x16.getCell(Position.get(14, 14)).setCurrentValue(7);
+		sudoku16x16.getCell(Position.get(15, 14)).setCurrentValue(10);
+		sudoku16x16.getCell(Position.get(3, 15)).setCurrentValue(1);
+		sudoku16x16.getCell(Position.get(5, 15)).setCurrentValue(11);
+		sudoku16x16.getCell(Position.get(7, 15)).setCurrentValue(2);
+		sudoku16x16.getCell(Position.get(9, 15)).setCurrentValue(15);
+		sudoku16x16.getCell(Position.get(12, 15)).setCurrentValue(0);
+		sudoku16x16.getCell(Position.get(14, 15)).setCurrentValue(14);
 
 		sudoku16x16.setComplexity(Complexity.arbitrary);
 		Solver solver = new Solver(sudoku16x16);
@@ -368,7 +367,7 @@ public class SolverTests2 extends Solver {
 		// copy solution to current value
 		for (int j = 0; j < sudoku16x16.getSudokuType().getSize().getY(); j++) {
 			for (int i = 0; i < sudoku16x16.getSudokuType().getSize().getX(); i++) {
-				sudoku16x16.getField(Position.get(i, j)).setCurrentValue(solution16x16.get(Position.get(i, j)));
+				sudoku16x16.getCell(Position.get(i, j)).setCurrentValue(solution16x16.get(Position.get(i, j)));
 			}
 		}
 
@@ -382,7 +381,7 @@ public class SolverTests2 extends Solver {
 			StringBuilder sb = new StringBuilder();
 			for (int j = 0; j < sudoku16x16.getSudokuType().getSize().getY(); j++) {
 				for (int i = 0; i < sudoku16x16.getSudokuType().getSize().getX(); i++) {
-					int value = sudoku16x16.getField(Position.get(i, j)).getCurrentValue();
+					int value = sudoku16x16.getCell(Position.get(i, j)).getCurrentValue();
 					String op = value + "";
 					if (value < 10)
 						op = " " + value;
@@ -398,110 +397,110 @@ public class SolverTests2 extends Solver {
 
 	@Test
 	public void testStandard16x16No2() {
-		sudoku16x16.getField(Position.get( 0, 0)).setCurrentValue(0);
-		sudoku16x16.getField(Position.get( 3, 0)).setCurrentValue(1);
-		sudoku16x16.getField(Position.get( 4, 0)).setCurrentValue(2);
-		sudoku16x16.getField(Position.get( 5, 0)).setCurrentValue(3);
-		sudoku16x16.getField(Position.get( 8, 0)).setCurrentValue(11);
-		sudoku16x16.getField(Position.get(10, 0)).setCurrentValue(5);
-		sudoku16x16.getField(Position.get(14, 0)).setCurrentValue(6);
-		sudoku16x16.getField(Position.get(2, 1)).setCurrentValue(7);
-		sudoku16x16.getField(Position.get(6, 1)).setCurrentValue(6);
-		sudoku16x16.getField(Position.get(9, 1)).setCurrentValue(2);
-		sudoku16x16.getField(Position.get(12, 1)).setCurrentValue(8);
-		sudoku16x16.getField(Position.get(13, 1)).setCurrentValue(9);
-		sudoku16x16.getField(Position.get(14, 1)).setCurrentValue(5);
-		sudoku16x16.getField(Position.get(15, 1)).setCurrentValue(10);
-		sudoku16x16.getField(Position.get(1, 2)).setCurrentValue(11);
-		sudoku16x16.getField(Position.get(4, 2)).setCurrentValue(9);
-		sudoku16x16.getField(Position.get(7, 2)).setCurrentValue(0);
-		sudoku16x16.getField(Position.get(9, 2)).setCurrentValue(12);
-		sudoku16x16.getField(Position.get(11, 2)).setCurrentValue(10);
-		sudoku16x16.getField(Position.get(14, 2)).setCurrentValue(13);
-		sudoku16x16.getField(Position.get(0, 3)).setCurrentValue(2);
-		sudoku16x16.getField(Position.get(3, 3)).setCurrentValue(14);
-		sudoku16x16.getField(Position.get(4, 3)).setCurrentValue(1);
-		sudoku16x16.getField(Position.get(7, 3)).setCurrentValue(13);
-		sudoku16x16.getField(Position.get(11, 3)).setCurrentValue(8);
-		sudoku16x16.getField(Position.get(14, 3)).setCurrentValue(11);
-		sudoku16x16.getField(Position.get(0, 4)).setCurrentValue(12);
-		sudoku16x16.getField(Position.get(4, 4)).setCurrentValue(7);
-		sudoku16x16.getField(Position.get(7, 4)).setCurrentValue(9);
-		sudoku16x16.getField(Position.get(9, 4)).setCurrentValue(11);
-		sudoku16x16.getField(Position.get(10, 4)).setCurrentValue(1);
-		sudoku16x16.getField(Position.get(12, 4)).setCurrentValue(0);
-		sudoku16x16.getField(Position.get(13, 4)).setCurrentValue(14);
-		sudoku16x16.getField(Position.get(1, 5)).setCurrentValue(10);
-		sudoku16x16.getField(Position.get(2, 5)).setCurrentValue(6);
-		sudoku16x16.getField(Position.get(3, 5)).setCurrentValue(5);
-		sudoku16x16.getField(Position.get(7, 5)).setCurrentValue(15);
-		sudoku16x16.getField(Position.get(11, 5)).setCurrentValue(14);
-		sudoku16x16.getField(Position.get(14, 5)).setCurrentValue(4);
-		sudoku16x16.getField(Position.get(15, 5)).setCurrentValue(12);
-		sudoku16x16.getField(Position.get(3, 6)).setCurrentValue(9);
-		sudoku16x16.getField(Position.get(5, 6)).setCurrentValue(4);
-		sudoku16x16.getField(Position.get(6, 6)).setCurrentValue(14);
-		sudoku16x16.getField(Position.get(9, 6)).setCurrentValue(3);
-		sudoku16x16.getField(Position.get(11, 6)).setCurrentValue(7);
-		sudoku16x16.getField(Position.get(14, 6)).setCurrentValue(10);
-		sudoku16x16.getField(Position.get(0, 7)).setCurrentValue(15);
-		sudoku16x16.getField(Position.get(3, 7)).setCurrentValue(4);
-		sudoku16x16.getField(Position.get(4, 7)).setCurrentValue(8);
-		sudoku16x16.getField(Position.get(5, 7)).setCurrentValue(11);
-		sudoku16x16.getField(Position.get(8, 7)).setCurrentValue(0);
-		sudoku16x16.getField(Position.get(14, 7)).setCurrentValue(7);
-		sudoku16x16.getField(Position.get(1, 8)).setCurrentValue(1);
-		sudoku16x16.getField(Position.get(7, 8)).setCurrentValue(12);
-		sudoku16x16.getField(Position.get(10, 8)).setCurrentValue(11);
-		sudoku16x16.getField(Position.get(11, 8)).setCurrentValue(4);
-		sudoku16x16.getField(Position.get(12, 8)).setCurrentValue(7);
-		sudoku16x16.getField(Position.get(15, 8)).setCurrentValue(2);
-		sudoku16x16.getField(Position.get(1, 9)).setCurrentValue(12);
-		sudoku16x16.getField(Position.get(4, 9)).setCurrentValue(14);
-		sudoku16x16.getField(Position.get(6, 9)).setCurrentValue(2);
-		sudoku16x16.getField(Position.get(9, 9)).setCurrentValue(13);
-		sudoku16x16.getField(Position.get(10, 9)).setCurrentValue(7);
-		sudoku16x16.getField(Position.get(12, 9)).setCurrentValue(15);
-		sudoku16x16.getField(Position.get(0, 10)).setCurrentValue(4);
-		sudoku16x16.getField(Position.get(1, 10)).setCurrentValue(7);
-		sudoku16x16.getField(Position.get(4, 10)).setCurrentValue(0);
-		sudoku16x16.getField(Position.get(8, 10)).setCurrentValue(1);
-		sudoku16x16.getField(Position.get(12, 10)).setCurrentValue(12);
-		sudoku16x16.getField(Position.get(13, 10)).setCurrentValue(8);
-		sudoku16x16.getField(Position.get(14, 10)).setCurrentValue(14);
-		sudoku16x16.getField(Position.get(2, 11)).setCurrentValue(11);
-		sudoku16x16.getField(Position.get(3, 11)).setCurrentValue(3);
-		sudoku16x16.getField(Position.get(5, 11)).setCurrentValue(5);
-		sudoku16x16.getField(Position.get(6, 11)).setCurrentValue(15);
-		sudoku16x16.getField(Position.get(8, 11)).setCurrentValue(12);
-		sudoku16x16.getField(Position.get(11, 11)).setCurrentValue(6);
-		sudoku16x16.getField(Position.get(15, 11)).setCurrentValue(4);
-		sudoku16x16.getField(Position.get(1, 12)).setCurrentValue(2);
-		sudoku16x16.getField(Position.get(4, 12)).setCurrentValue(11);
-		sudoku16x16.getField(Position.get(8, 12)).setCurrentValue(5);
-		sudoku16x16.getField(Position.get(11, 12)).setCurrentValue(3);
-		sudoku16x16.getField(Position.get(12, 12)).setCurrentValue(10);
-		sudoku16x16.getField(Position.get(15, 12)).setCurrentValue(15);
-		sudoku16x16.getField(Position.get(1, 13)).setCurrentValue(6);
-		sudoku16x16.getField(Position.get(4, 13)).setCurrentValue(15);
-		sudoku16x16.getField(Position.get(6, 13)).setCurrentValue(4);
-		sudoku16x16.getField(Position.get(8, 13)).setCurrentValue(13);
-		sudoku16x16.getField(Position.get(11, 13)).setCurrentValue(0);
-		sudoku16x16.getField(Position.get(14, 13)).setCurrentValue(1);
-		sudoku16x16.getField(Position.get(0, 14)).setCurrentValue(10);
-		sudoku16x16.getField(Position.get(1, 14)).setCurrentValue(0);
-		sudoku16x16.getField(Position.get(2, 14)).setCurrentValue(14);
-		sudoku16x16.getField(Position.get(3, 14)).setCurrentValue(8);
-		sudoku16x16.getField(Position.get(6, 14)).setCurrentValue(12);
-		sudoku16x16.getField(Position.get(9, 14)).setCurrentValue(1);
-		sudoku16x16.getField(Position.get(13, 14)).setCurrentValue(13);
-		sudoku16x16.getField(Position.get(1, 15)).setCurrentValue(13);
-		sudoku16x16.getField(Position.get(5, 15)).setCurrentValue(10);
-		sudoku16x16.getField(Position.get(7, 15)).setCurrentValue(1);
-		sudoku16x16.getField(Position.get(10, 15)).setCurrentValue(12);
-		sudoku16x16.getField(Position.get(11, 15)).setCurrentValue(2);
-		sudoku16x16.getField(Position.get(12, 15)).setCurrentValue(4);
-		sudoku16x16.getField(Position.get(15, 15)).setCurrentValue(11);
+		sudoku16x16.getCell(Position.get( 0, 0)).setCurrentValue(0);
+		sudoku16x16.getCell(Position.get( 3, 0)).setCurrentValue(1);
+		sudoku16x16.getCell(Position.get( 4, 0)).setCurrentValue(2);
+		sudoku16x16.getCell(Position.get( 5, 0)).setCurrentValue(3);
+		sudoku16x16.getCell(Position.get( 8, 0)).setCurrentValue(11);
+		sudoku16x16.getCell(Position.get(10, 0)).setCurrentValue(5);
+		sudoku16x16.getCell(Position.get(14, 0)).setCurrentValue(6);
+		sudoku16x16.getCell(Position.get(2, 1)).setCurrentValue(7);
+		sudoku16x16.getCell(Position.get(6, 1)).setCurrentValue(6);
+		sudoku16x16.getCell(Position.get(9, 1)).setCurrentValue(2);
+		sudoku16x16.getCell(Position.get(12, 1)).setCurrentValue(8);
+		sudoku16x16.getCell(Position.get(13, 1)).setCurrentValue(9);
+		sudoku16x16.getCell(Position.get(14, 1)).setCurrentValue(5);
+		sudoku16x16.getCell(Position.get(15, 1)).setCurrentValue(10);
+		sudoku16x16.getCell(Position.get(1, 2)).setCurrentValue(11);
+		sudoku16x16.getCell(Position.get(4, 2)).setCurrentValue(9);
+		sudoku16x16.getCell(Position.get(7, 2)).setCurrentValue(0);
+		sudoku16x16.getCell(Position.get(9, 2)).setCurrentValue(12);
+		sudoku16x16.getCell(Position.get(11, 2)).setCurrentValue(10);
+		sudoku16x16.getCell(Position.get(14, 2)).setCurrentValue(13);
+		sudoku16x16.getCell(Position.get(0, 3)).setCurrentValue(2);
+		sudoku16x16.getCell(Position.get(3, 3)).setCurrentValue(14);
+		sudoku16x16.getCell(Position.get(4, 3)).setCurrentValue(1);
+		sudoku16x16.getCell(Position.get(7, 3)).setCurrentValue(13);
+		sudoku16x16.getCell(Position.get(11, 3)).setCurrentValue(8);
+		sudoku16x16.getCell(Position.get(14, 3)).setCurrentValue(11);
+		sudoku16x16.getCell(Position.get(0, 4)).setCurrentValue(12);
+		sudoku16x16.getCell(Position.get(4, 4)).setCurrentValue(7);
+		sudoku16x16.getCell(Position.get(7, 4)).setCurrentValue(9);
+		sudoku16x16.getCell(Position.get(9, 4)).setCurrentValue(11);
+		sudoku16x16.getCell(Position.get(10, 4)).setCurrentValue(1);
+		sudoku16x16.getCell(Position.get(12, 4)).setCurrentValue(0);
+		sudoku16x16.getCell(Position.get(13, 4)).setCurrentValue(14);
+		sudoku16x16.getCell(Position.get(1, 5)).setCurrentValue(10);
+		sudoku16x16.getCell(Position.get(2, 5)).setCurrentValue(6);
+		sudoku16x16.getCell(Position.get(3, 5)).setCurrentValue(5);
+		sudoku16x16.getCell(Position.get(7, 5)).setCurrentValue(15);
+		sudoku16x16.getCell(Position.get(11, 5)).setCurrentValue(14);
+		sudoku16x16.getCell(Position.get(14, 5)).setCurrentValue(4);
+		sudoku16x16.getCell(Position.get(15, 5)).setCurrentValue(12);
+		sudoku16x16.getCell(Position.get(3, 6)).setCurrentValue(9);
+		sudoku16x16.getCell(Position.get(5, 6)).setCurrentValue(4);
+		sudoku16x16.getCell(Position.get(6, 6)).setCurrentValue(14);
+		sudoku16x16.getCell(Position.get(9, 6)).setCurrentValue(3);
+		sudoku16x16.getCell(Position.get(11, 6)).setCurrentValue(7);
+		sudoku16x16.getCell(Position.get(14, 6)).setCurrentValue(10);
+		sudoku16x16.getCell(Position.get(0, 7)).setCurrentValue(15);
+		sudoku16x16.getCell(Position.get(3, 7)).setCurrentValue(4);
+		sudoku16x16.getCell(Position.get(4, 7)).setCurrentValue(8);
+		sudoku16x16.getCell(Position.get(5, 7)).setCurrentValue(11);
+		sudoku16x16.getCell(Position.get(8, 7)).setCurrentValue(0);
+		sudoku16x16.getCell(Position.get(14, 7)).setCurrentValue(7);
+		sudoku16x16.getCell(Position.get(1, 8)).setCurrentValue(1);
+		sudoku16x16.getCell(Position.get(7, 8)).setCurrentValue(12);
+		sudoku16x16.getCell(Position.get(10, 8)).setCurrentValue(11);
+		sudoku16x16.getCell(Position.get(11, 8)).setCurrentValue(4);
+		sudoku16x16.getCell(Position.get(12, 8)).setCurrentValue(7);
+		sudoku16x16.getCell(Position.get(15, 8)).setCurrentValue(2);
+		sudoku16x16.getCell(Position.get(1, 9)).setCurrentValue(12);
+		sudoku16x16.getCell(Position.get(4, 9)).setCurrentValue(14);
+		sudoku16x16.getCell(Position.get(6, 9)).setCurrentValue(2);
+		sudoku16x16.getCell(Position.get(9, 9)).setCurrentValue(13);
+		sudoku16x16.getCell(Position.get(10, 9)).setCurrentValue(7);
+		sudoku16x16.getCell(Position.get(12, 9)).setCurrentValue(15);
+		sudoku16x16.getCell(Position.get(0, 10)).setCurrentValue(4);
+		sudoku16x16.getCell(Position.get(1, 10)).setCurrentValue(7);
+		sudoku16x16.getCell(Position.get(4, 10)).setCurrentValue(0);
+		sudoku16x16.getCell(Position.get(8, 10)).setCurrentValue(1);
+		sudoku16x16.getCell(Position.get(12, 10)).setCurrentValue(12);
+		sudoku16x16.getCell(Position.get(13, 10)).setCurrentValue(8);
+		sudoku16x16.getCell(Position.get(14, 10)).setCurrentValue(14);
+		sudoku16x16.getCell(Position.get(2, 11)).setCurrentValue(11);
+		sudoku16x16.getCell(Position.get(3, 11)).setCurrentValue(3);
+		sudoku16x16.getCell(Position.get(5, 11)).setCurrentValue(5);
+		sudoku16x16.getCell(Position.get(6, 11)).setCurrentValue(15);
+		sudoku16x16.getCell(Position.get(8, 11)).setCurrentValue(12);
+		sudoku16x16.getCell(Position.get(11, 11)).setCurrentValue(6);
+		sudoku16x16.getCell(Position.get(15, 11)).setCurrentValue(4);
+		sudoku16x16.getCell(Position.get(1, 12)).setCurrentValue(2);
+		sudoku16x16.getCell(Position.get(4, 12)).setCurrentValue(11);
+		sudoku16x16.getCell(Position.get(8, 12)).setCurrentValue(5);
+		sudoku16x16.getCell(Position.get(11, 12)).setCurrentValue(3);
+		sudoku16x16.getCell(Position.get(12, 12)).setCurrentValue(10);
+		sudoku16x16.getCell(Position.get(15, 12)).setCurrentValue(15);
+		sudoku16x16.getCell(Position.get(1, 13)).setCurrentValue(6);
+		sudoku16x16.getCell(Position.get(4, 13)).setCurrentValue(15);
+		sudoku16x16.getCell(Position.get(6, 13)).setCurrentValue(4);
+		sudoku16x16.getCell(Position.get(8, 13)).setCurrentValue(13);
+		sudoku16x16.getCell(Position.get(11, 13)).setCurrentValue(0);
+		sudoku16x16.getCell(Position.get(14, 13)).setCurrentValue(1);
+		sudoku16x16.getCell(Position.get(0, 14)).setCurrentValue(10);
+		sudoku16x16.getCell(Position.get(1, 14)).setCurrentValue(0);
+		sudoku16x16.getCell(Position.get(2, 14)).setCurrentValue(14);
+		sudoku16x16.getCell(Position.get(3, 14)).setCurrentValue(8);
+		sudoku16x16.getCell(Position.get(6, 14)).setCurrentValue(12);
+		sudoku16x16.getCell(Position.get(9, 14)).setCurrentValue(1);
+		sudoku16x16.getCell(Position.get(13, 14)).setCurrentValue(13);
+		sudoku16x16.getCell(Position.get(1, 15)).setCurrentValue(13);
+		sudoku16x16.getCell(Position.get(5, 15)).setCurrentValue(10);
+		sudoku16x16.getCell(Position.get(7, 15)).setCurrentValue(1);
+		sudoku16x16.getCell(Position.get(10, 15)).setCurrentValue(12);
+		sudoku16x16.getCell(Position.get(11, 15)).setCurrentValue(2);
+		sudoku16x16.getCell(Position.get(12, 15)).setCurrentValue(4);
+		sudoku16x16.getCell(Position.get(15, 15)).setCurrentValue(11);
 
 		sudoku16x16.setComplexity(Complexity.arbitrary);
 		Solver solver = new Solver(sudoku16x16);
@@ -510,7 +509,7 @@ public class SolverTests2 extends Solver {
 		// copy solution to current value
 		for (int j = 0; j < sudoku16x16.getSudokuType().getSize().getY(); j++) {
 			for (int i = 0; i < sudoku16x16.getSudokuType().getSize().getX(); i++) {
-				sudoku16x16.getField(Position.get(i, j)).setCurrentValue(solution16x16.get(Position.get(i, j)));
+				sudoku16x16.getCell(Position.get(i, j)).setCurrentValue(solution16x16.get(Position.get(i, j)));
 			}
 		}
 
@@ -525,7 +524,7 @@ public class SolverTests2 extends Solver {
 			StringBuilder sb = new StringBuilder();
 			for (int j = 0; j < sudoku16x16.getSudokuType().getSize().getY(); j++) {
 				for (int i = 0; i < sudoku16x16.getSudokuType().getSize().getX(); i++) {
-					int value = sudoku16x16.getField(Position.get(i, j)).getCurrentValue();
+					int value = sudoku16x16.getCell(Position.get(i, j)).getCurrentValue();
 					String op = value + "";
 					if (value < 10)
 						op = " " + value;
@@ -541,8 +540,8 @@ public class SolverTests2 extends Solver {
 
 	@Test
 	public void testNoConstraintSaturation() {
-		sudoku.getField(Position.get(0, 0)).setCurrentValue(0);
-		sudoku.getField(Position.get(1, 0)).setCurrentValue(0);
+		sudoku.getCell(Position.get(0, 0)).setCurrentValue(0);
+		sudoku.getCell(Position.get(1, 0)).setCurrentValue(0);
 
 		sudoku.setComplexity(Complexity.arbitrary);
 		Solver solver = new Solver(sudoku);

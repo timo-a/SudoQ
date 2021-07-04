@@ -4,16 +4,16 @@ import android.widget.LinearLayout;
 import de.sudoq.R;
 import de.sudoq.controller.sudoku.SudokuActivity;
 import de.sudoq.model.sudoku.Position;
-import de.sudoq.view.SudokuFieldView;
+import de.sudoq.view.SudokuCellView;
 import de.sudoq.view.VirtualKeyboardButtonView;
 import de.sudoq.view.VirtualKeyboardLayout;
 
 public class SudokuUtilities {
 
-	public static SudokuFieldView[][] getViewArray(SudokuActivity a) {
+	public static SudokuCellView[][] getViewArray(SudokuActivity a) {
 		Position dim = a.getGame().getSudoku().getSudokuType().getSize();
-		SudokuFieldView[][] oldViews = a.getSudokuLayout().getSudokuFieldViews();
-		SudokuFieldView[][] views = new SudokuFieldView[dim.getX()][dim.getY()];
+		SudokuCellView[][] oldViews = a.getSudokuLayout().getSudokuFieldViews();
+		SudokuCellView[][] views = new SudokuCellView[dim.getX()][dim.getY()];
 		for (int i = 0; i < dim.getX(); i++) {
 			for (int j = 0; j < dim.getY(); j++) {
 				views[i][j] = oldViews[i][j];

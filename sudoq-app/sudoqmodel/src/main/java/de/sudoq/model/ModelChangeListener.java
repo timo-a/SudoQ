@@ -15,7 +15,7 @@ package de.sudoq.model;
  *            der Typ des Objekts welches bei Änderungen mitgegeben wird
  */
 public interface ModelChangeListener<T> {
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Diese Methode wird aufgerufen, falls sich etwas im beobachteten Model
@@ -24,6 +24,6 @@ public interface ModelChangeListener<T> {
 	 * @param obj
 	 *            Das Objekt, das sich geaendert hat. Kann auch null sein
 	 */
-	public void onModelChanged(T obj);
+    void onModelChanged(T obj);
 
 }

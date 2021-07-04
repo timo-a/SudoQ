@@ -16,21 +16,21 @@ import java.util.Stack;
  * iteriert werden kann.
  */
 public class ActionTreeIterator implements Iterator<ActionTreeElement> {
-	/** Attributes */
+	/* Attributes */
 
 	/**
 	 * Der ActionTree über den iteriert wird
 	 */
-	private ActionTree actionTree;
+	private final ActionTree actionTree;
 
 	/**
 	 * Das aktuelle Element beim Iterieren
 	 */
 	private ActionTreeElement currentElement;
 
-	private Stack<ActionTreeElement> otherPaths;
+	private final Stack<ActionTreeElement> otherPaths;
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Erzeugt und instanziiert ein neues ActionTreeElement mit den gegebenen
@@ -45,10 +45,10 @@ public class ActionTreeIterator implements Iterator<ActionTreeElement> {
 	public ActionTreeIterator(ActionTree tree) {
 		this.actionTree = tree;
 		currentElement = actionTree.rootElement;
-		otherPaths = new Stack<ActionTreeElement>();
+		otherPaths = new Stack<>();
 	}
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * {@inheritDoc}

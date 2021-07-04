@@ -20,7 +20,7 @@ import de.sudoq.model.xml.Xmlable;
  */
 public class ActionTreeElement extends ObservableModelImpl<ActionTreeElement> implements Comparable<ActionTreeElement>,
 		Iterable<ActionTreeElement> {
-	/** Attributes */
+	/* Attributes */
 
 	/**
 	 * Eine eindeutige identifikationsnummer für dieses Element
@@ -69,7 +69,7 @@ public class ActionTreeElement extends ObservableModelImpl<ActionTreeElement> im
 	/**
 	 * Konstante für XmlAttribut
 	 */
-	public static final String FIELD_ID = "field_id";
+	public static final String FIELD_ID = "field_id";//corresponds to cell_id, left unchanged
 	/**
 	 * Konstante für XmlAttribut
 	 */
@@ -87,7 +87,7 @@ public class ActionTreeElement extends ObservableModelImpl<ActionTreeElement> im
 	 */
 	public static final String CORRECT = "correct";
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Erzeugt und instanziiert ein neues ActionTreeElement mit den gegebenen Parametern. Ist die ID ungültig oder das
@@ -256,21 +256,21 @@ public class ActionTreeElement extends ObservableModelImpl<ActionTreeElement> im
 	 * @return den resultierenden XmlTree
 	 */
 	public XmlTree toXml() {
-		if (action.field.getId() <= 0)
+		if (action.cell.getId() <= 0)
 			return null;
 		XmlTree xml = new XmlTree("action");
 
 		xml.addAttribute(new XmlAttribute(ID, Integer.toString(getId())));
 		xml.addAttribute(new XmlAttribute(PARENT, previous == null ? "" : Integer.toString(previous.getId())));
 		xml.addAttribute(new XmlAttribute(DIFF, Integer.toString(action.diff)));
-		xml.addAttribute(new XmlAttribute(FIELD_ID, Integer.toString(action.field.getId())));
+		xml.addAttribute(new XmlAttribute(FIELD_ID, Integer.toString(action.cell.getId())));
 		xml.addAttribute(new XmlAttribute(ACTION_TYPE, action.getClass().getSimpleName()));
 		xml.addAttribute(new XmlAttribute(MARKED, Boolean.toString(marked)));
 		if (mistake) {
-			xml.addAttribute(new XmlAttribute(MISTAKE, Boolean.toString(mistake)));
+			xml.addAttribute(new XmlAttribute(MISTAKE, Boolean.toString(true)));
 		} 
 		if (correct) {
-			xml.addAttribute(new XmlAttribute(CORRECT, Boolean.toString(correct)));			
+			xml.addAttribute(new XmlAttribute(CORRECT, Boolean.toString(true)));
 		}
 
 		return xml;

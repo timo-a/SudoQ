@@ -42,11 +42,11 @@ public class GameManager {
 	/**
 	 * Die einzige GameManager Instanz
 	 */
-	private static GameManager manager = new GameManager();
+	private static final GameManager manager = new GameManager();
 
-	private XmlHandler<Game> xmlHandler;
+	private final XmlHandler<Game> xmlHandler;
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Instanziiert ein neues GameManager Objekt. Das kann nur innerhalb dieser
@@ -56,7 +56,7 @@ public class GameManager {
 		xmlHandler = new GameXmlHandler();
 	}
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Gibt die einzige GameManager Instanz zurück.
@@ -134,7 +134,7 @@ public class GameManager {
 	 * @return die Liste
 	 */
 	public List<GameData> getGameList() {
-		List<GameData> list = new ArrayList<GameData>();
+		List<GameData> list = new ArrayList<>();
 		for (XmlTree game : getGamesXml()) {
 			list.add(new GameData(Integer.parseInt(game.getAttributeValue(ID))
 					             ,game.getAttributeValue(PLAYED_AT)

@@ -8,14 +8,22 @@
 package de.sudoq.controller.menus;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import java.util.Locale;
 
 import de.sudoq.R;
 import de.sudoq.controller.SudoqCompatActivity;
+import de.sudoq.controller.menus.preferences.LanguageSetting;
+import de.sudoq.controller.menus.preferences.LanguageUtility;
 import de.sudoq.controller.menus.preferences.PlayerPreferencesActivity;
 import de.sudoq.controller.sudoku.SudokuActivity;
 import de.sudoq.model.game.GameManager;
@@ -31,6 +39,11 @@ public class MainActivity extends SudoqCompatActivity {
 	 */
 	@SuppressWarnings("unused")
 	private static final String LOG_TAG = MainActivity.class.getSimpleName();
+
+	/**
+	 * stores language at activity start to compare if language changed in advanced preferences
+	 */
+	private LanguageSetting currentLanguageCode;
 
 	/** Methods */
 
@@ -51,7 +64,31 @@ public class MainActivity extends SudoqCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setDisplayShowTitleEnabled(false);
 
-        onResume();
+        /* load language from profile */
+
+		//retrieve language from profile at beginning of activity lifecycle
+		currentLanguageCode = LanguageUtility.loadLanguageFromSharedPreferences2(this);
+
+		String a = Locale.getDefault().getLanguage();
+		String b = getResources().getConfiguration().locale.getLanguage();
+		String c = currentLanguageCode.toStorableString();
+
+
+		if (currentLanguageCode.isSystemLanguage()) {
+			//nothing to do
+			//locale is adopted automatically from device
+		} else {
+			LanguageSetting.LanguageCode currentConf = LanguageUtility.getConfLocale(this);
+			if (!currentConf.equals(currentLanguageCode.language)) {
+				//if conf != loaded language, set conf and update
+				LanguageUtility.setConfLocale(currentLanguageCode.language.name(), this);
+				Intent refresh = new Intent(this, this.getClass());
+				this.finish();
+				this.startActivity(refresh);
+			}
+		}
+
+		Log.d("lang", "MainActivity.onCreate() set with " + currentLanguageCode);
 	}
 
 	/**
@@ -67,9 +104,20 @@ public class MainActivity extends SudoqCompatActivity {
 		continueButton.setEnabled(p.getCurrentGame() > Profile.NO_GAME);
 
 
-		GameManager gm = GameManager.getInstance();
 		Button loadButton = (Button) findViewById(R.id.button_mainmenu_load_sudoku);
-		loadButton.setEnabled(!gm.getGameList().isEmpty());
+		//loadButton.setEnabled(!gm.getGameList().isEmpty());
+		loadButton.setEnabled(true);
+
+		//load language from memory
+		LanguageSetting.LanguageCode fromConf = LanguageUtility.getConfLocale(this);
+
+		if (!fromConf.equals( currentLanguageCode.language)){
+			Log.d("lang","refresh because " + currentLanguageCode + " -> " + fromConf);
+
+			Intent refresh = new Intent(this, this.getClass());
+			this.finish();
+			this.startActivity(refresh);
+		}
 
 	}
 
@@ -104,4 +152,23 @@ public class MainActivity extends SudoqCompatActivity {
 			break;
 		}
 	}
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+
+		// check if configuration has changed
+		// per Manifest this method gets called if there are changes in layoutDirection or locale
+		// (if we only check for locale, this method doesn't get called, no idea why https://stackoverflow.com/a/27648673/3014199)
+		//
+		if (!newConfig.locale.getLanguage().equals(currentLanguageCode.language.name())){
+			//only adopt external change if language is set to "system language"
+			if (currentLanguageCode.isSystemLanguage()){
+				//adopt change
+				currentLanguageCode.language = LanguageUtility.loadLanguageFromLocale();
+				//store changes
+				LanguageUtility.storeLanguageToMemory2(this, currentLanguageCode);
+			}
+		}
+	}
+
 }

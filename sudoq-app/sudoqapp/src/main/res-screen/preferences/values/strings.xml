@@ -10,9 +10,9 @@
     <string name="profile_preference_title_assistance_markRowColumn">Mark Row/Column</string>
     <string name="profile_preference_title_assistance_markWrongSymbol">Mark wrong Symbols</string>
     <string name="profile_preference_title_assistance_restrictCandidates">Input Assistance</string>
-    <string name="profile_preference_title_assistance_allowSolveSpecificField">Solve Specific Field</string>
-    <string name="profile_preference_title_assistance_allowSolveRandomField">Solve Random Field</string>
-    <string name="profile_preference_title_assistance_allowGetHint">Hint For Easy Field</string>
+    <string name="profile_preference_title_assistance_allowSolveSpecificCell">Solve Specific Cell</string>
+    <string name="profile_preference_title_assistance_allowSolveRandomCell">Solve Random Cell</string>
+    <string name="profile_preference_title_assistance_allowGetHint">Hint For Easy Cell</string>
     <string name="profile_preference_title_assistance_autoAdjustNotes">Auto Adjust Notices</string>
     <string name="profile_preference_title_profile">Profile</string>
     <string name="profile_preference_button_statistics">Statistics</string>
@@ -23,4 +23,27 @@
     <string name="profile_preference_new_profile">unnamed</string>
     <string name="profile_preference_title_crash_trigger">crash app</string>
     <string name="profile_preference_title_debug">debug</string>
+
+    <!-- restrict types -->
+    <string name="advanced_settings_restrict_types_empty_warning">You have to leave at least one type. Otherwise you won\'t be able to start any new sudoku.</string>
+    <!-- Sudoku Types -->
+    <string name="advanced_settings_restrict_item_standard_9x9"  >Standard</string>
+    <string name="advanced_settings_restrict_item_standard_16x16">16x16</string>
+    <string name="advanced_settings_restrict_item_standard_6x6"  >6x6</string>
+    <string name="advanced_settings_restrict_item_standard_4x4"  >4x4</string>
+    <string name="advanced_settings_restrict_item_squiggly_a_9x9">Squiggly-Sudoku 9x9</string>
+    <string name="advanced_settings_restrict_item_squiggly_b_9x9">Squoggly-Sudoku 9x9</string>
+    <string name="advanced_settings_restrict_item_stairstep_9x9" >Stairstep-Sudoku 9x9</string>
+    <string name="advanced_settings_restrict_item_samurai"       >Samurai-Sudoku</string>
+    <string name="advanced_settings_restrict_item_hyper"         >Hyper-Sudoku</string>
+    <string name="advanced_settings_restrict_item_xsudoku"       >X-Sudoku</string>
+
+    <!-- language -->
+    <string name="advanced_settings_language_spinner_dummy">choose language</string>
+    <string name="advanced_settings_language_spinner_label">Language</string>
+    <string name="language_english">English</string>
+    <string name="language_french">French</string>
+    <string name="language_german">German</string>
+    <string name="language_system">System language</string>
+
 </resources>

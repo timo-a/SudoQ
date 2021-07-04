@@ -1,6 +1,5 @@
 package de.sudoq.model.solverGenerator.solver;
 
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.EnumMap;
@@ -10,13 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import de.sudoq.model.actionTree.SolveAction;
 import de.sudoq.model.actionTree.SolveActionFactory;
-import de.sudoq.model.solverGenerator.solution.DerivationField;
+import de.sudoq.model.solverGenerator.solution.DerivationCell;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.helper.Backtracking;
-import de.sudoq.model.solverGenerator.solver.helper.Helpers;
 import de.sudoq.model.solverGenerator.solver.helper.HiddenHelper;
 import de.sudoq.model.solverGenerator.solver.helper.LastDigitHelper;
 import de.sudoq.model.solverGenerator.solver.helper.LeftoverNoteHelper;
@@ -37,7 +34,7 @@ import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
  * werden. Auch das Validieren eines Sudokus auf Lösbarkeit ist möglich.
  */
 public class Solver {
-	/** Attributes */
+	/* Attributes */
 
 	/**
 	 * Das Sudoku, welches von diesem Solver gelöst wird
@@ -75,7 +72,7 @@ public class Solver {
 	 */
 	private ComplexityConstraint complConstr;
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Creates a new solver for {@code sudoku}.
@@ -98,7 +95,7 @@ public class Solver {
 
 	protected List<SolveHelper> makeHelperList(){
 		// Initialize the helpers
-		List<SolveHelper> helpers = new ArrayList<SolveHelper>();
+		List<SolveHelper> helpers = new ArrayList<>();
 
 		helpers.add(new LastDigitHelper(this.sudoku, 1)); //only one field in
 		helpers.add(new LeftoverNoteHelper(this.sudoku, 1));
@@ -144,7 +141,7 @@ public class Solver {
 		return this.sudoku;
 	}
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Ermittelt die Lösung für ein Feld, sowie dessen Herleitung. Die Herleitung wird als Solution-Objekt
@@ -194,10 +191,10 @@ public class Solver {
 				if (b.cardinality() == 1) { //we found a field where only one note remains
 					if (!this.sudoku.hasBranch()) {
 						//if there are no branches create solution-object
-						solution.setAction(new SolveActionFactory().createAction(b.nextSetBit(0), this.sudoku.getField(p)));
+						solution.setAction(new SolveActionFactory().createAction(b.nextSetBit(0), this.sudoku.getCell(p)));
 
 						SolveDerivation deriv = new SolveDerivation();
-						deriv.addDerivationField(new DerivationField(p, (BitSet) b.clone(), new BitSet())); //since only one bit set, complement is an empty set
+						deriv.addDerivationCell(new DerivationCell(p, (BitSet) b.clone(), new BitSet())); //since only one bit set, complement is an empty set
 						solution.addDerivation(deriv);
 						solvedField = true;
 					} else {
@@ -243,7 +240,7 @@ public class Solver {
 
 		PositionMap<Integer> copy = new PositionMap<>(this.sudoku.getSudokuType().getSize());
 		for (Position p : this.sudoku.positions) {
-			copy.put(p, this.sudoku.getField(p).getCurrentValue());
+			copy.put(p, this.sudoku.getCell(p).getCurrentValue());
 		}
 
 		boolean solved = solveAll(buildDerivation, false, false);
@@ -254,7 +251,7 @@ public class Solver {
 		// Restore old state if solutions shall not be applied or if sudoku could not be solved
 		if (!applySolutions || !solved) {
 			for (Position p : this.sudoku.positions) {
-				this.sudoku.getField(p).setCurrentValue(copy.get(p), false);
+				this.sudoku.getCell(p).setCurrentValue(copy.get(p), false);
 			}
 		}
 
@@ -285,7 +282,7 @@ public class Solver {
 			for (SolveDerivation sd :s.getDerivations())
 				hist[sd.getType().ordinal()]++;
 
-		EnumMap<HintTypes, Integer> hm = new EnumMap<HintTypes, Integer>(HintTypes.class);
+		EnumMap<HintTypes, Integer> hm = new EnumMap<>(HintTypes.class);
 
 		for (int i = 0; i < hist.length; i++)
 			if (hist[i] > 0)
@@ -303,15 +300,15 @@ public class Solver {
 		}catch (IllegalStateException ise){
 			return "lastSolutions is zero";
 		}
-		String counts = "";
-		for (HintTypes h : em.keySet())
-			counts += "  " + em.get(h) + ' ' + h;
+		String separator = ""; //TODO switch to stringJoiner from (API 24) on
+		StringBuilder countsBuilder = new StringBuilder();
+		for (HintTypes h : em.keySet()) {
+			countsBuilder.append(separator)
+					     .append(em.get(h) + " " + h);
+			separator = "  ";//switch to separator after first element
+		}
 
-
-		if (counts.length() > 2)
-			counts=counts.substring(2);
-
-		return counts;
+		return countsBuilder.toString();
 	}
 
 	private static Map<HintTypes, Integer> hintscores = new HashMap<>();
@@ -359,9 +356,9 @@ public class Solver {
 		boolean ambiguous = false;
 
 		//map position -> value
-		PositionMap<Integer> copy = new PositionMap<Integer>(this.sudoku.getSudokuType().getSize());
+		PositionMap<Integer> copy = new PositionMap<>(this.sudoku.getSudokuType().getSize());
 		for (Position p : this.sudoku.positions) {
-			copy.put(p, this.sudoku.getField(p).getCurrentValue());
+			copy.put(p, this.sudoku.getCell(p).getCurrentValue());
 		}
 
 		/////debug
@@ -377,7 +374,7 @@ public class Solver {
 			// store the correct solution
 			if (solution != null) {
 				for (Position p: this.sudoku.positions) {
-					int curVal = this.sudoku.getField(p).getCurrentValue();
+					int curVal = this.sudoku.getCell(p).getCurrentValue();
 					solution.put(p, curVal);
 
 				}
@@ -395,7 +392,7 @@ public class Solver {
 
 		// restore initial state
 		for(Position p : this.sudoku.positions)
-			this.sudoku.getField(p).setCurrentValue(copy.get(p),false);
+			this.sudoku.getCell(p).setCurrentValue(copy.get(p),false);
 
 
 		// depending on the result, return an int
@@ -422,11 +419,12 @@ public class Solver {
 
 	/**
 	 * Returns the solutions of the last `solve`-call. Undefined if last solve failed e.g. invalid.
+	 * @return the solutions of the last `solve`-call.
 	 */
 	public PositionMap<Integer> getSolutionsMap(){
-		PositionMap<Integer> solutions = new PositionMap<Integer>(this.sudoku.getSudokuType().getSize());
+		PositionMap<Integer> solutions = new PositionMap<>(this.sudoku.getSudokuType().getSize());
 		for (Position p: this.sudoku.positions) {
-			int curVal = this.sudoku.getField(p).getCurrentValue();
+			int curVal = this.sudoku.getCell(p).getCurrentValue();
 			solutions.put(p, curVal);
 		}
 		return solutions;
@@ -436,7 +434,7 @@ public class Solver {
 	 * Indicates whether further solutions exist for a sudoku where we've already found one.
 	 * (potentially) modifies sudoku.
 	 *
-	 * @return
+	 * @return true if another solution exists
 	 */
 	public boolean severalSolutionsExist(){
         //lastsolutions might be set to null, e.g. if we kill branch but dont find another solution
@@ -498,8 +496,8 @@ public class Solver {
 		boolean isUnsolvable = false;
 
 		if (buildDerivation) {
-			lastSolutions = new ArrayList<Solution>();
-			branchPoints = new Stack<Integer>();
+			lastSolutions = new ArrayList<>();
+			branchPoints = new Stack<>();
 		}
         int solver_counter = 0;
 		while (!solved           //if `solved` we're done
@@ -575,11 +573,14 @@ public class Solver {
 
 
 
-	protected enum Branchresult {SUCCESS, UNSOLVABLE};
+	protected enum Branchresult {SUCCESS, UNSOLVABLE}
 
 	/** if there is a branch, delete it and make a the next one:
 	 *                                 if there are more candidates, choose the next one
 	 *                                 otherwise, delete branches until there are
+	 *
+	 * @param buildDerivation indicates whether a derivation is to be constructed
+	 * @return the Branchresult
 	 */
 	protected Branchresult advanceBranching(boolean buildDerivation){
 		if (!this.sudoku.hasBranch()) {
@@ -616,10 +617,10 @@ public class Solver {
 					BitSet relevantCandidates = new BitSet();
 					relevantCandidates.set(nextCandidate);
 					irrelevantCandidates.clear(nextCandidate);
-					DerivationField derivField = new DerivationField(branchingPos,
+					DerivationCell derivField = new DerivationCell(branchingPos,
 							                                         relevantCandidates,
 			                                                         irrelevantCandidates);
-					lastDerivation.addDerivationField(derivField);
+					lastDerivation.addDerivationCell(derivField);
 					lastDerivation.setDescription("Backtrack different candidate");
 				}
 
@@ -644,11 +645,16 @@ if there is another candidate -> advance
 
 
 	/**
-	*  According to their priority use the helpers until one of them can
-	*  be applied.
-	*
-	*  @returns true if any helper could be applied, false if no helper could be applied
-	*/
+	 *  According to their priority use the helpers until one of them can
+	 *  be applied.
+	 *
+	 * @param solved is the sudoku already solved?
+	 * @param didUpdate was an update performed?
+	 * @param isUnsolvable is it unsolvable?
+	 * @param buildDerivation is a derivation to be built?
+	 * @param validation should difficulty scores be collected?
+	 * @return true if any helper could be applied, false if no helper could be applied
+	 */
 	protected boolean useHelper(boolean solved, boolean didUpdate, boolean isUnsolvable, boolean buildDerivation, boolean validation){
 		if (!solved && !didUpdate && !isUnsolvable) {
 			for (int i = 0; i < numberOfHelpers; i++) {
@@ -706,7 +712,7 @@ if there is another candidate -> advance
 				if (b.cardinality() == 1) {
 					if (addDerivations) {
 						SolveDerivation deriv = new SolveDerivation(HintTypes.NakedSingle);
-						deriv.addDerivationField(new DerivationField(p, (BitSet) b.clone(),
+						deriv.addDerivationCell(new DerivationCell(p, (BitSet) b.clone(),
 						                                             new BitSet()));
 						deriv.setDescription("debug: naked single via Solver.updateNakedSingles");
 						/*
@@ -744,7 +750,7 @@ if there is another candidate -> advance
 		//for (Position p : this.sudoku.positions)
 		for (Position p : this.sudoku.getSudokuType().getValidPositions())
 		    /* look for no solution entered && no candidates left */
-			if (this.sudoku.getCurrentCandidates(p).isEmpty() && this.sudoku.getField(p).isNotSolved() )
+			if (this.sudoku.getCurrentCandidates(p).isEmpty() && this.sudoku.getCell(p).isNotSolved() )
 				return true;
 
 		return false;
@@ -763,7 +769,7 @@ if there is another candidate -> advance
 		//return !sudoku.positions.map(sudoku.getField).exists(f=>f.isNotSolved())
 
 		for (Position p : this.sudoku.positions)
-			if (this.sudoku.getField(p).isNotSolved())
+			if (this.sudoku.getCell(p).isNotSolved())
 				return false;
 
 		return true;
@@ -772,6 +778,7 @@ if there is another candidate -> advance
 
 	/**
 	 * intended for debugging only
+	 * @return the iterator for helper
 	 */
 	public Iterable<SolveHelper> helperIterator(){
 

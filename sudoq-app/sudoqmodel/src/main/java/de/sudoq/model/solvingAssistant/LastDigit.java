@@ -20,7 +20,7 @@ public class LastDigit {
             if(c.hasUniqueBehavior()) {
                 Vector<Position> v = new Vector<>();
                 for(Position p : c.getPositions())
-                    if(sudoku.getField(p).isNotSolved())
+                    if(sudoku.getCell(p).isNotSolved())
                         v.add(p);
                 if(v.size() == 1){
                     /* We found an instance where only one field is empty */
@@ -30,7 +30,7 @@ public class LastDigit {
                     List<Integer> otherSolutions = new ArrayList<>();
                     for(Position p : c.getPositions())
                         if(p!=solutionField)
-                            otherSolutions.add(sudoku.getField(p).getCurrentValue());
+                            otherSolutions.add(sudoku.getCell(p).getCurrentValue());
                     //make list with all possible values
                     List<Integer> possibleSolutions = new ArrayList<>();
                     for(int i : sudoku.getSudokuType().getSymbolIterator())

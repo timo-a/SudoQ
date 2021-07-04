@@ -38,7 +38,7 @@ public final class FileManager {
 
 	private static int currentProfileId = -1;
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Erstellt die Singleton-Instanz des FileManagers
@@ -293,7 +293,7 @@ public final class FileManager {
 	 */
 	public static File getGameThumbnailFile(int gameID) {
 		return new File(getGamesDir() + File.separator + "game_" +
-				Integer.toString(gameID) + ".png");
+                gameID + ".png");
 	}
 
 	// Sudokus
@@ -418,7 +418,7 @@ public final class FileManager {
 	 * @return nächste verfügbare Sudoku ID
 	 */
 	private static int getFreeSudokuIdFor(Sudoku sudoku) {
-		ArrayList<Integer> numbers = new ArrayList<Integer>();
+		ArrayList<Integer> numbers = new ArrayList<>();
 		for (String s : getSudokuDir(sudoku).list()) {
 			numbers.add(Integer.parseInt(s.substring(7, s.length() - 4)));
 		}

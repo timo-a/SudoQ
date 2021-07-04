@@ -5,15 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import de.sudoq.model.actionTree.Action;
-import de.sudoq.model.actionTree.NoteAction;
 import de.sudoq.model.actionTree.NoteActionFactory;
 import de.sudoq.model.solvingAssistant.HintTypes;
 import de.sudoq.model.sudoku.CandidateSet;
-import de.sudoq.model.sudoku.Constraint;
-import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
-import de.sudoq.model.sudoku.Utils;
-import de.sudoq.model.sudoku.Utils.ConstraintShape;
 
 /**
  * In case the user doesn't specify any notes, we find fields that have none
@@ -39,12 +34,12 @@ public class NoNotesDerivation extends SolveDerivation {
     public List<Action> getActionList(Sudoku sudoku){
         NoteActionFactory af = new NoteActionFactory();
 
-        for(Iterator<DerivationField> dfi = getFieldIterator(); dfi.hasNext();){
-            DerivationField df = dfi.next();
+        for(Iterator<DerivationCell> dfi = getCellIterator(); dfi.hasNext();){
+            DerivationCell df = dfi.next();
             CandidateSet cs = new CandidateSet();
             cs.assignWith(df.getRelevantCandidates());
             for (int i : cs.getSetBits()){
-                actionlist.add(af.createAction(i, sudoku.getField(df.getPosition())));
+                actionlist.add(af.createAction(i, sudoku.getCell(df.getPosition())));
             }
         }
         return actionlist;

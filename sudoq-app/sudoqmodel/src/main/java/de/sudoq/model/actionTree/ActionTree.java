@@ -8,14 +8,13 @@
 package de.sudoq.model.actionTree;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
 
-import de.sudoq.model.ModelChangeListener;
 import de.sudoq.model.ObservableModelImpl;
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 
 /**
  * Diese Klasse repräsentiert die Menge aller Züge auf einem Sudoku. Sie erlaubt
@@ -23,7 +22,6 @@ import de.sudoq.model.sudoku.Field;
  * ergeben die Züge einen Baum.
  */
 public class ActionTree extends ObservableModelImpl<ActionTreeElement> implements Iterable<ActionTreeElement> {
-	/** Attributes */
 
 	/**
 	 * Der Ursprungsknoten des Baumes
@@ -34,18 +32,18 @@ public class ActionTree extends ObservableModelImpl<ActionTreeElement> implement
 	 */
 	private int idCounter;
 
-	public enum InsertStrategy {redundant, undo, upwards, regular, none};
+	public enum InsertStrategy {redundant, undo, upwards, regular, none}
+
 	private InsertStrategy lastStrategy = InsertStrategy.none;
 	public InsertStrategy getLastInsertStrategy(){return lastStrategy;}
 	private List<Action> actionSequence = new ArrayList<>();
-	/** Constructors */
 
 	/**
 	 * Erzeugt und instanziiert einen neuen ActionTree
 	 */
 	public ActionTree() {
 		idCounter = 1;
-		Action mockAction = new Action(0, new Field(-1, 1)) {
+		Action mockAction = new Action(0, new Cell(-1, 1)) {
 			public void undo() { }
 			public void execute() { }
 			public boolean inverse(Action a){ return false; }
@@ -53,7 +51,7 @@ public class ActionTree extends ObservableModelImpl<ActionTreeElement> implement
 		rootElement = new ActionTreeElement(idCounter++, mockAction, rootElement);
 	}
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Diese Methode fügt die gegebene Action an der gegebenen Stelle zum Baum
@@ -76,14 +74,13 @@ public class ActionTree extends ObservableModelImpl<ActionTreeElement> implement
 				throw new IllegalArgumentException(); //There'a a root but no mounting el? -> throw exception 
 		}
 
-		ActionTreeElement ate;
-		/* */
-		ate = new ActionTreeElement(idCounter, action, mountingElement);
-		idCounter++;
+		//mount new tree node on specified parent node
+		ActionTreeElement ate = new ActionTreeElement(idCounter++, action, mountingElement);
 
-		
+
+		//TODO as of now theres never a null root, because ActionTree starts with a dummy right?
 		if (rootElement==null) {
-			rootElement = ate;  //if there's no root, ate is root TODO as of now theres never a null root right?
+			rootElement = ate;  //if there's no root, ate is root
 		}
 		
 		notifyListeners(ate);
@@ -106,7 +103,7 @@ public class ActionTree extends ObservableModelImpl<ActionTreeElement> implement
 	 * @return Das gefundene Element oder null
 	 */
 	public ActionTreeElement getElement(int id) {
-		if (id < idCounter && id >= 1) {
+		if ( 1 <= id && id < idCounter ) {
 			//ActionTreeElement currentElement = rootElement;
 			//Stack<ActionTreeElement> otherPaths = new Stack<ActionTreeElement>();
 
@@ -139,29 +136,9 @@ public class ActionTree extends ObservableModelImpl<ActionTreeElement> implement
 	}
 
 	/**
-	 * Überprüft den Baum ausgehend vom Wurzelelement auf Konsistenz. Es dürfen
-	 * keine Zyklen auftreten.
-	 * 
-	 * @return true falls der Baum konsistent ist, andernfalls false
-	 */
-	public boolean isConsistent() {
-		LinkedList<ActionTreeElement> elements = new LinkedList<ActionTreeElement>();
-		for (ActionTreeElement ate : this) {
-			if (elements.contains(ate)) {
-				return false;
-			}
-			elements.add(ate);
-		}
-		return true;
-	}
-
-	/**
-	 * Gibt einen Weg zwischen den zwei gegebenen Elementen repraesentiert durch
-	 * eine Liste zurueck. Die Liste beginnt mit start und endet mit end. Kann
-	 * kein Weg gefunden werden (weil die Elemente in verschiedenen Baeumen
-	 * sind) wird null zurueckgeben. Ist start gleich end wird eine leere Liste
-	 * zurückgegeben
-	 * 
+	 * Returns the shortest path in the tree from start to end.
+	 * start and end are included in the path, unless they are identical, then an empty list is returned.
+	 *
 	 * @param start
 	 *            der Startpunkt
 	 * @param end
@@ -171,83 +148,72 @@ public class ActionTree extends ObservableModelImpl<ActionTreeElement> implement
 	 *             falls start oder end null sind
 	 */
 	static public List<ActionTreeElement> findPath(ActionTreeElement start, ActionTreeElement end) {
-		if (start.equals(end)) {
-			return new LinkedList<ActionTreeElement>();
+		//Assumptions:
+		//    every tree has a root with id == 0, so there is a common ancestor node by definition
+		if (start.getId() == end.getId()) {
+			return Collections.EMPTY_LIST;
 		}
-
-
 
 		// Ways from Start or End Element to the tree root
-		LinkedList<ActionTreeElement> startToRoot = new LinkedList<ActionTreeElement>();
-		LinkedList<ActionTreeElement> endToRoot = new LinkedList<ActionTreeElement>();
+		LinkedList<ActionTreeElement> startToRoot = new LinkedList<>(Collections.singleton(start));
+		LinkedList<ActionTreeElement> endToRoot = new LinkedList<>(Collections.singleton(end));
 
-		ActionTreeElement current, other;
-		boolean path; // is start or end current
-		if (start.getId() > end.getId()) {
-			current = start;
-			other = end;
-			path = true;
-		} else {
-			current = end;
-			other = start;
-			path = false;
-		}
+		/* back track until parents with same ids are found */
+		LinkedList<ActionTreeElement> current = startToRoot;
+		LinkedList<ActionTreeElement> other   = endToRoot;
 
-		while (conditionA(startToRoot, endToRoot)) {//I wish I knew what they do
+		while (noCommonAncestorFoundMoreToGo(startToRoot, endToRoot)) {
 
-			while (conditionB(current,other)) {
-				(path ? startToRoot : endToRoot).addLast(current);
-				current = current.getParent();
-			}
+			catchUp(current, other);//add to current until current.last.id <= other.last.id
 
-			ActionTreeElement tmp = current;
+			LinkedList<ActionTreeElement> tmp = current;//swap
 			current = other;
 			other = tmp;
-			path = !path;
 		}
 
-		// nodes not in the same tree?
+		// both last elements now have the same id (worst case it is 1 i.e. root)
+		// if the last elements are not also identical, they must be from different trees
 		if (startToRoot.getLast() != endToRoot.getLast()) {
-			return null;
+			return null;//todo return [] instead?
 		}
 
 		// remove elements which are in both paths
-		while (!startToRoot.isEmpty() && !endToRoot.isEmpty() && startToRoot.getLast() == endToRoot.getLast()) {
-			startToRoot.removeLast();
+		ActionTreeElement commonAncestor;
+		do {
+			commonAncestor = startToRoot.removeLast();
 			endToRoot.removeLast();
-		}
+		} while (!startToRoot.isEmpty() && !endToRoot.isEmpty()
+				&& startToRoot.getLast() == endToRoot.getLast());
 
-		// readd the last removed element
-		if (!startToRoot.isEmpty()) { // its itself a split up point
-			startToRoot.add(startToRoot.getLast().getParent());
-		} else { // its start itself
-			startToRoot.add(start);
-		}
 		// add the end-root way backwards
-		while (!endToRoot.isEmpty()) {
-			startToRoot.add(endToRoot.getLast());
-			endToRoot.removeLast();
+		startToRoot.addLast(commonAncestor);
+		for (Iterator<ActionTreeElement> it = endToRoot.descendingIterator(); it.hasNext(); ) {
+			startToRoot.addLast(it.next());
 		}
 
 		return startToRoot;
 	}
 
-	private static boolean conditionA(LinkedList<ActionTreeElement> startToRoot, LinkedList<ActionTreeElement> endToRoot){
-		boolean eitherListEmpty = startToRoot.isEmpty() || endToRoot.isEmpty();
+	private static boolean noCommonAncestorFoundMoreToGo(LinkedList<ActionTreeElement> startToRoot, LinkedList<ActionTreeElement> endToRoot){
+		int lastId1 = startToRoot.getLast().getId();
+		int lastId2 = endToRoot.getLast().getId();
+		boolean lastElementsDiffer = lastId1 != lastId2;
 
-		return eitherListEmpty || (
-				                   startToRoot.getLast() != endToRoot.getLast() //last elements differ
-										   &&
-								   startToRoot.getLast().getParent() != null || endToRoot.getLast().getParent() != null
-		                          );
-		/* mangels laziness kann ich leider nicht alles abkürzen*/
+		boolean notBothRoot = lastId1 > 1 || lastId2 > 1;//not necessary when we are absolutely sure to end up at the same root node
+		//maybe compare ids in last elements differ
+		return lastElementsDiffer && notBothRoot;
 	}
 
-	private static boolean conditionB(ActionTreeElement current, ActionTreeElement other){
+	/**
+	 * adds parents to current until current's last element has an id lesser or equal other's
+	 */
+	private static void catchUp(LinkedList<ActionTreeElement> current, LinkedList<ActionTreeElement> other){
+		while (current.getLast().getId() > other.getLast().getId()) {
+			ActionTreeElement parent = current.getLast().getParent();
+			current.addLast(parent);
+		}
 
-		return current != null && (other == null || current.getId() >= other.getId());
 	}
-
 
 
 	/**
@@ -255,6 +221,7 @@ public class ActionTree extends ObservableModelImpl<ActionTreeElement> implement
 	 * 
 	 * @return einen Iterator für die ActionTreeElemente
 	 */
+	@Override
 	public Iterator<ActionTreeElement> iterator() {
 		return new ActionTreeIterator(this);
 	}

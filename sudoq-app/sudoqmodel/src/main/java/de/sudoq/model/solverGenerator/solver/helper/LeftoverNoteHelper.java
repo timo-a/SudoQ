@@ -1,7 +1,5 @@
 package de.sudoq.model.solverGenerator.solver.helper;
 
-import java.util.List;
-
 import de.sudoq.model.solverGenerator.solution.LeftoverNoteDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.solvingAssistant.HintTypes;
@@ -49,10 +47,10 @@ public class LeftoverNoteHelper extends SolveHelper {
         CandidateSet filled = new CandidateSet();
         CandidateSet notes  = new CandidateSet();
         for(Position p: c){
-            if(sudoku.getField(p).isNotSolved())
+            if(sudoku.getCell(p).isNotSolved())
                 notes.or(sudoku.getCurrentCandidates(p)); //collect all notes
             else
-                filled.set(sudoku.getField(p).getCurrentValue()); //collect all entered solution
+                filled.set(sudoku.getCell(p).getCurrentValue()); //collect all entered solution
         }
 
         return filled.hasCommonElement(notes);
@@ -62,10 +60,10 @@ public class LeftoverNoteHelper extends SolveHelper {
         CandidateSet filled = new CandidateSet();
         CandidateSet notes  = new CandidateSet();
         for(Position p: c){
-            if(sudoku.getField(p).isNotSolved())
+            if(sudoku.getCell(p).isNotSolved())
                 notes.or(sudoku.getCurrentCandidates(p));
             else
-                filled.set(sudoku.getField(p).getCurrentValue());
+                filled.set(sudoku.getCell(p).getCurrentValue());
         }
         filled.and(notes);
         return filled.nextSetBit(0);
@@ -73,7 +71,7 @@ public class LeftoverNoteHelper extends SolveHelper {
 
     private void deleteNote(Constraint c, int note){
         for(Position p: c)
-            if(sudoku.getField(p).isNotSolved() && sudoku.getField(p).isNoteSet(note))
+            if(sudoku.getCell(p).isNotSolved() && sudoku.getCell(p).isNoteSet(note))
                 sudoku.getCurrentCandidates(p).clear(note);
     }
 

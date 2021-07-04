@@ -9,8 +9,8 @@
     <string name="profile_preference_title_assistance_markRowColumn">Séléctionner la ligne/ la colonne</string>
     <string name="profile_preference_title_assistance_markWrongSymbol">Séléctionner les symboles faux</string>
     <string name="profile_preference_title_assistance_restrictCandidates">Aide de saisie</string>
-    <string name="profile_preference_title_assistance_allowSolveSpecificField">Résoudre la case choisie</string>
-    <string name="profile_preference_title_assistance_allowSolveRandomField">Résoudre une case au hasard</string>
+    <string name="profile_preference_title_assistance_allowSolveSpecificCell">Résoudre la case choisie</string>
+    <string name="profile_preference_title_assistance_allowSolveRandomCell">Résoudre une case au hasard</string>
     <string name="profile_preference_title_assistance_allowGetHint">Conseils</string>
     <string name="profile_preference_title_assistance_autoAdjustNotes">Adapter les remarques automatiquement</string>
     <string name="profile_preference_title_profile">Profil</string>
@@ -21,8 +21,28 @@
     <string name="profile_preference_button_provide_restricted_set_of_types">Sélectionnez les types sont proposés</string>
     <string name="profile_preference_new_profile">nouveau profil</string>
 
+    <!-- restrict types -->
+    <string name="advanced_settings_restrict_types_empty_warning">Vous devez laisser au moins un type. Sinon, vous ne pourrez pas commencer un nouveau sudoku.</string>
+    <!-- Sudoku Types -->
+    <string name="advanced_settings_restrict_item_standard_9x9"  >Standard</string>
+    <string name="advanced_settings_restrict_item_standard_16x16">16x16</string>
+    <string name="advanced_settings_restrict_item_standard_6x6"  >6x6</string>
+    <string name="advanced_settings_restrict_item_standard_4x4"  >4x4</string>
+    <string name="advanced_settings_restrict_item_squiggly_a_9x9">Squiggly-Sudoku 9x9</string>
+    <string name="advanced_settings_restrict_item_squiggly_b_9x9">Squoggly-Sudoku 9x9</string>
+    <string name="advanced_settings_restrict_item_stairstep_9x9" >Sudoku d\'escalier 9x9</string>
+    <string name="advanced_settings_restrict_item_samurai"       >Samurai-Sudoku</string>
+    <string name="advanced_settings_restrict_item_hyper"         >Hyper-Sudoku</string>
+    <string name="advanced_settings_restrict_item_xsudoku"       >X-Sudoku</string>
+
 
     <string name="profile_preference_title_crash_trigger">crasher l\'application</string>
     <string name="profile_preference_title_intelligent_assistant">Assistant Intelligent</string>
+    <string name="language_system">Langue de système</string>
+    <string name="language_german">Allemand</string>
+    <string name="language_french">Français</string>
+    <string name="language_english">Anglaise</string>
+    <string name="advanced_settings_language_spinner_label">Langue</string>
+    <string name="advanced_settings_language_spinner_dummy">Choisissez une langue</string>
 
 </resources>

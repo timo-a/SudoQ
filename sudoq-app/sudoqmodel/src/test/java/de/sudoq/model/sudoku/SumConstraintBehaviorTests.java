@@ -36,12 +36,12 @@ public class SumConstraintBehaviorTests {
 		
 		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard9x9).createSudoku();
 
-		sudoku.getField(Position.get(0, 0)).setCurrentValue(1);
-		sudoku.getField(Position.get(0, 1)).setCurrentValue(2);
-		sudoku.getField(Position.get(0, 2)).setCurrentValue(3);
-		sudoku.getField(Position.get(1, 0)).setCurrentValue(1);
-		sudoku.getField(Position.get(1, 1)).setCurrentValue(2);
-		sudoku.getField(Position.get(1, 2)).setCurrentValue(3);
+		sudoku.getCell(Position.get(0, 0)).setCurrentValue(1);
+		sudoku.getCell(Position.get(0, 1)).setCurrentValue(2);
+		sudoku.getCell(Position.get(0, 2)).setCurrentValue(3);
+		sudoku.getCell(Position.get(1, 0)).setCurrentValue(1);
+		sudoku.getCell(Position.get(1, 1)).setCurrentValue(2);
+		sudoku.getCell(Position.get(1, 2)).setCurrentValue(3);
 
 		Constraint constraint = new Constraint(new SumConstraintBehavior(12), ConstraintType.LINE);
 		constraint.addPosition(Position.get(0, 0));
@@ -54,16 +54,16 @@ public class SumConstraintBehaviorTests {
 		assertFalse("constraint has unique behavior", constraint.hasUniqueBehavior());
 		assertTrue("constraint not saturated", constraint.isSaturated(sudoku));
 
-		sudoku.getField(Position.get(1, 2)).clearCurrentValue();
+		sudoku.getCell(Position.get(1, 2)).clearCurrentValue();
 		assertTrue("constraint not saturated", constraint.isSaturated(sudoku));
 
-		sudoku.getField(Position.get(1, 1)).setCurrentValue(8);
+		sudoku.getCell(Position.get(1, 1)).setCurrentValue(8);
 		assertFalse("constraint not saturated", constraint.isSaturated(sudoku));
 
-		sudoku.getField(Position.get(1, 2)).setCurrentValue(2);
+		sudoku.getCell(Position.get(1, 2)).setCurrentValue(2);
 		assertFalse("constraint not saturated", constraint.isSaturated(sudoku));
 
-		sudoku.getField(Position.get(1, 2)).setCurrentValue(4);
+		sudoku.getCell(Position.get(1, 2)).setCurrentValue(4);
 		assertFalse("constraint not saturated", constraint.isSaturated(sudoku));
 	}
 }

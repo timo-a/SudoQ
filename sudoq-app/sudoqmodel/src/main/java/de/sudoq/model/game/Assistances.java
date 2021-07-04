@@ -13,7 +13,7 @@ package de.sudoq.model.game;
  * Hilfestellungen, die vom Benutzer angefordert werden müssen.
  */
 public enum Assistances {
-	/** Attributes */
+    /* Attributes */
 
 	/**
 	 * Die Zeile und Spalte, in der sich das momentan ausgewählte Feld befindet, werden markiert (passiv).
@@ -36,8 +36,7 @@ public enum Assistances {
 	 * Die Notizen werden bei Änderungen am Sudokus automatisch geändert, sodass nur Symbole als Notizen eingetragen
 	 * sind, die bei ihrer Eingabe in das Feld die Constraints des Sudokus nicht verletzen würden.
 	 */
-	autoAdjustNotes;
-
+	autoAdjustNotes
 
 
 }

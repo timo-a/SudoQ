@@ -13,17 +13,21 @@ public class SolveActionLastDigit extends SolveAction {
         Position rwPosition = Utils.positionToRealWorld(target);
         int      rwSolution = Utils.symbolToRealWorld(solution);
         /* are all x values the same? */
-        boolean xSame = true;
         int xPo = list.get(0).getX();
+        boolean xSame = true;
         for (Position p: list)
-            if(p.getX()!=xPo)
+            if (p.getX() != xPo) {
                 xSame = false;
+                break;
+            }
         /* are all Y values the same? */
-        boolean ySame = true;
         int yPo = list.get(0).getY();
+        boolean ySame = true;
         for (Position p: list)
-            if(p.getY()!=yPo)
+            if (p.getY() != yPo) {
                 ySame = false;
+                break;
+            }
 
         String structure = xSame ? "column":
                            ySame ? "row":

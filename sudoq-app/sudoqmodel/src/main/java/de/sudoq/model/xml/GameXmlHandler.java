@@ -17,7 +17,7 @@ import de.sudoq.model.game.Game;
  */
 public class GameXmlHandler extends XmlHandler<Game> {
 
-	private int id;
+	private final int id;
 
 	/**
 	 * Erzeugt einen GameXmlHandler um ein Game zu speichern

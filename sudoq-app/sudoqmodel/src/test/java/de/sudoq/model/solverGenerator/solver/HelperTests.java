@@ -7,17 +7,13 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import de.sudoq.model.files.FileManagerTests;
-import de.sudoq.model.solverGenerator.solution.DerivationField;
-import de.sudoq.model.solverGenerator.solution.LockedCandidatesDerivation;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
-import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.solverGenerator.solver.helper.HiddenHelper;
 import de.sudoq.model.solverGenerator.solver.helper.LastDigitHelper;
 import de.sudoq.model.solverGenerator.solver.helper.LeftoverNoteHelper;
@@ -26,14 +22,8 @@ import de.sudoq.model.solverGenerator.solver.helper.NakedHelper;
 import de.sudoq.model.solverGenerator.solver.helper.SolveHelper;
 import de.sudoq.model.solverGenerator.solver.helper.SubsetHelper;
 import de.sudoq.model.solverGenerator.solver.helper.XWingHelper;
-import de.sudoq.model.sudoku.Field;
 import de.sudoq.model.sudoku.Position;
-import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
-import de.sudoq.model.sudoku.SudokuBuilder;
-import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
 public class HelperTests {
@@ -206,7 +196,7 @@ public class HelperTests {
 	}
 
 	private void setVal(Sudoku s, int x, int y, int val){
-		s.getField(Position.get(x-1, y-1)).setCurrentValue(val-1);
+		s.getCell(Position.get(x-1, y-1)).setCurrentValue(val-1);
 	}
 
 }

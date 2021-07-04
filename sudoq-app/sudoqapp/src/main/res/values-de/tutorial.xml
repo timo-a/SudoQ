@@ -43,10 +43,10 @@
 	<string name="sf_tutorial_assistances_active_title">Aktive Hilfestellungen</string>
 	<string name="sf_tutorial_assistances_active_description1">Aktive Hilfestellungen können im Spiel aufgerufen werden wenn man sie braucht.
 	    Sie werden über den links gezeigten Button erreicht.</string>
-	<string name="sf_tutorial_assistances_active_solverandomfield_title">Zufälliges Feld lösen</string>
-	<string name="sf_tutorial_assistances_active_solverandomfield_description1">Es wird automatisch ein zufälliges Feld gelöst.</string>
-	<string name="sf_tutorial_assistances_active_solvecurrentfield_title">Ausgewähltes Feld lösen</string>
-	<string name="sf_tutorial_assistances_active_solvecurrentfield_description1">Das zur Zeit ausgewählte Feld wird gelöst.</string>
+	<string name="sf_tutorial_assistances_active_solverandomcell_title">Zufälliges Feld lösen</string>
+	<string name="sf_tutorial_assistances_active_solverandomcell_description1">Es wird automatisch ein zufälliges Feld gelöst.</string>
+	<string name="sf_tutorial_assistances_active_solvecurrentcell_title">Ausgewähltes Feld lösen</string>
+	<string name="sf_tutorial_assistances_active_solvecurrentcell_description1">Das zur Zeit ausgewählte Feld wird gelöst.</string>
 	<string name="sf_tutorial_assistances_active_check_title">Lösung prüfen</string>
 	<string name="sf_tutorial_assistances_active_check_description1">Deine aktuelle Lösung wird geprüft und eine Nachricht teilt dir mit ob alle deine ausgefüllten Felder korrekt gelöst sind, 
 	    oder ob es ein Feld gibt, das nicht korrekt gelöst ist.</string>

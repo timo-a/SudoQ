@@ -8,8 +8,6 @@
 package de.sudoq.model.sudoku.sudokuTypes;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -65,7 +63,7 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 	protected List<Constraint> constraints;
 
 	/** 
-	 * Alle Positions die in Teil eines Constraints sind -> auf ein Feld verweisen
+	 * Alle Positions die in Teil eines Constraints sind d.h. auf ein Feld verweisen
 	 * (Bei Samurai sind das ja nicht alle) 
 	 * */
 	protected List<Position> positions;
@@ -80,10 +78,10 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 	protected ComplexityConstraintBuilder ccb;
 	
 	public SudokuType(){
-		this.constraints = new ArrayList<Constraint>();
-		this.positions   = new ArrayList<Position>();
+		this.constraints = new ArrayList<>();
+		this.positions   = new ArrayList<>();
 		this.setOfPermutationProperties = new SetOfPermutationProperties();
-		this.helperList = new ArrayList<Helpers>();
+		this.helperList = new ArrayList<>();
 		this.ccb = new ComplexityConstraintBuilder();
 	}
 		
@@ -110,14 +108,14 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 		this.standardAllocationFactor = -1.0f;
 		this.numberOfSymbols = numberOfSymbols;
 		this.dimensions = Position.get(width, height);
-		this.constraints = new ArrayList<Constraint>();
-		this.positions   = new ArrayList<Position>();
+		this.constraints = new ArrayList<>();
+		this.positions   = new ArrayList<>();
 		this.setOfPermutationProperties = new SetOfPermutationProperties();
-		this.helperList = new ArrayList<Helpers>();
+		this.helperList = new ArrayList<>();
 		this.ccb = new ComplexityConstraintBuilder();
 	}
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Gibt die Größe eines Sudokus dieses Typs zurück. Die Größe wird durch ein Position-Objekt repräsentiert, wobei
@@ -182,6 +180,7 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 	/**
 	 * Returns an iterator over all valid positions in this type.
 	 * valid meaning a position that appears in a constraint
+	 * @return all positions
 	 */
 	public Iterable<Position> getValidPositions() {
 		//return positions.iterator();
@@ -400,6 +399,6 @@ public class SudokuType implements Iterable<Constraint>, ComplexityFactory, Xmla
 			for(Position p: c)
 				if(!positions.contains(p))
 					positions.add(p);
-		
+
 	}
 }

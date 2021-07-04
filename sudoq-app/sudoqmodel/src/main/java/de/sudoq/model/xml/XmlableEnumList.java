@@ -8,11 +8,7 @@
 package de.sudoq.model.xml;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
-import de.sudoq.model.sudoku.ConstraintType;
-import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.sudokuTypes.PermutationProperties;
 import de.sudoq.model.xml.XmlAttribute;
 import de.sudoq.model.xml.XmlTree;
 import de.sudoq.model.xml.Xmlable;

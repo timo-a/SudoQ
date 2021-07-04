@@ -7,26 +7,26 @@
  */
 package de.sudoq.model.actionTree;
 
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 
 /**
  * Diese Klasse repräsentiert eine Aktion auf einem Sudoku-Feld die vorwärts und
  * rückwärts ausgeführt werden kann.
  */
 public abstract class Action {
-	/** Attributes */
+	/* Attributes */
 
 	/**
 	 * Der Wert diff speichert die Unterschiede zwischen altem und neuem Wert.
 	 */
-	protected int diff;
+	protected final int diff;
 
 	/**
 	 * Das Sudoku-Feld auf dem die Action ausgeführt wird
 	 */
-	protected Field field;
+	protected Cell cell;
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Ein geschützter Konstruktor um die Instanziierung von Actions außerhalb
@@ -36,15 +36,15 @@ public abstract class Action {
 	 * 
 	 * @param diff
 	 *            Der Unterschied zwischen altem und neuem Wert
-	 * @param field
+	 * @param cell
 	 *            Das zu bearbeitende Feld
 	 * @throws IllegalArgumentException
 	 *             Wird geworfen, falls das übergebene Field null ist
 	 */
-	protected Action(int diff, Field field) {
+	protected Action(int diff, Cell cell) {
 		this.diff = diff;
-		if (field != null) {
-			this.field = field;
+		if (cell != null) {
+			this.cell = cell;
 		} else {
 			throw new IllegalArgumentException();
 		}
@@ -65,11 +65,11 @@ public abstract class Action {
 	 * 
 	 * @return die Feld id.
 	 */
-	public int getFieldId() {
-		return field.getId();
+	public int getCellId() {
+		return cell.getId();
 	}
-	public Field getField() {
-		return field;
+	public Cell getCell() {
+		return cell;
 	}
 
 	/**
@@ -79,7 +79,7 @@ public abstract class Action {
 	public boolean equals(Object o) {
 		if (o != null && o.getClass().equals(this.getClass())) {
 			Action other = (Action) o;
-			return this.diff == other.diff && this.field.equals(other.field);
+			return this.diff == other.diff && this.cell.equals(other.cell);
 		}
 		return false;
 	}

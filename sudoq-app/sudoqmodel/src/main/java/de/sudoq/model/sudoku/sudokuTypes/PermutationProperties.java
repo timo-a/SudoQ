@@ -11,7 +11,7 @@ package de.sudoq.model.sudoku.sudokuTypes;
  * Dieses Enum definiert die auf einem Sudoku verfügbaren Permutationen.
  */
 public enum PermutationProperties {
-	/** Attributes */
+	/* Attributes */
 
 	/**
 	 * Rotation um 90°.

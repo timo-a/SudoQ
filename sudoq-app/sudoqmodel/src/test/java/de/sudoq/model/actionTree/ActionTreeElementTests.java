@@ -7,16 +7,13 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import de.sudoq.model.actionTree.Action;
-import de.sudoq.model.actionTree.ActionTreeElement;
-import de.sudoq.model.actionTree.SolveAction;
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 
 public class ActionTreeElementTests {
 
 	@Test
 	public void testConstruction() {
-		Action action = new SolveAction(1, new Field(-1, 1));
+		Action action = new SolveAction(1, new Cell(-1, 1));
 
 		ActionTreeElement ate1 = new ActionTreeElement(1, action, null);
 		ActionTreeElement ate2 = new ActionTreeElement(2, action, ate1);
@@ -40,7 +37,7 @@ public class ActionTreeElementTests {
 
 	@Test
 	public void testEquals() {
-		Action action = new SolveAction(1, new Field(-1, 1));
+		Action action = new SolveAction(1, new Cell(-1, 1));
 		ActionTreeElement ate = new ActionTreeElement(1, action, null);
 		ActionTreeElement ate1 = new ActionTreeElement(2, action, null);
 		assertFalse(ate.equals(new Object()));
@@ -49,14 +46,14 @@ public class ActionTreeElementTests {
 		assertTrue(ate.equals(ate1));
 		ate1.mark();
 		assertFalse(ate.equals(ate1));
-		ate1 = new ActionTreeElement(1, new SolveAction(1, new Field(0, 1)), null);
+		ate1 = new ActionTreeElement(1, new SolveAction(1, new Cell(0, 1)), null);
 		assertFalse(ate.equals(ate1));
 
 	}
 
 	@Test
 	public void testIsSplitUp() {
-		Action action = new SolveAction(1, new Field(-1, 1));
+		Action action = new SolveAction(1, new Cell(-1, 1));
 
 		ActionTreeElement ate1 = new ActionTreeElement(1, action, null);
 		assertFalse(ate1.isSplitUp());
@@ -68,8 +65,8 @@ public class ActionTreeElementTests {
 
 	@Test
 	public void testActionExecution() {
-		Field f = new Field(true, 3, -1, 9);
-		Action action = new SolveAction(1 - Field.EMPTYVAL, f);
+		Cell f = new Cell(true, 3, -1, 9);
+		Action action = new SolveAction(1 - Cell.EMPTYVAL, f);
 
 		ActionTreeElement ate1 = new ActionTreeElement(1, action, null);
 
@@ -82,7 +79,7 @@ public class ActionTreeElementTests {
 
 	@Test
 	public void testToXml() {
-		Action action = new SolveAction(1, new Field(1, 9));
+		Action action = new SolveAction(1, new Cell(1, 9));
 		ActionTreeElement ate = new ActionTreeElement(1, action, null);
 		assertTrue(ate.toXml().getAttributeValue(ActionTreeElement.PARENT).equals(""));
 		assertTrue(new ActionTreeElement(2, action, ate).toXml().getAttributeValue(ActionTreeElement.PARENT)
@@ -91,16 +88,16 @@ public class ActionTreeElementTests {
 		ate.markWrong();
 		assertTrue(ate.toXml().getAttributeValue(ActionTreeElement.MISTAKE).equals("true"));
 		assertTrue(ate.toXml().getAttributeValue(ActionTreeElement.CORRECT).equals("true"));
-		action = new SolveAction(1, new Field(-1, 9));
+		action = new SolveAction(1, new Cell(-1, 9));
 		ate = new ActionTreeElement(1, action, null);
 		assertEquals(ate.toXml(), null);
 	}
 
 	@Test
 	public void testCompare() {
-		ActionTreeElement a1 = new ActionTreeElement(1, new SolveAction(1, new Field(1, 9)), null);
-		ActionTreeElement a2 = new ActionTreeElement(3, new SolveAction(1, new Field(1, 9)), null);
-		ActionTreeElement a3 = new ActionTreeElement(1, new SolveAction(1, new Field(1, 9)), null);
+		ActionTreeElement a1 = new ActionTreeElement(1, new SolveAction(1, new Cell(1, 9)), null);
+		ActionTreeElement a2 = new ActionTreeElement(3, new SolveAction(1, new Cell(1, 9)), null);
+		ActionTreeElement a3 = new ActionTreeElement(1, new SolveAction(1, new Cell(1, 9)), null);
 		assertTrue(a1.compareTo(a2) == -2);
 		assertTrue(a2.compareTo(a1) == 2);
 		assertTrue(a1.compareTo(a3) == 0);
@@ -110,7 +107,7 @@ public class ActionTreeElementTests {
 
 	@Test
 	public void testMark() {
-		ActionTreeElement a1 = new ActionTreeElement(1, new SolveAction(1, new Field(1, 9)), null);
+		ActionTreeElement a1 = new ActionTreeElement(1, new SolveAction(1, new Cell(1, 9)), null);
 		assertFalse(a1.isMarked());
 		a1.mark();
 		assertTrue(a1.isMarked());

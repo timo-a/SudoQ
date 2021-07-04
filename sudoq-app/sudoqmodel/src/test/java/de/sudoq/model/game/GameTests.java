@@ -22,7 +22,7 @@ import de.sudoq.model.profile.Profile;
 import de.sudoq.model.solverGenerator.Generator;
 import de.sudoq.model.solverGenerator.GeneratorCallback;
 import de.sudoq.model.solverGenerator.solution.Solution;
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
@@ -62,8 +62,8 @@ public class GameTests {
 		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9).createSudoku());
 		assertEquals(game.getId(), 2);
 		assertNotNull(game.getStateHandler());
-		assertEquals(game.getSudoku().getField(Position.get(8, 8)).getCurrentValue(), Field.EMPTYVAL);
-		assertNull(game.getSudoku().getField(Position.get(10, 2)));
+		assertEquals(game.getSudoku().getCell(Position.get(8, 8)).getCurrentValue(), Cell.EMPTYVAL);
+		assertNull(game.getSudoku().getCell(Position.get(10, 2)));
 		assertEquals(0, game.getAssistancesCost());
 	}
 
@@ -78,24 +78,24 @@ public class GameTests {
 
 		Position pos = Position.get(1, 1);
 		ActionTreeElement start = game.getCurrentState();
-        Field f = game.getSudoku().getField(pos);
+        Cell f = game.getSudoku().getCell(pos);
 		game.addAndExecute(new SolveActionFactory().createAction(3, f));//setze 3
 		game.addAndExecute(new SolveActionFactory().createAction(4, f));//setze 4
 		assertFalse(game.isMarked(game.getCurrentState()));
 		game.addAndExecute(new SolveActionFactory().createAction(5, f));//setze 5
-		assertEquals(5, game.getSudoku().getField(pos).getCurrentValue());
+		assertEquals(5, game.getSudoku().getCell(pos).getCurrentValue());
 		game.markCurrentState();
 		assertTrue(game.isMarked(game.getCurrentState()));
 
 		game.goToState(start);
-		assertEquals(Field.EMPTYVAL, f.getCurrentValue());
+		assertEquals(Cell.EMPTYVAL, f.getCurrentValue());
 		assertFalse(game.isFinished());
 
 		game.redo();
 		game.redo();
 		assertEquals(5, f.getCurrentValue());//schlägt fehl
 		game.undo();
-		assertEquals(Field.EMPTYVAL, f.getCurrentValue());
+		assertEquals(Cell.EMPTYVAL, f.getCurrentValue());
 		game.redo();
 		assertFalse(game.checkSudoku());
 
@@ -113,9 +113,9 @@ public class GameTests {
 		Position pos = Position.get(1, 1);
 		ActionTreeElement start = game.getCurrentState();
 
-		game.addAndExecute(new SolveActionFactory().createAction(3, game.getSudoku().getField(pos)));
-		game.addAndExecute(new SolveActionFactory().createAction(4, game.getSudoku().getField(pos)));
-		game.addAndExecute(new SolveActionFactory().createAction(5, game.getSudoku().getField(pos)));
+		game.addAndExecute(new SolveActionFactory().createAction(3, game.getSudoku().getCell(pos)));
+		game.addAndExecute(new SolveActionFactory().createAction(4, game.getSudoku().getCell(pos)));
+		game.addAndExecute(new SolveActionFactory().createAction(5, game.getSudoku().getCell(pos)));
 		game.markCurrentState();
 
 		game.goToState(start);
@@ -139,11 +139,11 @@ public class GameTests {
 		Position pos = Position.get(1, 1);
 		ActionTreeElement start = game.getCurrentState();
 
-		game.addAndExecute(new SolveActionFactory().createAction(3, game.getSudoku().getField(pos)));
-		game.addAndExecute(new SolveActionFactory().createAction(4, game.getSudoku().getField(pos)));
-		game.addAndExecute(new SolveActionFactory().createAction(5, game.getSudoku().getField(pos)));
-		game.addAndExecute(new NoteActionFactory().createAction(2, game.getSudoku().getField(pos)));
-		assertEquals(game.getSudoku().getField(pos).getCurrentValue(), 5);
+		game.addAndExecute(new SolveActionFactory().createAction(3, game.getSudoku().getCell(pos)));
+		game.addAndExecute(new SolveActionFactory().createAction(4, game.getSudoku().getCell(pos)));
+		game.addAndExecute(new SolveActionFactory().createAction(5, game.getSudoku().getCell(pos)));
+		game.addAndExecute(new NoteActionFactory().createAction(2, game.getSudoku().getCell(pos)));
+		assertEquals(game.getSudoku().getCell(pos).getCurrentValue(), 5);
 		game.markCurrentState();
 		assertTrue(game.isMarked(game.getCurrentState()));
 
@@ -240,23 +240,23 @@ public class GameTests {
 		SudokuMock sudoku = new SudokuMock();
 		Game game = new Game(2, sudoku);
 
-		assertFalse(game.solveField(null));
-		assertFalse(game.solveField(new Field(true, -1, 3, 9)));
+		assertFalse(game.solveCell(null));
+		assertFalse(game.solveCell(new Cell(true, -1, 3, 9)));
 
-		game.addAndExecute(new SolveActionFactory().createAction(2, game.getSudoku().getField(Position.get(0, 0))));
+		game.addAndExecute(new SolveActionFactory().createAction(2, game.getSudoku().getCell(Position.get(0, 0))));
 		sudoku.toogleErrors();
 		assertFalse(game.checkSudoku());
 		assertTrue(game.getCurrentState().isMistake());
-		assertFalse(game.solveField());
-		assertFalse(game.solveField(game.getSudoku().getField(Position.get(0, 0))));
+		assertFalse(game.solveCell());
+		assertFalse(game.solveCell(game.getSudoku().getCell(Position.get(0, 0))));
 		assertFalse(game.solveAll());
 
 		sudoku.toogleErrors();
 		sudoku.toogleFinished();
-		game.addAndExecute(new SolveActionFactory().createAction(Field.EMPTYVAL,
-				game.getSudoku().getField(Position.get(0, 0))));
-		game.addAndExecute(new SolveActionFactory().createAction(1, game.getSudoku().getField(Position.get(0, 0))));
-		assertEquals(Field.EMPTYVAL, game.getSudoku().getField(Position.get(0, 0)).getCurrentValue());
+		game.addAndExecute(new SolveActionFactory().createAction(Cell.EMPTYVAL,
+				game.getSudoku().getCell(Position.get(0, 0))));
+		game.addAndExecute(new SolveActionFactory().createAction(1, game.getSudoku().getCell(Position.get(0, 0))));
+		assertEquals(Cell.EMPTYVAL, game.getSudoku().getCell(Position.get(0, 0)).getCurrentValue());
 	}
 
 	@Test
@@ -266,22 +266,22 @@ public class GameTests {
 		as.setAssistance(Assistances.autoAdjustNotes);
 		game.setAssistances(as);
 
-		game.addAndExecute(new NoteActionFactory().createAction(2, game.getSudoku().getField(Position.get(1, 0))));
-		game.addAndExecute(new NoteActionFactory().createAction(3, game.getSudoku().getField(Position.get(1, 0))));
-		game.addAndExecute(new NoteActionFactory().createAction(2, game.getSudoku().getField(Position.get(0, 1))));
-		game.addAndExecute(new NoteActionFactory().createAction(3, game.getSudoku().getField(Position.get(0, 1))));
+		game.addAndExecute(new NoteActionFactory().createAction(2, game.getSudoku().getCell(Position.get(1, 0))));
+		game.addAndExecute(new NoteActionFactory().createAction(3, game.getSudoku().getCell(Position.get(1, 0))));
+		game.addAndExecute(new NoteActionFactory().createAction(2, game.getSudoku().getCell(Position.get(0, 1))));
+		game.addAndExecute(new NoteActionFactory().createAction(3, game.getSudoku().getCell(Position.get(0, 1))));
 
-		assertTrue(game.getSudoku().getField(Position.get(0, 1)).isNoteSet(2));
-		assertTrue(game.getSudoku().getField(Position.get(1, 0)).isNoteSet(2));
-		assertTrue(game.getSudoku().getField(Position.get(0, 1)).isNoteSet(3));
-		assertTrue(game.getSudoku().getField(Position.get(1, 0)).isNoteSet(3));
+		assertTrue(game.getSudoku().getCell(Position.get(0, 1)).isNoteSet(2));
+		assertTrue(game.getSudoku().getCell(Position.get(1, 0)).isNoteSet(2));
+		assertTrue(game.getSudoku().getCell(Position.get(0, 1)).isNoteSet(3));
+		assertTrue(game.getSudoku().getCell(Position.get(1, 0)).isNoteSet(3));
 
-		game.addAndExecute(new SolveActionFactory().createAction(2, game.getSudoku().getField(Position.get(0, 0))));
+		game.addAndExecute(new SolveActionFactory().createAction(2, game.getSudoku().getCell(Position.get(0, 0))));
 
-		assertTrue(game.getSudoku().getField(Position.get(0, 1)).isNoteSet(3));
-		assertTrue(game.getSudoku().getField(Position.get(1, 0)).isNoteSet(3));
-		assertFalse(game.getSudoku().getField(Position.get(0, 1)).isNoteSet(2));
-		assertFalse(game.getSudoku().getField(Position.get(1, 0)).isNoteSet(2));
+		assertTrue(game.getSudoku().getCell(Position.get(0, 1)).isNoteSet(3));
+		assertTrue(game.getSudoku().getCell(Position.get(1, 0)).isNoteSet(3));
+		assertFalse(game.getSudoku().getCell(Position.get(0, 1)).isNoteSet(2));
+		assertFalse(game.getSudoku().getCell(Position.get(1, 0)).isNoteSet(2));
 	}
 
 	@Test
@@ -326,35 +326,35 @@ public class GameTests {
 		
         System.out.println("we passed the while loop!");
 		Game game = new Game(1, sudoku);
-		ArrayList<Field> unsolvedFields = new ArrayList<Field>();
-		for (Field f : sudoku) {
+		ArrayList<Cell> unsolvedCells = new ArrayList<Cell>();
+		for (Cell f : sudoku) {
 			if (f.isEditable()) {
 				f.clearCurrentValue();
-				unsolvedFields.add(f);
+				unsolvedCells.add(f);
 			}
 		}
 		assertTrue(game.checkSudoku());
-		assertTrue(game.solveField());
+		assertTrue(game.solveCell());
 		boolean hasNewSolved = false;
-		for (Field f : sudoku) {
+		for (Cell f : sudoku) {
 			if (f.isEditable() && f.isSolvedCorrect()) {
 				if (hasNewSolved) {
 					fail("Solve field solved more than one field");
 				} else {
 					hasNewSolved = true;
-					unsolvedFields.remove(f);
+					unsolvedCells.remove(f);
 				}
 			}
 		}
 		assertTrue(hasNewSolved);
 		assertTrue(game.checkSudoku());
 		assertFalse(game.isFinished());
-		assertTrue(game.solveField(unsolvedFields.get(0)));
-		assertTrue(unsolvedFields.get(0).isSolvedCorrect());
-		unsolvedFields.remove(0);
+		assertTrue(game.solveCell(unsolvedCells.get(0)));
+		assertTrue(unsolvedCells.get(0).isSolvedCorrect());
+		unsolvedCells.remove(0);
 		assertFalse(game.isFinished());
 		assertTrue(game.solveAll());
-		for (Field f : unsolvedFields) {
+		for (Cell f : unsolvedCells) {
 			assertTrue(f.isSolvedCorrect());
 		}
 		assertTrue(game.isFinished());
@@ -372,12 +372,12 @@ public class GameTests {
 		}
 		Game game = new Game(1, sudoku);
 
-		Field unsolvedField = null;
-		for (Field f : sudoku) {
+		Cell unsolvedCell = null;
+		for (Cell f : sudoku) {
 			if (f.isEditable()) {
 				f.clearCurrentValue();
-				if (unsolvedField == null)
-					unsolvedField = f;
+				if (unsolvedCell == null)
+					unsolvedCell = f;
 			}
 		}
 
@@ -386,16 +386,16 @@ public class GameTests {
 		assertTrue(game.getAssistancesCost() - 3 == oldAssistanceCost);
 		oldAssistanceCost = game.getAssistancesCost();
 
-		if (unsolvedField.getSolution() < 8) {
-			game.addAndExecute(new SolveActionFactory().createAction(8, unsolvedField));
+		if (unsolvedCell.getSolution() < 8) {
+			game.addAndExecute(new SolveActionFactory().createAction(8, unsolvedCell));
 		} else {
-			game.addAndExecute(new SolveActionFactory().createAction(7, unsolvedField));
+			game.addAndExecute(new SolveActionFactory().createAction(7, unsolvedCell));
 		}
 
 		game.goToLastCorrectState();
 		assertTrue(game.getAssistancesCost() - 3 == oldAssistanceCost);
 		oldAssistanceCost = game.getAssistancesCost();
-		assertTrue(unsolvedField.getCurrentValue() == Field.EMPTYVAL);
+		assertTrue(unsolvedCell.getCurrentValue() == Cell.EMPTYVAL);
 		assertTrue(game.getCurrentState().isCorrect());
 	}
 
@@ -415,18 +415,18 @@ public class GameTests {
 
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
-				game.addAndExecute(new NoteActionFactory().createAction(1, game.getSudoku().getField(Position.get(i, j))));
-				assertTrue(game.getSudoku().getField(Position.get(i, j)).isNoteSet(1));
+				game.addAndExecute(new NoteActionFactory().createAction(1, game.getSudoku().getCell(Position.get(i, j))));
+				assertTrue(game.getSudoku().getCell(Position.get(i, j)).isNoteSet(1));
 			}
 		}
 
-		assertTrue(game.solveField());
+		assertTrue(game.solveCell());
 		boolean done = false;
 		int x = -1;
 		int y = -1;
 		for (int i = 0; i < 9 && !done; i++) {
 			for (int j = 0; j < 9 && !done; j++) {
-				if (game.getSudoku().getField(Position.get(i, j)).getCurrentValue() == 1) {
+				if (game.getSudoku().getCell(Position.get(i, j)).getCurrentValue() == 1) {
 					done = true;
 					x = i;
 					y = j;
@@ -436,26 +436,26 @@ public class GameTests {
 		assertTrue(done);
 
 		for (int i = 0; i < 9; i++) {
-			assertFalse(game.getSudoku().getField(Position.get(x, i)).isNoteSet(1));
-			assertFalse(game.getSudoku().getField(Position.get(i, y)).isNoteSet(1));
+			assertFalse(game.getSudoku().getCell(Position.get(x, i)).isNoteSet(1));
+			assertFalse(game.getSudoku().getCell(Position.get(i, y)).isNoteSet(1));
 		}
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				assertFalse(game.getSudoku().getField(Position.get((x - (x % 3) + i), (y - (y % 3) + j))).isNoteSet(1));
+				assertFalse(game.getSudoku().getCell(Position.get((x - (x % 3) + i), (y - (y % 3) + j))).isNoteSet(1));
 			}
 		}
 
 		x = (x + 3) % 9;
 		y = (y + 3) % 9;
-		game.solveField(game.getSudoku().getField(Position.get(x, y)));
+		game.solveCell(game.getSudoku().getCell(Position.get(x, y)));
 
 		for (int i = 0; i < 9; i++) {
-			assertFalse(game.getSudoku().getField(Position.get(x, i)).isNoteSet(1));
-			assertFalse(game.getSudoku().getField(Position.get(i, y)).isNoteSet(1));
+			assertFalse(game.getSudoku().getCell(Position.get(x, i)).isNoteSet(1));
+			assertFalse(game.getSudoku().getCell(Position.get(i, y)).isNoteSet(1));
 		}
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				assertFalse(game.getSudoku().getField(Position.get((x - (x % 3) + i), (y - (y % 3) + j))).isNoteSet(1));
+				assertFalse(game.getSudoku().getCell(Position.get((x - (x % 3) + i), (y - (y % 3) + j))).isNoteSet(1));
 			}
 		}
 	}

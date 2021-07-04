@@ -8,7 +8,6 @@
 package de.sudoq.model.sudoku.sudokuTypes;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import de.sudoq.model.xml.XmlAttribute;
 import de.sudoq.model.xml.XmlTree;

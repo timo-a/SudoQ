@@ -20,7 +20,7 @@ public class SudokuBuilder {
 	private PositionMap<Boolean> setValues;
 	private SudokuType type;
 
-	/** Constructors */
+	/* Constructors */
 
 	/**
 	 * Erstellt einen Builder fuer ein Sudoku des spezifizierten Typs.
@@ -48,7 +48,7 @@ public class SudokuBuilder {
 		setValues = new PositionMap<>(type.getSize());
 	}
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Erstellt ein Sudoku mit dem Sudoku Typ dieses Builders und den

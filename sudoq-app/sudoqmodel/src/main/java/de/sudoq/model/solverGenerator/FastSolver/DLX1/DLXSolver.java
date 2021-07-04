@@ -1,7 +1,7 @@
 package de.sudoq.model.solverGenerator.FastSolver.DLX1;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -9,7 +9,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import de.sudoq.model.solverGenerator.FastSolver.FastSolver;
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
@@ -51,7 +51,7 @@ public class DLXSolver implements FastSolver {
         int[][] sarray = new int[dim.getY()][dim.getX()];
         for (int r = 0; r < sarray.length; r++)
             for (int c = 0; c < sarray[0].length; c++){
-                Field f = s.getField(Position.get(c,r));
+                Cell f = s.getCell(Position.get(c,r));
                 sarray[r][c] = f==null ? -1 //if pos doesn't exist e.g. (9,0) in SamuraiSudoku
                                        : f.isSolved() ? f.getCurrentValue() + 1
                                                       : 0;
@@ -80,7 +80,7 @@ public class DLXSolver implements FastSolver {
             *
             * */
             ExecutorService executor = Executors.newSingleThreadExecutor();
-            Collection c = Arrays.asList(new AmbiguousTask());
+            Collection c = Collections.singletonList(new AmbiguousTask());
             try {
                 executor.invokeAll(c , 5, TimeUnit.MINUTES); // Timeout of 5 minutes.
             } catch (InterruptedException e) {

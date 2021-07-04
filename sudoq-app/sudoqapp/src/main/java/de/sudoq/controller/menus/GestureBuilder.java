@@ -34,8 +34,8 @@ import java.util.Set;
 
 import de.sudoq.R;
 import de.sudoq.controller.SudoqCompatActivity;
-import de.sudoq.controller.sudoku.board.FieldViewPainter;
-import de.sudoq.controller.sudoku.board.FieldViewStates;
+import de.sudoq.controller.sudoku.board.CellViewPainter;
+import de.sudoq.controller.sudoku.board.CellViewStates;
 import de.sudoq.controller.sudoku.InputListener;
 import de.sudoq.controller.sudoku.Symbol;
 import de.sudoq.model.files.FileManager;
@@ -187,14 +187,14 @@ public class GestureBuilder extends SudoqCompatActivity implements OnGesturePerf
 		Set<String> gestures = this.gestureStore.getGestureEntries();
 		for (String sym : this.currentSymbolSet)
 			if (gestures.contains(sym))
-				this.virtualKeyboard.markField(Symbol.getInstance().getAbstract(sym), FieldViewStates.SELECTED_NOTE);
+				this.virtualKeyboard.markCell(Symbol.getInstance().getAbstract(sym), CellViewStates.SELECTED_NOTE);
 	}
 	
 	/**
 	 * Aktuallisiert die Tastatur.
 	 */
 	private void refreshKeyboard() {
-		FieldViewPainter.getInstance().setMarking(this.virtualKeyboard, FieldViewStates.KEYBOARD);
+		CellViewPainter.getInstance().setMarking(this.virtualKeyboard, CellViewStates.KEYBOARD);
 		Symbol.createSymbol(currentSymbolSet);
 		this.virtualKeyboard.refresh(currentSymbolSet.length);
 		this.virtualKeyboard.setActivated(true);

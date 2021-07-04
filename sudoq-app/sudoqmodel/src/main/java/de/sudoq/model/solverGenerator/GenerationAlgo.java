@@ -21,17 +21,11 @@ import de.sudoq.model.files.FileManager;
 import de.sudoq.model.solverGenerator.FastSolver.BranchAndBound.FastBranchAndBound;
 import de.sudoq.model.solverGenerator.FastSolver.FastSolver;
 import de.sudoq.model.solverGenerator.FastSolver.FastSolverFactory;
-import de.sudoq.model.solverGenerator.solution.BacktrackingDerivation;
-import de.sudoq.model.solverGenerator.solution.DerivationField;
-import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.ComplexityRelation;
 import de.sudoq.model.solverGenerator.solver.Solver;
-import de.sudoq.model.solverGenerator.solver.SolverSudoku;
-import de.sudoq.model.solverGenerator.transformations.Transformer;
-import de.sudoq.model.solvingAssistant.HintTypes;
 import de.sudoq.model.sudoku.Constraint;
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
@@ -49,17 +43,13 @@ import static de.sudoq.model.solverGenerator.solver.ComplexityRelation.INVALID;
 import static de.sudoq.model.solverGenerator.solver.ComplexityRelation.CONSTRAINT_SATURATION;
 
 /**
- * Abstrakte Klasse kapselt gemeinsamkeiten von {@link SudokuGenerationStandardType} und {@link SudokuGeneration}
- * Grund: wir hatten ursprünglich eine extra methode um 9x9 und 16x16 sudokus zu generieren.
- * Um diese Methode zu debuggen, habe ich alle Gemeinsamkeiten ausgelagert.
- * @author timo
  * Bietet die Möglichkeit Sudokus zu generieren.
  * Die Klasse implementiert das {@link Runnable} interface
  * und kann daher in einem eigenen Thread ausgeführt werden.
  *
  */
 public class GenerationAlgo implements Runnable {
-	/** Attributes */
+	/* Attributes */
 
 
 		/**
@@ -88,12 +78,12 @@ public class GenerationAlgo implements Runnable {
 		 * If we gave the current sudoku to the user tey wouldn't have to solve these fields
 		 * as they'd already be filled in.
 		 */
-		protected List<Position> definedFields;
+		protected List<Position> definedCells;
 
 		/**
 		 * Die noch freien, also nicht belegten Felder des Sudokus
 		 */
-		protected List<Position> freeFields;
+		protected List<Position> freeCells;
 
 		/**
 		 * Das gelöste Sudoku
@@ -103,7 +93,7 @@ public class GenerationAlgo implements Runnable {
 		/**
 		 * Die Anzahl der Felder, die fest zu definieren ist
 		 */
-		private int fieldsToDefine;
+		private int cellsToDefine;
 
 
 		/**
@@ -134,13 +124,13 @@ public class GenerationAlgo implements Runnable {
 			this.sudoku = sudoku;
 			this.callbackObject = callbackObject;
 			this.solver = new Solver(sudoku);
-			this.freeFields = new ArrayList<Position>();
-			this.definedFields = new ArrayList<Position>();
+			this.freeCells = new ArrayList<>();
+			this.definedCells = new ArrayList<>();
 			this.random = random;
 
 			this.desiredComplexityConstraint = sudoku.getSudokuType().buildComplexityConstraint(sudoku.getComplexity());
 
-			freeFields.addAll(getPositions(sudoku));//fills the currenlty empty list freefields as no field is defined=occupied
+			freeCells.addAll(getPositions(sudoku));//fills the currenlty empty list freefields as no field is defined=occupied
 
 		}
 
@@ -158,9 +148,9 @@ public class GenerationAlgo implements Runnable {
 			SudokuBuilder suBi = new SudokuBuilder(sudoku.getSudokuType());
 
 			for(Position p : getPositions(solvedSudoku)){
-					int value = solvedSudoku.getField(p).getSolution();
+					int value = solvedSudoku.getCell(p).getSolution();
 					suBi.addSolution(p, value);
-					if (!sudoku.getField(p).isNotSolved())
+					if (!sudoku.getCell(p).isNotSolved())
 						suBi.setFixed(p);
 
 			}
@@ -182,7 +172,7 @@ public class GenerationAlgo implements Runnable {
 
 		private Sudoku createSudokuPattern(){
 			//determine ideal number of prefilled fields
-			fieldsToDefine = getNumberOfFieldsToDefine(sudoku.getSudokuType(), desiredComplexityConstraint);
+			cellsToDefine = getNumberOfCellsToDefine(sudoku.getSudokuType(), desiredComplexityConstraint);
 
 			//A mapping from position to solution
 			PositionMap<Integer> solution = new PositionMap<>(this.sudoku.getSudokuType().getSize());
@@ -190,23 +180,23 @@ public class GenerationAlgo implements Runnable {
 			//System.out.println("Fields to define: "+fieldsToDefine);
 
 			//define fields
-			for (int i = 0; i < fieldsToDefine; i++) {
-				Position p = addDefinedField();
+			for (int i = 0; i < cellsToDefine; i++) {
+				Position p = addDefinedCell();
 			}
 
-			int fieldsToDefineDynamic = fieldsToDefine;
+			int fieldsToDefineDynamic = cellsToDefine;
 
 			/* until a solution is found, remove 5 random fields and add new ones */
 			FastSolver fs = FastSolverFactory.getSolver(sudoku);
 			while(!fs.hasSolution()) {
 				//System.out.println("Iteration: "+(iteration++)+", defined Fields: "+definedFields.size());
 				// Remove some fields, because sudoku could not be validated
-				removeDefinedFields(5);
+				removeDefinedCells(5);
 
 				// Define average number of fields
-				while (definedFields.size() < fieldsToDefineDynamic)
-					if (addDefinedField() == null) //try to add field, if null returned i.e. nospace / invalid
-						removeDefinedFields(5); //remove 5 fields
+				while (definedCells.size() < fieldsToDefineDynamic)
+					if (addDefinedCell() == null) //try to add field, if null returned i.e. nospace / invalid
+						removeDefinedCells(5); //remove 5 fields
 
 				if(fieldsToDefineDynamic > 0 && random.nextFloat() < 0.2)
 					fieldsToDefineDynamic--; //to avoid infinite loop slowly relax
@@ -241,8 +231,8 @@ public class GenerationAlgo implements Runnable {
 		private void createAllocation(Sudoku pattern){
 
 			//ensure all fields are defined
-			while (!this.freeFields.isEmpty()) {
-				this.definedFields.add(this.freeFields.remove(0));
+			while (!this.freeCells.isEmpty()) {
+				this.definedCells.add(this.freeCells.remove(0));
 			}
 
 
@@ -250,8 +240,8 @@ public class GenerationAlgo implements Runnable {
 			//TODO simplify: iterate over fields/positions
 
 			for (Position pos : getPositions(sudoku)) {
-				Field fSudoku =  sudoku.getField(pos);
-				Field fSolved = pattern.getField(pos);
+				Cell fSudoku =  sudoku.getCell(pos);
+				Cell fSolved = pattern.getCell(pos);
 				fSudoku.setCurrentValue(fSolved.getSolution(), false);
 			}
 
@@ -269,9 +259,9 @@ public class GenerationAlgo implements Runnable {
 					//	this.definedFields.add(this.freeFields.remove(0));
 					//}
 
-					removeDefinedFields(definedFields.size());
-					for (int i = 0; i < fieldsToDefine; i++) {
-						addDefinedField2();
+					removeDefinedCells(definedCells.size());
+					for (int i = 0; i < cellsToDefine; i++) {
+						addDefinedCell2();
 					}
 				}
 
@@ -292,15 +282,15 @@ public class GenerationAlgo implements Runnable {
 
 				//System.out.println("Generator.run +/- loop. validate says " + rel);
 				switch(rel){
-					case MUCH_TOO_EASY: removeDefinedFields(reallocationAmount);
+					case MUCH_TOO_EASY: removeDefinedCells(reallocationAmount);
 						break;
-					case TOO_EASY: removeDefinedFields(1);
+					case TOO_EASY: removeDefinedCells(1);
 						break;
 					case INVALID:  //freeFields ARE empty ?! hence infinite loop
 					case TOO_DIFFICULT:
 					case MUCH_TOO_DIFFICULT:
-						for (int i = 0; i < Math.min(reallocationAmount, freeFields.size()); i++) {
-							addDefinedField2();
+						for (int i = 0; i < Math.min(reallocationAmount, freeCells.size()); i++) {
+							addDefinedCell2();
 						}
 						break;
 
@@ -323,7 +313,7 @@ public class GenerationAlgo implements Runnable {
 
 				Position p = fs.getAmbiguousPos();
 
-				addDefinedField2(p);
+				addDefinedCell2(p);
 
 				fs = FastSolverFactory.getSolver(sudoku);
 			}
@@ -351,12 +341,12 @@ public class GenerationAlgo implements Runnable {
 				if (last.equals(current))
 					counter++;
 				else{
-					s += (", "+counter)+'*'+last;
+					s += ( ", " + counter ) + '*' + last;
 					last = current;
 					counter = 0;
 				}
 			}
-			s += (", "+counter)+'*'+last;
+			s += ( ", " + counter ) + '*' + last;
 
 			return '[' + s.substring(2) + ']';
 		}
@@ -375,13 +365,13 @@ public class GenerationAlgo implements Runnable {
 		// the number is determined as the smaller of
 		//        - the standard allocation factor defined in the type
 		//        - the average #fields per difficulty level defined in the type
-		private int getNumberOfFieldsToDefine(SudokuType type, ComplexityConstraint desiredComplexityConstraint){
+		private int getNumberOfCellsToDefine(SudokuType type, ComplexityConstraint desiredComplexityConstraint){
 			//TODO What do we have the allocation factor for??? can't it always be expressed through avg-fields?
 			float standardAllocationFactor = type.getStandardAllocationFactor();
-			int fieldsOnSudokuBoard = type.getSize().getX() * type.getSize().getY();
-			int fieldsByType = (int) (fieldsOnSudokuBoard * standardAllocationFactor); //TODO wäre freeFields.size nicht passender?
-			int fieldsByComp = desiredComplexityConstraint.getAverageFields();
-			return Math.min(fieldsByType, fieldsByComp);
+			int cellsOnSudokuBoard = type.getSize().getX() * type.getSize().getY();
+			int cellsByType = (int) (cellsOnSudokuBoard * standardAllocationFactor); //TODO wäre freeFields.size nicht passender?
+			int cellsByComp = desiredComplexityConstraint.getAverageCells();
+			return Math.min(cellsByType, cellsByComp);
 		}
 
 		/** returns `percentage` percent of the #positions in the type
@@ -408,7 +398,7 @@ public class GenerationAlgo implements Runnable {
 		 * @return Die Position des definierten Feldes oder null, falls keines
 		 *         gefunden wurde
 		 */
-		private Position addDefinedField() {
+		private Position addDefinedCell() {
 			//TODO not sure what they do
 
 
@@ -424,12 +414,12 @@ public class GenerationAlgo implements Runnable {
 
 
 			//definierte Felder markieren
-			for (Position p : this.definedFields) {
+			for (Position p : this.definedCells) {
 				markings[p.getX()][p.getY()] = true;
 			}
 
 			/* avoids infitite while loop*/
-			int count = definedFields.size();
+			int count = definedCells.size();
 
 			//find random {@code Position} p
 			Position p = null;
@@ -437,7 +427,7 @@ public class GenerationAlgo implements Runnable {
 			while (p == null && count < xSize * ySize) {
 				int x = random.nextInt(xSize);
 				int y = random.nextInt(ySize);
-				if (sudoku.getField(Position.get(x, y)) == null) {//position existiert nicht
+				if (sudoku.getCell(Position.get(x, y)) == null) {//position existiert nicht
 					markings[x][y] = true;
 					count++;
 				} else if (markings[x][y] == false) { //pos existiert und ist unmarkiert
@@ -448,7 +438,7 @@ public class GenerationAlgo implements Runnable {
 			//construct a list of symbols starting at arbitrary point. there is no short way to do this without '%' 
 			int numSym = sudoku.getSudokuType().getNumberOfSymbols();
 			int offset = random.nextInt(numSym);
-			Queue<Integer> symbols = new LinkedList<Integer>();
+			Queue<Integer> symbols = new LinkedList<>();
 			for (int i = 0; i < numSym; i++)
 				symbols.add(i);
 
@@ -458,19 +448,19 @@ public class GenerationAlgo implements Runnable {
 			//constraint-saturierende belegung suchen 
 			boolean valid = false;
 			for (int s: symbols) {				
-				sudoku.getField(p).setCurrentValue(s, false);
+				sudoku.getCell(p).setCurrentValue(s, false);
 				//alle constraints saturiert?
 				valid = true;
 				for (Constraint c: this.sudoku.getSudokuType()) {
 					if (!c.isSaturated(sudoku)) {
 						valid = false;
-						sudoku.getField(p).setCurrentValue(Field.EMPTYVAL, false);
+						sudoku.getCell(p).setCurrentValue(Cell.EMPTYVAL, false);
 						break;
 					}
 				}
 				if (valid) {
-					definedFields.add(p);
-					freeFields.remove(p); //if it's defined it is no longer free
+					definedCells.add(p);
+					freeCells.remove(p); //if it's defined it is no longer free
 					break;
 				}
 			}
@@ -480,27 +470,27 @@ public class GenerationAlgo implements Runnable {
 			return p;
 		}
 
-		private void addDefinedField2(int i){
-			Position p = freeFields.remove(i); //used to be 0, random just in case
-			Field fSudoku = sudoku.getField(p);
-			Field fSolved = solvedSudoku.getField(p);
+		private void addDefinedCell2(int i){
+			Position p = freeCells.remove(i); //used to be 0, random just in case
+			Cell fSudoku = sudoku.getCell(p);
+			Cell fSolved = solvedSudoku.getCell(p);
 			fSudoku.setCurrentValue(fSolved.getSolution(), false);
-			definedFields.add(p);
+			definedCells.add(p);
 		}
 
-		private void addDefinedField2(Position p){
-			int i = freeFields.indexOf(p);
+		private void addDefinedCell2(Position p){
+			int i = freeCells.indexOf(p);
 			if (i<0)
 				throw new IllegalArgumentException("position is not free, so it cannot be defined.");
-			addDefinedField2(i);
+			addDefinedCell2(i);
 		}
 
 
 		/**
 		 * choses a random free field and sets it as defined
 		 */
-		private void addDefinedField2(){
-			addDefinedField2(random.nextInt(freeFields.size()));
+		private void addDefinedCell2(){
+			addDefinedCell2(random.nextInt(freeCells.size()));
 		}
 
 		/**
@@ -508,26 +498,26 @@ public class GenerationAlgo implements Runnable {
 		 * 
 		 * @return position of removed field or null is nothing there to remove
 		 */
-		private Position removeDefinedField() {
-			if (definedFields.isEmpty())
+		private Position removeDefinedCell() {
+			if (definedCells.isEmpty())
 				return null;
 
-			int nr = random.nextInt(definedFields.size());
-			Position p = definedFields.remove(nr);
-			sudoku.getField(p).setCurrentValue(Field.EMPTYVAL, false);
-			freeFields.add(p);
+			int nr = random.nextInt(definedCells.size());
+			Position p = definedCells.remove(nr);
+			sudoku.getCell(p).setCurrentValue(Cell.EMPTYVAL, false);
+			freeCells.add(p);
 			return p;
 		}
 
 		/**
 		 * Tries {@code numberOfFieldsToRemove} times to remove a defined field
-		 * @param numberOfFieldsToRemove number of fields to remove
+		 * @param numberOfCellsToRemove number of fields to remove
 		 * @return list of removed positions
 		 * */
-		private List<Position> removeDefinedFields(int numberOfFieldsToRemove){
+		private List<Position> removeDefinedCells(int numberOfCellsToRemove){
 			ArrayList<Position> removed = new ArrayList<>();
-			for (int i = 0; i < numberOfFieldsToRemove; i++){
-				Position p = removeDefinedField();
+			for (int i = 0; i < numberOfCellsToRemove; i++){
+				Position p = removeDefinedCell();
 				if(p != null)
 					removed.add(p);
 			}
@@ -548,7 +538,7 @@ public class GenerationAlgo implements Runnable {
 
 		for (int x = 0; x < sudoku.getSudokuType().getSize().getX(); x++)
 			for (int y = 0; y < sudoku.getSudokuType().getSize().getY(); y++)
-				if (sudoku.getField(Position.get(x, y)) != null)
+				if (sudoku.getCell(Position.get(x, y)) != null)
 					p.add(Position.get(x, y));
 
 		return p;

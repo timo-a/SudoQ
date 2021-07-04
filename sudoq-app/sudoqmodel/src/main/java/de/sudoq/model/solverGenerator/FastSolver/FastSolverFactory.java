@@ -1,9 +1,6 @@
 package de.sudoq.model.solverGenerator.FastSolver;
 
-import de.sudoq.model.solverGenerator.FastSolver.BranchAndBound.FastBranchAndBound;
 import de.sudoq.model.solverGenerator.FastSolver.DLX1.DLXSolver;
-import de.sudoq.model.solverGenerator.FastSolver.DLX2.SamuraiSolver;
-import de.sudoq.model.solverGenerator.FastSolver.DLX2.Standard16Solver;
 import de.sudoq.model.sudoku.Sudoku;
 
 public class FastSolverFactory {

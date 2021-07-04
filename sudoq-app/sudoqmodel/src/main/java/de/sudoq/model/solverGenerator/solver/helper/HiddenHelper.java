@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
-import de.sudoq.model.solverGenerator.solution.DerivationBlock;
-import de.sudoq.model.solverGenerator.solution.DerivationField;
+import de.sudoq.model.solverGenerator.solution.DerivationCell;
 import de.sudoq.model.solverGenerator.solution.HiddenSetDerivation;
-import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.SolverSudoku;
 import de.sudoq.model.solvingAssistant.HintTypes;
 import de.sudoq.model.sudoku.Constraint;
@@ -21,7 +19,7 @@ import de.sudoq.model.sudoku.Position;
  * Ist dies der Fall, müssen diese n Kandidaten in den n Feldern in irgendeiner
  * Kombination eingetragen werden und daher können alle übrigen symbole aus diesen n feldern entfert werden.
  *
- * [¹²³⁴][¹²³⁴][³..][³..] -> [¹²][¹²][³..][³..]
+ * {@literal [¹²³⁴][¹²³⁴][³..][³..] -> [¹²][¹²][³..][³..]}
  * Looks for a constraint and a set of n candidates(i.e. distinct symbols that are not a solution).
  * For these candidates must hold that they exclusively appear in n unsolved fields.
  * In that case, they are all the solutions to these n fields (in some order) and all other candidates within these n fields can be removed
@@ -29,19 +27,19 @@ import de.sudoq.model.sudoku.Position;
  */
 public class HiddenHelper extends SubsetHelper {
 
-	private HintTypes[] labels = new HintTypes[] { HintTypes.HiddenSingle,
-	                                               HintTypes.HiddenPair,
-	                                               HintTypes.HiddenTriple,
-	                                               HintTypes.HiddenQuadruple,
-	                                               HintTypes.HiddenQuintuple,
-			                                       HintTypes.Hidden__6_tuple,
-                                                   HintTypes.Hidden__7_tuple,
-                                                   HintTypes.Hidden__8_tuple,
-                                                   HintTypes.Hidden__9_tuple,
-                                                   HintTypes.Hidden_10_tuple,
-                                                   HintTypes.Hidden_11_tuple,
-                                                   HintTypes.Hidden_12_tuple,
-                                                   HintTypes.Hidden_13_tuple};
+    private final HintTypes[] labels = new HintTypes[] { HintTypes.HiddenSingle,
+                                                         HintTypes.HiddenPair,
+                                                         HintTypes.HiddenTriple,
+                                                         HintTypes.HiddenQuadruple,
+                                                         HintTypes.HiddenQuintuple,
+                                                         HintTypes.Hidden__6_tuple,
+                                                         HintTypes.Hidden__7_tuple,
+                                                         HintTypes.Hidden__8_tuple,
+                                                         HintTypes.Hidden__9_tuple,
+                                                         HintTypes.Hidden_10_tuple,
+                                                         HintTypes.Hidden_11_tuple,
+                                                         HintTypes.Hidden_12_tuple,
+                                                         HintTypes.Hidden_13_tuple};
 
 	private HiddenSetDerivation derivation;
 
@@ -121,8 +119,8 @@ public class HiddenHelper extends SubsetHelper {
 							BitSet relevantCandidates = (BitSet) currentCandidates.clone();
 							BitSet irrelevantCandidates = localCopy;
 							irrelevantCandidates.andNot(currentSet);
-							DerivationField field = new DerivationField(pos, relevantCandidates, irrelevantCandidates);
-							lastDerivation.addDerivationField(field);
+							DerivationCell field = new DerivationCell(pos, relevantCandidates, irrelevantCandidates);
+							lastDerivation.addDerivationCell(field);
 						}
 						foundSubset = true;
 					}
@@ -158,8 +156,8 @@ public class HiddenHelper extends SubsetHelper {
 		for (Position p : subsetPositions) {
 			BitSet relevantCandidates = (BitSet) this.sudoku.getCurrentCandidates(p).clone();
 			relevantCandidates.and(currentSet);
-			DerivationField field = new DerivationField(p, relevantCandidates, new BitSet());
-			derivation.addSubsetField(field);
+			DerivationCell field = new DerivationCell(p, relevantCandidates, new BitSet());
+			derivation.addSubsetCell(field);
 		}
 		return derivation;
 	}

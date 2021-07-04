@@ -10,11 +10,7 @@ import java.util.NoSuchElementException;
 
 import org.junit.Test;
 
-import de.sudoq.model.actionTree.ActionFactory;
-import de.sudoq.model.actionTree.ActionTree;
-import de.sudoq.model.actionTree.ActionTreeElement;
-import de.sudoq.model.actionTree.SolveActionFactory;
-import de.sudoq.model.sudoku.Field;
+import de.sudoq.model.sudoku.Cell;
 
 public class ActionTreeIteratorTests {
 
@@ -22,12 +18,12 @@ public class ActionTreeIteratorTests {
 	public void testCompleteness() {
 		ActionTree at = new ActionTree();
 		ActionFactory factory = new SolveActionFactory();
-		Field field = new Field(-1, 1);
+		Cell cell = new Cell(-1, 1);
 
-		Action a2 = new SolveAction(1, field); // -> value 1
-		Action a3 = new SolveAction(0, field); // -> value 1
-		Action a4 = new SolveAction(0, field); // -> value 1
-		Action a5 = new SolveAction(1, field); // -> value 2
+		Action a2 = new SolveAction(1, cell); // -> value 1
+		Action a3 = new SolveAction(0, cell); // -> value 1
+		Action a4 = new SolveAction(0, cell); // -> value 1
+		Action a5 = new SolveAction(1, cell); // -> value 2
 
 		ActionTreeElement ate2 = at.add(a2, at.getRoot()); //one child
 		at.add(a3, ate2);//this should be ignored by the actionTree, cause redundant to parent TODO no ot shouldnd, only in gamestatehandler scenario. make that scenario!!!
@@ -48,12 +44,12 @@ public class ActionTreeIteratorTests {
 	public void testCompleteness2() {
 		ActionTree at = new ActionTree();
 		ActionFactory factory = new SolveActionFactory();
-		Field field = new Field(-1, 1);
+		Cell cell = new Cell(-1, 1);
 
-		Action a2 = factory.createAction(1, field);//actions are created by factory in relation to current field
-		Action a3 = factory.createAction(3, field);//creating them as needed makes it hard to see what is what
-		Action a4 = factory.createAction(3, field);
-		Action a5 = factory.createAction(2, field);
+		Action a2 = factory.createAction(1, cell);//actions are created by factory in relation to current field
+		Action a3 = factory.createAction(3, cell);//creating them as needed makes it hard to see what is what
+		Action a4 = factory.createAction(3, cell);
+		Action a5 = factory.createAction(2, cell);
 
 		ActionTreeElement ate2 = at.add(a2, at.getRoot()); //one child
 		ActionTreeElement ate3 = at.add(a3, ate2);

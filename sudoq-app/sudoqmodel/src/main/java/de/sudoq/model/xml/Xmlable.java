@@ -13,7 +13,7 @@ package de.sudoq.model.xml;
  */
 public interface Xmlable {
 
-	/** Methods */
+	/* Methods */
 
 	/**
 	 * Erzeugt ein XmlTree Objekt, welches die, für eine Speicherrepräsentation
@@ -21,7 +21,7 @@ public interface Xmlable {
 	 * 
 	 * @return XML-Baum-Repräsentation der implementierenden Klasse
 	 */
-	public XmlTree toXmlTree();
+    XmlTree toXmlTree();
 
 	/**
 	 * Lädt Daten aus einer XML Repräsentation der Klasse in die
@@ -33,6 +33,6 @@ public interface Xmlable {
 	 *             Wird geworfen, falls die Xml Repräsentation eine nicht
 	 *             unterstützte Struktur aufweist.
 	 */
-	public void fillFromXml(XmlTree xmlTreeRepresentation) throws IllegalArgumentException;
+    void fillFromXml(XmlTree xmlTreeRepresentation) throws IllegalArgumentException;
 
 }

@@ -142,13 +142,13 @@
          android:layout_marginLeft="5dp"
          android:layout_marginRight="5dp"
          android:textStyle="bold"
-         android:text="@string/sf_tutorial_assistances_active_solverandomfield_title" />
+         android:text="@string/sf_tutorial_assistances_active_solverandomcell_title" />
     
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:text="@string/sf_tutorial_assistances_active_solverandomfield_description1" />
+        android:text="@string/sf_tutorial_assistances_active_solverandomcell_description1" />
     
     <TextView
          android:layout_width="wrap_content"
@@ -157,13 +157,13 @@
          android:layout_marginLeft="5dp"
          android:layout_marginRight="5dp"
          android:textStyle="bold"
-         android:text="@string/sf_tutorial_assistances_active_solvecurrentfield_title" />
+         android:text="@string/sf_tutorial_assistances_active_solvecurrentcell_title" />
     
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:text="@string/sf_tutorial_assistances_active_solvecurrentfield_description1" />
+        android:text="@string/sf_tutorial_assistances_active_solvecurrentcell_description1" />
     
     <TextView
          android:layout_width="wrap_content"
