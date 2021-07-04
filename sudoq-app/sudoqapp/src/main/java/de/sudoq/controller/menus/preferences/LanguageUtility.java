@@ -10,8 +10,6 @@ import android.util.Log;
 
 import java.util.Locale;
 
-import de.sudoq.model.profile.Profile;
-
 public class LanguageUtility {
 
     private final static String SUDOQ_SHARED_PREFS_FILE = "SudoqSharedPrefs";
@@ -61,8 +59,13 @@ public class LanguageUtility {
 
 
     public static LanguageSetting.LanguageCode loadLanguageFromLocale(){
+        //use english as default
         String code = Locale.getDefault().getLanguage();
-        return LanguageSetting.LanguageCode.valueOf(code);
+        for (LanguageSetting.LanguageCode l: LanguageSetting.LanguageCode.values()) {
+            if (code.equals(l.name()))
+                return l;
+        }
+        return LanguageSetting.LanguageCode.en;
     }
 
 
