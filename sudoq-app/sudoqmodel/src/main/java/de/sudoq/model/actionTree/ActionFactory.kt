@@ -11,6 +11,7 @@ import de.sudoq.model.sudoku.Cell
 
 /**
  * An Interface for Factories that create objects of a certain [Action] type.
+ * todo why are factories used at all?
  */
 interface ActionFactory { //TODO rename IActionFactory
     /**

@@ -14,7 +14,6 @@ import java.io.IOException;
 
 import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.Utility;
-import de.sudoq.model.files.FileManager;
 import de.sudoq.model.game.Assistances;
 
 public class ProfileTests extends TestWithInitCleanforSingletons {

@@ -131,8 +131,8 @@ public class ActionTreeTests {
 		ActionTreeElement ate5 =       at.add(factory.createAction(2, cell3), ate2);
 		ActionTreeElement ate6 =          at.add(factory.createAction(1, cell4), ate5);
 
-		assertArrayEquals(new ActionTreeElement[] { ate4, ate3, ate2, ate5, ate6 }, ActionTree.Companion.findPath(ate4, ate6)
-				.toArray());
+		assertArrayEquals(new ActionTreeElement[] { ate4, ate3, ate2, ate5, ate6 },
+				ActionTree.Companion.findPath(ate4, ate6).toArray());
 
 		assertArrayEquals(new ActionTreeElement[] { ate6, ate5, ate2 }, ActionTree.Companion.findPath(ate6, ate2).toArray());
 

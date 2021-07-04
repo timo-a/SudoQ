@@ -4,8 +4,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-import de.sudoq.model.files.FileManager;
-
 import static org.junit.Assert.assertNotNull;
 
 public class ProfileManagerTests {

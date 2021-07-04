@@ -18,5 +18,7 @@ class SolveActionFactory : ActionFactory {
      */
     override fun createAction(value: Int, cell: Cell): Action {
         return SolveAction(value - cell.currentValue, cell)
+        //todo diff was a mistake store previous value instead
+        //todo also test if new value permissible and throw exception if not
     }
 }

@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.sudoq.model.files.FileManager;
+import de.sudoq.model.utility.FileManager;
 import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;

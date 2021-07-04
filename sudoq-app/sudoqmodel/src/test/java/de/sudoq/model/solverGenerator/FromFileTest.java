@@ -1,20 +1,12 @@
 package de.sudoq.model.solverGenerator;
 
-import org.junit.Test;
-
 import java.io.File;
-import java.io.IOException;
 
 import de.sudoq.model.Utility;
-import de.sudoq.model.files.FileManager;
 import de.sudoq.model.solverGenerator.FastSolver.FastSolver;
 import de.sudoq.model.solverGenerator.FastSolver.FastSolverFactory;
 import de.sudoq.model.sudoku.Sudoku;
-import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.xml.XmlHelper;
 
 public class FromFileTest {
 

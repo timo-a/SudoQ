@@ -12,15 +12,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.sudoq.model.Utility;
-import de.sudoq.model.files.FileManager;
+import de.sudoq.model.utility.FileManager;
 import de.sudoq.model.persistence.xml.profile.ProfileRepo;
 import de.sudoq.model.persistence.xml.profile.ProfilesListRepo;
 import de.sudoq.model.profile.Profile;
-import de.sudoq.model.sudoku.Sudoku;
-import de.sudoq.model.sudoku.SudokuBuilder;
-import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
 public class XmlHandlerTests {
 

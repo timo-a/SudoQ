@@ -11,7 +11,7 @@ import java.util.List;
 
 import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.Utility;
-import de.sudoq.model.files.FileManager;
+import de.sudoq.model.utility.FileManager;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.helper.NakedHelper;
 import de.sudoq.model.solverGenerator.solver.helper.SubsetHelper;

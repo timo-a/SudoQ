@@ -22,7 +22,7 @@ class SolveAction(diff: Int, cell: Cell) : Action(diff, cell) {
      * {@inheritDoc}
      */
     override fun execute() {
-        cell.currentValue += diff
+        cell.currentValue += diff //todo execute is not idempotent... maybe pass target val instead of diff and save last value on execute?
     }
 
     /**

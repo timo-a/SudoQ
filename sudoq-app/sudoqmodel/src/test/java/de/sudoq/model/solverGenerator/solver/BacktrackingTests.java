@@ -6,15 +6,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-
-import java.io.IOException;
 
 import de.sudoq.model.TestWithInitCleanforSingletons;
-import de.sudoq.model.Utility;
-import de.sudoq.model.files.FileManager;
-import de.sudoq.model.profile.Profile;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.helper.Backtracking;
 import de.sudoq.model.sudoku.Position;

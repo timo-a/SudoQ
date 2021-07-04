@@ -3,16 +3,10 @@ package de.sudoq.model.solverGenerator;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 
-import java.io.IOException;
 import java.util.List;
 
 import de.sudoq.model.TestWithInitCleanforSingletons;
-import de.sudoq.model.Utility;
-import de.sudoq.model.files.FileManager;
-import de.sudoq.model.profile.Profile;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.transformations.Transformer;
 import de.sudoq.model.sudoku.Constraint;

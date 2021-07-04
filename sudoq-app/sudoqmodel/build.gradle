@@ -14,7 +14,9 @@ dependencies {
     implementation 'junit:junit:4.12' //todo switch to junit5 entirely
 
     //implementation 'org.testng:testng:6.9.6'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.0.3'
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.0.3"
+    testImplementation "org.amshove.kluent:kluent:1.67"
+    testImplementation "io.mockk:mockk:1.9"
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.0.3'
 
 //testCompile 'junit:junit:4.7'
@@ -23,6 +25,13 @@ testImplementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
 //    otherTestsImplementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
+}
+
+test{
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
 
 //https://blog.inspeerity.com/gradle/integration-and-unit-separate-gradle-tasks/

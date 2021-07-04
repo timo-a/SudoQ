@@ -15,7 +15,6 @@ import de.sudoq.model.solverGenerator.FastSolver.FastSolverFactory;
 import de.sudoq.model.solverGenerator.solver.SudokuMockUps;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.xml.XmlHelper;

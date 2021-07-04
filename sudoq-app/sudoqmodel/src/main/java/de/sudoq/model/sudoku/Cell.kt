@@ -77,9 +77,11 @@ class Cell(editable: Boolean, solution: Int, id: Int, numberOfValues: Int) :
 
     private fun setCurrentValueP(value: Int, notify: Boolean) {
         if (isEditable) {
-            require(!(value < 0 && value != EMPTYVAL || value > maxValue)) {
-                ("maxValue is " + maxValue
-                        + " parameter value is " + value)
+            require(value >= 0 || value == EMPTYVAL) {
+                ("value must not be negative (except is $EMPTYVAL for empty) but is $value")
+            }
+            require(value <= maxValue) {
+                ("maxValue is $maxValue parameter value is $value")
             }
             currentVal = value
             if (notify) notifyListeners(this)

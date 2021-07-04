@@ -22,14 +22,16 @@ class NoteAction(diff: Int, cell: Cell) : Action(diff, cell) {
      * {@inheritDoc}
      */
     override fun execute() {
-        cell.toggleNote(diff)
+        if(!cell.isNoteSet(diff))
+            cell.toggleNote(diff)
     }
 
     /**
      * {@inheritDoc}
      */
     override fun undo() {
-        cell.toggleNote(diff)
+        if(cell.isNoteSet(diff))
+            cell.toggleNote(diff)
     }
 
     override fun inverse(a: Action): Boolean {

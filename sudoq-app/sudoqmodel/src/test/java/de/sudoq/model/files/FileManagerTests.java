@@ -16,6 +16,7 @@ import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.persistence.xml.game.GameRepo;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.profile.Profile;
+import de.sudoq.model.utility.FileManager;
 
 public class FileManagerTests extends TestWithInitCleanforSingletons {
 

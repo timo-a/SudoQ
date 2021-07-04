@@ -14,7 +14,6 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import de.sudoq.R
 import de.sudoq.controller.tutorial.TutorialActivity
-import de.sudoq.model.files.FileManager
 
 /**
  * Eine Activity, welche die für einwandfreie Funktionalität der SudoQ-App
@@ -30,7 +29,6 @@ open class SudoqCompatActivity : AppCompatActivity() {
         System.setProperty("org.xml.sax.driver", "org.xmlpull.v1.sax2.Driver")
         val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
         val sudokusDir = getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE)
-        FileManager.initialize(sudokusDir)
     }
 
     /**

@@ -6,7 +6,7 @@ import org.junit.BeforeClass;
 import java.io.File;
 import java.io.IOException;
 
-import de.sudoq.model.files.FileManager;
+import de.sudoq.model.utility.FileManager;
 import de.sudoq.model.persistence.xml.profile.ProfileRepo;
 import de.sudoq.model.persistence.xml.profile.ProfilesListRepo;
 import de.sudoq.model.profile.Profile;

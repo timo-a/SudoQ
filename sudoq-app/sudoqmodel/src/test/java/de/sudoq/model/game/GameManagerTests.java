@@ -16,7 +16,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.sudoq.model.Utility;
-import de.sudoq.model.files.FileManager;
+import de.sudoq.model.utility.FileManager;
 import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.persistence.xml.game.GameRepo;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;

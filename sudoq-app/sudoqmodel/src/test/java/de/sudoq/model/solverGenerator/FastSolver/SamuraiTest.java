@@ -4,18 +4,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.IOException;
 
 import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.Utility;
-import de.sudoq.model.files.FileManager;
-import de.sudoq.model.files.FileManagerTests;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.xml.XmlHelper;
 
 import static org.junit.Assert.assertEquals;
 

@@ -15,7 +15,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 import de.sudoq.model.Utility;
-import de.sudoq.model.files.FileManager;
+import de.sudoq.model.utility.FileManager;
 import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.profile.Profile;
 import de.sudoq.model.solverGenerator.solution.Solution;
