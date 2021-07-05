@@ -18,7 +18,6 @@ import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import de.sudoq.R
 import de.sudoq.controller.tutorial.TutorialActivity
-import de.sudoq.model.utility.FileManager
 
 /**
  * Eine ListActivity, welche die für einwandfreie Funktionalität der SudoQ-App
@@ -53,8 +52,6 @@ open class SudoqListActivity : AppCompatActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         System.setProperty("org.xml.sax.driver", "org.xmlpull.v1.sax2.Driver")
-        //getDir(getString(R.string.path_rel_profiles), Context.MODE_PRIVATE),
-        de.sudoq.model.utility.FileManager.initialize(getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE))
     }
 
     /**
