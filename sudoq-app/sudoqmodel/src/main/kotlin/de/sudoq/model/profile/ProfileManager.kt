@@ -80,7 +80,7 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
     var profilesListRepo: ProfilesListRepo? = null //TODO refactor initialization, set it right
 
     var currentProfileDir: File? = null
-        get() = profileRepo!!.getProfileDirFor(currentProfileID)
+        get() = File(profilesDir!!.absolutePath, "profile_$currentProfileID")
         private set
 
     var profilesDir: File? = null //todo remove noargs constructor, make non-nullable
@@ -164,15 +164,6 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
     }
 
     /**
-     * Diese Methode erstellt ein neues Profil.
-     */
-    private fun createProfile() {
-
-
-    }
-
-
-    /**
      * Deletes the current [ProfileManager], if another one exists.
      * Cooses the next one that isn't deleted from profiles.xml
      */
@@ -211,11 +202,8 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
 		System.out.println("getnrpEND");*/
         var count =
             profilesDir!!.list()!!.size //one folder for each profile + file listing all profiles
-        if (File(
-                profilesDir,
-                "profiles.xml"
-            ).exists()
-        ) {  //if profiles.xml exists subtract it from count
+        if (File(profilesDir, "profiles.xml").exists()) {
+            //if profiles.xml exists subtract it from count
             count--
         }
         return count == 0
@@ -283,8 +271,8 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
      */
     fun createInitialProfile() {
 
-        currentProfile = profileRepo!!.createFirstProfile()
         profilesListRepo!!.createProfilesFile()
+        currentProfile = profileRepo!!.create()
         profilesListRepo!!.addProfile(currentProfile)
 
     }

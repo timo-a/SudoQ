@@ -38,11 +38,6 @@ class ProfileRepo(private val profilesDir: File) : IRepo<ProfileBE> {
     }
 
 
-    fun createFirstProfile(): ProfileBE {
-        return create(1)
-    }
-
-
     /**
      * Erstellt die Ordnerstruktur und nötige Dateien für das Profil mit der
      * übergebenen ID
@@ -116,7 +111,7 @@ class ProfileRepo(private val profilesDir: File) : IRepo<ProfileBE> {
      *
      * @return File, welcher auf das Profilverzeichnis zeigt
      */
-    fun getProfileDirFor(id: Int): File {
+    private fun getProfileDirFor(id: Int): File {
         return File(profilesDir.absolutePath + File.separator + "profile_$id")
     }
 
