@@ -10,7 +10,7 @@ package de.sudoq.model.game
 import de.sudoq.model.persistence.IRepo
 import de.sudoq.model.persistence.xml.game.GameMapper
 import de.sudoq.model.persistence.xml.game.GameRepo
-import de.sudoq.model.profile.Profile
+import de.sudoq.model.profile.ProfileSingleton
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.sudoku.SudokuManager
 import de.sudoq.model.sudoku.complexity.Complexity
@@ -124,7 +124,7 @@ class GameManager(profilesDir: File, val sudokuTypeRepo: IRepo<SudokuType>) {
      */
     fun deleteGame(id: Int) {
         if (id == profile.currentGame) {
-            profile.currentGame = Profile.NO_GAME
+            profile.currentGame = ProfileManager.NO_GAME
             profile.saveChanges() //save 'currentGameID' in xml (otherwise menu will offer 'continue')
         }
         gameRepo.delete(id)

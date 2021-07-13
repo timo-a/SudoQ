@@ -20,7 +20,7 @@ import de.sudoq.model.utility.FileManager;
 import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.persistence.xml.game.GameRepo;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
-import de.sudoq.model.profile.Profile;
+import de.sudoq.model.profile.ProfileSingleton;
 import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
@@ -28,7 +28,7 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 public class GameManagerTests {
 
 	static File profileDir = new File("/tmp/sudoq/GameManagerTests/profile");
-	static Profile p;
+	static ProfileSingleton p;
 	private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
 
 	//this is a dummy so it compiles todo use xmls from resources
@@ -55,7 +55,7 @@ public class GameManagerTests {
 
 		profileDir.mkdirs();
 		Utility.clearDir(profileDir);
-		p = Profile.Companion.getInstance(profileDir);
+		p = ProfileSingleton.Companion.getInstance(profileDir);
 	}
 
 	@AfterClass
@@ -80,7 +80,7 @@ public class GameManagerTests {
 		Game game = gm.newGame(SudokuTypes.standard9x9, Complexity.difficult, new GameSettings(), sudokuDir);
 		p.setCurrentGame(game.getId());
 		gm.deleteGame(p.getCurrentGame(), p);
-		assertEquals(Profile.NO_GAME, p.getCurrentGame());
+		assertEquals(ProfileManager.NO_GAME, p.getCurrentGame());
 	}
 
 	@After

@@ -21,7 +21,7 @@ import de.sudoq.controller.sudoku.CellInteractionListener.SelectEvent
 import de.sudoq.controller.sudoku.board.CellViewStates
 import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.Game
-import de.sudoq.model.profile.Profile
+import de.sudoq.model.profile.ProfileSingleton
 import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.Sudoku
@@ -103,7 +103,7 @@ class UserInteractionMediator(
     override fun onCellSelected(view: SudokuCellView, e: SelectEvent) {
         if (!game!!.isFinished()) {
             val c = view.context
-            val p = Profile.getInstance(
+            val p = ProfileSingleton.getInstance(
                 c.getDir(
                     c.getString(R.string.path_rel_profiles),
                     Context.MODE_PRIVATE

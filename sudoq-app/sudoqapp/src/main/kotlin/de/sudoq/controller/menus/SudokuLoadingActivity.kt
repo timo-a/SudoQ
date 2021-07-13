@@ -29,7 +29,6 @@ import de.sudoq.controller.sudoku.SudokuActivity
 import de.sudoq.model.game.GameData
 import de.sudoq.model.game.GameManager
 import de.sudoq.model.persistence.xml.game.GameRepo
-import de.sudoq.model.profile.Profile
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.persistence.sudokuType.SudokuTypeRepo
 import java.io.*

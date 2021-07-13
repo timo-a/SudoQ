@@ -9,7 +9,7 @@ import java.io.IOException;
 import de.sudoq.model.utility.FileManager;
 import de.sudoq.model.persistence.xml.profile.ProfileRepo;
 import de.sudoq.model.persistence.xml.profile.ProfilesListRepo;
-import de.sudoq.model.profile.Profile;
+import de.sudoq.model.profile.ProfileSingleton;
 import de.sudoq.model.profile.ProfileManager;
 
 public class TestWithInitCleanforSingletons {
@@ -53,7 +53,7 @@ public class TestWithInitCleanforSingletons {
 		File profileDir = new File("/tmp/sudoq/CatchAll/profile");
 		profileDir.mkdirs();
 
-		Profile.Companion.getInstance(profileDir);
+		ProfileSingleton.Companion.getInstance(profileDir);
 	}
 
 	@AfterClass

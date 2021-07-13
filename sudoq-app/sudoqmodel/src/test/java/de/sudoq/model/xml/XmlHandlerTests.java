@@ -15,7 +15,7 @@ import de.sudoq.model.Utility;
 import de.sudoq.model.utility.FileManager;
 import de.sudoq.model.persistence.xml.profile.ProfileRepo;
 import de.sudoq.model.persistence.xml.profile.ProfilesListRepo;
-import de.sudoq.model.profile.Profile;
+import de.sudoq.model.profile.ProfileSingleton;
 
 public class XmlHandlerTests {
 
@@ -27,9 +27,9 @@ public class XmlHandlerTests {
 	public void init() {
 		profiles = new File("res" + File.separator + "tmp_profiles");
 		profiles.mkdir();
-		Profile.Companion.getInstance(profiles).setProfileRepo(new ProfileRepo(profiles));
-		Profile.Companion.getInstance(profiles).setProfilesListRepo( new ProfilesListRepo(profiles));
-		Profile.Companion.getInstance(profiles).setProfilesDir(profiles);
+		ProfileSingleton.Companion.getInstance(profiles).setProfileRepo(new ProfileRepo(profiles));
+		ProfileSingleton.Companion.getInstance(profiles).setProfilesListRepo( new ProfilesListRepo(profiles));
+		ProfileSingleton.Companion.getInstance(profiles).setProfilesDir(profiles);
 
 		sudokus = new File("res" + File.separator + "tmp_suds");
 		sudokus.mkdir();

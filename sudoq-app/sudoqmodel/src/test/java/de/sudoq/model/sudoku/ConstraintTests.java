@@ -15,7 +15,7 @@ import org.junit.Test;
 
 import de.sudoq.model.Utility;
 import de.sudoq.model.utility.FileManager;
-import de.sudoq.model.profile.Profile;
+import de.sudoq.model.profile.ProfileSingleton;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
@@ -40,7 +40,7 @@ public class ConstraintTests {
 		java.lang.reflect.Field s = FileManager.class.getDeclaredField("sudokus");
 		s.setAccessible(true);
 		s.set(null, null);
-		java.lang.reflect.Field p = Profile.class.getDeclaredField("instance");
+		java.lang.reflect.Field p = ProfileSingleton.class.getDeclaredField("instance");
 		p.setAccessible(true);
 		p.set(null, null);
 		Utility.deleteDir(profiles);

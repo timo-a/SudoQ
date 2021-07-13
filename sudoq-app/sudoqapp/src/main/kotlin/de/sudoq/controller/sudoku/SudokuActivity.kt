@@ -37,7 +37,7 @@ import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.Game
 import de.sudoq.model.game.GameManager
 import de.sudoq.model.persistence.xml.game.GameRepo
-import de.sudoq.model.profile.Profile
+import de.sudoq.model.profile.ProfileSingleton
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Position
@@ -251,7 +251,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
             }
             setTypeText()
             updateButtons()
-            val p = Profile.getInstance(profilesFile)
+            val p = ProfileSingleton.getInstance(profilesFile)
             panel!!.gestureButton!!.isSelected = p.isGestureActive
         }
     }
@@ -345,7 +345,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
      * Hinweise angezeigt werden sollen
      */
     private fun inflateGestures(firstStart: Boolean) {
-        val p = Profile.getInstance(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+        val p = ProfileSingleton.getInstance(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
         val gestureFile = p.getCurrentGestureFile()
         try {
             val fis = FileInputStream(gestureFile)
@@ -442,7 +442,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
      * gelangt.
      */
     public override fun onPause() {
-        val p = Profile.getInstance(profilesFile)
+        val p = ProfileSingleton.getInstance(profilesFile)
         timeHandler.removeCallbacks(timeUpdate)
         //gameid = 1
         gameManager.save(game!!)
@@ -472,7 +472,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
         }
         sudokuScrollView!!.zoomFactor = prevZoomFactor
         if (finished) {
-            p.currentGame = Profile.NO_GAME
+            p.currentGame = ProfileManager.NO_GAME
             p.saveChanges()
         }
         super.onPause()

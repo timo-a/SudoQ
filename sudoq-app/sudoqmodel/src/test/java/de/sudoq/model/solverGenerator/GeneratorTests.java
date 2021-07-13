@@ -17,7 +17,7 @@ import org.junit.BeforeClass;
 import de.sudoq.model.Utility;
 import de.sudoq.model.utility.FileManager;
 import de.sudoq.model.persistence.IRepo;
-import de.sudoq.model.profile.Profile;
+import de.sudoq.model.profile.ProfileSingleton;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solver.ComplexityRelation;
 import de.sudoq.model.solverGenerator.solver.Solver;
@@ -48,7 +48,7 @@ public class GeneratorTests implements GeneratorCallback {
         java.lang.reflect.Field s = FileManager.class.getDeclaredField("sudokus");
         s.setAccessible(true);
         s.set(null, null);
-        java.lang.reflect.Field p = Profile.class.getDeclaredField("instance");
+        java.lang.reflect.Field p = ProfileSingleton.class.getDeclaredField("instance");
         p.setAccessible(true);
         p.set(null, null);
         Utility.deleteDir(Utility.profiles);

@@ -3,7 +3,8 @@ package de.sudoq.model.persistence.xml.profile
 import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.persistence.IRepo
-import de.sudoq.model.profile.Profile
+import de.sudoq.model.profile.ProfileManager
+import de.sudoq.model.profile.ProfileSingleton
 import de.sudoq.model.profile.Statistics
 import de.sudoq.model.xml.XmlHelper
 import de.sudoq.model.xml.XmlTree
@@ -21,14 +22,14 @@ class ProfileRepo(private val profilesDir: File) : IRepo<ProfileBE> {
     private fun create(id: Int): ProfileBE {
 
         val newProfile = ProfileBE(id)
-        newProfile.name = Profile.DEFAULT_PROFILE_NAME
+        newProfile.name = ProfileManager.DEFAULT_PROFILE_NAME
         newProfile.currentGame = -1
         newProfile.assistances = GameSettings()
         newProfile.assistances.setAssistance(Assistances.markRowColumn)
         //		this.gameSettings.setGestures(false);
         //this.appSettings.setDebug(false);
         newProfile.statistics = IntArray(Statistics.values().size)
-        newProfile.statistics!![Statistics.fastestSolvingTime.ordinal] = Profile.INITIAL_TIME_RECORD
+        newProfile.statistics!![Statistics.fastestSolvingTime.ordinal] = ProfileManager.INITIAL_TIME_RECORD
 
         createProfileFiles(id)
         // save new profile xml

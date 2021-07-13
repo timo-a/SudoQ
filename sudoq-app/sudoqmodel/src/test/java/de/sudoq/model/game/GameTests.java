@@ -12,7 +12,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -23,7 +22,7 @@ import de.sudoq.model.actionTree.SolveActionFactory;
 import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.persistence.xml.game.GameBE;
 import de.sudoq.model.persistence.xml.game.GameMapper;
-import de.sudoq.model.profile.Profile;
+import de.sudoq.model.profile.ProfileSingleton;
 import de.sudoq.model.solverGenerator.Generator;
 import de.sudoq.model.solverGenerator.GeneratorCallback;
 import de.sudoq.model.solverGenerator.solution.Solution;
@@ -50,7 +49,7 @@ public class GameTests {
 	public static void beforeClass() {
 		Utility.copySudokus();
 		File profileDir = new File("/tmp/sudoq/GameTests/profile");
-		Profile.Companion.getInstance(profileDir);
+		ProfileSingleton.Companion.getInstance(profileDir);
 
 		TypeBuilder.get99(); //just to force initialization of filemanager
 		

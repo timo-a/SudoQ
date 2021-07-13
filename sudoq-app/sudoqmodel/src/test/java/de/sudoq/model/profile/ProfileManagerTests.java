@@ -27,6 +27,6 @@ public class ProfileManagerTests {
         File f = new File("/tmp/123");
         //Profile p = new Profile(f);
 
-        Profile pci = Profile.Companion.getInstance(f);
+        ProfileSingleton pci = ProfileSingleton.Companion.getInstance(f);
     }
 }

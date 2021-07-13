@@ -19,7 +19,7 @@ import de.sudoq.controller.menus.NewSudokuActivity
 import de.sudoq.controller.menus.preferences.AdvancedPreferencesActivity.ParentActivity
 import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.GameSettings
-import de.sudoq.model.profile.Profile.Companion.getInstance
+import de.sudoq.model.profile.ProfileSingleton.Companion.getInstance
 
 /**
  * Wird aufgerufen in Hauptmenü-> neues Sudoku -> einstellungen

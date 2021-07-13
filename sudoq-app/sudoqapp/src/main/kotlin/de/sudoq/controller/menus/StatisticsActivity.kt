@@ -14,7 +14,7 @@ import androidx.appcompat.widget.Toolbar
 import de.sudoq.R
 import de.sudoq.controller.SudoqCompatActivity
 import de.sudoq.controller.sudoku.SudokuActivity.Companion.getTimeString
-import de.sudoq.model.profile.Profile
+import de.sudoq.model.profile.ProfileSingleton
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.profile.Statistics
 
@@ -76,7 +76,7 @@ class StatisticsActivity : SudoqCompatActivity() {
         pm.loadCurrentProfile()
         val timeRecordInSecs = pm.getStatistic(Statistics.fastestSolvingTime)
         var timeString = "---"
-        if (timeRecordInSecs != Profile.INITIAL_TIME_RECORD) {
+        if (timeRecordInSecs != ProfileManager.INITIAL_TIME_RECORD) {
             timeString = getTimeString(timeRecordInSecs)
         }
         current.text = getString(R.string.statistics_fastest_solving_time) + ": " + timeString

@@ -15,7 +15,7 @@ import de.sudoq.model.Utility;
 import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.persistence.xml.game.GameRepo;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
-import de.sudoq.model.profile.Profile;
+import de.sudoq.model.profile.ProfileSingleton;
 import de.sudoq.model.utility.FileManager;
 
 public class FileManagerTests extends TestWithInitCleanforSingletons {
@@ -68,7 +68,7 @@ public class FileManagerTests extends TestWithInitCleanforSingletons {
 		File profileDir = new File("/tmp/sudoq/FileManagerTests/getGameThumbnailFile/profiles");
 		profileDir.mkdirs();
 		Utility.clearDir(profileDir);
-		Profile p = Profile.Companion.getInstance(profileDir); //needs to be called first otherwise it failes as an indiviidual and sometimes as part of all the tests in this class
+		ProfileSingleton p = ProfileSingleton.Companion.getInstance(profileDir); //needs to be called first otherwise it failes as an indiviidual and sometimes as part of all the tests in this class
 
 		IRepo<SudokuType> str = new IRepo<SudokuType>() {
 			@Override

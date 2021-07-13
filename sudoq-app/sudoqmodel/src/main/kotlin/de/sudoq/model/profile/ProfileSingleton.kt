@@ -14,26 +14,12 @@ import java.io.File
  * which is maintained by SharedPreferences of the Android-API.
  *
  */
-class Profile private constructor(f: File) : ProfileManager(f) {
+class ProfileSingleton private constructor(f: File) : ProfileManager(f) {
 //private constructor because class is static
 //TODO split into profile handler and profile
 
     // Profiles todo move all to profileManager
-
-
     companion object {
-        const val INITIAL_TIME_RECORD = 5999
-
-        /**
-         * Konstante die signalisiert, dass es kein aktuelles Spiel gibt
-         */
-        const val NO_GAME = -1
-
-        /**
-         * Konstante die signalisiert, dass ein neues Profil noch keinen namen hat
-         */
-        const val DEFAULT_PROFILE_NAME = "unnamed"
-
 
         /**
          * Diese Methode gibt eine Instance dieser Klasse zurück, wird sie erneut
@@ -43,16 +29,16 @@ class Profile private constructor(f: File) : ProfileManager(f) {
          */
         //@JvmStatic
         //@get:Synchronized
-        fun getInstance(f: File): Profile {
+        fun getInstance(f: File): ProfileSingleton {
             if (instance == null || instance!!.profilesDir != f) {
-                instance = Profile(f)
+                instance = ProfileSingleton(f)
                 instance!!.loadCurrentProfile()
             }
 
             return instance!!
         }
 
-        private var instance: Profile? = null
+        private var instance: ProfileSingleton? = null
 
     }
 }

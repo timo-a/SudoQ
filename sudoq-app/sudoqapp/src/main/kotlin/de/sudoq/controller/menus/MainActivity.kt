@@ -24,8 +24,7 @@ import de.sudoq.controller.menus.preferences.LanguageUtility.setConfLocale
 import de.sudoq.controller.menus.preferences.LanguageUtility.storeLanguageToMemory2
 import de.sudoq.controller.menus.preferences.PlayerPreferencesActivity
 import de.sudoq.controller.sudoku.SudokuActivity
-import de.sudoq.model.game.GameManager
-import de.sudoq.model.profile.Profile
+import de.sudoq.model.profile.ProfileSingleton
 import de.sudoq.model.profile.ProfileManager
 import java.io.File
 import java.util.*
@@ -91,7 +90,7 @@ class MainActivity : SudoqCompatActivity() {
         check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
         pm.loadCurrentProfile()
         val continueButton = findViewById<View>(R.id.button_mainmenu_continue) as Button
-        continueButton.isEnabled = pm.currentGame > Profile.NO_GAME
+        continueButton.isEnabled = pm.currentGame > ProfileManager.NO_GAME
 
         val loadButton = findViewById<View>(R.id.button_mainmenu_load_sudoku) as Button
         //loadButton.setEnabled(!gm.getGameList().isEmpty());

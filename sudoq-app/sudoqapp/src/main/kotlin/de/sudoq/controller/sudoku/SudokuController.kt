@@ -13,7 +13,7 @@ import de.sudoq.model.actionTree.Action
 import de.sudoq.model.actionTree.NoteActionFactory
 import de.sudoq.model.actionTree.SolveActionFactory
 import de.sudoq.model.game.Game
-import de.sudoq.model.profile.Profile
+import de.sudoq.model.profile.ProfileSingleton
 import de.sudoq.model.profile.Statistics
 import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.complexity.Complexity
@@ -157,7 +157,7 @@ class SudokuController(
             Complexity.easy -> incrementStatistic(Statistics.playedEasySudokus)
         }
         incrementStatistic(Statistics.playedSudokus)
-        val p = Profile.getInstance(
+        val p = ProfileSingleton.getInstance(
             context.getDir(
                 context.getString(R.string.path_rel_profiles),
                 Context.MODE_PRIVATE
@@ -172,7 +172,7 @@ class SudokuController(
     }
 
     private fun incrementStatistic(s: Statistics) { //TODO this should probably be in model...
-        val p = Profile.getInstance(
+        val p = ProfileSingleton.getInstance(
             context.getDir(
                 context.getString(R.string.path_rel_profiles),
                 Context.MODE_PRIVATE

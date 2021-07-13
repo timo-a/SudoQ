@@ -13,7 +13,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import de.sudoq.R
 import de.sudoq.model.game.Game
-import de.sudoq.model.profile.Profile
+import de.sudoq.model.profile.ProfileSingleton
 import de.sudoq.view.SudokuLayout
 
 /**
@@ -131,7 +131,7 @@ class ControlPanelFragment : Fragment() {
         } else if (v === Buttons.actionTreeButton) {
             activity.toogleActionTree()
         } else if (v === Buttons.gestureButton) {
-            val profile = Profile.getInstance(
+            val profile = ProfileSingleton.getInstance(
                 activity.getDir(
                     getString(R.string.path_rel_profiles),
                     Context.MODE_PRIVATE

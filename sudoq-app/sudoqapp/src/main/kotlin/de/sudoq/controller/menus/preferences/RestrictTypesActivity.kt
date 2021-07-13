@@ -20,7 +20,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import de.sudoq.R
 import de.sudoq.controller.SudoqListActivity
-import de.sudoq.model.profile.Profile.Companion.getInstance
+import de.sudoq.model.profile.ProfileSingleton.Companion.getInstance
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.xml.SudokuTypesList
 

@@ -399,4 +399,19 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
         return if (stat == null) -1 else statistics!![stat.ordinal]
     }
 
+    companion object {
+        const val INITIAL_TIME_RECORD = 5999
+
+        /**
+         * Konstante die signalisiert, dass es kein aktuelles Spiel gibt
+         */
+        const val NO_GAME = -1
+
+        /**
+         * Konstante die signalisiert, dass ein neues Profil noch keinen namen hat
+         */
+        const val DEFAULT_PROFILE_NAME = "unnamed"
+    }
+
+
 }

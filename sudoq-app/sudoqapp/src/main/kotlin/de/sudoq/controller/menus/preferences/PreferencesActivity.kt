@@ -10,7 +10,7 @@ import de.sudoq.controller.menus.GestureBuilder
 import de.sudoq.model.ModelChangeListener
 import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.GameSettings
-import de.sudoq.model.profile.Profile.Companion.getInstance
+import de.sudoq.model.profile.ProfileSingleton.Companion.getInstance
 import de.sudoq.model.profile.ProfileManager
 
 abstract class PreferencesActivity : SudoqCompatActivity(), ModelChangeListener<ProfileManager> {

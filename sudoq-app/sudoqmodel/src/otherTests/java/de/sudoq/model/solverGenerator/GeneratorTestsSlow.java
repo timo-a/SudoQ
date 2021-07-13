@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import de.sudoq.model.Utility;
 import de.sudoq.model.files.FileManager;
-import de.sudoq.model.profile.Profile;
+import de.sudoq.model.profile.ProfileSingleton;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solver.ComplexityRelation;
 import de.sudoq.model.solverGenerator.solver.Solver;
@@ -32,7 +32,7 @@ public class GeneratorTestsSlow implements GeneratorCallback {
 	@BeforeClass
 	public static void init() throws IOException {
 		Utility.copySudokus();
-		Profile.getInstance();
+		ProfileSingleton.getInstance();
 	}
 
 	@AfterClass
@@ -44,7 +44,7 @@ public class GeneratorTestsSlow implements GeneratorCallback {
         Field s = FileManager.class.getDeclaredField("sudokus");
         s.setAccessible(true);
         s.set(null, null);
-        Field p = Profile.class.getDeclaredField("instance");
+        Field p = ProfileSingleton.class.getDeclaredField("instance");
         p.setAccessible(true);
         p.set(null, null);
         Utility.deleteDir(Utility.profiles);
