@@ -41,6 +41,7 @@ import de.sudoq.model.profile.ProfileSingleton
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Position
+import de.sudoq.persistence.profile.ProfileRepo
 import de.sudoq.persistence.sudokuType.SudokuTypeRepo
 import de.sudoq.view.*
 import java.io.*
@@ -179,7 +180,8 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
         profilesFile = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
         sudokuFile = getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE)
         sudokuTypeRepo = SudokuTypeRepo(sudokuFile)
-        gameManager = GameManager(profilesFile, sudokuTypeRepo)
+        val pm = ProfileManager(profilesFile, ProfileRepo(profilesFile))
+        gameManager = GameManager(pm, sudokuTypeRepo)
 
         // Load the Game by using current game id
         if (savedInstanceState != null) {
@@ -189,7 +191,6 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
                 finish()
             }
         } else {
-            val pm = ProfileManager(profilesFile)
             pm.loadCurrentProfile()
             game = gameManager.load(pm.currentGame)
         }
@@ -251,7 +252,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
             }
             setTypeText()
             updateButtons()
-            val p = ProfileSingleton.getInstance(profilesFile)
+            val p = ProfileSingleton.getInstance(profilesFile, ProfileRepo(profilesFile))
             panel!!.gestureButton!!.isSelected = p.isGestureActive
         }
     }
@@ -345,7 +346,8 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
      * Hinweise angezeigt werden sollen
      */
     private fun inflateGestures(firstStart: Boolean) {
-        val p = ProfileSingleton.getInstance(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        val p = ProfileSingleton.getInstance(profilesDir, ProfileRepo(profilesDir))
         val gestureFile = p.getCurrentGestureFile()
         try {
             val fis = FileInputStream(gestureFile)
@@ -442,7 +444,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
      * gelangt.
      */
     public override fun onPause() {
-        val p = ProfileSingleton.getInstance(profilesFile)
+        val p = ProfileSingleton.getInstance(profilesFile, ProfileRepo(profilesFile))
         timeHandler.removeCallbacks(timeUpdate)
         //gameid = 1
         gameManager.save(game!!)

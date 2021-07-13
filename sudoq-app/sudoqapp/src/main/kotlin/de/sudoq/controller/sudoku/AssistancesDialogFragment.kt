@@ -14,6 +14,7 @@ import de.sudoq.controller.sudoku.hints.HintFormulator.getText
 import de.sudoq.model.game.Game
 import de.sudoq.model.profile.ProfileSingleton
 import de.sudoq.model.solvingAssistant.SolvingAssistant.giveAHint
+import de.sudoq.persistence.profile.ProfileRepo
 import de.sudoq.view.SudokuLayout
 import java.util.*
 
@@ -43,12 +44,11 @@ class AssistancesDialogFragment : DialogFragment() {
         )
         val v = (getActivity() as SudokuActivity).currentCellView
         if (v != null && v.cell.isNotSolved) itemStack.add(getString(R.string.sf_sudoku_assistances_solve_specific))
-        val p = ProfileSingleton.getInstance(
-            activity.getDir(
-                getString(R.string.path_rel_profiles),
-                Context.MODE_PRIVATE
-            )
+        val profilesDir = activity.getDir(
+            getString(R.string.path_rel_profiles),
+            Context.MODE_PRIVATE
         )
+        val p = ProfileSingleton.getInstance(profilesDir, ProfileRepo(profilesDir))
         if (p.assistances.isHelperSet) itemStack.add(getString(R.string.sf_sudoku_assistances_give_hint))
         if (p.appSettings.isDebugSet) itemStack.add(getString(R.string.sf_sudoku_assistances_crash))
 

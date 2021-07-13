@@ -21,6 +21,7 @@ import de.sudoq.controller.SudoqCompatActivity
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.sudoku.complexity.Complexity.Companion.playableValues
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
+import de.sudoq.persistence.profile.ProfileRepo
 //import org.apache.commons.lang3.StringUtils
 import java.io.*
 import java.util.regex.Pattern
@@ -56,7 +57,8 @@ class SplashActivity : SudoqCompatActivity() {
         setContentView(R.layout.splash)
 
         // If there is no profile initialize one
-        val pm = ProfileManager(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir))
         if (pm.noProfiles()) {
             pm.initialize()
             pm.name = getString(R.string.default_user_name)

@@ -21,6 +21,7 @@ import de.sudoq.controller.menus.preferences.AdvancedPreferencesActivity.ParentA
 import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.profile.ProfileSingleton.Companion.getInstance
+import de.sudoq.persistence.profile.ProfileRepo
 
 /**
  * Activity um Profile zu bearbeiten und zu verwalten
@@ -61,7 +62,8 @@ class PlayerPreferencesActivity : PreferencesActivity() {
         name!!.isSingleLine = true // no multiline names
         firstStartup = false
         createProfile = true
-        val p = getInstance(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        val p = getInstance(profilesDir, ProfileRepo(profilesDir))
         p.registerListener(this)
 
         //store language at beginning of activity lifecycle
@@ -104,7 +106,8 @@ class PlayerPreferencesActivity : PreferencesActivity() {
      *
      */
     override fun refreshValues() {
-        val profile = getInstance(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        val profile = getInstance(profilesDir, ProfileRepo(profilesDir))
         name!!.setText(profile.name)
         gesture!!.isChecked = profile.isGestureActive
         autoAdjustNotes!!.isChecked = profile.getAssistance(Assistances.autoAdjustNotes)
@@ -128,7 +131,8 @@ class PlayerPreferencesActivity : PreferencesActivity() {
             var newProfileName = getString(R.string.profile_preference_new_profile)
             var newIndex = 0
             /* increment newIndex to be bigger than the others */
-            val p = getInstance(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+            val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+            val p = getInstance(profilesDir, ProfileRepo(profilesDir))
             val l: List<String> = p.profilesNameList
             for (s in l) if (s.startsWith(newProfileName)) {
                 val currentIndex = s.substring(newProfileName.length)
@@ -160,13 +164,15 @@ class PlayerPreferencesActivity : PreferencesActivity() {
      * Uebernimmt die Werte der Views im Profil und speichert die aenderungen
      */
     override fun adjustValuesAndSave() {
-        val p = getInstance(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        val p = getInstance(profilesDir, ProfileRepo(profilesDir))
         p.name = name!!.text.toString()
         saveToProfile()
     }
 
     override fun saveToProfile() {
-        val p = getInstance(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        val p = getInstance(profilesDir, ProfileRepo(profilesDir))
         p.isGestureActive = gesture!!.isChecked
         saveAssistance(Assistances.autoAdjustNotes, autoAdjustNotes!!)
         saveAssistance(Assistances.markRowColumn, markRowColumn!!)
@@ -201,7 +207,8 @@ class PlayerPreferencesActivity : PreferencesActivity() {
      * von der android xml übergebene view
      */
     private fun deleteProfile() {
-        val p = getInstance(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        val p = getInstance(profilesDir, ProfileRepo(profilesDir))
         p.deleteProfile()
     }
 
@@ -239,7 +246,8 @@ class PlayerPreferencesActivity : PreferencesActivity() {
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
-        val p = getInstance(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        val p = getInstance(profilesDir, ProfileRepo(profilesDir))
         val multipleProfiles = p.numberOfAvailableProfiles > 1
         menu.findItem(R.id.action_delete_profile).isVisible = multipleProfiles
         menu.findItem(R.id.action_switch_profile).isVisible = multipleProfiles

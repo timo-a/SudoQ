@@ -7,6 +7,7 @@
  */
 package de.sudoq.model.profile
 
+import de.sudoq.model.persistence.IRepo
 import java.io.File
 
 /**
@@ -15,7 +16,7 @@ import java.io.File
  * Some callers expect a singleton instance so for now we keep one around.
  * todo: replace all instances with manager
  */
-class ProfileSingleton private constructor(f: File) : ProfileManager(f) {
+class ProfileSingleton private constructor(f: File, pr: IRepo<Profile>) : ProfileManager(f, pr) {
 //private constructor because class is static
 
     companion object {
@@ -28,9 +29,9 @@ class ProfileSingleton private constructor(f: File) : ProfileManager(f) {
          */
         //@JvmStatic
         //@get:Synchronized
-        fun getInstance(f: File): ProfileSingleton {
+        fun getInstance(f: File, pr: IRepo<Profile>): ProfileSingleton {
             if (instance == null || instance!!.profilesDir != f) {
-                instance = ProfileSingleton(f)
+                instance = ProfileSingleton(f, pr)
                 instance!!.loadCurrentProfile()
             }
 

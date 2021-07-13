@@ -23,6 +23,7 @@ import de.sudoq.controller.SudoqListActivity
 import de.sudoq.model.profile.ProfileSingleton.Companion.getInstance
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.xml.SudokuTypesList
+import de.sudoq.persistence.profile.ProfileRepo
 
 /**
  * Diese Klasse repräsentiert den Lade-Controller des Sudokuspiels. Mithilfe von
@@ -133,7 +134,8 @@ class RestrictTypesActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
                 R.string.advanced_settings_restrict_types_empty_warning,
                 Toast.LENGTH_SHORT
             ) else if (types!!.contains(st)) types!!.remove(st) else types!!.add(st)
-        val p = getInstance(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        val p = getInstance(profilesDir, ProfileRepo(profilesDir))
         p.saveChanges()
         adapter!!.notifyDataSetChanged()
     }
@@ -150,7 +152,8 @@ class RestrictTypesActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
     }
 
     private fun initialiseTypes() {
-        val pm = ProfileManager(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir))
         types = pm.assistances.wantedTypesList
         // initialize ArrayAdapter for the type names and set it
         adapter = RestrictTypesAdapter(this, types!!)

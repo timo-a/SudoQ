@@ -22,6 +22,7 @@ import de.sudoq.controller.menus.preferences.AdvancedPreferencesActivity
 import de.sudoq.controller.menus.preferences.LanguageSetting.LanguageCode
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.profile.ProfileManager
+import de.sudoq.persistence.profile.ProfileRepo
 
 /**
  * Activity um Profile zu bearbeiten und zu verwalten
@@ -67,7 +68,8 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
         debug = findViewById<View>(R.id.checkbox_debug) as CheckBox
         //exporter      = (CheckBox) findViewById(R.id.checkbox_exportcrash_trigger);
         gameSettings = NewSudokuActivity.gameSettings
-        val pm = ProfileManager(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir))
         check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
         pm.loadCurrentProfile()
         val profileGameSettings = pm.assistances
@@ -202,8 +204,8 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
             ParentActivity.NEW_SUDOKU -> {
                 saveToGameSettings()
                 if (debug != null) {
-                    val pm =
-                        ProfileManager(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+                    val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+                    val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir))
                     check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
                     pm.loadCurrentProfile()
                     pm.setDebugActive(debug!!.isChecked)
@@ -221,7 +223,8 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
     }
 
     override fun saveToProfile() {
-        val pm = ProfileManager(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir))
         check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
         pm.loadCurrentProfile()
         if (debug != null) pm.setDebugActive(debug!!.isChecked)

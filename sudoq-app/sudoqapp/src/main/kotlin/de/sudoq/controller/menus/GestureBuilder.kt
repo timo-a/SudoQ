@@ -27,6 +27,7 @@ import de.sudoq.controller.sudoku.Symbol.Companion.getInstance
 import de.sudoq.controller.sudoku.board.CellViewPainter.Companion.instance
 import de.sudoq.controller.sudoku.board.CellViewStates
 import de.sudoq.model.profile.ProfileManager
+import de.sudoq.persistence.profile.ProfileRepo
 import de.sudoq.view.VirtualKeyboardLayout
 import java.io.FileInputStream
 import java.io.FileNotFoundException
@@ -88,7 +89,8 @@ class GestureBuilder : SudoqCompatActivity(), OnGesturePerformedListener, InputL
      * Erzeugt die View für die Gesteneingabe
      */
     private fun inflateGestures() {
-        val pm = ProfileManager(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+        val profileDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        val pm = ProfileManager(profileDir, ProfileRepo(profileDir))
         val gestureFile = pm.getCurrentGestureFile()
         try {
             gestureStore.load(FileInputStream(gestureFile))
@@ -146,7 +148,8 @@ class GestureBuilder : SudoqCompatActivity(), OnGesturePerformedListener, InputL
      * Speichert den aktuellen Satz an Gesten om Profile Ordner des aktuellen Benutzers
      */
     private fun saveGestures() {
-        val pm = ProfileManager(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+        val profileDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        val pm = ProfileManager(profileDir, ProfileRepo(profileDir))
         val gestureFile = pm.getCurrentGestureFile()
         try {
             gestureStore.save(FileOutputStream(gestureFile))

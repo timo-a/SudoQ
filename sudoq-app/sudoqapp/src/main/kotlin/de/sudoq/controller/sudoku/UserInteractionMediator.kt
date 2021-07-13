@@ -25,6 +25,7 @@ import de.sudoq.model.profile.ProfileSingleton
 import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.Sudoku
+import de.sudoq.persistence.profile.ProfileRepo
 import de.sudoq.view.GestureInputOverlay
 import de.sudoq.view.SudokuCellView
 import de.sudoq.view.SudokuLayout
@@ -103,12 +104,11 @@ class UserInteractionMediator(
     override fun onCellSelected(view: SudokuCellView, e: SelectEvent) {
         if (!game!!.isFinished()) {
             val c = view.context
-            val p = ProfileSingleton.getInstance(
-                c.getDir(
-                    c.getString(R.string.path_rel_profiles),
-                    Context.MODE_PRIVATE
-                )
+            val profilesDir = c.getDir(
+                c.getString(R.string.path_rel_profiles),
+                Context.MODE_PRIVATE
             )
+            val p = ProfileSingleton.getInstance(profilesDir, ProfileRepo(profilesDir))
             if (p.isGestureActive) {
                 cellSelectedGestureMode(view, e)
             } else {

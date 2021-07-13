@@ -19,7 +19,9 @@ import de.sudoq.controller.menus.NewSudokuActivity
 import de.sudoq.controller.menus.preferences.AdvancedPreferencesActivity.ParentActivity
 import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.GameSettings
+import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.profile.ProfileSingleton.Companion.getInstance
+import de.sudoq.persistence.profile.ProfileRepo
 
 /**
  * Wird aufgerufen in Hauptmenü-> neues Sudoku -> einstellungen
@@ -67,8 +69,10 @@ class NewSudokuPreferencesActivity : PreferencesActivity() {
         markWrongSymbol!!.isChecked = confSettings!!.getAssistance(Assistances.markWrongSymbol)
         restrictCandidates!!.isChecked =
             confSettings!!.getAssistance(Assistances.restrictCandidates)
-        val p = getInstance(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
-        p.registerListener(this)
+
+        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir))
+        pm.registerListener(this)
 
         //set and store language at beginning of activity lifecycle
         currentLanguageCode = LanguageUtility.loadLanguageFromSharedPreferences(this)
@@ -115,7 +119,8 @@ class NewSudokuPreferencesActivity : PreferencesActivity() {
         //confSettings.setHelper();
         //confSettings.setCrash();
         //todo singleton not necessary
-        val p = getInstance(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        val p = getInstance(profilesDir, ProfileRepo(profilesDir))
         p.saveChanges()
     }
 
@@ -130,7 +135,8 @@ class NewSudokuPreferencesActivity : PreferencesActivity() {
     }
 
     override fun saveToProfile() {
-        val p = getInstance(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        val p = getInstance(profilesDir, ProfileRepo(profilesDir))
         p.isGestureActive = gesture!!.isChecked
         saveAssistance(Assistances.autoAdjustNotes, autoAdjustNotes!!)
         saveAssistance(Assistances.markRowColumn, markRowColumn!!)

@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter
 import de.sudoq.R
 import de.sudoq.controller.SudoqListActivity
 import de.sudoq.model.profile.ProfileManager
+import de.sudoq.persistence.profile.ProfileRepo
 import java.util.*
 
 /**
@@ -44,7 +45,8 @@ class ProfileListActivity : SudoqListActivity(), OnItemClickListener {
         this.title = this.getString(R.string.action_switch_profile)
 
         //todo make class variable
-        val pm = ProfileManager(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir))
         check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
         pm.loadCurrentProfile()
         profileIds = pm.profilesIdList
@@ -71,7 +73,8 @@ class ProfileListActivity : SudoqListActivity(), OnItemClickListener {
         val profileName = profileNames!![position]
         val profileId = profileIds!![position]
         Log.d(LOG_TAG, "Clicked on name $profileName with id:$profileId")
-        val pm = ProfileManager(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir))
         check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
         pm.loadCurrentProfile()
         pm.changeProfile(profileId)

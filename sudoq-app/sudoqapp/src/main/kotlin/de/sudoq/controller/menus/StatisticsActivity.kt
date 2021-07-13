@@ -17,6 +17,7 @@ import de.sudoq.controller.sudoku.SudokuActivity.Companion.getTimeString
 import de.sudoq.model.profile.ProfileSingleton
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.profile.Statistics
+import de.sudoq.persistence.profile.ProfileRepo
 
 /**
  * Diese Klasse stellt eine Activity zur Anzeige der Statisik des aktuellen
@@ -26,7 +27,8 @@ class StatisticsActivity : SudoqCompatActivity() {
     /** Methods  */
     private fun setScore(textViewID: Int, label: Int, statLabel: Statistics) {
         val current = findViewById<View>(textViewID) as TextView
-        val pm = ProfileManager(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir))
         check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
         pm.loadCurrentProfile()
         current.text = "${getString(label)}: ${pm.getStatistic(statLabel)}"
@@ -71,7 +73,8 @@ class StatisticsActivity : SudoqCompatActivity() {
         )
         setScore(R.id.text_score, R.string.statistics_score, Statistics.maximumPoints)
         val current = findViewById<View>(R.id.text_fastest_solving_time) as TextView
-        val pm = ProfileManager(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir))
         check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
         pm.loadCurrentProfile()
         val timeRecordInSecs = pm.getStatistic(Statistics.fastestSolvingTime)

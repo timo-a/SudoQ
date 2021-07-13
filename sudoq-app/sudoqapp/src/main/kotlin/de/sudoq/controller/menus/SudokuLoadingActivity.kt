@@ -30,6 +30,7 @@ import de.sudoq.model.game.GameData
 import de.sudoq.model.game.GameManager
 import de.sudoq.model.persistence.xml.game.GameRepo
 import de.sudoq.model.profile.ProfileManager
+import de.sudoq.persistence.profile.ProfileRepo
 import de.sudoq.persistence.sudokuType.SudokuTypeRepo
 import java.io.*
 import java.nio.charset.Charset
@@ -74,11 +75,11 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
         profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
         sudokuDir = getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE)
         sudokuTypeRepo = SudokuTypeRepo(sudokuDir)
-        gameManager = GameManager(profilesDir, sudokuTypeRepo)
+        profileManager = ProfileManager(profilesDir, ProfileRepo(profilesDir))
+        gameManager = GameManager(profileManager!!, sudokuTypeRepo)
 
 
         //needs to be called before setcontentview which calls onContentChanged
-        profileManager = ProfileManager(profilesDir)
         check(!profileManager!!.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
         profileManager!!.loadCurrentProfile()
         setContentView(R.layout.sudokuloading)
@@ -233,8 +234,9 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
             }
         }
         val builder = AlertDialog.Builder(this)
-        val p = ProfileManager(profilesDir)
-        val gameRepo = GameRepo(p.profilesDir!!, p.currentProfileID, sudokuTypeRepo)
+        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
+        val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir))
+        val gameRepo = GameRepo(pm.profilesDir!!, pm.currentProfileID, sudokuTypeRepo)
         builder.setItems(temp_items.toTypedArray()) { dialog, item ->
             val gameID = adapter!!.getItem(position)!!.id
             when (item) {

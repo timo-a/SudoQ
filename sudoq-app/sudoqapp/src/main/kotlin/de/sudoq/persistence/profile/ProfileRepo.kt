@@ -1,9 +1,11 @@
-package de.sudoq.model.persistence.xml.profile
+package de.sudoq.persistence.profile
 
 import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.persistence.IRepo
+import de.sudoq.model.persistence.xml.profile.ProfileBE
 import de.sudoq.model.persistence.xml.profile.ProfileMapper
+import de.sudoq.model.persistence.xml.profile.ProfilesListRepo
 import de.sudoq.model.profile.Profile
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.profile.Statistics

@@ -10,7 +10,7 @@ package de.sudoq.model.profile
 import de.sudoq.model.ObservableModelImpl
 import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.GameSettings
-import de.sudoq.model.persistence.xml.profile.ProfileRepo
+import de.sudoq.model.persistence.IRepo
 import de.sudoq.model.persistence.xml.profile.ProfilesListRepo
 import de.sudoq.model.xml.*
 import java.io.File
@@ -75,7 +75,7 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
             currentProfile.statistics = value
         }
 
-    var profileRepo: ProfileRepo? = null //TODO refactor initialization, set it right
+    var profileRepo: IRepo<Profile>? = null //TODO refactor initialization, set it right
     var profilesListRepo: ProfilesListRepo? = null //TODO refactor initialization, set it right
 
     var currentProfileDir: File? = null
@@ -92,8 +92,9 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
             field = value
         }
 
-    constructor(profilesDir: File) : this() {
-        this.profileRepo = ProfileRepo(profilesDir)
+    constructor(profilesDir: File,
+                profileRepo: IRepo<Profile>) : this() {
+        this.profileRepo = profileRepo
         this.profilesListRepo = ProfilesListRepo(profilesDir)
 
         if (!profilesDir.canWrite())
@@ -103,10 +104,10 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
     }
 
     constructor(
-        profileRepo: ProfileRepo,
+        profileRepo: IRepo<Profile>,
         profilesListRepo: ProfilesListRepo,
         profilesDir: File
-    ) : this() {//todo pas just file and init here?
+    ) : this() {
         this.profileRepo = profileRepo
         this.profilesListRepo = profilesListRepo
 

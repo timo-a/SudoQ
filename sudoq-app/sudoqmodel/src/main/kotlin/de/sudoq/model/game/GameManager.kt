@@ -25,9 +25,8 @@ import java.util.*
 /**
  * Singleton for creating and loading sudoku games.
  */
-class GameManager(profilesDir: File, val sudokuTypeRepo: IRepo<SudokuType>) {
-
-    private var profile: ProfileManager = ProfileManager(profilesDir)
+class GameManager(private var profile: ProfileManager,
+                  val sudokuTypeRepo: IRepo<SudokuType>) {
 
     private var gameRepo: GameRepo
 
