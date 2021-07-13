@@ -21,6 +21,7 @@ import androidx.appcompat.widget.Toolbar
 import de.sudoq.R
 import de.sudoq.controller.SudoqListActivity
 import de.sudoq.model.profile.Profile.Companion.getInstance
+import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.xml.SudokuTypesList
 
 /**
@@ -149,8 +150,8 @@ class RestrictTypesActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
     }
 
     private fun initialiseTypes() {
-        val p = getInstance(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
-        types = p.assistances.wantedTypesList
+        val pm = ProfileManager(getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE))
+        types = pm.assistances.wantedTypesList
         // initialize ArrayAdapter for the type names and set it
         adapter = RestrictTypesAdapter(this, types!!)
         listAdapter = adapter

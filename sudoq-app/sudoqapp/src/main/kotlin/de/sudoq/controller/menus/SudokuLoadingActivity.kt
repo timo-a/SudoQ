@@ -75,7 +75,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
         profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
         sudokuDir = getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE)
         sudokuTypeRepo = SudokuTypeRepo(sudokuDir)
-        gameManager = GameManager(profilesDir, sudokuDir, sudokuTypeRepo)
+        gameManager = GameManager(profilesDir, sudokuTypeRepo)
 
 
         //needs to be called before setcontentview which calls onContentChanged
@@ -152,9 +152,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
                 gameManager.deleteFinishedGames()
             }
             R.id.action_sudokuloading_delete_all -> {
-                val p = Profile.getInstance(profilesDir)
-                gameManager.gameList.map { it.id }
-                    .forEach { gameManager.deleteGame(it, p) }
+                gameManager.gameList.forEach { gameManager.deleteGame(it.id) }
             }
             else -> super.onOptionsItemSelected(item)
         }
@@ -210,8 +208,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         } else {
             /*selected in order to delete*/
-            val p = Profile.getInstance(profilesDir)
-            gameManager.deleteGame(adapter!!.getItem(position)!!.id, p)
+            gameManager.deleteGame(adapter!!.getItem(position)!!.id)
             onContentChanged()
         }
     }
@@ -237,7 +234,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
             }
         }
         val builder = AlertDialog.Builder(this)
-        val p = Profile.getInstance(profilesDir)
+        val p = ProfileManager(profilesDir)
         val gameRepo = GameRepo(p.profilesDir!!, p.currentProfileID, sudokuTypeRepo)
         builder.setItems(temp_items.toTypedArray()) { dialog, item ->
             val gameID = adapter!!.getItem(position)!!.id
@@ -249,7 +246,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 }
                 1 -> { // delete
-                    gameManager.deleteGame(gameID, p)
+                    gameManager.deleteGame(gameID)
                     onContentChanged()
                 }
                 2 -> {

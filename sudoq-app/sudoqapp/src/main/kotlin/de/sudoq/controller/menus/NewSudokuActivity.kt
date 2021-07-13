@@ -173,7 +173,7 @@ class NewSudokuActivity : SudoqCompatActivity() {
                 val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
                 val pm = ProfileManager(profilesDir)
                 val sudokuDir = getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE)
-                val game = GameManager(profilesDir, sudokuDir, SudokuTypeRepo(sudokuDir))
+                val game = GameManager(profilesDir, SudokuTypeRepo(sudokuDir))
                     .newGame(sudokuType!!, complexity!!, gameSettings!!, sudokuDir)
                 check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
                 pm.loadCurrentProfile()

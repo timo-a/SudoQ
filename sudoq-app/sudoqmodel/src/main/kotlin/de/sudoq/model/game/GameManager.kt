@@ -25,7 +25,7 @@ import java.util.*
 /**
  * Singleton for creating and loading sudoku games.
  */
-class GameManager(profilesDir: File, sudokuDir: File, val sudokuTypeRepo: IRepo<SudokuType>) {
+class GameManager(profilesDir: File, val sudokuTypeRepo: IRepo<SudokuType>) {
 
     private var profile: ProfileManager = ProfileManager(profilesDir)
 
@@ -93,7 +93,7 @@ class GameManager(profilesDir: File, sudokuDir: File, val sudokuTypeRepo: IRepo<
      *
      * @param game [Game] to save
      */
-    fun save(game: Game, profile: Profile) {
+    fun save(game: Game) {
         val gameBE = GameMapper.toBE(game)
         gameRepo.update(gameBE)
 
@@ -122,7 +122,7 @@ class GameManager(profilesDir: File, sudokuDir: File, val sudokuTypeRepo: IRepo<
      *
      * @param id ID of the game to remove
      */
-    fun deleteGame(id: Int, profile: Profile) {
+    fun deleteGame(id: Int) {
         if (id == profile.currentGame) {
             profile.currentGame = Profile.NO_GAME
             profile.saveChanges() //save 'currentGameID' in xml (otherwise menu will offer 'continue')

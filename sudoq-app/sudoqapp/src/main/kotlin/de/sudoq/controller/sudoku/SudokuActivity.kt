@@ -179,7 +179,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
         profilesFile = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
         sudokuFile = getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE)
         sudokuTypeRepo = SudokuTypeRepo(sudokuFile)
-        gameManager = GameManager(profilesFile, sudokuFile, sudokuTypeRepo)
+        gameManager = GameManager(profilesFile, sudokuTypeRepo)
 
         // Load the Game by using current game id
         if (savedInstanceState != null) {
@@ -445,7 +445,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
         val p = Profile.getInstance(profilesFile)
         timeHandler.removeCallbacks(timeUpdate)
         //gameid = 1
-        gameManager.save(game!!, p)
+        gameManager.save(game!!)
         //gameid = -1
         val prevZoomFactor = sudokuScrollView!!.zoomFactor
         sudokuLayout!!.isDrawingCacheEnabled = true
@@ -496,9 +496,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
      */
     override fun finish() {
         if (game != null) {
-            val p = Profile.getInstance(profilesFile)
-            p.loadCurrentProfile()
-            gameManager.save(game!!, p)
+            gameManager.save(game!!)
         }
         super.finish()
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
@@ -726,8 +724,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
 
     /** saves the whole game, purpose: save the action tree so a spontaneous crash doesn't lose us actions record  */
     private fun saveActionTree() {
-        val p = Profile.getInstance(profilesFile)
-        gameManager.save(game!!, p)
+        gameManager.save(game!!)
     }
 
     companion object {
