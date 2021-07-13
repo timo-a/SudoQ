@@ -1,6 +1,5 @@
-package de.sudoq.model.persistence.xml.profile
+package de.sudoq.persistence.profile
 
-import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.profile.AppSettings
 import de.sudoq.model.profile.Statistics

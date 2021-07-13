@@ -11,7 +11,7 @@ import de.sudoq.model.ObservableModelImpl
 import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.persistence.IRepo
-import de.sudoq.model.persistence.xml.profile.ProfilesListRepo
+import de.sudoq.model.persistence.xml.profile.IProfilesListRepo
 import de.sudoq.model.xml.*
 import java.io.File
 import java.util.*
@@ -76,7 +76,7 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
         }
 
     var profileRepo: IRepo<Profile>? = null //TODO refactor initialization, set it right
-    var profilesListRepo: ProfilesListRepo? = null //TODO refactor initialization, set it right
+    var profilesListRepo: IProfilesListRepo? = null //TODO refactor initialization, set it right
 
     var currentProfileDir: File? = null
         get() = File(profilesDir!!.absolutePath, "profile_$currentProfileID")
@@ -93,9 +93,10 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
         }
 
     constructor(profilesDir: File,
-                profileRepo: IRepo<Profile>) : this() {
+                profileRepo: IRepo<Profile>,
+                profilesListRepo: IProfilesListRepo) : this() {
         this.profileRepo = profileRepo
-        this.profilesListRepo = ProfilesListRepo(profilesDir)
+        this.profilesListRepo = profilesListRepo
 
         if (!profilesDir.canWrite())
             throw IllegalArgumentException("profiles dir cannot write")
@@ -103,9 +104,9 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
         this.profilesDir = profilesDir
     }
 
-    constructor(
+    constructor(//todo combine with above
         profileRepo: IRepo<Profile>,
-        profilesListRepo: ProfilesListRepo,
+        profilesListRepo: IProfilesListRepo,
         profilesDir: File
     ) : this() {
         this.profileRepo = profileRepo

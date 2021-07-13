@@ -24,6 +24,7 @@ import de.sudoq.model.game.GameData
 import de.sudoq.model.persistence.xml.game.GameRepo
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.persistence.profile.ProfileRepo
+import de.sudoq.persistence.profile.ProfilesListRepo
 import de.sudoq.persistence.sudokuType.SudokuTypeRepo
 import java.io.FileInputStream
 import java.io.FileNotFoundException
@@ -55,7 +56,7 @@ class SudokuLoadingAdapter(context: Context, private val gameDatas: List<GameDat
         val sudokuComplexity = rowView.findViewById<View>(R.id.complexity_label) as TextView
         val sudokuTime = rowView.findViewById<View>(R.id.time_label) as TextView
         val sudokuState = rowView.findViewById<View>(R.id.state_label) as TextView
-        val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir))
+        val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
         pm.loadCurrentProfile()
         val gameRepo = GameRepo(pm.profilesDir!!, pm.currentProfileID, sudokuTypeRepo)
         val currentThumbnailFile = gameRepo.getGameThumbnailFile(gameDatas[position].id)

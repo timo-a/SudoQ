@@ -22,6 +22,7 @@ import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.profile.ProfileSingleton.Companion.getInstance
 import de.sudoq.persistence.profile.ProfileRepo
+import de.sudoq.persistence.profile.ProfilesListRepo
 
 /**
  * Activity um Profile zu bearbeiten und zu verwalten
@@ -63,7 +64,7 @@ class PlayerPreferencesActivity : PreferencesActivity() {
         firstStartup = false
         createProfile = true
         val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val p = getInstance(profilesDir, ProfileRepo(profilesDir))
+        val p = getInstance(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
         p.registerListener(this)
 
         //store language at beginning of activity lifecycle
@@ -107,7 +108,8 @@ class PlayerPreferencesActivity : PreferencesActivity() {
      */
     override fun refreshValues() {
         val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val profile = getInstance(profilesDir, ProfileRepo(profilesDir))
+        val profile = getInstance(profilesDir, ProfileRepo(profilesDir),
+                                  ProfilesListRepo(profilesDir))
         name!!.setText(profile.name)
         gesture!!.isChecked = profile.isGestureActive
         autoAdjustNotes!!.isChecked = profile.getAssistance(Assistances.autoAdjustNotes)
@@ -132,7 +134,8 @@ class PlayerPreferencesActivity : PreferencesActivity() {
             var newIndex = 0
             /* increment newIndex to be bigger than the others */
             val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-            val p = getInstance(profilesDir, ProfileRepo(profilesDir))
+            val p = getInstance(profilesDir, ProfileRepo(profilesDir),
+                                ProfilesListRepo(profilesDir))
             val l: List<String> = p.profilesNameList
             for (s in l) if (s.startsWith(newProfileName)) {
                 val currentIndex = s.substring(newProfileName.length)
@@ -165,14 +168,14 @@ class PlayerPreferencesActivity : PreferencesActivity() {
      */
     override fun adjustValuesAndSave() {
         val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val p = getInstance(profilesDir, ProfileRepo(profilesDir))
+        val p = getInstance(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
         p.name = name!!.text.toString()
         saveToProfile()
     }
 
     override fun saveToProfile() {
         val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val p = getInstance(profilesDir, ProfileRepo(profilesDir))
+        val p = getInstance(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
         p.isGestureActive = gesture!!.isChecked
         saveAssistance(Assistances.autoAdjustNotes, autoAdjustNotes!!)
         saveAssistance(Assistances.markRowColumn, markRowColumn!!)
@@ -208,7 +211,7 @@ class PlayerPreferencesActivity : PreferencesActivity() {
      */
     private fun deleteProfile() {
         val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val p = getInstance(profilesDir, ProfileRepo(profilesDir))
+        val p = getInstance(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
         p.deleteProfile()
     }
 
@@ -247,7 +250,7 @@ class PlayerPreferencesActivity : PreferencesActivity() {
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
         val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val p = getInstance(profilesDir, ProfileRepo(profilesDir))
+        val p = getInstance(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
         val multipleProfiles = p.numberOfAvailableProfiles > 1
         menu.findItem(R.id.action_delete_profile).isVisible = multipleProfiles
         menu.findItem(R.id.action_switch_profile).isVisible = multipleProfiles

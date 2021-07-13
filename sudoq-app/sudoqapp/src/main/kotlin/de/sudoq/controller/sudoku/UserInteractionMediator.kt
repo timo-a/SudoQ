@@ -26,6 +26,7 @@ import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.persistence.profile.ProfileRepo
+import de.sudoq.persistence.profile.ProfilesListRepo
 import de.sudoq.view.GestureInputOverlay
 import de.sudoq.view.SudokuCellView
 import de.sudoq.view.SudokuLayout
@@ -108,7 +109,8 @@ class UserInteractionMediator(
                 c.getString(R.string.path_rel_profiles),
                 Context.MODE_PRIVATE
             )
-            val p = ProfileSingleton.getInstance(profilesDir, ProfileRepo(profilesDir))
+            val p = ProfileSingleton.getInstance(profilesDir, ProfileRepo(profilesDir),
+                                                 ProfilesListRepo(profilesDir))
             if (p.isGestureActive) {
                 cellSelectedGestureMode(view, e)
             } else {

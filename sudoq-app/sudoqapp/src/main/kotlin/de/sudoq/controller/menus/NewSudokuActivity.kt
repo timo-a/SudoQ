@@ -29,6 +29,7 @@ import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.xml.SudokuTypesList
 import de.sudoq.persistence.profile.ProfileRepo
+import de.sudoq.persistence.profile.ProfilesListRepo
 import de.sudoq.persistence.sudokuType.SudokuTypeRepo
 import java.util.*
 
@@ -61,7 +62,7 @@ class NewSudokuActivity : SudoqCompatActivity() {
 
         //for initial settings-values from Profile
         val profileDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val pm = ProfileManager(profileDir, ProfileRepo(profileDir))
+        val pm = ProfileManager(profileDir, ProfileRepo(profileDir), ProfilesListRepo(profileDir))
         check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
         pm.loadCurrentProfile()
         val xt = pm.assistances.toXmlTree()
@@ -173,7 +174,8 @@ class NewSudokuActivity : SudoqCompatActivity() {
         if (sudokuType != null && complexity != null && gameSettings != null) {
             try {
                 val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-                val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir))
+                val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir),
+                                        ProfilesListRepo(profilesDir))
                 val sudokuDir = getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE)
                 val game = GameManager(pm, SudokuTypeRepo(sudokuDir))
                     .newGame(sudokuType!!, complexity!!, gameSettings!!, sudokuDir)

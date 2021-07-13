@@ -1,6 +1,6 @@
-package de.sudoq.model.persistence.xml.profile
+package de.sudoq.persistence.profile
 
-import de.sudoq.model.persistence.IRepo
+import de.sudoq.model.persistence.xml.profile.IProfilesListRepo
 import de.sudoq.model.profile.Profile
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlHelper
@@ -8,28 +8,10 @@ import de.sudoq.model.xml.XmlTree
 import java.io.File
 import java.io.IOException
 
-class ProfilesListRepo(private val profilesDir: File) : IRepo<ProfilesListBE> {
+class ProfilesListRepo(private val profilesDir: File) : IProfilesListRepo {
 //todo names and ids are redundant. just iterate through the profiles everytime?
 
-    override fun create(): ProfilesListBE {
-        TODO("Not yet implemented")
-    }
-
-
-    override fun read(id: Int): ProfilesListBE {
-        TODO("Not yet implemented")
-    }
-
-    override fun update(t: ProfilesListBE): ProfilesListBE {
-        TODO("Not yet implemented")
-    }
-
-    override fun delete(id: Int) {
-        TODO("Not yet implemented")
-    }
-
-
-    fun addProfile(newProfile: Profile) {
+    override fun addProfile(newProfile: Profile) {
         //todo move to repo
         val newProfileID = newProfile.id
 
@@ -56,7 +38,7 @@ class ProfilesListRepo(private val profilesDir: File) : IRepo<ProfilesListBE> {
     /**
      * Erzeugt die profiles.xml Datei, wenn noch kein Profil vorhanden ist.
      */
-    fun createProfilesFile() {
+    override fun createProfilesFile() {
         val profilesXML = File(profilesDir.absolutePath + File.separator + "profiles.xml")
         try {
             val xmlTree = XmlTree("profiles")
@@ -86,7 +68,7 @@ class ProfilesListRepo(private val profilesDir: File) : IRepo<ProfilesListBE> {
     }
 
 
-    fun updateProfilesList(changedProfile: Profile) {
+    override fun updateProfilesList(changedProfile: Profile) {
         val profiles = profilesXml
         for (profile in profiles) {
             if (profile.getAttributeValue(ID)!!.toInt() == changedProfile.id) {
@@ -97,16 +79,16 @@ class ProfilesListRepo(private val profilesDir: File) : IRepo<ProfilesListBE> {
     }
 
     //todo make property
-    fun getCurrentProfileId(): Int {
+    override fun getCurrentProfileId(): Int {
         return profilesXml.getAttributeValue(name = CURRENT)!!.toInt()
     }
 
-    fun setCurrentProfileId(id: Int) {
+    override fun setCurrentProfileId(id: Int) {
         profilesXml.updateAttribute(XmlAttribute(CURRENT, id.toString()))
         saveProfilesFile(profilesXml)
     }
 
-    fun deleteProfileFromList(id: Int) {
+    override fun deleteProfileFromList(id: Int) {
         val oldProfiles = profilesXml
         val profiles = XmlTree(oldProfiles.name)
         oldProfiles
@@ -116,17 +98,17 @@ class ProfilesListRepo(private val profilesDir: File) : IRepo<ProfilesListBE> {
         saveProfilesFile(profiles)
     }
 
-    fun getNextProfile(): Int {
+    override fun getNextProfile(): Int {
         return profilesXml.getChildren().next().getAttributeValue(ID)!!.toInt()
     }
 
-    fun getProfilesCount(): Int = profilesXml.numberOfChildren
+    override fun getProfilesCount(): Int = profilesXml.numberOfChildren
 
-    fun getProfileNamesList(): List<String> {
+    override fun getProfileNamesList(): List<String> {
         return profilesXml.map { it.getAttributeValue(NAME)!! }
     }
 
-    fun getProfileIdsList(): List<Int> {
+    override fun getProfileIdsList(): List<Int> {
         return profilesXml.map { it.getAttributeValue(ID)!!.toInt() }
     }
 

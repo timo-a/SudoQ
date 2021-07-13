@@ -18,6 +18,7 @@ import de.sudoq.model.profile.Statistics
 import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.persistence.profile.ProfileRepo
+import de.sudoq.persistence.profile.ProfilesListRepo
 
 /**
  * Der SudokuController ist dafür zuständig auf Aktionen des Benutzers mit dem
@@ -162,7 +163,8 @@ class SudokuController(
             context.getString(R.string.path_rel_profiles),
             Context.MODE_PRIVATE
         )
-        val p = ProfileSingleton.getInstance(profilesDir, ProfileRepo(profilesDir))
+        val p = ProfileSingleton.getInstance(profilesDir, ProfileRepo(profilesDir),
+                                             ProfilesListRepo(profilesDir))
         if (p.getStatistic(Statistics.fastestSolvingTime) > game.time) {
             p.setStatistic(Statistics.fastestSolvingTime, game.time)
         }
@@ -176,7 +178,8 @@ class SudokuController(
             context.getString(R.string.path_rel_profiles),
             Context.MODE_PRIVATE
         )
-        val p = ProfileSingleton.getInstance(profilesDir, ProfileRepo(profilesDir))
+        val p = ProfileSingleton.getInstance(profilesDir, ProfileRepo(profilesDir),
+                                             ProfilesListRepo(profilesDir))
         p.setStatistic(s, p.getStatistic(s) + 1)
     }
 }

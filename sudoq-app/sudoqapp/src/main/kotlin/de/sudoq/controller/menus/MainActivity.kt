@@ -27,6 +27,7 @@ import de.sudoq.controller.sudoku.SudokuActivity
 import de.sudoq.model.profile.ProfileSingleton
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.persistence.profile.ProfileRepo
+import de.sudoq.persistence.profile.ProfilesListRepo
 import java.io.File
 import java.util.*
 
@@ -87,7 +88,7 @@ class MainActivity : SudoqCompatActivity() {
     public override fun onResume() {
         super.onResume()
         //Toast.makeText(this, "onResume", Toast.LENGTH_LONG).show();
-        val pm = ProfileManager(profilesFile, ProfileRepo(profilesFile))
+        val pm = ProfileManager(profilesFile, ProfileRepo(profilesFile), ProfilesListRepo(profilesFile))
         check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
         pm.loadCurrentProfile()
         val continueButton = findViewById<View>(R.id.button_mainmenu_continue) as Button

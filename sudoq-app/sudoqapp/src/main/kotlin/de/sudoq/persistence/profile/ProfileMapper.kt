@@ -1,7 +1,6 @@
-package de.sudoq.model.persistence.xml.profile
+package de.sudoq.persistence.profile
 
 import de.sudoq.model.profile.Profile
-import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 
 object ProfileMapper {
     fun toBE(profile: Profile): ProfileBE {

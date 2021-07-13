@@ -13,6 +13,7 @@ import de.sudoq.model.game.GameSettings
 import de.sudoq.model.profile.ProfileSingleton.Companion.getInstance
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.persistence.profile.ProfileRepo
+import de.sudoq.persistence.profile.ProfilesListRepo
 
 abstract class PreferencesActivity : SudoqCompatActivity(), ModelChangeListener<ProfileManager> {
     var gesture: CheckBox? = null
@@ -63,7 +64,7 @@ abstract class PreferencesActivity : SudoqCompatActivity(), ModelChangeListener<
     protected abstract fun saveToProfile()
     protected fun saveAssistance(a: Assistances, c: CheckBox) {
         val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val p = getInstance(profilesDir, ProfileRepo(profilesDir))
+        val p = getInstance(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
         p.setAssistance(a, c.isChecked)
     }
 

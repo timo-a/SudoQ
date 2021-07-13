@@ -22,6 +22,7 @@ import de.sudoq.model.game.GameSettings
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.profile.ProfileSingleton.Companion.getInstance
 import de.sudoq.persistence.profile.ProfileRepo
+import de.sudoq.persistence.profile.ProfilesListRepo
 
 /**
  * Wird aufgerufen in Hauptmenü-> neues Sudoku -> einstellungen
@@ -71,7 +72,7 @@ class NewSudokuPreferencesActivity : PreferencesActivity() {
             confSettings!!.getAssistance(Assistances.restrictCandidates)
 
         val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir))
+        val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
         pm.registerListener(this)
 
         //set and store language at beginning of activity lifecycle
@@ -120,7 +121,7 @@ class NewSudokuPreferencesActivity : PreferencesActivity() {
         //confSettings.setCrash();
         //todo singleton not necessary
         val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val p = getInstance(profilesDir, ProfileRepo(profilesDir))
+        val p = getInstance(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
         p.saveChanges()
     }
 
@@ -136,7 +137,7 @@ class NewSudokuPreferencesActivity : PreferencesActivity() {
 
     override fun saveToProfile() {
         val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val p = getInstance(profilesDir, ProfileRepo(profilesDir))
+        val p = getInstance(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
         p.isGestureActive = gesture!!.isChecked
         saveAssistance(Assistances.autoAdjustNotes, autoAdjustNotes!!)
         saveAssistance(Assistances.markRowColumn, markRowColumn!!)

@@ -15,6 +15,7 @@ import de.sudoq.model.game.Game
 import de.sudoq.model.profile.ProfileSingleton
 import de.sudoq.model.solvingAssistant.SolvingAssistant.giveAHint
 import de.sudoq.persistence.profile.ProfileRepo
+import de.sudoq.persistence.profile.ProfilesListRepo
 import de.sudoq.view.SudokuLayout
 import java.util.*
 
@@ -48,7 +49,8 @@ class AssistancesDialogFragment : DialogFragment() {
             getString(R.string.path_rel_profiles),
             Context.MODE_PRIVATE
         )
-        val p = ProfileSingleton.getInstance(profilesDir, ProfileRepo(profilesDir))
+        val p = ProfileSingleton.getInstance(profilesDir, ProfileRepo(profilesDir),
+                                             ProfilesListRepo(profilesDir))
         if (p.assistances.isHelperSet) itemStack.add(getString(R.string.sf_sudoku_assistances_give_hint))
         if (p.appSettings.isDebugSet) itemStack.add(getString(R.string.sf_sudoku_assistances_crash))
 

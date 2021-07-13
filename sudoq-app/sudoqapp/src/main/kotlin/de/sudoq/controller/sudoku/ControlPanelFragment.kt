@@ -15,6 +15,7 @@ import de.sudoq.R
 import de.sudoq.model.game.Game
 import de.sudoq.model.profile.ProfileSingleton
 import de.sudoq.persistence.profile.ProfileRepo
+import de.sudoq.persistence.profile.ProfilesListRepo
 import de.sudoq.view.SudokuLayout
 
 /**
@@ -137,7 +138,8 @@ class ControlPanelFragment : Fragment() {
                 Context.MODE_PRIVATE
             )
 
-            val profile = ProfileSingleton.getInstance(profilesDir, ProfileRepo(profilesDir))
+            val profile = ProfileSingleton.getInstance(profilesDir, ProfileRepo(profilesDir),
+                                                       ProfilesListRepo(profilesDir))
             if (activity.checkGesture()) {
                 /* toggle 'gesture active'
 				 * toggle button icon as well */
