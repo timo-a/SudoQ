@@ -12,13 +12,12 @@ import java.io.File
 /**
  * This static class is a wrapper for the currently loaded player profile
  * which is maintained by SharedPreferences of the Android-API.
- *
+ * Some callers expect a singleton instance so for now we keep one around.
+ * todo: replace all instances with manager
  */
 class ProfileSingleton private constructor(f: File) : ProfileManager(f) {
 //private constructor because class is static
-//TODO split into profile handler and profile
 
-    // Profiles todo move all to profileManager
     companion object {
 
         /**

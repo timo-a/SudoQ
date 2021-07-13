@@ -1,6 +1,7 @@
 package de.sudoq.model.persistence.xml.profile
 
 import de.sudoq.model.persistence.IRepo
+import de.sudoq.model.profile.Profile
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlHelper
 import de.sudoq.model.xml.XmlTree
@@ -28,7 +29,7 @@ class ProfilesListRepo(private val profilesDir: File) : IRepo<ProfilesListBE> {
     }
 
 
-    fun addProfile(newProfile: ProfileBE) {
+    fun addProfile(newProfile: Profile) {
         //todo move to repo
         val newProfileID = newProfile.id
 
@@ -85,7 +86,7 @@ class ProfilesListRepo(private val profilesDir: File) : IRepo<ProfilesListBE> {
     }
 
 
-    fun updateProfilesList(changedProfile: ProfileBE) {
+    fun updateProfilesList(changedProfile: Profile) {
         val profiles = profilesXml
         for (profile in profiles) {
             if (profile.getAttributeValue(ID)!!.toInt() == changedProfile.id) {

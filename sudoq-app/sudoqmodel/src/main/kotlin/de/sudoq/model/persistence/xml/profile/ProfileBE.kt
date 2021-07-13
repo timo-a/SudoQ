@@ -1,5 +1,6 @@
 package de.sudoq.model.persistence.xml.profile
 
+import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.profile.AppSettings
 import de.sudoq.model.profile.Statistics
@@ -19,6 +20,14 @@ class ProfileBE(val id: Int) : Xmlable {
 
     var appSettings = AppSettings()
 
+    constructor(id: Int, currentGame: Int, name: String, assistances: GameSettings,
+                statistics: IntArray, appSettings: AppSettings) : this(id) {
+        this.currentGame = currentGame
+        this.name = name
+        this.assistances = assistances
+        this.statistics = statistics
+        this.appSettings = appSettings
+    }
 
     /**
      * {@inheritDoc}

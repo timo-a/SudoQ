@@ -10,7 +10,6 @@ package de.sudoq.model.profile
 import de.sudoq.model.ObservableModelImpl
 import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.GameSettings
-import de.sudoq.model.persistence.xml.profile.ProfileBE
 import de.sudoq.model.persistence.xml.profile.ProfileRepo
 import de.sudoq.model.persistence.xml.profile.ProfilesListRepo
 import de.sudoq.model.xml.*
@@ -27,7 +26,7 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
 //private constructor because class is static
 //TODO split into profile handler and profile
 
-    lateinit var currentProfile: ProfileBE //initialized in loadCurrentProfile
+    lateinit var currentProfile: Profile //initialized in loadCurrentProfile
 
 
     /**

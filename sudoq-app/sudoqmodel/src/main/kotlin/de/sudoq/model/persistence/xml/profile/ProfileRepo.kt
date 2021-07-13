@@ -3,8 +3,9 @@ package de.sudoq.model.persistence.xml.profile
 import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.persistence.IRepo
+import de.sudoq.model.persistence.xml.profile.ProfileMapper
+import de.sudoq.model.profile.Profile
 import de.sudoq.model.profile.ProfileManager
-import de.sudoq.model.profile.ProfileSingleton
 import de.sudoq.model.profile.Statistics
 import de.sudoq.model.xml.XmlHelper
 import de.sudoq.model.xml.XmlTree
@@ -12,14 +13,14 @@ import java.io.File
 import java.io.IOException
 
 
-class ProfileRepo(private val profilesDir: File) : IRepo<ProfileBE> {
+class ProfileRepo(private val profilesDir: File) : IRepo<Profile> {
 
-    override fun create(): ProfileBE {
+    override fun create(): Profile {
 
         return create(newProfileID)
     }
 
-    private fun create(id: Int): ProfileBE {
+    private fun create(id: Int): Profile {
 
         val newProfile = ProfileBE(id)
         newProfile.name = ProfileManager.DEFAULT_PROFILE_NAME
@@ -33,9 +34,8 @@ class ProfileRepo(private val profilesDir: File) : IRepo<ProfileBE> {
 
         createProfileFiles(id)
         // save new profile xml
-        update(newProfile)
-
-        return newProfile
+        val profileReloaded = updateBE(newProfile)
+        return ProfileMapper.fromBE(profileReloaded)
     }
 
 
@@ -54,12 +54,21 @@ class ProfileRepo(private val profilesDir: File) : IRepo<ProfileBE> {
         try {
             XmlHelper().saveXml(XmlTree("games"), games)
         } catch (e: IOException) {
-            throw IllegalStateException("Invalid Profil", e)
+            throw IllegalStateException("Invalid Profile", e)
         }
     }
 
 
-    override fun read(id: Int): ProfileBE {
+    override fun read(id: Int): Profile {
+        val profileDir = File(profilesDir, "profile_$id")
+        val file = File(profileDir, "profile.xml")
+        val p = ProfileBE(id)
+        val helper = XmlHelper()
+        p.fillFromXml(helper.loadXml(file)!!)
+        return ProfileMapper.fromBE(p)
+    }
+
+    private fun readBE(id: Int): ProfileBE {
         val profileDir = File(profilesDir, "profile_$id")
         val file = File(profileDir, "profile.xml")
         val p = ProfileBE(id)
@@ -68,13 +77,20 @@ class ProfileRepo(private val profilesDir: File) : IRepo<ProfileBE> {
         return p
     }
 
-    override fun update(t: ProfileBE): ProfileBE {
+    override fun update(t: Profile): Profile {
+        val profileBEIn = ProfileMapper.toBE(t)
+        val profileBEOut = updateBE(profileBEIn)
+        val profileOut = ProfileMapper.fromBE(profileBEOut)
+        return profileOut
+    }
+
+    private fun updateBE(profileBE: ProfileBE): ProfileBE {
         try {
-            val file = getProfileXmlFor(t.id)
-            val tree = t.toXmlTree()
+            val file = getProfileXmlFor(profileBE.id)
+            val tree = profileBE.toXmlTree()
             val helper = XmlHelper()
             helper.saveXml(tree, file)
-            return read(t.id) //return the object that is now saved under that id
+            return readBE(profileBE.id) //return the object that is now saved under that id
         } catch (e: IOException) {
             throw IllegalArgumentException("Something went wrong when writing xml", e)
         }
