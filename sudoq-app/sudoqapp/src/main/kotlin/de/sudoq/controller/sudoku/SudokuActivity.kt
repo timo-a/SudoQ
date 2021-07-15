@@ -37,6 +37,7 @@ import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.Game
 import de.sudoq.model.game.GameManager
 import de.sudoq.model.persistence.xml.game.GameRepo
+import de.sudoq.model.persistence.xml.game.GamesListRepo
 import de.sudoq.model.profile.ProfileSingleton
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.sudoku.Cell
@@ -183,7 +184,18 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
         sudokuTypeRepo = SudokuTypeRepo(sudokuFile)
         val pm = ProfileManager(profilesFile, ProfileRepo(profilesFile),
                                 ProfilesListRepo(profilesFile))
-        gameManager = GameManager(pm, sudokuTypeRepo)
+        ///init params for game*repos
+        pm.loadCurrentProfile()
+        //todo: pass externally initialized object to constructor
+        val gameRepo = GameRepo(
+            pm.profilesDir!!,
+            pm.currentProfileID,
+            sudokuTypeRepo)
+        val gamesFile = File(pm.currentProfileDir, "games.xml")
+        val gamesDir = File(pm.currentProfileDir, "games")
+
+        val gamesListRepo = GamesListRepo(gamesDir, gamesFile)
+        gameManager = GameManager(pm, gameRepo, gamesListRepo, sudokuTypeRepo)
 
         // Load the Game by using current game id
         if (savedInstanceState != null) {

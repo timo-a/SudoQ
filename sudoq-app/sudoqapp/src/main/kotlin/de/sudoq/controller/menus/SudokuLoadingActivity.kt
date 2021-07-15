@@ -29,6 +29,7 @@ import de.sudoq.controller.sudoku.SudokuActivity
 import de.sudoq.model.game.GameData
 import de.sudoq.model.game.GameManager
 import de.sudoq.model.persistence.xml.game.GameRepo
+import de.sudoq.model.persistence.xml.game.GamesListRepo
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.persistence.profile.ProfileRepo
 import de.sudoq.persistence.profile.ProfilesListRepo
@@ -78,8 +79,20 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
         sudokuTypeRepo = SudokuTypeRepo(sudokuDir)
         profileManager = ProfileManager(profilesDir, ProfileRepo(profilesDir),
                                         ProfilesListRepo(profilesDir))
-        gameManager = GameManager(profileManager!!, sudokuTypeRepo)
 
+
+        ///init params for game*repos
+        profileManager!!.loadCurrentProfile()
+        val gameRepo = GameRepo(
+            profileManager!!.profilesDir!!,
+            profileManager!!.currentProfileID,
+            sudokuTypeRepo)
+        val gamesFile = File(profileManager!!.currentProfileDir, "games.xml")
+
+        val gamesDir = File(profileManager!!.currentProfileDir, "games")
+        val gamesListRepo = GamesListRepo(gamesDir, gamesFile)
+
+        gameManager = GameManager(profileManager!!, gameRepo, gamesListRepo, sudokuTypeRepo)
 
         //needs to be called before setcontentview which calls onContentChanged
         check(!profileManager!!.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }

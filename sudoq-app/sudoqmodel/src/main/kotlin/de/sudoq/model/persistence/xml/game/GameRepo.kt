@@ -1,5 +1,6 @@
 package de.sudoq.model.persistence.xml.game
 
+import de.sudoq.model.game.Game
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.game.GameStateHandler
 import de.sudoq.model.persistence.IRepo
@@ -15,7 +16,7 @@ class GameRepo(
     profilesDir: File,
     profileId: Int,
     private val sudokuTypeRepo: IRepo<SudokuType>
-) : IRepo<GameBE> {
+) : IRepo<Game> {
 
 
     private val gamesDir: File
@@ -23,7 +24,12 @@ class GameRepo(
     val gamesFile: File
 
 
-    override fun create(): GameBE {
+    override fun create(): Game {
+        val newGame = createBE()
+        return GameMapper.fromBE(newGame)
+    }
+
+    private fun createBE(): GameBE {
         val newGame = GameBE()
         newGame.id = getNextFreeGameId()
         newGame.gameSettings = GameSettings()
@@ -62,7 +68,12 @@ class GameRepo(
         return File(gamesDir, "game_$id.xml")
     }
 
-    override fun read(id: Int): GameBE {
+    override fun read(id: Int): Game {
+        val game = readBE(id)
+        return GameMapper.fromBE(game)
+    }
+
+    private fun readBE(id: Int): GameBE {
         val obj = GameBE()
         val helper = XmlHelper()
         val gameFile: File = getGameFile(id)
@@ -77,20 +88,28 @@ class GameRepo(
         return obj
     }
 
-    override fun update(g: GameBE): GameBE {
+    override fun update(g: Game): Game {
+        val gameBE = GameMapper.toBE(g)
+        val gameLoaded = updateBE(gameBE)
+        return GameMapper.fromBE(gameLoaded)
+    }
+
+    private fun updateBE(g: GameBE): GameBE {
+
         val file = File(gamesDir, "game_${g.id}.xml")
         try {
             XmlHelper().saveXml(g.toXmlTree(), file)
         } catch (e: IOException) {
             throw IllegalStateException("Error saving game xml tree", e)
         }
-        return read(g.id)
+        return readBE(g.id)
     }
 
     override fun delete(id: Int) {
-        val game = getGameFile(id).delete()
+        getGameFile(id).delete()
         getGameThumbnailFile(id).delete()
     }
+
     // Thumbnails
     /**
      * Returns the .png File for thumbnail of the game with id gameID

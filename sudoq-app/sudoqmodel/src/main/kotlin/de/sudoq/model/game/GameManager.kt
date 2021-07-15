@@ -10,6 +10,8 @@ package de.sudoq.model.game
 import de.sudoq.model.persistence.IRepo
 import de.sudoq.model.persistence.xml.game.GameMapper
 import de.sudoq.model.persistence.xml.game.GameRepo
+import de.sudoq.model.persistence.xml.game.GamesListRepo
+import de.sudoq.model.persistence.xml.game.IGamesListRepo
 import de.sudoq.model.profile.ProfileSingleton
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.sudoku.SudokuManager
@@ -26,13 +28,12 @@ import java.util.*
  * Singleton for creating and loading sudoku games.
  */
 class GameManager(private var profile: ProfileManager,
+                  private var gameRepo: IRepo<Game>,
+                  private var gamesListRepo: IGamesListRepo,
                   val sudokuTypeRepo: IRepo<SudokuType>) {
 
-    private var gameRepo: GameRepo
 
     private var games: MutableList<GameData>
-
-    private var gamesFile: File
 
     /**
      * Creates a new gam and sets up the necessary files.
@@ -53,22 +54,20 @@ class GameManager(private var profile: ProfileManager,
         val sudoku = sm.getNewSudoku(type, complexity)
         sm.usedSudoku(sudoku) //TODO warum instanziierung, wenn laut doc singleton?
 
-        val gameBE0 = gameRepo.create()
-        gameBE0.sudoku = sudoku
-        val game = GameMapper.fromBE(gameBE0)
+        val newGameID = gameRepo.create().id //due to interface we cannot pass sudoku to the new game
+        val game = Game(newGameID, sudoku)
         game.setAssistances(assistances)
-        val gameBE = GameMapper.toBE(game)
-        gameRepo.update(gameBE)
+        gameRepo.update(game)
         val gameData = GameData(
-            gameBE.id,
+            game.id,
             SimpleDateFormat(GameData.dateFormat).format(Date()),
-            gameBE.finished,
-            gameBE.sudoku!!.sudokuType?.enumType!!,
-            gameBE.sudoku!!.complexity!!
+            game.isFinished(),
+            game.sudoku!!.sudokuType?.enumType!!,
+            game.sudoku!!.complexity!!
         )
 
         games.add(gameData)
-        saveGamesFile(games)
+        gamesListRepo.saveGamesFile(games)
 
         return game
     }
@@ -82,8 +81,7 @@ class GameManager(private var profile: ProfileManager,
      */
     fun load(id: Int): Game {
         require(id > 0) { "invalid id" }
-        val gameBE = gameRepo.read(id)
-        return GameMapper.fromBE(gameBE)
+        return gameRepo.read(id)
     }
 
 
@@ -93,13 +91,12 @@ class GameManager(private var profile: ProfileManager,
      * @param game [Game] to save
      */
     fun save(game: Game) {
-        val gameBE = GameMapper.toBE(game)
-        gameRepo.update(gameBE)
+        gameRepo.update(game)
 
         updateGameInList(game)
 
         profile.saveChanges()
-        saveGamesFile(games)
+        gamesListRepo.saveGamesFile(games)
     }
 
     private fun updateGameInList(game: Game) {
@@ -144,7 +141,7 @@ class GameManager(private var profile: ProfileManager,
      *
      */
     fun updateGamesList() {
-        saveGamesFile(games.filter { gameRepo.getGameFile(it.id).exists() })
+        gamesListRepo.saveGamesFile(games.filter { gamesListRepo.fileExists(it.id) })
     }
 
 
@@ -158,32 +155,10 @@ class GameManager(private var profile: ProfileManager,
         updateGamesList()
     }
 
-    private fun saveGamesFile(games: List<GameData>) {
-        val xmlTree = XmlTree("games")
-        games.map { it.toXmlTree() }.forEach { xmlTree.addChild(it) }
-        try {
-            XmlHelper().saveXml(xmlTree, gamesFile)
-        } catch (e: IOException) {
-            throw IllegalStateException("Profile broken", e)
-        }
-    }
+
 
     init{
-        profile.loadCurrentProfile()
-        this.gameRepo = GameRepo(
-            profile.profilesDir!!,
-            profile.currentProfileID,
-            sudokuTypeRepo)
-        this.gamesFile = File(profile.currentProfileDir, "games.xml")
-
-        this.games = try {
-            XmlHelper()
-                .loadXml(this.gamesFile)!!
-                .map { GameData.fromXml(it) }
-                .sortedDescending().toMutableList()
-        } catch (e: IOException) {
-            throw IllegalStateException("Profile broken", e)
-        }
+        this.games = gamesListRepo.load()
     }
 
 }
