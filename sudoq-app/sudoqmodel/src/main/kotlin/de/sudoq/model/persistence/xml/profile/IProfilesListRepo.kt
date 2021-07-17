@@ -4,6 +4,7 @@ import de.sudoq.model.profile.Profile
 
 interface IProfilesListRepo {
 
+    fun profilesFileExists(): Boolean
     fun createProfilesFile()
     fun addProfile(newProfile: Profile)
     fun getProfileNamesList(): List<String>

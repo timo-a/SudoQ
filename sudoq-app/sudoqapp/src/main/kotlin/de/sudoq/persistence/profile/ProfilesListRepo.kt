@@ -35,11 +35,14 @@ class ProfilesListRepo(private val profilesDir: File) : IProfilesListRepo {
             throw IllegalStateException("Something went wrong reading profiles.xml", e)
         }
 
+    override fun profilesFileExists(): Boolean = getProfilesFile().exists()
+
+
     /**
      * Erzeugt die profiles.xml Datei, wenn noch kein Profil vorhanden ist.
      */
     override fun createProfilesFile() {
-        val profilesXML = File(profilesDir.absolutePath + File.separator + "profiles.xml")
+        val profilesXML = getProfilesFile()
         try {
             val xmlTree = XmlTree("profiles")
             xmlTree.addAttribute(XmlAttribute(CURRENT, "-1"))//empty list -> no current profile

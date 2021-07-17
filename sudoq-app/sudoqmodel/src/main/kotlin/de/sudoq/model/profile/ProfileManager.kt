@@ -272,7 +272,9 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
      */
     fun createInitialProfile() {
 
-        profilesListRepo!!.createProfilesFile()
+        if(!profilesListRepo!!.profilesFileExists()) {
+            profilesListRepo!!.createProfilesFile()
+        }
         currentProfile = profileRepo!!.create()
         profilesListRepo!!.addProfile(currentProfile)
 
