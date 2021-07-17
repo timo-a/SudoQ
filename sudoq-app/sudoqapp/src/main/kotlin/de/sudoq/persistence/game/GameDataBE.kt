@@ -5,12 +5,17 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
  * You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.sudoq.model.game
+package de.sudoq.persistence.game
 
+import de.sudoq.persistence.game.GameBE.Companion.COMPLEXITY
+import de.sudoq.persistence.game.GameBE.Companion.FINISHED
+import de.sudoq.persistence.game.GameBE.Companion.ID
+import de.sudoq.persistence.game.GameBE.Companion.PLAYED_AT
+import de.sudoq.persistence.game.GameBE.Companion.SUDOKU_TYPE
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
-import java.text.ParseException
-import java.text.SimpleDateFormat
+import de.sudoq.model.xml.XmlAttribute
+import de.sudoq.model.xml.XmlTree
 import java.util.*
 
 
@@ -24,23 +29,18 @@ import java.util.*
  * @property isFinished  Indicates if the game was completed
  * @property complexity The complexit of the sudoku
  */
-class GameData(
+class GameDataBE(
     val id: Int,
-    /**
-     * Date when the game was last played
-     */
-    val playedAt: Date,
+    val playedAt: String,
     val isFinished: Boolean,
     val type: SudokuTypes,
     val complexity: Complexity
-) : Comparable<GameData> {
-
-
+) : Comparable<GameDataBE> {
 
     /**
      * Sorts by finished < not yet finished and then by last played date
      */
-    override fun compareTo(other: GameData): Int {
+    override fun compareTo(other: GameDataBE): Int {
         return if (isFinished == other.isFinished) {
             playedAt.compareTo(other.playedAt)
         } else {
@@ -48,9 +48,32 @@ class GameData(
         }
     }
 
+    fun toXmlTree(): XmlTree {
+        val representation = XmlTree("game")
+        representation.addAttribute(XmlAttribute(ID, "" + id))
+        representation.addAttribute(XmlAttribute(FINISHED, "" + isFinished))
+        representation.addAttribute(XmlAttribute(PLAYED_AT, playedAt))
+        representation.addAttribute(XmlAttribute(SUDOKU_TYPE, type.ordinal.toString()))
+        representation.addAttribute(XmlAttribute(COMPLEXITY, complexity.ordinal.toString()))
+        return representation
+    }
+
+
     companion object {
 
         const val dateFormat = "yyyy:MM:dd HH:mm:ss"
 
+        fun fromXml(xmlTreeRepresentation: XmlTree): GameDataBE {
+            val sudokuTypeOrd = xmlTreeRepresentation.getAttributeValue(SUDOKU_TYPE)!!.toInt()
+            val complexityOrd = xmlTreeRepresentation.getAttributeValue(COMPLEXITY)!!.toInt()
+
+            return GameDataBE(
+                xmlTreeRepresentation.getAttributeValue(ID)!!.toInt(),
+                xmlTreeRepresentation.getAttributeValue(PLAYED_AT)!!,
+                xmlTreeRepresentation.getAttributeValue(FINISHED).toBoolean(),
+                SudokuTypes.values()[sudokuTypeOrd],
+                Complexity.values()[complexityOrd]
+            )
+        }
     }
 }

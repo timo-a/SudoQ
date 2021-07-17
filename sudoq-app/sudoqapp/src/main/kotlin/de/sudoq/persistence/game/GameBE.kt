@@ -1,4 +1,4 @@
-package de.sudoq.model.persistence.xml.game
+package de.sudoq.persistence.game
 
 import de.sudoq.model.actionTree.ActionTreeElement
 import de.sudoq.model.actionTree.NoteActionFactory
@@ -14,7 +14,7 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
 import de.sudoq.model.xml.Xmlable3
-import java.util.*
+import java.util.ArrayList
 
 class GameBE : Xmlable3<SudokuType> {//todo move back to sudokuTypeBE once this class is in app
 

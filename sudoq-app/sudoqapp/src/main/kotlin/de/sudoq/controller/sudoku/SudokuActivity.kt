@@ -36,12 +36,13 @@ import de.sudoq.model.actionTree.ActionTreeElement
 import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.Game
 import de.sudoq.model.game.GameManager
-import de.sudoq.model.persistence.xml.game.GameRepo
-import de.sudoq.model.persistence.xml.game.GamesListRepo
+import de.sudoq.model.persistence.xml.game.IGamesListRepo
 import de.sudoq.model.profile.ProfileSingleton
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Position
+import de.sudoq.persistence.game.GameRepo
+import de.sudoq.persistence.game.GamesListRepo
 import de.sudoq.persistence.profile.ProfileRepo
 import de.sudoq.persistence.profile.ProfilesListRepo
 import de.sudoq.persistence.sudokuType.SudokuTypeRepo
@@ -194,7 +195,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
         val gamesFile = File(pm.currentProfileDir, "games.xml")
         val gamesDir = File(pm.currentProfileDir, "games")
 
-        val gamesListRepo = GamesListRepo(gamesDir, gamesFile)
+        val gamesListRepo : IGamesListRepo = GamesListRepo(gamesDir, gamesFile)
         gameManager = GameManager(pm, gameRepo, gamesListRepo, sudokuTypeRepo)
 
         // Load the Game by using current game id

@@ -53,7 +53,7 @@ class Game {
     /**
      * game settings
      */
-    internal var gameSettings: GameSettings? = null //TODO make non-nullable
+    var gameSettings: GameSettings? = null //TODO make non-nullable
 
     /**
      * Indicates if game is finished

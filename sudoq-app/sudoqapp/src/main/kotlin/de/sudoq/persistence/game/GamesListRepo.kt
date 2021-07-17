@@ -1,8 +1,11 @@
-package de.sudoq.model.persistence.xml.game
+package de.sudoq.persistence.game
 
 import de.sudoq.model.game.GameData
 import de.sudoq.model.xml.XmlHelper
 import de.sudoq.model.xml.XmlTree
+import de.sudoq.model.persistence.xml.game.IGamesListRepo
+import de.sudoq.persistence.game.GameDataBE
+import de.sudoq.persistence.game.GameDataMapper
 import java.io.File
 import java.io.IOException
 
@@ -13,7 +16,8 @@ class GamesListRepo(private val gamesDir: File,
         try {
             return XmlHelper()
                 .loadXml(this.gamesFile)!!
-                .map { GameData.fromXml(it) }
+                .map { GameDataBE.fromXml(it) }
+                .map { GameDataMapper.fromBE(it) }
                 .sortedDescending().toMutableList()
         } catch (e: IOException) {
             throw IllegalStateException("Profile broken", e)
@@ -29,7 +33,9 @@ class GamesListRepo(private val gamesDir: File,
 
     override fun saveGamesFile(games: List<GameData>) {
         val xmlTree = XmlTree("games")
-        games.map { it.toXmlTree() }.forEach { xmlTree.addChild(it) }
+        games.map { GameDataMapper.toBE(it) }
+            .map { it.toXmlTree() }
+            .forEach { xmlTree.addChild(it) }
         try {
             XmlHelper().saveXml(xmlTree, gamesFile)
         } catch (e: IOException) {

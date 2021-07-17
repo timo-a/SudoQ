@@ -8,11 +8,7 @@
 package de.sudoq.model.game
 
 import de.sudoq.model.persistence.IRepo
-import de.sudoq.model.persistence.xml.game.GameMapper
-import de.sudoq.model.persistence.xml.game.GameRepo
-import de.sudoq.model.persistence.xml.game.GamesListRepo
 import de.sudoq.model.persistence.xml.game.IGamesListRepo
-import de.sudoq.model.profile.ProfileSingleton
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.sudoku.SudokuManager
 import de.sudoq.model.sudoku.complexity.Complexity
@@ -20,7 +16,6 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.xml.*
 import java.io.File
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -60,7 +55,7 @@ class GameManager(private var profile: ProfileManager,
         gameRepo.update(game)
         val gameData = GameData(
             game.id,
-            SimpleDateFormat(GameData.dateFormat).format(Date()),
+            Date(),
             game.isFinished(),
             game.sudoku!!.sudokuType?.enumType!!,
             game.sudoku!!.complexity!!
@@ -103,7 +98,8 @@ class GameManager(private var profile: ProfileManager,
         val oldGameData = games.find { it.id == game.id }!!
         val newGameData = GameData(
             oldGameData.id,
-            SimpleDateFormat(GameData.dateFormat).format(Date()), game.isFinished(),
+            Date(),
+            game.isFinished(),
             oldGameData.type, oldGameData.complexity
         )
 

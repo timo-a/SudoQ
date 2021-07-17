@@ -1,6 +1,7 @@
-package de.sudoq.model.persistence.xml.game
+package de.sudoq.persistence.game
 
 import de.sudoq.model.game.Game
+import de.sudoq.persistence.game.GameBE
 
 object GameMapper {//test
 

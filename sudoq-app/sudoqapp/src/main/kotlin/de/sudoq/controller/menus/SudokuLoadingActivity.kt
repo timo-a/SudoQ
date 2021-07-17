@@ -28,9 +28,10 @@ import de.sudoq.controller.SudoqListActivity
 import de.sudoq.controller.sudoku.SudokuActivity
 import de.sudoq.model.game.GameData
 import de.sudoq.model.game.GameManager
-import de.sudoq.model.persistence.xml.game.GameRepo
-import de.sudoq.model.persistence.xml.game.GamesListRepo
+import de.sudoq.model.persistence.xml.game.IGamesListRepo
 import de.sudoq.model.profile.ProfileManager
+import de.sudoq.persistence.game.GameRepo
+import de.sudoq.persistence.game.GamesListRepo
 import de.sudoq.persistence.profile.ProfileRepo
 import de.sudoq.persistence.profile.ProfilesListRepo
 import de.sudoq.persistence.sudokuType.SudokuTypeRepo
@@ -90,7 +91,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
         val gamesFile = File(profileManager!!.currentProfileDir, "games.xml")
 
         val gamesDir = File(profileManager!!.currentProfileDir, "games")
-        val gamesListRepo = GamesListRepo(gamesDir, gamesFile)
+        val gamesListRepo : IGamesListRepo = GamesListRepo(gamesDir, gamesFile)
 
         gameManager = GameManager(profileManager!!, gameRepo, gamesListRepo, sudokuTypeRepo)
 

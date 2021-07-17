@@ -20,8 +20,6 @@ import de.sudoq.model.actionTree.ActionTreeElement;
 import de.sudoq.model.actionTree.NoteActionFactory;
 import de.sudoq.model.actionTree.SolveActionFactory;
 import de.sudoq.model.persistence.IRepo;
-import de.sudoq.model.persistence.xml.game.GameBE;
-import de.sudoq.model.persistence.xml.game.GameMapper;
 import de.sudoq.model.profile.ProfileSingleton;
 import de.sudoq.model.solverGenerator.Generator;
 import de.sudoq.model.solverGenerator.GeneratorCallback;

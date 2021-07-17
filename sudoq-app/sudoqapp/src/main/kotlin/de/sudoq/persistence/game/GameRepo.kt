@@ -1,9 +1,11 @@
-package de.sudoq.model.persistence.xml.game
+package de.sudoq.persistence.game
 
 import de.sudoq.model.game.Game
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.game.GameStateHandler
 import de.sudoq.model.persistence.IRepo
+import de.sudoq.model.sudoku.Sudoku
+import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.xml.XmlHelper
 import java.io.File
@@ -24,9 +26,13 @@ class GameRepo(
     val gamesFile: File
 
 
+    /**
+     * do not use the generated game for anything other than obtaining its id!
+     */
     override fun create(): Game {
-        val newGame = createBE()
-        return GameMapper.fromBE(newGame)
+        val id = getNextFreeGameId()
+        val dummySudoku = Sudoku(-1, 0, SudokuType(9, 9, 9), Complexity.arbitrary, HashMap())
+        return Game(id, dummySudoku)
     }
 
     private fun createBE(): GameBE {

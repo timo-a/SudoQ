@@ -21,7 +21,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import de.sudoq.R
 import de.sudoq.model.game.GameData
-import de.sudoq.model.persistence.xml.game.GameRepo
+import de.sudoq.persistence.game.GameRepo
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.persistence.profile.ProfileRepo
 import de.sudoq.persistence.profile.ProfilesListRepo
