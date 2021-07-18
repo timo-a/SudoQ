@@ -104,19 +104,6 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
         this.profilesDir = profilesDir
     }
 
-    constructor(//todo combine with above
-        profileRepo: IRepo<Profile>,
-        profilesListRepo: IProfilesListRepo,
-        profilesDir: File
-    ) : this() {
-        this.profileRepo = profileRepo
-        this.profilesListRepo = profilesListRepo
-
-        if (!profilesDir.canWrite())
-            throw IllegalArgumentException("profiles dir cannot write")
-
-        this.profilesDir = profilesDir
-    }
 
     /** assumes an empty directory */
     fun initialize() {

@@ -47,7 +47,7 @@ public class GameTests {
 	public static void beforeClass() {
 		Utility.copySudokus();
 		File profileDir = new File("/tmp/sudoq/GameTests/profile");
-		ProfileSingleton.Companion.getInstance(profileDir);
+		//ProfileSingleton.Companion.getInstance(profileDir);
 
 		TypeBuilder.get99(); //just to force initialization of filemanager
 		
@@ -162,11 +162,6 @@ public class GameTests {
 		game.redo();
 		game.undo();
 
-		Game game2 = new Game();
-		GameBE gameBE  = GameMapper.INSTANCE.toBE(game);
-		GameBE game2BE = GameMapper.INSTANCE.toBE(game2);
-		game2BE.fillFromXml(gameBE.toXmlTree(), sudokuTypeRepo);
-		assertEquals(gameBE, game2BE);
 	}
 
 	// Regression Test for Issue-89
@@ -182,22 +177,8 @@ public class GameTests {
 		assertTrue(game.solveAll());
 		assertTrue(game.isFinished());
 
-		Game game2 = convertAndBack(game);
-		assertTrue(game2.isFinished());
-
-		game2.undo();
-		assertTrue(game2.isFinished());
-
-		game = convertAndBack(game2);
-		assertTrue(game.isFinished());
 	}
 
-	private Game convertAndBack(Game g) {
-		GameBE source = GameMapper.INSTANCE.toBE(g);
-		GameBE target = new GameBE();
-		target.fillFromXml(source.toXmlTree(), sudokuTypeRepo);
-		return GameMapper.INSTANCE.fromBE(target);
-	}
 
 	@Test(expected = NullPointerException.class)
 	public void testSetNullAssistances() {

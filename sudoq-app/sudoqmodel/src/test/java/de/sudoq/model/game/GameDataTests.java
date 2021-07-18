@@ -23,7 +23,7 @@ public class GameDataTests {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void initTestB()	{
-		new GameData(0, "hugo", true, SudokuTypes.squigglya, Complexity.difficult);
+		new GameData(0, new Date(), true, SudokuTypes.squigglya, Complexity.difficult);
 	}
 
 
@@ -32,9 +32,8 @@ public class GameDataTests {
 		GameData g;
 
 		Date d = new Date();
-		String s = new SimpleDateFormat(dateFormat).format(d);
-		
-		g = new GameData(0, s, true, SudokuTypes.squigglya, Complexity.difficult);
+
+		g = new GameData(0, d, true, SudokuTypes.squigglya, Complexity.difficult);
 
 		assertSame(g.getComplexity(), Complexity.difficult);
 		assertSame(g.getType(), SudokuTypes.squigglya);
@@ -47,20 +46,18 @@ public class GameDataTests {
 	public void compareTest() {
 		Date d = new Date();
 		d.setTime(2);
-		String s = new SimpleDateFormat(dateFormat).format(d);
-		GameData gd1 = new GameData(0, s, false, SudokuTypes.squigglya, Complexity.difficult);
+		GameData gd1 = new GameData(0, d, false, SudokuTypes.squigglya, Complexity.difficult);
 		Date d2 = new Date();
 		d2.setTime(400000);
-		String s2 = new SimpleDateFormat(dateFormat).format(d2);
-		GameData gd2 = new GameData(0, s2, false, SudokuTypes.squigglya, Complexity.difficult);
+		GameData gd2 = new GameData(0, d2, false, SudokuTypes.squigglya, Complexity.difficult);
 
 		assertEquals(gd1.compareTo(gd2), -1);
 		
-		gd2 =new GameData(0, s2, true, SudokuTypes.squigglya, Complexity.difficult);
+		gd2 =new GameData(0, d2, true, SudokuTypes.squigglya, Complexity.difficult);
 		assertEquals(1, gd1.compareTo(gd2));
 			
-		gd1 = new GameData(0, s, true, SudokuTypes.squigglya, Complexity.difficult);
-		gd2 = new GameData(0, s2, false, SudokuTypes.squigglya, Complexity.difficult);
+		gd1 = new GameData(0, d, true, SudokuTypes.squigglya, Complexity.difficult);
+		gd2 = new GameData(0, d2, false, SudokuTypes.squigglya, Complexity.difficult);
 		assertEquals(gd1.compareTo(gd2), -1);
 		
 		
