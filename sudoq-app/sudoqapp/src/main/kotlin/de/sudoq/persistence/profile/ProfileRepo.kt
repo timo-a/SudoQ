@@ -154,4 +154,8 @@ class ProfileRepo(private val profilesDir: File) : IRepo<Profile> {
         return profilesList.getProfileIdsList()
     }
 
+    override fun ids(): List<Int> {
+        TODO("Not yet implemented")
+    }
+
 }

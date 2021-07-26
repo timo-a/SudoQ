@@ -10,4 +10,5 @@ interface IRepo<T> {
 
     fun delete(id: Int)
 
+    fun ids(): List<Int>
 }

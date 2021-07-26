@@ -8,6 +8,7 @@
 package de.sudoq.model.sudoku
 
 import de.sudoq.model.persistence.IRepo
+import de.sudoq.model.persistence.xml.sudoku.ISudokuRepoProvider
 import de.sudoq.model.persistence.xml.sudoku.SudokuBE
 import de.sudoq.model.persistence.xml.sudoku.SudokuMapper
 import de.sudoq.model.persistence.xml.sudoku.SudokuRepo
@@ -23,7 +24,8 @@ import java.io.File
 
 /** Responsible for maintaining existing Sudokus.
  * Implemented as Singleton. */
-open class SudokuManager(val sudokuDir: File, val sudokuTypeRepo: IRepo<SudokuType>) : GeneratorCallback {
+open class SudokuManager(val sudokuTypeRepo: IRepo<SudokuType>,
+                         private val sudokuRepoProvider: ISudokuRepoProvider) : GeneratorCallback {
 
     private val generator = Generator(sudokuTypeRepo)
 
@@ -34,21 +36,17 @@ open class SudokuManager(val sudokuDir: File, val sudokuTypeRepo: IRepo<SudokuTy
      * Callback for the Generator
      */
     override fun generationFinished(sudoku: Sudoku) {
-        val sudokuRepo = SudokuRepo(sudokuDir, sudoku, sudokuTypeRepo)
+        val sudokuRepo = sudokuRepoProvider.getRepo(sudoku)
         val i = sudokuRepo.create().id
         val sudokuBE = SudokuMapper.toBE(sudoku)
         sudokuBE.id = i
-        sudokuRepo.update(sudokuBE)
-        used?.also { sudokuRepo.delete(SudokuMapper.toBE(it)) }
+        sudokuRepo.update(SudokuMapper.fromBE(sudokuBE))
+        used?.also { sudokuRepo.delete(it.id) }
     }
 
     override fun generationFinished(sudoku: Sudoku, sl: List<Solution>) {
-        val sudokuRepo = SudokuRepo(sudokuDir, sudoku, sudokuTypeRepo)
-        val i = sudokuRepo.create().id
-        val sudokuBE = SudokuMapper.toBE(sudoku)
-        sudokuBE.id = i
-        sudokuRepo.update(sudokuBE)
-        used?.also { sudokuRepo.delete(SudokuMapper.toBE(it)) }
+        //todo is it ever used, if not safely remove/throw not implemented
+        generationFinished(sudoku)
     }
 
     /**
@@ -63,25 +61,22 @@ open class SudokuManager(val sudokuDir: File, val sudokuTypeRepo: IRepo<SudokuTy
             generator.generate(sudoku.sudokuType!!.enumType, sudoku.complexity, this)
         } else {
             Transformer.transform(sudoku)
-            val sudokuRepo = SudokuRepo(sudokuDir, sudoku, sudokuTypeRepo)
-            sudokuRepo.update(SudokuMapper.toBE(sudoku))
+            val sudokuRepo = sudokuRepoProvider.getRepo(sudoku)
+            sudokuRepo.update(sudoku)
         }
     }
 
     /**
-     * Retrune a new [Sudoku] of the specified [type][SudokuTypes] and [Complexity]
+     * Return a new [Sudoku] of the specified [type][SudokuTypes] and [Complexity]
      *
      * @param t [type][SudokuTypes] of the [Sudoku]
      * @param c [Complexity] of the [Sudoku]
      * @return the new [Sudoku]
      */
     fun getNewSudoku(t: SudokuTypes?, c: Complexity?): Sudoku {
-        val sudokuRepo = SudokuRepo(sudokuDir, t!!, c!!, sudokuTypeRepo)
-        val f = sudokuRepo.getRandomSudoku()!!
-
-        val sudokuBE = SudokuBE()
-        sudokuBE.fillFromXml(XmlHelper().loadXml(f)!!, sudokuTypeRepo)
-        return SudokuMapper.fromBE(sudokuBE)
+        val sudokuRepo = sudokuRepoProvider.getRepo(t!!, c!!)
+        val randomId = sudokuRepo.ids().random()
+        return sudokuRepo.read(randomId)
     }
 
 

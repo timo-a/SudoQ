@@ -138,4 +138,8 @@ class GameRepo(
         this.gamesFile = File(profile, "games.xml")
     }
 
+    override fun ids(): List<Int> {
+        TODO("Not yet implemented")
+    }
+
 }

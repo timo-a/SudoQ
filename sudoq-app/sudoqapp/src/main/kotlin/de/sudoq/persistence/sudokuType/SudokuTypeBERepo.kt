@@ -59,5 +59,9 @@ class SudokuTypeBERepo(private val sudokuDir: File) : IRepo<SudokuTypeBE> {
         TODO("Not yet implemented")
     }
 
+    override fun ids(): List<Int> {
+        TODO("Not yet implemented")
+    }
+
 
 }

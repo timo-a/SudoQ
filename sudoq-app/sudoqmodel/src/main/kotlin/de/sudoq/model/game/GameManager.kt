@@ -9,6 +9,7 @@ package de.sudoq.model.game
 
 import de.sudoq.model.persistence.IRepo
 import de.sudoq.model.persistence.xml.game.IGamesListRepo
+import de.sudoq.model.persistence.xml.sudoku.ISudokuRepoProvider
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.sudoku.SudokuManager
 import de.sudoq.model.sudoku.complexity.Complexity
@@ -43,9 +44,10 @@ class GameManager(private var profile: ProfileManager,
         type: SudokuTypes,
         complexity: Complexity,
         assistances: GameSettings,
-        sudokuDir: File
+        sudokuDir: File,
+        sudokuRepoProvider: ISudokuRepoProvider
     ): Game {
-        val sm = SudokuManager(sudokuDir, sudokuTypeRepo)
+        val sm = SudokuManager(sudokuTypeRepo, sudokuRepoProvider)
         val sudoku = sm.getNewSudoku(type, complexity)
         sm.usedSudoku(sudoku) //TODO warum instanziierung, wenn laut doc singleton?
 

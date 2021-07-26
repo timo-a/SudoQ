@@ -1,7 +1,6 @@
 package de.sudoq.persistence.sudokuType
 
 import de.sudoq.model.persistence.IRepo
-import de.sudoq.persistence.sudokuType.SudokuTypeBE
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.xml.XmlHelper
@@ -56,6 +55,10 @@ class SudokuTypeRepo(private val sudokuDir: File) : IRepo<SudokuType> {
     }
 
     override fun delete(id: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun ids(): List<Int> {
         TODO("Not yet implemented")
     }
 

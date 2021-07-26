@@ -33,6 +33,7 @@ import de.sudoq.persistence.game.GameRepo
 import de.sudoq.persistence.game.GamesListRepo
 import de.sudoq.persistence.profile.ProfileRepo
 import de.sudoq.persistence.profile.ProfilesListRepo
+import de.sudoq.persistence.sudoku.SudokuRepoProvider
 import de.sudoq.persistence.sudokuType.SudokuTypeRepo
 import java.io.File
 import java.util.*
@@ -196,7 +197,12 @@ class NewSudokuActivity : SudoqCompatActivity() {
 
                 ///
                 val gm = GameManager(pm, gameRepo, gamesListRepo, sudokuTypeRepo)
-                val game = gm.newGame(sudokuType!!, complexity!!, gameSettings!!, sudokuDir)
+                val SudokuRepoProvider = SudokuRepoProvider(sudokuDir, sudokuTypeRepo)
+                val game = gm.newGame(sudokuType!!,
+                                      complexity!!,
+                                      gameSettings!!,
+                                      sudokuDir,
+                                      SudokuRepoProvider)
                 check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
                 pm.loadCurrentProfile()
                 pm.currentGame = game.id

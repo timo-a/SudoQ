@@ -3,13 +3,16 @@ package de.sudoq.model.sudoku;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.util.List;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.Utility;
 import de.sudoq.model.persistence.IRepo;
+import de.sudoq.model.persistence.xml.sudoku.SudokuRepo;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
@@ -19,6 +22,10 @@ public class SudokuManagerTests extends TestWithInitCleanforSingletons {
 
 	//this is a dummy so it compiles todo use xmls from resources
 	private IRepo<SudokuType> sudokuTypeRepo = new IRepo<SudokuType>() {
+		@NotNull
+		@Override
+		public List<Integer> ids() { throw new NotImplementedException(); }
+
 		@Override
 		public void delete(int id) { throw new NotImplementedException(); }
 
@@ -38,12 +45,15 @@ public class SudokuManagerTests extends TestWithInitCleanforSingletons {
 	@Test(timeout = 120) // threw an exception and ran forever in the past -> timeout
 	public void test() {
 		//assertEquals(21, FileManager.getSudokuCountOf(SudokuTypes.standard9x9, Complexity.infernal));
-		Sudoku s = new SudokuManager(sudokuDir, sudokuTypeRepo)
+		IRepo<Sudoku> sudokuRepo = new SudokuRepo(sudokuDir,
+				SudokuTypes.standard9x9,
+				Complexity.infernal, sudokuTypeRepo);
+		Sudoku s = new SudokuManager(sudokuTypeRepo,  null)
 				.getNewSudoku(SudokuTypes.standard9x9, Complexity.infernal);
 		for (int i = 0; i < 10; i++) {
 			s.increaseTransformCount();
 		}
-		SudokuManager sm = new SudokuManager(sudokuDir, sudokuTypeRepo) {
+		SudokuManager sm = new SudokuManager(sudokuTypeRepo, null) {
 			public void generationFinished(Sudoku sudoku) {
 				synchronized (SudokuManagerTests.this) {
 					super.generationFinished(sudoku);

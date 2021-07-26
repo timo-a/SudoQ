@@ -15,7 +15,7 @@ class SudokuRepo(
     type: SudokuTypes,
     complexity: Complexity,
     private val sudokuTypeRepo: IRepo<SudokuType>
-) : IRepo<SudokuBE> {
+) : IRepo<Sudoku> {
 
     private val sudokusDir: File = getSudokuDir(type, complexity)
 
@@ -29,7 +29,7 @@ class SudokuRepo(
     private val helper: XmlHelper = XmlHelper()
 
 
-    override fun create(): SudokuBE {
+    override fun create(): Sudoku {
         val sudokuBE = SudokuBE()
         sudokuBE.id = getFreeSudokuId()
         val file = getSudokuFile(sudokuBE.id)
@@ -47,7 +47,7 @@ class SudokuRepo(
         return File(sudokusDir.absolutePath + File.separator + "sudoku_$id.xml")
     }
 
-    override fun read(id: Int): SudokuBE {
+    override fun read(id: Int): Sudoku {
         val obj = SudokuBE()
         val file = getSudokuFile(id)
 
@@ -58,11 +58,11 @@ class SudokuRepo(
         } catch (e: IllegalArgumentException) {
             throw IllegalArgumentException("Something went wrong when filling obj from xml ", e)
         }
-        return obj
+        return SudokuMapper.fromBE(obj)
 
     }
 
-    override fun update(t: SudokuBE): SudokuBE {
+    override fun update(t: Sudoku): Sudoku {
         val file = File(
             getSudokuDir(
                 t.sudokuType!!.enumType!!,
@@ -71,7 +71,7 @@ class SudokuRepo(
         )
 
         try {
-            val tree = t.toXmlTree()
+            val tree = SudokuMapper.toBE(t).toXmlTree()
             helper.saveXml(tree, file)
         } catch (e: IOException) {
             throw IllegalArgumentException("Something went wrong when writing xml", e)
@@ -79,7 +79,7 @@ class SudokuRepo(
         return read(t.id)
     }
 
-    fun delete(t: SudokuBE) {
+    fun delete(t: Sudoku) {
         val f = File(sudokusDir.absolutePath, "sudoku_${t.id}.xml")
         f.delete()
     }
@@ -108,6 +108,10 @@ class SudokuRepo(
         }
     }
 
+    override fun ids(): List<Int> {
+        return sudokusDir.list().map { it.substring(7, it.length - 4).toInt() }
+    }
+
     /**
      * Gibt den die Sudokus mit den gegebenen Parametern enthaltennden Ordner
      * zurueck
@@ -128,12 +132,9 @@ class SudokuRepo(
      * @return nächste verfügbare Sudoku ID
      */
     private fun getFreeSudokuId(): Int {
-        val numbers = ArrayList<Int>()
-        for (s in sudokusDir.list()) {
-            numbers.add(s.substring(7, s.length - 4).toInt())
-        }
-
+        val numbers = ids()
         return generateSequence(1) { it + 1 }.first { !numbers.contains(it) }
     }
+
 
 }
