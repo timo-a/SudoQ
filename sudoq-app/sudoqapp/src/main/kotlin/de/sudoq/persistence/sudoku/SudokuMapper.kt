@@ -1,4 +1,4 @@
-package de.sudoq.model.persistence.xml.sudoku
+package de.sudoq.persistence.sudoku
 
 import de.sudoq.model.sudoku.Sudoku
 

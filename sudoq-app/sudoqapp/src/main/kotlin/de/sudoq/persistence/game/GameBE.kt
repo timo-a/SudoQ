@@ -7,13 +7,13 @@ import de.sudoq.model.actionTree.SolveActionFactory
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.game.GameStateHandler
 import de.sudoq.model.persistence.IRepo
-import de.sudoq.model.persistence.xml.sudoku.SudokuBE
-import de.sudoq.model.persistence.xml.sudoku.SudokuMapper
 import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
 import de.sudoq.model.xml.Xmlable3
+import de.sudoq.persistence.sudoku.SudokuBE
+import de.sudoq.persistence.sudoku.SudokuMapper
 import java.util.ArrayList
 
 class GameBE : Xmlable3<SudokuType> {//todo move back to sudokuTypeBE once this class is in app

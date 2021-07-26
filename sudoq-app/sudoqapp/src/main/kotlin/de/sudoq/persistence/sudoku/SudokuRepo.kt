@@ -1,4 +1,4 @@
-package de.sudoq.model.persistence.xml.sudoku
+package de.sudoq.persistence.sudoku
 
 import de.sudoq.model.persistence.IRepo
 import de.sudoq.model.sudoku.Sudoku
@@ -8,7 +8,6 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.xml.XmlHelper
 import java.io.File
 import java.io.IOException
-import java.util.*
 
 class SudokuRepo(
     private val outerSudokusDir: File,
@@ -87,25 +86,6 @@ class SudokuRepo(
     override fun delete(id: Int) {
         val f = File(sudokusDir.absolutePath, "sudoku_${id}.xml")
         f.delete()
-    }
-
-    /**
-     * Gibt eine Referenz auf ein zufaelliges zu den Parametern passendem Sudoku
-     * zurueck und null falls keins existiert
-     * todo handle no available sudokus
-     * @param type
-     * der Typ des Sudokus
-     * @param complexity
-     * die Schwierigkeit des Sudokus
-     * @return die Referenz auf die Datei
-     */
-    fun getRandomSudoku(): File? {
-        return if (sudokusDir.list().isNotEmpty()) {
-            val fileName = sudokusDir.list()[Random().nextInt(sudokusDir.list().size)]
-            File(sudokusDir.absolutePath + File.separator + fileName)
-        } else {
-            null
-        }
     }
 
     override fun ids(): List<Int> {

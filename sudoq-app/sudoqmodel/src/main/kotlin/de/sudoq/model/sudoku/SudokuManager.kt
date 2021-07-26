@@ -9,9 +9,6 @@ package de.sudoq.model.sudoku
 
 import de.sudoq.model.persistence.IRepo
 import de.sudoq.model.persistence.xml.sudoku.ISudokuRepoProvider
-import de.sudoq.model.persistence.xml.sudoku.SudokuBE
-import de.sudoq.model.persistence.xml.sudoku.SudokuMapper
-import de.sudoq.model.persistence.xml.sudoku.SudokuRepo
 import de.sudoq.model.solverGenerator.Generator
 import de.sudoq.model.solverGenerator.GeneratorCallback
 import de.sudoq.model.solverGenerator.solution.Solution
@@ -19,8 +16,6 @@ import de.sudoq.model.solverGenerator.transformations.Transformer
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
-import de.sudoq.model.xml.XmlHelper
-import java.io.File
 
 /** Responsible for maintaining existing Sudokus.
  * Implemented as Singleton. */
@@ -38,9 +33,12 @@ open class SudokuManager(val sudokuTypeRepo: IRepo<SudokuType>,
     override fun generationFinished(sudoku: Sudoku) {
         val sudokuRepo = sudokuRepoProvider.getRepo(sudoku)
         val i = sudokuRepo.create().id
-        val sudokuBE = SudokuMapper.toBE(sudoku)
-        sudokuBE.id = i
-        sudokuRepo.update(SudokuMapper.fromBE(sudokuBE))
+        val sudokuWithId = Sudoku(i,
+                                  sudoku.transformCount,
+                                  sudoku.sudokuType!!,
+                                  sudoku.complexity!!,
+                                  sudoku.cells!!)
+        sudokuRepo.update(sudokuWithId)
         used?.also { sudokuRepo.delete(it.id) }
     }
 
