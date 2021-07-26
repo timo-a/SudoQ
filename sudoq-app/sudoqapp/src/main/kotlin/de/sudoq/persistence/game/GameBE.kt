@@ -73,7 +73,7 @@ class GameBE : Xmlable3<SudokuType> {
         for (ate in actionList) {
 
             //add if not null
-            ate.toXml()?.let { representation.addChild(it) }
+            ActionTreeElementMapper.toBE(ate).toXml()?.let { representation.addChild(it) }
 
         }
         return representation
@@ -101,10 +101,10 @@ class GameBE : Xmlable3<SudokuType> {
         stateHandler = GameStateHandler()
         for (sub in xmlTreeRepresentation) {//todo give xmltree handler its own xml capabilities
             if (sub.name == "action") {
-                val diff = sub.getAttributeValue(ActionTreeElement.DIFF)!!.toInt()
+                val diff = sub.getAttributeValue(ActionTreeElementBE.DIFF)!!.toInt()
 
                 // put the action to the parent action
-                val attributeValue = sub.getAttributeValue(ActionTreeElement.PARENT)
+                val attributeValue = sub.getAttributeValue(ActionTreeElementBE.PARENT)
                 val parentID = attributeValue!!.toInt()
                 val parent = stateHandler!!.actionTree.getElement(parentID)
                 goToState(parent!!)//since we don't serialize the root node there should always be a parent
@@ -113,9 +113,9 @@ class GameBE : Xmlable3<SudokuType> {
                 // is not necessary since the root action comes from the gsh so
 
                 // every element has e parent
-                val field_id = sub.getAttributeValue(ActionTreeElement.FIELD_ID)!!.toInt()
+                val field_id = sub.getAttributeValue(ActionTreeElementBE.FIELD_ID)!!.toInt()
                 val f = sudoku!!.getCell(field_id)!!
-                if (sub.getAttributeValue(ActionTreeElement.ACTION_TYPE) == SolveAction::class.java.simpleName) {
+                if (sub.getAttributeValue(ActionTreeElementBE.ACTION_TYPE) == SolveAction::class.java.simpleName) {
                     stateHandler!!.addAndExecute(
                         SolveActionFactory().createAction(
                             f.currentValue + diff,
@@ -125,14 +125,14 @@ class GameBE : Xmlable3<SudokuType> {
                 } else { // if(sub.getAttributeValue(ActionTreeElement.ACTION_TYPE).equals(NoteAction.class.getSimpleName()))
                     stateHandler!!.addAndExecute(NoteActionFactory().createAction(diff, f))
                 }
-                if (java.lang.Boolean.parseBoolean(sub.getAttributeValue(ActionTreeElement.MARKED))) {
+                if (java.lang.Boolean.parseBoolean(sub.getAttributeValue(ActionTreeElementBE.MARKED))) {
                     markCurrentState()
                 }
-                var s = sub.getAttributeValue(ActionTreeElement.MISTAKE)
+                var s = sub.getAttributeValue(ActionTreeElementBE.MISTAKE)
                 if (s != null && java.lang.Boolean.parseBoolean(s)) {
                     currentState.markWrong()
                 }
-                s = sub.getAttributeValue(ActionTreeElement.CORRECT)
+                s = sub.getAttributeValue(ActionTreeElementBE.CORRECT)
                 if (s != null && java.lang.Boolean.parseBoolean(s)) {
                     currentState.markCorrect()
                 }

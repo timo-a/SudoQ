@@ -123,29 +123,6 @@ class ActionTreeElement(val id: Int, val action: Action, val parent: ActionTreeE
     }
 
     /**
-     * @return an [XmlTree] representing this objects
-     */
-    fun toXml(): XmlTree? {
-        if (action.cellId <= 0) //indicates root node
-            return null
-
-        val xml = XmlTree("action")
-        xml.addAttribute(XmlAttribute(ID, id.toString()))
-        xml.addAttribute(XmlAttribute(PARENT, parent?.id?.toString() ?: ""))
-        xml.addAttribute(XmlAttribute(DIFF, action.diff.toString()))
-        xml.addAttribute(XmlAttribute(FIELD_ID, action.cellId.toString()))
-        xml.addAttribute(XmlAttribute(ACTION_TYPE, action.XML_ATTRIBUTE_NAME))
-        xml.addAttribute(XmlAttribute(MARKED, java.lang.Boolean.toString(isMarked)))
-        if (isMistake) {
-            xml.addAttribute(XmlAttribute(MISTAKE, java.lang.Boolean.toString(true)))
-        }
-        if (isCorrect) {
-            xml.addAttribute(XmlAttribute(CORRECT, java.lang.Boolean.toString(true)))
-        }
-        return xml
-    }
-
-    /**
      * {@inheritDoc}
      */
     override fun compareTo(other: ActionTreeElement): Int {
@@ -183,49 +160,6 @@ class ActionTreeElement(val id: Int, val action: Action, val parent: ActionTreeE
     //TODO rename to iterateChildren, analyse use, replace with get first child:optional
     fun getChildren(): Iterator<ActionTreeElement> {
         return iterator()
-    }
-
-    companion object {
-        /**
-         * Constant for XmlAttribute
-         */
-        const val ID = "id"
-
-        /**
-         * Constant for XmlAttribute
-         */
-        const val PARENT = "parent"
-
-        /**
-         * Constant for XmlAttribute
-         */
-        const val DIFF = "value"
-
-        /**
-         * Constant for XmlAttribute
-         * corresponds to cell_id, left unchanged for backwards compatibility.
-         */
-        const val FIELD_ID = "field_id"
-
-        /**
-         * Constant for XmlAttribute
-         */
-        const val ACTION_TYPE = "action_type"
-
-        /**
-         * Constant for XmlAttribute
-         */
-        const val MARKED = "marked"
-
-        /**
-         * Constant for XmlAttribute
-         */
-        const val MISTAKE = "mistake"
-
-        /**
-         * Constant for XmlAttribute
-         */
-        const val CORRECT = "correct"
     }
 
     init {
