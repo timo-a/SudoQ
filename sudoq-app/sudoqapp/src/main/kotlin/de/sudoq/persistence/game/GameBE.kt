@@ -16,7 +16,7 @@ import de.sudoq.persistence.sudoku.SudokuBE
 import de.sudoq.persistence.sudoku.SudokuMapper
 import java.util.ArrayList
 
-class GameBE : Xmlable3<SudokuType> {//todo move back to sudokuTypeBE once this class is in app
+class GameBE : Xmlable3<SudokuType> {
 
     /** Unique id for the game */
     var id: Int = -1

@@ -12,7 +12,7 @@ import de.sudoq.model.xml.XmlTree
 import de.sudoq.model.xml.Xmlable3
 import java.util.*
 
-class SudokuBE() : Xmlable3<SudokuType> {//todo move back to sudokuTypeBE once in app
+class SudokuBE() : Xmlable3<SudokuType> {
 
     var id: Int = 0
 
@@ -81,7 +81,7 @@ class SudokuBE() : Xmlable3<SudokuType> {//todo move back to sudokuTypeBE once i
             -1
         }
         val enumType =
-            SudokuTypes.values()[xmlTreeRepresentation.getAttributeValue("type")!!.toInt()]
+            SudokuTypes.values()[xmlTreeRepresentation.getAttributeValue("type")!!.toInt() ]
         sudokuType = SudokuTypeProvider.getSudokuType(enumType, sudokuTypeRepo)
         transformCount = xmlTreeRepresentation.getAttributeValue("transformCount")!!.toInt()
         val compl = xmlTreeRepresentation.getAttributeValue("complexity")
