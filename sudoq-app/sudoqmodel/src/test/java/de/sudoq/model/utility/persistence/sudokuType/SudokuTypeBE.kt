@@ -85,7 +85,7 @@ class SudokuTypeBE : Xmlable {
             hList.addAttribute(XmlAttribute("i", "" + helperList[i].ordinal))
         }
         representation.addChild(hList)
-        representation.addChild(ccb.toXmlTree())
+        // todo move those tests to app anyway (or mock) representation.addChild(ccb.toXmlTree())
 
         // TODO complexity builderdata
         return representation
@@ -121,10 +121,11 @@ class SudokuTypeBE : Xmlable {
                         helperList[index] = h
                     }
                 }
-                ComplexityConstraintBuilder.TITLE -> {
+                //title is now in app
+                /*ComplexityConstraintBuilder.TITLE -> {
                     ccb = ComplexityConstraintBuilder()
                     ccb.fillFromXml(sub)
-                }
+                }*/
                 else -> {
                 }
             }

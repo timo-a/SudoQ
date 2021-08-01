@@ -1,5 +1,6 @@
 package de.sudoq.persistence.sudokuType
 
+import de.sudoq.persistence.sudoku.CCBMapper
 import de.sudoq.model.solverGenerator.solver.helper.Helpers
 import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.ConstraintType
@@ -12,6 +13,7 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
 import de.sudoq.model.xml.Xmlable
+import de.sudoq.persistence.sudoku.CCBBE
 import java.util.*
 
 class SudokuTypeBE : Xmlable {
@@ -85,7 +87,7 @@ class SudokuTypeBE : Xmlable {
             hList.addAttribute(XmlAttribute("i", "" + helperList[i].ordinal))
         }
         representation.addChild(hList)
-        representation.addChild(ccb.toXmlTree())
+        representation.addChild(CCBMapper.toBE(ccb).toXmlTree())
 
         // TODO complexity builderdata
         return representation
@@ -121,9 +123,10 @@ class SudokuTypeBE : Xmlable {
                         helperList[index] = h
                     }
                 }
-                ComplexityConstraintBuilder.TITLE -> {
-                    ccb = ComplexityConstraintBuilder()
-                    ccb.fillFromXml(sub)
+                CCBBE.TITLE -> {
+                    var ccbbe = CCBBE()
+                    ccbbe.fillFromXml(sub)
+                    ccb = CCBMapper.fromBE(ccbbe)
                 }
                 else -> {
                 }
