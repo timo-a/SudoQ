@@ -12,7 +12,7 @@ class CCBBE(var specimen: MutableMap<Complexity?, ComplexityConstraint> = HashMa
     override fun toXmlTree(): XmlTree {
         val representation = XmlTree(TITLE)
         for (v in specimen.values) {
-            representation.addChild(v.toXmlTree())
+            representation.addChild(ComplexityConstraintMapper.toBE(v).toXmlTree())
         }
         return representation
     }
@@ -21,8 +21,9 @@ class CCBBE(var specimen: MutableMap<Complexity?, ComplexityConstraint> = HashMa
     override fun fillFromXml(xmlTreeRepresentation: XmlTree) {
         specimen = HashMap()
         for (sub in xmlTreeRepresentation) {
-            val cc = ComplexityConstraint()
-            cc.fillFromXml(sub)
+            val ccBE = ComplexityConstraintBE()
+            ccBE.fillFromXml(sub)
+            val cc = ComplexityConstraintMapper.fromBE(ccBE)
             specimen[cc.complexity] = cc
         }
     }

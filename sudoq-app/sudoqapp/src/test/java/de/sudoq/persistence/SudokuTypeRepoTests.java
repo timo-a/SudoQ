@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.persistence.sudokuType.SudokuTypeBE;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.persistence.sudokuType.SudokuTypeRepo;
@@ -58,7 +59,7 @@ public class SudokuTypeRepoTests {
         Files.copy(sourceFile.toPath(), targetPath);
 
         SudokuTypeRepo sTR = new SudokuTypeRepo(tempFolder);
-        SudokuTypeBE st = sTR.read(0);
+        SudokuType st = sTR.read(0);
 
         Assertions.assertSame(0, SudokuTypes.standard9x9.ordinal(), "standard should have ordinal 0");
         Assertions.assertSame(SudokuTypes.standard9x9, st.getEnumType());
@@ -72,7 +73,7 @@ public class SudokuTypeRepoTests {
     @Test
     public void testUpdate() {
         SudokuTypeRepo sTR = new SudokuTypeRepo(new File("dummy"));
-        Assertions.assertThrows(NotImplementedError.class, () -> sTR.update(new SudokuTypeBE()));
+        Assertions.assertThrows(NotImplementedError.class, () -> sTR.update(new SudokuType(9,9,9)));
     }
 
     /**

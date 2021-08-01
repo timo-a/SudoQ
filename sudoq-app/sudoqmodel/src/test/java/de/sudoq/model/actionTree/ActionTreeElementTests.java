@@ -87,25 +87,6 @@ public class ActionTreeElementTests {
 	}
 
 	@Test
-	public void testToXml() {
-		Action action = new SolveAction(1, new Cell(1, 9));
-		ActionTreeElement ate = new ActionTreeElement(1, action, null);
-		assertEquals("", ate.toXml().getAttributeValue(ActionTreeElement.PARENT));
-		assertEquals("1", new ActionTreeElement(2, action, ate).toXml().getAttributeValue(ActionTreeElement.PARENT));
-		ate.markCorrect();
-		ate.markWrong();
-		assertEquals("true", ate.toXml().getAttributeValue(ActionTreeElement.MISTAKE));
-		assertEquals("true", ate.toXml().getAttributeValue(ActionTreeElement.CORRECT));
-	}
-
-	@Test
-	public void testToXml2() {
-		Action action = new SolveAction(1, new Cell(-1, 9));
-		ActionTreeElement ate = new ActionTreeElement(1, action, null);
-		assertNull(ate.toXml());
-	}
-
-	@Test
 	public void testCompare() {
 		ActionTreeElement a1 = new ActionTreeElement(1, new SolveAction(1, new Cell(1, 9)), null);
 		ActionTreeElement a2 = new ActionTreeElement(3, new SolveAction(1, new Cell(1, 9)), null);

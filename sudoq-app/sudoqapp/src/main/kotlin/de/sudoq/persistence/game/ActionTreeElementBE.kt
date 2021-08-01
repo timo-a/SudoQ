@@ -21,28 +21,20 @@ import java.util.*
  * @property parent the parent node
  *
  */
-class ActionTreeElementBE(val id: Int, val action: Action, private val parentId: Int?) {
-
-    /**
-     * Indicates whether this node is marked //TODO what does it mean to be marked?
-     *
-     * @return true iff this node is marked otherwise false
-     */
-    private var isMarked = false
-
-    /**
-     * Indicates whether this move is known to have been a mistake.
-     *
-     * @return true if this action has demonstrably led to a wrong state. false if unknown
-     */
-    private var isMistake = false
-
+class ActionTreeElementBE(val id: Int, val action: Action, private val parentId: Int?,
+                          /** Indicates whether this node is marked TODO what does it mean to be marked? */
+                          private var isMarked: Boolean = false,
+                          /** Indicates whether this move is known to have been a mistake.
+                            * @return true if this action has demonstrably led to a wrong state. false if unknown
+                            */
+                          private var isMistake: Boolean = false,
     /**
      * Indicates whether this action (and all parents up to root?) have been correct.
      * I think intermediate actions can be incorrect...
      * @return true if this action directly leads to a correct state. false if unknown
      */
-    private var isCorrect = false
+                          private var isCorrect: Boolean = false
+) {
 
 
     /**
@@ -111,9 +103,4 @@ class ActionTreeElementBE(val id: Int, val action: Action, private val parentId:
         const val CORRECT = "correct"
     }
 
-    init {
-        isMarked = false
-        isMistake = false
-        isCorrect = false
-    }
 }
