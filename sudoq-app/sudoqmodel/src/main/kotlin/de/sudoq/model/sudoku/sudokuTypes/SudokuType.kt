@@ -139,11 +139,7 @@ open class SudokuType : Iterable<Constraint>, ComplexityFactory {
      * @return true, iff the sudoku satisfies all constraints
      */
     fun checkSudoku(sudoku: Sudoku): Boolean {
-        for (c in constraints) {
-            if (!c.isSaturated(sudoku))
-                return false
-        }
-        return true
+        return constraints.all { it.isSaturated(sudoku) }
     }
 
     /**

@@ -62,5 +62,9 @@ class SudokuTypeRepo() : IRepo<SudokuType> {
         TODO("Not yet implemented")
     }
 
+    override fun ids(): List<Int> {
+        TODO("Not yet implemented")
+    }
+
 
 }
