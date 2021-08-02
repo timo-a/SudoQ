@@ -7,8 +7,9 @@
  */
 package de.sudoq.model.game
 
-import de.sudoq.model.xml.SudokuTypesList
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.pow
 
 /**
@@ -28,7 +29,7 @@ open class GameSettings(
     isLeftHandModeSet: Boolean = false,
     isHelperSet: Boolean = false,
     isGestureSet: Boolean = false,
-    val wantedTypesList: SudokuTypesList = SudokuTypesList()
+    val wantedTypesList: ArrayList<SudokuTypes> = ArrayList(listOf(*SudokuTypes.values()))
 ) {
 
     var isLefthandModeSet = isLeftHandModeSet

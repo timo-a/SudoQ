@@ -28,7 +28,7 @@ import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.persistence.xml.game.IGamesListRepo
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
-import de.sudoq.model.xml.SudokuTypesList
+import de.sudoq.persistence.sudoku.sudokuTypes.SudokuTypesListBE
 import de.sudoq.persistence.game.GameRepo
 import de.sudoq.persistence.game.GameSettingsBE
 import de.sudoq.persistence.game.GameSettingsMapper
@@ -39,6 +39,7 @@ import de.sudoq.persistence.sudoku.SudokuRepoProvider
 import de.sudoq.persistence.sudokuType.SudokuTypeRepo
 import java.io.File
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * SudokuPreferences ermöglicht das Verwalten von Einstellungen eines zu
@@ -111,7 +112,7 @@ class NewSudokuActivity : SudoqCompatActivity() {
         super.onResume()
         /** type spinner  */
         val possibleTypes = gameSettings!!.wantedTypesList
-        check(!possibleTypes.isEmpty()) {  //TODO shouldn't happen in the first place!
+        check(possibleTypes.isNotEmpty()) {  //TODO shouldn't happen in the first place!
             "list shouldn't be empty"
         }
         initTypeSpinner(possibleTypes)
@@ -130,7 +131,7 @@ class NewSudokuActivity : SudoqCompatActivity() {
         //LanguageUtility.setLocaleFromMemory(this);
     }
 
-    private fun initTypeSpinner(stl: SudokuTypesList) {
+    private fun initTypeSpinner(stl: ArrayList<SudokuTypes>) {
         val typeSpinner = findViewById<Spinner>(R.id.spinner_sudokutype)
         //List<String> translatedSudokuTypes = Arrays.asList(getResources().getStringArray(R.array.sudokutype_values));
         val wantedSudokuTypes: MutableList<StringAndEnum<SudokuTypes>> =

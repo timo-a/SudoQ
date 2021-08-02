@@ -1,7 +1,8 @@
 package de.sudoq.persistence.game
 
 import de.sudoq.model.game.Assistances
-import de.sudoq.model.xml.SudokuTypesList
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
+import de.sudoq.persistence.sudoku.sudokuTypes.SudokuTypesListBE
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
 import de.sudoq.model.xml.Xmlable
@@ -12,7 +13,7 @@ class GameSettingsBE(val assistances: BitSet = BitSet(),
                      var isLefthandModeSet: Boolean = false,
                      var isHelperSet: Boolean = false,
                      var isGesturesSet: Boolean = false,
-                     val wantedTypesList: SudokuTypesList = SudokuTypesList()
+                     val wantedTypesList: SudokuTypesListBE = SudokuTypesListBE(listOf(*SudokuTypes.values()))
 ) : Xmlable {
 
     /**
@@ -52,7 +53,7 @@ class GameSettingsBE(val assistances: BitSet = BitSet(),
             java.lang.Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("left"))
         isHelperSet =
             java.lang.Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("helper"))
-        for (xt in xmlTreeRepresentation) if (xt.name == SudokuTypesList.ROOT_NAME) wantedTypesList.fillFromXml(
+        for (xt in xmlTreeRepresentation) if (xt.name == SudokuTypesListBE.ROOT_NAME) wantedTypesList.fillFromXml(
             xt
         )
     }

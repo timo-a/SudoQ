@@ -18,13 +18,13 @@ import android.widget.TextView
 import de.sudoq.R
 import de.sudoq.controller.menus.Utility
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
-import de.sudoq.model.xml.SudokuTypesList
+import de.sudoq.persistence.sudoku.sudokuTypes.SudokuTypesListBE
 
 /**
  * Adapter für die Anzeige aller zu wählenden Sudoku Typen
  */
-class RestrictTypesAdapter(context: Context, typesList: SudokuTypesList) :
-    ArrayAdapter<SudokuTypes>(context, R.layout.restricttypes_item, typesList.allTypes) {
+class RestrictTypesAdapter(context: Context, typesList: ArrayList<SudokuTypes>) :
+    ArrayAdapter<SudokuTypes>(context, R.layout.restricttypes_item, SudokuTypes.values().toList()) {
 
     private val types: List<SudokuTypes>
 

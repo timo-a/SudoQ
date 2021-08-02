@@ -1,6 +1,7 @@
 package de.sudoq.persistence.game
 
 import de.sudoq.model.game.GameSettings
+import de.sudoq.persistence.sudoku.sudokuTypes.SudokuTypesListBE
 
 object GameSettingsMapper {
 
@@ -10,7 +11,8 @@ object GameSettingsMapper {
             gs.isLefthandModeSet,
             gs.isHelperSet,
             gs.isGesturesSet,
-            gs.wantedTypesList)
+            SudokuTypesListBE(gs.wantedTypesList)
+        )
     }
 
     fun fromBE(gs: GameSettingsBE): GameSettings {

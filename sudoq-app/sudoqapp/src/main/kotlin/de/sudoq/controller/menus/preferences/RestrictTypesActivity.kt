@@ -22,7 +22,8 @@ import de.sudoq.R
 import de.sudoq.controller.SudoqListActivity
 import de.sudoq.model.profile.ProfileSingleton.Companion.getInstance
 import de.sudoq.model.profile.ProfileManager
-import de.sudoq.model.xml.SudokuTypesList
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
+import de.sudoq.persistence.sudoku.sudokuTypes.SudokuTypesListBE
 import de.sudoq.persistence.profile.ProfileRepo
 import de.sudoq.persistence.profile.ProfilesListRepo
 
@@ -34,7 +35,7 @@ import de.sudoq.persistence.profile.ProfilesListRepo
 class RestrictTypesActivity : SudoqListActivity(), OnItemClickListener, OnItemLongClickListener {
     /** Attributes  */
     private var adapter: RestrictTypesAdapter? = null
-    private var types: SudokuTypesList? = null
+    private var types: ArrayList<SudokuTypes>? = null
     /** Constructors  */
     /** Methods  */
     /**
@@ -79,7 +80,7 @@ class RestrictTypesActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
         when (item.itemId) {
             R.id.action_restore_all ->
                 /* add (only!) types that are not currently selected */
-                types!!.addAll(types!!.allTypes.filter { !types!!.contains(it) })
+                types!!.addAll(SudokuTypes.values().filter { !types!!.contains(it) })
 
             else -> super.onOptionsItemSelected(item)
         }
@@ -92,7 +93,7 @@ class RestrictTypesActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
 
         //Toast.makeText(getApplicationContext(), "prepOpt called. s_1: "+types.size()+" s_2: "+types.getAllTypes().size(), Toast.LENGTH_LONG).show();
         menu.findItem(R.id.action_restore_all).isVisible =
-            types!!.size < types!!.allTypes.size //offer option to restore all only when some are disabled...
+            types!!.size < SudokuTypes.values().size //offer option to restore all only when some are disabled...
         return true
     }
 
