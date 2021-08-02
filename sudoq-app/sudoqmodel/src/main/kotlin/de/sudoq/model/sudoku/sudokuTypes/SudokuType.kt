@@ -15,6 +15,7 @@ import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint
 import de.sudoq.model.sudoku.complexity.ComplexityFactory
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * A SudokuType represents the Attributes of a specific sudoku type.
@@ -100,7 +101,7 @@ open class SudokuType : Iterable<Constraint>, ComplexityFactory {
 
         constraints = ArrayList()
         positions = ArrayList()
-        permutationProperties = SetOfPermutationProperties()
+        permutationProperties = ArrayList()
         helperList = ArrayList()
         ccb = ComplexityConstraintBuilder()
     }

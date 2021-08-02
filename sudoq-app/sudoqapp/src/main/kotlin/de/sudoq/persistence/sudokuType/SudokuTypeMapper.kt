@@ -1,7 +1,7 @@
 package de.sudoq.persistence.sudokuType
 
-import de.sudoq.persistence.sudokuType.SudokuTypeBE
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
+import de.sudoq.persistence.sudoku.sudokuTypes.SetOfPermutationPropertiesBE
 
 object SudokuTypeMapper {
 
@@ -13,7 +13,7 @@ object SudokuTypeMapper {
             sudokuType.size!!,
             sudokuType.blockSize,
             sudokuType.constraints,
-            sudokuType.permutationProperties,
+            SetOfPermutationPropertiesBE(sudokuType.permutationProperties),
             sudokuType.helperList,
             sudokuType.ccb
         )

@@ -7,13 +7,12 @@ import de.sudoq.model.sudoku.ConstraintType
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.UniqueConstraintBehavior
 import de.sudoq.model.sudoku.sudokuTypes.ComplexityConstraintBuilder
-import de.sudoq.model.sudoku.sudokuTypes.PermutationProperties
-import de.sudoq.model.sudoku.sudokuTypes.SetOfPermutationProperties
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
 import de.sudoq.model.xml.Xmlable
 import de.sudoq.persistence.sudoku.CCBBE
+import de.sudoq.persistence.sudoku.sudokuTypes.SetOfPermutationPropertiesBE
 import java.util.*
 
 class SudokuTypeBE : Xmlable {
@@ -30,7 +29,7 @@ class SudokuTypeBE : Xmlable {
 
     var constraints: MutableList<Constraint>
 
-    var permutationProperties: List<PermutationProperties>
+    var permutationProperties: SetOfPermutationPropertiesBE
 
     var helperList: MutableList<Helpers>
 
@@ -38,7 +37,7 @@ class SudokuTypeBE : Xmlable {
 
     constructor() {
         constraints = ArrayList()
-        permutationProperties = SetOfPermutationProperties()
+        permutationProperties = SetOfPermutationPropertiesBE()
         helperList = ArrayList()
         ccb = ComplexityConstraintBuilder()
     }
@@ -51,7 +50,7 @@ class SudokuTypeBE : Xmlable {
         size: Position,
         blockSize: Position,
         constraints: MutableList<Constraint>,
-        permutationProperties: List<PermutationProperties>,
+        permutationProperties: SetOfPermutationPropertiesBE,
         helperList: MutableList<Helpers>,
         ccb: ComplexityConstraintBuilder
     ) {
@@ -81,7 +80,7 @@ class SudokuTypeBE : Xmlable {
         for (c in constraints) {
             representation.addChild(c.toXmlTree())
         }
-        representation.addChild((permutationProperties as SetOfPermutationProperties).toXmlTree())
+        representation.addChild(permutationProperties.toXmlTree())
         val hList = XmlTree("helperList")
         for (i in helperList.indices) {
             hList.addAttribute(XmlAttribute("i", "" + helperList[i].ordinal))
@@ -109,9 +108,9 @@ class SudokuTypeBE : Xmlable {
                     c.fillFromXml(sub)
                     constraints.add(c)
                 }
-                SetOfPermutationProperties.SET_OF_PERMUTATION_PROPERTIES -> {
-                    permutationProperties = SetOfPermutationProperties()
-                    (permutationProperties as SetOfPermutationProperties).fillFromXml(sub) //cast neccessary because setOPP is defined as
+                SetOfPermutationPropertiesBE.SET_OF_PERMUTATION_PROPERTIES -> {
+                    permutationProperties = SetOfPermutationPropertiesBE()
+                    permutationProperties.fillFromXml(sub)
                 }
                 "helperList" -> {
                     helperList = ArrayList(sub.numberOfAttributes)
