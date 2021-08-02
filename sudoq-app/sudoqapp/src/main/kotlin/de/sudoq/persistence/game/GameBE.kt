@@ -62,7 +62,7 @@ class GameBE : Xmlable3<SudokuType> {
         representation.addAttribute(XmlAttribute(FINISHED, "" + finished))
         representation.addAttribute(XmlAttribute("time", "" + time))
         representation.addAttribute(XmlAttribute("currentTurnId", "" + currentTurnId))
-        representation.addChild(gameSettings!!.toXmlTree())
+        representation.addChild(GameSettingsMapper.toBE(gameSettings!!).toXmlTree())
         representation.addAttribute(XmlAttribute("assistancesCost", "" + assistancesCost))
         representation.addChild(SudokuMapper.toBE(sudoku!!).toXmlTree())
         val actionList = ArrayList<ActionTreeElement>()
@@ -94,8 +94,9 @@ class GameBE : Xmlable3<SudokuType> {
                 sudokuBE.fillFromXml(sub, sudokuTypeRepo)
                 sudoku = SudokuMapper.fromBE(sudokuBE)
             } else if (sub.name == "gameSettings") {
-                gameSettings = GameSettings()
-                gameSettings!!.fillFromXml(sub)
+                val gameSettingsBE = GameSettingsBE()
+                gameSettingsBE.fillFromXml(sub)
+                gameSettings = GameSettingsMapper.fromBE(gameSettingsBE)
             }
         }
         stateHandler = GameStateHandler()

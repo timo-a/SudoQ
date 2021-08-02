@@ -30,6 +30,8 @@ import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.xml.SudokuTypesList
 import de.sudoq.persistence.game.GameRepo
+import de.sudoq.persistence.game.GameSettingsBE
+import de.sudoq.persistence.game.GameSettingsMapper
 import de.sudoq.persistence.game.GamesListRepo
 import de.sudoq.persistence.profile.ProfileRepo
 import de.sudoq.persistence.profile.ProfilesListRepo
@@ -70,9 +72,11 @@ class NewSudokuActivity : SudoqCompatActivity() {
         val pm = ProfileManager(profileDir, ProfileRepo(profileDir), ProfilesListRepo(profileDir))
         check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
         pm.loadCurrentProfile()
-        val xt = pm.assistances.toXmlTree()
-        gameSettings = GameSettings()
-        gameSettings!!.fillFromXml(xt)
+        val xt = GameSettingsMapper.toBE(pm.assistances).toXmlTree()
+        val gameSettingsBE = GameSettingsBE()
+        gameSettingsBE.fillFromXml(xt)
+        gameSettings = GameSettingsMapper.fromBE(gameSettingsBE)
+
         /** complexity spinner  */
         val complexitySpinner = findViewById<View>(R.id.spinner_sudokucomplexity) as Spinner
         val complexityAdapter = ArrayAdapter.createFromResource(

@@ -8,9 +8,6 @@
 package de.sudoq.model.game
 
 import de.sudoq.model.xml.SudokuTypesList
-import de.sudoq.model.xml.XmlAttribute
-import de.sudoq.model.xml.XmlTree
-import de.sudoq.model.xml.Xmlable
 import java.util.*
 import kotlin.math.pow
 
@@ -19,23 +16,29 @@ import kotlin.math.pow
  * - a set of [Assistances], i.e. their availability.
  * - additional options like lefthandmode, hints...
  */
-open class GameSettings : Xmlable {
-
+open class GameSettings(
     /**
      * A BitSet representing available [Assistances]
+     * TODO make private again after GameSettingsMapper no longer needs it
      */
-    private val assistances: BitSet = BitSet()
-
-    var isLefthandModeSet = false
-        private set
-
-    var isHelperSet = false
-        private set
-
-    var isGesturesSet = false
-        private set
-
+    @Deprecated(
+        "would be private if not for GameSettingsMapper. " +
+                "Not supposed to be used by others."
+    ) val assistances: BitSet = BitSet(),
+    isLeftHandModeSet: Boolean = false,
+    isHelperSet: Boolean = false,
+    isGestureSet: Boolean = false,
     val wantedTypesList: SudokuTypesList = SudokuTypesList()
+) {
+
+    var isLefthandModeSet = isLeftHandModeSet
+        private set
+
+    var isHelperSet = isHelperSet
+        private set
+
+    var isGesturesSet = isGestureSet
+        private set
 
     /**
      * Sets an assistance to true
@@ -78,69 +81,6 @@ open class GameSettings : Xmlable {
 
     fun setHelper(value: Boolean) {
         isHelperSet = value
-    }
-
-    /* to and from string */
-    override fun toXmlTree(): XmlTree {
-        val representation = XmlTree("gameSettings")
-        representation.addAttribute(
-            XmlAttribute(
-                "assistances",
-                convertAssistancesToString()
-            )
-        ) //TODO scrap that, representation as 0,1 is ugly -> save all with name, then make all of the boolean assistances enums
-        representation.addAttribute(XmlAttribute("gestures", isGesturesSet))
-        representation.addAttribute(XmlAttribute("left", isLefthandModeSet))
-        representation.addAttribute(XmlAttribute("helper", isHelperSet))
-        representation.addChild(wantedTypesList.toXmlTree())
-        return representation
-    }
-
-    @Throws(IllegalArgumentException::class)
-    override fun fillFromXml(xmlTreeRepresentation: XmlTree) {
-        assistancesfromString(xmlTreeRepresentation.getAttributeValue("assistances")!!)
-        isGesturesSet =
-            java.lang.Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("gestures"))
-        isLefthandModeSet =
-            java.lang.Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("left"))
-        isHelperSet =
-            java.lang.Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("helper"))
-        for (xt in xmlTreeRepresentation) if (xt.name == SudokuTypesList.ROOT_NAME) wantedTypesList.fillFromXml(
-            xt
-        )
-    }
-
-    /**
-     * Generates a String of "0" and "1" from the AssistanceSet.
-     * The String car be parsed again with [assistancesfromString].
-     *
-     * @return String representation of the AssistanceSet
-     */
-    private fun convertAssistancesToString(): String {
-        val bitstring = StringBuilder()
-        for (assist in Assistances.values()) bitstring.append(if (getAssistance(assist)) "1" else "0")
-        return bitstring.toString()
-    }
-
-    /**
-     * Reads the Assistance set from a String of "0" and "1"s
-     *
-     * @param representation String representation of the assistances
-     *
-     * @throws IllegalArgumentException on parse error
-     */
-    @Throws(IllegalArgumentException::class)
-    private fun assistancesfromString(representation: String) {
-
-        for ((i, assist) in Assistances.values().withIndex()) {
-            try {
-                if (representation[i] == '1') {
-                    setAssistance(assist)
-                }
-            } catch (exc: Exception) {
-                throw IllegalArgumentException()
-            }
-        }
     }
 
 }

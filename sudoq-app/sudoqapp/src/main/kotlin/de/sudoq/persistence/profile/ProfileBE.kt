@@ -6,6 +6,8 @@ import de.sudoq.model.profile.Statistics
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
 import de.sudoq.model.xml.Xmlable
+import de.sudoq.persistence.game.GameSettingsBE
+import de.sudoq.persistence.game.GameSettingsMapper
 
 class ProfileBE(val id: Int) : Xmlable {
 
@@ -36,8 +38,9 @@ class ProfileBE(val id: Int) : Xmlable {
         name = xmlTreeRepresentation.getAttributeValue("name")
         for (sub in xmlTreeRepresentation) {
             if (sub.name == "gameSettings") {
-                assistances = GameSettings()
-                assistances.fillFromXml(sub)
+                val gameSettingsBE = GameSettingsBE()
+                gameSettingsBE.fillFromXml(sub)
+                assistances = GameSettingsMapper.fromBE(gameSettingsBE)
             }
             if (sub.name == "appSettings") {
                 appSettings = AppSettings()
@@ -59,7 +62,7 @@ class ProfileBE(val id: Int) : Xmlable {
         representation.addAttribute(XmlAttribute("id", id.toString()))
         representation.addAttribute(XmlAttribute("currentGame", currentGame.toString()))
         representation.addAttribute(XmlAttribute("name", name!!))
-        representation.addChild(assistances.toXmlTree())
+        representation.addChild(GameSettingsMapper.toBE(assistances).toXmlTree())
         for (stat in Statistics.values()) {
             representation.addAttribute(
                 XmlAttribute(
