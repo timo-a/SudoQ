@@ -25,7 +25,7 @@ class ConstraintBE(var behavior: ConstraintBehavior = UniqueConstraintBehavior()
         representation.addAttribute(XmlAttribute("name", name))
         representation.addAttribute(XmlAttribute("type", "" + type.ordinal))
         for (pos in positions) {
-            representation.addChild(pos.toXmlTree())
+            representation.addChild(PositionMapper.toBE(pos).toXmlTree())
         }
         return representation
     }
@@ -42,7 +42,9 @@ class ConstraintBE(var behavior: ConstraintBehavior = UniqueConstraintBehavior()
         type = ConstraintType.values()[xmlTreeRepresentation.getAttributeValue("type")!!.toInt()]
         for (sub in xmlTreeRepresentation) {
             if (sub.name == "position") {
-                addPosition(Position.fillFromXmlStatic(sub))
+                val positionBE = PositionBE(-1,-1)
+                positionBE.fillFromXml(sub)
+                addPosition(PositionMapper.fromBE(positionBE))
             }
         }
     }

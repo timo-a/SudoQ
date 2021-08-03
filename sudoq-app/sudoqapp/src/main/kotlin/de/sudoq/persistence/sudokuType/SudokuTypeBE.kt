@@ -1,6 +1,5 @@
 package de.sudoq.persistence.sudokuType
 
-import de.sudoq.persistence.sudoku.CCBMapper
 import de.sudoq.model.solverGenerator.solver.helper.Helpers
 import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.ConstraintType
@@ -11,9 +10,7 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
 import de.sudoq.model.xml.Xmlable
-import de.sudoq.persistence.sudoku.CCBBE
-import de.sudoq.persistence.sudoku.ConstraintBE
-import de.sudoq.persistence.sudoku.ConstraintMapper
+import de.sudoq.persistence.sudoku.*
 import de.sudoq.persistence.sudoku.sudokuTypes.SetOfPermutationPropertiesBE
 import java.util.*
 
@@ -103,8 +100,8 @@ class SudokuTypeBE : Xmlable {
             xmlTreeRepresentation.getAttributeValue("standardAllocationFactor")!!.toFloat()
         for (sub in xmlTreeRepresentation) {
             when (sub.name) {
-                "size" -> size = Position.fillFromXmlStatic(sub)
-                "blockSize" -> blockSize = Position.fillFromXmlStatic(sub)
+                "size" -> size = PositionBE.fillFromXmlStatic(sub)
+                "blockSize" -> blockSize = PositionBE.fillFromXmlStatic(sub)
                 "constraint" -> {
                     val cBE = ConstraintBE()
                     cBE.fillFromXml(sub)

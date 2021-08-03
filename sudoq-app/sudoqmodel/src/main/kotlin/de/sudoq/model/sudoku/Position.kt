@@ -19,7 +19,7 @@ import de.sudoq.model.xml.Xmlable
  * @property y the y coordinate
  *
  */
-class Position(var x: Int, var y: Int) : Xmlable {
+class Position(var x: Int, var y: Int) {
 
     /**
      * Instanziiert ein neues Position-Objekt mit den spezifizierten x- und y-Koordinaten. Ist eine der Koordinaten
@@ -71,12 +71,7 @@ class Position(var x: Int, var y: Int) : Xmlable {
         return "$x, $y"
     }
 
-    override fun toXmlTree(): XmlTree {
-        val representation = XmlTree("position")
-        representation.addAttribute(XmlAttribute("x", "" + x))
-        representation.addAttribute(XmlAttribute("y", "" + y))
-        return representation
-    }
+
 
     fun toXmlTree(name: String): XmlTree {
         val representation = XmlTree(name)
@@ -85,12 +80,6 @@ class Position(var x: Int, var y: Int) : Xmlable {
         return representation
     }
 
-    @Throws(IllegalArgumentException::class)
-    override fun fillFromXml(xmlTreeRepresentation: XmlTree) {
-        require(!fixed) { "Tried to manipulate a fixed position" }
-        x = xmlTreeRepresentation.getAttributeValue("x")!!.toInt()
-        y = xmlTreeRepresentation.getAttributeValue("y")!!.toInt()
-    }
 
     companion object {
         /**
@@ -135,10 +124,6 @@ class Position(var x: Int, var y: Int) : Xmlable {
             }
         }
 
-        fun fillFromXmlStatic(xmlTreeRepresentation: XmlTree): Position {
-            return Companion[
-                    xmlTreeRepresentation.getAttributeValue("x")!!.toInt(),
-                    xmlTreeRepresentation.getAttributeValue("y")!!.toInt()]
-        }
+
     }
 }
