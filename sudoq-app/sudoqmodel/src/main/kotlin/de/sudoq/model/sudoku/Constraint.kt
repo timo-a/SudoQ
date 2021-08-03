@@ -21,14 +21,15 @@ import java.util.*
  * @param type Type of the Constraint
  */
 class Constraint(private var behavior: ConstraintBehavior, type: ConstraintType) :
-    Iterable<Position>, Xmlable {
+    Iterable<Position> {
 
     /** A List of [Position]s of all [Cells], that together satisfy a constraint */
     private var positions: MutableList<Position> = ArrayList()
 
     /** Name of the Constraint should start with one of "extra block", "Block", "Column", "Row".
      */
-    private var name: String
+    var name: String
+        private set
 
     /** Type of the Constraint */
     var type: ConstraintType = type
@@ -57,7 +58,7 @@ class Constraint(private var behavior: ConstraintBehavior, type: ConstraintType)
      * @param position The [Position] to add to this constraint
      * TODO make those tests subclasses and set method to private
      */
-    @Deprecated("""mostly used in tests""")
+    @Deprecated("""exclusively used in tests""")
     fun addPosition(position: Position) {
         if (position !in positions) {
             positions.add(position)
@@ -127,31 +128,9 @@ class Constraint(private var behavior: ConstraintBehavior, type: ConstraintType)
         return positions as ArrayList<Position>
     }
 
-    override fun toXmlTree(): XmlTree {
-        val representation = XmlTree("constraint")
-        representation.addAttribute(XmlAttribute("behavior", behavior.javaClass.toString()))
-        representation.addAttribute(XmlAttribute("name", name))
-        representation.addAttribute(XmlAttribute("type", "" + type.ordinal))
-        for (pos in positions) {
-            representation.addChild(pos.toXmlTree())
-        }
-        return representation
+    @Deprecated("only used by Constraintmapper in app, remove when possible")
+    fun setPositions(ps: List<Position>){
+        positions = ps.toMutableList()
     }
 
-    @Throws(IllegalArgumentException::class)
-    override fun fillFromXml(xmlTreeRepresentation: XmlTree) {
-        val behavior = xmlTreeRepresentation.getAttributeValue("behavior")!!
-        if (behavior.contains("Unique")) {
-            this.behavior = UniqueConstraintBehavior()
-        } else {
-            throw IllegalArgumentException("Undefined constraint behavior")
-        }
-        name = xmlTreeRepresentation.getAttributeValue("name")!!
-        type = ConstraintType.values()[xmlTreeRepresentation.getAttributeValue("type")!!.toInt()]
-        for (sub in xmlTreeRepresentation) {
-            if (sub.name == "position") {
-                addPosition(Position.fillFromXmlStatic(sub))
-            }
-        }
-    }
 }

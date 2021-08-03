@@ -12,6 +12,8 @@ import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
 import de.sudoq.model.xml.Xmlable
 import de.sudoq.persistence.sudoku.CCBBE
+import de.sudoq.persistence.sudoku.ConstraintBE
+import de.sudoq.persistence.sudoku.ConstraintMapper
 import de.sudoq.persistence.sudoku.sudokuTypes.SetOfPermutationPropertiesBE
 import java.util.*
 
@@ -78,7 +80,7 @@ class SudokuTypeBE : Xmlable {
         representation.addChild(size!!.toXmlTree("size"))
         representation.addChild(blockSize.toXmlTree("blockSize"))
         for (c in constraints) {
-            representation.addChild(c.toXmlTree())
+            representation.addChild(ConstraintMapper.toBE(c).toXmlTree())
         }
         representation.addChild(permutationProperties.toXmlTree())
         val hList = XmlTree("helperList")
@@ -104,8 +106,9 @@ class SudokuTypeBE : Xmlable {
                 "size" -> size = Position.fillFromXmlStatic(sub)
                 "blockSize" -> blockSize = Position.fillFromXmlStatic(sub)
                 "constraint" -> {
-                    val c = Constraint(UniqueConstraintBehavior(), ConstraintType.LINE)
-                    c.fillFromXml(sub)
+                    val cBE = ConstraintBE()
+                    cBE.fillFromXml(sub)
+                    val c = ConstraintMapper.fromBE(cBE)
                     constraints.add(c)
                 }
                 SetOfPermutationPropertiesBE.SET_OF_PERMUTATION_PROPERTIES -> {
