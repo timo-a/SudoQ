@@ -16,7 +16,7 @@ import de.sudoq.model.xml.Xmlable
  * - whether debug mode is on
  * - the language
  */
-class AppSettings : Xmlable {
+class AppSettings {
 
     var isDebugSet = false
         private set
@@ -29,19 +29,6 @@ class AppSettings : Xmlable {
         isDebugSet = value
     }
 
-    /* to and from string */
-    override fun toXmlTree(): XmlTree {
-        val representation = XmlTree("appSettings")
-        representation.addAttribute(XmlAttribute("debug", isDebugSet))
-        representation.addAttribute(XmlAttribute("language", language))
-        return representation
-    }
 
-    @Throws(IllegalArgumentException::class)
-    override fun fillFromXml(xmlTreeRepresentation: XmlTree) {
-        isDebugSet =
-            java.lang.Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("debug"))
-        language = xmlTreeRepresentation.getAttributeValue("language") ?: "system"
-        //if language hasn't been used before it will be null -> assume system
-    }
+
 }

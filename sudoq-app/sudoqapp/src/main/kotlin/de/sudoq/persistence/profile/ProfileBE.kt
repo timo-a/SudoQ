@@ -43,8 +43,9 @@ class ProfileBE(val id: Int) : Xmlable {
                 assistances = GameSettingsMapper.fromBE(gameSettingsBE)
             }
             if (sub.name == "appSettings") {
-                appSettings = AppSettings()
-                appSettings.fillFromXml(sub)
+                val appSettingsBE = AppSettingsBE()
+                appSettingsBE.fillFromXml(sub)
+                appSettings = AppSettingsMapper.fromBE(appSettingsBE)
             }
         }
         statistics = IntArray(Statistics.values().size)
@@ -71,7 +72,7 @@ class ProfileBE(val id: Int) : Xmlable {
                 )
             )
         }
-        representation.addChild(appSettings.toXmlTree())
+        representation.addChild(AppSettingsMapper.toBE(appSettings).toXmlTree())
         return representation
     }
 
