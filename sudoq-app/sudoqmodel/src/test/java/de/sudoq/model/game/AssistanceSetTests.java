@@ -11,28 +11,6 @@ import de.sudoq.model.xml.XmlTree;
 
 public class AssistanceSetTests {
 	@Test
-	public void test() {
-		GameSettings a = new GameSettings();
-		a.setAssistance(Assistances.autoAdjustNotes);
-		a.setAssistance(Assistances.markWrongSymbol);
-
-		assertTrue("autoAdjustNotes has wrong value", a.getAssistance(Assistances.autoAdjustNotes));
-		assertFalse("markRowColumn has wrong value", a.getAssistance(Assistances.markRowColumn));
-		assertTrue("markWrongSymbol has wrong value", a.getAssistance(Assistances.markWrongSymbol));
-		assertFalse("restrictCandidates has wrong value", a.getAssistance(Assistances.restrictCandidates));
-
-		XmlTree t = a.toXmlTree();
-		a = new GameSettings();
-		a.fillFromXml(t);
-
-		assertTrue("autoAdjustNotes has wrong value", a.getAssistance(Assistances.autoAdjustNotes));
-		assertFalse("markRowColumn has wrong value", a.getAssistance(Assistances.markRowColumn));
-		assertTrue("markWrongSymbol has wrong value", a.getAssistance(Assistances.markWrongSymbol));
-		assertFalse("restrictCandidates has wrong value", a.getAssistance(Assistances.restrictCandidates));
-
-		a.clearAssistance(Assistances.markWrongSymbol);
-		assertFalse("markWrongSymbol has wrong value", a.getAssistance(Assistances.markWrongSymbol));
-	}
 
 	@Test(expected = NullPointerException.class)
 	public void testFooString() {
