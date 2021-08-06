@@ -15,8 +15,8 @@ class GameSettingsBETests {
 
     @ParameterizedTest
     @EnumSource(value=Letter::class)
-    fun `should not be null`(assistance: Assistances) {
-        Assertions.assertNotNull(assistance)
+    fun `should not be null`(l: Letter) {
+        Assertions.assertNotNull(l)
     }
 
 
