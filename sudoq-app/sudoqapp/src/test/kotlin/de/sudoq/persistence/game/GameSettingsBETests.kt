@@ -1,84 +1,59 @@
 package de.sudoq.persistence.game
 
 import de.sudoq.model.game.Assistances
+import de.sudoq.model.game.Assistances.*
 import de.sudoq.model.xml.XmlTree
-import org.junit.jupiter.api.Assertions
+import org.amshove.kluent.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
 
 
 class GameSettingsBETests {
-
-    enum class Letter {A,B}
-
-    @ParameterizedTest
-    @EnumSource(value=Letter::class)
-    fun `should not be null`(l: Letter) {
-        Assertions.assertNotNull(l)
-    }
-
 
     @Nested
     inner class Assistance {
 
         var a = GameSettingsBE()
 
-        /*@ParameterizedTest
+        @ParameterizedTest
         @EnumSource(value=Assistances::class, names = ["autoAdjustNotes", "markWrongSymbol"])
         fun `should set assistance`(assistance: Assistances) {
             var a = GameSettingsBE()
             a.setAssistance(assistance)
-            //a.getAssistance(assistance).`should be true`()
-
-        }*/
+            a.getAssistance(assistance).`should be true`()
+        }
     }
+
     @Test
     fun test() {
         var a = GameSettingsBE()
-        a.setAssistance(Assistances.autoAdjustNotes)
-        a.setAssistance(Assistances.markWrongSymbol)
-        Assertions.assertTrue(
-            a.getAssistance(Assistances.autoAdjustNotes),
-            "autoAdjustNotes has wrong value"
-        )
-        Assertions.assertTrue(
-            a.getAssistance(Assistances.markWrongSymbol),
-            "markWrongSymbol has wrong value"
-            )
-        Assertions.assertFalse(
-            a.getAssistance(Assistances.markRowColumn),
-            "markRowColumn has wrong value"
-        )
-        Assertions.assertFalse(
-            a.getAssistance(Assistances.restrictCandidates),
-            "restrictCandidates has wrong value"
-        )
+        a.setAssistance(autoAdjustNotes)
+        a.setAssistance(markWrongSymbol)
+
+        //confirm state
+        a.getAssistance(autoAdjustNotes).`should be true`()
+        a.getAssistance(markWrongSymbol).`should be true`()
+        a.getAssistance(markRowColumn).`should be false`()
+        a.getAssistance(restrictCandidates).`should be false`()
+
+        //to xmlTree and back
         val t: XmlTree = a.toXmlTree()
         a = GameSettingsBE()
         a.fillFromXml(t)
-        Assertions.assertTrue(
-            a.getAssistance(Assistances.autoAdjustNotes),
-            "autoAdjustNotes has wrong value"
-        )
-        Assertions.assertFalse(
-            a.getAssistance(Assistances.markRowColumn),
-            "markRowColumn has wrong value"
-        )
-        Assertions.assertTrue(
-            a.getAssistance(Assistances.markWrongSymbol),
-            "markWrongSymbol has wrong value"
-        )
-        Assertions.assertFalse(
-            a.getAssistance(Assistances.restrictCandidates),
-            "restrictCandidates has wrong value"
-        )
-        //TODO fix a.clearAssistance(Assistances.markWrongSymbol)
-        Assertions.assertFalse(
-            a.getAssistance(Assistances.markWrongSymbol),
-            "markWrongSymbol has wrong value"
-            )
+
+        a.getAssistance(autoAdjustNotes).`should be true`()
+        a.getAssistance(markRowColumn).`should be false`()
+        a.getAssistance(markWrongSymbol).`should be true`()
+        a.getAssistance(restrictCandidates).`should be false`()
+
+    }
+
+    @Test
+    fun testFooString() {
+        invoking { GameSettingsBE().fillFromXml(XmlTree("foo")) }
+            .`should throw`(NullPointerException::class)
     }
 
 }
