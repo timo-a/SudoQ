@@ -1,29 +1,38 @@
 package de.sudoq.persistence.game
 
 import de.sudoq.model.game.Assistances
-import de.sudoq.model.game.GameSettings
 import de.sudoq.model.xml.XmlTree
-import de.sudoq.persistence.game.GameSettingsBE
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.provider.EnumSource
+import org.junit.jupiter.params.ParameterizedTest
 
 
 class GameSettingsBETests {
+
+    enum class Letter {A,B}
+
+    @ParameterizedTest
+    @EnumSource(value=Letter::class)
+    fun `should not be null`(assistance: Assistances) {
+        Assertions.assertNotNull(assistance)
+    }
+
 
     @Nested
     inner class Assistance {
 
         var a = GameSettingsBE()
 
-        //@ParameterizedTest
-        //@EnumSource(value=Assistances.class, names = {"autoAdjustNotes", "markWrongSymbol"})
+        /*@ParameterizedTest
+        @EnumSource(value=Assistances::class, names = ["autoAdjustNotes", "markWrongSymbol"])
         fun `should set assistance`(assistance: Assistances) {
             var a = GameSettingsBE()
             a.setAssistance(assistance)
             //a.getAssistance(assistance).`should be true`()
 
-        }
+        }*/
     }
     @Test
     fun test() {
