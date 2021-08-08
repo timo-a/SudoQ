@@ -32,7 +32,7 @@ class SolveActionTest {
             solveAction.execute()
             solveAction.execute()
 
-            cell.currentValue `should be equal to` 1//0
+            cell.currentValue `should be equal to` 3//1 if idempotent it would be 1
         }
     }
 
