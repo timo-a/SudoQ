@@ -7,7 +7,7 @@ import de.sudoq.model.xml.XmlHelper
 import org.apache.commons.io.FileUtils
 import java.io.File
 
-class SudokuTypeRepo() : IRepo<SudokuType> {
+/*class SudokuTypeRepo() : IRepo<SudokuType> {
 
     private val typesDir: File = FileUtils.getFile("src","test", "resources", "persistence", "SudokuTypes");
 
@@ -67,4 +67,4 @@ class SudokuTypeRepo() : IRepo<SudokuType> {
     }
 
 
-}
+}*/

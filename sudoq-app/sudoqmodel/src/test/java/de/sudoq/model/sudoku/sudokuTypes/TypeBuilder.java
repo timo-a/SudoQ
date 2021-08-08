@@ -1,14 +1,11 @@
 package de.sudoq.model.sudoku.sudokuTypes;
 
-import org.apache.commons.lang3.NotImplementedException;
-
 import de.sudoq.model.persistence.IRepo;
-import de.sudoq.model.utility.persistence.sudokuType.SudokuTypeRepo;
 
 public class TypeBuilder {
 
 	//this is a dummy so it compiles todo use xmls from resources
-	private static IRepo<SudokuType> sudokuTypeRepo = new SudokuTypeRepo();
+	private static IRepo<SudokuType> sudokuTypeRepo;//todo use mocks = new SudokuTypeRepo();
 
 	public static SudokuType getType(SudokuTypes st){
 		return SudokuTypeProvider.getSudokuType(st, sudokuTypeRepo);

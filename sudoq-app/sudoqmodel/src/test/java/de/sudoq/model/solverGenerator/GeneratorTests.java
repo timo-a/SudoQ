@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.apache.commons.lang3.NotImplementedException;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.AfterClass;
@@ -58,6 +60,12 @@ public class GeneratorTests implements GeneratorCallback {
 	public void beforeTest() {
 		TypeBuilder.get99();
 		IRepo<SudokuType> dummySoItCompiles = new IRepo<SudokuType>() {
+			@NotNull
+			@Override
+			public List<Integer> ids() {
+				throw new NotImplementedException();
+			}
+
 			@Override
 			public SudokuType create() {
 				return null;

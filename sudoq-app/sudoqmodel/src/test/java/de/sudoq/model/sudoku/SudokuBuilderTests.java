@@ -12,12 +12,11 @@ import org.junit.Test;
 import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
-import de.sudoq.model.utility.persistence.sudokuType.SudokuTypeRepo;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
 public class SudokuBuilderTests extends TestWithInitCleanforSingletons {
 
-	private IRepo<SudokuType> str = new SudokuTypeRepo();
+	private IRepo<SudokuType> str;//todo fix  = new SudokuTypeRepo();
 
 	@BeforeClass
 	public static void initFileManager() {

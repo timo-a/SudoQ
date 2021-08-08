@@ -11,12 +11,11 @@ import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
-import de.sudoq.model.utility.persistence.sudokuType.SudokuTypeRepo;
 
 public class UniqueConstraintBehaviorTests extends TestWithInitCleanforSingletons {
 
 	//this is a dummy so it compiles todo use xmls from resources
-	private IRepo<SudokuType> sudokuTypeRepo = new SudokuTypeRepo();
+	private IRepo<SudokuType> sudokuTypeRepo;// = new SudokuTypeRepo();
 
 	@Test
 	public void testConstraint() {

@@ -23,7 +23,6 @@ import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.utility.persistence.sudokuType.SudokuTypeRepo;
 
 import static de.sudoq.model.sudoku.sudokuTypes.SudokuTypes.standard9x9;
 import static org.junit.Assert.assertEquals;
@@ -36,7 +35,7 @@ import static org.junit.Assert.assertTrue;
 public class SolverTests2 extends Solver {
 
 	//this is a dummy so it compiles todo use xmls from resources
-	private static IRepo<SudokuType> sudokuTypeRepo = new SudokuTypeRepo();
+	private static IRepo<SudokuType> sudokuTypeRepo;//todo use mock = new SudokuTypeRepo();
 
 	@BeforeClass
 	public static void init() {

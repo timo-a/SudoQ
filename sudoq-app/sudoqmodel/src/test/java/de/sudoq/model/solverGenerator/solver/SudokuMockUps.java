@@ -13,7 +13,7 @@ import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.utility.persistence.sudokuType.SudokuTypeRepo;
+//import de.sudoq.model.utility.persistence.sudokuType.SudokuTypeRepo;
 
 /**
  * Created by timo on 02.09.16.
@@ -24,7 +24,7 @@ public class SudokuMockUps {
 
     private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
 
-    private static IRepo<SudokuType> str = new SudokuTypeRepo();
+    private static IRepo<SudokuType> str; //todo use mock = new SudokuTypeRepo();
 
     public static Sudoku stringTo9x9Sudoku(String pattern){
         Sudoku s = new SudokuBuilder(SudokuTypes.standard9x9, str).createSudoku();

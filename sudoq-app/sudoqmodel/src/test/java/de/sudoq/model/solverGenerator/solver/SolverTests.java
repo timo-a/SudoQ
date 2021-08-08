@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,6 +42,12 @@ public class SolverTests {
 
 	//this is a dummy so it compiles todo use xmls from resources
 	private IRepo<SudokuType> sudokuTypeRepo = new IRepo<SudokuType>() {
+		@NotNull
+		@Override
+		public List<Integer> ids() {
+			throw new NotImplementedException();
+		}
+
 		@Override
 		public void delete(int id) { throw new NotImplementedException(); }
 

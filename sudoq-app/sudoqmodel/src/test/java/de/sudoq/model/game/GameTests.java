@@ -34,14 +34,13 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
-import de.sudoq.model.utility.persistence.sudokuType.SudokuTypeRepo;
 
 public class GameTests {
 
 	private static Sudoku sudoku;
 
 	//this is a dummy so it compiles todo use xmls from resources
-	private static IRepo<SudokuType> sudokuTypeRepo = new SudokuTypeRepo();
+	private static IRepo<SudokuType> sudokuTypeRepo;// = new SudokuTypeRepo();
 
 	@BeforeClass
 	public static void beforeClass() {

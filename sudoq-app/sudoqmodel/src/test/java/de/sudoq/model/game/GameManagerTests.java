@@ -8,8 +8,10 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -32,6 +34,12 @@ public class GameManagerTests {
 
 	//this is a dummy so it compiles todo use xmls from resources
 	private static IRepo<SudokuType> sudokuTypeRepo = new IRepo<SudokuType>() {
+		@NotNull
+		@Override
+		public List<Integer> ids() {
+			throw new NotImplementedException();
+		}
+
 		@Override
 		public void delete(int id) { throw new NotImplementedException(); }
 

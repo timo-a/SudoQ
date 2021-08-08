@@ -2,7 +2,7 @@ package de.sudoq.model.utility.persistence.sudokuType
 
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 
-object SudokuTypeMapper {
+/*object SudokuTypeMapper {
 
     fun toBE(sudokuType: SudokuType): SudokuTypeBE {
         return SudokuTypeBE(
@@ -31,4 +31,4 @@ object SudokuTypeMapper {
             sudokuTypeBE.ccb
         )
     }
-}
+}*/

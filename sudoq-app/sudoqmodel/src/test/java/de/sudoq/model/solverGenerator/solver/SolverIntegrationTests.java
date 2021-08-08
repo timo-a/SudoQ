@@ -5,8 +5,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
 
 import de.sudoq.model.Utility;
 import de.sudoq.model.persistence.IRepo;
@@ -30,6 +33,12 @@ public class SolverIntegrationTests {
 
 	//this is a dummy so it compiles todo use xmls from resources
 	private IRepo<SudokuType> sudokuTypeRepo = new IRepo<SudokuType>() {
+		@NotNull
+		@Override
+		public List<Integer> ids() {
+			throw new NotImplementedException();
+		}
+
 		@Override
 		public void delete(int id) { throw new NotImplementedException(); }
 

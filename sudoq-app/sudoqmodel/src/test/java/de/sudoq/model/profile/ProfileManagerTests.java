@@ -1,5 +1,6 @@
 package de.sudoq.model.profile;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -25,6 +26,12 @@ public class ProfileManagerTests {
 
     IRepo<Profile> getMockProfileRepo() {
         return new IRepo<Profile>() {
+            @NotNull
+            @Override
+            public List<Integer> ids() {
+                throw new NotImplementedException();
+            }
+
             @Override
             public Profile create() {
                 return null;

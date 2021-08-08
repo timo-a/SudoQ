@@ -7,14 +7,13 @@ import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.UniqueConstraintBehavior
 import de.sudoq.model.sudoku.sudokuTypes.ComplexityConstraintBuilder
 import de.sudoq.model.sudoku.sudokuTypes.PermutationProperties
-import de.sudoq.model.sudoku.sudokuTypes.SetOfPermutationProperties
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
 import de.sudoq.model.xml.Xmlable
 import java.util.*
 
-class SudokuTypeBE : Xmlable {
+/*class SudokuTypeBE : Xmlable {
 
     var enumType: SudokuTypes? = null
 
@@ -132,4 +131,4 @@ class SudokuTypeBE : Xmlable {
         }
     }
 
-}
+}*/

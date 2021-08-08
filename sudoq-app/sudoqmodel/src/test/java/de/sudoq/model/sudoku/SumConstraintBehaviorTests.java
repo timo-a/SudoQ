@@ -14,13 +14,12 @@ import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
-import de.sudoq.model.utility.persistence.sudokuType.SudokuTypeRepo;
 
 public class SumConstraintBehaviorTests {
 	private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
 
 	//this is a dummy so it compiles todo use xmls from resources
-	private IRepo<SudokuType> sudokuTypeRepo = new SudokuTypeRepo();
+	private IRepo<SudokuType> sudokuTypeRepo = null;//new SudokuTypeRepo();
 
 	@BeforeClass
 	public static void init() {

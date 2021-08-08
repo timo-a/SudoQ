@@ -7,7 +7,10 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
+import org.apache.commons.lang3.NotImplementedException;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import de.sudoq.model.TestWithInitCleanforSingletons;
@@ -70,6 +73,12 @@ public class FileManagerTests extends TestWithInitCleanforSingletons {
 		//ProfileSingleton p = ProfileSingleton.Companion.getInstance(profileDir); //needs to be called first otherwise it failes as an indiviidual and sometimes as part of all the tests in this class
 
 		IRepo<SudokuType> str = new IRepo<SudokuType>() {
+			@NotNull
+			@Override
+			public List<Integer> ids() {
+				throw new NotImplementedException();
+			}
+
 			@Override
 			public SudokuType create() {
 				return null;
