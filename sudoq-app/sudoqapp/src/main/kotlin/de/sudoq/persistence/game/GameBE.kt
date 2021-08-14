@@ -11,12 +11,12 @@ import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
-import de.sudoq.model.xml.Xmlable3
+import de.sudoq.persistence.XmlableWithRepo
 import de.sudoq.persistence.sudoku.SudokuBE
 import de.sudoq.persistence.sudoku.SudokuMapper
 import java.util.ArrayList
 
-class GameBE : Xmlable3<SudokuType> {
+class GameBE : XmlableWithRepo<SudokuType> {
 
     /** Unique id for the game */
     var id: Int = -1

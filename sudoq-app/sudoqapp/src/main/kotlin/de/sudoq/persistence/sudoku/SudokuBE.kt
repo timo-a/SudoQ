@@ -9,10 +9,10 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
-import de.sudoq.model.xml.Xmlable3
+import de.sudoq.persistence.XmlableWithRepo
 import java.util.*
 
-class SudokuBE() : Xmlable3<SudokuType> {
+class SudokuBE() : XmlableWithRepo<SudokuType> {
 
     var id: Int = 0
 
