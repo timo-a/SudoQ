@@ -10,7 +10,7 @@ package de.sudoq.persistence.sudoku.sudokuTypes
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
-import de.sudoq.model.xml.Xmlable
+import de.sudoq.persistence.Xmlable
 import java.util.*
 
 /**

@@ -3,7 +3,7 @@ package de.sudoq.persistence.sudoku
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
-import de.sudoq.model.xml.Xmlable
+import de.sudoq.persistence.Xmlable
 
 class PositionBE(var x: Int, var y: Int): Xmlable {
 

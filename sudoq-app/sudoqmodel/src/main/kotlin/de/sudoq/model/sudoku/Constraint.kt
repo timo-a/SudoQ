@@ -7,9 +7,6 @@
  */
 package de.sudoq.model.sudoku
 
-import de.sudoq.model.xml.XmlAttribute
-import de.sudoq.model.xml.XmlTree
-import de.sudoq.model.xml.Xmlable
 import java.util.*
 
 /**

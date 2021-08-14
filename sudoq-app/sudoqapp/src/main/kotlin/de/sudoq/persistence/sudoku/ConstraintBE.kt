@@ -6,7 +6,7 @@ import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.UniqueConstraintBehavior
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
-import de.sudoq.model.xml.Xmlable
+import de.sudoq.persistence.Xmlable
 import java.util.ArrayList
 
 //Todo instead of dummy values, use an interface with constructor(xt: XmlTree)

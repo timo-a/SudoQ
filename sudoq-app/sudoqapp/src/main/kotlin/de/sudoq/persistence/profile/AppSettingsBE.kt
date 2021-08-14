@@ -2,7 +2,7 @@ package de.sudoq.persistence.profile
 
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
-import de.sudoq.model.xml.Xmlable
+import de.sudoq.persistence.Xmlable
 
 class AppSettingsBE(var isDebugSet: Boolean = false,
                     var language: String = "dummyval"): Xmlable {

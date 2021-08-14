@@ -7,10 +7,6 @@
  */
 package de.sudoq.model.profile
 
-import de.sudoq.model.xml.XmlAttribute
-import de.sudoq.model.xml.XmlTree
-import de.sudoq.model.xml.Xmlable
-
 /**
  * This class represents general settings:
  * - whether debug mode is on

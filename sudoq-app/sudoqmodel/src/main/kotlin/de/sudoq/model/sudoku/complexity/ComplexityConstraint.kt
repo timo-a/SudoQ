@@ -7,10 +7,6 @@
  */
 package de.sudoq.model.sudoku.complexity
 
-import de.sudoq.model.xml.XmlAttribute
-import de.sudoq.model.xml.XmlTree
-import de.sudoq.model.xml.Xmlable
-
 /**
  * This class represents the requirements a sudoku must meet to qualify as a certain complexity.
  */

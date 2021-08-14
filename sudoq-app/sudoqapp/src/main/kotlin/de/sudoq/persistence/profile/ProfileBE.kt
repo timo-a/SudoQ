@@ -5,7 +5,7 @@ import de.sudoq.model.profile.AppSettings
 import de.sudoq.model.profile.Statistics
 import de.sudoq.model.xml.XmlAttribute
 import de.sudoq.model.xml.XmlTree
-import de.sudoq.model.xml.Xmlable
+import de.sudoq.persistence.Xmlable
 import de.sudoq.persistence.game.GameSettingsBE
 import de.sudoq.persistence.game.GameSettingsMapper
 

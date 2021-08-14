@@ -3,7 +3,7 @@ package de.sudoq.persistence.sudoku
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint
 import de.sudoq.model.xml.XmlTree
-import de.sudoq.model.xml.Xmlable
+import de.sudoq.persistence.Xmlable
 import java.util.HashMap
 
 class CCBBE(var specimen: MutableMap<Complexity?, ComplexityConstraint> = HashMap())
