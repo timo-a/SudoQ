@@ -13,10 +13,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
-import de.sudoq.persistence.sudokuType.SudokuTypeBE;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.persistence.sudokuType.SudokuTypeRepo;
 import kotlin.NotImplementedError;
+import de.sudoq.persistence.sudokuType.SudokuTypeBE;
+import de.sudoq.persistence.sudokuType.SudokuTypeRepo;
 
 public class SudokuTypeRepoTests {
 
