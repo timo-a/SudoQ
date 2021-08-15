@@ -1,105 +1,93 @@
-package de.sudoq.model.xml;
+package de.sudoq.persistence
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import de.sudoq.model.xml.XmlAttribute
+import de.sudoq.model.xml.XmlTree
+import org.amshove.kluent.*
+import org.junit.jupiter.api.Test
 
-import java.util.Iterator;
+class XmlTreeTests {
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+    @Test
+    fun testGetName() {
+        val tree = XmlTree("xyz")
+        tree.name `should be equal to` "xyz"
+    }
 
-import de.sudoq.model.xml.XmlAttribute;
-import de.sudoq.model.xml.XmlTree;
+    @Test
+    fun testGetContent() {
+        val tree = XmlTree("xyz", "some content")
+        tree.content `should be equal to` "some content"
+    }
 
-public class XmlTreeTests {
+    @Test
+    fun testGetNumberOfChildren() {
+        val tree = XmlTree("root")
+        tree.addChild(XmlTree("sub"))
+        tree.addChild(XmlTree("sub"))
+        tree.numberOfChildren `should be equal to` 2
+    }
 
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
+    @Test
+    fun testGetAttributeValue() {
+        val tree = XmlTree("root")
+        val attribute = XmlAttribute("xyzName", "xyzValue")
+        tree.addAttribute(attribute)
+        tree.getAttributeValue("xyzName") `should be equal to` "xyzValue"
+        tree.getAttributeValue("notExistingAttribute").`should not be null`()
+    }
 
-	@Test
-	public void testGetName() {
-		XmlTree tree = new XmlTree("xyz");
-		assertEquals(tree.getName(), "xyz");
-	}
+    @Test
+    fun testGetAttributes() {
+        val tree = XmlTree("root")
+        val attribute1 = XmlAttribute("attribute1", "value1")
+        val attribute2 = XmlAttribute("attribute2", "value2")
+        tree.addAttribute(attribute1)
+        tree.addAttribute(attribute2)
+        tree.addAttribute(attribute2)
+        var i = 0
+        val iterator = tree.getAttributes()
+        while (iterator.hasNext()) {
+            val attribute = iterator.next()
+            if (i == 0) {
+                attribute.name `should be equal to` "attribute1"
+                attribute.value `should be equal to` "value1"
+            } else if (i == 1) {
+                attribute.name `should be equal to` "attribute2"
+                attribute.value `should be equal to` "value2"
+            }
+            i++
+        }
+        i `should be equal to` 2
+    }
 
-	@Test
-	public void testGetContent() {
-		XmlTree tree = new XmlTree("xyz", "some content");
-		assertEquals(tree.getContent(), "some content");
-	}
+    @Test
+    fun testGetChildren() {
+        val tree = XmlTree("root")
+        val subtree1 = XmlTree("sub")
+        val subtree2 = XmlTree("sub")
+        tree.addChild(subtree1)
+        tree.addChild(subtree2)
+        var i = 0
+        val iterator: Iterator<XmlTree> = tree.getChildren()
+        while (iterator.hasNext()) {
+            iterator.next().name `should be equal to` "sub"
+            i++
+        }
+        i `should be equal to` 2
+    }
 
-	@Test
-	public void testGetNumberOfChildren() {
-		XmlTree tree = new XmlTree("root");
-		tree.addChild(new XmlTree("sub"));
-		tree.addChild(new XmlTree("sub"));
-		assertEquals(tree.getNumberOfChildren(), 2);
-	}
+    @Test
+    fun testUpdateAttribute1() {
+        val tree = XmlTree("root")
+        tree.addAttribute(XmlAttribute("attr", "first_value"))
+        tree.updateAttribute(XmlAttribute("attr", "second_value"))
+        tree.getAttributeValue("attr") `should be equal to` "second_value"
+    }
 
-	@Test
-	public void testGetAttributeValue() {
-		XmlTree tree = new XmlTree("root");
-		XmlAttribute attribute = new XmlAttribute("xyzName", "xyzValue");
-		tree.addAttribute(attribute);
-
-		assertEquals(tree.getAttributeValue("xyzName"), "xyzValue");
-		assertNull(tree.getAttributeValue("notExistingAttribute"));
-	}
-	
-	@Test
-	public void testGetAttributes() {
-		XmlTree tree = new XmlTree("root");
-		XmlAttribute attribute1 = new XmlAttribute("attribute1", "value1");
-		XmlAttribute attribute2 = new XmlAttribute("attribute2", "value2");
-		tree.addAttribute(attribute1);
-		tree.addAttribute(attribute2);
-		tree.addAttribute(attribute2);
-
-		int i = 0;
-		for (Iterator<XmlAttribute> iterator = tree.getAttributes(); iterator.hasNext();) {
-			XmlAttribute attribute = iterator.next();
-			if (i == 0) {
-				assertEquals(attribute.getName(), "attribute1");
-				assertEquals(attribute.getValue(), "value1");
-			} else if (i == 1) {
-				assertEquals(attribute.getName(), "attribute2");
-				assertEquals(attribute.getValue(), "value2");
-			}
-			i++;
-		}
-		assertEquals(i, 2);
-	}
-
-	@Test
-	public void testGetChildren() {
-		XmlTree tree = new XmlTree("root");
-		XmlTree subtree1 = new XmlTree("sub");
-		XmlTree subtree2 = new XmlTree("sub");
-		tree.addChild(subtree1);
-		tree.addChild(subtree2);
-
-		int i = 0;
-		for (Iterator<XmlTree> iterator = tree.getChildren(); iterator.hasNext();) {
-			assertEquals(iterator.next().getName(), "sub");
-			i++;
-		}
-		assertEquals(i, 2);
-	}
-
-	@Test
-	public void testUpdateAttribute1() {
-		XmlTree tree = new XmlTree("root");
-		tree.addAttribute(new XmlAttribute("attr", "first_value"));
-		tree.updateAttribute(new XmlAttribute("attr", "second_value"));
-		assertTrue(tree.getAttributeValue("attr").equals("second_value"));
-	}
-
-	@Test
-	public void testUpdateAttribute2() {
-		XmlTree tree = new XmlTree("root");
-		tree.updateAttribute(new XmlAttribute("attr", "first_value"));
-		assertTrue(tree.getAttributeValue("attr").equals("first_value"));
-	}
+    @Test
+    fun testUpdateAttribute2() {
+        val tree = XmlTree("root")
+        tree.updateAttribute(XmlAttribute("attr", "first_value"))
+        tree.getAttributeValue("attr") `should be equal to` "first_value"
+    }
 }

@@ -1,44 +1,33 @@
-package de.sudoq.model.xml;
+package de.sudoq.persistence
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import de.sudoq.model.xml.XmlAttribute
+import org.amshove.kluent.*
+import org.junit.jupiter.api.Test
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+class XmlAttributeTests {
 
-import de.sudoq.model.xml.XmlAttribute;
+    @Test
+    fun testConstructorStringStringIllegalArgumentException2() {
+        invoking { XmlAttribute("", "value") }
+            .`should throw`(IllegalArgumentException::class)
+    }
 
-public class XmlAttributeTests {
+    @Test
+    fun testGetName() {
+        val attribute = XmlAttribute("xyzName", "")
+        attribute.name `should be equal to` "xyzName"
+    }
 
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
+    @Test
+    fun testGetValue() {
+        val attribute = XmlAttribute("xyzName", "xyzValue")
+        attribute.value `should be equal to`  "xyzValue"
+    }
 
-	private String returnNull(){return null;}
-
-
-	@Test
-	public void testConstructorStringStringIllegalArgumentException2() {
-		thrown.expect(IllegalArgumentException.class);
-		new XmlAttribute("", "value");
-	}
-
-
-	@Test
-	public void testGetName() {
-		XmlAttribute attribute = new XmlAttribute("xyzName", "");
-		assertEquals(attribute.getName(), "xyzName");
-	}
-
-	@Test
-	public void testGetValue() {
-		XmlAttribute attribute = new XmlAttribute("xyzName", "xyzValue");
-		assertEquals(attribute.getValue(), "xyzValue");
-	}
-
-	@Test
-	public void testIsSameAttribute() {
-		assertTrue(new XmlAttribute("xyzName", "value").isSameAttribute(new XmlAttribute("xyzName", "differentvalue")));
-	}
-
+    @Test
+    fun testIsSameAttribute() {
+        val a = XmlAttribute("xyzName", "value")
+        val b = XmlAttribute("xyzName","differentvalue")
+        a.isSameAttribute(b).`should be true`()
+    }
 }
