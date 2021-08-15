@@ -7,9 +7,8 @@
  */
 package de.sudoq.persistence.game
 
-import de.sudoq.model.ObservableModelImpl
 import de.sudoq.model.actionTree.Action
-import de.sudoq.model.xml.XmlAttribute
+import de.sudoq.persistence.XmlAttribute
 import de.sudoq.model.xml.XmlTree
 import java.util.*
 

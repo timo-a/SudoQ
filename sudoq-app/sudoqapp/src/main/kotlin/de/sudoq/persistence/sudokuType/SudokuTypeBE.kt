@@ -5,7 +5,7 @@ import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.sudokuTypes.ComplexityConstraintBuilder
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
-import de.sudoq.model.xml.XmlAttribute
+import de.sudoq.persistence.XmlAttribute
 import de.sudoq.model.xml.XmlTree
 import de.sudoq.persistence.Xmlable
 import de.sudoq.persistence.sudoku.*
@@ -72,8 +72,8 @@ class SudokuTypeBE : Xmlable {
                 standardAllocationFactor.toString()
             )
         )
-        representation.addChild(size!!.toXmlTree("size"))
-        representation.addChild(blockSize.toXmlTree("blockSize"))
+        representation.addChild(PositionMapper.toBE(size!!).toXmlTree("size"))
+        representation.addChild(PositionMapper.toBE(blockSize).toXmlTree("blockSize"))
         for (c in constraints) {
             representation.addChild(ConstraintMapper.toBE(c).toXmlTree())
         }

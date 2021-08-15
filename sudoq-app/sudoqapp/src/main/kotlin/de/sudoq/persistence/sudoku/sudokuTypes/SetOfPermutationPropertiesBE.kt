@@ -1,7 +1,7 @@
 package de.sudoq.persistence.sudoku.sudokuTypes
 
 import de.sudoq.model.sudoku.sudokuTypes.PermutationProperties
-import de.sudoq.model.xml.XmlAttribute
+import de.sudoq.persistence.XmlAttribute
 import de.sudoq.model.xml.XmlTree
 import de.sudoq.persistence.Xmlable
 

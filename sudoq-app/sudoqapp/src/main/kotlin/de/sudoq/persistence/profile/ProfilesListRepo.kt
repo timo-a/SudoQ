@@ -2,7 +2,7 @@ package de.sudoq.persistence.profile
 
 import de.sudoq.model.persistence.xml.profile.IProfilesListRepo
 import de.sudoq.model.profile.Profile
-import de.sudoq.model.xml.XmlAttribute
+import de.sudoq.persistence.XmlAttribute
 import de.sudoq.model.xml.XmlHelper
 import de.sudoq.model.xml.XmlTree
 import java.io.File

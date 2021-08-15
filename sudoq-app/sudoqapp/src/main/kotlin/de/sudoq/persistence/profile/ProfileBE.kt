@@ -3,7 +3,7 @@ package de.sudoq.persistence.profile
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.profile.AppSettings
 import de.sudoq.model.profile.Statistics
-import de.sudoq.model.xml.XmlAttribute
+import de.sudoq.persistence.XmlAttribute
 import de.sudoq.model.xml.XmlTree
 import de.sudoq.persistence.Xmlable
 import de.sudoq.persistence.game.GameSettingsBE

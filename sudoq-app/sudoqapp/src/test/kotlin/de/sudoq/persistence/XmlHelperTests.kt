@@ -1,8 +1,5 @@
 package de.sudoq.persistence
 
-import de.sudoq.model.xml.XmlAttribute
-import de.sudoq.model.xml.XmlHelper
-import de.sudoq.model.xml.XmlTree
 import org.amshove.kluent.*
 import org.junit.jupiter.api.Test
 import java.io.File

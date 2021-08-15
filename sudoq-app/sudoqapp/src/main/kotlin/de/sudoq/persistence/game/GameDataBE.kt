@@ -14,7 +14,7 @@ import de.sudoq.persistence.game.GameBE.Companion.PLAYED_AT
 import de.sudoq.persistence.game.GameBE.Companion.SUDOKU_TYPE
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
-import de.sudoq.model.xml.XmlAttribute
+import de.sudoq.persistence.XmlAttribute
 import de.sudoq.model.xml.XmlTree
 import java.util.*
 

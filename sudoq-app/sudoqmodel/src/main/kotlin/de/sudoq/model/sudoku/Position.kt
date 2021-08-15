@@ -7,9 +7,6 @@
  */
 package de.sudoq.model.sudoku
 
-import de.sudoq.model.xml.XmlAttribute
-import de.sudoq.model.xml.XmlTree
-
 /**
  * A two dimensional cartesian Coordinate.
  * Implemented as Flyweight (not quite, but Position.get(x,y) gives memoized objects)
@@ -69,16 +66,6 @@ class Position(var x: Int, var y: Int) {
     override fun toString(): String {
         return "$x, $y"
     }
-
-
-
-    fun toXmlTree(name: String): XmlTree {
-        val representation = XmlTree(name)
-        representation.addAttribute(XmlAttribute("x", "" + x))
-        representation.addAttribute(XmlAttribute("y", "" + y))
-        return representation
-    }
-
 
     companion object {
         /**

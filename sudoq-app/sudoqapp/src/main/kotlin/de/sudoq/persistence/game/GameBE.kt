@@ -9,7 +9,7 @@ import de.sudoq.model.game.GameStateHandler
 import de.sudoq.model.persistence.IRepo
 import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
-import de.sudoq.model.xml.XmlAttribute
+import de.sudoq.persistence.XmlAttribute
 import de.sudoq.model.xml.XmlTree
 import de.sudoq.persistence.XmlableWithRepo
 import de.sudoq.persistence.sudoku.SudokuBE

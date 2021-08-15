@@ -1,6 +1,5 @@
 package de.sudoq.model.game
 
-import de.sudoq.model.xml.XmlTree
 import org.amshove.kluent.`should be false`
 import org.amshove.kluent.`should be true`
 import org.junit.jupiter.api.Assertions

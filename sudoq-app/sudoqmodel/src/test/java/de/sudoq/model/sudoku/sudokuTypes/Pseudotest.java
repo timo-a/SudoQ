@@ -13,7 +13,6 @@ import de.sudoq.model.Utility;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
-import de.sudoq.model.xml.XmlHelper;
 
 public class Pseudotest {
 

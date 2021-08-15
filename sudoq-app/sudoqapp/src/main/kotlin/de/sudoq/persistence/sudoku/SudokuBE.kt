@@ -7,7 +7,7 @@ import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
-import de.sudoq.model.xml.XmlAttribute
+import de.sudoq.persistence.XmlAttribute
 import de.sudoq.model.xml.XmlTree
 import de.sudoq.persistence.XmlableWithRepo
 import java.util.*

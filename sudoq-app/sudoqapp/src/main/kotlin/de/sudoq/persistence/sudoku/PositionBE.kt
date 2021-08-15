@@ -1,14 +1,18 @@
 package de.sudoq.persistence.sudoku
 
 import de.sudoq.model.sudoku.Position
-import de.sudoq.model.xml.XmlAttribute
-import de.sudoq.model.xml.XmlTree
+import de.sudoq.persistence.XmlAttribute
+import de.sudoq.persistence.XmlTree
 import de.sudoq.persistence.Xmlable
 
 class PositionBE(var x: Int, var y: Int): Xmlable {
 
     override fun toXmlTree(): XmlTree {
-        val representation = XmlTree("position")
+        return toXmlTree("position")
+    }
+
+    fun toXmlTree(name: String): XmlTree {
+        val representation = XmlTree(name)
         representation.addAttribute(XmlAttribute("x", "" + x))
         representation.addAttribute(XmlAttribute("y", "" + y))
         return representation

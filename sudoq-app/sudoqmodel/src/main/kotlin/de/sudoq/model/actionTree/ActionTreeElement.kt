@@ -8,8 +8,6 @@
 package de.sudoq.model.actionTree
 
 import de.sudoq.model.ObservableModelImpl
-import de.sudoq.model.xml.XmlAttribute
-import de.sudoq.model.xml.XmlTree
 import java.util.*
 
 /**

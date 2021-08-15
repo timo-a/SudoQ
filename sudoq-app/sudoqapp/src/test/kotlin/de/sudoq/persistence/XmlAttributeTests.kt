@@ -1,6 +1,5 @@
 package de.sudoq.persistence
 
-import de.sudoq.model.xml.XmlAttribute
 import org.amshove.kluent.*
 import org.junit.jupiter.api.Test
 
