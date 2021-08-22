@@ -63,7 +63,7 @@ public class SudokuMockUps {
 
 
     public static Sudoku getLockedCandidates1(){
-        //http://hodoku.sourceforge.net/en/tech_intersections.php
+        //http://hodoku.sourceforge.net/en/tech_intersections.php //sudoku_1 in resources
         String pattern = "9    8     4       ¹²   ¹²⁷  ³⁶       ¹³⁵  ⁶⁷   ⁵⁷    \n"
                        + "³⁷   ⁶⁷    2       5    ¹⁷⁸  ³⁶       ¹³⁹  4    ⁷⁸⁹   \n"
                        + "³⁵⁷  ⁵⁶⁷   1       9    ⁷⁸   4        ³⁵   ⁶⁷⁸  2     \n"
