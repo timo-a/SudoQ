@@ -3,7 +3,7 @@ package de.sudoq.persistence.sudokuType
 import de.sudoq.model.persistence.IRepo
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
-import de.sudoq.model.xml.XmlHelper
+import de.sudoq.persistence.XmlHelper
 import java.io.File
 
 class SudokuTypeRepo(private val sudokuDir: File) : IRepo<SudokuType> {

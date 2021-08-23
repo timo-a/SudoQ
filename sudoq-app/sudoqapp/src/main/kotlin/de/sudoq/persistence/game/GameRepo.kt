@@ -7,7 +7,7 @@ import de.sudoq.model.persistence.IRepo
 import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
-import de.sudoq.model.xml.XmlHelper
+import de.sudoq.persistence.XmlHelper
 import java.io.File
 import java.io.IOException
 

@@ -7,7 +7,7 @@ import de.sudoq.model.persistence.xml.profile.IProfilesListRepo
 import de.sudoq.model.profile.Profile
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.profile.Statistics
-import de.sudoq.model.xml.XmlHelper
+import de.sudoq.persistence.XmlHelper
 import de.sudoq.persistence.XmlTree
 import java.io.File
 import java.io.IOException

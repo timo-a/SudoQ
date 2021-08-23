@@ -1,9 +1,9 @@
 package de.sudoq.persistence.game
 
 import de.sudoq.model.game.GameData
-import de.sudoq.model.xml.XmlHelper
 import de.sudoq.persistence.XmlTree
 import de.sudoq.model.persistence.xml.game.IGamesListRepo
+import de.sudoq.persistence.XmlHelper
 import de.sudoq.persistence.game.GameDataBE
 import de.sudoq.persistence.game.GameDataMapper
 import java.io.File

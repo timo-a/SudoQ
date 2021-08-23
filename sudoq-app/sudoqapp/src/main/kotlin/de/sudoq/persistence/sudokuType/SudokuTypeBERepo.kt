@@ -4,7 +4,7 @@ import de.sudoq.model.persistence.IRepo
 import de.sudoq.persistence.sudokuType.SudokuTypeBE
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
-import de.sudoq.model.xml.XmlHelper
+import de.sudoq.persistence.XmlHelper
 import java.io.File
 
 class SudokuTypeBERepo(private val sudokuDir: File) : IRepo<SudokuTypeBE> {
