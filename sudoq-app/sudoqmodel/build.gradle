@@ -44,12 +44,12 @@ configurations {
     othertestsImplementation.extendsFrom testImplementation
     othertestsRuntime.extendsFrom testRuntime
 }
-task otherTest(type: Test) {
+task secondTest(type: Test) {
     testClassesDirs = sourceSets.othertests.output.classesDirs
     classpath = sourceSets.othertests.runtimeClasspath
 }
 
-check.dependsOn otherTest
+check.dependsOn secondTest
 
 //solverTests
 sourceSets {
@@ -71,6 +71,14 @@ task solverTest(type: Test) {
 
     testClassesDirs = sourceSets.solvertests.output.classesDirs
     classpath = sourceSets.solvertests.runtimeClasspath
+}
+
+tasks.named('secondTest') {
+    // Use JUnit Platform for unit tests.
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
 
 check.dependsOn solverTest
