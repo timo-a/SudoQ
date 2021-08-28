@@ -5,10 +5,14 @@ import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.complexity.Complexity
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import java.io.File
 import java.util.stream.IntStream
 
 open class PrettySudokuRepo(protected val path: File) : IRepo<Sudoku> {
+
+    private val typeRepo = SudokuTypeRepo(File("SudokuTypes"))
+    val type = typeRepo.read(SudokuTypes.standard9x9.ordinal)
 
     override fun create(): Sudoku {
         TODO("Not yet implemented")
@@ -48,7 +52,7 @@ open class PrettySudokuRepo(protected val path: File) : IRepo<Sudoku> {
                     }
             }
         }
-        val sudoku = Sudoku(id, 0,null, complexity, pos2cellMap )
+        val sudoku = Sudoku(id, 0,type, complexity, pos2cellMap )
         return sudoku
     }
 

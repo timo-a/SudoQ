@@ -1,7 +1,7 @@
 package de.sudoq.persistence
 
 import de.sudoq.model.persistence.IRepo
-import de.sudoq.model.xml.XmlTree
+import de.sudoq.persistence.XmlTree
 
 /**
  * A class that can be (de-)serialised to/from XML.

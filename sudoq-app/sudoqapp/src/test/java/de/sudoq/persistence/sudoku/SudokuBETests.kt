@@ -11,8 +11,8 @@ import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import testutils.SudokuTypeProvider
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
-import de.sudoq.model.xml.XmlHelper
-import de.sudoq.model.xml.XmlTree
+import de.sudoq.persistence.XmlHelper
+import de.sudoq.persistence.XmlTree
 
 class SudokuBETests {
 

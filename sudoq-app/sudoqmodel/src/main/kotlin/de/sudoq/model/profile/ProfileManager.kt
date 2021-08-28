@@ -12,7 +12,6 @@ import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.persistence.IRepo
 import de.sudoq.model.persistence.xml.profile.IProfilesListRepo
-import de.sudoq.model.xml.*
 import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList

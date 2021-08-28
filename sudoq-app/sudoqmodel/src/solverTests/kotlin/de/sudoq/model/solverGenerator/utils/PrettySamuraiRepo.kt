@@ -1,12 +1,10 @@
 package de.sudoq.model.solverGenerator.utils
 
-import de.sudoq.model.sudoku.Sudoku
 import java.io.File
 
-class PrettySamuraiRepo(path: File) : PrettySudokuRepo(path) {
+class PrettySamuraiRepo(path: File) : PrettySudokuRepo2(path) {
 
     fun parseSudoku(){
-        val s = Sudoku()
-        s.
+        TODO()
     }
 }

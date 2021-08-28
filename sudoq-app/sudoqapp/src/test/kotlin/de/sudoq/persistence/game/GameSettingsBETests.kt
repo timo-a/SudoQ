@@ -2,7 +2,7 @@ package de.sudoq.persistence.game
 
 import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.Assistances.*
-import de.sudoq.model.xml.XmlTree
+import de.sudoq.persistence.XmlTree
 import org.amshove.kluent.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

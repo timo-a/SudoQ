@@ -15,9 +15,7 @@ import de.sudoq.model.sudoku.SudokuManager
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
-import de.sudoq.model.xml.*
 import java.io.File
-import java.text.SimpleDateFormat
 import java.util.*
 
 /**
