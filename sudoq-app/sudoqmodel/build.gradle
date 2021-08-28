@@ -1,10 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'kotlin'
 
-/*plugins {//test
-    // Apply the java-library plugin to add support for Java Library
-    id 'java-library'
-}*///test end
 
 targetCompatibility = '1.7'
 sourceCompatibility = '1.7'
@@ -12,18 +8,14 @@ sourceCompatibility = '1.7'
 //* for debug of creating jar
 dependencies {
     implementation 'junit:junit:4.12' //todo switch to junit5 entirely
-    //testImplementation "org.junit.vintage:junit-vintage-engine:5.4.0"
-    //can't make it work -> migrate directly
+    testImplementation "org.junit.vintage:junit-vintage-engine:5.4.0"
 
-    //implementation 'org.testng:testng:6.9.6'
-    testImplementation "org.junit.jupiter:junit-jupiter-api:5.4.0"
-    testImplementation "org.junit.jupiter:junit-jupiter-params:5.4.0"
+    testImplementation "org.junit.jupiter:junit-jupiter:5.4.0"
     testImplementation "org.amshove.kluent:kluent:1.67"
     testImplementation "io.mockk:mockk:1.9"
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.0'
 
-//testCompile 'junit:junit:4.7'
-testImplementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
+    //testCompile 'junit:junit:4.7'
+    testImplementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
     testImplementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
