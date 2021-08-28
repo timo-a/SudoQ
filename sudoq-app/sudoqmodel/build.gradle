@@ -34,6 +34,7 @@ test{
 sourceSets {
     othertests {
         java.srcDir "$projectDir/src/otherTests/java"
+        kotlin.srcDir "$projectDir/src/otherTests/kotlin"
         resources.srcDir "$projectDir/src/otherTests/resources"
         compileClasspath += main.output + test.output
         runtimeClasspath += main.output + test.output
@@ -54,9 +55,8 @@ check.dependsOn secondTest
 //solverTests
 sourceSets {
     solvertests {
-        java.srcDirs "$projectDir/src/solverTests/java"
-//        java.srcDirs = [ "$projectDir/src/solverTests/java"
-//                       , "$projectDir/src/solverTests/kotlin"]
+        java.srcDir "$projectDir/src/solverTests/java"
+        kotlin.srcDir "$projectDir/src/solverTests/kotlin"
         resources.srcDir "$projectDir/src/solverTests/resources"
         compileClasspath += main.output + test.output
         runtimeClasspath += main.output + test.output
@@ -67,8 +67,8 @@ configurations {
     solvertestsImplementation.extendsFrom testImplementation
     solvertestsRuntime.extendsFrom testRuntime
 }
-task solverTest(type: Test) {
 
+task solverTest(type: Test) {
     testClassesDirs = sourceSets.solvertests.output.classesDirs
     classpath = sourceSets.solvertests.runtimeClasspath
 }
