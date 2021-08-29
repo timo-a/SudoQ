@@ -73,7 +73,7 @@ task solverTest(type: Test) {
     classpath = sourceSets.solvertests.runtimeClasspath
 }
 
-tasks.named('secondTest') {
+tasks.named('solverTest') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
     testLogging {

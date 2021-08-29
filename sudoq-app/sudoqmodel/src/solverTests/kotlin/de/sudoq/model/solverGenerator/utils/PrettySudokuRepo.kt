@@ -1,39 +1,43 @@
 package de.sudoq.model.solverGenerator.utils
 
-import de.sudoq.model.persistence.IRepo
-import de.sudoq.model.sudoku.Cell
-import de.sudoq.model.sudoku.Position
+import de.sudoq.model.solverGenerator.utils.parser.StandardParser
 import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import java.io.File
-import java.util.stream.IntStream
+import java.nio.file.Path
 
-open class PrettySudokuRepo(protected val path: File) : IRepo<Sudoku> {
+open class PrettySudokuRepo(typeEnum: SudokuTypes) {
 
     private val typeRepo = SudokuTypeRepo(File("SudokuTypes"))
-    val type = typeRepo.read(SudokuTypes.standard9x9.ordinal)
+    val type = typeRepo.read(typeEnum.ordinal)
 
-    override fun create(): Sudoku {
-        TODO("Not yet implemented")
-    }
-
-
-
-    fun read(id: Int, complexity: Complexity): Sudoku {
-        val ls = loadAndClean(id)
+    fun read(relPath: Path, complexity: Complexity, id: Int = 0): Sudoku {
+        val ls = loadAndClean(relPath)
         val sudoku = parseSudoku(id, complexity, ls)
-
-        TODO("Not yet implemented")
+        return sudoku
     }
 
-    protected fun loadAndClean(id: Int): List<List<String>> {
-        val f =  File(path.absolutePath, "sudoku_$id.pretty")
+    protected open fun parseSudoku(
+        id: Int,
+        complexity: Complexity,
+        ls: List<List<String>>
+    ): Sudoku {
+        val parser = StandardParser()
+        val sudoku = parser.parseSudoku(id, type, complexity, ls)
+        return sudoku
+    }
+
+
+    protected fun loadAndClean(relPath: Path): List<List<String>> {
+        val f =  getSudokuFile(relPath)
         val ls: List<List<String>> = f.readLines()
             .map {
                 it.replace("|", "")
-                .replace("-", "")
-                .replace("+", "")
+                    .replace("-", "")
+                    .replace("+", "")
+                    .replace("'", "")
+                    .trim()
             }.filter {
                 it.isNotEmpty()
             }.map {
@@ -43,53 +47,13 @@ open class PrettySudokuRepo(protected val path: File) : IRepo<Sudoku> {
         return ls
     }
 
-    protected fun parseSudoku(id:Int, complexity: Complexity, ss: List<List<String>>): Sudoku {
-        val pos2cellMap = object: HashMap<Position, Cell>(){
-            init {
-                for ((y, row) in ss.withIndex())
-                    for ((x, cellString) in row.withIndex()) {
-                        put(Position.get(x,y), parseCell(y*0+x, cellString))
-                    }
-            }
-        }
-        val sudoku = Sudoku(id, 0,type, complexity, pos2cellMap )
-        return sudoku
-    }
-
-    protected fun parseCell(id: Int, s: String): Cell {
-        var c = Cell(id,9)
-        if(s.length == 1 && s.all { it.isDigit() }) {
-            c.currentValue = parseValue(s)
-        } else {
-            s.forEach {
-                if (it in "¹²³⁴⁵⁶⁷⁸⁹")
-                    c.toggleNote(it - '¹')
-            }
-        }
-        return c
-    }
-
-    protected fun parseValue(s: String) :Int {
-        return s.toInt()
+    open protected fun getSudokuFile(path: Path): File {
+        val classLoader = javaClass.classLoader
+        return File(classLoader!!.getResource(path.toString()).file)
     }
 
 
 
-    override fun update(t: Sudoku): Sudoku {
-        TODO("Not yet implemented")
-    }
-
-    override fun delete(id: Int) {
-        TODO("Not yet implemented")
-    }
-
-    override fun ids(): List<Int> {
-        TODO("Not yet implemented")
-    }
-
-    override fun read(id: Int): Sudoku {
-        TODO("Not yet implemented")
-    }
 
 
 }

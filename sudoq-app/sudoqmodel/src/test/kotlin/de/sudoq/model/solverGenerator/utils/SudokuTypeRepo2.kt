@@ -7,7 +7,7 @@ import java.io.File
 class SudokuTypeRepo2(private val sudokuTypesDir: File): SudokuTypeRepo(sudokuTypesDir) {
 
     override fun getSudokuTypeFile(type: SudokuTypes): File {
-        val path = "${sudokuTypesDir.absolutePath}${File.separator}$type.xml"
+        val path = "$sudokuTypesDir${File.separator}$type.xml"
         val classLoader = javaClass.classLoader
         return File(classLoader!!.getResource(path).file)
     }

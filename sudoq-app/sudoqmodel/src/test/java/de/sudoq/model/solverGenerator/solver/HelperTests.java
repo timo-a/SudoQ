@@ -34,44 +34,6 @@ public class HelperTests {
 	}
 
 
-	@Test
-	public void testLockedUpdateOne() {
-        /*¹²³⁴⁵⁶⁷⁸⁹
-          9    8     4 | ¹²   ¹²⁷  ³⁶ | ¹³⁵ ⁶⁷  ⁵⁷
-          ³⁷   ⁶⁷    2 | 5    ¹⁷⁸  ³⁶ | ¹³⁹ 4   ⁷⁸⁹
-          ³⁵⁷  ⁵⁶⁷   1 | 9    ⁷⁸   4  | ³⁵  ⁶⁷⁸ 2
-          -------------+--------------|--------------
-          ⁵⁸   ¹⁴⁵   6 | ¹⁴⁸  9    7  | 2   3   ⁴⁵⁸
-          ⁵⁷⁸  ¹⁴⁵⁷  3 | 6    ¹⁴⁸  2  | ⁵⁹  ⁷⁸  ⁴⁵⁷⁸⁹
-          2    ⁴⁷    9 | ⁴⁸   3    5  | 6   1   ⁴⁷⁸
-          -------------|--------------+--------------
-          1    9     5 | 7    6    8  | 4   2   3
-          4    2     7 | 3    5    1  | 8   9   6
-          6    3     8 | ²⁴   ²⁴   9  | 7   5   1
-          expected to find (6,2) kann 5 gelöscht werden
-        */
-		SolverSudoku sudoku = new SolverSudoku(SudokuMockUps.getLockedCandidates1());
-
-		SolveHelper helper = new LockedCandandidatesHelper(sudoku, sudoku.getComplexityValue());
-
-		List<SolveDerivation> sdlist = new ArrayList();
-
-		assertTrue(sudoku.getCurrentCandidates(Position.get(6,2)).isSet(4));
-
-		while (helper.update(true)){
-			sdlist.add(helper.getDerivation());
-			System.out.println("print derivation:");
-			System.out.println(sdlist.get(sdlist.size()-1));
-
-		}
-		/* make sure the solution where "5" is removed from field "7,3" is among the found solutions */
-		assertFalse(sudoku.getCurrentCandidates(Position.get(6,2)).isSet(4));
-
-		boolean twoFindings = sdlist.size()==2;
-
-		assertTrue(twoFindings);
-
-	}
 
 	@Test
 	public void testXWing(){
