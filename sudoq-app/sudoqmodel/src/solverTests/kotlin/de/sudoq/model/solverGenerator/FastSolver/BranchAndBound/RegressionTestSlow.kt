@@ -70,7 +70,7 @@ class RegressionTestSlow {
      * Braucht ewig
      *
      */
-    @Test
+    @Test(timeout = 5 * 60 * 1000)
     fun test2_fastbacktrack() {
 
         val repo = PrettyStandard16x16Repo()
