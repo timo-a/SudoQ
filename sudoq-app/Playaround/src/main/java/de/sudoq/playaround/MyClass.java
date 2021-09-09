@@ -1,17 +1,11 @@
 package de.sudoq.playaround;
 
-import java.io.File;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
-import de.sudoq.model.files.FileManager;
-import de.sudoq.model.solverGenerator.solution.Solution;
-import de.sudoq.model.solverGenerator.solution.SolveDerivation;
-import de.sudoq.model.solverGenerator.solver.Solver;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 

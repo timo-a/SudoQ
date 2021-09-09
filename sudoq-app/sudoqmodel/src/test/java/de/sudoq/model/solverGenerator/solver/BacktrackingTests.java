@@ -6,14 +6,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 
-import java.io.IOException;
-
-import de.sudoq.model.Utility;
-import de.sudoq.model.files.FileManager;
-import de.sudoq.model.profile.Profile;
+import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.helper.Backtracking;
 import de.sudoq.model.sudoku.Position;
@@ -21,30 +15,7 @@ import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
-public class BacktrackingTests {
-
-	@BeforeClass
-	public static void init() throws IOException {
-		Utility.copySudokus();
-		Profile.getInstance();
-	}
-
-	@AfterClass
-	public static void clean() throws IOException, SecurityException, NoSuchFieldException, IllegalArgumentException,
-			IllegalAccessException {
-        java.lang.reflect.Field f = FileManager.class.getDeclaredField("profiles");
-        f.setAccessible(true);
-        f.set(null, null);
-        java.lang.reflect.Field s = FileManager.class.getDeclaredField("sudokus");
-        s.setAccessible(true);
-        s.set(null, null);
-        java.lang.reflect.Field p = Profile.class.getDeclaredField("instance");
-        p.setAccessible(true);
-        p.set(null, null);
-        FileManager.deleteDir(Utility.profiles);
-        FileManager.deleteDir(Utility.sudokus);
-    }
-
+public class BacktrackingTests extends TestWithInitCleanforSingletons {
 
 	@Test
 	public void testInitialisation() {
@@ -53,18 +24,9 @@ public class BacktrackingTests {
 		assertEquals(back.getComplexityScore(), 10);
 	}
 
-	@Test
-	public void testIllegalArguments() {
-		try {
-			new Backtracking(null, 5);
-			fail("No IllegalArgumentException, altough sudoku was null");
-		} catch (IllegalArgumentException e) {
-		}
-		try {
-			new Backtracking(new SolverSudoku(new Sudoku(TypeBuilder.get99())), -2);
-			fail("No IllegalArgumentException, complexity was < 0");
-		} catch (IllegalArgumentException e) {
-		}
+	@Test(expected = IllegalArgumentException.class)
+	public void testIInitialisationWithInvalidComplexity() {
+		new Backtracking(new SolverSudoku(new Sudoku(TypeBuilder.get99())), -2);
 	}
 
 	@Test
@@ -79,7 +41,7 @@ public class BacktrackingTests {
 		assertEquals(deriv.getCellIterator().next().getPosition(), Position.get(1, 3));
 	}
 
-	@Test
+	@Test(timeout = 60)
 	public void testAlreadySolved() {
 		SolverSudoku sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
 		sudoku.setComplexity(Complexity.arbitrary);

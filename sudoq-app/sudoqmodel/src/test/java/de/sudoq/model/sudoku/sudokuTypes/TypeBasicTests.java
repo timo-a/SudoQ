@@ -46,7 +46,6 @@ public class TypeBasicTests {
 		assertTrue(sudoku1.getSudokuType().checkSudoku(sudoku1));
 		sudoku1.getCell(Position.get(0, 0)).setCurrentValue(5);
 		assertFalse(sudoku1.getSudokuType().checkSudoku(sudoku1));
-		assertFalse(sudoku1.getSudokuType().checkSudoku(null));
 
 	}
 

@@ -6,6 +6,8 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 
@@ -21,15 +23,15 @@ public class ActionTreeTests {
 		assertNotNull(at.getRoot());
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void testAddingElementsMountOnNull() {
 		ActionTree at = new ActionTree();
 		ActionFactory factory = new SolveActionFactory();
-		Field field = new Field(-1, 1);
+		Cell cell = new Cell(-1, 1);
 
 		ActionTreeElement ate = at.getRoot();
 
-		at.add(factory.createAction(2, field), null);
+		at.add(factory.createAction(2, cell), null);
 	}
 
 	@Test
@@ -40,12 +42,6 @@ public class ActionTreeTests {
 
 		ActionTreeElement ate = at.getRoot();//add(factory.createAction(1, field), null);
 		assertEquals(ate.getId(), 1);
-
-		try {//TODO extract to own method
-			at.add(factory.createAction(2, cell), null);
-			fail("No Exception thrown");
-		} catch (IllegalArgumentException e) {
-		}
 
 		assertEquals(at.add(factory.createAction(1, cell), ate).getId(), 2);
 
@@ -101,7 +97,7 @@ public class ActionTreeTests {
 		assertNull(at.getElement(-2));
 	}
 
-	@Test
+	//@Test method no longer exists -> removed
 	public void testConsistencyCheck() {
 		ActionTree at = new ActionTree();
 		ActionFactory factory = new SolveActionFactory();
@@ -111,10 +107,10 @@ public class ActionTreeTests {
 		ActionTreeElement ate2 = at.add(factory.createAction(1, cell), ate1);
 		ActionTreeElement ate3 = at.add(factory.createAction(1, cell), ate2);
 		at.add(factory.createAction(1, cell), ate2);
-		assertTrue(at.isConsistent());
+		//assertTrue(at.isConsistent());
 
 		ate3.addChild(ate1);
-		assertFalse(at.isConsistent());
+		//assertFalse(at.isConsistent());
 	}
 
 	// AT170
@@ -135,20 +131,20 @@ public class ActionTreeTests {
 		ActionTreeElement ate5 =       at.add(factory.createAction(2, cell3), ate2);
 		ActionTreeElement ate6 =          at.add(factory.createAction(1, cell4), ate5);
 
-		assertArrayEquals(new ActionTreeElement[] { ate4, ate3, ate2, ate5, ate6 }, ActionTree.findPath(ate4, ate6)
-				.toArray());
+		assertArrayEquals(new ActionTreeElement[] { ate4, ate3, ate2, ate5, ate6 },
+				ActionTree.Companion.findPath(ate4, ate6).toArray());
 
-		assertArrayEquals(new ActionTreeElement[] { ate6, ate5, ate2 }, ActionTree.findPath(ate6, ate2).toArray());
+		assertArrayEquals(new ActionTreeElement[] { ate6, ate5, ate2 }, ActionTree.Companion.findPath(ate6, ate2).toArray());
 
-		assertArrayEquals(new ActionTreeElement[] { ate2, ate5, ate6 }, ActionTree.findPath(ate2, ate6).toArray());
+		assertArrayEquals(new ActionTreeElement[] { ate2, ate5, ate6 }, ActionTree.Companion.findPath(ate2, ate6).toArray());
 
-		assertArrayEquals(new ActionTreeElement[] { ate6, ate5, ate2, ate1 }, ActionTree.findPath(ate6, ate1).toArray());
+		assertArrayEquals(new ActionTreeElement[] { ate6, ate5, ate2, ate1 }, ActionTree.Companion.findPath(ate6, ate1).toArray());
 
-		assertArrayEquals(new ActionTreeElement[] { ate1, ate2, ate5, ate6 }, ActionTree.findPath(ate1, ate6).toArray());
+		assertArrayEquals(new ActionTreeElement[] { ate1, ate2, ate5, ate6 }, ActionTree.Companion.findPath(ate1, ate6).toArray());
 
-		assertArrayEquals(new ActionTreeElement[] {}, ActionTree.findPath(ate6, ate6).toArray());
+		assertArrayEquals(new ActionTreeElement[] {}, ActionTree.Companion.findPath(ate6, ate6).toArray());
 
-		assertArrayEquals(new ActionTreeElement[] {}, ActionTree.findPath(ate1, ate1).toArray());
+		assertArrayEquals(new ActionTreeElement[] {}, ActionTree.Companion.findPath(ate1, ate1).toArray());
 	}
 
 
@@ -167,7 +163,7 @@ public class ActionTreeTests {
 		ActionTreeElement ate3 = at2.getRoot();
 		ActionTreeElement ate4 = at2.add(factory.createAction(2, cell), ate3);
 
-		List<ActionTreeElement> path = ActionTree.findPath(a1, b1);
+		List<ActionTreeElement> path = ActionTree.Companion.findPath(ate2, ate4);
 		assertTrue(path.isEmpty());//return empty list because elements have same id
 
 	}

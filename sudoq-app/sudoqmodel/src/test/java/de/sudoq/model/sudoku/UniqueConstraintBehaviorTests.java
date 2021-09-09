@@ -3,17 +3,24 @@ package de.sudoq.model.sudoku;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Test;
 
+import de.sudoq.model.TestWithInitCleanforSingletons;
+import de.sudoq.model.persistence.IRepo;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
-public class UniqueConstraintBehaviorTests {
+public class UniqueConstraintBehaviorTests extends TestWithInitCleanforSingletons {
+
+	//this is a dummy so it compiles todo use xmls from resources
+	private IRepo<SudokuType> sudokuTypeRepo;// = new SudokuTypeRepo();
 
 	@Test
 	public void testConstraint() {
 		TypeBuilder.get99();//just to force init of filemanager
-		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard9x9).createSudoku();
+		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku();
 
 		sudoku.getCell(Position.get(0, 0)).setCurrentValue(1);
 		sudoku.getCell(Position.get(0, 1)).setCurrentValue(2);

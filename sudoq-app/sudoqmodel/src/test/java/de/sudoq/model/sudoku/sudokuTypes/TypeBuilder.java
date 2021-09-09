@@ -1,32 +1,18 @@
 package de.sudoq.model.sudoku.sudokuTypes;
 
-import java.io.File;
-
-import de.sudoq.model.Utility;
-import de.sudoq.model.files.FileManager;
+import de.sudoq.model.persistence.IRepo;
 
 public class TypeBuilder {
 
-	private static File profiles = new File(Utility.RES + File.separator + "tmp_profiles");
-	private static File sudokus  = new File(Utility.RES + File.separator + "tmp_suds");
+	//this is a dummy so it compiles todo use xmls from resources
+	private static IRepo<SudokuType> sudokuTypeRepo;//todo use mocks = new SudokuTypeRepo();
 
 	public static SudokuType getType(SudokuTypes st){
-
-		profiles.mkdirs();
-
-		FileManager.initialize(profiles, sudokus);
-
-		return SudokuType.getSudokuType(st);
+		return SudokuTypeProvider.getSudokuType(st, sudokuTypeRepo);
 	}
 	
 	public static SudokuType get99(){
-
-		profiles.mkdirs();
-
-		FileManager.initialize(profiles, sudokus);
-
-		return SudokuType.getSudokuType(SudokuTypes.standard9x9);
+		return SudokuTypeProvider.getSudokuType(SudokuTypes.standard9x9, sudokuTypeRepo);
 	}
-
 
 }

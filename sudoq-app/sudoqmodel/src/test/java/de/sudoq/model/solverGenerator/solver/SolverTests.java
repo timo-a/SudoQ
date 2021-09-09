@@ -11,10 +11,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.sudoq.model.files.FileManagerTests;
+import org.apache.commons.lang3.NotImplementedException;
+
+import de.sudoq.model.TestWithInitCleanforSingletons;
+import de.sudoq.model.persistence.IRepo;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.sudoku.Cell;
@@ -35,13 +40,38 @@ public class SolverTests {
 
 	private static final boolean PRINT_SOLUTIONS = false;
 
+	//this is a dummy so it compiles todo use xmls from resources
+	private IRepo<SudokuType> sudokuTypeRepo = new IRepo<SudokuType>() {
+		@NotNull
+		@Override
+		public List<Integer> ids() {
+			throw new NotImplementedException();
+		}
+
+		@Override
+		public void delete(int id) { throw new NotImplementedException(); }
+
+		@Override
+		public SudokuType update(SudokuType sudokuBE) { throw new NotImplementedException(); }
+
+		@Override
+		public SudokuType read(int id) {
+			throw new NotImplementedException();
+		}
+
+		@Override
+		public SudokuType create() { throw new NotImplementedException(); }
+
+	};
+
+
 	@Before
 	public void before() {
-		FileManagerTests.init();
-		sudoku = new SudokuBuilder(SudokuTypes.standard9x9).createSudoku();
+		TestWithInitCleanforSingletons.legacyInit();
+		sudoku = new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku();
 		sudoku.setComplexity(Complexity.arbitrary);
 		solver = new Solver(sudoku);
-		sudoku16x16 = new SudokuBuilder(SudokuTypes.standard16x16).createSudoku();
+		sudoku16x16 = new SudokuBuilder(SudokuTypes.standard16x16, sudokuTypeRepo).createSudoku();
 		sudoku16x16.setComplexity(Complexity.arbitrary);
 		solution16x16 = new PositionMap<Integer>(sudoku16x16.getSudokuType().getSize());
 	}
@@ -84,7 +114,7 @@ public class SolverTests {
 		sudoku.getCell(Position.get(6, 8)).setCurrentValue(2);
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testSolveOneAutomaticallyApplied() {
 		initSudoku9x9(sudoku);
 		Solution solution = new Solution();
@@ -106,7 +136,7 @@ public class SolverTests {
 		}
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testSolveOneManuallyApplied() {
 		initSudoku9x9(sudoku);
 		Solution solution = new Solution();
@@ -130,14 +160,14 @@ public class SolverTests {
 		}
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void solveOneIncorrect() {
 		sudoku.getCell(Position.get(0, 0)).setCurrentValue(0);
 		sudoku.getCell(Position.get(1, 0)).setCurrentValue(0);
 		assertNull(solver.solveOne(true));
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testSolveAllAutomaticallyApplied() {
 		initSudoku9x9(sudoku);
 
@@ -154,7 +184,7 @@ public class SolverTests {
 
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void testSolveAllManuallyApplied() {
 		initSudoku9x9(sudoku);
 		solver.solveAll(true, false);
@@ -173,7 +203,7 @@ public class SolverTests {
 		}
 	}
 
-	@Test
+	@Test(timeout = 3_000)
 	public void solveAllIncorrect() {
 		sudoku.getCell(Position.get(0, 0)).setCurrentValue(0);
 		sudoku.getCell(Position.get(1, 0)).setCurrentValue(0);
@@ -182,11 +212,11 @@ public class SolverTests {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void solveAllIllegalComplexity() {
-		solver.sudoku.setComplexity(null);
+		solver.solverSudoku.setComplexity(null);
 		solver.validate(null);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void testNullSudoku() {
 		new Solver(null);
 	}
@@ -341,7 +371,7 @@ public class SolverTests {
 			assertTrue(c.isSaturated(sudoku16x16));
 		}
 
-		System.out.println("Solution (16x16) - Complexity: " + solver.sudoku.getComplexityValue());
+		System.out.println("Solution (16x16) - Complexity: " + solver.solverSudoku.getComplexityValue());
 		if (PRINT_SOLUTIONS) {
 			StringBuilder sb = new StringBuilder();
 			for (int j = 0; j < sudoku16x16.getSudokuType().getSize().getY(); j++) {
@@ -484,7 +514,7 @@ public class SolverTests {
 		}
 
 		// print solution if wanted
-		System.out.println("Solution (16x16) - Complexity: " + solver.sudoku.getComplexityValue());
+		System.out.println("Solution (16x16) - Complexity: " + solver.solverSudoku.getComplexityValue());
 		if (PRINT_SOLUTIONS) {
 			StringBuilder sb = new StringBuilder();
 			for (int j = 0; j < sudoku16x16.getSudokuType().getSize().getY(); j++) {

@@ -4,14 +4,17 @@ import org.junit.Before;
 import org.junit.Test;
 
 
-import de.sudoq.model.files.FileManagerTests;
-import de.sudoq.model.solverGenerator.FastSolver.FastSolver;
-import de.sudoq.model.solverGenerator.FastSolver.FastSolverFactory;
+import java.io.File;
+
+import de.sudoq.model.TestWithInitCleanforSingletons;
+import de.sudoq.model.Utility;
+import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
 import static org.junit.Assert.assertEquals;
@@ -31,14 +34,19 @@ public class SolverRegressionTests {
     private PositionMap<Integer> solution16x16;
 
     private static final boolean PRINT_SOLUTIONS = false;
+    private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
 
     @Before
     public void before() {
-        FileManagerTests.init();
-        sudoku = new SudokuBuilder(SudokuTypes.standard9x9).createSudoku();
+        TestWithInitCleanforSingletons.legacyInit();
+
+        IRepo<SudokuType> str; //todo use mock = new SudokuTypeRepo();
+
+
+        //sudoku = new SudokuBuilder(SudokuTypes.standard9x9, str).createSudoku();
         sudoku.setComplexity(Complexity.arbitrary);
         solver = new Solver(sudoku);
-        sudoku16x16 = new SudokuBuilder(SudokuTypes.standard16x16).createSudoku();
+        //sudoku16x16 = new SudokuBuilder(SudokuTypes.standard16x16, str).createSudoku();
         sudoku16x16.setComplexity(Complexity.arbitrary);
         solution16x16 = new PositionMap<Integer>(sudoku16x16.getSudokuType().getSize());
     }

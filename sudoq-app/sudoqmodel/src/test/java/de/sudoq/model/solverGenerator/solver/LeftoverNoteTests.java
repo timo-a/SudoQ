@@ -41,19 +41,9 @@ public class LeftoverNoteTests extends LeftoverNoteHelper {
 	}
 
 
-    @Test
-    public void testIllegalArguments() {
-        try {
-            new LeftoverNoteHelper(null, 20);
-            fail("No IllegalArgumentException thrown, altough sudoku was null");
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            new LeftoverNoteHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), -1);
-            fail("No IllegalArgumentException thrown, altough complexity was too low");
-        } catch (IllegalArgumentException e) {
-        }
+    @Test(expected = IllegalArgumentException.class)
+    public void testIllegalArgumentComplexity() {
+        new LeftoverNoteHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), -1);
     }
 
     @Test

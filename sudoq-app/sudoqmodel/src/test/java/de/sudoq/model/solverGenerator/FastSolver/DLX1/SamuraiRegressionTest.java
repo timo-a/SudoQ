@@ -3,22 +3,14 @@ package de.sudoq.model.solverGenerator.FastSolver.DLX1;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import de.sudoq.model.files.FileManager;
-import de.sudoq.model.files.FileManagerTests;
+import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.solverGenerator.FastSolver.DLX2.SamuraiSolver;
 import de.sudoq.model.solverGenerator.FastSolver.FastSolver;
-import de.sudoq.model.solverGenerator.FastSolver.FastSolverFactory;
 import de.sudoq.model.solverGenerator.solver.SudokuMockUps;
 import de.sudoq.model.sudoku.Sudoku;
-import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.xml.XmlHelper;
 
 import static org.junit.Assert.assertTrue;
 
@@ -27,7 +19,7 @@ public class SamuraiRegressionTest {
 
     @BeforeClass
     public static void init() {
-        FileManagerTests.init();
+        TestWithInitCleanforSingletons.legacyInit();
     }
 
 

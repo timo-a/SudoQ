@@ -13,7 +13,6 @@ import de.sudoq.model.Utility;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
-import de.sudoq.model.xml.XmlHelper;
 
 public class Pseudotest {
 
@@ -37,7 +36,7 @@ public class Pseudotest {
 		for(Constraint c : oldType)
 			s.addConstraint(c);
 		for (PermutationProperties p : oldType.getPermutationProperties())
-			s.setOfPermutationProperties.add(p);
+			s.getPermutationProperties().add(p);
 		
 		Complexity[] comps = {Complexity.easy,
 	                          Complexity.medium,
@@ -46,13 +45,13 @@ public class Pseudotest {
 	                          Complexity.arbitrary};
 
         for(Complexity c : comps)
-            s.ccb.specimen.put(c, oldType.buildComplexityConstraint(c));
+            s.ccb.getSpecimen().put(c, oldType.buildComplexityConstraint(c));
         
 		return s;
 	}
 	
-	private void filestuff(SudokuType st){
-		System.out.println(st.typeName);
+/*	private void filestuff(SudokuType st){
+		System.out.println(st.getEnumType());
 		
 		try {
 			String type= st.getEnumType().toString();
@@ -63,7 +62,7 @@ public class Pseudotest {
 			e.printStackTrace();
 		}
 		st.fillFromXml(st.toXmlTree());
-	}
+	}*/
 	
 	@Test
 	public void createXmlTypes() {

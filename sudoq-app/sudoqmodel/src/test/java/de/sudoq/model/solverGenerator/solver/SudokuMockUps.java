@@ -1,39 +1,46 @@
 package de.sudoq.model.solverGenerator.solver;
 
-import java.util.List;
-import java.util.Stack;
+import org.junit.rules.TemporaryFolder;
 
+import java.io.File;
+
+import de.sudoq.model.Utility;
+import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.sudoku.Cell;
-import de.sudoq.model.sudoku.Constraint;
-import de.sudoq.model.sudoku.ConstraintType;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
-import de.sudoq.model.sudoku.UniqueConstraintBehavior;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
+//import de.sudoq.model.utility.persistence.sudokuType.SudokuTypeRepo;
 
 /**
  * Created by timo on 02.09.16.
  */
 public class SudokuMockUps {
 
+    static TemporaryFolder tmpSudokus = new TemporaryFolder();
+
+    private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
+
+    private static IRepo<SudokuType> str; //todo use mock = new SudokuTypeRepo();
+
     public static Sudoku stringTo9x9Sudoku(String pattern){
-        Sudoku s = new SudokuBuilder(SudokuTypes.standard9x9).createSudoku();
+        Sudoku s = new SudokuBuilder(SudokuTypes.standard9x9, str).createSudoku();
         s.setComplexity(Complexity.arbitrary);
         return transform(s, pattern);
     }
 
     public static Sudoku stringTo16x16Sudoku(String pattern){
-        Sudoku s = new SudokuBuilder(SudokuTypes.standard16x16).createSudoku();
+        Sudoku s = new SudokuBuilder(SudokuTypes.standard16x16, str).createSudoku();
         s.setComplexity(Complexity.arbitrary);
         return transformX(16, s, pattern);
     }
 
     /* expects values in [1,9] */
     public static Sudoku stringToSamuraiSudoku(String pattern){
-        Sudoku s = new SudokuBuilder(SudokuTypes.samurai).createSudoku();
+        Sudoku s = new SudokuBuilder(SudokuTypes.samurai, str).createSudoku();
         s.setComplexity(Complexity.arbitrary);
         int dim = 21;
         for(int y=0; y<dim; y++)
@@ -56,7 +63,7 @@ public class SudokuMockUps {
 
 
     public static Sudoku getLockedCandidates1(){
-        //http://hodoku.sourceforge.net/en/tech_intersections.php
+        //http://hodoku.sourceforge.net/en/tech_intersections.php //sudoku_1 in resources
         String pattern = "9    8     4       ¹²   ¹²⁷  ³⁶       ¹³⁵  ⁶⁷   ⁵⁷    \n"
                        + "³⁷   ⁶⁷    2       5    ¹⁷⁸  ³⁶       ¹³⁹  4    ⁷⁸⁹   \n"
                        + "³⁵⁷  ⁵⁶⁷   1       9    ⁷⁸   4        ³⁵   ⁶⁷⁸  2     \n"
@@ -92,7 +99,7 @@ public class SudokuMockUps {
 
 
     public static Sudoku stringToSudoku(SudokuTypes type, String pattern){
-        Sudoku sudoku = new SudokuBuilder(type).createSudoku();
+        Sudoku sudoku = new SudokuBuilder(type, str).createSudoku();
         sudoku.setComplexity(Complexity.arbitrary);
         int yLim = sudoku.getSudokuType().getSize().getY();
         int xLim = sudoku.getSudokuType().getSize().getX();
@@ -191,7 +198,7 @@ public class SudokuMockUps {
     }
 
 
-    /* untested */
+    /* untested
     private static Sudoku transform1Constraint(String pattern){
         pattern = "2 4 5 ²⁴³ ⁶";
         String[] candidates = pattern.split("\\s+");
@@ -220,7 +227,7 @@ public class SudokuMockUps {
             }
         }
         return sudoku;
-    }
+    }*/
 }
 
 

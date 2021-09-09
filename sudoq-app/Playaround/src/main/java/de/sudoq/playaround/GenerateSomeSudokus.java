@@ -9,10 +9,8 @@ import de.sudoq.model.solverGenerator.GenerationAlgo;
 import de.sudoq.model.solverGenerator.solver.Solver;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.solverGenerator.Generator;
 import de.sudoq.model.solverGenerator.GeneratorCallback;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.xml.SudokuXmlHandler;
@@ -29,7 +27,7 @@ public class GenerateSomeSudokus {
     String PROFILE_LOCATION = "/home/t/Code/SudoQ/DebugOnPC/profilefiles";
 
     public void setup(String profiles, String sudokus, long seed) {
-        FileManager.initialize(new File(profiles), new File(sudokus));
+        FileManager.initialize(new File(sudokus));
         //Profile.getInstance();
         random = new Random(seed);
         //random = new Random(111398881573105l);
@@ -44,7 +42,7 @@ public class GenerateSomeSudokus {
         setup(PROFILE_LOCATION, SUDOKU_LOCATION2,0);
     }
 
-    public void changeSudokuFile(File f){FileManager.initialize(FileManager.getProfilesDir(), f);}
+    public void changeSudokuFile(File f){FileManager.initialize(f);}
 
     public void generate10infernal(){
         generate(Complexity.infernal, SudokuTypes.standard9x9, 10);
@@ -65,7 +63,7 @@ public class GenerateSomeSudokus {
     }
 
     public void generate(Complexity c, SudokuTypes st){
-        Sudoku sudoku = new SudokuBuilder(st).createSudoku();
+        Sudoku sudoku = new SudokuBuilder(st, new File(SUDOKU_LOCATION2)).createSudoku();
 		sudoku.setComplexity(c);
 
 		GenerationAlgo ga = new GenerationAlgo(sudoku, getCallbackObj(), random);
@@ -125,7 +123,7 @@ public class GenerateSomeSudokus {
     //careful: we need to ensure there is a folder structure path/type/complexity/
     public  void saveSudokuAllInOne(String path, Sudoku sudoku){
         File sudokuLocation = FileManager.getSudokuDir();
-        FileManager.initialize(FileManager.getProfilesDir(), new File(path));
+        FileManager.initialize(new File(path));
         new SudokuXmlHandler().saveAsXml(sudoku);
     }
 }

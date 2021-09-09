@@ -4,10 +4,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.IOException;
 
-import de.sudoq.model.files.FileManager;
-import de.sudoq.model.files.FileManagerTests;
+import de.sudoq.model.TestWithInitCleanforSingletons;
+import de.sudoq.model.Utility;
 import de.sudoq.model.solverGenerator.GenerationAlgo;
 import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Position;
@@ -15,22 +14,21 @@ import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.xml.XmlHelper;
 
 
 public class SudokuTest {
+    private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
 
     @BeforeClass
     public static void init() {
-        FileManagerTests.init();
+        TestWithInitCleanforSingletons.legacyInit();
     }
 
     @Test
 	public void testSolveSudoku() {
 
-        Sudoku s = getSudoku(FileManager.getSudokuDir(), SudokuTypes.standard9x9, Complexity.easy, 1);
+        Sudoku s = getSudoku(sudokuDir, SudokuTypes.standard9x9, Complexity.easy, 1);
         System.out.println(s);
         FastSolver fs = FastSolverFactory.getSolver(s);
 
@@ -68,14 +66,14 @@ public class SudokuTest {
                 + File.separator
                 + "sudoku_" + i + ".xml");
 
-        Sudoku s = new Sudoku(SudokuType.getSudokuType(st));
-        try {
-            s.fillFromXml(new XmlHelper().loadXml(f));
-            s.setComplexity(Complexity.arbitrary);//justincase
-            return s;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        Sudoku s = new Sudoku(SudokuTypeProvider.getSudokuType(st, sudokuDir));
+//        try {
+//            s.fillFromXml(new XmlHelper().loadXml(f), sudokuDir);
+//            s.setComplexity(Complexity.arbitrary);//justincase
+//            return s;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } todo load from resources
         return null;
     }
 }

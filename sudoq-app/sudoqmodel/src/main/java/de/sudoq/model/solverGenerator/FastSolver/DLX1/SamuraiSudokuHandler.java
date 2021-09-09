@@ -7,8 +7,17 @@ public class SamuraiSudokuHandler extends FastSudokuHandler {
         super(boardSize, solutions);
     }
 
+    public static void printResult(int[][] cover) {
+        for (int[] row : cover) {
+            for (int e : row) {
+                System.out.print(e != 0 ? String.format("%1$2s ", e)
+                        : "   ");
+            }
+            System.out.println();
+        }
+    }
 
-    protected int[][] parseBoard(List<DancingLinks.DancingNode> answer){
+    protected int[][] parseBoard(List<DancingLinks.DancingNode> answer) {
         /* every row in the table we passed to the dancing links algorithm
          * represents a possible candidate at a position in the sudoku.
          * The `rows` of linked nodes in the output represent the actual candidates in the solution.
@@ -22,17 +31,17 @@ public class SamuraiSudokuHandler extends FastSudokuHandler {
          * */
 
         int[][] result = new int[size][size];
-        for(DancingLinks.DancingNode n : answer){
+        for (DancingLinks.DancingNode n : answer) {
             DancingLinks.DancingNode rcNode = n;
 
             /* We supply the dancing links algorithm with a table but get back a linked list that has no leftmost node ecause you can always go left
-            *  the columns are numbered starting from 0 to ...
-            *  so in order go get to the leftmost node we cycle through and take the node with the minimum column name
-            *  */
+             *  the columns are numbered starting from 0 to ...
+             *  so in order go get to the leftmost node we cycle through and take the node with the minimum column name
+             *  */
             int min = Integer.parseInt(rcNode.C.name);
-            for(DancingLinks.DancingNode tmp = n.R; tmp != n; tmp = tmp.R){
+            for (DancingLinks.DancingNode tmp = n.R; tmp != n; tmp = tmp.R) {
                 int val = Integer.parseInt(tmp.C.name);
-                if (val < min){
+                if (val < min) {
                     min = val;
                     rcNode = tmp;
                 }
@@ -68,50 +77,33 @@ public class SamuraiSudokuHandler extends FastSudokuHandler {
         return result;
     }
 
-    private int[] getCoordinates(int i){
+    private int[] getCoordinates(int i) {
         if (i < 0)
             throw new IllegalArgumentException();
-        if (i < 81){
-            return getCoordinates9x9(i, 0,0);
-        }
-        else if (i < 81 * 2){
-            return getCoordinates9x9(i % 81, 0,12);
-        }
-        else if (i < 81 * 3){
-            return getCoordinates9x9(i % 81, 12,0);
-        }
-        else if (i < 81 * 4){
-            return getCoordinates9x9(i % 81, 12,12);
-        }
-        else if (i < 81*4 + 9){
-            i -=  81*4;
-            return new int[]{6+ i/3, 9+ i%3};
-        }
-        else if (i < 81*4 + 9 + 3*9){
-            i -=  81*4 + 9;
-            return new int[]{9+ i/9, 6 + i%9};
-        }
-        else if (i < 81*4 + 9 + 3*9 + 9){
-            i -=  81*4 + 9 + 3*9;
-            return new int[]{12+ i/3, 9+ i%3};
-        }
-        else
+        if (i < 81) {
+            return getCoordinates9x9(i, 0, 0);
+        } else if (i < 81 * 2) {
+            return getCoordinates9x9(i % 81, 0, 12);
+        } else if (i < 81 * 3) {
+            return getCoordinates9x9(i % 81, 12, 0);
+        } else if (i < 81 * 4) {
+            return getCoordinates9x9(i % 81, 12, 12);
+        } else if (i < 81 * 4 + 9) {
+            i -= 81 * 4;
+            return new int[]{6 + i / 3, 9 + i % 3};
+        } else if (i < 81 * 4 + 9 + 3 * 9) {
+            i -= 81 * 4 + 9;
+            return new int[]{9 + i / 9, 6 + i % 9};
+        } else if (i < 81 * 4 + 9 + 3 * 9 + 9) {
+            i -= 81 * 4 + 9 + 3 * 9;
+            return new int[]{12 + i / 3, 9 + i % 3};
+        } else
             return null;
 
     }
 
-    private int[] getCoordinates9x9(int i, int offsetR, int offsetC){
-        return new int[]{offsetR + i/9, offsetC + i%9};
-    }
-
-     public static void printResult(int[][] cover) {
-    	for (int[] row : cover) {
-			for  (int e : row) {
-				System.out.print( e != 0 ? String.format("%1$2s ", e)
-                                         : "   " );
-			}
-			System.out.println();
-		}
+    private int[] getCoordinates9x9(int i, int offsetR, int offsetC) {
+        return new int[]{offsetR + i / 9, offsetC + i % 9};
     }
 
 }

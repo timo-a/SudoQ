@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'kotlin-android'
 allprojects {
     gradle.projectsEvaluated {
         tasks.withType(JavaCompile) {
@@ -17,12 +17,12 @@ android {
         targetSdkVersion 29
         resConfigs "en", "de", "fr"
         testApplicationId "de.sudoq.test"
-        testInstrumentationRunner "android.test.InstrumentationTestRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     sourceSets {
         main {
-            /* this allows us to group resources(layouts, values) by topic */
+            // this allows us to group resources(layouts, values) by topic
             res.srcDirs =
             [
                     'src/main/res/layouts/sudoku',
@@ -43,7 +43,10 @@ android {
             //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    
 }
+
+
 
 dependencies {
     implementation project(':sudoqmodel')
@@ -51,6 +54,17 @@ dependencies {
     //implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.0.2'
     //implementation 'androidx.recyclerview:recyclerview:1.0.0'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.4.0'
+    testImplementation "org.amshove.kluent:kluent:1.67"
+    testImplementation "io.mockk:mockk:1.9"
+    testImplementation project(path: ':sudoq-persistence-xml')
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.0'
+
+
+
+    //androidTestImplementation 'com.android.support.test.espresso:espressocore:3.0.2'
 
 
     //compile 'com.android.support:support-v4:21.0.0'

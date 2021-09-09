@@ -8,6 +8,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,8 @@ import de.sudoq.model.Utility;
 import de.sudoq.model.actionTree.ActionTreeElement;
 import de.sudoq.model.actionTree.NoteActionFactory;
 import de.sudoq.model.actionTree.SolveActionFactory;
-import de.sudoq.model.profile.Profile;
+import de.sudoq.model.persistence.IRepo;
+import de.sudoq.model.profile.ProfileSingleton;
 import de.sudoq.model.solverGenerator.Generator;
 import de.sudoq.model.solverGenerator.GeneratorCallback;
 import de.sudoq.model.solverGenerator.solution.Solution;
@@ -28,6 +30,8 @@ import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
@@ -35,10 +39,14 @@ public class GameTests {
 
 	private static Sudoku sudoku;
 
+	//this is a dummy so it compiles todo use xmls from resources
+	private static IRepo<SudokuType> sudokuTypeRepo;// = new SudokuTypeRepo();
+
 	@BeforeClass
 	public static void beforeClass() {
 		Utility.copySudokus();
-		Profile.getInstance();
+		File profileDir = new File("/tmp/sudoq/GameTests/profile");
+		//ProfileSingleton.Companion.getInstance(profileDir);
 
 		TypeBuilder.get99(); //just to force initialization of filemanager
 		
@@ -54,12 +62,12 @@ public class GameTests {
 			}
 		};
 		
-		new Generator().generate(SudokuTypes.standard9x9, Complexity.easy, gc);
+		new Generator(sudokuTypeRepo).generate(SudokuTypes.standard9x9, Complexity.easy, gc);
 	}
 
 	@Test
 	public void testInstanciation() {
-		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9).createSudoku());
+		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku());
 		assertEquals(game.getId(), 2);
 		assertNotNull(game.getStateHandler());
 		assertEquals(game.getSudoku().getCell(Position.get(8, 8)).getCurrentValue(), Cell.EMPTYVAL);
@@ -67,14 +75,14 @@ public class GameTests {
 		assertEquals(0, game.getAssistancesCost());
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void testNullInstantiation() {
 		new Game(2, null);
 	}
 
 	@Test
 	public void testGameInteraction() {
-		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9).createSudoku());
+		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku());
 
 		Position pos = Position.get(1, 1);
 		ActionTreeElement start = game.getCurrentState();
@@ -105,9 +113,9 @@ public class GameTests {
 
 	@Test
 	public void testEquals() {
-		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9).createSudoku());
+		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku());
 		assertEquals(game, game);
-		Game game2 = new Game(3, new SudokuBuilder(SudokuTypes.standard9x9).createSudoku());
+		Game game2 = new Game(3, new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku());
 		assertNotEquals(game, game2);
 
 		Position pos = Position.get(1, 1);
@@ -132,7 +140,7 @@ public class GameTests {
 
 	@Test
 	public void testGameXML() {
-		Sudoku s = new SudokuBuilder(SudokuTypes.standard9x9).createSudoku();
+		Sudoku s = new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku();
 		s.setId(5);
 		Game game = new Game(2, s);
 
@@ -153,15 +161,12 @@ public class GameTests {
 		game.redo();
 		game.undo();
 
-		Game game2 = new Game();
-		game2.fillFromXml(game.toXmlTree());
-		assertEquals(game, game2);
 	}
 
 	// Regression Test for Issue-89
 	@Test
 	public void testFinishedAttributeConsistency() {
-		SudokuBuilder sb = new SudokuBuilder(SudokuTypes.standard9x9);
+		SudokuBuilder sb = new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo);
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
 				sb.addSolution(Position.get(i, j), 1);
@@ -171,29 +176,18 @@ public class GameTests {
 		assertTrue(game.solveAll());
 		assertTrue(game.isFinished());
 
-		Game game2 = new Game();
-		game2.fillFromXml(game.toXmlTree());
-		assertTrue(game2.isFinished());
+	}
 
-		game2.undo();
-		assertTrue(game2.isFinished());
 
-		game = new Game();
-		game.fillFromXml(game2.toXmlTree());
-		assertTrue(game.isFinished());
+	@Test(expected = NullPointerException.class)
+	public void testSetNullAssistances() {
+		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku());
+		game.setAssistances(null);
 	}
 
 	@Test
 	public void testAssistanceSetting() {
-		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9).createSudoku());
-		try {
-			game.setAssistances(null);
-			fail("no exception");
-		} catch (IllegalArgumentException e) {
-			// fine
-		}
-
-		assertFalse(game.isAssistanceAvailable(null));
+		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku());
 
 		game.setAssistances(new GameSettings() {
 			@Override
@@ -214,7 +208,7 @@ public class GameTests {
 			private boolean errors = false;
 
 			public SudokuMock() {
-				super(SudokuBuilder.createType(SudokuTypes.standard9x9), new PositionMap<Integer>(Position.get(9, 9)),
+				super(SudokuTypeProvider.getSudokuType(SudokuTypes.standard9x9, sudokuTypeRepo), new PositionMap<Integer>(Position.get(9, 9)),
 						new PositionMap<Boolean>(Position.get(9, 9)));
 			}
 
@@ -261,7 +255,7 @@ public class GameTests {
 
 	@Test
 	public void testNoteAdjustment() {
-		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9).createSudoku());
+		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku());
 		GameSettings as = new GameSettings();
 		as.setAssistance(Assistances.autoAdjustNotes);
 		game.setAssistances(as);
@@ -402,7 +396,7 @@ public class GameTests {
 	// Regression Test for Issue-90
 	@Test
 	public void testAutoAdjustNotesForAutomaticSolving() {
-		SudokuBuilder sb = new SudokuBuilder(SudokuTypes.standard9x9);
+		SudokuBuilder sb = new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo);
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
 				sb.addSolution(Position.get(i, j), 1);

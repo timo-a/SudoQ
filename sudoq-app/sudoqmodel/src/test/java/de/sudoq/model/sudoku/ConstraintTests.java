@@ -5,15 +5,48 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.sudoq.model.Utility;
+import de.sudoq.model.utility.FileManager;
+import de.sudoq.model.profile.ProfileSingleton;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
 public class ConstraintTests {
+
+	private static File profiles = new File("res/tmp_profiles");
+	private static File sudokus = new File("res/tmp_sudokus");
+
+	@BeforeClass
+	public static void init() throws IOException {
+		Utility.copySudokus();
+		profiles = Utility.profiles;
+		sudokus  = Utility.sudokus;
+	}
+
+	@AfterClass
+	public static void clean() throws IOException, SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+		java.lang.reflect.Field f = FileManager.class.getDeclaredField("profiles");
+		f.setAccessible(true);
+		f.set(null, null);
+		java.lang.reflect.Field s = FileManager.class.getDeclaredField("sudokus");
+		s.setAccessible(true);
+		s.set(null, null);
+		java.lang.reflect.Field p = ProfileSingleton.class.getDeclaredField("instance");
+		p.setAccessible(true);
+		p.set(null, null);
+		Utility.deleteDir(profiles);
+		Utility.deleteDir(sudokus);
+	}
+
 
 	@Test
 	public void initialisation() {
@@ -38,7 +71,6 @@ public class ConstraintTests {
 		c.addPosition(p1);
 		c.addPosition(p2);
 		c.addPosition(p3);
-		c.addPosition(null);
 		c.addPosition(p1);
 		assertTrue(c.getSize() == 3);
 		assertTrue(c.includes(p1));
@@ -85,36 +117,6 @@ public class ConstraintTests {
 		assertTrue(c.isSaturated(sudo));
 		c.addPosition(posC);
 		assertFalse(c.isSaturated(sudo));
-
-		assertFalse(c.isSaturated(null));
-
 	}
 
-	@Test
-	public void testIllegalArguments() {
-		try {
-			new Constraint(new UniqueConstraintBehavior(), null, "Test");
-			fail("Exception expected");
-		} catch (IllegalArgumentException e) {
-		}
-
-		try {
-			new Constraint(null, ConstraintType.BLOCK, "Test");
-			fail("Exception expected");
-		} catch (IllegalArgumentException e) {
-		}
-
-		try {
-			new Constraint(new UniqueConstraintBehavior(), null);
-			fail("Exception expected");
-		} catch (IllegalArgumentException e) {
-		}
-
-		try {
-			new Constraint(null, ConstraintType.BLOCK);
-			fail("Exception expected");
-		} catch (IllegalArgumentException e) {
-		}
-
-	}
 }

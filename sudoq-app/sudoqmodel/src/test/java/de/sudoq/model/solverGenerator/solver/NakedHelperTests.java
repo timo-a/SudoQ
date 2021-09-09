@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
+import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.Utility;
-import de.sudoq.model.files.FileManager;
-import de.sudoq.model.profile.Profile;
+import de.sudoq.model.utility.FileManager;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.helper.NakedHelper;
 import de.sudoq.model.solverGenerator.solver.helper.SubsetHelper;
@@ -31,10 +31,9 @@ import static org.junit.Assert.fail;
 public class NakedHelperTests extends NakedHelper {
 
 
-    @BeforeClass
+	@BeforeClass
 	public static void init() {
-		Utility.copySudokus();
-		Profile.getInstance();
+		TestWithInitCleanforSingletons.legacyInit();
 	}
 
 	@AfterClass
@@ -46,36 +45,22 @@ public class NakedHelperTests extends NakedHelper {
         java.lang.reflect.Field s = FileManager.class.getDeclaredField("sudokus");
         s.setAccessible(true);
         s.set(null, null);
-        java.lang.reflect.Field p = Profile.class.getDeclaredField("instance");
-        p.setAccessible(true);
-        p.set(null, null);
-        FileManager.deleteDir(Utility.profiles);
-        FileManager.deleteDir(Utility.sudokus);
+        Utility.deleteDir(Utility.profiles);
+        Utility.deleteDir(Utility.sudokus);
 	}
 
     public NakedHelperTests(){
         super(new SolverSudoku(new Sudoku(TypeBuilder.get99())),4,0 );
     }
 
-    @Test
-    public void testIllegalArguments() {
-        try {
-            new NakedHelper(null, 1, 20);
-            fail("No IllegalArgumentException thrown, altough sudoku was null");
-        } catch (IllegalArgumentException e) {
-        }
+    @Test(expected = IllegalArgumentException.class)
+    public void testIllegalArgumentLevelTooLow() {
+        new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 0, 20);
+    }
 
-        try {
-            new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 0, 20);
-            fail("No IllegalArgumentException thrown, altough level was too low");
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 1, -1);
-            fail("No IllegalArgumentException thrown, altough complexity was too low");
-        } catch (IllegalArgumentException e) {
-        }
+    @Test(expected = IllegalArgumentException.class)
+    public void testIllegalArgumentComplexityTooLow() {
+        new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 1, -1);
     }
 
     @Test
