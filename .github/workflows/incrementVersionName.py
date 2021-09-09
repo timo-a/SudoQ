@@ -29,8 +29,11 @@ def increment(versionName, severity):
     (major, minor, patch) = versionName.split('.')
     if severity == 'M':
         major = str(int(major) + 1)
+        minor = "0"
+        patch = "0"
     elif position == 'm':
         minor = str(int(minor) + 1)
+        patch = "0"
     else:
         patch = str(int(patch) + 1)
 
