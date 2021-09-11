@@ -27,7 +27,7 @@ enum class Complexity {
     arbitrary;
 
     companion object {
-        @JvmStatic
+
         fun playableValues(): Iterable<Complexity> {
             val l: MutableList<Complexity> = ArrayList(listOf(*values()))
             l.remove(arbitrary)//skip arbitrary as it is not playable
