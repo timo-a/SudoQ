@@ -51,7 +51,7 @@ class ConstraintTests {
         val posB = Position[0, 1]
         val posC = Position[0, 2]
 
-        val sudo = mockk<Sudoku>(relaxed = true)
+        val sudo = mockk<Sudoku>()
 
         fun mkCell(id: Int, currentValue: Int): Cell {
             val c = Cell(id,9)
