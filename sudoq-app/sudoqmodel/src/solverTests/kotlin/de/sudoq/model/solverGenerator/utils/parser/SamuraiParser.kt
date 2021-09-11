@@ -6,7 +6,7 @@ import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 
-class SamuraiParser(): SudokuParser() {
+class SamuraiParser : SudokuParser() {
 
     override fun parseSudoku(id:Int,
                              type: SudokuType,

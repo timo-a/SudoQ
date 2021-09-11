@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class GameSettingsTest {
     @Test
     fun `clear should clear`() {
-        var a = GameSettings()
+        val a = GameSettings()
         a.setAssistance(Assistances.markWrongSymbol)
 
         //confirm state
