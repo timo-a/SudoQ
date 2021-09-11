@@ -45,19 +45,31 @@ object LanguageUtility {
     /* save language to enum */
     @JvmStatic
     fun loadLanguageFromLocale(): LanguageCode {
-        val code = Locale.getDefault().language
+        val code = Locale.getDefault().language //TODO won't this always return en?
         LanguageCode.values().forEach { if (it.name == code) return it}
         return LanguageCode.en
     }
 
+    //can be 'system'
     @JvmStatic
     fun getConfLocale(a: Activity): LanguageCode {
         val res = a.resources
         val conf = res.configuration
         val code = conf.locale.language
-        return LanguageCode.valueOf(code)
+
+        val unmaintainedLang = !LanguageCode.values()
+            .map { it.name }
+            .contains(code)
+
+        return if (unmaintainedLang) {
+            Log.e("lang","Inexplicably, the language loaded from conf is $code, defaulting to 'system'")
+            LanguageCode.system
+        } else{
+            LanguageCode.valueOf(code)
+        }
     }
 
+    //can be 'system'
     @JvmStatic
     fun setConfLocale(lang: String, a: Activity) {
         Log.i("lang", "setLocale( " + lang + ", " + a.javaClass.simpleName + ")")

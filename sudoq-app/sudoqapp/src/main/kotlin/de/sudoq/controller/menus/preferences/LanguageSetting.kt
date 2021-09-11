@@ -10,8 +10,20 @@ class LanguageSetting {
     }
 
     //may never be system!
-    @JvmField
     var language: LanguageCode
+       get() {
+           if (language == LanguageCode.system)
+               throw java.lang.IllegalStateException("LanguageSetting.language is 'system'. This is not allowed")
+           else
+               return language
+       }
+       set(value) {
+           if (value == LanguageCode.system)
+               throw java.lang.IllegalArgumentException("LanguageSetting.language may not be set to 'system'.")
+
+           language = value
+       }
+
     var isSystemLanguage: Boolean
         private set
 

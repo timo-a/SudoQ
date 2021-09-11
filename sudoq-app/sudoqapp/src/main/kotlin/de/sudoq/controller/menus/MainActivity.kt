@@ -101,6 +101,8 @@ class MainActivity : SudoqCompatActivity() {
         //load language from memory
         val fromConf = getConfLocale(this)
         if (fromConf != currentLanguageCode!!.language) {
+            //language has been changed so we need to restart this activity
+            //so that the new language is applied to it
             Log.d("lang", "refresh because $currentLanguageCode -> $fromConf")
             val refresh = Intent(this, this.javaClass)
             finish()
