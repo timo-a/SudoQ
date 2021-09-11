@@ -24,7 +24,7 @@ open class SudokuParser {
     }
 
     protected fun parseCell(id: Int, type: SudokuType, s: String): Cell {
-        var c = Cell(id, type.numberOfSymbols)
+        val c = Cell(id, type.numberOfSymbols)
 
         fun a(s: String): Boolean {return true}
 

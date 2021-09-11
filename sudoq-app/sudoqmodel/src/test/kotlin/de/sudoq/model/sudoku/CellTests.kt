@@ -10,7 +10,7 @@ class CellTests {
 
     @Test
     fun `should hold the solution that is passed`() {
-        var cell = Cell(false, solution=5, -1, 5)
+        val cell = Cell(false, solution=5, -1, 5)
         cell.currentValue `should be equal to` 5
     }
 
@@ -47,7 +47,7 @@ class CellTests {
         @ParameterizedTest
         @ValueSource(ints = [0,5,10,15])
         fun ` should set value`(i: Int) {
-            val f = Cell(true, 8, -1, 20);
+            val f = Cell(true, 8, -1, 20)
 
             f.currentValue = i
 			f.currentValue `should be equal to` i
@@ -91,13 +91,13 @@ class CellTests {
 
     @Test
     fun `should not change when not editable`() {
-        val f = Cell(false, 6, -1, 9);
+        val f = Cell(false, 6, -1, 9)
 
         val initialValue = f.currentValue
 
         f.isEditable.`should be false`()
 
-		f.currentValue = 3;
+		f.currentValue = 3
 
         f.currentValue `should be` initialValue
 

@@ -63,7 +63,7 @@ open class PrettySudokuRepo2(protected val path: File) : IRepo<Sudoku> {
     }
 
     protected fun parseCell(id: Int, s: String): Cell {
-        var c = Cell(id,9)
+        val c = Cell(id,9)
         if(s.length == 1 && s.all { it.isDigit() }) {
             c.currentValue = parseValue(s)
         } else {
