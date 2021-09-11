@@ -27,7 +27,7 @@ enum class Complexity {
     arbitrary;//todo use null or separate enum in-game, where this value should not occur
 
     companion object {
-        @JvmStatic
+
         fun playableValues(): Iterable<Complexity> {
             val l: MutableList<Complexity> = ArrayList(listOf(*values()))
             l.remove(arbitrary)//skip arbitrary as it is not playable
