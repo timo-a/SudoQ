@@ -46,6 +46,7 @@ jobs:
           python $SCRIPT $FILE ${{ github.event.inputs.changeSeverity }}
           echo "$NEW_VERSION_NAME"
           echo "::set-output name=new_version_name::$(cat new_version_name.txt)"
+	  rm new_version_name.txt
 
       - name: commit files
         run: |
