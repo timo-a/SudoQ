@@ -57,6 +57,10 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.multidex)
+    androidTestImplementation(libs.androidx.core)
+    androidTestImplementation(libs.androidx.espresso.core)
+    //androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.junit.ktx)
 
     testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.junit.jupiter.params)
