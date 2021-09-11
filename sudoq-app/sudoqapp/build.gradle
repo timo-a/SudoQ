@@ -50,6 +50,7 @@ android {
 
 dependencies {
     implementation project(':sudoqmodel')
+    implementation project(':sudoq-persistence-xml')
     implementation 'com.google.android.material:material:1.0.0'
     //implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.0.2'
