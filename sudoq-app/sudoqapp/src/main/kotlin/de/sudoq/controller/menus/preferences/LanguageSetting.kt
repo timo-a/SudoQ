@@ -21,7 +21,7 @@ class LanguageSetting {
            if (value == LanguageCode.system)
                throw java.lang.IllegalArgumentException("LanguageSetting.language may not be set to 'system'.")
 
-           language = value
+           field = value
        }
 
     var isSystemLanguage: Boolean
