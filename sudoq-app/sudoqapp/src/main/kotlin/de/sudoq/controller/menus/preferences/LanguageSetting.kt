@@ -12,10 +12,10 @@ class LanguageSetting {
     //may never be system!
     var language: LanguageCode
        get() {
-           if (language == LanguageCode.system)
+           if (field == LanguageCode.system)
                throw java.lang.IllegalStateException("LanguageSetting.language is 'system'. This is not allowed")
            else
-               return language
+               return field
        }
        set(value) {
            if (value == LanguageCode.system)
