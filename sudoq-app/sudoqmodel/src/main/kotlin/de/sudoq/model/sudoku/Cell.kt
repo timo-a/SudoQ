@@ -45,7 +45,7 @@ class Cell(editable: Boolean, solution: Int, id: Int, numberOfValues: Int) :
      */
     constructor(id: Int, numberOfValues: Int) : this(true, EMPTYVAL, id, numberOfValues)
 
-    /** The current value in this cell */
+    /** The current value in this cell TODO why are there currentValue and currentVal? */
     var currentValue: Int
         get() = currentVal
         /**

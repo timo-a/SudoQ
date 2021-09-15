@@ -81,6 +81,7 @@ class UserInteractionMediator(
     private val gestureStore: GestureStore
     override fun onInput(symbol: Int) {
         val currentField = sudokuView!!.currentCellView
+
         for (listener in actionListener) {
             if (noteMode) {
                 if (currentField!!.cell.isNoteSet(symbol)) {

@@ -8,11 +8,8 @@
 package de.sudoq.model.game
 
 import de.sudoq.model.ObservableModelImpl
-import de.sudoq.model.actionTree.Action
-import de.sudoq.model.actionTree.ActionTree
+import de.sudoq.model.actionTree.*
 import de.sudoq.model.actionTree.ActionTree.Companion.findPath
-import de.sudoq.model.actionTree.ActionTreeElement
-import de.sudoq.model.actionTree.SolveAction
 import java.util.*
 
 /**
@@ -66,7 +63,10 @@ class GameStateHandler : ObservableModelImpl<ActionTreeElement>() {
             }
             isActionAStepBack(currentState, action) -> {
                 currentState = currentState!!.parent
-                action.execute()
+                when(action) {
+                    is NoteAction -> action.undo()
+                    is SolveAction -> action.execute()
+                }
             }
             isSolveOnSameCell(action) -> {
                 val intended = action as SolveAction
