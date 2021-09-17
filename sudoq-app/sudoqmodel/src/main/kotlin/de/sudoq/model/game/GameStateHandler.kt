@@ -56,6 +56,7 @@ class GameStateHandler : ObservableModelImpl<ActionTreeElement>() {
 
     //private
     private fun addStrategic(action: Action) {
+        //TODO split execution and insertion into action tree
         when {
             isActionRedundant(currentState, action) -> {
                 currentState = findExistingChildren(currentState, action)[0]

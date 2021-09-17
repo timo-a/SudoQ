@@ -12,7 +12,10 @@ import de.sudoq.model.sudoku.Cell
 /**
  * This class represents an action that adds or removes notes from a [cell].
  */
-class NoteAction(diff: Int, cell: Cell) : Action(diff, cell) {
+class NoteAction(diff: Int, val actionType: Action, cell: Cell) : Action(diff, cell) {
+
+    enum class Action {SET, REMOVE}
+
 
     init {
         XML_ATTRIBUTE_NAME = "NoteAction"
@@ -22,7 +25,8 @@ class NoteAction(diff: Int, cell: Cell) : Action(diff, cell) {
      * {@inheritDoc}
      */
     override fun execute() {
-        if(!cell.isNoteSet(diff))
+        if (actionType == Action.SET && !cell.isNoteSet(diff)
+            || actionType == Action.REMOVE && cell.isNoteSet(diff))
             cell.toggleNote(diff)
     }
 
@@ -30,14 +34,15 @@ class NoteAction(diff: Int, cell: Cell) : Action(diff, cell) {
      * {@inheritDoc}
      */
     override fun undo() {
-        if(cell.isNoteSet(diff))
+        if (actionType == Action.SET && cell.isNoteSet(diff)
+            || actionType == Action.REMOVE && !cell.isNoteSet(diff))
             cell.toggleNote(diff)
     }
 
-    override fun inverse(a: Action): Boolean {
+    override fun inverse(a: de.sudoq.model.actionTree.Action): Boolean {
         //ensure type, inherited equals can be reused as NoteActions are self inverse.
         if (a !is NoteAction) return false
-        return equals(a)
+        return equals(a) && actionType == a.actionType
     }
 
 }

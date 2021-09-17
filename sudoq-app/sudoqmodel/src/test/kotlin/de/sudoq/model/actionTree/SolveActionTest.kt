@@ -76,7 +76,7 @@ class SolveActionTest {
     @Test
     fun `should not equal a NoteAction`(){
 
-        SolveAction(1, cell) `should not be equal to` NoteAction(1, cell)
+        SolveAction(1, cell) `should not be equal to` NoteAction(1, NoteAction.Action.SET, cell)
     }
 
     @Test

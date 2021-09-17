@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 
 class NoteActionTest {
     val cell = Cell(0, 2)
-    private val noteAction = NoteAction(5, cell)
+    private val noteAction = NoteAction(5, NoteAction.Action.SET, cell)
 
     @Nested
     inner class Execute {

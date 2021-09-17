@@ -18,6 +18,13 @@ class NoteActionFactory : ActionFactory {
      * {@inheritDoc}
      */
     override fun createAction(value: Int, cell: Cell): Action {
-        return NoteAction(value, cell)
+
+        //choose the action that inverts the current state
+        val actionType = when(cell.isNoteSet(value)) {
+            true -> NoteAction.Action.REMOVE
+            false -> NoteAction.Action.SET
+        }
+
+        return NoteAction(value, actionType, cell)
     }
 }

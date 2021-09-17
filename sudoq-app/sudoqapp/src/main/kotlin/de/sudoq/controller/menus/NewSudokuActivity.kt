@@ -126,7 +126,7 @@ class NewSudokuActivity : SudoqCompatActivity() {
 //		if(wtl.contains(sudokuType))
 //			((Spinner) findViewById(R.id.spinner_sudokutype)).setSelection(wtl.indexOf(sudokuType));
         Log.d(LOG_TAG, "Resume_ende: $sudokuType")
-
+        var noop = 0
         //set language
         //LanguageUtility.setLocaleFromMemory(this);
     }
@@ -136,7 +136,7 @@ class NewSudokuActivity : SudoqCompatActivity() {
         //List<String> translatedSudokuTypes = Arrays.asList(getResources().getStringArray(R.array.sudokutype_values));
         val wantedSudokuTypes: MutableList<StringAndEnum<SudokuTypes>> =
             ArrayList() //user can choose to only have selected types offered, so here we filter
-        check(stl.size != 0) { "list shouldn't be empty" }
+        check(stl.isNotEmpty()) { "list shouldn't be empty" }
 
         /* convert */
         for (st in stl) {
@@ -155,22 +155,27 @@ class NewSudokuActivity : SudoqCompatActivity() {
         typeSpinner.adapter = typeAdapter
         Log.d(LOG_TAG, "Sudokutype_4: $sudokuType")
 
-        /* add onItemSelectListener */typeSpinner.onItemSelectedListener =
-            object : OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>,
-                    view: View,
-                    pos: Int,
-                    id: Long
-                ) {
-                    val item = parent.getItemAtPosition(pos) as StringAndEnum<SudokuTypes>
-                    setSudokuType(item.enum)
-                }
+        /* add onItemSelectListener */
+        typeSpinner.onItemSelectedListener = MyListener(this)
+    }
 
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    // do nothing
-                }
-            }
+    //custom class for better debugging
+    class MyListener(private val parentActivity : NewSudokuActivity): OnItemSelectedListener {
+
+        override fun onItemSelected(
+            parent: AdapterView<*>,
+            view: View,
+            pos: Int,
+            id: Long
+        ) {
+            val item = parent.getItemAtPosition(pos) as StringAndEnum<SudokuTypes>
+            parentActivity.setSudokuType(item.enum)
+        }
+
+        override fun onNothingSelected(parent: AdapterView<*>?) {
+            // do nothing
+        }
+
     }
 
     /**
