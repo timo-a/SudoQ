@@ -1,4 +1,7 @@
-SUDOQ README
+# SUDOQ
+
+![build with gradle assemble](https://github.com/timo-a/SudoQ/actions/workflows/gradle_assemble.yml/badge.svg)
+
 
 ANDROID STUFF
 
