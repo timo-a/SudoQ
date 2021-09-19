@@ -62,9 +62,7 @@ class ActionTree : ObservableModelImpl<ActionTreeElement>(), Iterable<ActionTree
     fun getElement(id: Int): ActionTreeElement? {
 
         if (id in 1 until idCounter) { //TODO is range check necessary?
-            for (ate in this)
-                if (ate.id == id)
-                    return ate
+            this.firstOrNull { it.id == id }
         }
         return null
     }
@@ -187,13 +185,14 @@ class ActionTree : ObservableModelImpl<ActionTreeElement>(), Iterable<ActionTree
      * Erzeugt und instanziiert einen neuen ActionTree
      */
     init {
-        val mockAction: Action = object : Action(0, Cell(-1, 1)) {
-            override fun undo() {}
-            override fun execute() {}
-            override fun inverse(a: Action): Boolean {
-                return false
-            }
+        root = ActionTreeElement(idCounter++, MockAction(), null)
+    }
+
+    class MockAction : Action(0, Cell(-1, 1)) {
+        override fun undo() {}
+        override fun execute() {}
+        override fun inverse(a: Action): Boolean {
+            return false
         }
-        root = ActionTreeElement(idCounter++, mockAction, null)
     }
 }

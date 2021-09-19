@@ -32,7 +32,10 @@ import de.sudoq.controller.menus.Utility
 import de.sudoq.controller.sudoku.CellInteractionListener.SelectEvent
 import de.sudoq.controller.sudoku.board.CellViewPainter.Companion.instance
 import de.sudoq.controller.sudoku.board.CellViewStates
+import de.sudoq.model.actionTree.ActionTree
 import de.sudoq.model.actionTree.ActionTreeElement
+import de.sudoq.model.actionTree.NoteAction
+import de.sudoq.model.actionTree.SolveAction
 import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.Game
 import de.sudoq.model.game.GameManager
@@ -227,31 +230,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
             Log.d(LOG_TAG, "Inflated gestures")
             // Scale SudokuView to LayoutSize, when inflating view is finished
             val vto = sudokuLayout!!.viewTreeObserver
-            vto.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-                    Log.d(LOG_TAG, "SudokuView height: " + sudokuLayout!!.measuredHeight)
-                    Log.d(LOG_TAG, "SudokuScrollView height: " + sudokuScrollView!!.measuredHeight)
-                    sudokuLayout!!.optiZoom(
-                        sudokuScrollView!!.measuredWidth,
-                        sudokuScrollView!!.measuredHeight
-                    )
-                    val obs = sudokuLayout!!.viewTreeObserver
-                    if (savedInstanceState != null) {
-                        val zoomFactor =
-                            savedInstanceState.getFloat(SAVE_ZOOM_FACTOR.toString() + "")
-                        if (zoomFactor != 0.0f) {
-                            sudokuLayout!!.zoom(zoomFactor)
-                            sudokuScrollView!!.zoomFactor = zoomFactor
-                        }
-                        val scrollX = savedInstanceState.getFloat(SAVE_SCROLL_X.toString()) +
-                                sudokuLayout!!.currentLeftMargin
-                        val scrollY = savedInstanceState.getFloat(SAVE_SCROLL_Y.toString()) +
-                                sudokuLayout!!.currentTopMargin
-                        sudokuScrollView!!.scrollTo(scrollX.toInt(), scrollY.toInt())
-                    }
-                    obs.removeGlobalOnLayoutListener(this)
-                }
-            })
+            vto.addOnGlobalLayoutListener(MyGlobalLayoutListener(this, savedInstanceState))
             val keyboardView = findViewById<VirtualKeyboardLayout>(R.id.virtual_keyboard)
             mediator = UserInteractionMediator(
                 keyboardView,
@@ -264,12 +243,63 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
             mediator!!.registerListener(this)
             if (game!!.isFinished()) {
                 setFinished(showWinDialog = false, surrendered = false)
+            } else {
+                //find the current cell from when the game was saved and mark it selected
+                val lastAction = game!!.currentState.action
+
+                fun getCellView(cellId: Int): SudokuCellView {
+                    val currentPosition = game!!.sudoku!!.getPosition(cellId)!!
+                    return sudokuLayout!!.getSudokuCellView(currentPosition)
+                }
+
+                when (lastAction) {
+                    // if no action
+                    is ActionTree.MockAction -> { /* */}
+                    is SolveAction -> {
+                        val currentCellView = getCellView(lastAction.cell.id)
+                        currentCellView.programmaticallySelectShort()}
+                    is NoteAction -> {
+                        val currentCellView = getCellView(lastAction.cell.id)
+                        currentCellView.programmaticallySelectLong()}
+                    else -> Log.e("GAME_RESTORE", "last action of unknown type")
+                }
+
             }
             setTypeText()
             updateButtons()
             val p = ProfileSingleton.getInstance(profilesFile, ProfileRepo(profilesFile),
                                                  ProfilesListRepo(profilesFile))
             panel!!.gestureButton!!.isSelected = p.isGestureActive
+        }
+    }
+
+    class MyGlobalLayoutListener(
+        private val activity: SudokuActivity,
+        private val savedInstanceState: Bundle?): OnGlobalLayoutListener {
+
+        override fun onGlobalLayout() {
+            Log.d(LOG_TAG, "SudokuView height: $activity.sudokuLayout!!.measuredHeight")
+            Log.d(LOG_TAG, "SudokuScrollView height: $activity.sudokuScrollView!!.measuredHeight")
+            activity.sudokuLayout!!.optiZoom(
+                activity.sudokuScrollView!!.measuredWidth,
+                activity.sudokuScrollView!!.measuredHeight
+            )
+            val obs = activity.sudokuLayout!!.viewTreeObserver
+            if (savedInstanceState != null) {
+                val zoomFactor =
+                    savedInstanceState.getFloat(SAVE_ZOOM_FACTOR.toString() + "")
+                if (zoomFactor != 0.0f) {
+                    activity.sudokuLayout!!.zoom(zoomFactor)
+                    activity.sudokuScrollView!!.zoomFactor = zoomFactor
+                }
+                val scrollX = savedInstanceState.getFloat(SAVE_SCROLL_X.toString()) +
+                        activity.sudokuLayout!!.currentLeftMargin
+                val scrollY = savedInstanceState.getFloat(SAVE_SCROLL_Y.toString()) +
+                        activity.sudokuLayout!!.currentTopMargin
+                activity.sudokuScrollView!!.scrollTo(scrollX.toInt(), scrollY.toInt())
+
+            }
+            obs.removeGlobalOnLayoutListener(this)
         }
     }
 
@@ -328,10 +358,15 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
             })
         }
         if (state.getInt(SAVE_FIELD_X.toString()) != -1) {
-            sudokuLayout!!.getSudokuCellView(
-                Position[state.getInt(SAVE_FIELD_X.toString()),
-                        state.getInt(SAVE_FIELD_Y.toString())]
-            ).onTouchEvent(null)
+            //save_field_x not being -1 means the last sudoku hat a cell selected
+            //this cell shall be selected again
+            val currentPosition = Position[
+                    state.getInt(SAVE_FIELD_X.toString()),
+                    state.getInt(SAVE_FIELD_Y.toString())]
+
+            sudokuLayout!!.getSudokuCellView(currentPosition).programmaticallySelectShort()
+            //todo kann man hier auch mit dem letztem Blatt im ActionTree arbeiten, so wie oben in GlobalLayoutListener?
+
         }
         if (state.getBoolean(SAVE_GESTURE_ACTIVE.toString())) {
             mediator!!.onCellSelected(sudokuLayout!!.currentCellView!!, SelectEvent.Short)
@@ -605,10 +640,10 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
 
         deleteAlert.setMessage(
             """
-    ${getString(R.string.dialog_won_text)}
-    
-    $statisticsString
-    """.trimIndent()
+            ${getString(R.string.dialog_won_text)}
+            
+            $statisticsString
+            """.trimIndent()
         )
         deleteAlert.setButton(getString(R.string.dialog_yes)) { dialog, which -> finish() }
         deleteAlert.setButton2(getString(R.string.dialog_no)) { dialog, which ->

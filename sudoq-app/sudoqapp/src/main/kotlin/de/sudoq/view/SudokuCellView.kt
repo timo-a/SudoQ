@@ -11,6 +11,8 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import de.sudoq.controller.sudoku.CellInteractionListener
 import de.sudoq.controller.sudoku.ObservableCellInteraction
@@ -18,6 +20,9 @@ import de.sudoq.controller.sudoku.Symbol
 import de.sudoq.controller.sudoku.board.CellViewPainter
 import de.sudoq.controller.sudoku.board.CellViewStates
 import de.sudoq.model.ModelChangeListener
+import de.sudoq.model.actionTree.Action
+import de.sudoq.model.actionTree.NoteAction
+import de.sudoq.model.actionTree.SolveAction
 import de.sudoq.model.game.Game
 import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Constraint
@@ -146,25 +151,24 @@ class SudokuCellView(
         }
         updateMarking()
     }
-    /**
-     * Diese Methode verarbeitet alle Touch Inputs, die der Benutzer macht und
-     * leitet sie an den ShowViewListener weiter.
-     *
-     * @param touchEvent
-     * Das TouchEvent das von der API kommt und diese Methode
-     * aufgerufen hat
-     * @return true falls das TouchEvent behandelt wurde, false falls nicht
-     * @throws IllegalArgumentException
-     * Wird geworfen, falls das übergebene MotionEvent null ist
-     */
-    /*@Override
-	public boolean onTouchEvent(MotionEvent touchEvent) {
-		for (CellInteractionListener listener : cellSelectListener) {
-			listener.onCellSelected(this);
-		}
 
-		return false;
-	}*/
+    /**
+     * This function simulates a short click for when the state of the sudoku is restored.
+     */
+    fun programmaticallySelectShort() {
+        programmaticallySelect(CellInteractionListener.SelectEvent.Short)
+    }
+
+    fun programmaticallySelectLong() {
+        programmaticallySelect(CellInteractionListener.SelectEvent.Long)
+    }
+
+    private fun programmaticallySelect(event: CellInteractionListener.SelectEvent) {
+        //close copy of [OnClickCellListener.onClick]
+        for (listener in cellSelectListener)
+            listener.onCellSelected(this, event)
+    }
+
     /**
      * Setzt den Notizstatus gemäß des Parameters
      *
@@ -344,32 +348,22 @@ class SudokuCellView(
             }
         }
         updateMarking()
-        setOnClickListener(object : OnClickListener {
-            override fun onClick(v: View) {
-                for (listener in cellSelectListener)
-                    listener.onCellSelected(scv!!, CellInteractionListener.SelectEvent.Short)
-            }
+        setOnClickListener(OnClickCellListener(this))
+        setOnLongClickListener(OnLongClickCellListener(this))
+    }
 
-            //this is just to pass `this`
-            var scv: SudokuCellView? = null
-            fun init(scv: SudokuCellView?): OnClickListener {
-                this.scv = scv
-                return this
-            }
-        }.init(this))
-        setOnLongClickListener(object : OnLongClickListener {
-            override fun onLongClick(v: View): Boolean {
-                for (listener in cellSelectListener)
-                    listener.onCellSelected(scv!!, CellInteractionListener.SelectEvent.Long)
-                return true
-            }
+    class OnClickCellListener(val scv: SudokuCellView): OnClickListener {
+        override fun onClick(v: View) {
+            for (listener in scv.cellSelectListener)
+                listener.onCellSelected(scv, CellInteractionListener.SelectEvent.Short)
+        }
+    }
 
-            //this is just to pass `this`
-            var scv: SudokuCellView? = null
-            fun init(scv: SudokuCellView?): OnLongClickListener {
-                this.scv = scv
-                return this
-            }
-        }.init(this))
+    class OnLongClickCellListener(val scv: SudokuCellView) : OnLongClickListener {
+        override fun onLongClick(v: View): Boolean {
+            for (listener in scv.cellSelectListener)
+                listener.onCellSelected(scv, CellInteractionListener.SelectEvent.Long)
+            return true
+        }
     }
 }
