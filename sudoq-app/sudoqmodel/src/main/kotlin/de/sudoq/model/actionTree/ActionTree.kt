@@ -61,10 +61,10 @@ class ActionTree : ObservableModelImpl<ActionTreeElement>(), Iterable<ActionTree
      */
     fun getElement(id: Int): ActionTreeElement? {
 
-        if (id in 1 until idCounter) { //TODO is range check necessary?
+        return if (id in 1 until idCounter) { //TODO is range check necessary?
             this.firstOrNull { it.id == id }
-        }
-        return null
+        } else
+            null
     }
 
     /**
