@@ -1,0 +1,5 @@
+un autre patch :
+ - les notes peuvent être saisies et supprimées dans n'importe quel ordre
+ - plus de plantage lors du changement d'orientation dans le menu "Nouveau Sudoku" et pendant le jeu
+ - lors du chargement, le champ de la dernière action est automatiquement sélectionné
+ 

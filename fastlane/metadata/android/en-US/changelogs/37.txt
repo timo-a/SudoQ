@@ -1,0 +1,4 @@
+another patch:
+ - notes can be properly set and removed in any order
+ - fixed crash on orientation change in "new sudoku" menu and game activity
+ - implement auto select of last action on loading a new game

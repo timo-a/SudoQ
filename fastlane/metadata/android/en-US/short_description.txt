@@ -1,0 +1,1 @@
+Play many sudoku types, with many assistances, all offline.

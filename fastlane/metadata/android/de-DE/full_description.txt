@@ -1,0 +1,8 @@
+Bietet viele Sudokutypen an, z.B. 4x4, 6x6, 16x16, squiggly oder Samurai.
+Es gibt viele Hilfestellungen etwa
+ - vor und zurück
+ - zurückspringen an jeden bisherigen Spielstand
+ - bestimmtes Feld lösen
+ - zurück zum letzten korrekten Stand
+
+Dazu viele Features wie zum Beispiel Gesteneingabe (Ziffern einfach auf den Schirm zeichnen).

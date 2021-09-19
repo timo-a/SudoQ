@@ -1,0 +1,8 @@
+Offre plusieurs types de Sudoku, par exemple 4x4, 6x6, 16x16, squiggly ou Samurai.
+Il existe de nombreuses fonctions d'aide telles que
+ - d'un côté à l'autre
+ - revenir à n'importe quel état de jeu précédent
+ - résoudre un certain domaine
+ - retour à la dernière position correcte
+
+Plus de nombreuses fonctionnalités telles que la saisie gestuelle (il suffit de dessiner des chiffres sur l'écran).

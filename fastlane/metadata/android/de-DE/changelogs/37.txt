@@ -1,0 +1,4 @@
+noch ein patch:
+ - Notizen können in beliebiger Reihenfolge eingegeben und gelöscht werden
+ - crasht nicht mehr bei orientierungswechsel in "Neues Sudoku" Menü und während dem Spiel
+ - beim Laden wird das Feld der letzten Aktion automatisch ausgewählt
