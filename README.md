@@ -1,6 +1,14 @@
-# SUDOQ
+# SudoQ
 
 ![build with gradle assemble](https://github.com/timo-a/SudoQ/actions/workflows/gradle_assemble.yml/badge.svg)
+
+
+[<img src="https://f-droid.org/badge/get-it-on.png"
+      alt="Get it on F-Droid"
+      height="80">](https://f-droid.org/en/packages/de.sudoq)
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" 
+      alt="Download from Google Play" 
+      height="80">](https://play.google.com/store/apps/details?id=de.sudoq)
 
 
 ANDROID STUFF
