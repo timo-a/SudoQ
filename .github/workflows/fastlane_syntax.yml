@@ -1,0 +1,16 @@
+# This workflow will check the fastlane folder for syntax errors
+
+name: Fastlane Syntax Check
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  check-fastlane-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: ashutoshgngwr/validate-fastlane-supply-metadata@v1
