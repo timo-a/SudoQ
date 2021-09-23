@@ -68,7 +68,7 @@ class PlayerPreferencesActivity : PreferencesActivity() {
         p.registerListener(this)
 
         //store language at beginning of activity lifecycle
-        currentLanguageCode = LanguageUtility.loadLanguageFromSharedPreferences2(this)
+        currentLanguageCode = LanguageUtility.loadLanguageFromSharedPreferences(this)
     }
 
     override fun onResume() {
@@ -77,7 +77,7 @@ class PlayerPreferencesActivity : PreferencesActivity() {
         //load language from memory
         //LanguageSetting fromMemory = LanguageUtility.loadLanguageFromSharedPreferences2(this);
         val fromConf = LanguageUtility.getConfLocale(this)
-        if (fromConf != currentLanguageCode!!.language) {
+        if (fromConf != currentLanguageCode!!.language.name) {
             val refresh = Intent(this, this.javaClass)
             finish()
             this.startActivity(refresh)
@@ -95,9 +95,9 @@ class PlayerPreferencesActivity : PreferencesActivity() {
             //only adopt external change if language is set to "system language"
             if (currentLanguageCode!!.isSystemLanguage) {
                 //adopt change
-                currentLanguageCode!!.language = LanguageUtility.loadLanguageFromLocale()
+                currentLanguageCode = LanguageUtility.loadLanguageFromSharedPreferences(this)
                 //store changes
-                LanguageUtility.storeLanguageToMemory2(this, currentLanguageCode!!)
+                LanguageUtility.storeLanguageToSharedPreferences(this, currentLanguageCode!!)
             }
         }
     }

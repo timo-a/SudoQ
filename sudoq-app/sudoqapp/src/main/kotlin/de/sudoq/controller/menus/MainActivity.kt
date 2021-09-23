@@ -18,13 +18,11 @@ import de.sudoq.R
 import de.sudoq.controller.SudoqCompatActivity
 import de.sudoq.controller.menus.preferences.LanguageSetting
 import de.sudoq.controller.menus.preferences.LanguageUtility.getConfLocale
-import de.sudoq.controller.menus.preferences.LanguageUtility.loadLanguageFromLocale
-import de.sudoq.controller.menus.preferences.LanguageUtility.loadLanguageFromSharedPreferences2
+import de.sudoq.controller.menus.preferences.LanguageUtility.loadLanguageFromSharedPreferences
 import de.sudoq.controller.menus.preferences.LanguageUtility.setConfLocale
-import de.sudoq.controller.menus.preferences.LanguageUtility.storeLanguageToMemory2
+import de.sudoq.controller.menus.preferences.LanguageUtility.storeLanguageToSharedPreferences
 import de.sudoq.controller.menus.preferences.PlayerPreferencesActivity
 import de.sudoq.controller.sudoku.SudokuActivity
-import de.sudoq.model.profile.ProfileSingleton
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.persistence.profile.ProfileRepo
 import de.sudoq.persistence.profile.ProfilesListRepo
@@ -62,22 +60,14 @@ class MainActivity : SudoqCompatActivity() {
         /* load language from profile */
 
         //retrieve language from profile at beginning of activity lifecycle
-        currentLanguageCode = loadLanguageFromSharedPreferences2(this)
-        val a = Locale.getDefault().language
-        val b = resources.configuration.locale.language
-        val c = currentLanguageCode!!.toStorableString()
-        if (currentLanguageCode!!.isSystemLanguage) {
-            //nothing to do
-            //locale is adopted automatically from device
-        } else {
-            val currentConf = getConfLocale(this)
-            if (currentConf != currentLanguageCode!!.language) {
-                //if conf != loaded language, set conf and update
-                setConfLocale(currentLanguageCode!!.language.name, this)
-                val refresh = Intent(this, this.javaClass)
-                finish()
-                this.startActivity(refresh)
-            }
+        currentLanguageCode = loadLanguageFromSharedPreferences(this)
+        val currentConf = getConfLocale(this)
+        if (currentConf != currentLanguageCode!!.language.name) {
+            // if conf != loaded language, set conf and update
+            setConfLocale(currentLanguageCode!!.language.name, this)
+            val refresh = Intent(this, this.javaClass)
+            finish()
+            this.startActivity(refresh)
         }
         Log.d("lang", "MainActivity.onCreate() set with $currentLanguageCode")
     }
@@ -100,7 +90,7 @@ class MainActivity : SudoqCompatActivity() {
 
         //load language from memory
         val fromConf = getConfLocale(this)
-        if (fromConf != currentLanguageCode!!.language) {
+        if (fromConf != currentLanguageCode!!.language.name) {
             //language has been changed so we need to restart this activity
             //so that the new language is applied to it
             Log.d("lang", "refresh because $currentLanguageCode -> $fromConf")
@@ -150,9 +140,9 @@ class MainActivity : SudoqCompatActivity() {
             //only adopt external change if language is set to "system language"
             if (currentLanguageCode!!.isSystemLanguage) {
                 //adopt change
-                currentLanguageCode!!.language = loadLanguageFromLocale()
+                currentLanguageCode = loadLanguageFromSharedPreferences(this)
                 //store changes
-                storeLanguageToMemory2(this, currentLanguageCode!!)
+                storeLanguageToSharedPreferences(this, currentLanguageCode!!)
             }
         }
     }

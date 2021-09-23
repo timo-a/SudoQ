@@ -10,23 +10,16 @@ object LanguageUtility {
 
     val SUDOQ_SHARED_PREFS_FILE : String = "SudoqSharedPrefs";
 
-    /* save languagesetting to two values*/
-    fun loadLanguageFromSharedPreferences(a: Activity): LanguageSetting {
-        val sp = a.getSharedPreferences(SUDOQ_SHARED_PREFS_FILE, MODE_PRIVATE)
-        val code = sp.getString("language", "system_en")
-        return LanguageSetting.fromStorableString(code)
-    }
-
     /* save language to enum */
     @JvmStatic
-    fun loadLanguageFromSharedPreferences2(a: Activity): LanguageSetting {
+    fun loadLanguageFromSharedPreferences(a: Activity): LanguageSetting {
         val sp = a.getSharedPreferences(SUDOQ_SHARED_PREFS_FILE, MODE_PRIVATE)
         val code = sp.getString("language", "system")
         val langEnum = LanguageCode.valueOf(code!!)
-        return if (langEnum == LanguageCode.system) {
-            LanguageSetting(loadLanguageFromLocale(), true)
+        if (langEnum == LanguageCode.system) {
+            return resolveSystemLocale()
         } else {
-            LanguageSetting(langEnum, false)
+            return LanguageSetting(langEnum, false)
         }
     }
 
@@ -34,7 +27,7 @@ object LanguageUtility {
      * @param langSetting
      */
     @JvmStatic
-    fun storeLanguageToMemory2(a: Activity, langSetting: LanguageSetting) {
+    fun storeLanguageToSharedPreferences(a: Activity, langSetting: LanguageSetting) {
         val langEnum = if (langSetting.isSystemLanguage) LanguageCode.system else langSetting.language
         val sp = a.getSharedPreferences(SUDOQ_SHARED_PREFS_FILE, MODE_PRIVATE)
         sp.edit()
@@ -42,31 +35,13 @@ object LanguageUtility {
             .apply()
     }
 
-    /* save language to enum */
-    @JvmStatic
-    fun loadLanguageFromLocale(): LanguageCode {
-        val code = Locale.getDefault().language //TODO won't this always return en?
-        LanguageCode.values().forEach { if (it.name == code) return it}
-        return LanguageCode.en
-    }
-
     //can be 'system'
     @JvmStatic
-    fun getConfLocale(a: Activity): LanguageCode {
+    fun getConfLocale(a: Activity): String {
         val res = a.resources
         val conf = res.configuration
         val code = conf.locale.language
-
-        val unmaintainedLang = !LanguageCode.values()
-            .map { it.name }
-            .contains(code)
-
-        return if (unmaintainedLang) {
-            Log.e("lang","Inexplicably, the language loaded from conf is $code, defaulting to 'system'")
-            LanguageCode.system
-        } else{
-            LanguageCode.valueOf(code)
-        }
+        return code;
     }
 
     //can be 'system'
@@ -83,7 +58,12 @@ object LanguageUtility {
 
     fun getLanguageFromItem(i: LanguageCode): LanguageSetting {
         val system = i == LanguageCode.system
-        val language = if (system) LanguageCode.valueOf(Locale.getDefault().language) else i
-        return LanguageSetting(language, system)
+        return if (system) resolveSystemLocale() else LanguageSetting(i, false)
+    }
+
+    fun resolveSystemLocale(): LanguageSetting {
+        val defaultCode = Locale.getDefault().language //TODO won't this always return en?
+        LanguageCode.values().forEach { if (it.name == defaultCode) return LanguageSetting(it, true)}
+        return LanguageSetting(LanguageCode.en, true)
     }
 }
