@@ -1,80 +1,41 @@
-package de.sudoq.model.sudoku.sudokuTypes;
+package de.sudoq.model.sudoku.sudokuTypes
 
-import kotlin.collections.get
-import kotlin.text.get
+import de.sudoq.model.sudoku.Position
+import de.sudoq.model.sudoku.PositionMap
+import de.sudoq.model.sudoku.Sudoku
+import org.amshove.kluent.`should be`
+import org.amshove.kluent.`should be false`
+import org.amshove.kluent.`should be true`
+import org.junit.jupiter.api.Test
 
-org.junit.Assert.assertFalse;
-org.junit.Assert.assertTrue;
-org.junit.Assert.fail;
+class CheckTest {
 
-import org.junit.Test;
+    var su1 = intArrayOf(
+        9, 5, 8,  3, 1, 2,  7, 6, 4,
+        4, 6, 1,  5, 7, 9,  8, 2, 3,
+        3, 7, 2,  4, 6, 8,  9, 5, 1,
 
-import de.sudoq.model.sudoku.Position;
-import de.sudoq.model.sudoku.PositionMap;
-import de.sudoq.model.sudoku.Sudoku;
+        8, 9, 6,  1, 2, 3,  5, 4, 7,
+        1, 4, 3,  7, 9, 5,  2, 8, 6,
+        5, 2, 7,  6, 8, 4,  3, 1, 9,
 
-public class TypeBasicTests {
+        7, 8, 5,  9, 4, 1,  6, 3, 2,
+        2, 1, 9,  8, 3, 6,  4, 7, 5,
+        6, 3, 4,  2, 5, 7,  1, 9, 8 )
 
-	int[] su1 = { 9, 5, 8, 3, 1, 2, 7, 6, 4
-	            , 4, 6, 1, 5, 7, 9, 8, 2, 3
-	            , 3, 7, 2, 4, 6, 8, 9, 5, 1
-	            , 8, 9, 6, 1, 2, 3, 5, 4, 7
-	            , 1, 4, 3, 7, 9, 5, 2, 8, 6
-	            , 5, 2, 7, 6, 8, 4, 3, 1, 9
-	            , 7, 8, 5, 9, 4, 1, 6, 3, 2
-	            , 2, 1, 9, 8, 3, 6, 4, 7, 5
-	            , 6, 3, 4, 2, 5, 7, 1, 9, 8 };
+    @Test
+    fun Checktest() {
+        for (i in su1.indices) {
+            su1[i]--
+        }
+        su1[0].`should be`(8);
 
-
-
-	@Test
-	public void Checktest() {
-		for (int i = 0; i < su1.length; i++) {
-			su1[i]--;
-		}
-		assertTrue(su1[0] == 8);
-
-        SudokuType s99 = TypeBuilder.getType(SudokuTypes.standard9x9);
-
-        PositionMap<Integer> map = new PositionMap<>(Position.get(9, 9), s99.getValidPositions(),
-                p -> su1[p.getY() * 9 + p.getX()]);
-
-		Sudoku sudoku1 = new Sudoku(s99, map, new PositionMap<>(Position.get(9, 9)));
-		for (Cell f : sudoku1)
-			f.setCurrentValue(f.getSolution());
-		assertTrue(sudoku1.getSudokuType().checkSudoku(sudoku1));
-		sudoku1.getCell(Position.get(0, 0)).setCurrentValue(5);
-		assertFalse(sudoku1.getSudokuType().checkSudoku(sudoku1));
-
-	}
-
-	@Test
-	public void toStringTest() {
-		SudokuType hy = TypeBuilder.getType(SudokuTypes.HyperSudoku);
-		assertTrue(hy.toString().equals(SudokuTypes.HyperSudoku.toString()));
-	}
-
+        val s99 = TypeBuilder.getType(SudokuTypes.standard9x9)
+        val map = PositionMap(Position[9, 9], s99.validPositions) { pos -> su1[pos.y * 9 + pos.x]}
+        val sudoku1 = Sudoku(s99, map, PositionMap(Position[9, 9]))
+        for (f in sudoku1) f.currentValue = f.solution
+        sudoku1.sudokuType.checkSudoku(sudoku1).`should be true`()
+        sudoku1.getCell(Position[0, 0])!!.currentValue = 5
+        sudoku1.sudokuType.checkSudoku(sudoku1).`should be false`()
+    }
 }
-
-/*class TestSudoku extends TypeBasic {
-
-	public TestSudoku(int a, int b) {
-		super(a, b);
-	}
-
-	@Override
-	public SudokuTypes getEnumType() {
-		return null;
-	}
-
-	@Override
-	public ComplexityConstraint buildComplexityConstraint(Complexity complexity) {
-		return null;
-	}
-
-	@Override
-	public float getStandardAllocationFactor() {
-		return 0;
-	}
-
-}*/
