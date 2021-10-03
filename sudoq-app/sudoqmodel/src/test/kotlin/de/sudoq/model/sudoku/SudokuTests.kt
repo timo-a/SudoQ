@@ -10,21 +10,12 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.sudoq.model.Utility;
 import de.sudoq.model.ModelChangeListener;
-import de.sudoq.model.persistence.IRepo;
-import de.sudoq.model.solverGenerator.Generator;
-import de.sudoq.model.solverGenerator.GeneratorCallback;
-import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
