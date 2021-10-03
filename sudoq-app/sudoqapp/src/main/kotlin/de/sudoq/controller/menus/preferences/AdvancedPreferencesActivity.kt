@@ -18,7 +18,6 @@ import android.widget.AdapterView.OnItemSelectedListener
 import androidx.appcompat.widget.Toolbar
 import de.sudoq.R
 import de.sudoq.controller.menus.NewSudokuActivity
-import de.sudoq.controller.menus.preferences.AdvancedPreferencesActivity
 import de.sudoq.controller.menus.preferences.LanguageSetting.LanguageCode
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.profile.ProfileManager
@@ -108,7 +107,7 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
         val thishere: Activity = this
 
         //set language
-        currentLanguageCode = LanguageUtility.loadLanguageFromSharedPreferences2(this)
+        currentLanguageCode = LanguageUtility.loadLanguageFromSharedPreferences(this)
         Log.d(
             "lang",
             "set language to AdvancedPreferencesActivity.onCreate() after setLocaleFromMemory."
@@ -135,7 +134,7 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
                 //enum to string(resolving system language) and set
                 val newCode = LanguageUtility.getLanguageFromItem(enumCode)
                 LanguageUtility.setConfLocale(newCode.language.name, thishere)
-                LanguageUtility.storeLanguageToMemory2(this@AdvancedPreferencesActivity, newCode)
+                LanguageUtility.storeLanguageToSharedPreferences(this@AdvancedPreferencesActivity, newCode)
                 //int previous = LanguageUtility.loadLanguageFromConf(AdvancedPreferencesActivity.this).name();
                 if (currentLanguageCode!!.language != newCode.language) {
                     //if we change e.g. from system(english) to english we need to store a different value but we don't need to refresh.
