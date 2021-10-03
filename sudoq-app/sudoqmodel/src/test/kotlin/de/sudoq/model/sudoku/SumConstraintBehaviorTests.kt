@@ -1,72 +1,55 @@
-package de.sudoq.model.sudoku;
+package de.sudoq.model.sudoku
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import io.mockk.every
+import io.mockk.mockk
+import org.amshove.kluent.`should be false`
+import org.amshove.kluent.`should be true`
+import org.amshove.kluent.`should throw`
+import org.amshove.kluent.invoking
+import org.junit.jupiter.api.*
+import java.lang.IllegalArgumentException
 
-import org.apache.commons.lang3.NotImplementedException;
-import org.junit.BeforeClass;
-import org.junit.Test;
+class SumConstraintBehaviorTests {
 
-import java.io.File;
+    @Test
+    fun testIllegalValue() {
+        invoking { SumConstraintBehavior(-1) }
+            .`should throw`(IllegalArgumentException::class)
+    }
 
-import de.sudoq.model.Utility;
-import de.sudoq.model.persistence.IRepo;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
+    @Test
+    fun testConstraint() {
 
-public class SumConstraintBehaviorTests {
-	private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
+        val sudoku = mockk<Sudoku>();
 
-	//this is a dummy so it compiles todo use xmls from resources
-	private IRepo<SudokuType> sudokuTypeRepo = null;//new SudokuTypeRepo();
+        fun mkCell(id: Int, currentValue: Int): Cell {
+            val c = Cell(id,9)
+            c.currentVal = currentValue
+            return c
+        }
 
-	@BeforeClass
-	public static void init() {
-		Utility.copySudokus();
-	}
+        every { sudoku.getCell(Position[0, 0]) } returns mkCell(0,1)
+        every { sudoku.getCell(Position[0, 1]) } returns mkCell(1,2)
+        every { sudoku.getCell(Position[0, 2]) } returns mkCell(2,3)
+        every { sudoku.getCell(Position[1, 0]) } returns mkCell(3,1)
+        every { sudoku.getCell(Position[1, 1]) } returns mkCell(4,2)
+        every { sudoku.getCell(Position[1, 2]) } returns mkCell(5,3)
 
-	@Test(expected = IllegalArgumentException.class)
-	public void testIllegalValue() {
-		@SuppressWarnings("unused")
-		SumConstraintBehavior c = new SumConstraintBehavior(-1);
-	}
+        val constraint = Constraint(SumConstraintBehavior(12), ConstraintType.LINE)
 
-	@Test
-	public void testConstraint() {
-		
-		TypeBuilder.get99();//just to force initialization of fileManager
-		
-		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku();
+        constraint.addPosition(Position[0, 0])
+        constraint.addPosition(Position[0, 1])
+        constraint.addPosition(Position[0, 2])
+        constraint.addPosition(Position[1, 0])
+        constraint.addPosition(Position[1, 1])
+        constraint.addPosition(Position[1, 2])
 
-		sudoku.getCell(Position.get(0, 0)).setCurrentValue(1);
-		sudoku.getCell(Position.get(0, 1)).setCurrentValue(2);
-		sudoku.getCell(Position.get(0, 2)).setCurrentValue(3);
-		sudoku.getCell(Position.get(1, 0)).setCurrentValue(1);
-		sudoku.getCell(Position.get(1, 1)).setCurrentValue(2);
-		sudoku.getCell(Position.get(1, 2)).setCurrentValue(3);
+        constraint.hasUniqueBehavior().`should be false`()
+        constraint.isSaturated(sudoku).`should be true`()
+        sudoku.getCell(Position[1, 1])!!.currentValue = 3
+        constraint.isSaturated(sudoku).`should be false`()
+        sudoku.getCell(Position[1, 2])!!.currentValue = 2
+        constraint.isSaturated(sudoku).`should be true`()
+    }
 
-		Constraint constraint = new Constraint(new SumConstraintBehavior(12), ConstraintType.LINE);
-		constraint.addPosition(Position.get(0, 0));
-		constraint.addPosition(Position.get(0, 1));
-		constraint.addPosition(Position.get(0, 2));
-		constraint.addPosition(Position.get(1, 0));
-		constraint.addPosition(Position.get(1, 1));
-		constraint.addPosition(Position.get(1, 2));
-
-		assertFalse("constraint has unique behavior", constraint.hasUniqueBehavior());
-		assertTrue("constraint not saturated", constraint.isSaturated(sudoku));
-
-		sudoku.getCell(Position.get(1, 2)).clearCurrentValue();
-		assertTrue("constraint not saturated", constraint.isSaturated(sudoku));
-
-		sudoku.getCell(Position.get(1, 1)).setCurrentValue(8);
-		assertFalse("constraint not saturated", constraint.isSaturated(sudoku));
-
-		sudoku.getCell(Position.get(1, 2)).setCurrentValue(2);
-		assertFalse("constraint not saturated", constraint.isSaturated(sudoku));
-
-		sudoku.getCell(Position.get(1, 2)).setCurrentValue(4);
-		assertFalse("constraint not saturated", constraint.isSaturated(sudoku));
-	}
 }
