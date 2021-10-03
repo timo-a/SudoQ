@@ -1,47 +1,40 @@
-package de.sudoq.model.sudoku;
+package de.sudoq.model.sudoku
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import io.mockk.every
+import io.mockk.mockk
+import org.amshove.kluent.`should be false`
+import org.amshove.kluent.`should be true`
+import org.junit.jupiter.api.*
 
-import org.apache.commons.lang3.NotImplementedException;
-import org.junit.Test;
+class UniqueConstraintBehaviorTests {
 
-import de.sudoq.model.TestWithInitCleanforSingletons;
-import de.sudoq.model.persistence.IRepo;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
+    @Test
+    fun testConstraint() {
 
-public class UniqueConstraintBehaviorTests extends TestWithInitCleanforSingletons {
+        val sudoku = mockk<Sudoku>()
 
-	//this is a dummy so it compiles todo use xmls from resources
-	private IRepo<SudokuType> sudokuTypeRepo;// = new SudokuTypeRepo();
+        fun mkCell(id: Int, currentValue: Int): Cell {
+            val c = Cell(id,9)
+            c.currentVal = currentValue
+            return c
+        }
 
-	@Test
-	public void testConstraint() {
-		TypeBuilder.get99();//just to force init of filemanager
-		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku();
-
-		sudoku.getCell(Position.get(0, 0)).setCurrentValue(1);
-		sudoku.getCell(Position.get(0, 1)).setCurrentValue(2);
-		sudoku.getCell(Position.get(0, 2)).setCurrentValue(3);
-		sudoku.getCell(Position.get(1, 0)).setCurrentValue(4);
-		sudoku.getCell(Position.get(1, 1)).setCurrentValue(5);
-		sudoku.getCell(Position.get(1, 2)).setCurrentValue(6);
-
-		Constraint constraint = new Constraint(new UniqueConstraintBehavior(), ConstraintType.LINE);
-		constraint.addPosition(Position.get(0, 0));
-		constraint.addPosition(Position.get(0, 1));
-		constraint.addPosition(Position.get(0, 2));
-		constraint.addPosition(Position.get(1, 0));
-		constraint.addPosition(Position.get(1, 1));
-		constraint.addPosition(Position.get(1, 2));
-
-		assertTrue("constraint has no unique behavior", constraint.hasUniqueBehavior());
-		assertTrue("constraint not saturated", constraint.isSaturated(sudoku));
-
-		sudoku.getCell(Position.get(0, 0)).setCurrentValue(2);
-
-		assertFalse("constraint still saturated", constraint.isSaturated(sudoku));
-	}
+        every { sudoku.getCell(Position[0, 0]) } returns mkCell(0, 1)
+        every { sudoku.getCell(Position[0, 1]) } returns mkCell(1, 2)
+        every { sudoku.getCell(Position[0, 2]) } returns mkCell(2, 3)
+        every { sudoku.getCell(Position[1, 0]) } returns mkCell(3, 4)
+        every { sudoku.getCell(Position[1, 1]) } returns mkCell(4, 5)
+        every { sudoku.getCell(Position[1, 2]) } returns mkCell(5, 6)
+        val constraint = Constraint(UniqueConstraintBehavior(), ConstraintType.LINE)
+        constraint.addPosition(Position[0, 0])
+        constraint.addPosition(Position[0, 1])
+        constraint.addPosition(Position[0, 2])
+        constraint.addPosition(Position[1, 0])
+        constraint.addPosition(Position[1, 1])
+        constraint.addPosition(Position[1, 2])
+        constraint.hasUniqueBehavior().`should be true`()
+        constraint.isSaturated(sudoku).`should be true`()
+        sudoku.getCell(Position[0, 0])!!.currentValue = 2
+        constraint.isSaturated(sudoku).`should be false`()
+    }
 }
