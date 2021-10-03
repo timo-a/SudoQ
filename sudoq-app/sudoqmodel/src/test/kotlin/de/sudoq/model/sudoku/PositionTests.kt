@@ -1,84 +1,80 @@
-package de.sudoq.model.sudoku;
+package de.sudoq.model.sudoku
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.amshove.kluent.`should be equal to`
+import org.amshove.kluent.`should throw`
+import org.amshove.kluent.invoking
+import org.junit.Assert
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
-import org.junit.Test;
+class PositionTests {
 
-import de.sudoq.model.sudoku.Position;
+    @Test // constructor
+    fun test() {
+        val iList = intArrayOf(Int.MIN_VALUE, -73, -1, 0, 1, 64, Int.MAX_VALUE)
+        val jList = intArrayOf(Int.MIN_VALUE, -83, -1, 0, 1, 63, Int.MAX_VALUE)
+        for (i in iList) {
+            for (j in jList) {
+                if (i < 0 || j < 0) {
+                    invoking { Position[i, j] }.`should throw`(IllegalArgumentException::class)
+                } else {
+                    val pos = Position[i, j]
+                    pos.x.`should be equal to`(i)
+                    pos.y.`should be equal to`(j)
+                }
+            }
+        }
+    }
 
-public class PositionTests {
+    @ParameterizedTest
+    @CsvSource(
+        "1, 2, 3, 4, 0",
+        "0, 0, 0, 0, 1",
+        "4, 4, 4, 3, 0",
+        "4, 5, 4, 5, 1",
+        "7987, 21523, 7987, 21523, 1",
+        "7987, 21523, 7988, 21521, 0")
+    fun equalTest(pX: Int, pY: Int, qX: Int, qY: Int, expected: Int) {
+        val posA = Position[pX, pY]
+        val posB = Position[qX, qY]
+        //posA.`should be equal to`(posB)
+        val result = posA == posB
+        Assert.assertTrue(
+            "equals() works not correct.",
+            result && expected == 1 || !result && expected == 0
+        )
+    }
 
-	@Test
-	// constructor
-	public void test() {
+    @Test
+    fun equalTest2() {
+        val pos = Position[1, 0]
+        Assert.assertFalse("equal accepts null", pos.equals(null))
+        Assert.assertFalse("equal accepts int", pos.equals(9))
+    }
 
-		int[] iList = { Integer.MIN_VALUE, -73, -1, 0, 1, 64, Integer.MAX_VALUE };
-		int[] jList = { Integer.MIN_VALUE, -83, -1, 0, 1, 63, Integer.MAX_VALUE };
+    @ParameterizedTest
+    @CsvSource("1, 2, 3, 4, 0",
+        "0, 0, 0, 0, 1",
+        "4, 4, 4, 3, 0",
+        "4, 5, 4, 5, 1",
+        "7987, 21523, 7987, 21523, 1",
+        "7987, 21523, 7988, 21521, 0"
+    )
+    fun hashCodeTest(pX: Int, pY: Int, qX: Int, qY: Int, expected: Int) {
+        val posA = Position[2, 2]
+        val posB = Position[2, 2]
 
-		for (int i : iList) {
-			for (int j : jList) {
+        val eq = posA == posB
+        val hash = posA.hashCode() == posB.hashCode()
+        Assertions.assertFalse { eq && !hash }
+    }
 
-				if (i < 0 || j < 0) {
-
-					try {
-						Position.get(i, j);
-						fail("No IllegalArgumentException is thrown");
-					} catch (IllegalArgumentException expected) {
-					}
-				} else {
-
-					try {
-						Position pos = Position.get(i, j);
-						assertTrue("getpos does not return initialised value", pos.getX() == i && pos.getY() == j);
-					} catch (IllegalArgumentException unexpected) {
-						fail("IllegalArgumentException is thrown");
-					}
-
-				}
-			}
-		}
-	}
-
-	@Test
-	public void equalTest() {
-
-		int[][] cases = { { 1, 2, 3, 4, 0 }, { 0, 0, 0, 0, 1 }, { 4, 4, 4, 3, 0 }, { 4, 5, 4, 5, 1 },
-				{ 7987, 21523, 7987, 21523, 1 }, { 7987, 21523, 7988, 21521, 0 } };
-
-		for (int[] i : cases) {
-
-			Position posA = Position.get(i[0], i[1]);
-			Position posB = Position.get(i[2], i[3]);
-			boolean result = posA.equals(posB);
-			assertTrue("equals() works not correct.", (result && i[4] == 1) || !result && i[4] == 0);
-		}
-		Position pos = Position.get(1, 0);
-		assertFalse("equal accepts null", pos.equals(null));
-		assertFalse("equal accepts int", pos.equals(9));
-	}
-
-	@Test
-	public void hashCodeTest() {
-		int[][] cases = { { 1, 2, 3, 4, 0 }, { 0, 0, 0, 0, 1 }, { 4, 4, 4, 3, 0 }, { 4, 5, 4, 5, 1 },
-				{ 7987, 21523, 7987, 21523, 1 }, { 7987, 21523, 7988, 21521, 0 } };
-
-		for (int[] i : cases) {
-
-			Position posA = Position.get(i[0], i[1]);
-			Position posB = Position.get(i[2], i[3]);
-			boolean resEquals = posA.equals(posB);
-			boolean resHash = posA.hashCode() == posB.hashCode();
-			assertFalse("hashCode() works not correct.", resEquals && !resHash);
-		}
-	}
-
-	@Test
-	public void testToString() {
-		Position p = Position.get(5, 9);
-		assertEquals(p.toString(), "5, 9");
-	}
+    @Test
+    fun testToString() {
+        val p = Position[5, 9]
+        Assert.assertEquals(p.toString(), "5, 9")
+    }
 
 }

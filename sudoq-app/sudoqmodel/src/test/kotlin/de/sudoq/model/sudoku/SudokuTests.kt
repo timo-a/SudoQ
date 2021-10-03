@@ -1,273 +1,237 @@
-package de.sudoq.model.sudoku;
+package de.sudoq.model.sudoku
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import de.sudoq.model.ModelChangeListener
+import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests
+import de.sudoq.model.sudoku.complexity.Complexity
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
+import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder
+import org.amshove.kluent.*
+import org.junit.jupiter.api.Test
 
-import java.util.Iterator;
+class SudokuTests {
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+    val sudokuType99: SudokuType = TypeBuilder.getType(SudokuTypes.standard9x9)
 
-import de.sudoq.model.ModelChangeListener;
-import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
+    @Test
+    fun testInitializeStandardSudoku() {
+        val sudoku = Sudoku(sudokuType99)
 
-public class SudokuTests {
+        sudoku.sudokuType `should be` sudokuType99
+        sudoku.isFinished.`should be false`()
 
-	//this is a dummy so it compiles todo use xmls from resources
-	//private static IRepo<SudokuType> sudokuTypeRepo = new SudokuTypeRepo();
+        for (pos in sudokuType99.validPositions)
+            sudoku.getCell(pos).`should not be null`()
 
-	@BeforeClass
-	public static void beforeClass() {
-        //todo use mock
-		/*new Generator(sudokuTypeRepo).generate(SudokuTypes.standard4x4, Complexity.easy, new GeneratorCallback() {
-			@Override
-			public void generationFinished(Sudoku sudoku) {
-				SudokuTests.sudoku = sudoku;
-			}
+        for (f in sudoku)
+            f.`should not be null`()
 
-			@Override
-			public void generationFinished(Sudoku sudoku, List<Solution> sl) {
-				SudokuTests.sudoku = sudoku;
-			}
-		});*/
-	}
+        sudoku.transformCount.`should be`(0)
+        sudoku.id.`should be`(0)
 
+        sudoku.increaseTransformCount()
 
-	@Test
-	public void testInitializeStandardSudoku() {
-		SudokuType sudokuType = TypeBuilder.getType(SudokuTypes.standard9x9);
-		Sudoku sudoku = new Sudoku(sudokuType);
+        sudoku.transformCount.`should be`(1)
+    }
 
-        assertSame("Sudokutype isn't the same", sudoku.getSudokuType(), sudokuType);
-		assertFalse("Sudoku finished on initialization", sudoku.isFinished());
+    @Test
+    fun testInitializeWithoutSolutions() {
+        val sudoku = Sudoku(sudokuType99, null, null)
 
-        for (Position pos : sudokuType.getValidPositions()) {
-            assertNotNull("some field initialized as null", sudoku.getCell(pos));
+        sudoku.sudokuType.`should be`(sudokuType99)
+        sudoku.isFinished.`should be false`()
+
+        for (pos in sudokuType99.validPositions)
+            sudoku.getCell(pos).`should not be null`()
+
+        for (f in sudoku)
+            f.`should not be null`()
+
+        sudoku.transformCount.`should be`(0)
+        sudoku.id.`should be`(0)
+
+        sudoku.increaseTransformCount()
+
+        sudoku.transformCount.`should be`(1)
+
+    }
+
+    @Test
+    fun testInitializeWithoutSetValues() {
+        val solutions = PositionMap<Int>(Position[9, 9], sudokuType99.validPositions) {
+            _ -> 0 }
+        val sudoku = Sudoku(sudokuType99, solutions, null)
+        sudoku.sudokuType.`should be`(sudokuType99)
+        sudoku.isFinished.`should be false`()
+
+        for (pos in sudokuType99.validPositions) {
+            sudoku.getCell(pos).`should not be null`()
         }
 
-		for (Cell f : sudoku) {
-            assertNotNull("some field initialized as null (iterator)", f);
-		}
+        sudoku.transformCount.`should be`(0)
+        sudoku.id.`should be`(0)
 
-        assertEquals(0, sudoku.getTransformCount());
-        assertEquals(0, sudoku.getId());
-		sudoku.increaseTransformCount();
-        assertEquals(1, sudoku.getTransformCount());
-	}
+        sudoku.increaseTransformCount()
 
-	@Test
-	public void testInitializeWithoutSolutions() {
-		SudokuType sudokuType = TypeBuilder.getType(SudokuTypes.standard9x9);
-		Sudoku sudoku = new Sudoku(sudokuType, null, null);
+        sudoku.transformCount.`should be`(1)
 
-        assertSame("Sudokutype isn't the same", sudoku.getSudokuType(), sudokuType);
-		assertFalse("Sudoku finished on initialization", sudoku.isFinished());
+    }
 
-        for (Position pos : sudokuType.getValidPositions()) {
-            assertNotNull("some field initialized as null", sudoku.getCell(pos));
-		}
+    @Test
+    fun testGetCell() {
+        val sudoku = Sudoku(sudokuType99)
+        val p12 = Position[1, 2]
+        sudoku.getCell(Position[9, 10]).`should be null`() //because out of board
 
-		for (Cell f : sudoku) {
-            assertNotNull("some field initialized as null (iterator)", f);
-		}
-	}
+        val f = sudoku.getCell(p12)
+        f!!.currentValue = 6
+        sudoku.getCell(p12)!!.currentValue.`should be`(6)
+    }
 
-	@Test
-	public void testInitializeWithoutSetValues() {
-		SudokuType sudokuType = TypeBuilder.getType(SudokuTypes.standard9x9);
-		PositionMap<Integer> solutions = new PositionMap<>(Position.get(9, 9),
-                sudokuType.getValidPositions(), p -> 0);
-		Sudoku sudoku = new Sudoku(sudokuType, solutions, null);
+    @Test
+    fun testComplexity() {
+        val sudoku = Sudoku(sudokuType99)
+        sudoku.complexity.`should be null`()
+        sudoku.complexity = Complexity.easy
+        sudoku.complexity.`should not be null`()
+        sudoku.complexity.`should be`(Complexity.easy)
+    }
 
-		assertTrue("Sudokutype isn't the same", sudoku.getSudokuType() == sudokuType);
-		assertFalse("Sudoku finished on initialization", sudoku.isFinished());
+    @Test//TODO no chance to fail...
+    fun testIterator() {
+        val su = Sudoku(sudokuType99)
+        su.getCell(Position[0, 0])!!.currentValue = 5
+        su.getCell(Position[1, 4])!!.currentValue = 4
+        val i = su.iterator()
+        var aThere = false
+        var bThere = false
+        var f: Cell
+        while (i.hasNext()) {
+            f = i.next()
+            if (f.currentValue == 5 && !aThere) aThere = true
+            if (f.currentValue == 4 && !bThere) bThere = true
+        }
+    }
 
-		for (Position pos : sudokuType.getValidPositions()) {
-             assertNotNull("some field initialized as null", sudoku.getCell(pos));
-		}
-
-		for (Cell f : sudoku) {
-            assertNotNull("some field initialized as null (iterator)", f);
-		}
-	}
-
-	@Test
-	public void testGetCell() {
-		Sudoku sudoku = new Sudoku(TypeBuilder.getType(SudokuTypes.standard9x9));
-
-		assertNotNull(sudoku);
-
-		assertNull(sudoku.getCell(Position.get(9, 10)));
-		Cell f = sudoku.getCell(Position.get(1, 2));
-
-		f.setCurrentValue(6);
-
-		assertEquals(6, sudoku.getCell(Position.get(1, 2)).getCurrentValue());
-	}
-
-	@Test
-	public void testComplexity() {
-		Sudoku sudoku = new Sudoku(TypeBuilder.getType(SudokuTypes.standard9x9));
-
-		assertNull(sudoku.getComplexity());
-		sudoku.setComplexity(Complexity.easy);
-		assertSame(sudoku.getComplexity(), Complexity.easy);
-		assertNotNull(sudoku.getComplexity());
-
-	}
-
-	@Test
-	public void testIterator() {
-		Sudoku su = new Sudoku(TypeBuilder.getType(SudokuTypes.standard9x9));
-
-		su.getCell(Position.get(0, 0)).setCurrentValue(5);
-		su.getCell(Position.get(1, 4)).setCurrentValue(4);
-
-		Iterator<Cell> i = su.iterator();
-
-		boolean aThere = false;
-		boolean bThere = false;
-
-		Cell f;
-
-		while (i.hasNext()) {
-			f = i.next();
-			if (f.getCurrentValue() == 5 && !aThere)
-				aThere = true;
-			if (f.getCurrentValue() == 4 && !bThere)
-				bThere = true;
-
-		}
-	}
-
-	@Test
-	public void testInitializeSudokuWithValues() {
-        SudokuType s99 = TypeBuilder.getType(SudokuTypes.standard9x9);
-		PositionMap<Integer> map = new PositionMap<>(s99.getSize(), s99.getValidPositions(),
-                pos -> pos.getX() + 1);
-		PositionMap<Boolean> setValues = new PositionMap<>(s99.getSize());
-		for (Position pos : s99.getValidPositions()) {
-            if (pos.getX() != pos.getY()) {
-                setValues.put(pos, true);
-			}
-		}
-
-        Sudoku sudoku = new Sudoku(s99, map, setValues);
-
-		Cell cell;
-		for (Position pos : s99.getValidPositions()) {
-            cell = sudoku.getCell(pos);
-            if (pos.getX() == pos.getY()) {
-                assertTrue("wrong field initialization or field null", cell.isEditable());
+    @Test
+    fun testInitializeSudokuWithValues() {
+        val map = PositionMap<Int>(Position[9, 9], sudokuType99.validPositions) {
+            pos -> pos.x + 1}
+        val setValues = PositionMap<Boolean>(Position[9, 9],
+            sudokuType99.validPositions.filter { pos -> pos.x != pos.y }) {
+            _ -> true }
+        val sudoku = Sudoku(sudokuType99, map, setValues)
+        var cell: Cell?
+        for (pos in sudokuType99.validPositions) {
+            cell = sudoku.getCell(pos)
+            if (pos.x == pos.y) {
+                cell!!.isEditable.`should be true`()
             } else {
-                assertFalse("wrong field initialization or field null", cell.isEditable());
+                cell!!.isEditable.`should be false`()
             }
-		}
-	}
+        }
+    }
 
-/*	@Test todo use mock
-	public void testCellChangeNotification() {
-		Sudoku sudoku = new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku();
-		Listener listener = new Listener();
+    @Test //todo use mockk
+    fun testCellChangeNotification() {
+        val sudokuTypeRepo = SudokuTypeRepo4Tests()
+        val sudoku = SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku()
+        val listener = Listener();
 
-		sudoku.getCell(Position.get(0, 0)).setCurrentValue(2);
-		assertEquals(listener.callCount, 0);
+        sudoku.getCell(Position[0, 0])!!.currentValue = 2
+        listener.callCount `should be` 0
 
-		sudoku.registerListener(listener);
-		sudoku.getCell(Position.get(3, 2)).setCurrentValue(5);
-		assertEquals(listener.callCount, 1);
-	}*/
+        sudoku.registerListener(listener);
+        sudoku.getCell(Position[3, 2])!!.currentValue = 5
+        listener.callCount `should be` 1
+   }
 
-	class Listener implements ModelChangeListener<Cell> {
-		int callCount = 0;
+    class Listener : ModelChangeListener<Cell> {
+        var callCount : Int = 0;
 
-		@Override
-		public void onModelChanged(Cell obj) {
-			callCount++;
-		}
+        override fun onModelChanged(obj: Cell) {
+            callCount++;
+        }
+    }
 
-	}
+    @Test
+    fun testNotEquals() {
+        val s1 = Sudoku(sudokuType99)
+        var s2 = Sudoku(TypeBuilder.getType(SudokuTypes.standard16x16))
+        s1.`should not be equal to`(s2)
+        s1.`should not be null`()
 
+        s2 = Sudoku(sudokuType99)
+        s1.complexity = Complexity.easy
+        s2.complexity = Complexity.medium
+        s1.`should not be equal to`(s2)
+        s2 = Sudoku(TypeBuilder.getType(SudokuTypes.samurai))
+        s2.complexity = Complexity.easy
+        s2.`should not be equal to`(s1)
+    }
 
+    @Test
+    fun testHasErrors() {
+        val sudokuType = sudokuType99
+        val solutions = PositionMap<Int>(Position[9, 9])
+        for (pos in sudokuType.validPositions) {
+            solutions.put(pos, 0)
+        }
+        val sudoku = Sudoku(sudokuType, solutions, null)
+        sudoku.getCell(Position[0, 0])!!.currentValue = 1
+        sudoku.hasErrors().`should be true`()
+    }
 
-	@Test
-	public void testNotEquals() {
-		Sudoku s1 = new Sudoku(TypeBuilder.getType(SudokuTypes.standard9x9  ));
-		Sudoku s2 = new Sudoku(TypeBuilder.getType(SudokuTypes.standard16x16));
-		assertNotEquals(s1, s2);
-		assertNotEquals(null, s1);
-		assertNotEquals(s1, 0);
-		s2 = new Sudoku(TypeBuilder.getType(SudokuTypes.standard9x9) );
-		s1.setComplexity(Complexity.easy);
-		s2.setComplexity(Complexity.medium);
-		assertNotEquals(s1, s2);
-		s2 = new Sudoku(TypeBuilder.getType(SudokuTypes.samurai));
-		s2.setComplexity(Complexity.easy);
-		assertNotEquals(s2, s1);
-	}
-
-	@Test
-	public void testHasErrors() {
-		SudokuType sudokuType = TypeBuilder.getType(SudokuTypes.standard9x9);
-		PositionMap<Integer> solutions = new PositionMap<>(Position.get(9, 9),
-                sudokuType.getValidPositions(), p -> 0);
-		Sudoku sudoku = new Sudoku(sudokuType, solutions, null);
-		sudoku.getCell(Position.get(0, 0)).setCurrentValue(1);
-		assertTrue(sudoku.hasErrors());
-	}
-
-
-	@Test
-	public void testCellModification() {
-		Sudoku s = new Sudoku(TypeBuilder.get99());
-		Cell f = new Cell(1000, 9);
-		s.setCell(f, Position.get(4, 4));
-		assertTrue(f.equals(s.getCell(Position.get(4, 4))));
-		assertEquals(s.getPosition(f.getId()), Position.get(4, 4));
-	}
-
-	@Test
-	public synchronized void testToString() {
-
-		SudokuType sudokuType = TypeBuilder.getType(SudokuTypes.standard4x4);
-		Sudoku sudoku = new Sudoku(sudokuType);
-		sudoku.getCell(Position.get(1,1)).setCurrentValue(3);
-		sudoku.cells.remove(Position.get(1,2));
-		assertEquals("x x x x\n"
-		            +"x 3 x x\n"
-		            +"x   x x\n"
-		            +"x x x x",sudoku.toString());
+    @Test
+    fun testCellModification() {
+        val s = Sudoku(TypeBuilder.get99())
+        val f = Cell(1000, 9)
+        s.setCell(f, Position[4, 4])
+        s.getCell(Position[4, 4]).`should be`(f)
+        s.getPosition(f.id).`should be equal to`(Position[4, 4])
+    }
 
 
+    @Test
+    fun testToString44() {
+        val sudokuType = TypeBuilder.getType(SudokuTypes.standard4x4)
+        val sudoku = Sudoku(sudokuType)
+        sudoku.getCell(Position[1, 1])!!.currentValue = 3
+        sudoku.cells!!.remove(Position[1, 2])
+        sudoku.toString().`should be equal to`(
+            """
+            x x x x
+            x 3 x x
+            x   x x
+            x x x x
+            """.trimIndent(),
+        )
+    }
 
-		sudokuType = TypeBuilder.getType(SudokuTypes.standard16x16);
-		sudoku = new Sudoku(sudokuType);
-		sudoku.getCell(Position.get(1,1)).setCurrentValue(12);
-		assertEquals("xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
-		            +"xx 12 xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
-		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
-		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
-		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
-		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
-		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
-		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
-		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
-		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
-		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
-		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
-		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
-		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
-		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx\n"
-		            +"xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx",sudoku.toString());
-	}
+    @Test
+    fun testToString99() {
+        val sudokuType = TypeBuilder.getType(SudokuTypes.standard16x16)
+        val sudoku = Sudoku(sudokuType)
+        sudoku.getCell(Position[1, 1])!!.currentValue = 12
+        sudoku.toString().`should be equal to`(
+            """
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx 12 xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            """.trimIndent(),
+        )
+    }
 }
