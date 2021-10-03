@@ -1,14 +1,14 @@
 package de.sudoq.model.sudoku.sudokuTypes;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import kotlin.collections.get
+import kotlin.text.get
+
+org.junit.Assert.assertFalse;
+org.junit.Assert.assertTrue;
+org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import java.util.stream.StreamSupport;
-
-import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
