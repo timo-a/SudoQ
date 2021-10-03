@@ -26,7 +26,7 @@ public class SamuraiTest {
     @Test
 	public void testSolveSamurai() {
         for (SudokuTypes st : SudokuTypes.values())
-            for (Complexity c : Complexity.playableValues())
+            for (Complexity c : Complexity.Companion.playableValues())
                 for (int i = 1; i <= 10; i++) {
                     Sudoku s = getSudoku(sudokuDir, SudokuTypes.samurai, Complexity.easy, 1);
                     testOneSudoku(s);
