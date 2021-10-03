@@ -1,61 +1,50 @@
-package de.sudoq.model.sudoku.sudokuTypes;
+package de.sudoq.model.sudoku.sudokuTypes
 
-import org.junit.Test;
+import org.amshove.kluent.`should be`
+import org.amshove.kluent.`should not be null`
+import org.junit.jupiter.api.Test
 
-import de.sudoq.model.sudoku.Position;
+class SymbolIteratorTest {
 
-org.junit.Assert.assertEquals;
-org.junit.Assert.assertNotNull;
-org.junit.Assert.assertNull;
-org.junit.Assert.assertTrue;
+    @Test
+    fun test4x4() {
+        val sst = TypeBuilder.getType(SudokuTypes.standard4x4)
+        testEquality(sst)
+    }
 
-public class SymbolIteratorTest {
+    @Test
+    fun test9x9() {
+        val sst = TypeBuilder.getType(SudokuTypes.standard9x9)
+        testEquality(sst)
+    }
 
-	SudokuType sst;
+    @Test
+    fun test6x6() {
+        val sst = TypeBuilder.getType(SudokuTypes.standard6x6)
+        testEquality(sst)
+    }
 
-	@Test
-	public void test4x4(){
-		sst = TypeBuilder.getType(SudokuTypes.standard4x4);
-		testEquality(sst);
-	}
+    @Test
+    fun test16x16() {
+        val sst = TypeBuilder.getType(SudokuTypes.standard16x16)
+        testEquality(sst)
+    }
 
-	@Test
-	public void test9x9(){
-		sst = TypeBuilder.getType(SudokuTypes.standard9x9);
-		testEquality(sst);
-	}
+    @Test
+    fun testArbitrary() {
+        val sst = TypeBuilder.getType(SudokuTypes.standard4x4)
+        for (i in intArrayOf(1, 2, 3, 20, 100)) {
+            sst.setNumberOfSymbols(i)
+            testEquality(sst)
+        }
+    }
 
-	@Test
-	public void test6x6(){
-		sst = TypeBuilder.getType(SudokuTypes.standard6x6);
-		testEquality(sst);
-	}
-
-	@Test
-	public void test16x16(){
-		sst = TypeBuilder.getType(SudokuTypes.standard16x16);
-		testEquality(sst);
-	}
-
-	@Test
-	public void testArbitrary(){
-		sst = TypeBuilder.getType(SudokuTypes.standard4x4);
-		for(int i : new int[]{1,2,3,20,100}){
-			sst.setNumberOfSymbols(i);
-			testEquality(sst);
-		}
-	}
-
-	private void testEquality(SudokuType sst) {
-		int counter = 0;
-		for (int i:
-			 sst.getSymbolIterator()) {
-			assertEquals(counter++, i);
-		}
-		assertEquals(sst.getNumberOfSymbols(), counter);
-		Position p = sst.getSize();
-	}
-
-
-
+    private fun testEquality(sst: SudokuType?) {
+        var counter = 0
+        for (i in sst!!.symbolIterator) {
+            i.`should be`(counter++)
+        }
+        sst.numberOfSymbols.`should be`(counter)
+        sst.size.`should not be null`()
+    }
 }

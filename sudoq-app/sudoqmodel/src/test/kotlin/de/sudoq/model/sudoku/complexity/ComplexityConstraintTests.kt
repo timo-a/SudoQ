@@ -1,47 +1,67 @@
-package de.sudoq.model.sudoku.complexity;
+package de.sudoq.model.sudoku.complexity
 
-import static org.junit.Assert.assertEquals;
+import org.amshove.kluent.`should be equal to`
+import org.amshove.kluent.`should throw`
+import org.amshove.kluent.invoking
+import org.junit.Assert
+import org.junit.jupiter.api.Test
+import java.lang.IllegalArgumentException
 
-import org.junit.Test;
+class ComplexityConstraintTests {
 
-public class ComplexityConstraintTests {
+    @Test
+    fun standardTest() {
+        val com = ComplexityConstraint(Complexity.medium, 32, 1000, 2000, 5)
+        com.complexity.`should be equal to`(Complexity.medium)
+        com.averageCells.`should be equal to`(32)
+        com.minComplexityIdentifier.`should be equal to`(1000)
+        com.maxComplexityIdentifier.`should be equal to`(2000)
+        com.numberOfAllowedHelpers.`should be equal to`(5)
+    }
 
-	@Test
-	public void standardTest() {
-		ComplexityConstraint com = new ComplexityConstraint(Complexity.medium, 32, 1000, 2000, 5);
+    @Test
+    fun testInvalidIdentifierRange() {
+        invoking {
+            ComplexityConstraint(Complexity.difficult, 5, 2000, 1000, 5)
+        }.`should throw`(IllegalArgumentException::class)
+    }
 
-		assertEquals(com.getComplexity(), Complexity.medium);
-		assertEquals(com.getAverageCells(), 32);
-		assertEquals(com.getMinComplexityIdentifier(), 1000);
-		assertEquals(com.getMaxComplexityIdentifier(), 2000);
-		assertEquals(com.getNumberOfAllowedHelpers(), 5);
-	}
+    @Test
+    fun testNegativeMinIdentifier() {
+        invoking {
+            ComplexityConstraint(Complexity.easy, 5, -5, 100, 3)
+        }.`should throw`(IllegalArgumentException::class)
+    }
 
-	@Test(expected = IllegalArgumentException.class)
-	public void testInvalidIdentifierRange() {
-		new ComplexityConstraint(Complexity.difficult, 5, 2000, 1000, 5);
-	}
+    @Test
+    fun testNegativeAverageCells() {
+        invoking {
+            ComplexityConstraint(Complexity.easy, -5, 10, 100, 3)
+        }.`should throw`(IllegalArgumentException::class)
+    }
 
-	@Test(expected = IllegalArgumentException.class)
-	public void testNegativeMinIdentifier() {
-		new ComplexityConstraint(Complexity.easy, 5, -5, 100, 3);
-	}
+    @Test
+    fun testIllegalNumberOfHelpers() {
+        invoking {
+            ComplexityConstraint(Complexity.infernal, 5, 1000, 2000, -5)
+        }.`should throw`(IllegalArgumentException::class)
+    }
 
-	@Test(expected = IllegalArgumentException.class)
-	public void testNegativeAverageCells() {
-		new ComplexityConstraint(Complexity.easy, -5, 10, 100, 3);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testIllegalNumberOfHelpers() {
-		new ComplexityConstraint(Complexity.infernal, 5, 1000, 2000, -5);
-	}
-
-	public static void returnsValues(ComplexityConstraint c, Complexity complexity, int averageFields, int minComplexityIdentifier, int maxComplexityIdentifier, int numberOfAllowedHelpers) {
-		assertEquals(c.getComplexity(), complexity);
-		assertEquals(c.getAverageCells(), averageFields);
-		assertEquals(c.getMinComplexityIdentifier(), minComplexityIdentifier);
-		assertEquals(c.getMaxComplexityIdentifier(), maxComplexityIdentifier);
-		assertEquals(c.getNumberOfAllowedHelpers(), numberOfAllowedHelpers);
-	}
+    companion object {
+        @JvmStatic
+		fun returnsValues(
+            c: ComplexityConstraint,
+            complexity: Complexity?,
+            averageFields: Int,
+            minComplexityIdentifier: Int,
+            maxComplexityIdentifier: Int,
+            numberOfAllowedHelpers: Int
+        ) {
+            c.complexity.`should be equal to`(complexity)
+            c.averageCells.`should be equal to`(averageFields.toLong())
+            c.minComplexityIdentifier.`should be equal to`(minComplexityIdentifier.toLong())
+            c.maxComplexityIdentifier.`should be equal to`(maxComplexityIdentifier.toLong())
+            c.numberOfAllowedHelpers.`should be equal to`(numberOfAllowedHelpers.toLong())
+        }
+    }
 }
