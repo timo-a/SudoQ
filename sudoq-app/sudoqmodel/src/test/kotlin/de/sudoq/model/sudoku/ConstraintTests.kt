@@ -1,122 +1,74 @@
-package de.sudoq.model.sudoku;
+package de.sudoq.model.sudoku
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import io.mockk.every
+import io.mockk.mockk
+import org.amshove.kluent.`should be equal to`
+import org.amshove.kluent.`should be true`
+import org.amshove.kluent.`should be false`
+import org.junit.jupiter.api.Test
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Iterator;
+class ConstraintTests {
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+    @Test
+    fun initialisation() {
+        val uc = UniqueConstraintBehavior()
+        var c = Constraint(uc, ConstraintType.LINE, null)
+        c.hasUniqueBehavior().`should be true`()
+        c.toString().`should be equal to`("Constraint with $uc")
+        val c1 = Constraint(UniqueConstraintBehavior(), ConstraintType.LINE)
+        c1.type.`should be equal to`(ConstraintType.LINE)
+        c = Constraint(SumConstraintBehavior(9), ConstraintType.LINE, null)
+        c.hasUniqueBehavior().`should be false`()
+    }
 
-import de.sudoq.model.Utility;
-import de.sudoq.model.utility.FileManager;
-import de.sudoq.model.profile.ProfileSingleton;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
+    @Test
+    fun testAddPositionAndIterate() {
+        val c = Constraint(UniqueConstraintBehavior(), ConstraintType.LINE)
+        val p1 = Position[1, 1]
+        val p2 = Position[2, 2]
+        val p3 = Position[42, 42]
+        c.addPosition(p1)
+        c.addPosition(p2)
+        c.addPosition(p3)
+        c.addPosition(p1)
+        c.size.`should be equal to`(3)
+        c.includes(p1).`should be true`()
+        c.includes(p2).`should be true`()
+        c.includes(p3).`should be true`()
+        val i = c.iterator()
+        var p = i.next()
+        p.`should be equal to`(p1)
+        p = i.next()
+        p.`should be equal to`(p2)
+        p = i.next()
+        p.`should be equal to`(p3)
+    }
 
-public class ConstraintTests {
+    @Test
+    fun testSaturation() {
+        val c = Constraint(UniqueConstraintBehavior(), ConstraintType.LINE)
+        val posA = Position[0, 0]
+        val posB = Position[0, 1]
+        val posC = Position[0, 2]
 
-	private static File profiles = new File("res/tmp_profiles");
-	private static File sudokus = new File("res/tmp_sudokus");
+        val sudo = mockk<Sudoku>()
 
-	@BeforeClass
-	public static void init() throws IOException {
-		Utility.copySudokus();
-		profiles = Utility.profiles;
-		sudokus  = Utility.sudokus;
-	}
+        fun mkCell(id: Int, currentValue: Int): Cell {
+            val c = Cell(id,9)
+            c.currentVal = currentValue
+            return c
+        }
 
-	@AfterClass
-	public static void clean() throws IOException, SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-		java.lang.reflect.Field f = FileManager.class.getDeclaredField("profiles");
-		f.setAccessible(true);
-		f.set(null, null);
-		java.lang.reflect.Field s = FileManager.class.getDeclaredField("sudokus");
-		s.setAccessible(true);
-		s.set(null, null);
-		java.lang.reflect.Field p = ProfileSingleton.class.getDeclaredField("instance");
-		p.setAccessible(true);
-		p.set(null, null);
-		Utility.deleteDir(profiles);
-		Utility.deleteDir(sudokus);
-	}
-
-
-	@Test
-	public void initialisation() {
-		UniqueConstraintBehavior uc = new UniqueConstraintBehavior();
-		Constraint c = new Constraint(uc, ConstraintType.LINE, null);
-		assertTrue(c.hasUniqueBehavior());
-		assertEquals(c.toString(), "Constraint with " + uc);
-		Constraint c1 = new Constraint(new UniqueConstraintBehavior(), ConstraintType.LINE);
-		assertTrue(c1.getType().equals(ConstraintType.LINE));
-		c = new Constraint(new SumConstraintBehavior(9), ConstraintType.LINE, null);
-		assertFalse(c.hasUniqueBehavior());
-	}
-
-	@Test
-	public void testAddPositionAndIterate() {
-		Constraint c = new Constraint(new UniqueConstraintBehavior(), ConstraintType.LINE);
-
-		Position p1 = Position.get(1, 1);
-		Position p2 = Position.get(2, 2);
-		Position p3 = Position.get(42, 42);
-
-		c.addPosition(p1);
-		c.addPosition(p2);
-		c.addPosition(p3);
-		c.addPosition(p1);
-		assertTrue(c.getSize() == 3);
-		assertTrue(c.includes(p1));
-		assertTrue(c.includes(p2));
-		assertTrue(c.includes(p3));
-
-		Iterator<Position> i = c.iterator();
-		Position p = i.next();
-		assertTrue(p.equals(p1));
-		p = i.next();
-		assertTrue(p.equals(p2));
-		p = i.next();
-		assertTrue(p.equals(p3));
-	}
-
-	@Test
-	public void testSaturation() {
-		Constraint c = new Constraint(new UniqueConstraintBehavior(), ConstraintType.LINE);
-
-		Position posA = Position.get(0, 0);
-		Position posB = Position.get(0, 1);
-		Position posC = Position.get(0, 2);
-
-		PositionMap<Integer> map = new PositionMap<Integer>(Position.get(9, 9));
-
-		for (int i = 0; i < 81; i++) {
-			map.put(Position.get(i / 9, i % 9), 0);
-		}
-		
-		SudokuType s99 = TypeBuilder.getType(SudokuTypes.standard9x9);
-		
-		Sudoku sudo = new Sudoku(s99, map, new PositionMap<Boolean>(Position.get(9, 9)));
-
-		sudo.getCell(posA).setCurrentValue(0);
-		sudo.getCell(posB).setCurrentValue(4);
-		sudo.getCell(posC).setCurrentValue(4);
-
-		assertTrue(c.isSaturated(sudo));
-
-		c.addPosition(posA);
-		assertTrue(c.isSaturated(sudo));
-
-		c.addPosition(posB);
-		assertTrue(c.isSaturated(sudo));
-		c.addPosition(posC);
-		assertFalse(c.isSaturated(sudo));
-	}
+        every { sudo.getCell(posA) }.returns(mkCell(0,0))
+        every { sudo.getCell(posB) }.returns(mkCell(1,4))
+        every { sudo.getCell(posC) }.returns(mkCell(2,4))
+        c.isSaturated(sudo).`should be true`()
+        c.addPosition(posA)
+        c.isSaturated(sudo).`should be true`()
+        c.addPosition(posB)
+        c.isSaturated(sudo).`should be true`()
+        c.addPosition(posC)
+        c.isSaturated(sudo).`should be false`()
+    }
 
 }
