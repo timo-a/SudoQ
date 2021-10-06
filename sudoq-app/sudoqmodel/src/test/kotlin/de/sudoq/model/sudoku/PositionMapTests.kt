@@ -1,67 +1,49 @@
-package de.sudoq.model.sudoku;
+package de.sudoq.model.sudoku
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
-import java.util.BitSet;
+import org.amshove.kluent.*
+import org.junit.jupiter.api.Test
+import java.lang.IllegalArgumentException
+import java.util.*
 
-import org.junit.Test;
+class PositionMapTests {
 
-import de.sudoq.model.sudoku.Position;
-import de.sudoq.model.sudoku.PositionMap;
+    @Test
+    fun testStandardUsage() {
+        val map = PositionMap<BitSet>(Position[9, 9])
+        val b = BitSet()
+        map.put(Position[3, 2], b)
+        b.set(7)
+        (map[Position[3, 2]]!![7]).`should be true`()
+        b.clear()
+        map[Position[3, 2]]!!.cardinality().`should be`(0)
+        val map2 = map.clone()
+        map[Position[3, 2]].`should be equal to`(map2[Position[3, 2]])
+        map[Position[2, 3]].`should be equal to`(map2[Position[2, 3]])
+    }
 
-public class PositionMapTests {
+    @Test
+    fun testIllegalArguments() {
+        invoking {
+            PositionMap<BitSet>(Position[1, 0])
+        }.`should throw`(IllegalArgumentException::class)
 
-	@Test
-	public void testStandardUsage() {
-		PositionMap<BitSet> map = new PositionMap<>(Position.get(9, 9));
-		BitSet b = new BitSet();
-		map.put(Position.get(3, 2), b);
-		b.set(7);
-		assertTrue(map.get(Position.get(3, 2)).get(7));
-		b.clear();
-		assertEquals(map.get(Position.get(3, 2)).cardinality(), 0);
+        invoking {
+            PositionMap<BitSet>(Position[0, 1])
+        }.`should throw`(IllegalArgumentException::class)
 
-		PositionMap<BitSet> map2 = map.clone();
-		assertEquals(map.get(Position.get(3, 2)), map2.get(Position.get(3, 2)));
-		assertEquals(map.get(Position.get(2, 3)), map2.get(Position.get(2, 3)));
-	}
+        val map = PositionMap<BitSet>(Position[9, 9])
+        invoking {
+            map.put(Position[10, 9], BitSet())
+        }.`should throw` (IllegalArgumentException::class)
 
-	@Test
-	public void testIllegalArguments() {
+        invoking {
+            map[Position[10, 9]]
+        }.`should throw`(IllegalArgumentException::class)
 
-		try {
-			new PositionMap<BitSet>(Position.get(1, 0));
-			fail("No IllegalArgumentException was thrown, altough the dimension was null");
-		} catch (IllegalArgumentException e) {
-		}
+        invoking {
+            map[Position[9, 10]]
+        }.`should throw`(IllegalArgumentException::class)
 
-		try {
-			new PositionMap<BitSet>(Position.get(0, 1));
-			fail("No IllegalArgumentException was thrown, altough the dimension was null");
-		} catch (IllegalArgumentException e) {
-		}
-
-		PositionMap<BitSet> map = new PositionMap<>(Position.get(9, 9));
-
-		try {
-			map.put(Position.get(10, 9), new BitSet());
-			fail("No IllegalArgumentException was thrown, altough the Position was invalid");
-		} catch (IllegalArgumentException e) {
-		}
-
-		try {
-			map.get(Position.get(10, 9));
-			fail("No IllegalArgumentException was thrown, altough the Position was invalid");
-		} catch (IllegalArgumentException e) {
-		}
-
-		try {
-			map.get(Position.get(9, 10));
-			fail("No IllegalArgumentException was thrown, altough the Position was invalid");
-		} catch (IllegalArgumentException e) {
-		}
-	}
-
+    }
 }

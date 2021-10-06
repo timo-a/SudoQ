@@ -1,75 +1,56 @@
-package de.sudoq.model.sudoku;
+package de.sudoq.model.sudoku
 
-import org.junit.Test;
+import de.sudoq.model.sudoku.Utils.classifyGroup
+import org.amshove.kluent.`should be equal to`
+import org.amshove.kluent.`should be`
+import org.junit.jupiter.api.Test
+import java.util.ArrayList
 
-import java.util.ArrayList;
-import java.util.List;
+class UtilsTests {
+    /**
+     *
+     */
+    @Test
+    fun classifyTest() {
+        val positionList: MutableList<Position> = ArrayList<Position>()
+        positionList.add(Position(2, 4))
+        positionList.add(Position(2, 5))
+        positionList.add(Position(2, 6))
+        positionList.add(Position(2, 7))
+        positionList.add(Position(2, 9))
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-public class UtilsTests {
-
-	/**
-	 *
-	 */
-	@Test
-	public void classifyTest() {
-
-		List<Position> positionList = new ArrayList();
-		positionList.add(new Position(2,4));
-		positionList.add(new Position(2,5));
-		positionList.add(new Position(2,6));
-		positionList.add(new Position(2,7));
-		positionList.add(new Position(2,9));
-		assertEquals("Column constraint is not recognized as such"
-				,Utils.ConstraintShape.Column
-				,UtilsKt.getGroupShape(positionList));
-		assertEquals("Column constraint is not recognized as such"
-				,"col 3"
-				,Utils.classifyGroup(positionList));
-
-		//Row
-		positionList.clear();
-		positionList.add(new Position(2,6));
-		positionList.add(new Position(3,6));
-		positionList.add(new Position(4,6));
-		positionList.add(new Position(5,6));
-		assertEquals("Row constraint is not recognized as such"
-				,Utils.ConstraintShape.Row
-				,UtilsKt.getGroupShape(positionList));
-		assertEquals("Row constraint is not recognized as such"
-				,"row 7"
-				,Utils.classifyGroup(positionList));
+        getGroupShape(positionList).`should be`(Utils.ConstraintShape.Column)
+        classifyGroup(positionList).`should be equal to`("col 3")
 
 
-		//diagonal
-		positionList.clear();
-		positionList.add(new Position(2,4));
-		positionList.add(new Position(3,5));
-		positionList.add(new Position(4,6));
-		positionList.add(new Position(5,7));
-		assertEquals("Diagonal constrant is not recognized as such"
-				,Utils.ConstraintShape.Diagonal
-				,UtilsKt.getGroupShape(positionList));
-		assertEquals("Diagonal constrant is not recognized as such"
-				,"a diagonal"
-				,Utils.classifyGroup(positionList));
+        //Row
+        positionList.clear()
+        positionList.add(Position(2, 6))
+        positionList.add(Position(3, 6))
+        positionList.add(Position(4, 6))
+        positionList.add(Position(5, 6))
 
-		//diagonal
-		positionList.clear();
-		positionList.add(new Position(2,4));
-		positionList.add(new Position(2,5));
-		positionList.add(new Position(3,4));
-		positionList.add(new Position(3,5));
-		assertEquals("Block constrant is not recognized as such"
-				,Utils.ConstraintShape.Block
-				,UtilsKt.getGroupShape(positionList));
-		assertEquals("Block constrant is not recognized as such"
-				,"a block containing (3, 5)"
-				,Utils.classifyGroup(positionList));
+        getGroupShape(positionList).`should be`(Utils.ConstraintShape.Row)
+        classifyGroup(positionList).`should be equal to`("row 7")
 
-	} 
+
+        //diagonal
+        positionList.clear()
+        positionList.add(Position(2, 4))
+        positionList.add(Position(3, 5))
+        positionList.add(Position(4, 6))
+        positionList.add(Position(5, 7))
+        getGroupShape(positionList).`should be`(Utils.ConstraintShape.Diagonal)
+        classifyGroup(positionList).`should be equal to`("a diagonal")
+
+
+        //diagonal
+        positionList.clear()
+        positionList.add(Position(2, 4))
+        positionList.add(Position(2, 5))
+        positionList.add(Position(3, 4))
+        positionList.add(Position(3, 5))
+        getGroupShape(positionList).`should be`(Utils.ConstraintShape.Block)
+        classifyGroup(positionList).`should be equal to`("a block containing (3, 5)")
+    }
 }
