@@ -1,17 +1,18 @@
-package de.sudoq.model.sudoku.complexity;
+package de.sudoq.model.sudoku.complexity
 
-import static org.junit.Assert.assertTrue;
+import org.amshove.kluent.`should be equal to`
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
 
-import org.junit.Test;
+class ComplexityTests {
 
-public class ComplexityTests {
-
-	@Test
-	public void test() {
-		Complexity[] types = Complexity.values();
-		for (Complexity type : types) {
-			assertTrue(Complexity.valueOf(type.toString()).equals(type));
-		}
-	}
-
+    /**
+     * Verifies that toString hasn't been tampered with.
+     * Dubious use.
+     */
+    @ParameterizedTest
+    @EnumSource(Complexity::class)
+    fun test(c: Complexity) {
+        Complexity.valueOf(c.toString()).`should be equal to` (c)
+    }
 }
