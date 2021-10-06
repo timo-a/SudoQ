@@ -1,6 +1,8 @@
 # SudoQ
 
-![build with gradle assemble](https://github.com/timo-a/SudoQ/actions/workflows/gradle_assemble.yml/badge.svg)
+![build with gradle assemble](https://github.com/timo-a/SudoQ/actions/workflows/gradle_assemble.yml/badge.svg)  
+![build with gradle assemble](https://github.com/timo-a/SudoQ/actions/workflows/gradle_model_junit_kotlin.yml/badge.svg)  
+![build with gradle assemble](https://github.com/timo-a/SudoQ/actions/workflows/gradle_model_junit.yml/badge.svg)
 
 
 [<img src="https://f-droid.org/badge/get-it-on.png"

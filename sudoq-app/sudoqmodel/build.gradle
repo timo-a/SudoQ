@@ -30,6 +30,35 @@ test{
     }
 }
 
+
+sourceSets {
+    kotlintests {
+        //java.srcDir ""
+        kotlin.srcDir "$projectDir/src/test/kotlin"
+        resources.srcDir "$projectDir/src/othertest/resources"
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+    }
+}
+
+configurations {
+    kotlintestsImplementation.extendsFrom testImplementation
+    kotlintestsRuntime.extendsFrom testRuntime
+}
+task kotlinTest(type: Test) {
+    testClassesDirs = sourceSets.kotlintests.output.classesDirs
+    classpath = sourceSets.kotlintests.runtimeClasspath
+}
+tasks.named('kotlinTest') {
+    // Use JUnit Platform for unit tests.
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+
+
 //https://blog.inspeerity.com/gradle/integration-and-unit-separate-gradle-tasks/
 sourceSets {
     othertests {
