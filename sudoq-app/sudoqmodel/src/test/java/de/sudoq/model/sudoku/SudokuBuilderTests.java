@@ -26,23 +26,35 @@ public class SudokuBuilderTests extends TestWithInitCleanforSingletons {
 
 	Cell cell;
 
-	static Map<SudokuTypes, Integer> specialParam = new HashMap<SudokuTypes, Integer>(4);
-	
-	static{
+
+	@Test
+	public void testInitialisation() {
+
+		Map<SudokuTypes, Integer> specialParam = new HashMap<>(4);
+
 		specialParam.put(SudokuTypes.samurai, 21);
 		specialParam.put(SudokuTypes.standard16x16, 16);
 		specialParam.put(SudokuTypes.standard6x6, 6);
 		specialParam.put(SudokuTypes.standard4x4, 4);
-	}
-	
-	@Test
-	public void testInitialisation() {
-		for (SudokuTypes t : SudokuTypes.values()) {
 
-			if(specialParam.containsKey(t))
-				testBuildergeneric(t, specialParam.get(t));
-			else
-				testBuildergeneric(t, 9);
+		for (Map.Entry<SudokuTypes, Integer> e: specialParam.entrySet()) {
+
+			testBuildergeneric(e.getKey(), e.getValue());
+		}
+	}
+
+	@Test
+	public void testInitialisationRest() {
+
+		for (SudokuTypes t : new SudokuTypes[]{
+				SudokuTypes.standard9x9,
+				SudokuTypes.Xsudoku,
+				SudokuTypes.HyperSudoku,
+				SudokuTypes.squigglya,
+				SudokuTypes.squigglyb,
+				SudokuTypes.stairstep}) {
+
+			testBuildergeneric(t, 9);
 		}
 	}
 
