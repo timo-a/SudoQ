@@ -1,93 +1,72 @@
-package de.sudoq.model.sudoku.sudokuTypes;
+package de.sudoq.model.sudoku.sudokuTypes
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import de.sudoq.model.sudoku.Constraint
+import org.amshove.kluent.*
+import org.junit.jupiter.api.Test
 
-import java.util.BitSet;
+class StandardSudokuType4x4Tests {
 
-import org.junit.Test;
+    var sst44 = TypeBuilder.getType(SudokuTypes.standard4x4)
 
-import de.sudoq.model.sudoku.Constraint;
-import de.sudoq.model.sudoku.Position;
-import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
-import de.sudoq.model.sudoku.complexity.ComplexityConstraintTests;
+    @Test
+    fun constraintsCountTest() {
+        sst44.constraints.shouldHaveSize(4 + 4 + 4)
+    }
 
-public class StandardSudokuType4x4Tests {
+    @Test
+    fun constraintsSizeTest() {
+        sst44.forEach { it.shouldHaveSize(4) }
+    }
 
-	SudokuType sst44 = TypeBuilder.getType(SudokuTypes.standard4x4);
+    @Test
+    fun constraintsTest0() {
 
-	@Test
-	public void constraintsTest() {
+        val blocks = sst44.filter { it.toString().contains("Block 0") }
+        blocks.shouldHaveSingleItem()
+        allPosWithinBounds(0, 1, 0, 1, blocks[0]).`should be true`()
+    }
 
-		assertTrue(sst44.constraints.size() == 4 + 4 + 4);
+    @Test
+    fun constraintsTest1() {
 
-		for (Constraint c : sst44)
-			assertTrue(c.getSize() == 4);
+        val blocks = sst44.filter { it.toString().contains("Block 1") }
+        blocks.shouldHaveSingleItem()
+        allPosWithinBounds(2, 3, 0, 1, blocks[0]).`should be true`()
+    }
 
-		BitSet b = new BitSet(4);
-		for (Constraint c : sst44) {
-			if (c.toString().contains("Block 0")) {
-				b.flip(0);
-				assertTrue(allPosWithinBounds(0, 1, 0, 1, c));
-			}
+    @Test
+    fun constraintsTest2() {
 
-			if (c.toString().contains("Block 1")) {
-				b.flip(1);
-				assertTrue(allPosWithinBounds(2, 3, 0, 1, c));
-			}
+        val blocks = sst44.filter { it.toString().contains("Block 2") }
+        blocks.shouldHaveSingleItem()
+        allPosWithinBounds(0, 1, 2, 3, blocks[0]).`should be true`()
+    }
 
-			if (c.toString().contains("Block 2")) {
-				b.flip(2);
-				assertTrue(allPosWithinBounds(0, 1, 2, 3, c));
-			}
+    @Test
+    fun constraintsTest3() {
 
-			if (c.toString().contains("Block 3")) {
-				b.flip(3);
-				assertTrue(allPosWithinBounds(2, 3, 2, 3, c));
-			}
-		}
-		b.flip(0, 4);
-		assertTrue(b.isEmpty());
-	}
+        val blocks = sst44.filter { it.toString().contains("Block 3") }
+        blocks.shouldHaveSingleItem()
+        allPosWithinBounds(2, 3, 2, 3, blocks[0]).`should be true`()
+    }
 
-	private boolean allPosWithinBounds(int minX, int maxX, int minY, int maxY, Constraint c) {
-		for (Position p : c)
-			if (p.getX() < minX || p.getX() > maxX || p.getY() < minY || p.getY() > maxY)
-				return false;
-		return true;
-	}
+    private fun allPosWithinBounds(
+        minX: Int,
+        maxX: Int,
+        minY: Int,
+        maxY: Int,
+        c: Constraint
+    ): Boolean = c.all { it.x in minX..maxX && it.y in (minY..maxY) }
 
-	@Test
-	public void getAllocationFactorTest() {
-		assertTrue(sst44.getStandardAllocationFactor() == 0.25f);
-	}
-	
-	@Test
-	public void getEnumTypeTest() {
-		assertTrue(sst44.getEnumType() == SudokuTypes.standard4x4);
-	}
 
-	//@Test ignored no point in specification by test
-	public void buildComplexityConstraintTest() {
-		SudokuType standard4x4 = TypeBuilder.getType(SudokuTypes.standard4x4);
 
-		ComplexityConstraint comCo = standard4x4.buildComplexityConstraint(Complexity.easy);
-		ComplexityConstraintTests.returnsValues(comCo, Complexity.easy, 12, 100, 130, 2);
+    @Test
+    fun enumTypeTest() {
+        sst44.enumType.`should be`(SudokuTypes.standard4x4)
+    }
 
-		comCo = standard4x4.buildComplexityConstraint(Complexity.medium);
-		ComplexityConstraintTests.returnsValues(comCo, Complexity.medium, 9, 125, 160, 3);
-
-		comCo = standard4x4.buildComplexityConstraint(Complexity.difficult);
-		ComplexityConstraintTests.returnsValues(comCo, Complexity.difficult, 7, 150, 190, Integer.MAX_VALUE);
-
-		comCo = standard4x4.buildComplexityConstraint(Complexity.infernal);
-		ComplexityConstraintTests.returnsValues(comCo, Complexity.infernal, 5, 175, 2500, Integer.MAX_VALUE);
-
-		comCo = standard4x4.buildComplexityConstraint(Complexity.arbitrary);
-		ComplexityConstraintTests.returnsValues(comCo, Complexity.arbitrary, 10, 1, Integer.MAX_VALUE, Integer.MAX_VALUE);
-
-		assertNull(standard4x4.buildComplexityConstraint(null));
-
-	}
+    @Test
+    fun buildComplexityConstraintTest() {
+        sst44.buildComplexityConstraint(null).`should be null`()
+    }
 }

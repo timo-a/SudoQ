@@ -176,4 +176,58 @@ class SudokuTests {
         sudoku.hasErrors().`should be true`()
     }
 
+    @Test
+    fun testCellModification() {
+        val s = Sudoku(TypeBuilder.get99())
+        val f = Cell(1000, 9)
+        s.setCell(f, Position[4, 4])
+        s.getCell(Position[4, 4]).`should be`(f)
+        s.getPosition(f.id).`should be equal to`(Position[4, 4])
+    }
+
+
+    @Test
+    fun testToString44() {
+        val sudokuType = TypeBuilder.getType(SudokuTypes.standard4x4)
+        val sudoku = Sudoku(sudokuType)
+        sudoku.getCell(Position[1, 1])!!.currentValue = 3
+        sudoku.cells!!.remove(Position[1, 2])
+        sudoku.toString().`should be equal to`(
+            """
+            x x x x
+            x 3 x x
+            x   x x
+            x x x x
+            """.trimIndent(),
+        )
+    }
+
+    @Test
+    fun testToString99() {
+        val sudokuType = TypeBuilder.getType(SudokuTypes.standard16x16)
+        val sudoku = Sudoku(sudokuType)
+        sudoku.getCell(Position[1, 1])!!.currentValue = 12
+        sudoku.toString().`should be equal to`(
+            """
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx 12 xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+            """.trimIndent(),
+        )
+    }
+
+
 }

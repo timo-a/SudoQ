@@ -1,48 +1,20 @@
-package de.sudoq.model.sudoku.sudokuTypes;
+package de.sudoq.model.sudoku.sudokuTypes
 
-import static org.junit.Assert.assertTrue;
+import org.amshove.kluent.`should be null`
+import org.amshove.kluent.`should be`
+import org.junit.Test
 
-import org.junit.Test;
+class SquigglyASudokuTests {
 
+    private val squigglyA: SudokuType = TypeBuilder.getType(SudokuTypes.squigglya)
 
-import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
-import de.sudoq.model.sudoku.complexity.ComplexityConstraintTests;
+    @Test
+    fun buildComplexityConstraintTest() {
+		squigglyA.buildComplexityConstraint(null).`should be null`();
+    }
 
-public class SquigglyASudokuTests {
-
-	SudokuType squigglyA = TypeBuilder.getType(SudokuTypes.squigglya);
-
-
-	//@Test ignored no point in specification by test
-	public void buildComplexityConstraintTest() {
-		
-		ComplexityConstraint comCo = squigglyA.buildComplexityConstraint(Complexity.easy);
-		ComplexityConstraintTests.returnsValues(comCo, Complexity.easy, 40, 500, 800, 2);
-
-		comCo = squigglyA.buildComplexityConstraint(Complexity.medium);
-		ComplexityConstraintTests.returnsValues(comCo, Complexity.medium, 32, 750, 1050, 3);
-
-		comCo = squigglyA.buildComplexityConstraint(Complexity.difficult);
-		ComplexityConstraintTests.returnsValues(comCo, Complexity.difficult, 28, 1000, 2500, Integer.MAX_VALUE);
-
-		comCo = squigglyA.buildComplexityConstraint(Complexity.infernal);
-		ComplexityConstraintTests.returnsValues(comCo, Complexity.infernal, 27, 2500, 25000, Integer.MAX_VALUE);
-
-		comCo = squigglyA.buildComplexityConstraint(Complexity.arbitrary);
-		ComplexityConstraintTests.returnsValues(comCo, Complexity.arbitrary, 32, 1, Integer.MAX_VALUE, Integer.MAX_VALUE);
-
-		assertTrue(squigglyA.buildComplexityConstraint(null) == null);
-
-	}
-
-	@Test
-	public void getEnumTypeTests() {
-		assertTrue(squigglyA.getEnumType() == SudokuTypes.squigglya);
-	}
-	
-	@Test
-	public void getAllocationFactorTest() {
-		assertTrue(squigglyA.getStandardAllocationFactor() == 0.25f);
-	}
+    @Test
+    fun enumTypeTests() {
+        squigglyA.enumType.`should be`(SudokuTypes.squigglya)
+    }
 }

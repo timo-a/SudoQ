@@ -28,14 +28,13 @@ open class SudokuType : Iterable<Constraint>, ComplexityFactory {
     //TODO make fillFromXML statis - make this nonnullable
 
     /** The ratio of fields that are to be allocated i.e. already filled when starting  a sudoku game  */
-    @JvmField
-    var standardAllocationFactor: Float = 0f
+    private var standardAllocationFactor: Float = 0f
 
     /**
      * Gibt den Standard Belegungsfaktor zurück
      */
     override fun getStandardAllocationFactor(): Float {
-        return standardAllocationFactor //this is needed explicitly because of ComplexityFactory TODO combine with field one everything is kotlin
+        return standardAllocationFactor
     }
 
     /**
