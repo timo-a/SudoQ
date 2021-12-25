@@ -7,7 +7,7 @@
     <!-- Sudoku Tutorial -->
     <string name="sf_tutorial_sudoku_title">Sudoku</string>
 	<string name="sf_tutorial_sudoku_description1">A sudoku is a logic-based, combinatorial number-placement puzzle. The original sudoku
-	    is a 9x9 grid that has to be filled with digits so hat each column, each row and each of the nine 3x3 sub-grids contains
+	    is a 9x9 grid that has to be filled with digits so that each column, each row and each of the nine 3x3 sub-grids contains
 	    all the digits from 1 to 9. At the beginning a sudoku is partially completed and has only one correct solution.</string>
 	<string name="sf_tutorial_sudoku_description2">Further sudoku types do not define the 3x3 sub-grids but other sets of cells which are
 	    represented by a black edging or gray shaded cells in this app. The following images show both types of representation which can
