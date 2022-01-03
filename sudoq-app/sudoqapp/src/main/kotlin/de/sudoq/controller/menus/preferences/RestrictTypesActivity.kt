@@ -156,6 +156,7 @@ class RestrictTypesActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
     private fun initialiseTypes() {
         val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
         val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
+        pm.loadCurrentProfile()
         types = pm.assistances.wantedTypesList
         // initialize ArrayAdapter for the type names and set it
         adapter = RestrictTypesAdapter(this, types!!)
