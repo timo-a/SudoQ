@@ -303,9 +303,12 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
                         `in`.close()
                         out.flush()
                         out.close()
-                    } catch (e: Exception) {
-                        Log.e(LOG_TAG, e.message)
-                        Log.e(LOG_TAG, "there seems to be an exception")
+                    } catch (e: IOException) {
+                        e.message?.let { Log.e(LOG_TAG, it) }
+                        Log.e(LOG_TAG, "there seems to be an io exception")
+                    } catch (e: FileNotFoundException) {
+                        e.message?.let { Log.e(LOG_TAG, it) }
+                        Log.e(LOG_TAG, "there seems to be a file not found exception")
                     }
                     Log.v("file-share", "tmpfile: " + tmpFile.absolutePath)
                     Log.v("file-share", "gamefile is null? " + (gameFile == null))

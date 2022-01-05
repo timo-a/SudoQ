@@ -88,7 +88,7 @@ class SplashActivity : SudoqCompatActivity() {
         try {
             currentVersionName = this.packageManager.getPackageInfo(this.packageName, 0).versionName
         } catch (e: PackageManager.NameNotFoundException) {
-            Log.v(LOG_TAG, e.message)
+            e.message?.let { Log.v(LOG_TAG, it) }
         }
 
         /* is this a new version? */
@@ -312,7 +312,7 @@ class SplashActivity : SudoqCompatActivity() {
             try {
                 files = assets.list(relPath)
             } catch (e: IOException) {
-                Log.e(LOG_TAG, e.message)
+                e.message?.let { Log.e(LOG_TAG, it) }
             }
             return files
         }
@@ -336,9 +336,12 @@ class SplashActivity : SudoqCompatActivity() {
                 `in`.close()
                 out.flush()
                 out.close()
-            } catch (e: Exception) {
-                Log.e(LOG_TAG, e.message)
-                Log.e(LOG_TAG, "there seems to be an exception")
+            } catch (e: IOException) {
+                e.message?.let { Log.e(LOG_TAG, it) }
+                Log.e(LOG_TAG, "there seems to be an io exception")
+            } catch (e: FileNotFoundException) {
+                e.message?.let { Log.e(LOG_TAG, it) }
+                Log.e(LOG_TAG, "there seems to be a file not found exception")
             }
         }
 

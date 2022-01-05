@@ -9,12 +9,12 @@ allprojects {
 }
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
 
     defaultConfig {
         applicationId "de.sudoq"
         minSdkVersion 14
-        targetSdkVersion 29
+        targetSdkVersion 30
         resConfigs "en", "de", "fr"
         testApplicationId "de.sudoq.test"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
