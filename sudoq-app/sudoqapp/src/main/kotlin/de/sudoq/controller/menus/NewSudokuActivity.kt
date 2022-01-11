@@ -90,7 +90,7 @@ class NewSudokuActivity : SudoqCompatActivity() {
 
         // nested Listener for complexitySpinner
         complexitySpinner.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View, pos: Int, id: Long) {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
                 setSudokuDifficulty(Complexity.values()[pos])
             }
 
