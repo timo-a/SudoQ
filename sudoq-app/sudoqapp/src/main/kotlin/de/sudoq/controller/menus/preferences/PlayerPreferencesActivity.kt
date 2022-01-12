@@ -34,11 +34,6 @@ class PlayerPreferencesActivity : PreferencesActivity() {
     var gameSettings: GameSettings? = null
 
     /**
-     * stores language at activity start to compare if language changed in advanced preferences
-     */
-    private var currentLanguageCode: LanguageSetting? = null
-
-    /**
      * Wird aufgerufen, falls die Activity zum ersten Mal gestartet wird. Läd
      * die Preferences anhand der zur Zeit aktiven Profil-ID.
      */
@@ -66,45 +61,10 @@ class PlayerPreferencesActivity : PreferencesActivity() {
         val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
         val p = getInstance(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
         p.registerListener(this)
-
-        //store language at beginning of activity lifecycle
-        currentLanguageCode = LanguageUtility.loadLanguageFromSharedPreferences(this)
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        //load language from memory
-        //LanguageSetting fromMemory = LanguageUtility.loadLanguageFromSharedPreferences2(this);
-        val fromConf = LanguageUtility.getConfLocale(this)
-        if (fromConf != currentLanguageCode!!.language.name) {
-            val refresh = Intent(this, this.javaClass)
-            finish()
-            this.startActivity(refresh)
-        } else {
-        }
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        // check if configuration has changed
-        // per Manifest this method gets called if there are changes in layoutDirection or locale
-        // (if we only check for locale, this method doesn't get called, no idea why https://stackoverflow.com/a/27648673/3014199)
-        //
-        if (newConfig.locale.language != currentLanguageCode!!.language.name) {
-            //only adopt external change if language is set to "system language"
-            if (currentLanguageCode!!.isSystemLanguage) {
-                //adopt change
-                currentLanguageCode = LanguageUtility.loadLanguageFromSharedPreferences(this)
-                //store changes
-                LanguageUtility.storeLanguageToSharedPreferences(this, currentLanguageCode!!)
-            }
-        }
     }
 
     /**
      * Aktualisiert die Werte in den Views
-     *
      */
     override fun refreshValues() {
         val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)

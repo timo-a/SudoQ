@@ -19,7 +19,7 @@ import de.sudoq.controller.tutorial.TutorialActivity
  * Eine Activity, welche die für einwandfreie Funktionalität der SudoQ-App
  * notwendigen Initialisierungsarbeiten ausführt.
  */
-open class SudoqCompatActivity : AppCompatActivity() {
+open class SudoqCompatActivity : LanguageAdaptingCompatActivity() {
     /**
      * Initialisiert eine neue Activity, setzt dabei die für die App notwendigen
      * System-Properties und initialisiert den FileManager.

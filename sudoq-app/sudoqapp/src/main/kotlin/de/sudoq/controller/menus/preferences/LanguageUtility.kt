@@ -1,69 +1,120 @@
 package de.sudoq.controller.menus.preferences
 
 import android.app.Activity
-import android.content.Context.MODE_PRIVATE
+import android.content.Context
 import android.util.Log
-import de.sudoq.controller.menus.preferences.LanguageSetting.LanguageCode
 import java.util.*
 
+/**
+ * This class provides several utility functions, for dealing with language management.
+ */
 object LanguageUtility {
 
-    val SUDOQ_SHARED_PREFS_FILE : String = "SudoqSharedPrefs";
+    // ### Language preferences: ###
 
-    /* save language to enum */
+    /**
+     * Name of the preferences.
+     */
+    private const val SUDOQ_SHARED_PREFS_FILE = "SudoqSharedPrefs"
+
+    /**
+     * The language key.
+     */
+    private const val LANGUAGE_KEY = "language"
+
+    /**
+     * Loads the [LanguageCode] from preferences. Defaults to system.
+     *
+     * @param context a [Context] of this application (any activity)
+     * @return the [LanguageCode] stored in the settings, or system
+     */
     @JvmStatic
-    fun loadLanguageFromSharedPreferences(a: Activity): LanguageSetting {
-        val sp = a.getSharedPreferences(SUDOQ_SHARED_PREFS_FILE, MODE_PRIVATE)
-        val code = sp.getString("language", "system")
-        val langEnum = LanguageCode.valueOf(code!!)
-        if (langEnum == LanguageCode.system) {
-            return resolveSystemLocale()
-        } else {
-            return LanguageSetting(langEnum, false)
-        }
+    fun loadLanguageCodeFromPreferences(context: Context): LanguageCode {
+        val sharedPreferences = context.getSharedPreferences(SUDOQ_SHARED_PREFS_FILE, Context.MODE_PRIVATE)
+        val languageCodeOrSystem = sharedPreferences.getString(LANGUAGE_KEY, LanguageCode.system.name)
+        return LanguageCode.getFromString(languageCodeOrSystem!!) // Null check pointless, but Kotlin does not like that we could potentially get null here.
     }
 
     /**
-     * @param langSetting
+     * Stores a [LanguageCode] to preferences.
+     *
+     * @param context a [Context] of this application (any activity)
+     * @param languageCode the [LanguageCode] to store in the preferences
      */
     @JvmStatic
-    fun storeLanguageToSharedPreferences(a: Activity, langSetting: LanguageSetting) {
-        val langEnum = if (langSetting.isSystemLanguage) LanguageCode.system else langSetting.language
-        val sp = a.getSharedPreferences(SUDOQ_SHARED_PREFS_FILE, MODE_PRIVATE)
+    fun saveLanguageCodeToPreferences(context: Context, languageCode: LanguageCode) {
+        val sp = context.getSharedPreferences(SUDOQ_SHARED_PREFS_FILE, Context.MODE_PRIVATE)
         sp.edit()
-            .putString("language", langEnum.name)
-            .apply()
+                .putString(LANGUAGE_KEY, languageCode.name)
+                .apply()
     }
 
-    //can be 'system'
+    // ### System language: ###
+
+    /**
+     * Finds the [LanguageCode] for the current system language. If the system language has no translation/is unknown English is chosen.
+     *
+     * @return the [LanguageCode] for the system language, or if unknown for english
+     */
     @JvmStatic
-    fun getConfLocale(a: Activity): String {
-        val res = a.resources
-        val conf = res.configuration
-        val code = conf.locale.language
-        return code;
+    fun resolveSystemLanguage(): LanguageCode {
+        val code = Locale.getDefault().language
+        return LanguageCode.getFromLanguageCode(code)
     }
 
-    //can be 'system'
+    // ### Resource language: ###
+
+    /**
+     * Gets the [LanguageCode] for the currently chosen resource language.
+     * There are only 3 possible resource languages, if however the resource is something else, this returns English.
+     *
+     * @param context a [Context] of this application (any activity)
+     * @return the [LanguageCode] which the resource is set to
+     */
     @JvmStatic
-    fun setConfLocale(lang: String, a: Activity) {
-        Log.i("lang", "setLocale( " + lang + ", " + a.javaClass.simpleName + ")")
-        val myLocale = Locale(lang)
-        val res = a.resources
-        val dm = res.displayMetrics
-        val conf = res.configuration
-        conf.locale = myLocale
-        res.updateConfiguration(conf, dm)
+    fun getResourceLanguageCode(context: Context): LanguageCode {
+        val resources = context.resources
+        val configuration = resources.configuration
+        val languageCode = configuration.locale.language
+        return LanguageCode.getFromLanguageCode(languageCode)
     }
 
-    fun getLanguageFromItem(i: LanguageCode): LanguageSetting {
-        val system = i == LanguageCode.system
-        return if (system) resolveSystemLocale() else LanguageSetting(i, false)
+    /**
+     * Sets the locale of the resources to a provided language.
+     *
+     * @param context a [Context] of this application (any activity)
+     * @param languageCode the [LanguageCode] which the resources should be set to
+     * @throws IllegalArgumentException if the [LanguageCode] for system was supplied
+     */
+    @JvmStatic
+    fun setResourceLocale(context: Context, languageCode: LanguageCode) {
+        Log.d("SudoQLanguage", "Setting resource from context '" + context.javaClass.simpleName + "' to '" + languageCode + "'")
+        require(languageCode != LanguageCode.system) { "The resource locale may never be set to system!" }
+        val newLocale = Locale(languageCode.name)
+        val resources = context.resources
+        val displayMetrics = resources.displayMetrics
+        val configuration = resources.configuration
+        configuration.locale = newLocale
+        resources.updateConfiguration(configuration, displayMetrics)
     }
 
-    fun resolveSystemLocale(): LanguageSetting {
-        val defaultCode = Locale.getDefault().language //TODO won't this always return en?
-        LanguageCode.values().forEach { if (it.name == defaultCode) return LanguageSetting(it, true)}
-        return LanguageSetting(LanguageCode.en, true)
+    // ### App language: ###
+
+    /**
+     * Returns the [LanguageCode] which the the app should currently be displaying.
+     * If the setting points to system, the system language is resolved, fallback is English.
+     *
+     * @param context a [Context] of this application (any activity)
+     * @return the [LanguageCode] representing the current language to use, never system
+     */
+    @JvmStatic
+    fun getDesiredLanguage(context: Context): LanguageCode {
+        val languageCode = loadLanguageCodeFromPreferences(context)
+        return if (languageCode == LanguageCode.system) {
+            //Load system language:
+            resolveSystemLanguage()
+        } else {
+            languageCode
+        }
     }
 }

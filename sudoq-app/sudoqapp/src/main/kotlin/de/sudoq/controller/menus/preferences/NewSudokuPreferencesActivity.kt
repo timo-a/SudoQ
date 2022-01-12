@@ -8,7 +8,6 @@
 package de.sudoq.controller.menus.preferences
 
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -30,11 +29,6 @@ import de.sudoq.persistence.profile.ProfilesListRepo
 class NewSudokuPreferencesActivity : PreferencesActivity() {
     /* shortcut for NewSudokuActivity.gameSettings */
     var confSettings: GameSettings? = null
-
-    /**
-     * stores language at activity start to compare if language changed in advanced preferences
-     */
-    private var currentLanguageCode: LanguageSetting? = null
 
     /**
      * Wird aufgerufen, falls die Activity zum ersten Mal gestartet wird. ?Läd
@@ -74,25 +68,6 @@ class NewSudokuPreferencesActivity : PreferencesActivity() {
         val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
         val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
         pm.registerListener(this)
-
-        //set and store language at beginning of activity lifecycle
-        currentLanguageCode = LanguageUtility.loadLanguageFromSharedPreferences(this)
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        //load language from memory
-        val fromMemory = LanguageUtility.loadLanguageFromSharedPreferences(this)
-        if (fromMemory.language != currentLanguageCode!!.language) {
-            val refresh = Intent(this, this.javaClass)
-            finish()
-            this.startActivity(refresh)
-        }
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
     }
 
     /**
