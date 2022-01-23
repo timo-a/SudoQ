@@ -12,19 +12,7 @@
     <!-- Android specific strings -->
     <string name="version_code" translatable="false">1.0.4</string><!--where are these used??? in manifest code is an integer and name is the x.y.z thing-->
     <string name="version_name" translatable="false">Berta</string>
-    
 
-    <!-- Action Bar Entries -->
-    <string name="action_show_tutorial">Tutorial</string>
-
-    <string name="action_new_profile">Create New Profile</string>
-    <string name="action_delete_profile">Delete This Profile</string>
-    <string name="action_switch_profile">Switch Profile</string>
-    <string name="action_delete_all_gestures">Delete all gestures</string>
-    <string name="action_delete_single_gesture">Delete specific gesture</string>
-    <string name="action_restore_all">Restore all</string>
-    
-    
     <!-- Error Messages -->
     <string name="error_profile_dir_not_found">Error! Profile folder could not be located!</string>
     <string name="error_sudoku_preference_incomplete">Error! Settings are incomplete!</string>
@@ -43,8 +31,20 @@
     <string name="toast_stop_that">STOP THAT!!!</string>
     
     <!-- Splash -->
-    <string name="splash_text">SudoQ is being initialized for the first start</string>    
-    
+    <string name="splash_text">SudoQ is being initialized for the first start</string>
+
+
+    <!-- Action Bar Entries -->
+    <string name="action_show_tutorial">Tutorial</string>
+
+    <string name="action_new_profile">Create New Profile</string>
+    <string name="action_delete_profile">Delete This Profile</string>
+    <string name="action_switch_profile">Switch Profile</string>
+    <string name="action_delete_all_gestures">Delete all gestures</string>
+    <string name="action_delete_single_gesture">Delete specific gesture</string>
+    <string name="action_restore_all">Restore all</string>
+
+
     <!-- Dialogs -->
     <string name="dialog_yes">Yes</string>
     <string name="dialog_no">No</string>
