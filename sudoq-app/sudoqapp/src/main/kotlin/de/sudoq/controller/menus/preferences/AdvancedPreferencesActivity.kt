@@ -101,8 +101,8 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
         val languageCode = LanguageUtility.loadLanguageCodeFromPreferences(this)
         languageSpinner.setSelection(languageCode.ordinal)
         // nested Listener for languageSpinner
-        languageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View, pos: Int, id: Long) {
+        languageSpinner.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
                 var pos = pos
                 if (langSpinnerInit) {
                     //onitemselected is called after initialization
