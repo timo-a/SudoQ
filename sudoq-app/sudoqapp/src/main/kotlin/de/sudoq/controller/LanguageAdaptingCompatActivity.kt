@@ -70,6 +70,7 @@ abstract class LanguageAdaptingCompatActivity : AppCompatActivity() {
      */
     protected fun restartThisActivity() {
         val intent = Intent(this, javaClass)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         finish()
         startActivity(intent)
         overridePendingTransition(0, 0)
