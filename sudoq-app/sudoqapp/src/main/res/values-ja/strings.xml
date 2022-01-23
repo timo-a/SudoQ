@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SudoQ is a Sudoku-App for Android Devices with Version 2.2 at least. -->
+<!-- Copyright (C) 2012  Haiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele -->
+<!-- This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.  -->
+<!-- This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.  -->
+<resources>
+
+    <!-- Error Messages -->
+    <string name="error_profile_dir_not_found">Fehler! Profil Ordner konnte nicht gefunden werden!</string>
+    <string name="error_sudoku_preference_incomplete">Fehler! Einstellungen unvollstaendig!</string>
+    <string name="error_gestures_no_library">Gesten nicht verfügbar!</string>
+    <string name="error_thumbnail_get">Miniaturansicht konnte nicht erstellt werden!</string>
+    <string name="error_thumbnail_saved">Erhaltene Miniaturansicht konnte nicht gespeichert werden!</string>
+    <string name="error_thumbnail_load">Miniaturansicht konnte nicht geladen werden!</string>
+    <string name="error_gestures_not_complete">Du musst zuerst im Profil für alle Symbole Gesten definieren!</string>
+    <string name="error_cant_switch_symbols">Kein alternativer Symbolsatz verfügbar!</string>
+    
+    <!-- Toasts -->
+    <string name="toast_solved_wrong">Ein Feld wurde nicht korrekt gelöst</string>
+    <string name="toast_solved_correct">Alle Felder sind korrekt gelöst</string>
+    <string name="toast_invalid_symbol">Ungültiges Symbol</string>
+    <string name="toast_restricted_symbol">Eingeschränktes Symbol</string>
+    <string name="toast_stop_that">やめなさい！</string>
+    
+        <!-- Splash -->
+    <string name="splash_text">SudoQ wird für die erste Benutzung vorbereitet</string>
+    
+    
+    <!-- Action Bar Entries -->
+    <string name="action_show_tutorial">Tutorial</string>
+
+    <string name="action_new_profile">Neues Profil erstellen</string>
+    <string name="action_delete_profile">Dieses Profil löschen</string>
+    <string name="action_switch_profile">Profil wechseln</string>
+    <string name="action_delete_all_gestures">Alle Gesten löschen</string>
+    <string name="action_delete_single_gesture">Spezifische Geste löschen</string>
+    <string name="action_restore_all">Alle wiederherstellen</string>
+
+
+    <!-- Dialogs -->
+    <string name="dialog_yes">Ja</string>
+    <string name="dialog_no">Nein</string>
+    <string name="dialog_won_title">Du hast gewonnen!</string>
+    <string name="dialog_surrender_title">Du hast aufgegeben!</string>
+    <string name="dialog_won_text">Willst du das Sudoku schließen?</string>
+    <string name="dialog_won_statistics">Statistik</string>
+    <string name="dialog_won_timeneeded">Gespielte Zeit</string>
+    <string name="dialog_won_score">Punkte</string>
+    
+    <!-- Statistics -->
+    <string name="statistics_title">Statistik</string>
+    <string name="statistics_counters">Zähler</string>
+    <string name="statistics_played_sudokus">Gespielte Sudokus</string>
+    <string name="statistics_played_easy_sudokus">Gespielte einfache Sudokus</string>
+    <string name="statistics_played_medium_sudokus">Gespielte mittlere Sudokus</string>
+    <string name="statistics_played_difficult_sudokus">Gespielte schwere Sudokus</string>
+    <string name="statistics_played_infernal_sudokus">Gespielte infernale Sudokus</string>    
+	<string name="statistics_records">Rekorde</string>
+	<string name="statistics_score">Höchste Punktzahl</string>
+	<string name="statistics_fastest_solving_time">Schnellste Lösezeit</string>
+        
+	<!-- Profile preference titles und textviews -->
+
+	<!-- Profile list -->
+	<string name="profile_list_profile_changed">Profil geändert zu</string>
+	
+	<!-- Player Preferences Button -->
+	<string name="player_preferences_button_changeprofile">Profil wechseln</string>
+	
+
+    <!-- GestureBuilder -->
+    <string name="gesture_builder_title">Gesten definieren</string>
+    <string name="gesture_builder_define_gesture">Zeichne die gewünschte Geste</string>
+    
+    <!-- GameTypeSelection Buttons -->
+    <string name="sf_gametypeselection_local_sudoku">Sudoku</string>
+    <string name="sf_gametypeselection_server_sudoku">Offizielles Sudoku</string>
+    <string name="sf_gametypeselection_create_mp">Erstellen</string>
+    <string name="sf_gametypeselection_join_mp">Beitreten</string>
+    
+    <!-- SudokuPreferences Buttons und TextViews -->    
+    <string name="subtitle_sudokupreferences_sudokutype">Sudokutyp:</string>
+    <string name="subtitle_sudokupreferences_sudokucomplexity">Schwierigkeit:</string>
+    <string name="sf_sudokupreferences_start">Start</string>
+    <string name="sf_sudokupreferences_sudokutype">Sudokutyp auswählen</string>
+    <string name="sf_sudokupreferences_sudokucomplexity">Schwierigkeitsgrad auswählen</string>
+    <string name="sf_sudokupreferences_assistances">Hilfestellungen konfigurieren</string>
+    <string name="sf_sudokupreferences_copying">Vorlagen werden gerade kopiert. Bitte warten Sie einen Moment.</string>
+
+    <!-- SudokuActivity -->
+    <string name="sf_sudoku_button_bookmark">Lesezeichen</string>
+    <string name="sf_sudoku_button_close">Schließen</string>
+    <string name="sf_sudoku_assistances_title">Hilfestellungen</string>
+    <string name="sf_sudoku_assistances_check">Lösung prüfen</string>
+    <string name="sf_sudoku_assistances_solve_specific">Ausgewähltes Feld lösen</string>
+    <string name="sf_sudoku_assistances_solve_random">Zufälliges Feld lösen</string>
+    <string name="sf_sudoku_assistances_solve_surrender">Aufgeben</string>
+    <string name="sf_sudoku_assistances_back_to_valid_state">Zurück zum letzten korrekten Stand</string>
+    <string name="sf_sudoku_assistances_back_to_bookmark">Zurück zum letzten Lesezeichen</string>
+    <string name="sf_sudoku_assistances_give_hint">Einen Tipp geben</string>
+
+    <string name="sf_sudoku_title_gesture_input_entry">Symboleingabe durch Geste</string>
+    <string name="sf_sudoku_title_gesture_input_note">Kandidat eingeben durch Geste</string>
+
+    <string name="sf_sudoku_title_action_tree">Aktionsverlauf</string>
+    <string name="sf_sudoku_assistances_crash">App abstürzen lassen</string>
+
+
+    <!-- Titles -->
+    <string name="title_mainmenu">SudoQ</string>
+    <string name="title_gametypeselection">Neues Sudoku</string>
+    
+    <!-- Subtitles -->
+	<string name="subtitle_gametypeselection_mp">Multiplayer</string>  
+	
+	<!-- Complexity -->
+    <string name="complexity_easy">簡単</string>
+    <string name="complexity_medium">中くらい</string>
+    <string name="complexity_difficult">難しい</string>
+    <string name="complexity_infernal">超難しい</string>
+    
+    <!-- Sudoku Types -->
+    <string name="sudoku_type_standard_9x9"  >Standard-Sudoku 9x9</string>
+    <string name="sudoku_type_standard_16x16">Standard-Sudoku 16x16</string>
+    <string name="sudoku_type_standard_6x6"  >Standard-Sudoku 6x6</string>
+    <string name="sudoku_type_standard_4x4"  >Standard-Sudoku 4x4</string>
+    <string name="sudoku_type_squiggly_a_9x9">Squiggly-Sudoku 9x9</string>
+    <string name="sudoku_type_squiggly_b_9x9">Squoggly-Sudoku 9x9</string>
+    <string name="sudoku_type_stairstep_9x9" >Treppen-Sudoku 9x9</string>
+    <string name="sudoku_type_samurai"       >Samurai-Sudoku</string>
+    <string name="sudoku_type_hyper"         >Hyper-Sudoku</string>
+    <string name="sudoku_type_xsudoku"       >X-Sudoku</string>
+    <string name="sudoku_type_dummy_longest_name">Standard-Sudoku 16x16</string>
+    <string name="sf_sudokupreferences_title">Sudoku-Einstellungen</string>
+    <string name="sf_advancedpreferences_title">Erweiterte Einstellungen</string>
+    <string name="sf_advancedpreferences_restricttypes_title">Wählbare Sudokutypen</string>
+
+    <!-- Game states -->
+
+    <string name="check_mark" translatable="false">〇</string>
+    <string name=    "x_mark" translatable="false">✖</string>
+
+
+    <!-- Sudoku Loading -->
+    <string name="tx_no_sudokus_to_load">Keine gespeicherten Sudokus vorhanden.</string>
+    <string name="sudokuloading_delete_finished">Gelöste Sudokus löschen</string>
+    <string name="sudokuloading_delete_all">Alle Sudokus löschen</string>
+    <string name="sf_loading_back">Zurück</string>
+    
+    <string name="sudokuloading_dialog_play">spielen</string>
+    <string name="sudokuloading_dialog_delete">löschen</string>
+    
+    
+    <!--  Defaults -->
+    <string name="default_user_name">Profil 1</string>
+    <string name="fab_go_back">Geklickte Sudokus werden gelöscht.\nUm aufzuhören nochmal auf den Button klicken</string>
+    <string name="sf_sudokuloading_title">Gespeicherte Sudokus</string>
+
+    <!-- hints -->
+    <string name="hint_lastdigit">Schau dir mal {determiner} hervorgehoben{suffix} {shape} an! Da ist nur noch ein Feld übrig.</string>
+
+    <string name="constraintshape_row_accusative_determined">Zeile</string>
+    <string name="constraintshape_column_accusative_determined">Spalte</string>
+    <string name="constraintshape_diagonal_accusative_determined">Diagonale</string>
+    <string name="constraintshape_block_accusative_determined">Block</string>
+    <string name="constraintshape_other_accusative_determined">Gruppe</string>
+
+    <string name="constraintshape_row_genitive_determined"     >Zeile</string>
+    <string name="constraintshape_column_genitive_determined"  >Spalte</string>
+    <string name="constraintshape_diagonal_genitive_determined">Diagonalen</string>
+    <string name="constraintshape_block_genitive_determined"   >Blocks</string>
+    <string name="constraintshape_other_genitive_determined"   >Gruppe</string>
+
+    <string name="constraintshape_row_dative_determined"     >Zeile</string>
+    <string name="constraintshape_column_dative_determined"  >Spalte</string>
+    <string name="constraintshape_diagonal_dative_determined">Diagonalen</string>
+    <string name="constraintshape_block_dative_determined"   >Block</string>
+    <string name="constraintshape_other_dative_determined"   >Gruppe</string>
+
+
+    <string name="feminine_accusative_determiner">die</string>
+    <string name="maskuline_accusative_determiner">den</string>
+    <string name="neutral_accusative_determiner">das</string>
+
+    <string name="feminine_accusative_suffix">e</string>
+    <string name="maskuline_accusative_suffix">en</string>
+    <string name="neutral_accusative_suffix">e</string>
+
+
+    <string name="hint_lastcandidate">Schau dir mal das hervorgehobene Feld an. Dort ist nur noch ein Kandidat übrig.</string>
+    <string name="hint_leftovernote">Schau dir mal {determiner} hervorgehoben{suffix} {shape} an! Weil {note} gesetzt ist können alle Notizen dazu entfernt werden.</string>
+
+    <string name="hint_nakedsingle_look">Es gibt ein „naked single“!</string>
+    <string name="hint_nakedsingle_note">Im hervorgehobenen Feld is nur noch {note} übrig.</string>
+    <string name="hint_nakedsingle_remove">Es kann in diesen Feld also als Lösung eingetragen werden und überall sonst {prep det} {shape} entfernt werden.</string>
+
+    <string name="hint_nakedset">Es gibt ein „naked set“: {symbols} werden sich irgendwie auf die hervorgehobenen Felder verteilen. In allen anderen Feldern dieser Gruppe können Sie entfernt werden. </string>
+
+    <string name="hint_hiddensingle">Es gibt ein „hidden single“! Im hervorgehobenen Bereich kommt \"{note}\" nur im hervorgehobenen Feld vor und kann daher als Lösung eingetragen werden.</string>
+
+    <string name="hint_hiddenset">Es gibt ein „hidden set“! {symbols} verteilen sich irgendwie über die hervorgehobenen Felder. Daher können andere Notitzen in diesen Feldern entfernt werden. </string>
+
+    
+    <string name="hint_lockedcandidates">Es gibt einen „locked candidate“: {note} kommt in der blauen Gruppe nur einmal vor. Deshalb kann es überall in der grünen Gruppe entfernt werden.</string>
+
+    <string name="hint_xWing">Es gibt einen „X-Wing“: Manche Notizen kommen in allen Schnittfeldern vor, jedoch nirgends sonst in den blauen gruppen. Die Notizen sind deshalb auf diese Schnittfelder festgelegt und können im grünen Bereich gelöscht werden.</string>
+    
+    <string name="hint_backtracking">Wie gesagt, ich bin noch in Entwicklung. Meine beste Empfehlung ist ein Lesezeichen zu setzen und auszuprobieren.</string>
+    <string name="hint_fill_out_notes"> Übrigens einige Felder sind komplett leer. Ich gehe im Zweifel davon aus, dass Zahlen die nicht als Notiz eingetragen sind bereits ausgeschossen wurden. Ich arbeite am besten wenn alle Zahlen die für ein Feld noch möglich sind dort auch als Notiz eingetragen sind. Möchtest du dass ich leere Felder mit Notitzen fülle?</string>
+
+
+
+    <string name="gender_maskulin">m</string>
+    <string name="gender_feminin">f</string>
+    <string name="gender_neutral">n</string>
+
+
+</resources>

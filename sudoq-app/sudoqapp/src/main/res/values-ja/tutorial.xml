@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SudoQ is a Sudoku-App for Android Devices with Version 2.2 at least. -->
+<!-- Copyright (C) 2012  Haiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele -->
+<!-- This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.  -->
+<!-- This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.  -->
+<resources>
+    
+    <!-- Sudoku Tutorial -->
+    <string name="sf_tutorial_sudoku_title">Sudoku</string>
+	<string name="sf_tutorial_sudoku_description1">Ein Sudoku ist ein Logikrätsel, bei dem Ziffern in die richtigen Felder gesetzt werden müssen. Das Original-Sudoku
+	    ist ein 9x9 Gitter, das mit den Ziffern 1-9 so zu befüllen ist, dass jede Zeile, jede Spalte und jeder der neun 3x3 Blöcke alle Ziffern enthält.
+	    Zu Beginn ist das Sudoku teilweise ausgefüllt und hat nur eine richtige Lösung.</string>
+	<string name="sf_tutorial_sudoku_description2">Weitere Sudokutypen haben nicht die 3x3 Blöcke sondern andere Gruppen von Feldern, 
+	    die in dieser App durch eine schwarze Umrandung oder grau hinterlegte Felder dargestellt werden.
+	    Die folgenden Bilder zeigen beide Arten der Darstellung die sich überschneiden können:</string>
+	<string name="sf_tutorial_sudoku_squiggly">Squiggly Typ A Sudoku</string>
+	<string name="sf_tutorial_sudoku_xsudoku">X-Sudoku Typ</string>
+    
+	<!-- Assistances Tutorial -->
+	<string name="sf_tutorial_assistances_title">Hilfestellungen</string>
+	<string name="sf_tutorial_assistances_description1">Es stehen mehrere Hilfestellungen zur Verfügung die es einfacher machen, ein Sudoku zu lösen.
+	    Diese Hilfestellungen können in "passive" und "aktive" Hilfestellungen unterteilt werden.</string>
+	    <string name = "sf_tutorial_assistances_description2">Aber: Das Aktivieren einer passiven bzw. das Benutzen einer aktiven
+	        Hilfestellung führt dazu, dass sich der Highscore verringert. Das Benutzen einer Hilfestellung hat einen ähnlichen Effekt wie
+	        das Benötigen von zusätzlicher Zeit zum Lösen des Sudokus, daher werden die Hilfestellungen als zusätzliche Zeit hinter der
+	        Spielzeit angezeigt.</string>
+	 
+	<string name="sf_tutorial_assistances_passive_title">Passive Hilfestellungen</string>
+	<string name="sf_tutorial_assistances_passive_description1">Passive Hilfestellungen können im Profil oder vor Beginn eines neuen Spiels aktiviert werden. 
+	    Diese Hilfestellungen müssen nicht im Spiel aufgerufen werden, können daher im Spiel aber auch nicht aktiviert bzw. deaktiviert werden.</string>
+	<string name="sf_tutorial_assistances_passive_markrowcolumn_title">Zeile/Spalte markieren</string>
+	<string name="sf_tutorial_assistances_passive_markrowcolumn_description1">Wenn diese Hilfestellung aktiv ist, werden alle Felder in der momentan ausgewählten Zeile und Spalte hervorgehoben.</string>
+	<string name="sf_tutorial_assistances_passive_autoadjustnotes_title">Notizen automatisch anpassen</string>
+	<string name="sf_tutorial_assistances_passive_autoadjustnotes_description1">Diese Hilfestellung aktualisiert deine Notizen, wenn du eine Ziffer in ein Feld eingibst. 
+	    Steht diese Ziffer in einem Feld der gleichen Zeile, Spalte oder demselben Block als Notiz so wird diese Notiz gelöscht.</string>
+	<string name="sf_tutorial_assistances_passive_markwrongsymbols_title">Falsche Symbole markieren</string>
+	<string name="sf_tutorial_assistances_passive_markwrongsymbols_description1">Wenn eine Ziffer in ein Feld eingegeben wird obwohl sie bereits
+	    in einem Feld in derselben Zeile, Spalte oder demselben Block steht wird sie rot markiert, da nicht in beiden Feldern die gleiche Ziffer stehen kann.</string>
+	<string name="sf_tutorial_assistances_passive_inputassistance_title">Eingabehilfe</string>
+	<string name="sf_tutorial_assistances_passive_inputassistance_description1">Wenn diese Hilfestellung aktiviert ist, kann eine Ziffer nur in ein Feld eingetragen werden wenn sie noch nicht 
+	    in einem Feld in derselben Zeile, Spalte oder demselben Block eingetragen ist. Alle anderen Ziffern sind ausgegraut.</string>
+	
+	<string name="sf_tutorial_assistances_active_title">Aktive Hilfestellungen</string>
+	<string name="sf_tutorial_assistances_active_description1">Aktive Hilfestellungen können im Spiel aufgerufen werden wenn man sie braucht.
+	    Sie werden über den links gezeigten Button erreicht.</string>
+	<string name="sf_tutorial_assistances_active_solverandomcell_title">Zufälliges Feld lösen</string>
+	<string name="sf_tutorial_assistances_active_solverandomcell_description1">Es wird automatisch ein zufälliges Feld gelöst.</string>
+	<string name="sf_tutorial_assistances_active_solvecurrentcell_title">Ausgewähltes Feld lösen</string>
+	<string name="sf_tutorial_assistances_active_solvecurrentcell_description1">Das zur Zeit ausgewählte Feld wird gelöst.</string>
+	<string name="sf_tutorial_assistances_active_check_title">Lösung prüfen</string>
+	<string name="sf_tutorial_assistances_active_check_description1">Deine aktuelle Lösung wird geprüft und eine Nachricht teilt dir mit ob alle deine ausgefüllten Felder korrekt gelöst sind, 
+	    oder ob es ein Feld gibt, das nicht korrekt gelöst ist.</string>
+	<string name="sf_tutorial_assistances_active_backtolastcorrect_title">Zurück zum letzten korrekten Stand</string>
+	<string name="sf_tutorial_assistances_active_backtolastcorrect_description1">Diese Hilfestellung setzt das Spiel auf den letzten Stand zurück zu dem alle Felder, die du ausgefüllt hast korrekt gelöst waren. 
+	    Der bisherige falsche Spielstand kann im Aktionsverlauf wiederhergestellt werden.</string>
+	<string name="sf_tutorial_assistances_active_surrender_title">Aufgeben</string>
+	<string name="sf_tutorial_assistances_active_surrender_description1">Dies ist keine Hilfestellung als solche. 
+	    Wenn sie aufgerufen wird, wird das Sudoku automatisch gelöst und man kann sich die Lösung ansehen. Für ein aufgegebenes Spiel erhält man keine Punkte.</string>
+	    
+	<!-- ActionTree Tutorial -->
+	<string name="sf_tutorial_action_title">Aktionsverlauf</string>
+	<string name="sf_tutorial_action_description1">Der Aktionsverlauf speichert alles was du in einem Spiel machst. Jedes Feld das du entweder durch Lösen oder Notitzen setzen veränderst
+	    wird im Aktionsverlauf gespeichert. Das ermöglicht es dir eine Lösung auszuprobieren und zurückzugehen falls sie falsch war ohne dass du dir jeden einzelnen Schritt merken musst, 
+	    seit das Spiel zuletzt korrekt ausgefüllt war.
+	    </string>
+	<string name="sf_tutorial_action_description2">Mit dem Button links kannst du diesen Verlauf in einem Spiel öffnen und dich durch deine Aktionen navigieren.</string>
+	<string name="sf_tutorial_action_description3">Wenn du dich im Verlauf zurückbewegst und von dort weiterspielst wird ein neuer Ast erzeugt, so dass du jederzeit zu deiner alten Lösung zurückkehren kannst.</string>
+	<string name="sf_tutorial_action_state">Das Bild links zeigt eine einzelne Aktion die du ausgeführt hast im Verlauf.</string>
+	<string name="sf_tutorial_action_bookmark">Im Aktionsverlauf kannst du Lesezeichen setzen um dir einen Status zu merken. Ein Lesezeichen wird dargestellt wie auf der linken Seite zu sehen ist.</string>
+	<string name="sf_tutorial_action_current_state">Das Bild auf der linken Seite zeigt wie der Zustand in dem du dich gerade befindest markiert wird.</string>
+	<string name="sf_tutorial_action_branching">Wenn du von einem Zustand aus zwei verschiedene Lösungen probiert hast, gibt es zwei Äste und der Zustand ist markiert wie links zu sehen ist.</string>
+	<string name="sf_tutorial_action_redoundo_title">Wiederherstellen / Rückgängig machen</string>
+	<string name="sf_tutorial_action_redoundo_description">Mit den Buttons links kannst du eine Aktion einfach wiederherstellen oder rückgängig machen ohne den Aktionsverlauf zu öffnen.</string>
+</resources>

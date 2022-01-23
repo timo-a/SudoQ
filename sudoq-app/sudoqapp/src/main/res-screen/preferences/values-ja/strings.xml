@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_preference_title">ユーザー設定</string>
+    <string name="profile_preference_title_name">名前</string>
+    <string name="profile_preference_title_gesture">ジェスチャー入力</string>
+    <string name="profile_preference_title_left_hand_mode">左利きモード</string>
+    <string name="profile_preference_title_cat_profile">プロファイル設定</string>
+    <string name="profile_preference_title_cat_assistances">ヘルプ設定</string>
+    <string name="profile_preference_title_assistance_markRowColumn">行・列をマークする</string>
+    <string name="profile_preference_title_assistance_markWrongSymbol">間違ったエントリをマークする</string>
+    <string name="profile_preference_title_assistance_restrictCandidates">入力ヘルプ</string>
+    <string name="profile_preference_title_assistance_allowSolveSpecificCell">選択したセルを解決する</string>
+    <string name="profile_preference_title_assistance_allowSolveRandomCell">ランダムセルを解く</string>
+    <string name="profile_preference_title_assistance_allowGetHint">ヒント</string>
+    <string name="profile_preference_title_assistance_autoAdjustNotes">ノートを自動的に適応させる</string>
+    <string name="profile_preference_title_profile">プロファイル</string>
+    <string name="profile_preference_button_statistics">統計</string>
+    <string name="profile_preference_button_gesture_builder">ジェスチャーを定義する</string>
+    <string name="profile_preference_button_save">保存する</string>
+    <string name="profile_preference_button_advanced_preferences">高度な設定</string>
+    <string name="profile_preference_button_provide_restricted_set_of_types">利用可能なタイプを制限します</string>
+
+    <string name="profile_preference_new_profile">名前なし</string>
+
+    <!-- restrict types -->
+    <string name="advanced_settings_restrict_types_empty_warning">すべてのタイプを非表示にすることはできません。1つのタイプを残してください。</string>
+    <!-- Sudoku Types -->
+    <string name="advanced_settings_restrict_item_standard_9x9"  >Standard</string>
+    <string name="advanced_settings_restrict_item_standard_16x16">16x16</string>
+    <string name="advanced_settings_restrict_item_standard_6x6"  >6x6</string>
+    <string name="advanced_settings_restrict_item_standard_4x4"  >4x4</string>
+    <string name="advanced_settings_restrict_item_squiggly_a_9x9">Squiggly-Sudoku 9x9</string>
+    <string name="advanced_settings_restrict_item_squiggly_b_9x9">Squoggly-Sudoku 9x9</string>
+    <string name="advanced_settings_restrict_item_stairstep_9x9" >Treppen-Sudoku 9x9</string>
+    <string name="advanced_settings_restrict_item_samurai"       >Samurai-Sudoku</string>
+    <string name="advanced_settings_restrict_item_hyper"         >Hyper-Sudoku</string>
+    <string name="advanced_settings_restrict_item_xsudoku"       >X-Sudoku</string>
+
+    <string name="profile_preference_title_crash_trigger">アプリをクラッシュさせる</string>
+    <string name="profile_preference_title_intelligent_assistant">インテリジェントアシスタント</string>
+    <string name="language_english">英語</string>
+    <string name="language_french">フランス語</string>
+    <string name="language_german">ドイツ語</string>
+    <string name="language_system">デバイス言語</string>
+    <string name="advanced_settings_language_spinner_label">言語</string>
+    <string name="advanced_settings_language_spinner_dummy">言語を選択してください</string>
+
+
+</resources>
