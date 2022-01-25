@@ -7,18 +7,15 @@
  */
 package de.sudoq.controller.menus.preferences
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.*
-import android.widget.AdapterView.OnItemSelectedListener
 import androidx.appcompat.widget.Toolbar
 import de.sudoq.R
 import de.sudoq.controller.menus.NewSudokuActivity
-import de.sudoq.controller.menus.preferences.LanguageSetting.LanguageCode
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.persistence.profile.ProfileRepo
@@ -40,11 +37,6 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
     private var debug: CheckBox? = null
     private var debugCounter: Byte = 0
     private var langSpinnerInit = true
-
-    /**
-     * stores language at activity start to compare if language changed in advanced preferences
-     */
-    private var currentLanguageCode: LanguageSetting? = null
 
     /**
      * Wird aufgerufen, falls die Activity zum ersten Mal gestartet wird. Läd
@@ -104,17 +96,12 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
         )
         languageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         languageSpinner.adapter = languageAdapter
-        val thishere: Activity = this
 
         //set language
-        currentLanguageCode = LanguageUtility.loadLanguageFromSharedPreferences(this)
-        Log.d(
-            "lang",
-            "set language to AdvancedPreferencesActivity.onCreate() after setLocaleFromMemory."
-        )
-        languageSpinner.setSelection(if (currentLanguageCode!!.isSystemLanguage) 0 else currentLanguageCode!!.language.ordinal)
+        val languageCode = LanguageUtility.loadLanguageCodeFromPreferences(this)
+        languageSpinner.setSelection(languageCode.ordinal)
         // nested Listener for languageSpinner
-        languageSpinner.onItemSelectedListener = object : OnItemSelectedListener {
+        languageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
                 var pos = pos
                 if (langSpinnerInit) {
@@ -124,26 +111,28 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
                     return
                 }
 
-                //if position is out of array bounds set to 0 (= system language).
+                // If position is out of bounds set it to the system language index:
                 if (pos >= LanguageCode.values().size) {
-                    pos = 0
+                    pos = LanguageCode.system.ordinal
                 }
 
-                //translate pos to enum
+                // Translate the position to enum language value:
                 val enumCode = LanguageCode.values()[pos]
-                //enum to string(resolving system language) and set
-                val newCode = LanguageUtility.getLanguageFromItem(enumCode)
-                LanguageUtility.setConfLocale(newCode.language.name, thishere)
-                LanguageUtility.storeLanguageToSharedPreferences(this@AdvancedPreferencesActivity, newCode)
-                //int previous = LanguageUtility.loadLanguageFromConf(AdvancedPreferencesActivity.this).name();
-                if (currentLanguageCode!!.language != newCode.language) {
-                    //if we change e.g. from system(english) to english we need to store a different value but we don't need to refresh.
 
-                    //restart activity so changes can take placem
-                    val refresh = Intent(thishere, thishere.javaClass)
-                    thishere.finish()
-                    thishere.startActivity(refresh)
+                // Store the chosen language setting to preferences:
+                LanguageUtility.saveLanguageCodeToPreferences(this@AdvancedPreferencesActivity, enumCode)
+
+                // Resolve the enum language if system:
+                var newLanguageCode = enumCode
+                if (newLanguageCode == LanguageCode.system) {
+                    // Either the real system language (if possible) or english will be applied here:
+                    newLanguageCode = LanguageUtility.resolveSystemLanguage()
                 }
+                // Apply the new language choice to the resources (regardless if it is the same):
+                LanguageUtility.setResourceLocale(this@AdvancedPreferencesActivity, newLanguageCode)
+
+                // Restart this activity (if required):
+                restartIfWrongLanguage()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {

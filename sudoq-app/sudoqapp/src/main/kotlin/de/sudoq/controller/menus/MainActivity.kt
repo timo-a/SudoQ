@@ -8,7 +8,6 @@
 package de.sudoq.controller.menus
 
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -16,28 +15,17 @@ import android.widget.Button
 import androidx.appcompat.widget.Toolbar
 import de.sudoq.R
 import de.sudoq.controller.SudoqCompatActivity
-import de.sudoq.controller.menus.preferences.LanguageSetting
-import de.sudoq.controller.menus.preferences.LanguageUtility.getConfLocale
-import de.sudoq.controller.menus.preferences.LanguageUtility.loadLanguageFromSharedPreferences
-import de.sudoq.controller.menus.preferences.LanguageUtility.setConfLocale
-import de.sudoq.controller.menus.preferences.LanguageUtility.storeLanguageToSharedPreferences
 import de.sudoq.controller.menus.preferences.PlayerPreferencesActivity
 import de.sudoq.controller.sudoku.SudokuActivity
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.persistence.profile.ProfileRepo
 import de.sudoq.persistence.profile.ProfilesListRepo
 import java.io.File
-import java.util.*
 
 /**
  * Verwaltet das Hauptmenü der App.
  */
 class MainActivity : SudoqCompatActivity() {
-    /**
-     * stores language at activity start to compare if language changed in advanced preferences
-     */
-    private var currentLanguageCode: LanguageSetting? = null
-
     private lateinit var profilesFile: File
     private lateinit var sudokuFile: File
 
@@ -57,19 +45,7 @@ class MainActivity : SudoqCompatActivity() {
         ab.setDisplayHomeAsUpEnabled(true)
         ab.setDisplayShowTitleEnabled(false)
 
-        /* load language from profile */
-
-        //retrieve language from profile at beginning of activity lifecycle
-        currentLanguageCode = loadLanguageFromSharedPreferences(this)
-        val currentConf = getConfLocale(this)
-        if (currentConf != currentLanguageCode!!.language.name) {
-            // if conf != loaded language, set conf and update
-            setConfLocale(currentLanguageCode!!.language.name, this)
-            val refresh = Intent(this, this.javaClass)
-            finish()
-            this.startActivity(refresh)
-        }
-        Log.d("lang", "MainActivity.onCreate() set with $currentLanguageCode")
+        Log.d("lang", "MainActivity.onCreate()")
     }
 
     /**
@@ -87,17 +63,6 @@ class MainActivity : SudoqCompatActivity() {
         val loadButton = findViewById<View>(R.id.button_mainmenu_load_sudoku) as Button
         //loadButton.setEnabled(!gm.getGameList().isEmpty());
         loadButton.isEnabled = true
-
-        //load language from memory
-        val fromConf = getConfLocale(this)
-        if (fromConf != currentLanguageCode!!.language.name) {
-            //language has been changed so we need to restart this activity
-            //so that the new language is applied to it
-            Log.d("lang", "refresh because $currentLanguageCode -> $fromConf")
-            val refresh = Intent(this, this.javaClass)
-            finish()
-            this.startActivity(refresh)
-        }
     }
 
     /**
@@ -125,24 +90,6 @@ class MainActivity : SudoqCompatActivity() {
             R.id.button_mainmenu_profile -> {
                 val preferencesIntent = Intent(this, PlayerPreferencesActivity::class.java)
                 startActivity(preferencesIntent)
-            }
-        }
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-
-        // check if configuration has changed
-        // per Manifest this method gets called if there are changes in layoutDirection or locale
-        // (if we only check for locale, this method doesn't get called, no idea why https://stackoverflow.com/a/27648673/3014199)
-        //
-        if (newConfig.locale.language != currentLanguageCode!!.language.name) {
-            //only adopt external change if language is set to "system language"
-            if (currentLanguageCode!!.isSystemLanguage) {
-                //adopt change
-                currentLanguageCode = loadLanguageFromSharedPreferences(this)
-                //store changes
-                storeLanguageToSharedPreferences(this, currentLanguageCode!!)
             }
         }
     }

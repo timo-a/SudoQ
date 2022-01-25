@@ -23,9 +23,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".controller.SudoqCompatActivity" />
-        <activity android:name=".controller.menus.MainActivity" android:configChanges="layoutDirection|locale" />
-        <activity android:name=".controller.menus.NewSudokuActivity"      android:label="@string/sf_sudokupreferences_title"
-                                                                          android:configChanges="layoutDirection|locale" />
+        <activity android:name=".controller.menus.MainActivity" />
+        <activity android:name=".controller.menus.NewSudokuActivity"      android:label="@string/sf_sudokupreferences_title" />
         <activity android:name=".controller.menus.preferences.NewSudokuPreferencesActivity" android:label="@string/sf_sudokupreferences_title"/>
         <activity android:name=".controller.menus.SudokuLoadingActivity"  android:label="@string/sf_sudokuloading_title"
                                                                           android:noHistory="true"
@@ -34,7 +33,6 @@
         <activity android:name=".controller.menus.GestureBuilder" android:label="@string/gesture_builder_title"/>
         <activity android:name=".controller.sudoku.SudokuActivity"/>
         <activity android:name=".controller.menus.preferences.PlayerPreferencesActivity"    android:label="@string/profile_preference_title"
-                                                                                            android:configChanges="layoutDirection|locale"
                                                                                             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".controller.menus.preferences.AdvancedPreferencesActivity"  android:label="@string/sf_advancedpreferences_title"/>
         <activity android:name=".controller.menus.preferences.RestrictTypesActivity"        android:label="@string/sf_advancedpreferences_restricttypes_title"/>
