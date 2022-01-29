@@ -10,7 +10,6 @@ package de.sudoq.controller.tutorial
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
@@ -19,9 +18,10 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import de.sudoq.R
+import de.sudoq.controller.LanguageAdaptingCompatActivity
 import java.util.*
 
-class TutorialActivity : AppCompatActivity() {
+class TutorialActivity : LanguageAdaptingCompatActivity() {
     //private DrawerLayout mDrawerLayout;
     /**
      * {@inheritDoc}

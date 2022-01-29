@@ -18,6 +18,8 @@ import android.view.Menu
 import android.widget.Toast
 import de.sudoq.R
 import de.sudoq.controller.SudoqCompatActivity
+import de.sudoq.controller.menus.preferences.LanguageCode
+import de.sudoq.controller.menus.preferences.LanguageUtility
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.sudoku.complexity.Complexity.Companion.playableValues
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
@@ -53,6 +55,16 @@ class SplashActivity : SudoqCompatActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Load the language setting from preferences:
+        val languageCode = LanguageUtility.loadLanguageCodeFromPreferences(this)
+        Log.i("SudoQLanguage", "Using language setting: $languageCode")
+        // If the desired language is not 'system' and not the current system language, update the resources (globally):
+        if (languageCode != LanguageCode.system && languageCode != LanguageUtility.resolveSystemLanguage()) {
+            LanguageUtility.setResourceLocale(this, languageCode)
+        }
+        // This should be applied app wide until manual preference changes.
+        // If something else changes the locale for reasons, it will be noticed.
 
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.splash)
