@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SudoQ is a Sudoku-App for Android Devices with Version 2.2 at least. -->
+<!-- Copyright (C) 2012  Haiko Klare, Julian Geppert, Jan-Bernhard Kordaß, Jonathan Kieling, Tim Zeitz, Timo Abele -->
+<!-- This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.  -->
+<!-- This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.  -->
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+	<!-- these strings aren't meant to be used in the app but serve as an overview of terms used in the app -->
+	<string name="glossary_board_the_whole_sudoku" tools:ignore="MissingTranslation">board</string>
+	<string name="glossary_cell_solutions_and_notes_go_here" tools:ignore="MissingTranslation">cell</string>
+	<string name="glossary_note_user_enters_this_into_a_cell_when_not_sure" tools:ignore="MissingTranslation">note</string>
+	<string name="glossary_candidate_note_but_more_abstract" tools:ignore="MissingTranslation">candidate</string>
+
+	<string name="glossary_naked_single" tools:ignore="MissingTranslation">naked single</string>
+	<string name="glossary_naked_set" tools:ignore="MissingTranslation">naked set</string>
+	<string name="glossary_hidden_single" tools:ignore="MissingTranslation">hidden single</string>
+	<string name="glossary_hidden_set" tools:ignore="MissingTranslation">hidden set</string>
+	<string name="glossary_locked_candidate" tools:ignore="MissingTranslation">locked candidate</string>
+
+</resources>

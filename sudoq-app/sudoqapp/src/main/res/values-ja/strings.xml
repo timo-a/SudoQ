@@ -6,134 +6,125 @@
 <resources>
 
     <!-- Error Messages -->
-    <string name="error_profile_dir_not_found">Fehler! Profil Ordner konnte nicht gefunden werden!</string>
-    <string name="error_sudoku_preference_incomplete">Fehler! Einstellungen unvollstaendig!</string>
-    <string name="error_gestures_no_library">Gesten nicht verfügbar!</string>
-    <string name="error_thumbnail_get">Miniaturansicht konnte nicht erstellt werden!</string>
-    <string name="error_thumbnail_saved">Erhaltene Miniaturansicht konnte nicht gespeichert werden!</string>
-    <string name="error_thumbnail_load">Miniaturansicht konnte nicht geladen werden!</string>
-    <string name="error_gestures_not_complete">Du musst zuerst im Profil für alle Symbole Gesten definieren!</string>
-    <string name="error_cant_switch_symbols">Kein alternativer Symbolsatz verfügbar!</string>
+    <string name="error_profile_dir_not_found">エラー！ プロファイルディレクトリが見つかりません！</string>
+    <string name="error_sudoku_preference_incomplete">エラー！ 設定が不完全です！</string>
+    <string name="error_gestures_no_library">ジェスチャーは定義されていません！</string>
+    <string name="error_thumbnail_get">一時停止中に画面をキャプチャできません！</string>
+    <string name="error_thumbnail_saved">キャプチャしたサムネイルを保存できません！</string>
+    <string name="error_thumbnail_load">このゲームのサムネイルを読み込めません！</string>
+    <string name="error_gestures_not_complete">プロファイル内のすべてのシンボルのジェスチャーを定義する必要があります。</string>
+    <string name="error_cant_switch_symbols">利用可能な代替シンボルセットはありません！</string>
     
     <!-- Toasts -->
-    <string name="toast_solved_wrong">Ein Feld wurde nicht korrekt gelöst</string>
-    <string name="toast_solved_correct">Alle Felder sind korrekt gelöst</string>
-    <string name="toast_invalid_symbol">Ungültiges Symbol</string>
-    <string name="toast_restricted_symbol">Eingeschränktes Symbol</string>
+    <string name="toast_solved_wrong">セルが正しく解決されない </string>
+    <string name="toast_solved_correct">すべてが正しく解決されます</string>
+    <string name="toast_invalid_symbol">無効なシンボル</string>
+    <string name="toast_restricted_symbol">シンボルは制限されています。</string>
     <string name="toast_stop_that">やめなさい！</string>
     
         <!-- Splash -->
-    <string name="splash_text">SudoQ wird für die erste Benutzung vorbereitet</string>
+    <string name="splash_text">SudoQは最初の開始のために初期化されています</string>
     
     
     <!-- Action Bar Entries -->
-    <string name="action_show_tutorial">Tutorial</string>
+    <string name="action_show_tutorial">チュートリアル</string>
 
-    <string name="action_new_profile">Neues Profil erstellen</string>
-    <string name="action_delete_profile">Dieses Profil löschen</string>
-    <string name="action_switch_profile">Profil wechseln</string>
-    <string name="action_delete_all_gestures">Alle Gesten löschen</string>
-    <string name="action_delete_single_gesture">Spezifische Geste löschen</string>
-    <string name="action_restore_all">Alle wiederherstellen</string>
+    <string name="action_new_profile">新しいプロファイルを作成する</string>
+    <string name="action_delete_profile">このプロファイルを削除する</string>
+    <string name="action_switch_profile">プロファイルを切り替える </string>
+    <string name="action_delete_all_gestures">すべてのジェスチャーを削除する</string>
+    <string name="action_delete_single_gesture">特定のジェスチャーを削除する</string>
+    <string name="action_restore_all">すべての復元</string>
 
 
     <!-- Dialogs -->
-    <string name="dialog_yes">Ja</string>
-    <string name="dialog_no">Nein</string>
-    <string name="dialog_won_title">Du hast gewonnen!</string>
-    <string name="dialog_surrender_title">Du hast aufgegeben!</string>
-    <string name="dialog_won_text">Willst du das Sudoku schließen?</string>
-    <string name="dialog_won_statistics">Statistik</string>
-    <string name="dialog_won_timeneeded">Gespielte Zeit</string>
-    <string name="dialog_won_score">Punkte</string>
+    <string name="dialog_yes">はい</string>
+    <string name="dialog_no">いいえ</string>
+    <string name="dialog_won_title">あなたが勝ちました！</string>
+    <string name="dialog_surrender_title">あなたはあきらめました！</string>
+    <string name="dialog_won_text">やめたいですか？ </string>
+    <string name="dialog_won_statistics">統計</string>
+    <string name="dialog_won_timeneeded">プレイした時間</string>
+    <string name="dialog_won_score">スコア</string>
     
     <!-- Statistics -->
-    <string name="statistics_title">Statistik</string>
-    <string name="statistics_counters">Zähler</string>
-    <string name="statistics_played_sudokus">Gespielte Sudokus</string>
-    <string name="statistics_played_easy_sudokus">Gespielte einfache Sudokus</string>
-    <string name="statistics_played_medium_sudokus">Gespielte mittlere Sudokus</string>
-    <string name="statistics_played_difficult_sudokus">Gespielte schwere Sudokus</string>
-    <string name="statistics_played_infernal_sudokus">Gespielte infernale Sudokus</string>    
-	<string name="statistics_records">Rekorde</string>
-	<string name="statistics_score">Höchste Punktzahl</string>
-	<string name="statistics_fastest_solving_time">Schnellste Lösezeit</string>
+    <string name="statistics_title">統計</string>
+    <string name="statistics_counters">カウンター</string>
+    <string name="statistics_played_sudokus">数独をプレイした数</string>
+    <string name="statistics_played_easy_sudokus">簡単な数独をプレイした数</string>
+    <string name="statistics_played_medium_sudokus">中難易度な数独をプレイした数</string>
+    <string name="statistics_played_difficult_sudokus">難しい数独をプレイした数</string>
+    <string name="statistics_played_infernal_sudokus">超難しい数独をプレイした数</string>
+	<string name="statistics_records">記録</string>
+	<string name="statistics_score">最高得点</string>
+	<string name="statistics_fastest_solving_time">最速タイム</string>
         
 	<!-- Profile preference titles und textviews -->
 
 	<!-- Profile list -->
-	<string name="profile_list_profile_changed">Profil geändert zu</string>
+	<string name="profile_list_profile_changed">プロファイルが次のように変更されました：</string>
 	
 	<!-- Player Preferences Button -->
-	<string name="player_preferences_button_changeprofile">Profil wechseln</string>
+	<string name="player_preferences_button_changeprofile">プロファイルの変更</string>
 	
 
     <!-- GestureBuilder -->
-    <string name="gesture_builder_title">Gesten definieren</string>
-    <string name="gesture_builder_define_gesture">Zeichne die gewünschte Geste</string>
+    <string name="gesture_builder_title">ジェスチャービルダー</string>
+    <string name="gesture_builder_define_gesture">ジェスチャを定義する</string>
     
-    <!-- GameTypeSelection Buttons -->
-    <string name="sf_gametypeselection_local_sudoku">Sudoku</string>
-    <string name="sf_gametypeselection_server_sudoku">Offizielles Sudoku</string>
-    <string name="sf_gametypeselection_create_mp">Erstellen</string>
-    <string name="sf_gametypeselection_join_mp">Beitreten</string>
-    
-    <!-- SudokuPreferences Buttons und TextViews -->    
-    <string name="subtitle_sudokupreferences_sudokutype">Sudokutyp:</string>
-    <string name="subtitle_sudokupreferences_sudokucomplexity">Schwierigkeit:</string>
-    <string name="sf_sudokupreferences_start">Start</string>
-    <string name="sf_sudokupreferences_sudokutype">Sudokutyp auswählen</string>
-    <string name="sf_sudokupreferences_sudokucomplexity">Schwierigkeitsgrad auswählen</string>
-    <string name="sf_sudokupreferences_assistances">Hilfestellungen konfigurieren</string>
-    <string name="sf_sudokupreferences_copying">Vorlagen werden gerade kopiert. Bitte warten Sie einen Moment.</string>
+    <!-- SudokuPreferences Buttons und TextViews -->
+    <string name="subtitle_sudokupreferences_sudokutype">数独タイプ：</string>
+    <string name="subtitle_sudokupreferences_sudokucomplexity">難易度：</string>
+    <string name="sf_sudokupreferences_start">始めます。</string>
+    <string name="sf_sudokupreferences_sudokutype">数独タイプを選択します。</string>
+    <string name="sf_sudokupreferences_sudokucomplexity">難易度を選択します。</string>
+    <string name="sf_sudokupreferences_assistances">アシスタンスを調整します。</string>
+    <string name="sf_sudokupreferences_copying">テンプレートは現在コピー中です。 しばらくお待ちください。</string>
 
     <!-- SudokuActivity -->
-    <string name="sf_sudoku_button_bookmark">Lesezeichen</string>
-    <string name="sf_sudoku_button_close">Schließen</string>
-    <string name="sf_sudoku_assistances_title">Hilfestellungen</string>
-    <string name="sf_sudoku_assistances_check">Lösung prüfen</string>
-    <string name="sf_sudoku_assistances_solve_specific">Ausgewähltes Feld lösen</string>
-    <string name="sf_sudoku_assistances_solve_random">Zufälliges Feld lösen</string>
-    <string name="sf_sudoku_assistances_solve_surrender">Aufgeben</string>
-    <string name="sf_sudoku_assistances_back_to_valid_state">Zurück zum letzten korrekten Stand</string>
-    <string name="sf_sudoku_assistances_back_to_bookmark">Zurück zum letzten Lesezeichen</string>
-    <string name="sf_sudoku_assistances_give_hint">Einen Tipp geben</string>
+    <string name="sf_sudoku_button_bookmark">ブックマーク</string>
+    <string name="sf_sudoku_button_close">閉じる</string>
+    <string name="sf_sudoku_assistances_title">支援</string>
+    <string name="sf_sudoku_assistances_check">解決策を確認します</string>
+    <string name="sf_sudoku_assistances_solve_specific">選択したセルを解く</string>
+    <string name="sf_sudoku_assistances_solve_random">ランダムセルを解く</string>
+    <string name="sf_sudoku_assistances_solve_surrender">あきらめる</string>
+    <string name="sf_sudoku_assistances_back_to_valid_state">最後の正しいステータスに戻る</string>
+    <string name="sf_sudoku_assistances_back_to_bookmark">最後のブックマークに戻る</string>
+    <string name="sf_sudoku_assistances_give_hint">ヒントを受け取る</string>
 
-    <string name="sf_sudoku_title_gesture_input_entry">Symboleingabe durch Geste</string>
-    <string name="sf_sudoku_title_gesture_input_note">Kandidat eingeben durch Geste</string>
+    <string name="sf_sudoku_title_gesture_input_entry">ジェスチャーで記号を入力します</string>
+    <string name="sf_sudoku_title_gesture_input_note">ジェスチャーでメモを入力します</string>
 
-    <string name="sf_sudoku_title_action_tree">Aktionsverlauf</string>
-    <string name="sf_sudoku_assistances_crash">App abstürzen lassen</string>
+    <string name="sf_sudoku_title_action_tree">アクション履歴</string>
+    <string name="sf_sudoku_assistances_crash">アプリをクラッシュさせる</string>
 
 
     <!-- Titles -->
     <string name="title_mainmenu">SudoQ</string>
-    <string name="title_gametypeselection">Neues Sudoku</string>
+    <string name="title_gametypeselection">新しい数独</string>
     
-    <!-- Subtitles -->
-	<string name="subtitle_gametypeselection_mp">Multiplayer</string>  
-	
 	<!-- Complexity -->
     <string name="complexity_easy">簡単</string>
-    <string name="complexity_medium">中くらい</string>
+    <string name="complexity_medium">中難易度</string>
     <string name="complexity_difficult">難しい</string>
     <string name="complexity_infernal">超難しい</string>
     
     <!-- Sudoku Types -->
-    <string name="sudoku_type_standard_9x9"  >Standard-Sudoku 9x9</string>
-    <string name="sudoku_type_standard_16x16">Standard-Sudoku 16x16</string>
-    <string name="sudoku_type_standard_6x6"  >Standard-Sudoku 6x6</string>
-    <string name="sudoku_type_standard_4x4"  >Standard-Sudoku 4x4</string>
-    <string name="sudoku_type_squiggly_a_9x9">Squiggly-Sudoku 9x9</string>
-    <string name="sudoku_type_squiggly_b_9x9">Squoggly-Sudoku 9x9</string>
-    <string name="sudoku_type_stairstep_9x9" >Treppen-Sudoku 9x9</string>
-    <string name="sudoku_type_samurai"       >Samurai-Sudoku</string>
-    <string name="sudoku_type_hyper"         >Hyper-Sudoku</string>
-    <string name="sudoku_type_xsudoku"       >X-Sudoku</string>
-    <string name="sudoku_type_dummy_longest_name">Standard-Sudoku 16x16</string>
-    <string name="sf_sudokupreferences_title">Sudoku-Einstellungen</string>
-    <string name="sf_advancedpreferences_title">Erweiterte Einstellungen</string>
-    <string name="sf_advancedpreferences_restricttypes_title">Wählbare Sudokutypen</string>
+    <string name="sudoku_type_standard_9x9"  >標準数独 9x9</string>
+    <string name="sudoku_type_standard_16x16">標準数独 16x16</string>
+    <string name="sudoku_type_standard_6x6"  >標準数独 6x6</string>
+    <string name="sudoku_type_standard_4x4"  >標準数独 4x4</string>
+    <string name="sudoku_type_squiggly_a_9x9">Squiggly数独 9x9</string>
+    <string name="sudoku_type_squiggly_b_9x9">Squoggly数独 9x9</string>
+    <string name="sudoku_type_stairstep_9x9" >階段数独 9x9</string>
+    <string name="sudoku_type_samurai"       >武士数独</string>
+    <string name="sudoku_type_hyper"         >ハイパー数独</string>
+    <string name="sudoku_type_xsudoku"       >X数独</string>
+    <string name="sudoku_type_dummy_longest_name">Squoggly数独 9x9</string>
+    <string name="sf_sudokupreferences_title">数独の設定</string>
+    <string name="sf_advancedpreferences_title">高度な設定</string>
+    <string name="sf_advancedpreferences_restricttypes_title">利用可能な数独タイプ</string>
 
     <!-- Game states -->
 
@@ -142,77 +133,77 @@
 
 
     <!-- Sudoku Loading -->
-    <string name="tx_no_sudokus_to_load">Keine gespeicherten Sudokus vorhanden.</string>
-    <string name="sudokuloading_delete_finished">Gelöste Sudokus löschen</string>
-    <string name="sudokuloading_delete_all">Alle Sudokus löschen</string>
-    <string name="sf_loading_back">Zurück</string>
+    <string name="tx_no_sudokus_to_load">保存された数独は利用できません。</string>
+    <string name="sudokuloading_delete_finished">完成した数独を削除します。</string>
+    <string name="sudokuloading_delete_all">すべての数独を削除します。</string>
+    <string name="sf_loading_back">戻る</string>
     
-    <string name="sudokuloading_dialog_play">spielen</string>
-    <string name="sudokuloading_dialog_delete">löschen</string>
+    <string name="sudokuloading_dialog_play">遊びます</string>
+    <string name="sudokuloading_dialog_delete">削除します</string>
     
     
     <!--  Defaults -->
-    <string name="default_user_name">Profil 1</string>
-    <string name="fab_go_back">Geklickte Sudokus werden gelöscht.\nUm aufzuhören nochmal auf den Button klicken</string>
-    <string name="sf_sudokuloading_title">Gespeicherte Sudokus</string>
+    <string name="default_user_name">プロファイル1</string>
+    <string name="fab_go_back">クリックして削除します。\n削除を停止するには、ボタンをもう一度クリックします</string>
+    <string name="sf_sudokuloading_title">保存された数独</string>
 
     <!-- hints -->
-    <string name="hint_lastdigit">Schau dir mal {determiner} hervorgehoben{suffix} {shape} an! Da ist nur noch ein Feld übrig.</string>
+    <string name="hint_lastdigit">強調表示された{shape}を見てください！ セルが1つだけ残っています。</string>
+    <string name="hint_lastcandidate">強調表示されたセルを見てください。 残りのメモは1つだけです。</string>
+    <string name="hint_leftovernote">強調表示された{shape}を見てください。 {note}が設定されているので、そのメモを削除できます。</string>
 
-    <string name="constraintshape_row_accusative_determined">Zeile</string>
-    <string name="constraintshape_column_accusative_determined">Spalte</string>
-    <string name="constraintshape_diagonal_accusative_determined">Diagonale</string>
-    <string name="constraintshape_block_accusative_determined">Block</string>
-    <string name="constraintshape_other_accusative_determined">Gruppe</string>
+    <string name="hint_nakedsingle_look">「裸のシングル」があります！</string>
+    <string name="hint_nakedsingle_note">{note}は、強調表示されたセルに残っている唯一のメモです。</string>
+    <string name="hint_nakedsingle_remove">そこに設定して、この{shape}の他のすべてのセルから削除できます。</string>
 
-    <string name="constraintshape_row_genitive_determined"     >Zeile</string>
-    <string name="constraintshape_column_genitive_determined"  >Spalte</string>
-    <string name="constraintshape_diagonal_genitive_determined">Diagonalen</string>
-    <string name="constraintshape_block_genitive_determined"   >Blocks</string>
-    <string name="constraintshape_other_genitive_determined"   >Gruppe</string>
+    <string name="hint_nakedset">「裸のセット」があるのを見てください！ {symbols}は、強調表示されたセルに何らかの方法で分散されます。 これらは、このグループの他のすべてのセルから削除できます。</string>
 
-    <string name="constraintshape_row_dative_determined"     >Zeile</string>
-    <string name="constraintshape_column_dative_determined"  >Spalte</string>
-    <string name="constraintshape_diagonal_dative_determined">Diagonalen</string>
-    <string name="constraintshape_block_dative_determined"   >Block</string>
-    <string name="constraintshape_other_dative_determined"   >Gruppe</string>
+    <string name="hint_hiddensingle">「隠されたシングル」があるのを見てください！ 強調表示された形状のすべてのセルのうち、「{note}」は強調表示されたセルにのみ表示されます。 そこに設定できます。</string>
+
+    <string name="hint_hiddenset">「隠されたセット」があるのを見てください！ {symbols}は、強調表示されたセルに何らかの方法で分散されます。 したがって、これらのセル内の他のメモはすべて削除できます。</string>
 
 
-    <string name="feminine_accusative_determiner">die</string>
-    <string name="maskuline_accusative_determiner">den</string>
-    <string name="neutral_accusative_determiner">das</string>
+    <string name="hint_lockedcandidates">「ロックされた候補」があります：{note}は青いグループで1回だけ発生します。 したがって、緑色のグループの他のすべてのセルで削除できます。</string>
 
-    <string name="feminine_accusative_suffix">e</string>
-    <string name="maskuline_accusative_suffix">en</string>
-    <string name="neutral_accusative_suffix">e</string>
+    <string name="hint_xWing">「X ウィング」があります：緑と青のグループの交点を見ると、いくつかのメモは青のグループの他のどこにも表示されません。 したがって、緑色のものでは削除できます。</string>
 
+    <string name="hint_backtracking">言ったように、私はまだ開発中です。 ですから、私はアイデアがありません。私の最善のアドバイスは、ブックマークを設定してセルを推測することです。</string>
+    <string name="hint_fill_out_notes">ちなみに、メモが入っていないセルがあります。 セルにメモが表示されない場合は、除外されていると思います。 まだ可能であると考えられるすべての数値がセル内のメモとして設定されている場合、私は最もよく機能します。 必要に応じて、メモを入力できます。</string>
 
-    <string name="hint_lastcandidate">Schau dir mal das hervorgehobene Feld an. Dort ist nur noch ein Kandidat übrig.</string>
-    <string name="hint_leftovernote">Schau dir mal {determiner} hervorgehoben{suffix} {shape} an! Weil {note} gesetzt ist können alle Notizen dazu entfernt werden.</string>
+    <string name="constraintshape_row_accusative_determined"     >行</string>
+    <string name="constraintshape_column_accusative_determined"  >桁</string>
+    <string name="constraintshape_diagonal_accusative_determined">対角線</string>
+    <string name="constraintshape_block_accusative_determined"   >ブロック</string>
+    <string name="constraintshape_other_accusative_determined"   >グループ</string>
 
-    <string name="hint_nakedsingle_look">Es gibt ein „naked single“!</string>
-    <string name="hint_nakedsingle_note">Im hervorgehobenen Feld is nur noch {note} übrig.</string>
-    <string name="hint_nakedsingle_remove">Es kann in diesen Feld also als Lösung eingetragen werden und überall sonst {prep det} {shape} entfernt werden.</string>
+    <string name="constraintshape_row_genitive_determined"     >行</string>
+    <string name="constraintshape_column_genitive_determined"  >桁</string>
+    <string name="constraintshape_diagonal_genitive_determined">対角線</string>
+    <string name="constraintshape_block_genitive_determined"   >ブロック</string>
+    <string name="constraintshape_other_genitive_determined"   >グループ</string>
 
-    <string name="hint_nakedset">Es gibt ein „naked set“: {symbols} werden sich irgendwie auf die hervorgehobenen Felder verteilen. In allen anderen Feldern dieser Gruppe können Sie entfernt werden. </string>
+    <string name="constraintshape_row_dative_determined"     >行</string>
+    <string name="constraintshape_column_dative_determined"  >桁</string>
+    <string name="constraintshape_diagonal_dative_determined">対角線</string>
+    <string name="constraintshape_block_dative_determined"   >ブロック</string>
+    <string name="constraintshape_other_dative_determined"   >グループ</string>
 
-    <string name="hint_hiddensingle">Es gibt ein „hidden single“! Im hervorgehobenen Bereich kommt \"{note}\" nur im hervorgehobenen Feld vor und kann daher als Lösung eingetragen werden.</string>
+    <!-- not needed for Japanese -->
+    <string name="feminine_accusative_determiner" ></string>
+    <string name="maskuline_accusative_determiner"></string>
+    <string name="neutral_accusative_determiner"  ></string>
 
-    <string name="hint_hiddenset">Es gibt ein „hidden set“! {symbols} verteilen sich irgendwie über die hervorgehobenen Felder. Daher können andere Notitzen in diesen Feldern entfernt werden. </string>
-
-    
-    <string name="hint_lockedcandidates">Es gibt einen „locked candidate“: {note} kommt in der blauen Gruppe nur einmal vor. Deshalb kann es überall in der grünen Gruppe entfernt werden.</string>
-
-    <string name="hint_xWing">Es gibt einen „X-Wing“: Manche Notizen kommen in allen Schnittfeldern vor, jedoch nirgends sonst in den blauen gruppen. Die Notizen sind deshalb auf diese Schnittfelder festgelegt und können im grünen Bereich gelöscht werden.</string>
-    
-    <string name="hint_backtracking">Wie gesagt, ich bin noch in Entwicklung. Meine beste Empfehlung ist ein Lesezeichen zu setzen und auszuprobieren.</string>
-    <string name="hint_fill_out_notes"> Übrigens einige Felder sind komplett leer. Ich gehe im Zweifel davon aus, dass Zahlen die nicht als Notiz eingetragen sind bereits ausgeschossen wurden. Ich arbeite am besten wenn alle Zahlen die für ein Feld noch möglich sind dort auch als Notiz eingetragen sind. Möchtest du dass ich leere Felder mit Notitzen fülle?</string>
-
-
+    <string name="feminine_accusative_suffix" ></string>
+    <string name="maskuline_accusative_suffix"></string>
+    <string name="neutral_accusative_suffix"  ></string>
 
     <string name="gender_maskulin">m</string>
     <string name="gender_feminin">f</string>
     <string name="gender_neutral">n</string>
+
+
+
+
 
 
 </resources>

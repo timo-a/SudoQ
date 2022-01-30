@@ -80,13 +80,7 @@
     <string name="gesture_builder_title">Gesture Builder</string>
     <string name="gesture_builder_define_gesture">Define a Gesture</string>
     
-    <!-- GameTypeSelection Buttons -->
-    <string name="sf_gametypeselection_local_sudoku" >Sudoku</string>
-    <string name="sf_gametypeselection_server_sudoku">Official Sudoku</string>
-    <string name="sf_gametypeselection_create_mp"    >Create</string>
-    <string name="sf_gametypeselection_join_mp"      >Join</string>
-    
-    <!-- SudokuPreferences Buttons und TextViews -->    
+    <!-- SudokuPreferences Buttons und TextViews -->
     <string name="subtitle_sudokupreferences_sudokutype">Sudoku Type:</string>
     <string name="subtitle_sudokupreferences_sudokucomplexity">Difficulty:</string>
     <string name="sf_sudokupreferences_start">Start</string>
@@ -117,9 +111,6 @@
     <string name="title_mainmenu">SudoQ</string>
     <string name="title_gametypeselection">New Sudoku</string>
     
-    <!-- Subtitles -->
-	<string name="subtitle_gametypeselection_mp">Multiplayer</string>  
-	
 	<!-- Complexity -->
     <string name="complexity_easy">Easy</string>
     <string name="complexity_medium">Medium</string>
@@ -146,8 +137,8 @@
         
     <!-- Game states -->    
         
-    <string name="check_mark" translatable="false">✔</string>
-    <string name=    "x_mark" translatable="false">✘</string>
+    <string name="check_mark">✔</string>
+    <string name=    "x_mark">✘</string>
 
     <!-- Sudoku Loading -->
     <string name="tx_no_sudokus_to_load">No saved Sudokus available.</string>
@@ -175,8 +166,28 @@
     <string name="sf_sudokuloading_title">Saved Sudokus</string>
 
     <!-- Hints -->
-
     <string name="hint_lastdigit">Look at the highlighted {shape}! There\'s only one cell left.</string>
+    <string name="hint_lastcandidate">Look at the highlighted cell. There\'s only one candidate left.</string>
+    <string name="hint_leftovernote">Look at the highlighted {shape}. As {note} is set, any notes of it can be removed.</string>
+
+    <string name="hint_nakedsingle_look">Look there\'s a naked single!</string>
+    <string name="hint_nakedsingle_note">{note} is the only note left in the highlighted cell.</string>
+    <string name="hint_nakedsingle_remove">It can be set there and removed from all other cells in this {shape}.</string>
+
+    <string name="hint_nakedset">Look there\'s a naked set! {symbols} will in some way be distributed among the highlighted cells. They can be removed from all other cells in this group.</string>
+
+    <string name="hint_hiddensingle">Look there\'s a hidden single! Of all the cells in the highlighted shape \"{note}\" appears only in the highlighted cell. It can be set there.</string>
+
+    <string name="hint_hiddenset">Look there\'s a hidden set! {symbols} will in some way be distributed among the highlighted cells. Therefore any other candidates in these cells can be removed.</string>
+
+
+    <string name="hint_lockedcandidates">There\'s a locked candidate: {note} appears only once in the blue group. It can therefore be deleted in all other cells in the green group.</string>
+
+    <string name="hint_xWing">If you look at the intersections of green and blue groups some notes appear nowhere else in the blue groups. They can therefore be deleted in the green ones.</string>
+
+
+    <string name="hint_backtracking">As said, I\'m still in development. So I\'m out of ideas and my best advice is to set a bookmark and guess a cell.</string>
+    <string name="hint_fill_out_notes"> By the way, there\'s a cell that has no notes in it. If I don\'t see a note in a cell I assume that you\'ve ruled it out. I work best if all numbers that are still considered possible are set as notes in a cell. If you want I can enter the notes for you. </string>
 
     <string name="constraintshape_row_accusative_determined"     >row</string>
     <string name="constraintshape_column_accusative_determined"  >column</string>
@@ -208,28 +219,6 @@
     <string name="feminine_accusative_suffix"></string>
     <string name="neutral_accusative_suffix"></string>
 
-    <string name="hint_lastcandidate">Look at the highlighted cell. There\'s only one candidate left.</string>
-    <string name="hint_leftovernote">Look at the highlighted {shape}. As {note} is set, any notes of it can be removed.</string>
-
-    <string name="hint_nakedsingle_look">Look there\'s a naked single!</string>
-    <string name="hint_nakedsingle_note">{note} is the only note left in the highlighted cell.</string>
-    <string name="hint_nakedsingle_remove">It can be set there and removed from all other cells in this {shape}.</string>
-
-    <string name="hint_nakedset">Look there\'s a naked set! {symbols} will in some way be distributed among the highlighted cells. They can be removed from all other cells in this group.</string>
-
-    
-    <string name="hint_hiddensingle">Look there\'s a hidden single! Of all the cells in the highlighted shape \"{note}\" appears only in the highlighted cell. It can be set there.</string>
-
-    <string name="hint_hiddenset">Look there\'s a hidden set! {symbols} will in some way be distributed among the highlighted cells. Therefore any other candidates in these cells can be removed.</string>
-
-    
-    <string name="hint_lockedcandidates">There\'s a locked candidate: {note} appears only once in the blue group. It can therefore be deleted in all other cells in the green group.</string>
-
-    <string name="hint_xWing">If you look at the intersections of green and blue groups some notes appear nowhere else in the blue groups. They can therefore be deleted in the green ones.</string>
-
-    
-    <string name="hint_backtracking">As said, I\'m still in development. So I\'m out of ideas and my best advice is to set a bookmark and guess a cell.</string>
-    <string name="hint_fill_out_notes"> By the way, there\'s a cell that has no notes in it. If I don\'t see a note in a cell I assume that you\'ve ruled it out. I work best if all numbers that are still considered possible are set as notes in a cell. If you want I can enter the notes for you. </string>
 
 
 </resources>

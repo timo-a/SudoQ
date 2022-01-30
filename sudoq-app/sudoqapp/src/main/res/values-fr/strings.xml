@@ -70,12 +70,6 @@
     <string name="gesture_builder_title">définir des gestes</string>
     <string name="gesture_builder_define_gesture">Dessinez le geste désiré</string>
     
-    <!-- GameTypeSelection Buttons -->
-    <string name="sf_gametypeselection_local_sudoku">Sudoku</string>
-    <string name="sf_gametypeselection_server_sudoku">Sudoku officiel</string>
-    <string name="sf_gametypeselection_create_mp">Créer</string>
-    <string name="sf_gametypeselection_join_mp">Adhérer</string>
-
     <!-- SudokuPreferences Buttons und TextViews -->
     <string name="subtitle_sudokupreferences_sudokutype">Type du sudoku:</string>
     <string name="subtitle_sudokupreferences_sudokucomplexity">Difficulté:</string>
@@ -104,9 +98,6 @@
     <!-- Titles -->
     <string name="title_mainmenu">SudoQ</string>
     <string name="title_gametypeselection">Nouveau sudoku</string>
-    
-    <!-- Subtitles -->
-    <string name="subtitle_gametypeselection_mp">Multiplayer</string>
     
     <!-- Complexity -->
     <string name="complexity_easy">Facile</string>

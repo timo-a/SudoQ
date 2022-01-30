@@ -3,19 +3,19 @@
 
     <!--Row,Column,Diagonal,Block,Other-->
     <string-array name="shape_gender_values">
-        <item>@string/gender_feminin</item>
-        <item>@string/gender_feminin</item>
-        <item>@string/gender_feminin</item>
-        <item>@string/gender_maskulin</item>
-        <item>@string/gender_feminin</item>
+        <item>@string/gender_neutral</item>
+        <item>@string/gender_neutral</item>
+        <item>@string/gender_neutral</item>
+        <item>@string/gender_neutral</item>
+        <item>@string/gender_neutral</item>
     </string-array>
 
 
     <!--Row,Column,Diagonal,Block,Other-->
     <string-array name="gender2in_the">
-        <item>m|im</item>
-        <item>f|in der</item>
-        <item>n|im</item>
+        <item>m|の中</item>
+        <item>f|の中</item>
+        <item>n|の中</item>
     </string-array>
 
 
