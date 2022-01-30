@@ -25,16 +25,16 @@
     <!-- restrict types -->
     <string name="advanced_settings_restrict_types_empty_warning">すべてのタイプを非表示にすることはできません。1つのタイプを残してください。</string>
     <!-- Sudoku Types -->
-    <string name="advanced_settings_restrict_item_standard_9x9"  >Standard</string>
+    <string name="advanced_settings_restrict_item_standard_9x9"  >標準数独</string>
     <string name="advanced_settings_restrict_item_standard_16x16">16x16</string>
     <string name="advanced_settings_restrict_item_standard_6x6"  >6x6</string>
     <string name="advanced_settings_restrict_item_standard_4x4"  >4x4</string>
-    <string name="advanced_settings_restrict_item_squiggly_a_9x9">Squiggly-Sudoku 9x9</string>
-    <string name="advanced_settings_restrict_item_squiggly_b_9x9">Squoggly-Sudoku 9x9</string>
-    <string name="advanced_settings_restrict_item_stairstep_9x9" >Treppen-Sudoku 9x9</string>
-    <string name="advanced_settings_restrict_item_samurai"       >Samurai-Sudoku</string>
-    <string name="advanced_settings_restrict_item_hyper"         >Hyper-Sudoku</string>
-    <string name="advanced_settings_restrict_item_xsudoku"       >X-Sudoku</string>
+    <string name="advanced_settings_restrict_item_squiggly_a_9x9">Squiggly-数独 9x9</string>
+    <string name="advanced_settings_restrict_item_squiggly_b_9x9">Squoggly-数独 9x9</string>
+    <string name="advanced_settings_restrict_item_stairstep_9x9" >階段数独 9x9</string>
+    <string name="advanced_settings_restrict_item_samurai"       >武士数独</string>
+    <string name="advanced_settings_restrict_item_hyper"         >ハイパー数独</string>
+    <string name="advanced_settings_restrict_item_xsudoku"       >X数独</string>
 
     <string name="profile_preference_title_crash_trigger">アプリをクラッシュさせる</string>
     <string name="profile_preference_title_intelligent_assistant">インテリジェントアシスタント</string>

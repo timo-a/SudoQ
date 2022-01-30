@@ -3,6 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="MissingTranslation">
 
+    <!--
+    For now we use resource strings for every grammatical case.
+    The arrays in this file would be would be more generic because language specific stuff
+    would remain in the resource files.
+    Reassess after Swedish (only two genders) is added. -->
+
     <string-array name="shape_accusative_determined">
         <item>@string/constraintshape_row_accusative_determined</item>
         <item>@string/constraintshape_column_accusative_determined</item>
