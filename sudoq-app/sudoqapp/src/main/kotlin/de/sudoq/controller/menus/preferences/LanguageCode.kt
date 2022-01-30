@@ -12,7 +12,8 @@ enum class LanguageCode {
     system,
     de,
     en,
-    fr;
+    fr,
+    ja;
 
     companion object {
         /**
