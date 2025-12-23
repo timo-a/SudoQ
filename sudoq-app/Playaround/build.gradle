@@ -9,8 +9,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 
-sourceCompatibility = "7"
-targetCompatibility = "7"
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
 buildscript {
     ext.kotlin_version = '1.5.0-RC'
     repositories {
