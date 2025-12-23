@@ -9,6 +9,7 @@ allprojects {
 }
 
 android {
+    namespace "de.sudoq"
     compileSdkVersion 30
 
     defaultConfig {
