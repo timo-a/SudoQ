@@ -1,217 +1,150 @@
-package de.sudoq.model.sudoku.sudokuTypes;
+package de.sudoq.model.sudoku.sudokuTypes
 
-import static org.junit.Assert.assertTrue;
+import de.sudoq.model.sudoku.Constraint
+import de.sudoq.model.sudoku.Position
+import org.amshove.kluent.`should be null`
+import org.amshove.kluent.`should be`
+import org.junit.Assert
+import org.junit.jupiter.api.Test
+import java.util.ArrayList
 
-import java.util.ArrayList;
-import java.util.List;
+class SquigglyBSudokuTest : SquigglySudokuTypesTest() {
 
-import org.junit.Test;
+    override var squig = TypeBuilder.getType(SudokuTypes.squigglyb)
 
+    override fun constraintsA(c: Constraint) {
+        val m: MutableList<Position> = ArrayList()
+        m.add(Position[0, 0])
+        m.add(Position[1, 0])
+        m.add(Position[2, 0])
+        m.add(Position[3, 0])
+        m.add(Position[4, 0])
+        m.add(Position[0, 1])
+        m.add(Position[1, 1])
+        m.add(Position[0, 2])
+        m.add(Position[0, 3])
+        assertions(m, c)
+    }
 
-import de.sudoq.model.sudoku.Constraint;
-import de.sudoq.model.sudoku.Position;
-import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
-import de.sudoq.model.sudoku.complexity.ComplexityConstraintTests;
+    override fun constraintsB(c: Constraint) {
+        val m: MutableList<Position> = ArrayList()
+        m.add(Position[5, 0])
+        m.add(Position[6, 0])
+        m.add(Position[7, 0])
+        m.add(Position[8, 0])
+        m.add(Position[7, 1])
+        m.add(Position[8, 1])
+        m.add(Position[8, 2])
+        m.add(Position[8, 3])
+        m.add(Position[8, 4])
+        assertions(m, c)
+    }
 
-public class SquigglyBSudokuTest extends SquigglySudokuTypesTest {
+    override fun constraintsC(c: Constraint) {
+        val m: MutableList<Position> = ArrayList()
+        m.add(Position[2, 1])
+        m.add(Position[3, 1])
+        m.add(Position[4, 1])
+        m.add(Position[5, 1])
+        m.add(Position[1, 2])
+        m.add(Position[2, 2])
+        m.add(Position[5, 2])
+        m.add(Position[5, 3])
+        m.add(Position[6, 3])
+        for (p in c) Assert.assertTrue("unvollst. set $c", m.contains(p))
+    }
 
-	SudokuType squigglyB = TypeBuilder.getType(SudokuTypes.squigglyb);
+    override fun constraintsD(c: Constraint) {
+        val m: MutableList<Position> = ArrayList()
+        m.add(Position[6, 1])
+        m.add(Position[6, 2])
+        m.add(Position[7, 2])
+        m.add(Position[7, 3])
+        m.add(Position[7, 4])
+        m.add(Position[5, 5])
+        m.add(Position[6, 5])
+        m.add(Position[7, 5])
+        m.add(Position[5, 6])
+        assertions(m, c)
+    }
 
-	
-	public void printsession(SudokuType s) {
-		for (Constraint c : s) {
-			System.out.println(c);
-			for (Position p : c)
-				System.out.println("    " + p);
-		}
-	}
+    override fun constraintsE(c: Constraint) {
+        val m: MutableList<Position> = ArrayList()
+        m.add(Position[3, 2])
+        m.add(Position[1, 3])
+        m.add(Position[2, 3])
+        m.add(Position[3, 3])
+        m.add(Position[1, 4])
+        m.add(Position[1, 5])
+        m.add(Position[1, 6])
+        m.add(Position[2, 6])
+        m.add(Position[2, 7])
+        assertions(m, c)
+    }
 
-	@Override
-	public void initialiser() {
-		SudokuType sq = TypeBuilder.getType(SudokuTypes.squigglyb);
-		printsession(sq);
-		ConstraintTest(sq);
-	}
+    override fun constraintsF(c: Constraint) {
+        val m: MutableList<Position> = ArrayList()
+        m.add(Position[4, 2])
+        m.add(Position[4, 3])
+        m.add(Position[2, 4])
+        m.add(Position[3, 4])
+        m.add(Position[4, 4])
+        m.add(Position[5, 4])
+        m.add(Position[6, 4])
+        m.add(Position[4, 5])
+        m.add(Position[4, 6])
+        assertions(m, c)
+    }
 
-	@Override
-	protected void constraintsA(Constraint c) {
-		List<Position> m = new ArrayList<>();
-		m.add(Position.get(0, 0));
-		m.add(Position.get(1, 0));
-		m.add(Position.get(2, 0));
-		m.add(Position.get(3, 0));
-		m.add(Position.get(4, 0));
-		m.add(Position.get(0, 1));
-		m.add(Position.get(1, 1));
-		m.add(Position.get(0, 2));
-		m.add(Position.get(0, 3));
+    override fun constraintsG(c: Constraint) {
+        val m: MutableList<Position> = ArrayList()
+        m.add(Position[0, 4])
+        m.add(Position[0, 5])
+        m.add(Position[0, 6])
+        m.add(Position[0, 7])
+        m.add(Position[1, 7])
+        m.add(Position[0, 8])
+        m.add(Position[1, 8])
+        m.add(Position[2, 8])
+        m.add(Position[3, 8])
+        assertions(m, c)
+    }
 
-		assertions(m, c);
-	}
+    override fun constraintsH(c: Constraint) {
+        val m: MutableList<Position> = ArrayList()
+        m.add(Position[2, 5])
+        m.add(Position[3, 5])
+        m.add(Position[3, 6])
+        m.add(Position[6, 6])
+        m.add(Position[7, 6])
+        m.add(Position[3, 7])
+        m.add(Position[4, 7])
+        m.add(Position[5, 7])
+        m.add(Position[6, 7])
+        assertions(m, c)
+    }
 
-	@Override
-	protected void constraintsB(Constraint c) {
-		List<Position> m = new ArrayList<>();
-		m.add(Position.get(5, 0));
-		m.add(Position.get(6, 0));
-		m.add(Position.get(7, 0));
-		m.add(Position.get(8, 0));
-		m.add(Position.get(7, 1));
-		m.add(Position.get(8, 1));
-		m.add(Position.get(8, 2));
-		m.add(Position.get(8, 3));
-		m.add(Position.get(8, 4));
+    override fun constraintsI(c: Constraint) {
+        val m: MutableList<Position> = ArrayList()
+        m.add(Position[8, 5])
+        m.add(Position[8, 6])
+        m.add(Position[7, 7])
+        m.add(Position[8, 7])
+        m.add(Position[4, 8])
+        m.add(Position[5, 8])
+        m.add(Position[6, 8])
+        m.add(Position[7, 8])
+        m.add(Position[8, 8])
+        assertions(m, c)
+    }
 
-		assertions(m, c);
-	}
+    @Test
+    fun enumTypeTests() {
+        squig.enumType.`should be`(SudokuTypes.squigglyb);
+    }
 
-	@Override
-	protected void constraintsC(Constraint c) {
-		List<Position> m = new ArrayList<>();
-		m.add(Position.get(2, 1));
-		m.add(Position.get(3, 1));
-		m.add(Position.get(4, 1));
-		m.add(Position.get(5, 1));
-		m.add(Position.get(1, 2));
-		m.add(Position.get(2, 2));
-		m.add(Position.get(5, 2));
-		m.add(Position.get(5, 3));
-		m.add(Position.get(6, 3));
-
-		for (Position p : c)
-			assertTrue("unvollst. set " + c, m.contains(p));
-	}
-
-	@Override
-	protected void constraintsD(Constraint c) {
-		List<Position> m = new ArrayList<>();
-		m.add(Position.get(6, 1));
-		m.add(Position.get(6, 2));
-		m.add(Position.get(7, 2));
-		m.add(Position.get(7, 3));
-		m.add(Position.get(7, 4));
-		m.add(Position.get(5, 5));
-		m.add(Position.get(6, 5));
-		m.add(Position.get(7, 5));
-		m.add(Position.get(5, 6));
-
-		assertions(m, c);
-	}
-
-	@Override
-	protected void constraintsE(Constraint c) {
-		List<Position> m = new ArrayList<>();
-		m.add(Position.get(3, 2));
-		m.add(Position.get(1, 3));
-		m.add(Position.get(2, 3));
-		m.add(Position.get(3, 3));
-		m.add(Position.get(1, 4));
-		m.add(Position.get(1, 5));
-		m.add(Position.get(1, 6));
-		m.add(Position.get(2, 6));
-		m.add(Position.get(2, 7));
-
-		assertions(m, c);
-	}
-
-	@Override
-	protected void constraintsF(Constraint c) {
-		List<Position> m = new ArrayList<>();
-		m.add(Position.get(4, 2));
-		m.add(Position.get(4, 3));
-		m.add(Position.get(2, 4));
-		m.add(Position.get(3, 4));
-		m.add(Position.get(4, 4));
-		m.add(Position.get(5, 4));
-		m.add(Position.get(6, 4));
-		m.add(Position.get(4, 5));
-		m.add(Position.get(4, 6));
-
-		assertions(m, c);
-	}
-
-	@Override
-	protected void constraintsG(Constraint c) {
-		List<Position> m = new ArrayList<>();
-		m.add(Position.get(0, 4));
-		m.add(Position.get(0, 5));
-		m.add(Position.get(0, 6));
-		m.add(Position.get(0, 7));
-		m.add(Position.get(1, 7));
-		m.add(Position.get(0, 8));
-		m.add(Position.get(1, 8));
-		m.add(Position.get(2, 8));
-		m.add(Position.get(3, 8));
-
-		assertions(m, c);
-	}
-
-	@Override
-	protected void constraintsH(Constraint c) {
-		List<Position> m = new ArrayList<>();
-		m.add(Position.get(2, 5));
-		m.add(Position.get(3, 5));
-		m.add(Position.get(3, 6));
-		m.add(Position.get(6, 6));
-		m.add(Position.get(7, 6));
-		m.add(Position.get(3, 7));
-		m.add(Position.get(4, 7));
-		m.add(Position.get(5, 7));
-		m.add(Position.get(6, 7));
-
-		assertions(m, c);
-	}
-
-	@Override
-	protected void constraintsI(Constraint c) {
-		List<Position> m = new ArrayList<>();
-		m.add(Position.get(8, 5));
-		m.add(Position.get(8, 6));
-		m.add(Position.get(7, 7));
-		m.add(Position.get(8, 7));
-		m.add(Position.get(4, 8));
-		m.add(Position.get(5, 8));
-		m.add(Position.get(6, 8));
-		m.add(Position.get(7, 8));
-		m.add(Position.get(8, 8));
-
-		assertions(m, c);
-	}
-
-	@Test
-	public void getEnumTypeTests() {
-		assertTrue(squigglyB.getEnumType() == SudokuTypes.squigglyb);
-	}
-	
-	
-	
-	//@Test ignored no point in specification by test
-	public void buildComplexityConstraintTest() {
-		
-		ComplexityConstraint comCo = squigglyB.buildComplexityConstraint(Complexity.easy);
-		ComplexityConstraintTests.returnsValues(comCo, Complexity.easy, 40, 500, 800, 2);
-
-		comCo = squigglyB.buildComplexityConstraint(Complexity.medium);
-		ComplexityConstraintTests.returnsValues(comCo, Complexity.medium, 32, 750, 1050, 3);
-
-		comCo = squigglyB.buildComplexityConstraint(Complexity.difficult);
-		ComplexityConstraintTests.returnsValues(comCo, Complexity.difficult, 28, 1000, 2500, Integer.MAX_VALUE);
-
-		comCo = squigglyB.buildComplexityConstraint(Complexity.infernal);
-		ComplexityConstraintTests.returnsValues(comCo, Complexity.infernal, 27, 2500, 25000, Integer.MAX_VALUE);
-
-		comCo = squigglyB.buildComplexityConstraint(Complexity.arbitrary);
-		ComplexityConstraintTests.returnsValues(comCo, Complexity.arbitrary, 32, 1, Integer.MAX_VALUE, Integer.MAX_VALUE);
-
-		assertTrue(squigglyB.buildComplexityConstraint(null) == null);
-
-	}
-
-	@Test
-	public void getAllocationFactorTest() {
-		SudokuType squigglyB = TypeBuilder.getType(SudokuTypes.squigglyb);
-		assertTrue(squigglyB.getStandardAllocationFactor() == 0.20f);
-	}
-
+    @Test
+    fun buildComplexityConstraintTest() {
+        squig.buildComplexityConstraint(null).`should be null`()
+    }
 }

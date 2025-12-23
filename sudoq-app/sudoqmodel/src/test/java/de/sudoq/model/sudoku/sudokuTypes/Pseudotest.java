@@ -32,7 +32,7 @@ public class Pseudotest {
 		
 		s.setNumberOfSymbols(oldType.getNumberOfSymbols());
 		s.setDimensions(oldType.getSize());
-		s.standardAllocationFactor = oldType.getStandardAllocationFactor();
+		//s.standardAllocationFactor = oldType.getStandardAllocationFactor();
 		for(Constraint c : oldType)
 			s.addConstraint(c);
 		for (PermutationProperties p : oldType.getPermutationProperties())
