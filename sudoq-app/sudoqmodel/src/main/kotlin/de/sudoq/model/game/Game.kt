@@ -119,15 +119,16 @@ class Game {
      */
     val score: Int
         get() {
-            var scoreFactor = 0
             fun power(expo: Double): Int = sudoku!!.sudokuType?.numberOfSymbols?.let {
                 it.toDouble().pow(expo).toInt()
             }!!
-            when (sudoku!!.complexity) {
-                Complexity.infernal -> scoreFactor = power(4.0)
-                Complexity.difficult -> scoreFactor = power(3.5)
-                Complexity.medium -> scoreFactor = power(3.0)
-                Complexity.easy -> scoreFactor = power(2.5)
+            val scoreFactor = when (sudoku!!.complexity) {
+                Complexity.infernal -> power(4.0)
+                Complexity.difficult -> power(3.5)
+                Complexity.medium -> power(3.0)
+                Complexity.easy -> power(2.5)
+                //todo refactor to make these illegal values unrepresentable
+                Complexity.arbitrary, null -> throw IllegalStateException("should not happen")
             }
             return (scoreFactor * 10 / ((time + assistancesTimeCost) / 60.0f)).toInt()
         }

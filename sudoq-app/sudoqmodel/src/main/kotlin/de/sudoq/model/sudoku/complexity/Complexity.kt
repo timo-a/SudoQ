@@ -24,7 +24,7 @@ enum class Complexity {
     infernal,
 
     /** Dummy value for arbitrary complexity. There are no requirements. */
-    arbitrary;
+    arbitrary;//todo use null or separate enum in-game, where this value should not occur
 
     companion object {
         @JvmStatic

@@ -210,6 +210,8 @@ class GenerationAlgo(
                     }
 
                 }
+
+                else -> {throw IllegalStateException("Unexpected value: $rel")}
             }
             plusminuscounter++
         }
