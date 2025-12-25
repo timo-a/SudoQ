@@ -2,10 +2,12 @@ package de.sudoq.model.solverGenerator.solver;
 
 import org.junit.rules.TemporaryFolder;
 
-import java.io.File;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-import de.sudoq.model.Utility;
 import de.sudoq.model.persistence.IRepo;
+import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests;
 import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
@@ -13,6 +15,7 @@ import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
+import de.sudoq.persistence.sudokuType.SudokuTypeRepo;
 //import de.sudoq.model.utility.persistence.sudokuType.SudokuTypeRepo;
 
 /**
@@ -22,9 +25,8 @@ public class SudokuMockUps {
 
     static TemporaryFolder tmpSudokus = new TemporaryFolder();
 
-    private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
 
-    private static IRepo<SudokuType> str; //todo use mock = new SudokuTypeRepo();
+    private static final IRepo<SudokuType> str = new SudokuTypeRepo4Tests();
 
     public static Sudoku stringTo9x9Sudoku(String pattern){
         Sudoku s = new SudokuBuilder(SudokuTypes.standard9x9, str).createSudoku();

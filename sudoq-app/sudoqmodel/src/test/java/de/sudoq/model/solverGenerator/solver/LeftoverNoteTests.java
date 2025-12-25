@@ -12,6 +12,7 @@ import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.helper.LeftoverNoteHelper;
 import de.sudoq.model.solverGenerator.solver.helper.NakedHelper;
 import de.sudoq.model.solverGenerator.solver.helper.SubsetHelper;
+import de.sudoq.model.solvingAssistant.HintTypes;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.ConstraintType;
 import de.sudoq.model.sudoku.Position;
@@ -28,16 +29,11 @@ import static org.junit.Assert.fail;
 /**
  * Created by timo on 17.03.17.
  */
-public class LeftoverNoteTests extends LeftoverNoteHelper {
-
-    public LeftoverNoteTests(){
-        super(new SolverSudoku(new Sudoku(TypeBuilder.get99())),  0 );
-    }
+public class LeftoverNoteTests {
 
     @BeforeClass
 	public static void init() {
 		Utility.copySudokus();
-		//Profile.getInstance();
 	}
 
 
@@ -48,6 +44,7 @@ public class LeftoverNoteTests extends LeftoverNoteHelper {
 
     @Test
     public void LeftoverTest(){
+        //GIVEN
         String pattern = "¹²³⁴ .     .   . \n"
                        + ".    .     .   . \n"
 
@@ -57,27 +54,14 @@ public class LeftoverNoteTests extends LeftoverNoteHelper {
         Sudoku        s = SudokuMockUps.stringToSudoku(SudokuTypes.standard4x4, pattern);
         SolverSudoku ss = new SolverSudoku(s, SolverSudoku.Initialization.USE_EXISTING);
         LeftoverNoteHelper loh = new LeftoverNoteHelper(ss,0);
-        assertTrue(loh.update(true));
-    }
 
-    @Test
-    public void hasLeftoverTest(){
-        String pattern = "¹²³⁴ .     .   . \n"
-                       + ".    .     .   . \n"
+        //WHEN
+        boolean result = loh.update(true);
 
-                       + ".    .     .   . \n"
-                       + "1    .     .   . \n";
-
-        Sudoku        s = SudokuMockUps.stringToSudoku(SudokuTypes.standard4x4, pattern);
-        super.sudoku    = new SolverSudoku(s, SolverSudoku.Initialization.USE_EXISTING);
-
-        Constraint cc= new Constraint(new UniqueConstraintBehavior(), ConstraintType.LINE);
-        for (Constraint c: sudoku.getSudokuType())
-            if(c.includes(Position.get(0,0)) && c.includes(Position.get(0,3))){
-                System.out.println(c);
-                cc=c;
-            }
-        boolean result = hasLeftoverNotes(cc);
+        //THEN
         assertTrue(result);
+        assertEquals(HintTypes.LeftoverNote, loh.getHintType());
+        assertEquals(1, loh.getDerivation().getActionList(ss).size());
     }
+
 }

@@ -10,12 +10,10 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import java.io.File
 import java.util.*
-import java.util.stream.IntStream
 import kotlin.collections.HashMap
 
 open class PrettySudokuRepo2(protected val path: File) : IRepo<Sudoku> {
 
-    private val typeRepo = SudokuTypeRepo2(File("SudokuTypes"))
     val type: SudokuType = SudokuType(SudokuTypes.standard9x9, 0,0f, Position.get(0,0),
         Position.get(0,0), Collections.emptyList(), Collections.emptyList(),
         Collections.emptyList(), ComplexityConstraintBuilder())

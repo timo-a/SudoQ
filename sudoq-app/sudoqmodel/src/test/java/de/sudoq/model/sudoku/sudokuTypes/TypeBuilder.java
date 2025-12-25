@@ -3,12 +3,12 @@ package de.sudoq.model.sudoku.sudokuTypes;
 import java.io.File;
 
 import de.sudoq.model.persistence.IRepo;
-import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo2;
+import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests;
 
 public class TypeBuilder {
 
-	//this is a dummy so it compiles todo use xmls from resources
-	private static IRepo<SudokuType> sudokuTypeRepo = new SudokuTypeRepo2(new File("persistence", "SudokuTypes"));//todo use mocks = new SudokuTypeRepo();
+	//todo can we use xmls from main/resources?
+    private static final IRepo<SudokuType> sudokuTypeRepo = new SudokuTypeRepo4Tests();
 
 	public static SudokuType getType(SudokuTypes st){
 		return SudokuTypeProvider.getSudokuType(st, sudokuTypeRepo);
