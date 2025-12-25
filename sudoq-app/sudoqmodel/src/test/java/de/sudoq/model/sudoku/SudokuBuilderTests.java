@@ -10,13 +10,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.sudoq.model.TestWithInitCleanforSingletons;
+import de.sudoq.model.Utility;
 import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
+import de.sudoq.persistence.sudokuType.SudokuTypeRepo;
 
 public class SudokuBuilderTests extends TestWithInitCleanforSingletons {
 
-	private IRepo<SudokuType> str;//todo fix  = new SudokuTypeRepo();
+	private final IRepo<SudokuType> str = new SudokuTypeRepo(Utility.sudokus);
 
 	@BeforeClass
 	public static void initFileManager() {

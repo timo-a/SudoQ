@@ -9,6 +9,8 @@ import java.io.IOException;
 import de.sudoq.model.utility.FileManager;
 import de.sudoq.model.profile.ProfileSingleton;
 import de.sudoq.model.profile.ProfileManager;
+import de.sudoq.persistence.profile.ProfileRepo;
+import de.sudoq.persistence.profile.ProfilesListRepo;
 
 public class TestWithInitCleanforSingletons {
 
@@ -39,7 +41,7 @@ public class TestWithInitCleanforSingletons {
 			profilesDir.mkdirs();
 
 		//todo mock input
-		profileManager = new ProfileManager(null, null, null);
+		profileManager = new ProfileManager(profilesDir, new ProfileRepo(profilesDir), new ProfilesListRepo(profilesDir));
 		profileManager.createInitialProfile();
 
 
@@ -50,7 +52,7 @@ public class TestWithInitCleanforSingletons {
 		File profileDir = new File("/tmp/sudoq/CatchAll/profile");
 		profileDir.mkdirs();
 
-		ProfileSingleton.Companion.getInstance(profileDir, null, null);
+		ProfileSingleton.Companion.getInstance(profileDir, new ProfileRepo(profileDir), new ProfilesListRepo(profileDir));
 	}
 
 	@AfterClass
