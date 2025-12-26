@@ -15,9 +15,7 @@ import java.text.ParseException
 import java.util.stream.IntStream.range
 import kotlin.collections.HashMap
 
-open class PrettySudokuRepo2(typeRepo: SudokuTypeRepo4Tests) : IRepo<Sudoku> {
-
-    val type: SudokuType = typeRepo.read(SudokuTypes.standard9x9.ordinal)
+open class PrettySudokuRepo2(val typeRepo: SudokuTypeRepo4Tests) : IRepo<Sudoku> {
 
     override fun create(): Sudoku {
         TODO("Not yet implemented")
@@ -25,11 +23,20 @@ open class PrettySudokuRepo2(typeRepo: SudokuTypeRepo4Tests) : IRepo<Sudoku> {
 
     fun read(path: Path, complexity: Complexity): Sudoku {
         val ls = loadAndClean(path)
-        val id: Int = path.toString()
+        val filename = path.fileName.toString()
+        val id: Int = filename
             .removeSuffix(".pretty")
             .takeLastWhile { it.isDigit() }
             .toInt()
-        val sudoku = parseSudoku(id, complexity, ls)
+        val typeE: SudokuTypes = when (filename.split("_")[0]) {
+            "9" -> SudokuTypes.standard9x9
+            "x" -> SudokuTypes.Xsudoku
+            else -> {
+                throw NotImplementedError("Type $filename not implemented")
+            }
+        }
+        val type = typeRepo.read(typeE.ordinal)
+        val sudoku = parseSudoku(id, type, complexity, ls)
         return sudoku
     }
 
@@ -54,7 +61,7 @@ open class PrettySudokuRepo2(typeRepo: SudokuTypeRepo4Tests) : IRepo<Sudoku> {
         return File(classLoader.getResource(path.toString())!!.file)
     }
 
-    protected fun parseSudoku(id:Int, complexity: Complexity, ss: List<List<String>>): Sudoku {
+    protected fun parseSudoku(id:Int, type: SudokuType, complexity: Complexity, ss: List<List<String>>): Sudoku {
         val pos2cellMap = object: HashMap<Position, Cell>(){
             init {
                 for ((y, row) in ss.withIndex())
@@ -69,18 +76,15 @@ open class PrettySudokuRepo2(typeRepo: SudokuTypeRepo4Tests) : IRepo<Sudoku> {
 
     protected fun parseCell(id: Int, s: String): Cell {
 
-        val c = when(s) {
+        val c = when {
             //single digit -> already solved
-            in ("0123456789") -> Cell(false, parseValue(s), id,9)
-            //dot -> e
-            "." -> Cell(id,9).also {
-                range(0, it.numberOfValues).forEach(it::toggleNote)
-            }
-            else -> {
-                check(s.all { it in "123456789¹²³⁴⁵⁶⁷⁸⁹" })
+            s in ("0123456789") -> Cell(false, parseValue(s), id,9)
+            //.2 -> empty with solution 2 (-1)
+            s.startsWith(".") -> Cell(true, parseValue(s.removePrefix(".")), id,9)
+            s.all { it in "123456789¹²³⁴⁵⁶⁷⁸⁹" } -> {
                 val solution: Int = s
                     .filter { it in "123456789" }
-                    .map { this.parseValue(it.toString()) }
+                    .map { parseValue(it.toString()) }
                     .single()
                 Cell(true, solution, id,9)
                     .also { it.toggleNote(solution) }
@@ -91,6 +95,7 @@ open class PrettySudokuRepo2(typeRepo: SudokuTypeRepo4Tests) : IRepo<Sudoku> {
                     }
                 }
             }
+            else -> {throw IllegalArgumentException("Invalid value for cell: $s")}
         }
         return c
     }

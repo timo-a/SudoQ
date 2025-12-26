@@ -25,8 +25,6 @@ import de.sudoq.model.Utility;
 import de.sudoq.model.actionTree.ActionTreeElement;
 import de.sudoq.model.actionTree.NoteActionFactory;
 import de.sudoq.model.actionTree.SolveActionFactory;
-import de.sudoq.model.persistence.IRepo;
-import de.sudoq.model.profile.ProfileSingleton;
 import de.sudoq.model.solverGenerator.Generator;
 import de.sudoq.model.solverGenerator.GeneratorCallback;
 import de.sudoq.model.solverGenerator.solution.Solution;
@@ -38,7 +36,6 @@ import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
@@ -320,7 +317,7 @@ public class GameTests {
 
 	@Test
 	public synchronized void testSolve() {
-        Path sudokuPath = Paths.get("sudokus/lockedCandidates_1.pretty");
+        Path sudokuPath = Paths.get("sudokus/9_lockedCandidates_1.pretty");
         Sudoku sudoku = sudokuRepo.read(sudokuPath, Complexity.easy);
         assertNotNull(sudoku);
         Game game = new Game(1, sudoku);
@@ -361,7 +358,7 @@ public class GameTests {
 
 	@Test
 	public synchronized void testGoToLastCorrectState() {
-        Path sudokuPath = Paths.get("sudokus/lockedCandidates_1.pretty");
+        Path sudokuPath = Paths.get("sudokus/9_lockedCandidates_1.pretty");
         Sudoku sudoku = sudokuRepo.read(sudokuPath, Complexity.easy);
         assertNotNull(sudoku);
 		Game game = new Game(1, sudoku);
