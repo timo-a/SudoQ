@@ -31,7 +31,8 @@ class XWingHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku, c
             when (getGroupShape(c.getPositions())) {
                 Utils.ConstraintShape.Row -> rows.add(c)
                 Utils.ConstraintShape.Column -> cols.add(c)
-                else -> {throw IllegalStateException("Unexpected value: ${getGroupShape(c.getPositions())}")
+                else -> {
+                    //ignore any other shapes like block
                 }
             }
         }
