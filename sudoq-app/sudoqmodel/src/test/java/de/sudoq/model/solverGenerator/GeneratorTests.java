@@ -44,9 +44,6 @@ public class GeneratorTests implements GeneratorCallback {
 	@AfterClass
 	public static void clean() throws IOException, SecurityException, NoSuchFieldException, IllegalArgumentException,
 			IllegalAccessException {
-        java.lang.reflect.Field f = FileManager.class.getDeclaredField("profiles");
-        f.setAccessible(true);
-        f.set(null, null);
         java.lang.reflect.Field s = FileManager.class.getDeclaredField("sudokus");
         s.setAccessible(true);
         s.set(null, null);

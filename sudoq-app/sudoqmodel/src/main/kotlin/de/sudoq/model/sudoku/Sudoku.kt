@@ -266,9 +266,10 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
                 }
                 sb.append(" ") //separator
             }
+            //replace last character (not needed separator) with newline
             sb.replace(sb.length - 1, sb.length, "\n")
         }
-        sb.delete(sb.length - 1, sb.length)
+        sb.deleteAt(sb.length - 1)//delete last newline
         return sb.toString()
     }
 

@@ -4,15 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.apache.commons.lang3.NotImplementedException;
-import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
 
 import de.sudoq.model.Utility;
 import de.sudoq.model.persistence.IRepo;
+import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
@@ -32,28 +30,7 @@ public class SolverIntegrationTests {
 	private static final boolean PRINT_SOLUTIONS = false ;
 
 	//this is a dummy so it compiles todo use xmls from resources
-	private IRepo<SudokuType> sudokuTypeRepo = new IRepo<SudokuType>() {
-		@NotNull
-		@Override
-		public List<Integer> ids() {
-			throw new NotImplementedException();
-		}
-
-		@Override
-		public void delete(int id) { throw new NotImplementedException(); }
-
-		@Override
-		public SudokuType update(SudokuType sudokuBE) { throw new NotImplementedException(); }
-
-		@Override
-		public SudokuType read(int id) {
-			throw new NotImplementedException();
-		}
-
-		@Override
-		public SudokuType create() { throw new NotImplementedException(); }
-
-	};
+	private IRepo<SudokuType> sudokuTypeRepo = new SudokuTypeRepo4Tests();
 
 	@Before
 	public void before() {
