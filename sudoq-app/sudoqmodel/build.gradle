@@ -136,6 +136,12 @@ compileTestKotlin {
     }
 }
 
+compileSolvertestsKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
 /*
 Was funktioniert?
 gradle otherTest
