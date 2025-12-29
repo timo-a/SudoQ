@@ -1,6 +1,6 @@
 package de.sudoq.model.solverGenerator.FastSolver;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

@@ -45,7 +45,7 @@ class SamuraiParser(): SudokuParser() {
                 }
 
                 for (r in 9 until 12) {
-                    for (c in 0 until 3) {
+                    for (c in 0 until 9) {
                         val cell = parseCell(r, c)
                         val p = Position.get(c+6, r)
                         put(p,cell)
