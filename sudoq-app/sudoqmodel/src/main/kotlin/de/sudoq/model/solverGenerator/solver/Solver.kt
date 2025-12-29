@@ -131,6 +131,7 @@ open class Solver(sudoku: Sudoku) {
 
         //loop until we get the solution for a field TODO what if a helper solves a field directly? solvedField would never be true right? I DONT THINK WE ARE SUPPOSED TO 'SOLVE' IN HELPERS, JUST FIND
         while (!solvedField && didUpdate && !isIncorrect) {
+            println("loop in solveOne")
             didUpdate = false
             if (isFilledCompletely) return null // if every field is already filled, no solution can be found, because that already happened
             if (isInvalid) {
@@ -153,6 +154,7 @@ open class Solver(sudoku: Sudoku) {
                             solverSudoku.getCell(p)!!
                         )
                         val deriv = SolveDerivation()
+                        deriv.setDescription("Custom Derivation in solveOne ~ Naked Single")
                         deriv.addDerivationCell(
                             DerivationCell(
                                 p,
@@ -174,14 +176,18 @@ open class Solver(sudoku: Sudoku) {
 
             // According to their priority use the helpers until one of them can
             // be applied
+            var foundHelper = false
             if (!solvedField && !didUpdate && !isIncorrect)
                 for (hel in helper) {
+                    println("try helper: ${hel.hintType}")
                     if (hel.update(true)) {
                         solution.addDerivation(hel.derivation!!) //we don't check whether branches exist here?!
                         didUpdate = true
+                        foundHelper = true
                         break
                     }
                 }
+            if (!foundHelper) println("Kein Helfer gefunden")
         }
 
         // Apply solution if wanted
