@@ -142,7 +142,8 @@ open class Solver(sudoku: Sudoku) {
                 }
             }
 
-            /* try to solve fields where only one note is remaining TODO why not just make a naked single?!(efficiency?)*/for (p in solverSudoku.positions!!) {
+            // try to solve fields where only one note is remaining TODO why not just make a naked single?!(efficiency?)
+            for (p in solverSudoku.positions!!) {
                 val b: BitSet = solverSudoku.getCurrentCandidates(p)
                 if (b.cardinality() == 1) { //we found a field where only one note remains
                     if (!solverSudoku.hasBranch()) {
@@ -173,11 +174,14 @@ open class Solver(sudoku: Sudoku) {
 
             // According to their priority use the helpers until one of them can
             // be applied
-            if (!solvedField && !didUpdate && !isIncorrect) for (hel in helper) if (hel.update(true)) {
-                solution.addDerivation(hel.derivation!!) //we don't check whether branches exist here?!
-                didUpdate = true
-                break
-            }
+            if (!solvedField && !didUpdate && !isIncorrect)
+                for (hel in helper) {
+                    if (hel.update(true)) {
+                        solution.addDerivation(hel.derivation!!) //we don't check whether branches exist here?!
+                        didUpdate = true
+                        break
+                    }
+                }
         }
 
         // Apply solution if wanted
