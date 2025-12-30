@@ -7,6 +7,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import static de.sudoq.model.sudoku.sudokuTypes.SudokuTypes.standard9x9;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +55,17 @@ public class SolverTests {
 		solution16x16 = new PositionMap<Integer>(sudoku16x16.getSudokuType().getSize());
 	}
 
+    @Test
+    public void test1(){
+        Sudoku initialSudoku = new Sudoku(sudokuTypeRepo.read(standard9x9.ordinal()));
+        for (int i=0; i < 8; i++)
+            initialSudoku.getCell(Position.get(i,0)).setCurrentValue(i);
+        Solver solver = new Solver(initialSudoku);
+        solver.solveAll(true, false, true);
+        List<Solution> ls = solver.getSolutions();
+        System.out.println(ls.getFirst());
+    }
+
 	/** convenience init sudoku	 */
 	private void initSudoku9x9(Sudoku sudoku){
 		    
@@ -91,57 +104,65 @@ public class SolverTests {
 		sudoku.getCell(Position.get(6, 8)).setCurrentValue(2);
 	}
 
-	@Test(timeout = 3_000)
-	public void testSolveOneAutomaticallyApplied() {
-		initSudoku9x9(sudoku);
-		Solution solution = new Solution();
-		while (solution != null) {
-			solution = solver.solveOne(true);
-			if (solution == null)
-				break;
-			SolveDerivation sd = null;
-			for (SolveDerivation d: solution.getDerivations()) sd = d; //getLastelement
-			if (solution.getAction() != null) {
-				assertNotEquals(this.sudoku.getCell(sd.getCellIterator().next().getPosition()).getCurrentValue(), Cell.EMPTYVAL);
-			} else {
-				solution = null;
-			}
-		}
+    @Test(timeout = 3_000)
+    public void testSolveOneAutomaticallyApplied() {
+        Sudoku sudoku = new Sudoku(sudokuTypeRepo.read(standard9x9.ordinal()));
+        initSudoku9x9(sudoku);
+        Solver solver = new Solver(sudoku);
+        SolverSudoku solverSudoku = solver.solverSudoku;
+        Solution solution = solver.solveOne(true);
+        while (solution != null && solution.getAction() != null) {
+            System.out.println("loop in test");
+            SolveDerivation sd = solution.getDerivations().getLast();
+            Cell c = solverSudoku.getCell(sd.getCellIterator().next().getPosition());
+            assertNotEquals(Cell.EMPTYVAL, c.getCurrentValue());
+            solution = solver.solveOne(true);
+        }
 
-		for (Cell f : this.sudoku) {
-			assertNotEquals(f.getCurrentValue(), -1);
-		}
-	}
+        // after solving everything, every cell should be filled
+        for (Cell f : solverSudoku) {
+            assertNotEquals(Cell.EMPTYVAL, f.getCurrentValue());
+        }
+    }
 
-	@Test(timeout = 3_000)
-	public void testSolveOneManuallyApplied() {
-		initSudoku9x9(sudoku);
-		Solution solution = new Solution();
-		while (solution != null) {
-			solution = solver.solveOne(false);
-			if (solution == null)
-				break;
-			SolveDerivation sd = null;
-			for (SolveDerivation d: solution.getDerivations()) sd = d; //getLastelement
-			if (solution.getAction() != null) {
-				solution.getAction().execute();
-				assertNotEquals(this.sudoku.getCell(sd.getCellIterator().next().getPosition()).getCurrentValue()
-						       , Cell.EMPTYVAL);
-			} else {
-				solution = null;
-			}
-		}
 
-		for (Cell f : this.sudoku) {
-			assertNotEquals(f.getCurrentValue(), -1);
-		}
-	}
+    @Test(timeout = 3_000)
+    public void testSolveOneManuallyApplied() {
+        Sudoku sudoku = new Sudoku(sudokuTypeRepo.read(standard9x9.ordinal()));
+        initSudoku9x9(sudoku);
+        Solver solver = new Solver(sudoku);
+        SolverSudoku solverSudoku = solver.solverSudoku;
+        Solution solution = solver.solveOne(false);
+        while (solution != null && solution.getAction() != null) {
+            SolveDerivation sd = solution.getDerivations().getLast();
+            solution.getAction().execute();
+            Cell c = solverSudoku.getCell(sd.getCellIterator().next().getPosition());
+            assertNotEquals(Cell.EMPTYVAL, c.getCurrentValue());
+            solution = solver.solveOne(false);
+        }
 
+        for (Cell f : solverSudoku) {
+            assertNotEquals(Cell.EMPTYVAL, f.getCurrentValue());
+        }
+    }
+
+    /**
+     * Unique behaviour constraint is expected to fail because of 2 zeroes in the first row
+     */
 	@Test(timeout = 3_000)
 	public void solveOneIncorrect() {
-		sudoku.getCell(Position.get(0, 0)).setCurrentValue(0);
-		sudoku.getCell(Position.get(1, 0)).setCurrentValue(0);
-		assertNull(solver.solveOne(true));
+        // GIVEN
+        Sudoku initialSudoku = new Sudoku(sudokuTypeRepo.read(standard9x9.ordinal()));
+        for (int i=0; i < 8; i++)
+            initialSudoku.getCell(Position.get(i,0)).setCurrentValue(i);
+        initialSudoku.getCell(Position.get(1,0)).setCurrentValue(0);//set a second cell to 0
+        Solver solver = new Solver(initialSudoku);
+
+        // WHEN
+        Solution solution = solver.solveOne(true);
+
+        // THEN
+        assertNull(solution);
 	}
 
 	@Test(timeout = 3_000)
@@ -157,7 +178,7 @@ public class SolverTests {
 		}
 
 		for (Cell f : this.sudoku)
-			assertNotEquals(f.getCurrentValue(), Cell.EMPTYVAL);
+			assertNotEquals(Cell.EMPTYVAL, f.getCurrentValue());
 
 	}
 
@@ -176,16 +197,25 @@ public class SolverTests {
 		SudokuTestUtilities.printSudoku(sudoku);
 
 		for (Cell f : this.sudoku) {
-			assertNotEquals(f.getCurrentValue(), Cell.EMPTYVAL);
+			assertNotEquals(Cell.EMPTYVAL, f.getCurrentValue());
 		}
 	}
 
 	@Test(timeout = 3_000)
 	public void solveAllIncorrect() {
-		sudoku.getCell(Position.get(0, 0)).setCurrentValue(0);
-		sudoku.getCell(Position.get(1, 0)).setCurrentValue(0);
-		assertFalse(solver.solveAll(true, false));
-	}
+        // GIVEN
+        Sudoku initialSudoku = new Sudoku(sudokuTypeRepo.read(standard9x9.ordinal()));
+        for (int i=0; i < 8; i++)
+            initialSudoku.getCell(Position.get(i,0)).setCurrentValue(i);
+        initialSudoku.getCell(Position.get(1,0)).setCurrentValue(0);//set a second cell to 0
+        Solver solver = new Solver(initialSudoku);
+
+        // WHEN
+        boolean response = solver.solveAll(true, false);
+
+        // THEN
+        assertFalse(response);
+    }
 
 	@Test(expected = IllegalArgumentException.class)
 	public void solveAllIllegalComplexity() {
@@ -210,7 +240,7 @@ public class SolverTests {
 		int count = 0;
 		for (int i = 0; i < 16; i++) {
 			for (int j = 0; j < 16; j++) {
-				assertEquals(map.get(Position.get(i, j)), new Integer(count));
+				assertEquals(map.get(Position.get(i, j)), Integer.valueOf(count));
 				count++;
 			}
 		}
