@@ -210,7 +210,9 @@ open class Solver(sudoku: Sudoku) {
      * Gibt an, ob die Lösungen direkt in das Sudoku eingetragen werden sollen
      * @return true, falls das Sudoku gelöst werden konnte, false falls nicht
      */
+    @Deprecated("this function is currently not used in main -> remove it sometime")
     fun solveAll(buildDerivation: Boolean, applySolutions: Boolean): Boolean {
+        //todo remove this function, and maybe actions alltogether
         //System.out.println("start of solveAll2");
         //print9x9(sudoku);
         val copy = PositionMap<Int>(solverSudoku.sudokuType!!.size!!)
@@ -533,7 +535,8 @@ open class Solver(sudoku: Sudoku) {
             val branchingPos = solverSudoku.lastBranch.position
             val branchingCandidate = solverSudoku.lastBranch.candidate
 
-            /* delete all solutions (including the backtracking-derivation) since the last branch */if (buildDerivation) {
+            /* delete all solutions (including the backtracking-derivation) since the last branch */
+            if (buildDerivation) {
                 while (lastSolutions!!.size > branchPoints!!.peek()) {
                     lastSolutions!!.removeAt(lastSolutions!!.size - 1)
                 }
@@ -543,7 +546,7 @@ open class Solver(sudoku: Sudoku) {
             val candidates = solverSudoku.getCurrentCandidates(branchingPos!!)
             val nextCandidate = candidates.nextSetBit(branchingCandidate + 1)
             if (nextCandidate != -1) {
-
+                //try the next candidate todo: better to try helpers first?
                 //TODO new Backtracking(this.sudoku).update(tre)
                 solverSudoku.startNewBranch(branchingPos, nextCandidate)
                 if (buildDerivation) {
@@ -565,7 +568,7 @@ open class Solver(sudoku: Sudoku) {
                 }
                 Branchresult.SUCCESS
             } else {
-                //no candidate was applicable -> backtrack even further
+                //no candidate left -> backtrack even further
                 advanceBranching(buildDerivation)
             }
         }
@@ -604,6 +607,7 @@ if there is another candidate -> advance
                     if (buildDerivation) {
                         val newSolution = Solution()
                         newSolution.addDerivation(hel.derivation!!)
+                        //todo we are not adding actions right now...
                         lastSolutions!!.add(newSolution)
                         if (hel is Backtracking) {
                             branchPoints!!.push(lastSolutions!!.size - 1)
