@@ -176,8 +176,8 @@ open class Solver(sudoku: Sudoku) {
 
             // According to their priority use the helpers until one of them can
             // be applied
-            var foundHelper = false
-            if (!solvedField && !didUpdate && !isIncorrect)
+            if (!solvedField && !didUpdate && !isIncorrect) {
+                var foundHelper = false
                 for (hel in helper) {
                     println("try helper: ${hel.hintType}")
                     if (hel.update(true)) {
@@ -187,11 +187,14 @@ open class Solver(sudoku: Sudoku) {
                         break
                     }
                 }
-            if (!foundHelper) println("Kein Helfer gefunden")
+                if (!foundHelper) println("Kein Helfer gefunden")
+            } else {println("skip helperloop")}
         }
 
         // Apply solution if wanted
-        if (!isIncorrect && solvedField && applySolution) solution.action!!.execute()
+        if (!isIncorrect && solvedField && applySolution) {
+            solution.action!!.execute()
+        }
         return if (!isIncorrect && solvedField) solution else null
     }
 
@@ -527,8 +530,8 @@ open class Solver(sudoku: Sudoku) {
         return if (!solverSudoku.hasBranch()) {
             Branchresult.UNSOLVABLE // possible output nr1: insolvable
         } else {
-            val branchingPos = solverSudoku.lastBranch!!.position
-            val branchingCandidate = solverSudoku.lastBranch!!.candidate
+            val branchingPos = solverSudoku.lastBranch.position
+            val branchingCandidate = solverSudoku.lastBranch.candidate
 
             /* delete all solutions (including the backtracking-derivation) since the last branch */if (buildDerivation) {
                 while (lastSolutions!!.size > branchPoints!!.peek()) {

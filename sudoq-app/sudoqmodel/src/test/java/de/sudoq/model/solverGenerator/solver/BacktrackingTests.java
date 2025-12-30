@@ -37,7 +37,7 @@ public class BacktrackingTests extends TestWithInitCleanforSingletons {
 		sudoku.getCurrentCandidates(Position.get(1, 3)).clear(2, 8);
 		back.update(true);
 		SolveDerivation deriv = back.getDerivation();
-		assertEquals(sudoku.branchings.size(), 1);
+		assertEquals(1, sudoku.getBranchLevel());
 		assertEquals(deriv.getCellIterator().next().getPosition(), Position.get(1, 3));
 	}
 
