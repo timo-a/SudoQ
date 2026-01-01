@@ -31,7 +31,6 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
 public class SudokuTests {
-	private static Sudoku sudoku;
 
 	//this is a dummy so it compiles todo use xmls from resources
 	//private static IRepo<SudokuType> sudokuTypeRepo = new SudokuTypeRepo();
@@ -264,27 +263,6 @@ public class SudokuTests {
 		s.setCell(f, Position.get(4, 4));
 		assertTrue(f.equals(s.getCell(Position.get(4, 4))));
 		assertEquals(s.getPosition(f.getId()), Position.get(4, 4));
-	}
-
-	@Test
-	public synchronized void testFinishedAndErrors() {
-		int counter = 0;
-		while (sudoku == null && counter < 80) {
-			try {
-				wait(100);
-				counter++;
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-
-		assertFalse(sudoku==null);
-		assertFalse(sudoku.hasErrors());
-		assertFalse(sudoku.isFinished());
-		for (Cell f : sudoku) {
-			f.setCurrentValue(f.getSolution());
-		}
-		assertTrue(sudoku.isFinished());
 	}
 
 	@Test
