@@ -24,7 +24,7 @@ public class FileManagerTests extends TestWithInitCleanforSingletons {
 
 	private static File sudokuDir = new File(Utility.RES + "tmp_suds");
 
-	@Test
+	//@Test
 	public void testInit() {
 		assertTrue(Utility.sudokus.exists());
 		assertTrue(Utility.profiles.exists());

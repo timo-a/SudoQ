@@ -20,7 +20,7 @@ import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
-public class BacktrackingTests extends TestWithInitCleanforSingletons {
+public class BacktrackingTests {
 
     private static SudokuTypeRepo4Tests sudokuTypeRepo = new SudokuTypeRepo4Tests();
 

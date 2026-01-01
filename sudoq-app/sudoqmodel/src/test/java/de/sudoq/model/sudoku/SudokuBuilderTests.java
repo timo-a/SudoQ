@@ -16,7 +16,7 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.persistence.sudokuType.SudokuTypeRepo;
 
-public class SudokuBuilderTests extends TestWithInitCleanforSingletons {
+public class SudokuBuilderTests {
 
 	private final IRepo<SudokuType> str = new SudokuTypeRepo(Utility.sudokus);
 
