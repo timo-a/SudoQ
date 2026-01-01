@@ -298,6 +298,7 @@ open class Solver(sudoku: Sudoku) {
      *
      * @return Ein ComplexityRelation-Objekt, welches die Constraint-gemäße Lösbarkeit beschreibt
      */
+    @Deprecated("this function is currently not used in main and often slow in tests => investigate!")
     fun validate(solution: PositionMap<Int?>?): ComplexityRelation {
         var result = ComplexityRelation.INVALID
         var solved = false

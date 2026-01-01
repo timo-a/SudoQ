@@ -380,7 +380,7 @@ public class SolverTests {
 
 		sudoku.setComplexity(Complexity.arbitrary);
 		Solver solver = new Solver(sudoku);
-		assertEquals(solver.validate(null), ComplexityRelation.INVALID);
+		assertEquals(ComplexityRelation.INVALID, solver.validate(null));
 	}
 
 }
