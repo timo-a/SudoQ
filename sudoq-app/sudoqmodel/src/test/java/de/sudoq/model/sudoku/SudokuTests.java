@@ -37,8 +37,6 @@ public class SudokuTests {
 
 	@BeforeClass
 	public static void beforeClass() {
-        Utility.copySudokus();
-
         //todo use mock
 		/*new Generator(sudokuTypeRepo).generate(SudokuTypes.standard4x4, Complexity.easy, new GeneratorCallback() {
 			@Override

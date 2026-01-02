@@ -24,7 +24,7 @@ import de.sudoq.persistence.sudoku.SudokuBE;
 import de.sudoq.persistence.sudoku.SudokuMapper;
 import de.sudoq.persistence.sudoku.SudokuRepo;
 
-public class SudokuManagerTests extends TestWithInitCleanforSingletons {
+public class SudokuManagerTests {
 
 	private final IRepo<SudokuType> sudokuTypeRepo = new SudokuTypeRepo4Tests();
 

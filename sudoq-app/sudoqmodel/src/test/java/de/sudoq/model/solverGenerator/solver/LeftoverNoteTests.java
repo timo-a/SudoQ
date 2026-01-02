@@ -31,12 +31,6 @@ import static org.junit.Assert.fail;
  */
 public class LeftoverNoteTests {
 
-    @BeforeClass
-	public static void init() {
-		Utility.copySudokus();
-	}
-
-
     @Test(expected = IllegalArgumentException.class)
     public void testIllegalArgumentComplexity() {
         new LeftoverNoteHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), -1);

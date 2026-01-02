@@ -34,8 +34,6 @@ public class SolverIntegrationTests {
 
 	@Before
 	public void before() {
-		Utility.copySudokus();
-
 		sudoku = new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku();
 		sudoku.setComplexity(Complexity.arbitrary);
 		solver = new Solver(sudoku);

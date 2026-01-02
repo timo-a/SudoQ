@@ -17,12 +17,6 @@ import static org.junit.Assert.assertTrue;
 public class SamuraiRegressionTest {
 
 
-    @BeforeClass
-    public static void init() {
-        TestWithInitCleanforSingletons.legacyInit();
-    }
-
-
     @Test
     public void testSamurai1(){
         String pattern =  ". . . . 1 . . 3 .       . . . 1 9 . 5 . . "

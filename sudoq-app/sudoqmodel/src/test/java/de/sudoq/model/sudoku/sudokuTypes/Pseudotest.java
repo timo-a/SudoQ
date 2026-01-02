@@ -16,12 +16,6 @@ import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
 
 public class Pseudotest {
 
-	@BeforeClass
-	public static void init() {
-		Utility.copySudokus();
-	}
-
-
 	SudokuType stHy = TypeBuilder.getType(SudokuTypes.HyperSudoku);
 
 	public SudokuType usual(SudokuType oldType){

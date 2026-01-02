@@ -12,11 +12,6 @@ import de.sudoq.model.solverGenerator.RegressionBoards16;
 public class Standard16x16RegressionTest {
 
 
-    @BeforeClass
-    public static void init() {
-        TestWithInitCleanforSingletons.legacyInit();
-    }
-
     //should work just fine
     @Test(timeout = 6000)
     public void testR2(){

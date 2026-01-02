@@ -36,12 +36,9 @@ public class SolverRegressionTests {
     private PositionMap<Integer> solution16x16;
 
     private static final boolean PRINT_SOLUTIONS = false;
-    private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
 
     @Before
     public void before() {
-        TestWithInitCleanforSingletons.legacyInit();
-
         IRepo<SudokuType> str = new SudokuTypeRepo4Tests();
 
 

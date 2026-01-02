@@ -51,10 +51,6 @@ public class GameTests {
      * */
     @Test
     public void debugGeneration() throws InterruptedException, ExecutionException {
-        Utility.copySudokus();
-        File profileDir = new File("/tmp/sudoq/GameTests/profile");
-        //ProfileSingleton.Companion.getInstance(profileDir);
-
         TypeBuilder.get99(); //just to force initialization of filemanager
 
         CompletableFuture<Sudoku> future = new CompletableFuture<>();
