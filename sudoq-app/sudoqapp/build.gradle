@@ -10,12 +10,12 @@ allprojects {
 
 android {
     namespace "de.sudoq"
-    compileSdkVersion 30
+    compileSdkVersion 34
 
     defaultConfig {
         applicationId "de.sudoq"
-        minSdkVersion 14
-        targetSdkVersion 30
+        minSdkVersion 19
+        targetSdkVersion 34
         resConfigs "en", "de", "fr"
         testApplicationId "de.sudoq.test"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -24,7 +24,7 @@ android {
     sourceSets {
         main {
             // this allows us to group resources(layouts, values) by topic
-            res.srcDirs =
+            res.srcDirs = 
             [
                     'src/main/res/layouts/sudoku',
                     'src/main/res/layouts/tutorial',
@@ -60,9 +60,9 @@ android {
 
 dependencies {
     implementation project(':sudoqmodel')
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.android.material:material:1.12.0'
     //implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     //implementation 'androidx.recyclerview:recyclerview:1.0.0'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.0'
