@@ -1,34 +1,31 @@
 package de.sudoq.model.solverGenerator.FastSolver;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-import de.sudoq.model.TestWithInitCleanforSingletons;
-import de.sudoq.model.Utility;
 import de.sudoq.model.solverGenerator.GenerationAlgo;
+import de.sudoq.model.solverGenerator.utils.PrettySudokuRepo2;
+import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests;
 import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
 
 public class SudokuTest {
-    private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
 
-    @BeforeClass
-    public static void init() {
-        TestWithInitCleanforSingletons.legacyInit();
-    }
+    private static SudokuTypeRepo4Tests sudokuTypeRepo = new SudokuTypeRepo4Tests();
 
-    @Test
+    private PrettySudokuRepo2 sudokuRepo = new PrettySudokuRepo2(sudokuTypeRepo);
+
+    @Test //todo this test doesn't have any assertions...
 	public void testSolveSudoku() {
-
-        Sudoku s = getSudoku(sudokuDir, SudokuTypes.standard9x9, Complexity.easy, 1);
+        Path sudokuPath = Paths.get("sudokus/9_lockedCandidates_1.pretty");
+        Sudoku s = sudokuRepo.read(sudokuPath, Complexity.easy);
         System.out.println(s);
         FastSolver fs = FastSolverFactory.getSolver(s);
 
@@ -56,24 +53,4 @@ public class SudokuTest {
     }
 
 
-
-
-
-    public static Sudoku getSudoku(File dir, SudokuTypes st, Complexity c, int i){
-        File f = new File(dir, st.toString()
-                + File.separator
-                + c.toString()
-                + File.separator
-                + "sudoku_" + i + ".xml");
-
-//        Sudoku s = new Sudoku(SudokuTypeProvider.getSudokuType(st, sudokuDir));
-//        try {
-//            s.fillFromXml(new XmlHelper().loadXml(f), sudokuDir);
-//            s.setComplexity(Complexity.arbitrary);//justincase
-//            return s;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } todo load from resources
-        return null;
-    }
 }

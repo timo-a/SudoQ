@@ -28,13 +28,6 @@ import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
 public class HelperTests {
 
-	@Before
-	public void before() {
-		TestWithInitCleanforSingletons.legacyInit();
-	}
-
-
-
 	@Test
 	public void testXWing(){
 		SolverSudoku sudoku = new SolverSudoku(SudokuMockUps.getXWing());

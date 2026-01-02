@@ -31,6 +31,9 @@ class XWingHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku, c
             when (getGroupShape(c.getPositions())) {
                 Utils.ConstraintShape.Row -> rows.add(c)
                 Utils.ConstraintShape.Column -> cols.add(c)
+                else -> {
+                    //ignore any other shapes like block
+                }
             }
         }
     }

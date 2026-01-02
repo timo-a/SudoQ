@@ -32,7 +32,7 @@ abstract class SolveHelper protected constructor(
      * The derivation of the last update step if
      * it was called with buildDerivation=true and if it was successful.
      *
-     * @return Derivation of the last update step, ofr null if not available
+     * @return Derivation of the last update step, or null if not available
      */
     var derivation: SolveDerivation? = null
         protected set

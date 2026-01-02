@@ -2,11 +2,14 @@ package de.sudoq.model.solverGenerator.solver;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import de.sudoq.model.sudoku.CandidateSet;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.ConstraintType;
 import de.sudoq.model.sudoku.Position;
@@ -24,25 +27,101 @@ public class SolverSudokuTests {
 		sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
 	}
 
+    @Test(expected = IllegalArgumentException.class)
+    public void killBranchWhenThereAreNone() {
+        //GIVEN
+        SolverSudoku sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
+        //WHEN
+        sudoku.killCurrentBranch();
+    }
+
+    @Test
+    public void killBranchShouldRemoveTheGuess() {
+        //GIVEN
+        Sudoku s = new Sudoku(TypeBuilder.get99());
+        Position p = Position.get(5, 7);
+        s.getCell(p).toggleNote(2);
+        s.getCell(p).toggleNote(3);
+        SolverSudoku sudoku = new SolverSudoku(s, SolverSudoku.Initialization.USE_EXISTING);
+
+        //WHEN
+        sudoku.startNewBranch(p, 2);
+        sudoku.killCurrentBranch();
+
+        //THEN
+        assertTrue(sudoku.getCurrentCandidates(p).isSet(3)); //3 should remain
+        assertFalse(sudoku.getCurrentCandidates(p).isSet(2)); //2 has been proven wrong, should be removed
+        assertEquals(1, sudoku.getCurrentCandidates(p).cardinality()); //no other candidates
+    }
+
+    @Test
+    public void killBranchShouldRemoveTheGuess2() {
+        //GIVEN
+        Sudoku s = new Sudoku(TypeBuilder.get99());
+        Position p1 = Position.get(5, 7);
+        s.getCell(p1).toggleNote(2);
+        s.getCell(p1).toggleNote(3);
+        Position p2 = Position.get(8, 4);
+        s.getCell(p2).toggleNote(4);
+        s.getCell(p2).toggleNote(5);
+        SolverSudoku sudoku = new SolverSudoku(s, SolverSudoku.Initialization.USE_EXISTING);
+
+        //WHEN
+        sudoku.startNewBranch(p1, 2);
+        sudoku.startNewBranch(p2, 4);
+        sudoku.killCurrentBranch();
+
+        //THEN
+        assertTrue(sudoku.getCurrentCandidates(p2).isSet(5)); //5 should remain
+        assertEquals(1, sudoku.getCurrentCandidates(p2).cardinality()); //no other candidates
+
+        //WHEN 2 (I'm too lazy right now, should probably be two tests...)
+        sudoku.killCurrentBranch();
+
+        //THEN 2
+        assertTrue(sudoku.getCurrentCandidates(p1).isSet(3)); //3 should remain
+        assertEquals(1, sudoku.getCurrentCandidates(p1).cardinality()); //no other candidates
+    }
+
 	@Test
 	public void testStandardSudoku() {
-		Position firstPos  = Position.get(5, 7);
+        Position firstPos  = Position.get(5, 7);
+        sudoku.getCurrentCandidates(firstPos).clear();
+        sudoku.getCurrentCandidates(firstPos).set(2);
+        sudoku.getCurrentCandidates(firstPos).set(3);
+
 		Position secondPos = Position.get(8, 4);
+        sudoku.getCurrentCandidates(secondPos).clear();
+        sudoku.getCurrentCandidates(secondPos).set(0);
+
 		Position thirdPos  = Position.get(3, 2);
 
-		sudoku.killCurrentBranch(); //nothing should happen todo put it in own test
-		sudoku.getCurrentCandidates(firstPos).clear();
-		sudoku.getCurrentCandidates(firstPos).set(2, 4);
-		assertEquals(sudoku.getCurrentCandidates(firstPos).cardinality(), 2);
+        assertFalse("Verify test initialization: sudoku should have no branch", sudoku.hasBranch());
+		assertEquals(2, sudoku.getCurrentCandidates(firstPos).cardinality());
 		sudoku.startNewBranch(firstPos, 2);
-		sudoku.getCurrentCandidates(secondPos).clear();
-		sudoku.getCurrentCandidates(secondPos).set(0);
+        //new branch only one possible candidate
+        assertEquals(1, sudoku.getCurrentCandidates(firstPos).cardinality());
+        assertFalse("Other candidate 4 should not be available on new branch", sudoku.getCurrentCandidates(firstPos).get(4));
+        assertTrue("Only 2", sudoku.getCurrentCandidates(firstPos).get(2));
+
+        CandidateSet candidatesOnTopBranch = sudoku.getLastBranch().getCandidates().get(firstPos);
+        assertNotSame(candidatesOnTopBranch, sudoku.getCurrentCandidates(firstPos));
+        assertTrue(candidatesOnTopBranch.isSet(2));
+        assertTrue(candidatesOnTopBranch.isSet(3));
+
+
 		sudoku.startNewBranch(secondPos, 0);
-		assertEquals(sudoku.branchings.size(), 2);
-		sudoku.killCurrentBranch();
-		assertEquals(sudoku.branchings.size(), 0);
+        assertEquals(2, sudoku.getBranchLevel());
+        sudoku.killCurrentBranch();
+        assertEquals(1, sudoku.getBranchLevel());
+        assertEquals(0, sudoku.getCurrentCandidates(secondPos).cardinality());
+
+        sudoku.killCurrentBranch();
+		assertFalse(sudoku.hasBranch());
+        assertTrue("after killing the branch the stashed away possibility should be available again", sudoku.getCurrentCandidates(firstPos).get(3));
+        assertFalse("after killing the branch the wrong guess should no longer be a candidate", sudoku.getCurrentCandidates(firstPos).get(2));
 		sudoku.startNewBranch(thirdPos, 0);
-		assertEquals(sudoku.getCurrentCandidates(firstPos).cardinality(), 1);
+		assertEquals(1, sudoku.getCurrentCandidates(firstPos).cardinality());
 		sudoku.resetCandidates();
 	}
 
@@ -72,17 +151,17 @@ public class SolverSudokuTests {
 	public void testResetCandidatesStack() {
 		sudoku.startNewBranch(Position.get(1, 1), 1);
 		sudoku.resetCandidates();
-		assertEquals(sudoku.branchings.size(), 0);
+		assertFalse(sudoku.hasBranch());
 		for (Position p : sudoku.positions) {
 			if (sudoku.getCell(p).getCurrentValue() != -1) {
-				assertEquals(sudoku.getCurrentCandidates(p).cardinality(), 0);
+				assertEquals(0, sudoku.getCurrentCandidates(p).cardinality());
 			} else {
 				int currentCandidate = -1;
 				for (int i = 0; i < sudoku.getCurrentCandidates(p).cardinality(); i++) {
 					currentCandidate = sudoku.getCurrentCandidates(p).nextSetBit(currentCandidate + 1);
 					for (Constraint c : sudoku.constraints.get(p)) {
 						for (Position pos : c) {
-							assertFalse(sudoku.getCell(pos).getCurrentValue() == currentCandidate);
+                            assertNotEquals(sudoku.getCell(pos).getCurrentValue(), currentCandidate);
 						}
 					}
 				}
@@ -117,20 +196,20 @@ public class SolverSudokuTests {
 
 
 		SolverSudoku sudoku = new SolverSudoku(new Sudoku(type));
-		assertEquals(sudoku.getSudokuType().getNumberOfSymbols(), 4);
-		assertEquals(sudoku.getCurrentCandidates(Position.get(0, 0)).cardinality(), 4);
+		assertEquals(4, sudoku.getSudokuType().getNumberOfSymbols());
+		assertEquals(4, sudoku.getCurrentCandidates(Position.get(0, 0)).cardinality());
 
 		sudoku.setSolution(Position.get(0, 0), 3);
 		sudoku.setSolution(Position.get(1, 0), 2);
 		sudoku.startNewBranch(Position.get(2, 0), 3);
 		sudoku.getCell(Position.get(2, 0)).setCurrentValue(3);
 		sudoku.updateCandidates();
-		assertEquals(sudoku.getCurrentCandidates(Position.get(3, 0)).cardinality(), 1);
-		assertEquals(sudoku.getCurrentCandidates(Position.get(3, 0)).nextSetBit(0), 2);
+		assertEquals(1, sudoku.getCurrentCandidates(Position.get(3, 0)).cardinality());
+		assertEquals(2, sudoku.getCurrentCandidates(Position.get(3, 0)).nextSetBit(0));
 		sudoku.killCurrentBranch();
 		sudoku.setSolution(Position.get(2, 0), 3);
-		assertEquals(sudoku.getCurrentCandidates(Position.get(3, 0)).cardinality(), 1);
-		assertEquals(sudoku.getCurrentCandidates(Position.get(3, 0)).nextSetBit(0), 2);
+		assertEquals(1, sudoku.getCurrentCandidates(Position.get(3, 0)).cardinality());
+		assertEquals(2, sudoku.getCurrentCandidates(Position.get(3, 0)).nextSetBit(0));
 		sudoku.setSolution(Position.get(3, 0), 2);
 		sudoku.updateCandidates();
 		assertTrue(sudoku.getSudokuType().checkSudoku(sudoku));

@@ -32,8 +32,7 @@ class SolverSudoku : Sudoku {
      * Speichert die Positionen an denen gebrancht wurde. (implizit in den einzelnen branchings )
      * TODO warum nehmen wir nicht branchPool.usedBranchings?
      */
-    @JvmField
-    var branchings: Stack<Branching>? = null
+    private val branchings: Stack<Branching> = Stack()
 
     /**
      * Der BranchingPool zum Verwalten der Branchings.
@@ -85,10 +84,9 @@ class SolverSudoku : Sudoku {
         initializeSolverSudoku(sudoku, mode)
     }
 
-    /* Initializes this object according to the passed sudoku
+    /**
+     * Initializes this object according to the passed sudoku
 	 * the passed sudoku is neither modified nor stored
-	 *
-	 *
 	 */
     private fun initializeSolverSudoku(sudoku: Sudoku, mode: Initialization?) {
         complexity = sudoku.complexity //transfer complexity as well
@@ -128,8 +126,7 @@ class SolverSudoku : Sudoku {
         branchPool = BranchingPool()
         currentCandidates = positionPool!!.positionMap
 
-        // initialize the candidate lists and branchings
-        branchings = Stack()
+        // initialize the candidate lists
         when (mode) {
             Initialization.NEW_CANDIDATES -> resetCandidates()
             Initialization.USE_EXISTING ->                //solverSudoku's fields take the candidates/notes from sudoku
@@ -139,6 +136,9 @@ class SolverSudoku : Sudoku {
                             if (sudoku.getCell(p)!!.isNoteSet(i) != currentCandidates!![p]!![i])
                                 currentCandidates!![p]!!.flip(i)
                     }
+
+            else -> {throw IllegalStateException("Unexpected value: $mode")
+            }
         }
     }
 
@@ -153,7 +153,7 @@ class SolverSudoku : Sudoku {
         // delete the branchings
         branchPool!!.recycleAllBranchings()
         positionPool!!.returnAll()
-        branchings!!.clear()
+        branchings.clear()
         currentCandidates = positionPool!!.positionMap
 
         // set the candidate lists of all unsolved cells to 'all possible'
@@ -187,7 +187,7 @@ class SolverSudoku : Sudoku {
             positionPool!!.positionMap //current candidates in a new (empty) PositionMap
         for (p in positions!!)
             currentCandidates!![p]!!.or(branch.candidates!![p]!!) //fill currentCandidates with candidates from before branching
-        branchings!!.push(branch) //put branch (i.e. a backup of what we had before this method was called) on branchings (which seems to be identical to branchpool.branchesinactiveuse)
+        branchings.push(branch) //put branch (i.e. a backup of what we had before this method was called) on branchings (which seems to be identical to branchpool.branchesinactiveuse)
 
         //the candidate given as parameter is entered as a (user solution)
         currentCandidates!![pos]!!.clear()
@@ -198,29 +198,27 @@ class SolverSudoku : Sudoku {
      * Entfernt den aktuellen Zweig und löscht den gesetzten Wert aus der Kandidatenliste des Feldes, welches für das
      * Branching genutzt wurde. Alles Änderungen in dem Zweig werden zurückgesetzt. Ist kein aktueller Zweig vorhanden,
      * so wird nichts getan.
+     *
+     * @throws IllegalStateException
+     * If this method is called when no branches exist
      */
     fun killCurrentBranch() {
-        // there is a slight chance that we work with an unsolvable sudoku
-        // then we might backtrack to a point where there are no branches left
-        // and in that case returning null is better than failing
-        //if(this.branchings.isEmpty())
-        //    return null;
-
         /* We're talking about two branches here:
 		   B the current branch at the start of the method
 		   A that which was before B (possibly another branch) */
 
+        //if there are no branches, return early
+        require(!branchings.empty()) {"Method should only be called when there is a branch to kill"}
         // delete old branch and remove the candidate used for branching from
         // candidates list
-        if (branchings!!.empty()) return
-        val lastBranching = branchings!!.pop()
+        val lastBranching = branchings.pop()
         currentCandidates = lastBranching!!.candidates //override current branch B with A
         for (p in lastBranching.solutionsSet)
             cells!![p]!!.setCurrentValue(Cell.EMPTYVAL, false) //remove solutions added in B
-        complexityValue -= lastBranching.complexityValue //substract cmplx scores of techniques that are not used after all
+        complexityValue -= lastBranching.complexityValue //substract cmplx scores of techniques that are not used after all todo these techniques are still part of the solution journey... average them in somehow?
 
-        //BitSet branchCandidates = this.currentCandidates.get(lastBranching.position);//candidates of A at critical pos of A
-        //branchCandidates.clear(lastBranching.candidate);//since we're deleting B, guessing this candidate led to failure -> it is not part of solution, we need to delete it
+        //val branchCandidates = this.currentCandidates!!.get(lastBranching.position!!);//candidates of A at critical pos of A
+        currentCandidates!![lastBranching.position!!]!!.clear(lastBranching.candidate);//since we're deleting B, guessing this candidate led to failure -> it is not part of solution, we need to delete it
         branchPool!!.recycleLastBranching()
         positionPool!!.returnPositionMap()
         //if (branchCandidates.isEmpty()) {
@@ -231,10 +229,10 @@ class SolverSudoku : Sudoku {
         //}
     }
 
-    val lastBranch: Branching?
-        get() = branchings!!.peek()
+    val lastBranch: Branching
+        get() = branchings.peek()
     val firstBranchPosition: Position?
-        get() = branchings!!.peek()!!.position
+        get() = branchings.peek()!!.position
 
     /**
      * Updatet die Kandidatenlisten aller Felder dahingehend, dass alle Kandidaten, die die Constraints bei deren
@@ -316,9 +314,8 @@ class SolverSudoku : Sudoku {
                     cells!![uPos]!!.setCurrentValue(currentCandidate, false)
                     checkedConstraints = constraints!![uPos]!!
                     for (checkedConstraint in checkedConstraints) {
-                        if (!checkedConstraint.isSaturated(this)) currentCandidates!![uPos]!!.clear(
-                            currentCandidate
-                        )
+                        if (!checkedConstraint.isSaturated(this))
+                            currentCandidates!![uPos]!!.clear(currentCandidate)
                     }
                     cells!![uPos]!!.setCurrentValue(Cell.EMPTYVAL, false)
                 }
@@ -342,7 +339,7 @@ class SolverSudoku : Sudoku {
         cells!![pos]!!.setCurrentValue(candidate, false)
         currentCandidates!![pos]!!.clear()
         if (hasBranch())
-            branchings!!.peek()!!.solutionsSet.add(pos)
+            branchings.peek()!!.solutionsSet.add(pos)
         updateCandidates(pos, candidate)
     }
 
@@ -352,7 +349,7 @@ class SolverSudoku : Sudoku {
      * @return true, falls auf diesem Sudoku ein Branch erzeugt wurde, false falls nicht
      */
     fun hasBranch(): Boolean {
-        return branchings!!.isNotEmpty()
+        return branchings.isNotEmpty()
     }
 
     /**
@@ -360,11 +357,11 @@ class SolverSudoku : Sudoku {
      * currently used.
      * @return
      * 0 if no branching has taken place, i.e. all logically derived, no guessing
-     * 1 if 1 guess (even if we guess 4 first, run into dead end and guess 5 that's one guess!)
+     * 1 if 1 guess (even if we guess '4' first, run into dead end and guess '5' that's one guess!)
      * ...
      */
     val branchLevel: Int
-        get() = branchings!!.size
+        get() = branchings.size
 
     /**
      * Gibt die Kandidatenliste der spezifizierten Position zurück.

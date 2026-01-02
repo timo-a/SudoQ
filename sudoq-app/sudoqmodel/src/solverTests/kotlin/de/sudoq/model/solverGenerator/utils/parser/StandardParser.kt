@@ -17,7 +17,7 @@ class StandardParser(): SudokuParser() {
             init {
                 for ((y, row) in ss.withIndex())
                     for ((x, cellString) in row.withIndex()) {
-                        put(Position.get(x,y), parseCell(y*0+x, type, cellString))
+                        put(Position[x, y], parseCell(y*9+x, type, cellString))
                     }
             }
         }

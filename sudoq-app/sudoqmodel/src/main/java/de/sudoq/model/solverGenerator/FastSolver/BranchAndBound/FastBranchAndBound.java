@@ -85,6 +85,9 @@ public class FastBranchAndBound extends Solver {
         return solved;
     }
 
+    /***
+     * @deprecated Standard16x16RegressionTest::testR2 times out
+     * */
     public boolean solveAll2() {
 
 
@@ -131,9 +134,10 @@ public class FastBranchAndBound extends Solver {
             ////////////////////////
 
             // UNCOMMENT THE FOLLOWING TO PRINT THE WHOLE SUDOKU AFTER EACH LOOP
-            /*if(solver_counter % 1000 == 0){
+            /*if(solver_counter % 1000 != -1){
                 System.out.println("sc: "+ solver_counter );
-                print9x9(sudoku);
+                //print9x9(solverSudoku);
+                System.out.println(solverSudoku.toString());
             }*/
         }
 

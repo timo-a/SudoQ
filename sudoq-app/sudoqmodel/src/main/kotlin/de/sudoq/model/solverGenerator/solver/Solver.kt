@@ -131,6 +131,7 @@ open class Solver(sudoku: Sudoku) {
 
         //loop until we get the solution for a field TODO what if a helper solves a field directly? solvedField would never be true right? I DONT THINK WE ARE SUPPOSED TO 'SOLVE' IN HELPERS, JUST FIND
         while (!solvedField && didUpdate && !isIncorrect) {
+            println("loop in solveOne")
             didUpdate = false
             if (isFilledCompletely) return null // if every field is already filled, no solution can be found, because that already happened
             if (isInvalid) {
@@ -142,7 +143,8 @@ open class Solver(sudoku: Sudoku) {
                 }
             }
 
-            /* try to solve fields where only one note is remaining TODO why not just make a naked single?!(efficiency?)*/for (p in solverSudoku.positions!!) {
+            // try to solve fields where only one note is remaining TODO why not just make a naked single?!(efficiency?)
+            for (p in solverSudoku.positions!!) {
                 val b: BitSet = solverSudoku.getCurrentCandidates(p)
                 if (b.cardinality() == 1) { //we found a field where only one note remains
                     if (!solverSudoku.hasBranch()) {
@@ -152,6 +154,7 @@ open class Solver(sudoku: Sudoku) {
                             solverSudoku.getCell(p)!!
                         )
                         val deriv = SolveDerivation()
+                        deriv.setDescription("Custom Derivation in solveOne ~ Naked Single")
                         deriv.addDerivationCell(
                             DerivationCell(
                                 p,
@@ -173,15 +176,25 @@ open class Solver(sudoku: Sudoku) {
 
             // According to their priority use the helpers until one of them can
             // be applied
-            if (!solvedField && !didUpdate && !isIncorrect) for (hel in helper) if (hel.update(true)) {
-                solution.addDerivation(hel.derivation!!) //we don't check whether branches exist here?!
-                didUpdate = true
-                break
-            }
+            if (!solvedField && !didUpdate && !isIncorrect) {
+                var foundHelper = false
+                for (hel in helper) {
+                    println("try helper: ${hel.hintType}")
+                    if (hel.update(true)) {
+                        solution.addDerivation(hel.derivation!!) //we don't check whether branches exist here?!
+                        didUpdate = true
+                        foundHelper = true
+                        break
+                    }
+                }
+                if (!foundHelper) println("Kein Helfer gefunden")
+            } else {println("skip helperloop")}
         }
 
         // Apply solution if wanted
-        if (!isIncorrect && solvedField && applySolution) solution.action!!.execute()
+        if (!isIncorrect && solvedField && applySolution) {
+            solution.action!!.execute()
+        }
         return if (!isIncorrect && solvedField) solution else null
     }
 
@@ -197,7 +210,9 @@ open class Solver(sudoku: Sudoku) {
      * Gibt an, ob die Lösungen direkt in das Sudoku eingetragen werden sollen
      * @return true, falls das Sudoku gelöst werden konnte, false falls nicht
      */
+    @Deprecated("this function is currently not used in main -> remove it sometime")
     fun solveAll(buildDerivation: Boolean, applySolutions: Boolean): Boolean {
+        //todo remove this function, and maybe actions alltogether
         //System.out.println("start of solveAll2");
         //print9x9(sudoku);
         val copy = PositionMap<Int>(solverSudoku.sudokuType!!.size!!)
@@ -283,6 +298,7 @@ open class Solver(sudoku: Sudoku) {
      *
      * @return Ein ComplexityRelation-Objekt, welches die Constraint-gemäße Lösbarkeit beschreibt
      */
+    @Deprecated("this function is currently not used in main and often slow in tests => investigate!")
     fun validate(solution: PositionMap<Int?>?): ComplexityRelation {
         var result = ComplexityRelation.INVALID
         var solved = false
@@ -517,10 +533,11 @@ open class Solver(sudoku: Sudoku) {
         return if (!solverSudoku.hasBranch()) {
             Branchresult.UNSOLVABLE // possible output nr1: insolvable
         } else {
-            val branchingPos = solverSudoku.lastBranch!!.position
-            val branchingCandidate = solverSudoku.lastBranch!!.candidate
+            val branchingPos = solverSudoku.lastBranch.position
+            val branchingCandidate = solverSudoku.lastBranch.candidate
 
-            /* delete all solutions (including the backtracking-derivation) since the last branch */if (buildDerivation) {
+            /* delete all solutions (including the backtracking-derivation) since the last branch */
+            if (buildDerivation) {
                 while (lastSolutions!!.size > branchPoints!!.peek()) {
                     lastSolutions!!.removeAt(lastSolutions!!.size - 1)
                 }
@@ -530,7 +547,7 @@ open class Solver(sudoku: Sudoku) {
             val candidates = solverSudoku.getCurrentCandidates(branchingPos!!)
             val nextCandidate = candidates.nextSetBit(branchingCandidate + 1)
             if (nextCandidate != -1) {
-
+                //try the next candidate todo: better to try helpers first?
                 //TODO new Backtracking(this.sudoku).update(tre)
                 solverSudoku.startNewBranch(branchingPos, nextCandidate)
                 if (buildDerivation) {
@@ -552,7 +569,7 @@ open class Solver(sudoku: Sudoku) {
                 }
                 Branchresult.SUCCESS
             } else {
-                //no candidate was applicable -> backtrack even further
+                //no candidate left -> backtrack even further
                 advanceBranching(buildDerivation)
             }
         }
@@ -591,6 +608,7 @@ if there is another candidate -> advance
                     if (buildDerivation) {
                         val newSolution = Solution()
                         newSolution.addDerivation(hel.derivation!!)
+                        //todo we are not adding actions right now...
                         lastSolutions!!.add(newSolution)
                         if (hel is Backtracking) {
                             branchPoints!!.push(lastSolutions!!.size - 1)

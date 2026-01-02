@@ -19,12 +19,6 @@ public class SubsetHelperTests extends HiddenHelper{
 		super(new SolverSudoku(new Sudoku(TypeBuilder.get99())),4,0 );
 	}
 
-    @BeforeClass
-	public static void init() {
-		Utility.copySudokus();
-		//Profile.getInstance();
-	}
-
 	@Test
 	public void testGetNextSubset(){
 

@@ -4,14 +4,10 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
-import de.sudoq.model.TestWithInitCleanforSingletons;
-import de.sudoq.model.Utility;
-import de.sudoq.model.utility.FileManager;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.helper.NakedHelper;
 import de.sudoq.model.solverGenerator.solver.helper.SubsetHelper;
@@ -23,35 +19,11 @@ import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 /**
  * Created by timo on 15.10.16.
  */
-public class NakedHelperTests extends NakedHelper {
-
-
-	@BeforeClass
-	public static void init() {
-		TestWithInitCleanforSingletons.legacyInit();
-	}
-
-	@AfterClass
-	public static void clean() throws IOException, SecurityException, NoSuchFieldException, IllegalArgumentException,
-			IllegalAccessException {
-        java.lang.reflect.Field f = FileManager.class.getDeclaredField("profiles");
-        f.setAccessible(true);
-        f.set(null, null);
-        java.lang.reflect.Field s = FileManager.class.getDeclaredField("sudokus");
-        s.setAccessible(true);
-        s.set(null, null);
-        Utility.deleteDir(Utility.profiles);
-        Utility.deleteDir(Utility.sudokus);
-	}
-
-    public NakedHelperTests(){
-        super(new SolverSudoku(new Sudoku(TypeBuilder.get99())),4,0 );
-    }
+public class NakedHelperTests {
 
     @Test(expected = IllegalArgumentException.class)
     public void testIllegalArgumentLevelTooLow() {

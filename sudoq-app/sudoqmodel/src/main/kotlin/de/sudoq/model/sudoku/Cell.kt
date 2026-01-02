@@ -12,7 +12,7 @@ import java.util.*
 
 /**
  * A Cell describes an atomic unit in a sudoku board. It holds information about the current value,
- * editierbility, notes and the correct solution. It extends OberservableModel so changes in value
+ * editability, notes and the correct solution. It extends OberservableModel so changes in value
  * und notes can be observed.
  */
 class Cell(editable: Boolean, solution: Int, id: Int, numberOfValues: Int) :
@@ -43,7 +43,8 @@ class Cell(editable: Boolean, solution: Int, id: Int, numberOfValues: Int) :
      * @param id id of this cell
      * @param numberOfValues the number of values this cell can take (e.g. 9 for regular sudoku)
      */
-    constructor(id: Int, numberOfValues: Int) : this(true, EMPTYVAL, id, numberOfValues)
+    constructor(id: Int, numberOfValues: Int) : this(true, EMPTYVAL//todo emptyval as solution is weird, bug?
+        , id, numberOfValues)
 
     /** The current value in this cell TODO why are there currentValue and currentVal? */
     var currentValue: Int

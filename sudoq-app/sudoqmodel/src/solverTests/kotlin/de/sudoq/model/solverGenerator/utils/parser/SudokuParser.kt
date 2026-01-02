@@ -24,9 +24,7 @@ open class SudokuParser {
     }
 
     protected fun parseCell(id: Int, type: SudokuType, s: String): Cell {
-        var c = Cell(id, type.numberOfSymbols)
-
-        fun a(s: String): Boolean {return true}
+        val c = Cell(id, type.numberOfSymbols)
 
         when(s) {
             //single digit -> already solved

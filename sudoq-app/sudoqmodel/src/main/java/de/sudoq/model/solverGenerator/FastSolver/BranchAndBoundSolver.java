@@ -17,7 +17,7 @@ public class BranchAndBoundSolver implements FastSolver {
     @Override
     public boolean hasSolution() {
         //return new FastBranchAndBound(s).solveAll(false, false);
-        return new FastBranchAndBound(s).solveAll2();
+        return new FastBranchAndBound(s).solveAll();
     }
 
     @Override

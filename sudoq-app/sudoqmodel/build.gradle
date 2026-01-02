@@ -1,8 +1,8 @@
 apply plugin: 'java'
 apply plugin: 'kotlin'
 
-targetCompatibility = '1.7'
-sourceCompatibility = '1.7'
+targetCompatibility = '1.8'
+sourceCompatibility = '1.8'
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
@@ -131,6 +131,18 @@ compileKotlin {
     }
 }
 compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+compileSolvertestsKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+compileKotlintestsKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
     }

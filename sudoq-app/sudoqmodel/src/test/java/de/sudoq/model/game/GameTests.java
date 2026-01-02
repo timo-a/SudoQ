@@ -7,66 +7,75 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.sudoq.model.Utility;
 import de.sudoq.model.actionTree.ActionTreeElement;
 import de.sudoq.model.actionTree.NoteActionFactory;
 import de.sudoq.model.actionTree.SolveActionFactory;
-import de.sudoq.model.persistence.IRepo;
-import de.sudoq.model.profile.ProfileSingleton;
 import de.sudoq.model.solverGenerator.Generator;
 import de.sudoq.model.solverGenerator.GeneratorCallback;
 import de.sudoq.model.solverGenerator.solution.Solution;
+import de.sudoq.model.solverGenerator.utils.PrettySudokuRepo2;
+import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests;
 import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
 public class GameTests {
 
-	private static Sudoku sudoku;
+	private static SudokuTypeRepo4Tests sudokuTypeRepo = new SudokuTypeRepo4Tests();
 
-	//this is a dummy so it compiles todo use xmls from resources
-	private static IRepo<SudokuType> sudokuTypeRepo;// = new SudokuTypeRepo();
+    private PrettySudokuRepo2 sudokuRepo = new PrettySudokuRepo2(sudokuTypeRepo);
 
-	@BeforeClass
-	public static void beforeClass() {
-		Utility.copySudokus();
-		File profileDir = new File("/tmp/sudoq/GameTests/profile");
-		//ProfileSingleton.Companion.getInstance(profileDir);
+    /**
+     * This is the former @BeforeClass init method. it takes suspiciously long to generate a sudoku todo inestigate!
+     * */
+    @Test
+    public void debugGeneration() throws InterruptedException, ExecutionException {
+        TypeBuilder.get99(); //just to force initialization of filemanager
 
-		TypeBuilder.get99(); //just to force initialization of filemanager
-		
-		GeneratorCallback gc = new GeneratorCallback() {
-			@Override
-			public void generationFinished(Sudoku sudoku) {
-				GameTests.sudoku = sudoku;
-			}
+        CompletableFuture<Sudoku> future = new CompletableFuture<>();
 
-			@Override
-			public void generationFinished(Sudoku sudoku, List<Solution> sl) {
-				GameTests.sudoku = sudoku;
-			}
-		};
-		
-		new Generator(sudokuTypeRepo).generate(SudokuTypes.standard9x9, Complexity.easy, gc);
-	}
+        GeneratorCallback gc = new GeneratorCallback() {
+            @Override
+            public void generationFinished(Sudoku sudoku) {
+                future.complete(sudoku);
+            }
+
+            @Override
+            public void generationFinished(Sudoku sudoku, List<Solution> sl) {
+                future.complete(sudoku);
+            }
+        };
+        new Generator(sudokuTypeRepo).generate(SudokuTypes.standard9x9, Complexity.easy, gc);
+        assertTimeoutPreemptively(Duration.of(60, ChronoUnit.SECONDS), () -> {
+            future.get();
+        });
+        Sudoku sudoku = future.get();
+        assertNotNull("sudoku is null", sudoku);
+    }
 
 	@Test
-	public void testInstanciation() {
+	public void testInstantiation() {
 		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku());
 		assertEquals(game.getId(), 2);
 		assertNotNull(game.getStateHandler());
@@ -304,22 +313,10 @@ public class GameTests {
 
 	@Test
 	public synchronized void testSolve() {
-		System.out.println("before while");
-		
-		int counter = 0;
-		while (GameTests.sudoku == null && counter<120) {
-			try {
-				wait(1000);
-				counter++;
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		if(GameTests.sudoku == null)
-			throw new IllegalStateException("infinite loop!");
-		
-        System.out.println("we passed the while loop!");
-		Game game = new Game(1, sudoku);
+        Path sudokuPath = Paths.get("sudokus/9_lockedCandidates_1.pretty");
+        Sudoku sudoku = sudokuRepo.read(sudokuPath, Complexity.easy);
+        assertNotNull(sudoku);
+        Game game = new Game(1, sudoku);
 		ArrayList<Cell> unsolvedCells = new ArrayList<Cell>();
 		for (Cell f : sudoku) {
 			if (f.isEditable()) {
@@ -357,13 +354,9 @@ public class GameTests {
 
 	@Test
 	public synchronized void testGoToLastCorrectState() {
-		while (sudoku == null) {
-			try {
-				wait(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+        Path sudokuPath = Paths.get("sudokus/9_lockedCandidates_1.pretty");
+        Sudoku sudoku = sudokuRepo.read(sudokuPath, Complexity.easy);
+        assertNotNull(sudoku);
 		Game game = new Game(1, sudoku);
 
 		Cell unsolvedCell = null;
@@ -377,7 +370,7 @@ public class GameTests {
 
 		int oldAssistanceCost = game.getAssistancesCost();
 		game.goToLastCorrectState();
-		assertTrue(game.getAssistancesCost() - 3 == oldAssistanceCost);
+        assertEquals(oldAssistanceCost+3, game.getAssistancesCost());
 		oldAssistanceCost = game.getAssistancesCost();
 
 		if (unsolvedCell.getSolution() < 8) {
@@ -387,9 +380,9 @@ public class GameTests {
 		}
 
 		game.goToLastCorrectState();
-		assertTrue(game.getAssistancesCost() - 3 == oldAssistanceCost);
+        assertEquals(oldAssistanceCost + 3, game.getAssistancesCost());
 		oldAssistanceCost = game.getAssistancesCost();
-		assertTrue(unsolvedCell.getCurrentValue() == Cell.EMPTYVAL);
+        assertEquals(Cell.EMPTYVAL, unsolvedCell.getCurrentValue());
 		assertTrue(game.getCurrentState().isCorrect());
 	}
 

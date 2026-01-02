@@ -124,8 +124,9 @@ class GenerationAlgo(
             removeDefinedCells(5)
 
             // Define average number of fields
-            while (definedCells.size < fieldsToDefineDynamic) if (addDefinedCell() == null) //try to add field, if null returned i.e. nospace / invalid
-                removeDefinedCells(5) //remove 5 fields
+            while (definedCells.size < fieldsToDefineDynamic)
+                if (addDefinedCell() == null) //try to add field, if null returned i.e. nospace / invalid
+                    removeDefinedCells(5) //remove 5 fields
             if (fieldsToDefineDynamic > 0 && random.nextFloat() < 0.2)
                 fieldsToDefineDynamic-- //to avoid infinite loop slowly relax
             fs = FastSolverFactory.getSolver(sudoku)
@@ -210,6 +211,9 @@ class GenerationAlgo(
                     }
 
                 }
+                ComplexityRelation.CONSTRAINT_SATURATION -> {} //do nothing
+
+                else -> {throw IllegalStateException("Unexpected value: $rel")}
             }
             plusminuscounter++
         }

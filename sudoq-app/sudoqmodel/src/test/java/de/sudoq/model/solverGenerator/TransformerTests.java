@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import java.util.List;
 
-import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.transformations.Transformer;
 import de.sudoq.model.sudoku.Constraint;
@@ -15,7 +14,7 @@ import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
-public class TransformerTests extends TestWithInitCleanforSingletons implements GeneratorCallback {
+public class TransformerTests implements GeneratorCallback {
 
 
 	PositionMap<Integer> map = new PositionMap<Integer>(Position.get(9, 9));

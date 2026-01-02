@@ -1,6 +1,7 @@
 package de.sudoq.model.solverGenerator.utils
 
 import de.sudoq.model.solverGenerator.utils.parser.SamuraiParser
+import de.sudoq.model.solverGenerator.utils.parser.StandardParser
 import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
@@ -16,7 +17,5 @@ class PrettySamuraiRepo : PrettySudokuRepo(SudokuTypes.samurai) {
         val sudoku = parser.parseSudoku(id, type, complexity, ls)
         return sudoku
     }
-
-
 
 }
