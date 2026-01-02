@@ -400,11 +400,9 @@ public class GameTests {
 		as.setAssistance(Assistances.autoAdjustNotes);
 		game.setAssistances(as);
 
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
-				game.addAndExecute(new NoteActionFactory().createAction(1, game.getSudoku().getCell(Position.get(i, j))));
-				assertTrue(game.getSudoku().getCell(Position.get(i, j)).isNoteSet(1));
-			}
+        for(Position pos: game.getSudoku().getSudokuType().getValidPositions()) {
+            game.addAndExecute(new NoteActionFactory().createAction(1, game.getSudoku().getCell(pos)));
+            assertTrue(game.getSudoku().getCell(pos).isNoteSet(1));
 		}
 
 		assertTrue(game.solveCell());

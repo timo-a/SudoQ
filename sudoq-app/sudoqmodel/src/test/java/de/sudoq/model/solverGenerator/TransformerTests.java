@@ -5,6 +5,10 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.function.IntFunction;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.transformations.Transformer;
@@ -265,7 +269,7 @@ public class TransformerTests implements GeneratorCallback {
 
 	public static void printSudoku9x9(Sudoku sudoku, int length) {
 		System.out.println("tada:");
-		for (int y = 0; y < length; y++) {
+    	for (int y = 0; y < length; y++) {
 			for (int x = 0; x < length; x++)
 				System.out.print(" " + sudoku.getCell(Position.get(x, y)).getSolution());
 			System.out.println();
@@ -273,7 +277,7 @@ public class TransformerTests implements GeneratorCallback {
 		System.out.println();
 	}
 
-	@Override
+    @Override
 	public void generationFinished(Sudoku sudoku) {
 		assertTrue(validSudoku(sudoku));
 		// printSudoku9x9(sudoku, 9);

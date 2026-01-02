@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import de.sudoq.model.utility.FileManager;
 import de.sudoq.model.sudoku.Cell;
@@ -72,12 +74,9 @@ public abstract class Utility {
 
     /** returns all positions of non-null Fields of sudoku */
     public static List<Position> getPositionsByRow(Sudoku sudoku){
-        List<Position> p = new ArrayList<>();
-        for (int y = 0; y < sudoku.getSudokuType().getSize().getY(); y++)
-            for (int x = 0; x < sudoku.getSudokuType().getSize().getX(); x++)
-                if (sudoku.getCell(Position.get(x, y)) != null)
-                    p.add(Position.get(x, y));
-        return p;
+        return StreamSupport.stream(sudoku.getSudokuType().getValidPositions().spliterator(), false)
+                .filter(p -> sudoku.getCell(p) != null)
+                .collect(Collectors.toList());
     }
 
 

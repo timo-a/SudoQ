@@ -103,14 +103,12 @@ public class SudokuMockUps {
     public static Sudoku stringToSudoku(SudokuTypes type, String pattern){
         Sudoku sudoku = new SudokuBuilder(type, str).createSudoku();
         sudoku.setComplexity(Complexity.arbitrary);
-        int yLim = sudoku.getSudokuType().getSize().getY();
         int xLim = sudoku.getSudokuType().getSize().getX();
 
         String[] candidates = pattern.split("\\s+");
-        for(int y=0; y<yLim; y++)
-            for(int x=0; x<xLim; x++){
-                String currentEntry = candidates[xLim*y+x];
-                Cell f =  sudoku.getCell(Position.get(x, y));
+        for(Position pos : sudoku.getSudokuType().getValidPositions()) {
+            String currentEntry = candidates[xLim * pos.getY() + pos.getX()];
+                Cell f =  sudoku.getCell(pos);
                 clearCandidates(f, sudoku);
 
                 if("0123456789".contains(currentEntry))
@@ -121,32 +119,32 @@ public class SudokuMockUps {
                     for(Character c:currentEntry.toCharArray())
                         f.toggleNote(Character.getNumericValue(c)-1);
 
-            }
+         }
         return sudoku;
     }
 
     private static Sudoku transform(Sudoku sudoku, String pattern){
         String[] candidates = pattern.split("\\s+");
-        for(int y=0; y<9; y++)
-            for(int x=0; x<9; x++){
-                String gu = candidates[9*y+x];
-                Cell f =  sudoku.getCell(Position.get(x, y));
-                clearCandidates(f,sudoku);
+        for (Position pos : sudoku.getSudokuType().getValidPositions()) {
+            String gu = candidates[9* pos.getY()+pos.getX()];
+            Cell f =  sudoku.getCell(pos);
+            clearCandidates(f,sudoku);
 
-                switch (gu.length()){
-                    case 0: break;
-                    case 1: if(gu.charAt(0) == '.')
-                        ;//pass '.' -> kein eintrag, keine notizen
-                    else
-                        f.setCurrentValue(Integer.parseInt(gu)-1);
-                        break;
-                    default:
-                        for(Character c:gu.toCharArray())
-                            f.toggleNote(Character.getNumericValue(c)-1);
-
-
+            switch (gu.length()){
+                case 0: break;
+                case 1: {
+                    if(gu.charAt(0) == '.') {
+                        ; //pass '.' -> kein eintrag, keine notizen
+                    } else {
+                        f.setCurrentValue(Integer.parseInt(gu) - 1);
+                    }
+                    break;
                 }
-            }
+                default:
+                    for(Character c:gu.toCharArray())
+                        f.toggleNote(Character.getNumericValue(c)-1);
+                }
+        }
         return sudoku;
     }
 
