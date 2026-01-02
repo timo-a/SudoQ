@@ -159,7 +159,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
 
     /** Methods  */
     private fun initializeSymbolSet() {
-        currentSymbolSet = when (game!!.sudoku!!.sudokuType!!.numberOfSymbols) {
+        currentSymbolSet = when (game!!.sudoku!!.sudokuType.numberOfSymbols) {
             4 -> Symbol.MAPPING_NUMBERS_FOUR
             6 -> Symbol.MAPPING_NUMBERS_SIX
             9 -> Symbol.MAPPING_NUMBERS_NINE
@@ -382,7 +382,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
      * Setzt den Text für Typ und Schwierigkeit des aktuellen Sudokus.
      */
     private fun setTypeText() {
-        val type = Utility.type2string(this, game!!.sudoku!!.sudokuType!!.enumType!!)
+        val type = Utility.type2string(this, game!!.sudoku!!.sudokuType.enumType!!)
         val comp = Utility.complexity2string(this, game!!.sudoku!!.complexity!!)
         val ab = supportActionBar
         ab!!.title = type
@@ -453,7 +453,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
         instance!!.setMarking(currentControlsView, CellViewStates.KEYBOARD)
         val keyboardView = findViewById<VirtualKeyboardLayout>(R.id.virtual_keyboard)
         instance!!.setMarking(keyboardView, CellViewStates.KEYBOARD)
-        keyboardView.refresh(game!!.sudoku!!.sudokuType!!.numberOfSymbols)
+        keyboardView.refresh(game!!.sudoku!!.sudokuType.numberOfSymbols)
     }
 
     /**

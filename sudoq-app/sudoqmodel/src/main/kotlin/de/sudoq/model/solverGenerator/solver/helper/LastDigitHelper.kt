@@ -47,7 +47,7 @@ class LastDigitHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudok
         var foundOne = false
         var candidate: Position?
         val remaining = Vector<Position>()
-        for (c in sudoku.sudokuType!!) if (c.hasUniqueBehavior()) {
+        for (c in sudoku.sudokuType) if (c.hasUniqueBehavior()) {
             remaining.clear()
             candidate = onlyOneLeft(c.getPositions(), remaining)
             if (candidate != null) {
@@ -61,7 +61,7 @@ class LastDigitHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudok
 
                 //make list with all possible values
                 val possibleSolutions: MutableList<Int> =
-                    ArrayList(sudoku.sudokuType!!.symbolIterator as AbstractList<Int>)
+                    ArrayList(sudoku.sudokuType.symbolIterator as AbstractList<Int>)
 
                 /* cut away all other solutions */possibleSolutions.removeAll(otherSolutions)
                 if (possibleSolutions.size == 1) {

@@ -49,7 +49,7 @@ abstract class SubsetHelper protected constructor(
      * All [Constraint]s of the Sudoku.
      */
     //TODO see if it can be replaced by iterator or just the sudokutype, because we dont want to modify the list of constraints!!!
-    private var allConstraints: Iterator<Constraint> = this.sudoku.sudokuType!!.iterator()
+    private var allConstraints: Iterator<Constraint> = this.sudoku.sudokuType.iterator()
 
     /**
      * Searches for a subset with the size `level` (specified in the constructor),

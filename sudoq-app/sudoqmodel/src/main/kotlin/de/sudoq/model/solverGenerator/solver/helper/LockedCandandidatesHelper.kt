@@ -22,7 +22,7 @@ class LockedCandandidatesHelper(sudoku: SolverSudoku, complexity: Int) :
     override fun update(buildDerivation: Boolean): Boolean {
         var success = false
         val constraints: MutableList<Constraint> = ArrayList()
-        for (c in sudoku.sudokuType!!) {
+        for (c in sudoku.sudokuType) {
             constraints.add(c)
         }
         /* compare all constraints */for (i in constraints.indices) for (j in i + 1 until constraints.size) {

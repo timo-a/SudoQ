@@ -211,7 +211,7 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
     override fun equals(other: Any?): Boolean {
         if (other != null && other is Sudoku) {
             val complexityMatch = complexity === other.complexity
-            val typeMatch = sudokuType!!.enumType === other.sudokuType!!.enumType
+            val typeMatch = sudokuType.enumType === other.sudokuType.enumType
             var fieldsMatch = true
             for (f in cells!!.values) {
                 if (!other.hasCell(f.id) || f != other.getCell(f.id)) {
@@ -242,11 +242,11 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
     //debug
     override fun toString(): String {
         val sb = StringBuilder()
-        val OFFSET = if (sudokuType!!.numberOfSymbols < 10) "" else " "
-        val EMPTY = if (sudokuType!!.numberOfSymbols < 10) "x" else "xx"
-        val NONE = if (sudokuType!!.numberOfSymbols < 10) " " else "  "
-        for (j in 0 until sudokuType!!.size!!.y) {
-            for (i in 0 until sudokuType!!.size!!.x) {
+        val OFFSET = if (sudokuType.numberOfSymbols < 10) "" else " "
+        val EMPTY = if (sudokuType.numberOfSymbols < 10) "x" else "xx"
+        val NONE = if (sudokuType.numberOfSymbols < 10) " " else "  "
+        for (j in 0 until sudokuType.size!!.y) {
+            for (i in 0 until sudokuType.size!!.x) {
                 val f = getCell(Position[i, j])
                 var op: String
                 if (f != null) { //feld existiert

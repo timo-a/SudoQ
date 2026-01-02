@@ -86,7 +86,7 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
         val sudoku = game.sudoku
         val sudokuType = sudoku!!.sudokuType
         val isMarkWrongSymbolAvailable = game.isAssistanceAvailable(Assistances.markWrongSymbol)
-        sudokuCellViews = Array(sudokuType!!.size!!.x + 1) { arrayOfNulls(sudokuType.size!!.y + 1) }
+        sudokuCellViews = Array(sudokuType.size!!.x + 1) { arrayOfNulls(sudokuType.size!!.y + 1) }
         for (p in sudokuType.validPositions) {
             val cell = sudoku.getCell(p)
             if (cell != null) {
@@ -101,8 +101,8 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
                 this.addView(sudokuCellViews!![x][y], params)
             }
         }
-        val x = sudoku.sudokuType!!.size!!.x //why all this????
-        val y = sudoku.sudokuType!!.size!!.y
+        val x = sudoku.sudokuType.size!!.x //why all this????
+        val y = sudoku.sudokuType.size!!.y
         val params = LayoutParams(currentCellViewSize, defaultCellViewSize)
         params.topMargin = (y - 1) * currentCellViewSize + (y - 1) + currentTopMargin
         params.leftMargin = (x - 1) * currentCellViewSize + (x - 1) + currentLeftMargin
@@ -229,7 +229,7 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
         Log.d(LOG_TAG, "SudokuView height intern: " + this.measuredHeight)
         val sudokuType = game.sudoku!!.sudokuType
         val size = if (width < height) width else height
-        val numberOfCells = if (width < height) sudokuType!!.size!!.x else sudokuType!!.size!!.y
+        val numberOfCells = if (width < height) sudokuType.size!!.x else sudokuType.size!!.y
         defaultCellViewSize = (size - (numberOfCells + 1) * spacing) / numberOfCells
         // this.currentCellViewSize = this.defaultCellViewSize;
         val cellSizeX =
@@ -294,7 +294,7 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
      */
     override fun registerListener(listener: CellInteractionListener) {
         val sudokuType = game.sudoku!!.sudokuType
-        for (p in sudokuType!!.validPositions) getSudokuCellView(p).registerListener(listener)
+        for (p in sudokuType.validPositions) getSudokuCellView(p).registerListener(listener)
     }
 
     /**
@@ -302,7 +302,7 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
      */
     override fun removeListener(listener: CellInteractionListener) {
         val sudokuType = game.sudoku!!.sudokuType
-        for (p in sudokuType!!.validPositions) getSudokuCellView(p).removeListener(listener)
+        for (p in sudokuType.validPositions) getSudokuCellView(p).removeListener(listener)
     }
 
     /**
@@ -341,7 +341,7 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
         // this.currentCellViewSize = this.defaultCellViewSize;
         setWillNotDraw(false)
         paint = Paint()
-        boardPainter = BoardPainter(this, game.sudoku!!.sudokuType!!)
+        boardPainter = BoardPainter(this, game.sudoku!!.sudokuType)
         CellViewPainter.instance!!.setSudokuLayout(this)
         hintPainter = HintPainter(this)
         inflateSudoku()

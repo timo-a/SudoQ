@@ -71,7 +71,7 @@ class GenerationAlgo(
      * Schwierigkeitsgrades
      */
     private val desiredComplexityConstraint: ComplexityConstraint? =
-        sudoku.sudokuType!!.buildComplexityConstraint(sudoku.complexity)
+        sudoku.sudokuType.buildComplexityConstraint(sudoku.complexity)
 
 
     /**
@@ -108,7 +108,7 @@ class GenerationAlgo(
         cellsToDefine = getNumberOfCellsToDefine(sudoku.sudokuType, desiredComplexityConstraint)
 
         //A mapping from position to solution
-        var solution = PositionMap<Int?>(sudoku.sudokuType!!.size!!)
+        var solution = PositionMap<Int?>(sudoku.sudokuType.size!!)
         val iteration = 0
         //System.out.println("Fields to define: "+fieldsToDefine);
 
@@ -283,7 +283,7 @@ class GenerationAlgo(
      * e.g. for standard 9x9 and 0.5 -> 40  */
     private fun getReallocationAmount(st: SudokuType, percentage: Double): Int {
         var numberOfPositions = 0
-        for (p in sudoku.sudokuType!!.validPositions) numberOfPositions++
+        for (p in sudoku.sudokuType.validPositions) numberOfPositions++
         val reallocationAmount =
             (numberOfPositions * percentage).toInt() //remove/delete up to 10% of board
         return Math.max(1, reallocationAmount) // at least 1
@@ -304,8 +304,8 @@ class GenerationAlgo(
      */
     private fun addDefinedCell(): Position? {
         //TODO not sure what they do
-        val xSize = sudoku.sudokuType!!.size!!.x
-        val ySize = sudoku.sudokuType!!.size!!.y
+        val xSize = sudoku.sudokuType.size!!.x
+        val ySize = sudoku.sudokuType.size!!.y
 
         // Ein Array von Markierungen zum Testen, welches Felder belegt werden können
         /*true means marked, i.e. already defined or not part of the game e.g. 0,10 for samurai
@@ -336,7 +336,7 @@ class GenerationAlgo(
         }
 
         //construct a list of symbols starting at arbitrary point. there is no short way to do this without '%' 
-        val numSym = sudoku.sudokuType!!.numberOfSymbols
+        val numSym = sudoku.sudokuType.numberOfSymbols
         val offset = random.nextInt(numSym)
         val symbols: Queue<Int> = LinkedList()
         for (i in 0 until numSym) symbols.add(i)
@@ -348,7 +348,7 @@ class GenerationAlgo(
         for (s in symbols) {
             sudoku.getCell(p!!)!!.setCurrentValue(s, false)
             //alle constraints saturiert?
-            valid = sudoku.sudokuType!!.all { it.isSaturated(sudoku) }
+            valid = sudoku.sudokuType.all { it.isSaturated(sudoku) }
 
             if (!valid)
                 sudoku.getCell(p)!!.setCurrentValue(Cell.EMPTYVAL, false)
@@ -431,7 +431,7 @@ class GenerationAlgo(
          */
         @JvmStatic ///todo Generator has same function...
         fun getPositions(sudoku: Sudoku): List<Position> {
-            val p: List<Position> = sudoku.sudokuType!!.validPositions
+            val p: List<Position> = sudoku.sudokuType.validPositions
                 .filter { sudoku.getCell(it) != null } //todo necessary?
                 .toList()
 

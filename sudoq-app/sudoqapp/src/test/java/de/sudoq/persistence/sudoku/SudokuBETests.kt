@@ -60,7 +60,7 @@ class SudokuBETests {
         val sudoku = Sudoku(sudokuType9x9)
         val sudokuBE = SudokuBE(
             sudoku.id, sudoku.transformCount,
-            sudoku.sudokuType!!, sudoku.complexity!!, sudoku.cells!!
+            sudoku.sudokuType, sudoku.complexity!!, sudoku.cells!!
         )
         val tree = sudokuBE.toXmlTree()
         val iterator: Iterator<XmlTree> = tree.getChildren()
@@ -78,7 +78,7 @@ class SudokuBETests {
         val sudoku = Sudoku(sudokuType9x9)
         val sudokuBE = SudokuBE(
             sudoku.id, sudoku.transformCount,
-            sudoku.sudokuType!!, sudoku.complexity!!, sudoku.cells!!
+            sudoku.sudokuType, sudoku.complexity!!, sudoku.cells!!
         )
         val tree = sudokuBE.toXmlTree()
         val iterator: Iterator<XmlTree> = tree.getChildren()
@@ -98,7 +98,7 @@ class SudokuBETests {
     @Test
     fun testFromXmlAdditionalChild() {
         val sudoku = Sudoku(sudokuType9x9)
-        val sudokuBE = SudokuBE(sudoku.id, sudoku.transformCount, sudoku.sudokuType!!,
+        val sudokuBE = SudokuBE(sudoku.id, sudoku.transformCount, sudoku.sudokuType,
             sudoku.complexity!!, sudoku.cells!!
         )
         val tree = sudokuBE.toXmlTree()

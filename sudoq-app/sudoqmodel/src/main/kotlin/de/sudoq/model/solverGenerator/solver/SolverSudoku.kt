@@ -66,7 +66,7 @@ class SolverSudoku : Sudoku {
      * Parameter and created object will be different objects with indepentent values,
      * can be modified independently
      */
-    constructor(sudoku: Sudoku) : super(sudoku.sudokuType!!) {
+    constructor(sudoku: Sudoku) : super(sudoku.sudokuType) {
         initializeSolverSudoku(sudoku, Initialization.NEW_CANDIDATES)
     }
 
@@ -80,7 +80,7 @@ class SolverSudoku : Sudoku {
      * @param mode
      * The initialization mode
      */
-    constructor(sudoku: Sudoku, mode: Initialization?) : super(sudoku.sudokuType!!) {
+    constructor(sudoku: Sudoku, mode: Initialization?) : super(sudoku.sudokuType) {
         initializeSolverSudoku(sudoku, mode)
     }
 
@@ -106,7 +106,7 @@ class SolverSudoku : Sudoku {
 
         // initialize the constraints lists for each position and the initial
         // candidates for each field
-        constraints = PositionMap(sudokuType!!.size!!)
+        constraints = PositionMap(sudokuType.size!!)
         for (p in positions!!)
             constraints!!.put(p, ArrayList())
 
@@ -116,13 +116,13 @@ class SolverSudoku : Sudoku {
         //this.positions.stream().forEach(p -> this.constraints.put(p, new ArrayList<>()));
 
         // add the constraints each position belongs to to the list
-        val allConstraints: Iterable<Constraint> = sudoku.sudokuType!!
+        val allConstraints: Iterable<Constraint> = sudoku.sudokuType
         for (constr in allConstraints)
             for (pos in constr.getPositions())
                 constraints!![pos]!!.add(constr)
 
         // initialize the candidates map
-        positionPool = PositionMapPool(sudokuType!!.size, positions)
+        positionPool = PositionMapPool(sudokuType.size, positions)
         branchPool = BranchingPool()
         currentCandidates = positionPool!!.positionMap
 
@@ -132,7 +132,7 @@ class SolverSudoku : Sudoku {
             Initialization.USE_EXISTING ->                //solverSudoku's fields take the candidates/notes from sudoku
                 for (p in positions!!)
                     if (sudoku.getCell(p)!!.isNotSolved) {
-                        for (i in sudokuType!!.symbolIterator)
+                        for (i in sudokuType.symbolIterator)
                             if (sudoku.getCell(p)!!.isNoteSet(i) != currentCandidates!![p]!![i])
                                 currentCandidates!![p]!!.flip(i)
                     }
@@ -159,7 +159,7 @@ class SolverSudoku : Sudoku {
         // set the candidate lists of all unsolved cells to 'all possible'
         positions!!.filter { position -> cells!![position]!!.isNotSolved }
             .map { position -> currentCandidates!![position]!! }
-            .forEach { candidateSet -> candidateSet.set(0, sudokuType!!.numberOfSymbols) }
+            .forEach { candidateSet -> candidateSet.set(0, sudokuType.numberOfSymbols) }
 
         updateCandidates()
     }

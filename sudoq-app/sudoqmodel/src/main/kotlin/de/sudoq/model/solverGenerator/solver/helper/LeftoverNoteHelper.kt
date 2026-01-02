@@ -14,7 +14,7 @@ open class LeftoverNoteHelper(sudoku: SolverSudoku, complexity: Int) :
 
     override fun update(buildDerivation: Boolean): Boolean {
         var foundOne = false
-        for (c in sudoku.sudokuType!!) if (c.hasUniqueBehavior() && hasLeftoverNotes(c)) {
+        for (c in sudoku.sudokuType) if (c.hasUniqueBehavior() && hasLeftoverNotes(c)) {
             foundOne = true
             val leftover = getLeftoverNote(c)
             deleteNote(c, leftover)

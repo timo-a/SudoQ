@@ -14,7 +14,7 @@ class NoNotesHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku,
         var foundOne = false
         var candidate: Position
         val emptyPos = Vector<Position>()
-        for (p in sudoku.sudokuType!!.validPositions) if (sudoku.getCell(p)!!.isCompletelyEmpty) emptyPos.add(
+        for (p in sudoku.sudokuType.validPositions) if (sudoku.getCell(p)!!.isCompletelyEmpty) emptyPos.add(
             p
         )
         foundOne = emptyPos.size > 0
@@ -23,13 +23,13 @@ class NoNotesHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku,
             //create map from pos to constraint
             val emptyPosSet: Set<Position> = HashSet(emptyPos)
             val cmap: MutableMap<Position, MutableList<Constraint>> = HashMap()
-            for (c in sudoku.sudokuType!!) if (c.hasUniqueBehavior()) for (p in c.getPositions()) if (emptyPosSet.contains(
+            for (c in sudoku.sudokuType) if (c.hasUniqueBehavior()) for (p in c.getPositions()) if (emptyPosSet.contains(
                     p
                 )
             ) if (cmap.containsKey(p)) cmap[p]!!.add(c) else cmap[p] = ArrayList(listOf(c))
             derivation = NoNotesDerivation()
             val allSymbols: Set<Int> =
-                HashSet(sudoku.sudokuType!!.symbolIterator as MutableCollection<out Int>)
+                HashSet(sudoku.sudokuType.symbolIterator as MutableCollection<out Int>)
             //for(int i : sudoku.getSudokuType().getSymbolIterator())
             //    allSymbbols.add(i);
             for (p in emptyPos) {
