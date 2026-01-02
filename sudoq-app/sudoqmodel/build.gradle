@@ -24,6 +24,7 @@ test{
         testImplementation "org.junit.jupiter:junit-jupiter:5.4.0"
         testImplementation "org.amshove.kluent:kluent:1.67"
         testImplementation "io.mockk:mockk:1.9"
+        testImplementation "io.mockk:mockk-agent-jvm:1.13.8"
 
         testImplementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
         testImplementation 'org.apache.commons:commons-lang3:3.12.0'
