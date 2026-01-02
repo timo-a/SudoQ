@@ -35,8 +35,7 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
     private var cellPositions: MutableMap<Int, Position>? = null
 
     /** The Type of the Sudoku */
-    var sudokuType: SudokuType? = null
-        private set
+    val sudokuType: SudokuType
 
     /** The Complexity of this Sudoku */
     var complexity: Complexity? = null
@@ -80,12 +79,6 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
                 }
             }
         }
-    }
-
-    /** Creates a completely empty sudoku that has to be filled */
-    @Deprecated("DO NOT USE THIS METHOD (if you are not from us)")
-    internal constructor() {
-        id = -1
     }
 
     /*init from basic properties. use this to init from BE */

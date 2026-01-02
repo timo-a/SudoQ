@@ -20,7 +20,7 @@ class SumConstraintBehaviorTests {
     @Test
     fun testConstraint() {
 
-        val sudoku = mockk<Sudoku>();
+        val sudoku = mockk<Sudoku>(relaxed = true);
 
         fun mkCell(id: Int, currentValue: Int): Cell {
             val c = Cell(id,9)
