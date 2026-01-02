@@ -6,16 +6,12 @@ import static org.junit.Assert.fail;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.sudoq.model.TestWithInitCleanforSingletons;
-import de.sudoq.model.Utility;
 import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.persistence.sudokuType.SudokuTypeRepo;
 
 public class SudokuBuilderTests {
 
@@ -23,34 +19,19 @@ public class SudokuBuilderTests {
 
 	Cell cell;
 
-	static Map<SudokuTypes, Integer> specialParam = new HashMap<SudokuTypes, Integer>(4);
-	
-	static{
-		specialParam.put(SudokuTypes.samurai, 21);
-		specialParam.put(SudokuTypes.standard16x16, 16);
-		specialParam.put(SudokuTypes.standard6x6, 6);
-		specialParam.put(SudokuTypes.standard4x4, 4);
-	}
-	
 	@Test
 	public void testInitialisation() {
 		for (SudokuTypes t : SudokuTypes.values()) {
-
-			if(specialParam.containsKey(t))
-				testBuildergeneric(t, specialParam.get(t));
-			else
-				testBuildergeneric(t, 9);
+            testBuildergeneric(t);
 		}
 	}
 
-	private void testBuildergeneric(SudokuTypes t, int length) {
+	private void testBuildergeneric(SudokuTypes t) {
 		Sudoku sudoku = new SudokuBuilder(t, str).createSudoku();
-		for (int i = 0; i < length; i++) {
-			for (int j = 0; j < length; j++) {
-				cell = sudoku.getCell(Position.get(i, j));
-				if (cell != null)
-					assertEquals(cell.getCurrentValue(), Cell.EMPTYVAL);
-			}
+		for (Position pos : sudoku.getSudokuType().getValidPositions()) {
+            cell = sudoku.getCell(pos);
+            if (cell != null)
+                assertEquals(Cell.EMPTYVAL, cell.getCurrentValue());
 		}
 	}
 
@@ -62,10 +43,10 @@ public class SudokuBuilderTests {
 		sb.addSolution(Position.get(0, 1), 3);
 		Sudoku s = sb.createSudoku();
 
-		assertEquals(s.getCell(Position.get(0, 0)).getSolution(), 5);
-		assertEquals(s.getCell(Position.get(0, 0)).getCurrentValue(), 5);
-		assertEquals(s.getCell(Position.get(0, 1)).getSolution(), 3);
-		assertEquals(s.getCell(Position.get(0, 1)).getCurrentValue(), Cell.EMPTYVAL);
+		assertEquals(5, s.getCell(Position.get(0, 0)).getSolution());
+		assertEquals(5, s.getCell(Position.get(0, 0)).getCurrentValue());
+		assertEquals(3, s.getCell(Position.get(0, 1)).getSolution());
+		assertEquals(Cell.EMPTYVAL, s.getCell(Position.get(0, 1)).getCurrentValue());
 
 		try {
 			sb.addSolution(Position.get(1, 3), -5);
