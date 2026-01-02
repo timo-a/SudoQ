@@ -39,7 +39,7 @@ class XWingHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku, c
     }
 
     override fun update(buildDerivation: Boolean): Boolean {
-        val constraints: Iterable<Constraint> = sudoku.sudokuType!!
+        val constraints: Iterable<Constraint> = sudoku.sudokuType
 
         /* collect rows / cols */
         val rows: MutableList<Constraint> = ArrayList()

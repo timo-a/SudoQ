@@ -199,13 +199,13 @@ class UserInteractionMediator(
      */
     fun updateKeyboard() {
         val currentField = sudokuView!!.currentCellView
-        for (i in game!!.sudoku!!.sudokuType!!.symbolIterator) {
-            var state: CellViewStates
-            state =
-                if (currentField != null && i == currentField.cell.currentValue && !noteMode) CellViewStates.SELECTED_INPUT_BORDER else if (currentField != null && currentField.cell.isNoteSet(
-                        i
-                    ) && noteMode
-                ) CellViewStates.SELECTED_NOTE_BORDER else CellViewStates.DEFAULT_BORDER
+        for (i in game!!.sudoku!!.sudokuType.symbolIterator) {
+            val state: CellViewStates = if (currentField != null && i == currentField.cell.currentValue && !noteMode)
+                CellViewStates.SELECTED_INPUT_BORDER
+            else if (currentField != null && currentField.cell.isNoteSet(i) && noteMode)
+                CellViewStates.SELECTED_NOTE_BORDER
+            else
+                CellViewStates.DEFAULT_BORDER
             virtualKeyboard.markCell(i, state)
         }
         virtualKeyboard.invalidate()
@@ -268,10 +268,10 @@ class UserInteractionMediator(
         } else {
             var number: Int = Symbol.getInstance().getAbstract(prediction.name)
             val save = currentCell.currentValue
-            if (number >= game!!.sudoku!!.sudokuType!!.numberOfSymbols) number = -1
+            if (number >= game!!.sudoku!!.sudokuType.numberOfSymbols) number = -1
             if (number != -1 && game.isAssistanceAvailable(Assistances.restrictCandidates)) {
                 currentCell.setCurrentValue(number, false)
-                for (c in game.sudoku!!.sudokuType!!) {
+                for (c in game.sudoku!!.sudokuType) {
                     if (!c.isSaturated(game.sudoku!!)) {
                         number = -2
                         break
@@ -304,10 +304,10 @@ class UserInteractionMediator(
             listener!!.onNoteDelete(currentCell, predictedNote)
         } else {
             val save = sudokuView.currentCellView!!.cell.currentValue
-            if (predictedNote >= game!!.sudoku!!.sudokuType!!.numberOfSymbols) predictedNote = -1
+            if (predictedNote >= game!!.sudoku!!.sudokuType.numberOfSymbols) predictedNote = -1
             if (predictedNote != -1 && game.isAssistanceAvailable(Assistances.restrictCandidates)) {
                 sudokuView.currentCellView!!.cell.setCurrentValue(predictedNote, false)
-                for (c in game.sudoku!!.sudokuType!!) {
+                for (c in game.sudoku!!.sudokuType) {
                     if (!c.isSaturated(game.sudoku!!)) {
                         predictedNote = -2
                         break

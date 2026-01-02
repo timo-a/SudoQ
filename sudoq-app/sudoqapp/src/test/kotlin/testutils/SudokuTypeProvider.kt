@@ -2,7 +2,7 @@ package testutils
 
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
-import de.sudoq.model.xml.XmlHelper
+import de.sudoq.persistence.XmlHelper
 import de.sudoq.persistence.sudokuType.SudokuTypeBE
 import java.io.File
 

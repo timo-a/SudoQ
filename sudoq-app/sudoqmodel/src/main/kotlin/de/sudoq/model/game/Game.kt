@@ -191,7 +191,7 @@ class Game {
                                                              .forEachOrdered(changePos -> this.addAndExecute(new NoteActionFactory().createAction(value, this.sudoku.getField(changePos))));
         should work, but to tired to try*/
 
-        for (c in sudoku!!.sudokuType!!) {
+        for (c in sudoku!!.sudokuType) {
             if (c.includes(editedPos!!)) {
                 for (changePos in c) {
                     if (sudoku!!.getCell(changePos)?.isNoteSet(value)!!) {

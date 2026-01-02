@@ -80,9 +80,9 @@ open class Solver(sudoku: Sudoku) {
         //the maximum number of empty fields is #Symbols -> if we look at naked sets up to $a$ we only need to look for hidden sets up to #Symbols - a -1
         // => we don't need to add all possible helpers:
         val numberOfNakedHelpers =
-            solverSudoku.sudokuType!!.numberOfSymbols / 2 //half if #symbols is even, less than half otherwise
+            solverSudoku.sudokuType.numberOfSymbols / 2 //half if #symbols is even, less than half otherwise
         val numberOfHiddenHelpers =
-            solverSudoku.sudokuType!!.numberOfSymbols - numberOfNakedHelpers - 1 //we don't need the complement -> one less
+            solverSudoku.sudokuType.numberOfSymbols - numberOfNakedHelpers - 1 //we don't need the complement -> one less
 
         //no naked single at this point, they're hardcoded later in the program
         //TODO add naked single here and remove its extra loop in the solveX method
@@ -121,7 +121,7 @@ open class Solver(sudoku: Sudoku) {
         solverSudoku.resetCandidates()
 
         // Look for constraint saturation at the beginning * if(this.sudoku.getSudokuType().exists((x => !x.isSaturated(this.sudoku)))
-        for (con in solverSudoku.sudokuType!!) {     // return null
+        for (con in solverSudoku.sudokuType) {     // return null
             if (!con.isSaturated(solverSudoku)) return null
         }
         val solution = Solution()
@@ -215,7 +215,7 @@ open class Solver(sudoku: Sudoku) {
         //todo remove this function, and maybe actions alltogether
         //System.out.println("start of solveAll2");
         //print9x9(sudoku);
-        val copy = PositionMap<Int>(solverSudoku.sudokuType!!.size!!)
+        val copy = PositionMap<Int>(solverSudoku.sudokuType.size!!)
         for (p in solverSudoku.positions!!) {
             copy.put(p, solverSudoku.getCell(p)!!.currentValue)
         }
@@ -305,7 +305,7 @@ open class Solver(sudoku: Sudoku) {
         val ambiguous = false
 
         //map position -> value
-        val copy = PositionMap<Int>(solverSudoku.sudokuType!!.size!!)
+        val copy = PositionMap<Int>(solverSudoku.sudokuType.size!!)
         for (p in solverSudoku.positions!!) {
             copy.put(p, solverSudoku.getCell(p)!!.currentValue)
         }
@@ -370,7 +370,7 @@ open class Solver(sudoku: Sudoku) {
      */
     val solutionsMap: PositionMap<Int>
         get() {
-            val solutions = PositionMap<Int>(solverSudoku.sudokuType!!.size!!)
+            val solutions = PositionMap<Int>(solverSudoku.sudokuType.size!!)
             for (p in solverSudoku.positions!!) {
                 val curVal = solverSudoku.getCell(p)!!.currentValue
                 solutions.put(p, curVal)
@@ -430,7 +430,7 @@ open class Solver(sudoku: Sudoku) {
             if (followComplexityConstraints) {
                 //if complexity is relevant restrict helpers
                 complConstr =
-                    solverSudoku.sudokuType!!.buildComplexityConstraint(solverSudoku.complexity)
+                    solverSudoku.sudokuType.buildComplexityConstraint(solverSudoku.complexity)
                 numberOfHelpers =
                     complConstr!!.numberOfAllowedHelpers //TODO specifying a max helper would be clearer
             } else {
@@ -441,7 +441,7 @@ open class Solver(sudoku: Sudoku) {
         }
 
         // Look for constraint saturation at the beginning
-        if (!solverSudoku.sudokuType!!.checkSudoku(solverSudoku)) {
+        if (!solverSudoku.sudokuType.checkSudoku(solverSudoku)) {
             return false
         }
         var solved = false
@@ -690,7 +690,7 @@ if there is another candidate -> advance
                 solverSudoku.getCurrentCandidates(vp).isEmpty //no solution entered
                         && solverSudoku.getCell(vp)!!.isNotSolved //no candidates left
 
-            return solverSudoku.sudokuType!!.validPositions.any(::invalid)
+            return solverSudoku.sudokuType.validPositions.any(::invalid)
         }
 
     /**
@@ -734,7 +734,7 @@ if there is another candidate -> advance
      */
     init {
         solverSudoku = SolverSudoku(sudoku)
-        complConstr = sudoku.sudokuType!!.buildComplexityConstraint(sudoku.complexity)
+        complConstr = sudoku.sudokuType.buildComplexityConstraint(sudoku.complexity)
         helper = makeHelperList()
         numberOfHelpers = helper.size
     }

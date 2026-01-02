@@ -8,7 +8,7 @@ object SudokuMapper {
         return SudokuBE(
             sudoku.id,
             sudoku.transformCount,
-            sudoku.sudokuType!!,
+            sudoku.sudokuType,
             sudoku.complexity!!,
             sudoku.cells!!
         )

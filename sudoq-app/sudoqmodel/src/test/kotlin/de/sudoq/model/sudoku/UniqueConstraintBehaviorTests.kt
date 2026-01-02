@@ -11,20 +11,28 @@ class UniqueConstraintBehaviorTests {
     @Test
     fun testConstraint() {
 
-        val sudoku = mockk<Sudoku>()
+        val sudoku = mockk<Sudoku>(relaxed = true)
 
         fun mkCell(id: Int, currentValue: Int): Cell {
             val c = Cell(id,9)
-            c.currentVal = currentValue
+            c.currentValue = currentValue
             return c
         }
 
-        every { sudoku.getCell(Position[0, 0]) } returns mkCell(0, 1)
-        every { sudoku.getCell(Position[0, 1]) } returns mkCell(1, 2)
-        every { sudoku.getCell(Position[0, 2]) } returns mkCell(2, 3)
-        every { sudoku.getCell(Position[1, 0]) } returns mkCell(3, 4)
-        every { sudoku.getCell(Position[1, 1]) } returns mkCell(4, 5)
-        every { sudoku.getCell(Position[1, 2]) } returns mkCell(5, 6)
+        val cell00 = mkCell(0, 1)
+        val cell01 = mkCell(1, 2)
+        val cell02 = mkCell(2, 3)
+        val cell10 = mkCell(3, 4)
+        val cell11 = mkCell(4, 5)
+        val cell12 = mkCell(5, 6)
+
+        every { sudoku.getCell(Position[0, 0]) } returns cell00
+        every { sudoku.getCell(Position[0, 1]) } returns cell01
+        every { sudoku.getCell(Position[0, 2]) } returns cell02
+        every { sudoku.getCell(Position[1, 0]) } returns cell10
+        every { sudoku.getCell(Position[1, 1]) } returns cell11
+        every { sudoku.getCell(Position[1, 2]) } returns cell12
+
         val constraint = Constraint(UniqueConstraintBehavior(), ConstraintType.LINE)
         constraint.addPosition(Position[0, 0])
         constraint.addPosition(Position[0, 1])
@@ -34,7 +42,11 @@ class UniqueConstraintBehaviorTests {
         constraint.addPosition(Position[1, 2])
         constraint.hasUniqueBehavior().`should be true`()
         constraint.isSaturated(sudoku).`should be true`()
-        sudoku.getCell(Position[0, 0])!!.currentValue = 2
+
+        // WHEN we change a value so the constraint is no longer satisfied
+        cell00.currentValue = 2
+
+        // THEN the constraint is no longer saturated
         constraint.isSaturated(sudoku).`should be false`()
     }
 }

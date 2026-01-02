@@ -35,7 +35,7 @@ open class SudokuManager(val sudokuTypeRepo: IRepo<SudokuType>,
         val i = sudokuRepo.create().id
         val sudokuWithId = Sudoku(i,
                                   sudoku.transformCount,
-                                  sudoku.sudokuType!!,
+                                  sudoku.sudokuType,
                                   sudoku.complexity!!,
                                   sudoku.cells!!)
         sudokuRepo.update(sudokuWithId)
@@ -56,7 +56,7 @@ open class SudokuManager(val sudokuTypeRepo: IRepo<SudokuType>,
     fun usedSudoku(sudoku: Sudoku) {
         if (sudoku.transformCount >= 10) {
             used = sudoku
-            generator.generate(sudoku.sudokuType!!.enumType, sudoku.complexity, this)
+            generator.generate(sudoku.sudokuType.enumType, sudoku.complexity, this)
         } else {
             Transformer.transform(sudoku)
             val sudokuRepo = sudokuRepoProvider.getRepo(sudoku)
@@ -75,17 +75,5 @@ open class SudokuManager(val sudokuTypeRepo: IRepo<SudokuType>,
         val sudokuRepo = sudokuRepoProvider.getRepo(t!!, c!!)
         val randomId = sudokuRepo.ids().random()
         return sudokuRepo.read(randomId)
-    }
-
-
-    companion object {
-
-        /**
-         * Creates an empty sudoku that has to be filled.
-         * @return empty Sudoku
-         */
-        @Deprecated("DO NOT USE THIS METHOD (if you are not from us)")
-        internal val emptySudokuToFillWithXml: Sudoku
-            get() = Sudoku()
     }
 }

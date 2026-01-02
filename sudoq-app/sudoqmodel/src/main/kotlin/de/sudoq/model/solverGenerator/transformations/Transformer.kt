@@ -81,7 +81,7 @@ object Transformer {
     private fun elementaryPermutation(sudoku: Sudoku) {
         val l: MutableList<Permutation> = Vector()
         for (p in elementaryList) {
-            if (sudoku.sudokuType!!.permutationProperties.contains(p.condition)) {
+            if (sudoku.sudokuType.permutationProperties.contains(p.condition)) {
                 l.add(p)
             }
         }
@@ -102,7 +102,7 @@ object Transformer {
     private fun subtlePermutation(sudoku: Sudoku) {
         /* make sure only allowed permutations are executed by intersecting subtleList with properties of the sudoku */
         val l: MutableList<Permutation> = Vector()
-        for (p in subtleList) if (sudoku.sudokuType!!.permutationProperties.contains(p.condition)) l.add(
+        for (p in subtleList) if (sudoku.sudokuType.permutationProperties.contains(p.condition)) l.add(
             p
         )
         for (p in l) p.permutate(sudoku)

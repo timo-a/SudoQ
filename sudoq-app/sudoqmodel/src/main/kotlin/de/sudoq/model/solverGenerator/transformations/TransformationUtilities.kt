@@ -38,7 +38,7 @@ internal fun rotate270(sudoku: Sudoku) {
 }
 
 internal fun mirrorHorizontally(sudoku: Sudoku) {
-    val width = sudoku.sudokuType!!.size!!.x
+    val width = sudoku.sudokuType.size!!.x
     for (i in 0 until width / 2) {
         swap_columns(sudoku, i, width - 1 - i)
     }
@@ -50,7 +50,7 @@ internal fun mirrorVertically(sudoku: Sudoku) {
 }
 
 internal fun mirrorDiagonallyDown(sudoku: Sudoku) {
-    val width = sudoku.sudokuType!!.size!!.x
+    val width = sudoku.sudokuType.size!!.x
     for (i in 0 until width - 1) { // zeilen
         for (j in i + 1 until width) { // zeilenElemente
             swapCells(
@@ -82,7 +82,7 @@ internal fun mirrorDiagonallyUp(sudoku: Sudoku) {
  */
 internal fun inBlockRowPermutation(sudoku: Sudoku) {
     rotate90(sudoku)
-    inBlockColumnPermutation(sudoku, sudoku.sudokuType!!.blockSize.y)
+    inBlockColumnPermutation(sudoku, sudoku.sudokuType.blockSize.y)
     rotate270(sudoku)
 }
 
@@ -92,7 +92,7 @@ internal fun inBlockRowPermutation(sudoku: Sudoku) {
  * @param sudoku [Sudoku] on which to perform the transformation
  */
 internal fun inBlockColumnPermutation(sudoku: Sudoku) {
-    inBlockColumnPermutation(sudoku, sudoku.sudokuType!!.blockSize.x)
+    inBlockColumnPermutation(sudoku, sudoku.sudokuType.blockSize.x)
 }
 
 /**
@@ -101,8 +101,8 @@ internal fun inBlockColumnPermutation(sudoku: Sudoku) {
  * @param sudoku [Sudoku] on which to perform the transformation
  */
 internal fun horizontalBlockPermutation(sudoku: Sudoku) {
-    val collumnsPerBlock = sudoku.sudokuType!!.blockSize.x
-    val numberOfHorizontalBlocks = sudoku.sudokuType!!.size!!.x / collumnsPerBlock
+    val collumnsPerBlock = sudoku.sudokuType.blockSize.x
+    val numberOfHorizontalBlocks = sudoku.sudokuType.size!!.x / collumnsPerBlock
     rotate_horizontally_By1(sudoku, numberOfHorizontalBlocks, collumnsPerBlock)
     horizontalBlockSwaps(sudoku, numberOfHorizontalBlocks, collumnsPerBlock)
 }
@@ -113,8 +113,8 @@ internal fun horizontalBlockPermutation(sudoku: Sudoku) {
  * @param sudoku [Sudoku] on which to perform the transformation
  */
 internal fun verticalBlockPermutation(sudoku: Sudoku) {
-    val rowsPerBlock = sudoku.sudokuType!!.blockSize.y
-    val numberOfVertikalBlocks = sudoku.sudokuType!!.size!!.y / rowsPerBlock
+    val rowsPerBlock = sudoku.sudokuType.blockSize.y
+    val numberOfVertikalBlocks = sudoku.sudokuType.size!!.y / rowsPerBlock
     Rotate90().permutate(sudoku)
     rotate_horizontally_By1(sudoku, numberOfVertikalBlocks, rowsPerBlock)
     horizontalBlockSwaps(sudoku, numberOfVertikalBlocks, rowsPerBlock)
@@ -140,7 +140,7 @@ private fun swapColumnOfBlocks(
 
 /* swaps two columns */
 private fun swap_columns(sudoku: Sudoku, column1: Int, column2: Int) {
-    val height = sudoku.sudokuType!!.size!!.y
+    val height = sudoku.sudokuType.size!!.y
     for (j in 0 until height) {
         val a = Position[column1, j]
         val b = Position[column2, j]
@@ -183,8 +183,8 @@ private fun horizontalBlockSwaps(
  * @param blockWidth Number of columns per block (standard has 3, 16x16 has 4)
  */
 private fun inBlockColumnPermutation(sudoku: Sudoku, blockWidth: Int) {
-    val numberOfHorizontalBlocks = (sudoku.sudokuType!!.size!!.x
-            / sudoku.sudokuType!!.blockSize.x)
+    val numberOfHorizontalBlocks = (sudoku.sudokuType.size!!.x
+            / sudoku.sudokuType.blockSize.x)
     for (i in 0 until numberOfHorizontalBlocks) {
         for (j in 0 until blockWidth) {
             val first = Transformer.random.nextInt(blockWidth)
@@ -208,7 +208,7 @@ private fun inBlockColumnPermutation(sudoku: Sudoku, blockWidth: Int) {
  */
 fun changeSymbols(sudoku: Sudoku) {
     val permutationRule = createPermutation(sudoku)
-    for (p in sudoku.sudokuType!!.validPositions) {
+    for (p in sudoku.sudokuType.validPositions) {
         val f = sudoku.getCell(p)
         val oldSymbol = f!!.solution
         val newSymbol = permutationRule[oldSymbol]!!
@@ -220,13 +220,13 @@ fun changeSymbols(sudoku: Sudoku) {
 /** Returns a permutation as a map. Identity is never returned */
 private fun createPermutation(sudoku: Sudoku): Map<Int, Int> {
     val permutationRule: MutableMap<Int, Int> = HashMap()
-    val numberOfSymbols = sudoku.sudokuType!!.numberOfSymbols
+    val numberOfSymbols = sudoku.sudokuType.numberOfSymbols
     val tries = Math.sqrt(numberOfSymbols.toDouble()).toInt() // wurzel(numberOfElements)
     // versuche, damit wir
     // deterministisch
     // bleiben
     var success: Boolean
-    for (i in sudoku.sudokuType!!.symbolIterator) {
+    for (i in sudoku.sudokuType.symbolIterator) {
         success = false
         run {
             var j = 0

@@ -8,7 +8,7 @@ import java.util.*
 object LastDigit {
     fun findOne(sudoku: Sudoku): SolveAction? {
         /* for every constraint */
-        for (c in sudoku.sudokuType!!) if (c.hasUniqueBehavior()) {
+        for (c in sudoku.sudokuType) if (c.hasUniqueBehavior()) {
             val v = Vector<Position>()
             for (p in c.getPositions()) if (sudoku.getCell(p)!!.isNotSolved) v.add(p)
             if (v.size == 1) {
@@ -24,8 +24,9 @@ object LastDigit {
                 )
                 //make list with all possible values
                 val possibleSolutions: MutableList<Int> = ArrayList()
-                for (i in sudoku.sudokuType!!.symbolIterator) possibleSolutions.add(i)
-                /* cut away all other solutions */possibleSolutions.removeAll(otherSolutions)
+                sudoku.sudokuType.symbolIterator.forEach { possibleSolutions.add(it) }
+                /* cut away all other solutions */
+                possibleSolutions.removeAll(otherSolutions)
                 if (possibleSolutions.size == 1) {
                     /* only one solution remains -> there were no doubles */
                     val solutionValue = possibleSolutions[0]

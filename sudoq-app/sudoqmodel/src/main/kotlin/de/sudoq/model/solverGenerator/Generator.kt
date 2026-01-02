@@ -94,8 +94,8 @@ class Generator(private val sudokuTypeRepo: IRepo<SudokuType>) {
          */
         fun getPositions(sudoku: Sudoku): List<Position> {
 
-            val xLim = sudoku.sudokuType!!.size!!.x
-            val yLim = sudoku.sudokuType!!.size!!.y
+            val xLim = sudoku.sudokuType.size!!.x
+            val yLim = sudoku.sudokuType.size!!.y
 
             val allPositions = (0 until xLim).flatMap { x ->
                 (0 until yLim)

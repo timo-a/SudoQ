@@ -20,7 +20,7 @@ class SudokuRepo(
 
     constructor(sudokusDir: File, sudoku: Sudoku, sudokuTypeRepo: IRepo<SudokuType>) : this(
         sudokusDir,
-        sudoku.sudokuType!!.enumType!!,
+        sudoku.sudokuType.enumType!!,
         sudoku.complexity!!,
         sudokuTypeRepo
     )
@@ -64,7 +64,7 @@ class SudokuRepo(
     override fun update(t: Sudoku): Sudoku {
         val file = File(
             getSudokuDir(
-                t.sudokuType!!.enumType!!,
+                t.sudokuType.enumType!!,
                 t.complexity!!
             ).absolutePath + File.separator + "sudoku_" + t.id + ".xml"
         )
