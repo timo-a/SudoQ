@@ -431,11 +431,10 @@ class GenerationAlgo(
          */
         @JvmStatic ///todo Generator has same function...
         fun getPositions(sudoku: Sudoku): List<Position> {
-            val p: MutableList<Position> = ArrayList()
-            for (x in 0 until sudoku.sudokuType!!.size!!.x)
-                for (y in 0 until sudoku.sudokuType!!.size!!.y)
-                    if (sudoku.getCell(Position[x, y]) != null)
-                        p.add(Position[x, y])
+            val p: List<Position> = sudoku.sudokuType!!.validPositions
+                .filter { sudoku.getCell(it) != null } //todo necessary?
+                .toList()
+
             return p
         }
 

@@ -6,6 +6,8 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
+import java.util.stream.StreamSupport;
+
 import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
@@ -34,12 +36,12 @@ public class TypeBasicTests {
 		}
 		assertTrue(su1[0] == 8);
 
-		for (int y = 0; y < 9; y++)
-			for (int x = 0; x < 9; x++)
-				map.put(Position.get(x, y), su1[y * 9 + x]);
+        SudokuType s99 = TypeBuilder.getType(SudokuTypes.standard9x9);
 
-		SudokuType s99 = TypeBuilder.getType(SudokuTypes.standard9x9);
-		
+        for(Position pos : s99.getValidPositions()) {
+            map.put(pos, su1[pos.getY() * 9 + pos.getX()]);
+        };
+
 		Sudoku sudoku1 = new Sudoku(s99, map, new PositionMap<Boolean>(Position.get(9, 9)));
 		for (Cell f : sudoku1)
 			f.setCurrentValue(f.getSolution());

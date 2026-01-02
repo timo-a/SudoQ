@@ -57,23 +57,21 @@ public class SudokuTests {
 		SudokuType sudokuType = TypeBuilder.getType(SudokuTypes.standard9x9);
 		Sudoku sudoku = new Sudoku(sudokuType);
 
-		assertTrue("Sudokutype isn't the same", sudoku.getSudokuType() == sudokuType);
+        assertSame("Sudokutype isn't the same", sudoku.getSudokuType(), sudokuType);
 		assertFalse("Sudoku finished on initialization", sudoku.isFinished());
 
-		for (int x = 0; x < 9; x++) {
-			for (int y = 0; y < 9; y++) {
-				assertTrue("some field initialized as null", sudoku.getCell(Position.get(x, y)) != null);
-			}
-		}
+        for (Position pos : sudokuType.getValidPositions()) {
+            assertNotNull("some field initialized as null", sudoku.getCell(pos));
+        }
 
 		for (Cell f : sudoku) {
-			assertTrue("some field initialized as null (iterator)", f != null);
+            assertNotNull("some field initialized as null (iterator)", f);
 		}
 
-		assertTrue(sudoku.getTransformCount() == 0);
-		assertTrue(sudoku.getId() == 0);
+        assertEquals(0, sudoku.getTransformCount());
+        assertEquals(0, sudoku.getId());
 		sudoku.increaseTransformCount();
-		assertTrue(sudoku.getTransformCount() == 1);
+        assertEquals(1, sudoku.getTransformCount());
 	}
 
 	@Test
@@ -81,42 +79,36 @@ public class SudokuTests {
 		SudokuType sudokuType = TypeBuilder.getType(SudokuTypes.standard9x9);
 		Sudoku sudoku = new Sudoku(sudokuType, null, null);
 
-		assertTrue("Sudokutype isn't the same", sudoku.getSudokuType() == sudokuType);
+        assertSame("Sudokutype isn't the same", sudoku.getSudokuType(), sudokuType);
 		assertFalse("Sudoku finished on initialization", sudoku.isFinished());
 
-		for (int x = 0; x < 9; x++) {
-			for (int y = 0; y < 9; y++) {
-				assertTrue("some field initialized as null", sudoku.getCell(Position.get(x, y)) != null);
-			}
+        for (Position pos : sudokuType.getValidPositions()) {
+            assertNotNull("some field initialized as null", sudoku.getCell(pos));
 		}
 
 		for (Cell f : sudoku) {
-			assertTrue("some field initialized as null (iterator)", f != null);
+            assertNotNull("some field initialized as null (iterator)", f);
 		}
 	}
 
 	@Test
 	public void testInitializeWithoutSetValues() {
 		SudokuType sudokuType = TypeBuilder.getType(SudokuTypes.standard9x9);
-		PositionMap<Integer> solutions = new PositionMap<Integer>(Position.get(9, 9));
-		for (int x = 0; x < 9; x++) {
-			for (int y = 0; y < 9; y++) {
-				solutions.put(Position.get(x, y), new Integer(0));
-			}
+		PositionMap<Integer> solutions = new PositionMap<>(Position.get(9, 9));
+        for (Position pos : sudokuType.getValidPositions()) {
+            solutions.put(pos, 0);
 		}
 		Sudoku sudoku = new Sudoku(sudokuType, solutions, null);
 
 		assertTrue("Sudokutype isn't the same", sudoku.getSudokuType() == sudokuType);
 		assertFalse("Sudoku finished on initialization", sudoku.isFinished());
 
-		for (int x = 0; x < 9; x++) {
-			for (int y = 0; y < 9; y++) {
-				assertTrue("some field initialized as null", sudoku.getCell(Position.get(x, y)) != null);
-			}
+		for (Position pos : sudokuType.getValidPositions()) {
+             assertNotNull("some field initialized as null", sudoku.getCell(pos));
 		}
 
 		for (Cell f : sudoku) {
-			assertTrue("some field initialized as null (iterator)", f != null);
+            assertNotNull("some field initialized as null (iterator)", f);
 		}
 	}
 
@@ -171,30 +163,26 @@ public class SudokuTests {
 
 	@Test
 	public void testInitializeSudokuWithValues() {
-		PositionMap<Integer> map = new PositionMap<Integer>(Position.get(9, 9));
-		PositionMap<Boolean> setValues = new PositionMap<Boolean>(Position.get(9, 9));
-		for (int x = 0; x < 9; x++) {
-			for (int y = 0; y < 9; y++) {
-				map.put(Position.get(x, y), x + 1);
-				if (x != y) {
-					setValues.put(Position.get(x, y), true);
-				}
+        SudokuType s99 = TypeBuilder.getType(SudokuTypes.standard9x9);
+		PositionMap<Integer> map = new PositionMap<>(s99.getSize());
+		PositionMap<Boolean> setValues = new PositionMap<>(s99.getSize());
+		for (Position pos : s99.getValidPositions()) {
+            map.put(pos, pos.getX() + 1);
+            if (pos.getX() != pos.getY()) {
+                setValues.put(pos, true);
 			}
 		}
 
-		Sudoku sudoku = new Sudoku(TypeBuilder.getType(SudokuTypes.standard9x9), map, setValues);
+        Sudoku sudoku = new Sudoku(s99, map, setValues);
 
 		Cell cell;
-		for (int x = 0; x < 9; x++) {
-			for (int y = 0; y < 9; y++) {
-				if (x == y) {
-					cell = sudoku.getCell(Position.get(x, y));
-					assertTrue("wrong field initialization or field null", cell.isEditable());
-				} else {
-					cell = sudoku.getCell(Position.get(x, y));
-					assertFalse("wrong field initialization or field null", cell.isEditable());
-				}
-			}
+		for (Position pos : s99.getValidPositions()) {
+            cell = sudoku.getCell(pos);
+            if (pos.getX() == pos.getY()) {
+                assertTrue("wrong field initialization or field null", cell.isEditable());
+            } else {
+                assertFalse("wrong field initialization or field null", cell.isEditable());
+            }
 		}
 	}
 
@@ -242,11 +230,9 @@ public class SudokuTests {
 	@Test
 	public void testHasErrors() {
 		SudokuType sudokuType = TypeBuilder.getType(SudokuTypes.standard9x9);
-		PositionMap<Integer> solutions = new PositionMap<Integer>(Position.get(9, 9));
-		for (int x = 0; x < 9; x++) {
-			for (int y = 0; y < 9; y++) {
-				solutions.put(Position.get(x, y), 0);
-			}
+		PositionMap<Integer> solutions = new PositionMap<>(Position.get(9, 9));
+		for (Position pos : sudokuType.getValidPositions()) {
+            solutions.put(pos, 0);
 		}
 		Sudoku sudoku = new Sudoku(sudokuType, solutions, null);
 		sudoku.getCell(Position.get(0, 0)).setCurrentValue(1);

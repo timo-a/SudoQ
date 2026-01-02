@@ -22,13 +22,11 @@ public class SamuraiSolver implements FastSolver {
 
     private int[][] toArray(Sudoku s) {
         int[][] a = new int[21][21];
-        Cell f;
-        for (int y = 0; y < 21; y++)
-            for (int x = 0; x < 21; x++) {
-                f = s.getCell(Position.get(x, y));
-                if (f != null && f.isSolved())
-                    a[y][x] = f.getCurrentValue() + 1; //s has values [0,8] so we need to add one.
-            }
+        for(Position pos : s.getSudokuType().getValidPositions()) {
+            Cell f = s.getCell(pos);
+            if (f != null && f.isSolved())
+                a[pos.getY()][pos.getX()] = f.getCurrentValue() + 1; //s has values [0,8] so we need to add one.
+        };
         return a;
     }
 
