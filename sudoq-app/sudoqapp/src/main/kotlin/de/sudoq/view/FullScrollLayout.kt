@@ -64,7 +64,7 @@ class FullScrollLayout : LinearLayout {
      * @param set
      * das Android AttributeSet
      */
-    constructor(context: Context?, set: AttributeSet?) : super(context, set) {
+    constructor(context: Context, set: AttributeSet?) : super(context, set) {
         initialize()
         scaleGestureDetector = ScaleGestureDetector(context, ScaleGestureListener())
     }
@@ -76,7 +76,7 @@ class FullScrollLayout : LinearLayout {
      * @param context
      * Der Kontext, in dem dieses Layout angelegt wird
      */
-    constructor(context: Context?) : super(context) {
+    constructor(context: Context) : super(context) {
         initialize()
         scaleGestureDetector = ScaleGestureDetector(context, ScaleGestureListener())
     }

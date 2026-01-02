@@ -98,7 +98,7 @@ class TutorialActivity : LanguageAdaptingCompatActivity() {
             }
         });
     }*/
-    internal class Adapter(fm: FragmentManager?) : FragmentPagerAdapter(fm) {
+    internal class Adapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         private val mFragments: MutableList<Fragment> = ArrayList()
         private val mFragmentTitles: MutableList<String> = ArrayList()
         fun addFragment(fragment: Fragment, title: String) {

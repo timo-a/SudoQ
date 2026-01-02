@@ -56,7 +56,7 @@ class AssistancesDialogFragment : DialogFragment() {
 
         // TODO why this no work? final CharSequence[] items = (CharSequence[]) itemStack.toArray();
         val items = itemStack.toTypedArray()
-        val builder = AlertDialog.Builder(getActivity()!!)
+        val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle(getString(R.string.sf_sudoku_assistances_title))
         builder.setItems(items) { dialog, item ->
             when (item) {
@@ -177,7 +177,7 @@ class AssistancesDialogFragment : DialogFragment() {
         // http://stackoverflow.com/a/12434038/3014199
         //it fixes a bug in the supportLibrary
         if (dialog != null && retainInstance) {
-            dialog.setDismissMessage(null)
+            dialog!!.setDismissMessage(null)
         }
         super.onDestroyView()
     }
