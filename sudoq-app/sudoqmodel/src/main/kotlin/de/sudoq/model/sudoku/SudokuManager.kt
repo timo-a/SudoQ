@@ -76,16 +76,4 @@ open class SudokuManager(val sudokuTypeRepo: IRepo<SudokuType>,
         val randomId = sudokuRepo.ids().random()
         return sudokuRepo.read(randomId)
     }
-
-
-    companion object {
-
-        /**
-         * Creates an empty sudoku that has to be filled.
-         * @return empty Sudoku
-         */
-        @Deprecated("DO NOT USE THIS METHOD (if you are not from us)")
-        internal val emptySudokuToFillWithXml: Sudoku
-            get() = Sudoku()
-    }
 }

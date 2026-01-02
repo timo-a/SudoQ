@@ -59,9 +59,10 @@ class ConstraintTests {
             return c
         }
 
-        every { sudo.getCell(posA) }.returns(mkCell(0,0))
-        every { sudo.getCell(posB) }.returns(mkCell(1,4))
-        every { sudo.getCell(posC) }.returns(mkCell(2,4))
+
+        every { sudo.getCell(posA) } returns mkCell(0,0)
+        every { sudo.getCell(posB) } returns mkCell(1,4)
+        every { sudo.getCell(posC) } returns mkCell(2,4)
         c.isSaturated(sudo).`should be true`()
         c.addPosition(posA)
         c.isSaturated(sudo).`should be true`()
