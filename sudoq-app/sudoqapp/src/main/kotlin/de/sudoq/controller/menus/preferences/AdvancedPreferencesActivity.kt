@@ -202,6 +202,7 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
                 }
             }
             ParentActivity.PROFILE -> saveToProfile()
+            ParentActivity.NOT_SPECIFIED -> { /* do nothing */ }
         }
     }
 
