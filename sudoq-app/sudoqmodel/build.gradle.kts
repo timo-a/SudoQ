@@ -1,6 +1,6 @@
 plugins {
+    alias(libs.plugins.kotlin.jvm)
     `java-library`
-    id("org.jetbrains.kotlin.jvm")
 }
 
 dependencies {
@@ -8,17 +8,19 @@ dependencies {
     implementation(kotlin("reflect"))
 
     //support for junit4 tests
-    implementation("junit:junit:4.12") //todo switch to junit5 entirely
-    testImplementation("org.junit.vintage:junit-vintage-engine:5.4.0")
+    testImplementation(libs.junit)
+    testRuntimeOnly(libs.junit.vintage.engine)
 
     testImplementation(project(":sudoq-persistence-xml"))
-    testImplementation("org.junit.jupiter:junit-jupiter:5.4.0")
-    testImplementation("org.amshove.kluent:kluent:1.67")
-    testImplementation("io.mockk:mockk:1.9")
-    testImplementation("io.mockk:mockk-agent-jvm:1.13.8")
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.junit.jupiter.params)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(libs.kluent)
+    testImplementation(libs.mockk)
+    testImplementation(libs.mockk.agent.jvm)
 
-    testImplementation("org.apache.directory.studio:org.apache.commons.io:2.4")
-    testImplementation("org.apache.commons:commons-lang3:3.12.0")
+    testImplementation(libs.apache.commons.io)
+    testImplementation(libs.apache.commons.lang3)
 }
 
 tasks.named<Test>("test") {

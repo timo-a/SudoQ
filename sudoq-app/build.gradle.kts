@@ -2,9 +2,9 @@ import com.android.build.api.dsl.ApplicationExtension
 import org.gradle.api.plugins.JavaPluginExtension
 
 plugins {
-    id("com.android.application") version "8.4.0" apply false
-    id("org.jetbrains.kotlin.android") version "1.9.22" apply false
-    id("org.jetbrains.kotlin.jvm") version "1.9.22" apply false
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.jvm) apply false
 }
 
 subprojects {
