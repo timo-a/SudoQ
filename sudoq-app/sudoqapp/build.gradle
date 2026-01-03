@@ -25,8 +25,7 @@ android {
     sourceSets {
         main {
             // this allows us to group resources(layouts, values) by topic
-            res.srcDirs = 
-            [
+            res.srcDirs = [
                     'src/main/res/layouts/sudoku',
                     'src/main/res/layouts/tutorial',
                     'src/main/res/layout',

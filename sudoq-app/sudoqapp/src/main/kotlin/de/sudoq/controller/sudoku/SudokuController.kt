@@ -152,13 +152,12 @@ class SudokuController(
      * Updatet die Spielerstatistik des aktuellen Profils in der App.
      */
     private fun updateStatistics() {
-        when (game.sudoku!!.complexity) {
+        when (game.sudoku!!.complexity!!) {
             Complexity.infernal -> incrementStatistic(Statistics.playedInfernalSudokus)
             Complexity.difficult -> incrementStatistic(Statistics.playedDifficultSudokus)
             Complexity.medium -> incrementStatistic(Statistics.playedMediumSudokus)
             Complexity.easy -> incrementStatistic(Statistics.playedEasySudokus)
             Complexity.arbitrary -> throw IllegalStateException("unexpected complexity value: 'arbitrary'")
-            null -> throw IllegalStateException("unexpected complexity value: null")
         }
         incrementStatistic(Statistics.playedSudokus)
         val profilesDir = context.getDir(
