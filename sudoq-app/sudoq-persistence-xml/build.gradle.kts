@@ -1,31 +1,9 @@
 plugins {
-    id 'java-library'
-    id 'kotlin'
-}
-
-targetCompatibility = '1.8'
-sourceCompatibility = '1.8'
-
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    `java-library`
+    id("org.jetbrains.kotlin.jvm")
 }
 
 dependencies {
-
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation project(':sudoqmodel')
-
-}
-
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
-compileTestKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
+    implementation(project(":sudoqmodel"))
+    implementation(kotlin("stdlib"))
 }

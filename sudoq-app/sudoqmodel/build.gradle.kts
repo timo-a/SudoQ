@@ -1,176 +1,97 @@
-apply plugin: 'java'
-apply plugin: 'kotlin'
-
-targetCompatibility = '1.8'
-sourceCompatibility = '1.8'
+plugins {
+    `java-library`
+    id("org.jetbrains.kotlin.jvm")
+}
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("reflect"))
+
+    //support for junit4 tests
+    implementation("junit:junit:4.12") //todo switch to junit5 entirely
+    testImplementation("org.junit.vintage:junit-vintage-engine:5.4.0")
+
+    testImplementation(project(":sudoq-persistence-xml"))
+    testImplementation("org.junit.jupiter:junit-jupiter:5.4.0")
+    testImplementation("org.amshove.kluent:kluent:1.67")
+    testImplementation("io.mockk:mockk:1.9")
+    testImplementation("io.mockk:mockk-agent-jvm:1.13.8")
+
+    testImplementation("org.apache.directory.studio:org.apache.commons.io:2.4")
+    testImplementation("org.apache.commons:commons-lang3:3.12.0")
 }
 
-test{
+tasks.named<Test>("test") {
     useJUnitPlatform()
     testLogging {
-        events "passed", "skipped", "failed"
-    }
-
-    dependencies {
-        //support for junit4 tests
-        implementation 'junit:junit:4.12' //todo switch to junit5 entirely
-        testImplementation "org.junit.vintage:junit-vintage-engine:5.4.0"
-
-        testImplementation project(':sudoq-persistence-xml')
-        testImplementation "org.junit.jupiter:junit-jupiter:5.4.0"
-        testImplementation "org.amshove.kluent:kluent:1.67"
-        testImplementation "io.mockk:mockk:1.9"
-        testImplementation "io.mockk:mockk-agent-jvm:1.13.8"
-
-        testImplementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
-        testImplementation 'org.apache.commons:commons-lang3:3.12.0'
+        events("passed", "skipped", "failed")
     }
 }
 
+val testImplementation by configurations.getting
 
 sourceSets {
-    kotlintests {
-        //java.srcDir ""
-        kotlin.srcDir "$projectDir/src/test/kotlin"
-        resources.srcDir "$projectDir/src/othertest/resources"
+    val main by getting
+    val test by getting
+
+    create("kotlintests") {
+        kotlin.srcDir("src/test/kotlin")
+        resources.srcDir("src/othertest/resources")
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+    }
+    create("othertests") {
+        java.srcDir("src/otherTests/java")
+        kotlin.srcDir("src/otherTests/kotlin")
+        resources.srcDir("src/otherTests/resources")
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+    }
+    create("solvertests") {
+        java.srcDir("src/solverTests/java")
+        kotlin.srcDir("src/solverTests/kotlin")
+        resources.srcDir("src/solverTests/resources")
         compileClasspath += main.output + test.output
         runtimeClasspath += main.output + test.output
     }
 }
 
 configurations {
-    kotlintestsImplementation.extendsFrom testImplementation
-    kotlintestsRuntime.extendsFrom testRuntime
+    getByName("kotlintestsImplementation") {
+        extendsFrom(testImplementation.get())
+    }
+    getByName("othertestsImplementation") {
+        extendsFrom(testImplementation.get())
+    }
+    getByName("solvertestsImplementation") {
+        extendsFrom(testImplementation.get())
+    }
 }
-task kotlinTest(type: Test) {
-    testClassesDirs = sourceSets.kotlintests.output.classesDirs
-    classpath = sourceSets.kotlintests.runtimeClasspath
-}
-tasks.named('kotlinTest') {
-    // Use JUnit Platform for unit tests.
+
+val kotlinTest by tasks.registering(Test::class) {
+    testClassesDirs = sourceSets.getByName("kotlintests").output.classesDirs
+    classpath = sourceSets.getByName("kotlintests").runtimeClasspath
     useJUnitPlatform()
     testLogging {
-        events "passed", "skipped", "failed"
+        events("passed", "skipped", "failed")
     }
 }
 
-
-
-//https://blog.inspeerity.com/gradle/integration-and-unit-separate-gradle-tasks/
-sourceSets {
-    othertests {
-        java.srcDir "$projectDir/src/otherTests/java"
-        kotlin.srcDir "$projectDir/src/otherTests/kotlin"
-        resources.srcDir "$projectDir/src/otherTests/resources"
-        compileClasspath += main.output + test.output
-        runtimeClasspath += main.output + test.output
-    }
+val secondTest by tasks.registering(Test::class) {
+    testClassesDirs = sourceSets.getByName("othertests").output.classesDirs
+    classpath = sourceSets.getByName("othertests").runtimeClasspath
 }
 
-configurations {
-    othertestsImplementation.extendsFrom testImplementation
-    othertestsRuntime.extendsFrom testRuntime
-}
-task secondTest(type: Test) {
-    testClassesDirs = sourceSets.othertests.output.classesDirs
-    classpath = sourceSets.othertests.runtimeClasspath
-}
-
-check.dependsOn secondTest
-
-//solverTests
-sourceSets {
-    solvertests {
-        java.srcDir "$projectDir/src/solverTests/java"
-        kotlin.srcDir "$projectDir/src/solverTests/kotlin"
-        resources.srcDir "$projectDir/src/solverTests/resources"
-        compileClasspath += main.output + test.output
-        runtimeClasspath += main.output + test.output
-    }
-}
-
-configurations {
-    solvertestsImplementation.extendsFrom testImplementation
-    solvertestsRuntime.extendsFrom testRuntime
-}
-
-task solverTest(type: Test) {
-    testClassesDirs = sourceSets.solvertests.output.classesDirs
-    classpath = sourceSets.solvertests.runtimeClasspath
-}
-
-tasks.named('solverTest') {
-    // Use JUnit Platform for unit tests.
+val solverTest by tasks.registering(Test::class) {
+    testClassesDirs = sourceSets.getByName("solvertests").output.classesDirs
+    classpath = sourceSets.getByName("solvertests").runtimeClasspath
     useJUnitPlatform()
     testLogging {
-        events "passed", "skipped", "failed"
+        events("passed", "skipped", "failed")
     }
 }
 
-check.dependsOn solverTest
-
-
-buildscript {
-    ext.kotlin_version = '1.5.0-RC'
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
+tasks.check {
+    dependsOn(secondTest)
+    dependsOn(solverTest)
 }
-repositories {
-    mavenCentral()
-}
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
-compileTestKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
-
-compileSolvertestsKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
-
-compileKotlintestsKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
-
-/*
-Was funktioniert?
-gradle otherTest
-schlägt fehl
-package org.junit does not exist
-package org.apache.commons.io does not exist
-* */
-
-
-
-
-/* //https://stackoverflow.com/a/35431416/3014199
-task deleteJar(type: Delete) {
-    delete 'libs/jars/sudoqmodel.jar'
-}
-
-task createJar(type: Copy) {
-    from('build/libs/')
-    into('.')
-    include('classes.jar')
-    rename('classes.jar', 'sudoqmodel.jar')
-}
-
-createJar.dependsOn(deleteJar)
-*/
