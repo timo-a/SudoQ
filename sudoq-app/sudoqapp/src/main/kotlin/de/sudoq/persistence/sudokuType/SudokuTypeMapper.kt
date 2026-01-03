@@ -9,7 +9,7 @@ object SudokuTypeMapper {
         return SudokuTypeBE(
             sudokuType.enumType!!,
             sudokuType.numberOfSymbols,
-            sudokuType.standardAllocationFactor,
+            sudokuType.getStandardAllocationFactor(),
             sudokuType.size!!,
             sudokuType.blockSize,
             sudokuType.constraints,

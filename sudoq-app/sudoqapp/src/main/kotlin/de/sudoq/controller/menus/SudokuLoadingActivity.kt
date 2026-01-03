@@ -380,7 +380,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
     val size: Int
         get() = games!!.size
 
-    private inner class FAB(context: Context?) : FloatingActionButton(context) {
+    private inner class FAB(context: Context) : FloatingActionButton(context) {
         private var fs: FabStates? = null
         fun setState(fs: FabStates?) {
             this.fs = fs
