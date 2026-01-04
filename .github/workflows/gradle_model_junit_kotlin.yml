@@ -4,7 +4,7 @@ name: Model Junit Tests for Kotlin
 
 on:
   push:
-    branches: [ master, development, feature/* ]
+    branches: [ master, fix/tests ]
   pull_request:
     branches: [ master, development ]
 
