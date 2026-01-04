@@ -47,7 +47,7 @@ jobs:
           echo "::set-output name=new_version_name::$(cat new_version_name.txt)"
           
       - name: commit files
-        uses: peter-evans/create-pull-request@v3
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: >-
