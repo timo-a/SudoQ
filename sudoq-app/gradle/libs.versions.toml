@@ -1,7 +1,7 @@
 [versions]
 # Plugins
 agp = "8.13.2"
-kotlin = "1.9.22"
+kotlin = "1.9.25"
 
 # Dependencies
 appcompat = "1.6.1"
