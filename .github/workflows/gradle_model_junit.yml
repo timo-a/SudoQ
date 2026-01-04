@@ -33,7 +33,7 @@ jobs:
           ./gradlew sudoqmodel:test
     - name: Upload test report
       if: failure()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: sudoqmodel-test-report
         path: sudoq-app/sudoqmodel/build/reports/tests/test/
