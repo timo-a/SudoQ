@@ -32,6 +32,7 @@ tasks.named<Test>("test") {
 }
 
 val testImplementation by configurations.getting
+val testRuntimeOnly by configurations.getting
 
 sourceSets {
     val main by getting
@@ -68,6 +69,16 @@ configurations {
     }
     getByName("solvertestsImplementation") {
         extendsFrom(testImplementation.get())
+    }
+
+    getByName("kotlintestsRuntimeOnly") {
+        extendsFrom(testRuntimeOnly.get())
+    }
+    getByName("othertestsRuntimeOnly") {
+        extendsFrom(testRuntimeOnly.get())
+    }
+    getByName("solvertestsRuntimeOnly") {
+        extendsFrom(testRuntimeOnly.get())
     }
 }
 
