@@ -17,7 +17,7 @@ jobs:
   increase-version:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v6
 
       - name: increase version code
         id: increase_version_code
