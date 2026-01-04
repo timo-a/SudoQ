@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "de.sudoq"
-        minSdk = 19
+        minSdk = 21
         targetSdk = 34
         multiDexEnabled = true
         testApplicationId = "de.sudoq.test"
