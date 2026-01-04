@@ -30,8 +30,7 @@ tasks.named<Test>("test") {
     }
 }
 
-val testImplementation by configurations.getting
-
+// Define the source sets for the different types of tests.
 sourceSets {
     val main by getting
     val test by getting
@@ -58,17 +57,19 @@ sourceSets {
     }
 }
 
-configurations {
-    getByName("kotlintestsImplementation") {
-        extendsFrom(testImplementation.get())
-    }
-    getByName("othertestsImplementation") {
-        extendsFrom(testImplementation.get())
-    }
-    getByName("solvertestsImplementation") {
-        extendsFrom(testImplementation.get())
-    }
-}
+// Configure the custom configurations to inherit dependencies from the standard test configurations.
+val testImplementation by configurations.getting
+val testRuntimeOnly by configurations.getting
+
+configurations.getByName("kotlintestsImplementation") { extendsFrom(testImplementation) }
+configurations.getByName("kotlintestsRuntimeOnly") { extendsFrom(testRuntimeOnly) }
+
+configurations.getByName("othertestsImplementation") { extendsFrom(testImplementation) }
+configurations.getByName("othertestsRuntimeOnly") { extendsFrom(testRuntimeOnly) }
+
+configurations.getByName("solvertestsImplementation") { extendsFrom(testImplementation) }
+configurations.getByName("solvertestsRuntimeOnly") { extendsFrom(testRuntimeOnly) }
+
 
 val kotlinTest by tasks.registering(Test::class) {
     testClassesDirs = sourceSets.getByName("kotlintests").output.classesDirs
