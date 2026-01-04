@@ -176,7 +176,7 @@ class ActionTree : ObservableModelImpl<ActionTreeElement>(), Iterable<ActionTree
         ) {
             while (current.last.id > other.last.id) {
                 val parent = current.last.parent
-                current.addLast(parent)
+                current.addLast(parent!!)
             }
         }
     }
