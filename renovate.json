@@ -2,5 +2,12 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "packageRules": [
+    {
+      "description": "Group all dependencies of workflow files (GitHub Actions)",
+      "matchFileNames": [".github/workflows/*.ya?ml"],
+      "groupName": "Workflow dependencies"
+    }
   ]
 }
