@@ -1,7 +1,9 @@
 package de.sudoq.model.solverGenerator;
-import org.junit.jupiter.api.*;
 
-public class JavaTest {
+
+import org.junit.jupiter.api.Test;
+
+class JavaTest {
     @Test
-    public void test() {Assertions.assertTrue(true);}
+    void test() {}
 }

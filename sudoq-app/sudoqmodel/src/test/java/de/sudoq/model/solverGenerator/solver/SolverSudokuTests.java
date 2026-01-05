@@ -1,13 +1,14 @@
 package de.sudoq.model.solverGenerator.solver;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import de.sudoq.model.sudoku.CandidateSet;
 import de.sudoq.model.sudoku.Constraint;
@@ -18,25 +19,25 @@ import de.sudoq.model.sudoku.SumConstraintBehavior;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
-public class SolverSudokuTests {
+class SolverSudokuTests {
 
 	SolverSudoku sudoku;
 
-	@Before
-	public void before() {
+    @BeforeEach
+    void before() {
 		sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
 	}
 
-    @Test(expected = IllegalArgumentException.class)
-    public void killBranchWhenThereAreNone() {
+    @Test
+    void killBranchWhenThereAreNone() {
         //GIVEN
         SolverSudoku sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
         //WHEN
-        sudoku.killCurrentBranch();
+        assertThrows(IllegalArgumentException.class, () -> sudoku.killCurrentBranch());
     }
 
     @Test
-    public void killBranchShouldRemoveTheGuess() {
+    void killBranchShouldRemoveTheGuess() {
         //GIVEN
         Sudoku s = new Sudoku(TypeBuilder.get99());
         Position p = Position.get(5, 7);
@@ -55,7 +56,7 @@ public class SolverSudokuTests {
     }
 
     @Test
-    public void killBranchShouldRemoveTheGuess2() {
+    void killBranchShouldRemoveTheGuess2() {
         //GIVEN
         Sudoku s = new Sudoku(TypeBuilder.get99());
         Position p1 = Position.get(5, 7);
@@ -83,8 +84,8 @@ public class SolverSudokuTests {
         assertEquals(1, sudoku.getCurrentCandidates(p1).cardinality()); //no other candidates
     }
 
-	@Test
-	public void testStandardSudoku() {
+    @Test
+    void standardSudoku() {
         Position firstPos  = Position.get(5, 7);
         sudoku.getCurrentCandidates(firstPos).clear();
         sudoku.getCurrentCandidates(firstPos).set(2);
@@ -96,13 +97,13 @@ public class SolverSudokuTests {
 
 		Position thirdPos  = Position.get(3, 2);
 
-        assertFalse("Verify test initialization: sudoku should have no branch", sudoku.hasBranch());
+        assertFalse(sudoku.hasBranch(), "Verify test initialization: sudoku should have no branch");
 		assertEquals(2, sudoku.getCurrentCandidates(firstPos).cardinality());
 		sudoku.startNewBranch(firstPos, 2);
         //new branch only one possible candidate
         assertEquals(1, sudoku.getCurrentCandidates(firstPos).cardinality());
-        assertFalse("Other candidate 4 should not be available on new branch", sudoku.getCurrentCandidates(firstPos).get(4));
-        assertTrue("Only 2", sudoku.getCurrentCandidates(firstPos).get(2));
+        assertFalse(sudoku.getCurrentCandidates(firstPos).get(4), "Other candidate 4 should not be available on new branch");
+        assertTrue(sudoku.getCurrentCandidates(firstPos).get(2), "Only 2");
 
         CandidateSet candidatesOnTopBranch = sudoku.getLastBranch().getCandidates().get(firstPos);
         assertNotSame(candidatesOnTopBranch, sudoku.getCurrentCandidates(firstPos));
@@ -118,37 +119,37 @@ public class SolverSudokuTests {
 
         sudoku.killCurrentBranch();
 		assertFalse(sudoku.hasBranch());
-        assertTrue("after killing the branch the stashed away possibility should be available again", sudoku.getCurrentCandidates(firstPos).get(3));
-        assertFalse("after killing the branch the wrong guess should no longer be a candidate", sudoku.getCurrentCandidates(firstPos).get(2));
+        assertTrue(sudoku.getCurrentCandidates(firstPos).get(3), "after killing the branch the stashed away possibility should be available again");
+        assertFalse(sudoku.getCurrentCandidates(firstPos).get(2), "after killing the branch the wrong guess should no longer be a candidate");
 		sudoku.startNewBranch(thirdPos, 0);
 		assertEquals(1, sudoku.getCurrentCandidates(firstPos).cardinality());
 		sudoku.resetCandidates();
 	}
 
-	// TODO Tests for a sudoku with at least one constraint behavior that is not
-	// the unique one
+    // TODO Tests for a sudoku with at least one constraint behavior that is not
+    // the unique one
 
-	@Test(expected = NullPointerException.class)
-	public void testNullConstructor() {
-		new SolverSudoku(null);
+    @Test
+    void nullConstructor() {
+		assertThrows(NullPointerException.class, () -> new SolverSudoku(null));
 	}
 
-	@Test
-	public void testInvalidArguments() {
+    @Test
+    void invalidArguments() {
 		sudoku.updateCandidates(null, 1);
 		sudoku.setSolution(null, 1);
 		sudoku.setSolution(Position.get(1, 0), 7);
 		sudoku.setSolution(Position.get(1, 0), -1);
 	}
 
-	@Test
-	public void testConstraintSaturationChecks() {
+    @Test
+    void constraintSaturationChecks() {
 		sudoku.setSolution(Position.get(0, 0), 1);
 		sudoku.setSolution(Position.get(0, 1), 1);
 	}
 
-	@Test
-	public void testResetCandidatesStack() {
+    @Test
+    void resetCandidatesStack() {
 		sudoku.startNewBranch(Position.get(1, 1), 1);
 		sudoku.resetCandidates();
 		assertFalse(sudoku.hasBranch());
@@ -169,18 +170,18 @@ public class SolverSudokuTests {
 		}
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void testBranchNonExistingPosition() {
-		sudoku.startNewBranch(Position.get(10, 4), 1);
+    @Test
+    void branchNonExistingPosition() {
+		assertThrows(IllegalArgumentException.class, () -> sudoku.startNewBranch(Position.get(10, 4), 1));
 	}
 
-	@Test
-	public void testAddNegaitveComplexity() {
+    @Test
+    void addNegaitveComplexity() {
 		sudoku.addComplexityValue(-5, true);
 	}
 
-	@Test
-	public void testNonUniqueConstraints() {
+    @Test
+    void nonUniqueConstraints() {
 		// Create new type with a sum constraint
 		
 		
@@ -215,8 +216,8 @@ public class SolverSudokuTests {
 		assertTrue(sudoku.getSudokuType().checkSudoku(sudoku));
 	}
 
-	@Test(expected = NullPointerException.class)
-	public void testStartNewBranchWithoutPosition() {
-		sudoku.startNewBranch(null, 1);
+    @Test
+    void startNewBranchWithoutPosition() {
+		assertThrows(NullPointerException.class, () -> sudoku.startNewBranch(null, 1));
 	}
 }

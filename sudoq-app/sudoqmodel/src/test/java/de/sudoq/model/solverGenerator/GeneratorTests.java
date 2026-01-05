@@ -1,7 +1,7 @@
 package de.sudoq.model.solverGenerator;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
 import java.io.File;
@@ -16,10 +16,10 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 
 import de.sudoq.model.Utility;
 import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests;
@@ -41,15 +41,15 @@ public class GeneratorTests implements GeneratorCallback {
 	private Generator generator;
 	private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
 
-	@BeforeClass
-	public static void init() throws IOException {
+    @BeforeAll
+    static void init() throws IOException {
 		Utility.copySudokus();
 		//Profile.Companion.getInstance();
 	}
 
-	@AfterClass
-	public static void clean() throws IOException, SecurityException, NoSuchFieldException, IllegalArgumentException,
-			IllegalAccessException {
+    @AfterAll
+    static void clean() throws IOException, SecurityException, NoSuchFieldException, IllegalArgumentException,
+        IllegalAccessException {
         java.lang.reflect.Field s = FileManager.class.getDeclaredField("sudokus");
         s.setAccessible(true);
         s.set(null, null);
@@ -59,8 +59,9 @@ public class GeneratorTests implements GeneratorCallback {
         //Utility.deleteDir(Utility.profiles);
         Utility.deleteDir(Utility.sudokus);
     }
-	@Before
-	public void beforeTest() {
+
+    @BeforeEach
+    void beforeTest() {
 		TypeBuilder.get99();
 		IRepo<SudokuType> dummySoItCompiles = new IRepo<SudokuType>() {
 			@NotNull
@@ -94,13 +95,13 @@ public class GeneratorTests implements GeneratorCallback {
 
 	@Override
 	public synchronized void generationFinished(Sudoku sudoku) {
-		assertEquals(new Solver(sudoku).validate(null), ComplexityRelation.CONSTRAINT_SATURATION);
+        assertEquals(ComplexityRelation.CONSTRAINT_SATURATION, new Solver(sudoku).validate(null));
 		this.notifyAll();
 	}
 
 	@Override
 	public synchronized void generationFinished(Sudoku sudoku, List<Solution> s) {
-		assertEquals(new Solver(sudoku).validate(null), ComplexityRelation.CONSTRAINT_SATURATION);
+        assertEquals(ComplexityRelation.CONSTRAINT_SATURATION, new Solver(sudoku).validate(null));
 		this.notifyAll();
 	}
 

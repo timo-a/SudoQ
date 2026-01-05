@@ -1,10 +1,10 @@
 package de.sudoq.model.solverGenerator.solution;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.BitSet;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import de.sudoq.model.actionTree.Action;
 import de.sudoq.model.actionTree.SolveActionFactory;
@@ -14,10 +14,10 @@ import de.sudoq.model.sudoku.ConstraintType;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.UniqueConstraintBehavior;
 
-public class SolutionTests {
+class SolutionTests {
 
-	@Test
-	public void standardTest() {
+    @Test
+    void standardTest() {
 		Solution sol = new Solution();
 		Action act = new SolveActionFactory().createAction(5, new Cell(true, 3, -1, 9));
 		sol.setAction(act);

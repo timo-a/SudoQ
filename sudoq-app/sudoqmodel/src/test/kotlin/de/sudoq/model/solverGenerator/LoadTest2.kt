@@ -10,7 +10,7 @@ class LoadTest2 {
 
 
     @Test
-    fun test_loading() {
+    fun loading() {
         val sudokuRepo = PrettySudokuRepo2(SudokuTypeRepo4Tests())
         sudokuRepo.`should not be null`()
 

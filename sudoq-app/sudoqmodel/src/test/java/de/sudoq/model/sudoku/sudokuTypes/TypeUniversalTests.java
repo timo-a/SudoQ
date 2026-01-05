@@ -1,12 +1,9 @@
 package de.sudoq.model.sudoku.sudokuTypes;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import de.sudoq.model.sudoku.ConstraintBehavior;
 import de.sudoq.model.sudoku.Position;

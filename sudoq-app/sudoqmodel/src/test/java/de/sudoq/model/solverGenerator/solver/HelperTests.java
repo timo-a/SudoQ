@@ -1,16 +1,16 @@
 package de.sudoq.model.solverGenerator.solver;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
@@ -26,10 +26,10 @@ import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
-public class HelperTests {
+class HelperTests {
 
-	@Test
-	public void testXWing(){
+    @Test
+    void xWing(){
 		SolverSudoku sudoku = new SolverSudoku(SudokuMockUps.getXWing());
 
 		SolveHelper helper = new XWingHelper(sudoku, sudoku.getComplexityValue());
@@ -56,9 +56,9 @@ public class HelperTests {
 
 	}
 
-	/* test if xwing is really the first helper that can be applied */
-	@Test
-	public void testXWing2(){
+    /* test if xwing is really the first helper that can be applied */
+    @Test
+    void xWing2(){
 		SolverSudoku sudoku = new SolverSudoku(SudokuMockUps.getXWing());
 
 		List<SolveHelper> helperList = new ArrayList<>();
@@ -101,11 +101,8 @@ public class HelperTests {
 	}
 
 
-
-
-
-	@Test
-	public void testNakedInvalidCandidateLists() {
+    @Test
+    void nakedInvalidCandidateLists() {
 		SolverSudoku sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
 		for (Position p : sudoku.getPositions()) {
 			sudoku.getCurrentCandidates(p).clear();
@@ -127,14 +124,14 @@ public class HelperTests {
 		assertEquals(sudoku.getCurrentCandidates(Position.get(0, 2)), nakedDouble);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void testIllegalArgumentLevelTooLow() {
-		new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 0, 20);
+    @Test
+    void illegalArgumentLevelTooLow() {
+		assertThrows(IllegalArgumentException.class, () -> new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 0, 20));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void testIllegalArgumentComplexityTooLow() {
-		new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 1, -1);
+    @Test
+    void illegalArgumentComplexityTooLow() {
+		assertThrows(IllegalArgumentException.class, () -> new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 1, -1));
 	}
 
 	private void setVal(Sudoku s, int x, int y, int val){

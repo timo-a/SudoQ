@@ -5,7 +5,6 @@ import org.amshove.kluent.`should be null`
 import org.amshove.kluent.`should be true`
 import org.amshove.kluent.`should be`
 import org.amshove.kluent.shouldHaveSize
-import org.junit.Assert
 import org.junit.jupiter.api.Test
 import java.util.*
 
@@ -108,7 +107,7 @@ class SamuraiSudokuTypeTests {
                 allPosWithinBounds(x, x + 3, y, y + 3, c).`should be true`()
             }
         }
-        Assert.assertTrue(counter == 1)
+        counter `should be` 1
     }
 
     private fun allPosWithinBounds(

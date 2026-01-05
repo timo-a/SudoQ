@@ -1,8 +1,8 @@
 package de.sudoq.model.solverGenerator.solver;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -16,27 +16,30 @@ import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Created by timo on 15.10.16.
  */
-public class NakedHelperTests {
+class NakedHelperTests {
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testIllegalArgumentLevelTooLow() {
-        new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 0, 20);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testIllegalArgumentComplexityTooLow() {
-        new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 1, -1);
+    @Test
+    void illegalArgumentLevelTooLow() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 0, 20));
     }
 
     @Test
-    public void NakedSingleTest(){
+    void illegalArgumentComplexityTooLow() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new NakedHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), 1, -1));
+    }
+
+    @Test
+    void NakedSingleTest(){
         String pattern = "¹²³⁴ ¹²³⁴  ¹²³⁴ ¹ \n"
                        + "1    2     3    4 \n"
 
@@ -74,14 +77,14 @@ public class NakedHelperTests {
      * then test if they are removed from other field as candidates
      */
     @Test
-    public void testNakedUpdateOne() {
+    void nakedUpdateOne() {
         SolverSudoku sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
 
         prepareSudoku(sudoku);
 
 
         SubsetHelper helper = new NakedHelper(sudoku, 2, 21);
-        assertEquals(helper.getComplexityScore(), 21);
+        assertEquals(21, helper.getComplexityScore());
 
         assertEquals(2, getNumberOfNotes(sudoku,2, 1));//2 candidates each are expected as all others are set in the constraint.
         assertEquals(2, getNumberOfNotes(sudoku,2, 2));
@@ -117,7 +120,7 @@ public class NakedHelperTests {
     }
 
     @Test
-    public void testNakedUpdateAll() {
+    void nakedUpdateAll() {
         SolverSudoku sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
 
         prepareSudoku(sudoku);
@@ -139,7 +142,7 @@ public class NakedHelperTests {
             derivations.add(helper.getDerivation());
 
 
-        assertEquals(derivations.size(), 4);
+        assertEquals(4, derivations.size());
         assertEquals(2, getNumberOfNotes( sudoku, 2, 1) );
         assertEquals(2, getNumberOfNotes( sudoku, 2, 2) );
         assertEquals(2, getNumberOfNotes( sudoku, 9, 2) );
@@ -155,7 +158,7 @@ public class NakedHelperTests {
     }
 
     @Test
-    public void testNakedInvalidCandidateLists() {
+    void nakedInvalidCandidateLists() {
         SolverSudoku sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
         for (Position p : sudoku.getPositions())
             sudoku.getCurrentCandidates(p).clear();

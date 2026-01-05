@@ -2,11 +2,11 @@ package de.sudoq.model.sudoku;
 
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.Assert.assertEquals;
 
 import java.io.File;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout
 
 import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.persistence.xml.sudoku.ISudokuRepoProvider;
@@ -18,6 +18,7 @@ import de.sudoq.persistence.XmlHelper;
 import de.sudoq.persistence.sudoku.SudokuBE;
 import de.sudoq.persistence.sudoku.SudokuMapper;
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 class SudokuManagerTests {
 
@@ -65,8 +66,8 @@ class SudokuManagerTests {
     val sudokuRepoProvider : ISudokuRepoProvider = object : ISudokuRepoProvider {
 
         override fun getRepo (type : SudokuTypes, complexity : Complexity) : IRepo<Sudoku> {
-            assertEquals(SudokuTypes.standard9x9, type);
-            assertEquals(Complexity.infernal, complexity);
+            require(type == SudokuTypes.standard9x9)
+            require(complexity == Complexity.infernal)
             return sudokuRepo;
         }
 
@@ -75,7 +76,8 @@ class SudokuManagerTests {
         }
     };
 
-    @Test(timeout = 12000) // threw an exception and ran forever in the past -> timeout
+    @Test
+    @Timeout(12, unit = TimeUnit.SECONDS)// threw an exception and ran forever in the past -> timeout
 	fun test() {
 		//assertEquals(21, FileManager.getSudokuCountOf(SudokuTypes.standard9x9, Complexity.infernal));
         val s : Sudoku = SudokuManager(sudokuTypeRepo, sudokuRepoProvider)
@@ -92,5 +94,4 @@ class SudokuManagerTests {
 		sm.usedSudoku(s);
 		//assertEquals(21, FileManager.getSudokuCountOf(SudokuTypes.standard9x9, Complexity.infernal));
 	}
-
 }

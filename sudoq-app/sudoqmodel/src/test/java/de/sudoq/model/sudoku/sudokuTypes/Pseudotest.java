@@ -1,13 +1,15 @@
 package de.sudoq.model.sudoku.sudokuTypes;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import de.sudoq.model.Utility;
 import de.sudoq.model.sudoku.Constraint;
@@ -43,23 +45,23 @@ public class Pseudotest {
         
 		return s;
 	}
-	
-/*	private void filestuff(SudokuType st){
-		System.out.println(st.getEnumType());
-		
-		try {
-			String type= st.getEnumType().toString();
-			new XmlHelper().saveXml(st.toXmlTree(), new File("/home/timo/Code/android/Sudoq5/SudoQ/sudokus/"+type+"/"
-			                                                                                         +type+".xml"));
-		} catch (IOException e) {
-			
-			e.printStackTrace();
-		}
-		st.fillFromXml(st.toXmlTree());
-	}*/
-	
-	@Test
-	public void createXmlTypes() {
+
+    /*    private void filestuff(SudokuType st){
+            System.out.println(st.getEnumType());
+            
+            try {
+                String type= st.getEnumType().toString();
+                new XmlHelper().saveXml(st.toXmlTree(), new File("/home/timo/Code/android/Sudoq5/SudoQ/sudokus/"+type+"/"
+                                                                                                         +type+".xml"));
+            } catch (IOException e) {
+                
+                e.printStackTrace();
+            }
+            st.fillFromXml(st.toXmlTree());
+        }*/
+    
+    @Test
+    void createXmlTypes() {
 		return;
 		/*
 		TypeStandard old = new StandardSudokuType9x9();
@@ -82,55 +84,56 @@ public class Pseudotest {
 		*/
 	}
 
-	@Test
-	public void getEnumTypeTest() {
-		assertTrue(stHy.getEnumType() == SudokuTypes.HyperSudoku);
+    @Test
+    void getEnumTypeTest() {
+		assertSame(stHy.getEnumType(), SudokuTypes.HyperSudoku);
 	}
 
-	@Test
-	public void getAllocationFactorTest() {
-		assertTrue(stHy.getStandardAllocationFactor() == 0.25f);
+    @Test
+    void getAllocationFactorTest() {
+        assertEquals(0.25f, stHy.getStandardAllocationFactor());
 	}
 
-	@Test
-	public void buildComplexityConstraintInitializedWithNullShouldReturnNull() {
-		assertNull("passing null to buildComplexityConstraint should return null.", stHy.buildComplexityConstraint(null));
+    @Test
+    void buildComplexityConstraintInitializedWithNullShouldReturnNull() {
+		assertNull(stHy.buildComplexityConstraint(null), "passing null to buildComplexityConstraint should return null.");
 	}
 
-	@Test //This tests just specification, is such a test relevant?
-	public void buildComplexityConstraintEasy() {
+    //This tests just specification, is such a test relevant?
+    @Test
+    void buildComplexityConstraintEasy() {
 		ComplexityConstraint reference = new ComplexityConstraint(
 				Complexity.easy, 40, 500, 1500, 2);
 		ComplexityConstraint test = stHy.buildComplexityConstraint(Complexity.easy);
 		assertTrue(complexityEqual(test, reference));
 	}
 
-	@Test
-	public void buildComplexityConstraintMedium() {
+    @Test
+    void buildComplexityConstraintMedium() {
 		ComplexityConstraint reference = new ComplexityConstraint(
 				Complexity.medium, 32, 1500, 3500, 3);
 		ComplexityConstraint test = stHy.buildComplexityConstraint(Complexity.medium);
 		assertTrue(complexityEqual(test, reference));
 	}
 
-	@Test
-	public void buildComplexityConstraintDifficult() {
+    @Test
+    void buildComplexityConstraintDifficult() {
 		ComplexityConstraint reference = new ComplexityConstraint(
 				Complexity.difficult, 28, 3500, 6000, Integer.MAX_VALUE);
 		ComplexityConstraint test = stHy.buildComplexityConstraint(Complexity.difficult);
 		assertTrue(complexityEqual(test, reference));
 	}
 
-	@Test
-	public void buildComplexityConstraintInfernal() {
+    @Test
+    void buildComplexityConstraintInfernal() {
 		ComplexityConstraint reference = new ComplexityConstraint(
 				Complexity.infernal, 27, 6000, 25000, Integer.MAX_VALUE);
 		ComplexityConstraint test = stHy.buildComplexityConstraint(Complexity.infernal);
 		assertTrue(complexityEqual(test, reference));
 	}
 
-	@Test
-	public void buildComplexityConstraintArbitrary() {
+    @Test
+    void buildComplexityConstraintArbitrary() {
 		ComplexityConstraint reference = new ComplexityConstraint(
 				Complexity.arbitrary, 32, 1, Integer.MAX_VALUE, Integer.MAX_VALUE);
 		ComplexityConstraint test = stHy.buildComplexityConstraint(Complexity.arbitrary);

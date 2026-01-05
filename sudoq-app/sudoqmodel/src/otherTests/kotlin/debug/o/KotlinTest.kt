@@ -1,16 +1,16 @@
 package debug.o
 
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class KotlinTest {
     @Test
-    fun testF() {
-        Assertions.assertTrue(false)
+    fun f() {
+        assertTrue(false)
     }
 
     @Test
-    fun testT() {
-        Assertions.assertTrue(true)
+    fun t() {
+        assertTrue(true)
     }
 }

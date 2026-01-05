@@ -1,12 +1,7 @@
 package de.sudoq.model.profile;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 
 import java.io.File;
@@ -16,7 +11,7 @@ import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.Utility;
 import de.sudoq.model.game.Assistances;
 
-public class ProfileSingletonTests extends TestWithInitCleanforSingletons {
+class ProfileSingletonTests extends TestWithInitCleanforSingletons {
 
 	/*@Test
 	public void testProfiles() {
@@ -42,8 +37,8 @@ public class ProfileSingletonTests extends TestWithInitCleanforSingletons {
 
 	static File profileDir = new File("/tmp/sudoq/ProfileTests/profile");
 
-	@BeforeClass
-	public static void myinit() throws IOException {
+    @BeforeAll
+    static void myinit() throws IOException {
 		profileDir.mkdirs();
 		Utility.clearDir(profileDir);
 	}

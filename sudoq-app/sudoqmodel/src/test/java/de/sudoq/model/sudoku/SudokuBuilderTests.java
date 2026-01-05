@@ -1,26 +1,26 @@
 package de.sudoq.model.sudoku;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
-public class SudokuBuilderTests {
+class SudokuBuilderTests {
 
 	private final IRepo<SudokuType> str = new SudokuTypeRepo4Tests();
 
 	Cell cell;
 
-	@Test
-	public void testInitialisation() {
+    @Test
+    void initialisation() {
 		for (SudokuTypes t : SudokuTypes.values()) {
             testBuildergeneric(t);
 		}
@@ -35,8 +35,8 @@ public class SudokuBuilderTests {
 		}
 	}
 
-	@Test
-	public void testBuilderWithSolutions() {
+    @Test
+    void builderWithSolutions() {
 		SudokuBuilder sb = new SudokuBuilder(SudokuTypes.standard9x9, str);
 		sb.addSolution(Position.get(0, 0), 5);
 		sb.setFixed(Position.get(0, 0));

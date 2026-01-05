@@ -12,13 +12,13 @@ import java.lang.IllegalArgumentException
 class SumConstraintBehaviorTests {
 
     @Test
-    fun testIllegalValue() {
+    fun illegalValue() {
         invoking { SumConstraintBehavior(-1) }
             .`should throw`(IllegalArgumentException::class)
     }
 
     @Test
-    fun testConstraint() {
+    fun constraint() {
 
         val sudoku = mockk<Sudoku>();
 

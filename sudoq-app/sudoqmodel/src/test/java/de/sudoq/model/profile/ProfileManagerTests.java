@@ -10,9 +10,7 @@ import java.util.List;
 import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.persistence.xml.profile.IProfilesListRepo;
 
-import static org.junit.Assert.assertNotNull;
-
-public class ProfileManagerTests {
+class ProfileManagerTests {
 
     /*@Test todo fix, probably needs tempdir, but is it even relevant?
     public void testManagerInstantiation() {
@@ -116,7 +114,7 @@ public class ProfileManagerTests {
     }
 
     @Test
-    public void testChildInstantiation() {
+    void childInstantiation() {
         File f = new File("/tmp/123");
         //Profile p = new Profile(f);
     }

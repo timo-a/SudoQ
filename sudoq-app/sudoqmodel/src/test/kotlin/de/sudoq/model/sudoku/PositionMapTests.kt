@@ -9,7 +9,7 @@ import java.util.*
 class PositionMapTests {
 
     @Test
-    fun testStandardUsage() {
+    fun standardUsage() {
         val map = PositionMap<BitSet>(Position[9, 9])
         val b = BitSet()
         map.put(Position[3, 2], b)
@@ -20,7 +20,7 @@ class PositionMapTests {
     }
 
     @Test
-    fun testIllegalArguments() {
+    fun illegalArguments() {
         invoking {
             PositionMap<BitSet>(Position[1, 0])
         }.`should throw`(IllegalArgumentException::class)
