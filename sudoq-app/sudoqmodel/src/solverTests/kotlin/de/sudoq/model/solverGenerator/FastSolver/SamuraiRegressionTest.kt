@@ -4,7 +4,7 @@ import de.sudoq.model.solverGenerator.utils.PrettySamuraiRepo
 import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.complexity.Complexity
 import org.amshove.kluent.`should be true`
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import java.nio.file.Path
@@ -12,7 +12,7 @@ import java.nio.file.Path
 class SamuraiRegressionTest {
 
     @Test
-    fun testSamurai1() {
+    fun samurai1() {
         val repo = PrettySamuraiRepo()
         val s: Sudoku = repo.read(
             Path.of("sudokus", "samurai", "samurai1.pretty"),
@@ -22,7 +22,7 @@ class SamuraiRegressionTest {
     }
 
     @Test
-    fun testSamurai2() {
+    fun samurai2() {
         val repo = PrettySamuraiRepo()
         val s: Sudoku = repo.read(
             Path.of("sudokus", "samurai", "samurai2.pretty"),
@@ -32,7 +32,7 @@ class SamuraiRegressionTest {
     }
 
     @Test
-    fun testSamurai2fromFile() {
+    fun samurai2fromFile() {
         val repo = PrettySamuraiRepo()
         val s: Sudoku = repo.read(
             Path.of("sudokus", "samurai", "empty.pretty"),
@@ -47,7 +47,7 @@ class SamuraiRegressionTest {
      * */
     @ParameterizedTest
     @ValueSource(ints = [0,1,2,3,4,5,6,7,8])
-    fun testPermutation(i: Int) {
+    fun permutation(i: Int) {
         val repo = PrettySamuraiRepo()
         val s: Sudoku = repo.read(
             Path.of("sudokus", "samurai", "badPattern$i.pretty"),

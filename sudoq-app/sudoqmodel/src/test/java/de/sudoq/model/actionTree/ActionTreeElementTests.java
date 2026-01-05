@@ -1,19 +1,19 @@
 package de.sudoq.model.actionTree;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import de.sudoq.model.sudoku.Cell;
 
-public class ActionTreeElementTests {
+class ActionTreeElementTests {
 
-	@Test
-	public void testConstruction() {
+    @Test
+    void construction() {
 		Action action = new SolveAction(1, new Cell(-1, 1));
 
 		ActionTreeElement ate1 = new ActionTreeElement(1, action, null);
@@ -29,39 +29,39 @@ public class ActionTreeElementTests {
 		assertFalse(ate1.isMistake());
 	}
 
-	@Test(expected = NullPointerException.class)
-	public void testAddNullChild() {
+    @Test
+    void addNullChild() {
 		Action action = new SolveAction(1, new Cell(-1, 1));
 
 		ActionTreeElement ate1 = new ActionTreeElement(1, action, null);
 		ActionTreeElement ate2 = new ActionTreeElement(2, action, ate1);
 
-		ate2.addChild(null);
+		assertThrows(NullPointerException.class, () -> ate2.addChild(null));
 	}
 
-	@Test(expected = NullPointerException.class)
-	public void testFailConstruction() {
-		new ActionTreeElement(1, null, null);
+    @Test
+    void failConstruction() {
+		assertThrows(NullPointerException.class, () -> new ActionTreeElement(1, null, null));
 	}
 
-	@Test
-	public void testEquals() {
+    @Test
+    void equals() {
 		Action action = new SolveAction(1, new Cell(-1, 1));
 		ActionTreeElement ate = new ActionTreeElement(1, action, null);
 		ActionTreeElement ate1 = new ActionTreeElement(2, action, null);
-		assertFalse(ate.equals(new Object()));
-		assertFalse(ate.equals(ate1));
+        assertNotEquals(new Object(), ate);
+        assertNotEquals(ate, ate1);
 		ate1 = new ActionTreeElement(1, action, null);
-		assertTrue(ate.equals(ate1));
+        assertEquals(ate, ate1);
 		ate1.mark();
-		assertFalse(ate.equals(ate1));
+        assertNotEquals(ate, ate1);
 		ate1 = new ActionTreeElement(1, new SolveAction(1, new Cell(0, 1)), null);
-		assertFalse(ate.equals(ate1));
+        assertNotEquals(ate, ate1);
 
 	}
 
-	@Test
-	public void testIsSplitUp() {
+    @Test
+    void isSplitUp() {
 		Action action = new SolveAction(1, new Cell(-1, 1));
 
 		ActionTreeElement ate1 = new ActionTreeElement(1, action, null);
@@ -72,8 +72,8 @@ public class ActionTreeElementTests {
 		assertTrue(ate1.isSplitUp());
 	}
 
-	@Test
-	public void testActionExecution() {
+    @Test
+    void actionExecution() {
 		Cell f = new Cell(true, 3, -1, 9);
 		Action action = new SolveAction(1 - Cell.EMPTYVAL, f);
 
@@ -81,25 +81,25 @@ public class ActionTreeElementTests {
 
 		int value = f.getCurrentValue();
 		ate1.execute();
-		assertEquals(f.getCurrentValue(), 1);
+        assertEquals(1, f.getCurrentValue());
 		ate1.undo();
 		assertEquals(f.getCurrentValue(), value);
 	}
 
-	@Test
-	public void testCompare() {
+    @Test
+    void compare() {
 		ActionTreeElement a1 = new ActionTreeElement(1, new SolveAction(1, new Cell(1, 9)), null);
 		ActionTreeElement a2 = new ActionTreeElement(3, new SolveAction(1, new Cell(1, 9)), null);
 		ActionTreeElement a3 = new ActionTreeElement(1, new SolveAction(1, new Cell(1, 9)), null);
-		assertTrue(a1.compareTo(a2) == -2);
-		assertTrue(a2.compareTo(a1) == 2);
-		assertTrue(a1.compareTo(a3) == 0);
-		assertTrue(a3.compareTo(a1) == 0);
-		assertTrue(a2.compareTo(a2) == 0);
+        assertEquals(-2, a1.compareTo(a2));
+        assertEquals(2, a2.compareTo(a1));
+        assertEquals(0, a1.compareTo(a3));
+        assertEquals(0, a3.compareTo(a1));
+        assertEquals(0, a2.compareTo(a2));
 	}
 
-	@Test
-	public void testMark() {
+    @Test
+    void mark() {
 		ActionTreeElement a1 = new ActionTreeElement(1, new SolveAction(1, new Cell(1, 9)), null);
 		assertFalse(a1.isMarked());
 		a1.mark();

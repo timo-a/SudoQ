@@ -14,7 +14,7 @@ class SudokuTests {
     val sudokuType99: SudokuType = TypeBuilder.getType(SudokuTypes.standard9x9)
 
     @Test
-    fun testInitializeStandardSudoku() {
+    fun initializeStandardSudoku() {
         val sudoku = Sudoku(sudokuType99)
 
         sudoku.sudokuType `should be` sudokuType99
@@ -35,7 +35,7 @@ class SudokuTests {
     }
 
     @Test
-    fun testInitializeWithoutSolutions() {
+    fun initializeWithoutSolutions() {
         val sudoku = Sudoku(sudokuType99, null, null)
 
         sudoku.sudokuType.`should be`(sudokuType99)
@@ -57,7 +57,7 @@ class SudokuTests {
     }
 
     @Test
-    fun testInitializeWithoutSetValues() {
+    fun initializeWithoutSetValues() {
         val solutions = PositionMap<Int>(Position[9, 9], sudokuType99.validPositions) {
             _ -> 0 }
         val sudoku = Sudoku(sudokuType99, solutions, null)
@@ -78,7 +78,7 @@ class SudokuTests {
     }
 
     @Test
-    fun testGetCell() {
+    fun getCell() {
         val sudoku = Sudoku(sudokuType99)
         val p12 = Position[1, 2]
         sudoku.getCell(Position[9, 10]).`should be null`() //because out of board
@@ -89,7 +89,7 @@ class SudokuTests {
     }
 
     @Test
-    fun testComplexity() {
+    fun complexity() {
         val sudoku = Sudoku(sudokuType99)
         sudoku.complexity.`should be null`()
         sudoku.complexity = Complexity.easy
@@ -98,7 +98,7 @@ class SudokuTests {
     }
 
     @Test//TODO no chance to fail...
-    fun testIterator() {
+    fun iterator() {
         val su = Sudoku(sudokuType99)
         su.getCell(Position[0, 0])!!.currentValue = 5
         su.getCell(Position[1, 4])!!.currentValue = 4
@@ -114,7 +114,7 @@ class SudokuTests {
     }
 
     @Test
-    fun testInitializeSudokuWithValues() {
+    fun initializeSudokuWithValues() {
         val map = PositionMap<Int>(Position[9, 9], sudokuType99.validPositions) {
             pos -> pos.x + 1}
         val setValues = PositionMap<Boolean>(Position[9, 9],
@@ -133,7 +133,7 @@ class SudokuTests {
     }
 
     @Test //todo use mockk
-    fun testCellChangeNotification() {
+    fun cellChangeNotification() {
         val sudokuTypeRepo = SudokuTypeRepo4Tests()
         val sudoku = SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku()
         val listener = Listener();
@@ -155,7 +155,7 @@ class SudokuTests {
     }
 
     @Test
-    fun testNotEquals() {
+    fun notEquals() {
         val s1 = Sudoku(sudokuType99)
         var s2 = Sudoku(TypeBuilder.getType(SudokuTypes.standard16x16))
         s1.`should not be equal to`(s2)
@@ -171,7 +171,7 @@ class SudokuTests {
     }
 
     @Test
-    fun testHasErrors() {
+    fun hasErrors() {
         val sudokuType = sudokuType99
         val solutions = PositionMap<Int>(Position[9, 9])
         for (pos in sudokuType.validPositions) {
@@ -183,7 +183,7 @@ class SudokuTests {
     }
 
     @Test
-    fun testCellModification() {
+    fun cellModification() {
         val s = Sudoku(TypeBuilder.get99())
         val f = Cell(1000, 9)
         s.setCell(f, Position[4, 4])
@@ -193,7 +193,7 @@ class SudokuTests {
 
 
     @Test
-    fun testToString44() {
+    fun toString44() {
         val sudokuType = TypeBuilder.getType(SudokuTypes.standard4x4)
         val sudoku = Sudoku(sudokuType)
         sudoku.getCell(Position[1, 1])!!.currentValue = 3
@@ -209,7 +209,7 @@ class SudokuTests {
     }
 
     @Test
-    fun testToString99() {
+    fun toString99() {
         val sudokuType = TypeBuilder.getType(SudokuTypes.standard16x16)
         val sudoku = Sudoku(sudokuType)
         sudoku.getCell(Position[1, 1])!!.currentValue = 12

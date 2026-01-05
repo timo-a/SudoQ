@@ -1,21 +1,15 @@
 package de.sudoq.model.game;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import de.sudoq.model.Utility;
 import de.sudoq.model.utility.FileManager;
@@ -56,7 +50,7 @@ public class GameManagerTests {
 
 	};
 
-//	@BeforeClass
+//	@BeforeAll
 //	public static void init() throws IOException {
 //		//TestWithInitCleanforSingletons.legacyInit();
 //
@@ -65,7 +59,7 @@ public class GameManagerTests {
 //		p = ProfileSingleton.Companion.getInstance(profileDir);
 //	}
 //
-//	@AfterClass
+//	@AfterAll
 //	public static void clean() throws IOException, SecurityException, NoSuchFieldException, IllegalArgumentException,
 //			IllegalAccessException {
 //		/*
@@ -90,7 +84,7 @@ public class GameManagerTests {
 //		assertEquals(ProfileManager.NO_GAME, p.getCurrentGame());
 //	}
 //
-//	@After
+//	@AfterEach
 //	public void deleteAllGames() {
 //		GameRepo gr = new GameRepo(profileDir, p.getCurrentProfileID(), sudokuTypeRepo);
 //		for (int i = 1; i <= gr.getGamesFile().list().length; i++) {

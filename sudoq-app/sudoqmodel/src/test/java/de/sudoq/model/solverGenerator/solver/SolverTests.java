@@ -1,23 +1,25 @@
 package de.sudoq.model.solverGenerator.solver;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static de.sudoq.model.sudoku.sudokuTypes.SudokuTypes.standard9x9;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 
 import de.sudoq.model.TestWithInitCleanforSingletons;
@@ -35,7 +37,7 @@ import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
-public class SolverTests {
+class SolverTests {
 
 	private Sudoku sudoku;
 	private Sudoku sudoku16x16;
@@ -47,8 +49,8 @@ public class SolverTests {
 	private IRepo<SudokuType> sudokuTypeRepo = new SudokuTypeRepo4Tests();
 
 
-	@Before
-	public void before() {
+    @BeforeEach
+    void before() {
 		sudoku = new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku();
 		sudoku.setComplexity(Complexity.arbitrary);
 		solver = new Solver(sudoku);
@@ -58,7 +60,7 @@ public class SolverTests {
 	}
 
     @Test
-    public void test1(){
+    void test1(){
         Sudoku initialSudoku = new Sudoku(sudokuTypeRepo.read(standard9x9.ordinal()));
         for (int i=0; i < 8; i++)
             initialSudoku.getCell(Position.get(i,0)).setCurrentValue(i);
@@ -106,8 +108,9 @@ public class SolverTests {
 		sudoku.getCell(Position.get(6, 8)).setCurrentValue(2);
 	}
 
-    @Test(timeout = 3_000)
-    public void testSolveOneAutomaticallyApplied() {
+    @Test
+    @Timeout(value = 3, unit = TimeUnit.SECONDS)
+    void solveOneAutomaticallyApplied() {
         Sudoku sudoku = new Sudoku(sudokuTypeRepo.read(standard9x9.ordinal()));
         initSudoku9x9(sudoku);
         Solver solver = new Solver(sudoku);
@@ -128,8 +131,9 @@ public class SolverTests {
     }
 
 
-    @Test(timeout = 3_000)
-    public void testSolveOneManuallyApplied() {
+    @Test
+    @Timeout(value = 3, unit = TimeUnit.SECONDS)
+    void solveOneManuallyApplied() {
         Sudoku sudoku = new Sudoku(sudokuTypeRepo.read(standard9x9.ordinal()));
         initSudoku9x9(sudoku);
         Solver solver = new Solver(sudoku);
@@ -151,8 +155,9 @@ public class SolverTests {
     /**
      * Unique behaviour constraint is expected to fail because of 2 zeroes in the first row
      */
-	@Test(timeout = 3_000)
-	public void solveOneIncorrect() {
+    @Test
+    @Timeout(value = 3, unit = TimeUnit.SECONDS)
+    void solveOneIncorrect() {
         // GIVEN
         Sudoku initialSudoku = new Sudoku(sudokuTypeRepo.read(standard9x9.ordinal()));
         for (int i=0; i < 8; i++)
@@ -167,8 +172,9 @@ public class SolverTests {
         assertNull(solution);
 	}
 
-    @Test(timeout = 3_000)
-    public void testSolveAll() {
+    @Test
+    @Timeout(value = 3, unit = TimeUnit.SECONDS)
+    void solveAll() {
         Sudoku sudoku = new Sudoku(sudokuTypeRepo.read(standard9x9.ordinal()));
         initSudoku9x9(sudoku);
         Solver solver = new Solver(sudoku);
@@ -185,8 +191,9 @@ public class SolverTests {
             assertNotEquals(Cell.EMPTYVAL, f.getCurrentValue());
     }
 
-	@Test(timeout = 3_000)
-	public void solveAllIncorrect() {
+    @Test
+    @Timeout(value = 3, unit = TimeUnit.SECONDS)
+    void solveAllIncorrect() {
         // GIVEN
         Sudoku initialSudoku = new Sudoku(sudokuTypeRepo.read(standard9x9.ordinal()));
         for (int i=0; i < 8; i++)
@@ -201,19 +208,19 @@ public class SolverTests {
         assertFalse(response);
     }
 
-	@Test(expected = IllegalArgumentException.class)
-	public void solveAllIllegalComplexity() {
+    @Test
+    void solveAllIllegalComplexity() {
 		solver.solverSudoku.setComplexity(null);
-		solver.validate(null);
+		assertThrows(IllegalArgumentException.class, () -> solver.validate(null));
 	}
 
-	@Test(expected = NullPointerException.class)
-	public void testNullSudoku() {
-		new Solver(null);
+    @Test
+    void nullSudoku() {
+		assertThrows(NullPointerException.class, () -> new Solver(null));
 	}
 
-	@Test
-	public void testHashing() {
+    @Test
+    void hashing() {
 		Map<Position, Integer> map = new HashMap<Position, Integer>();
 		for (int i = 0; i < 16; i++) {
 			for (int j = 0; j < 16; j++) {
@@ -230,8 +237,8 @@ public class SolverTests {
 		}
 	}
 
-	@Test
-	public void testStandard16x16() {
+    @Test
+    void standard16x16() {
         List<String> pattern = Arrays.asList(//
                 "__F_9_C734_5AE__",//
                 "C___5______BD93_",//
@@ -312,7 +319,7 @@ public class SolverTests {
     }
 
     @Test
-	public void testStandard16x16No2() {
+    void standard16x16No2() {
         List<String> pattern = Arrays.asList(//
                 "0__123__B_5___6_",
                 "__7___6__2__895A",
@@ -373,8 +380,8 @@ public class SolverTests {
 		}
 	}
 
-	@Test
-	public void testNoConstraintSaturation() {
+    @Test
+    void noConstraintSaturation() {
 		sudoku.getCell(Position.get(0, 0)).setCurrentValue(0);
 		sudoku.getCell(Position.get(1, 0)).setCurrentValue(0);
 

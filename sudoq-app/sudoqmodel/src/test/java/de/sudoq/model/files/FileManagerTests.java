@@ -1,17 +1,16 @@
 package de.sudoq.model.files;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.Utility;
@@ -28,44 +27,38 @@ public class FileManagerTests {
 	public void testInit() {
 		assertTrue(Utility.sudokus.exists());
 		assertTrue(Utility.profiles.exists());
-		//assertTrue(profileManager.getProfilesDir().getAbsolutePath().equals(Utility.profiles.getAbsolutePath()));
-		assertTrue(sudokuDir.  getAbsolutePath().equals(Utility.sudokus.getAbsolutePath()));
+        //assertTrue(profileManager.getProfilesDir().getAbsolutePath().equals(Utility.profiles.getAbsolutePath()));
+        assertEquals(sudokuDir.getAbsolutePath(), Utility.sudokus.getAbsolutePath());
 		assertTrue(Utility.sudokus.list().length > 0);
 	}
 
 
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testNullInit() {
-		FileManager.initialize(null);
+    @Test
+    void nullInit() {
+		assertThrows(IllegalArgumentException.class, () -> FileManager.initialize(null));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void testInitNonWriteable() {
+    @Test
+    void initNonWriteable() {
 		File tmp = new File("tmp");
 		tmp.mkdir();
 		tmp.setWritable(false);
 		assertFalse(tmp.canWrite());
 
-		FileManager.initialize(tmp);
-
-		//tmp.setWritable(true);
-		//assertTrue(tmp.delete());
+		assertThrows(IllegalArgumentException.class, () -> FileManager.initialize(tmp));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void testUnableToWriteInit() {
+    @Test
+    void unableToWriteInit() {
 		File foo = new File("foo");
 		foo.setWritable(false);
 		assertFalse(foo.canWrite());
-        FileManager.initialize(foo);
+		assertThrows(IllegalArgumentException.class, () -> FileManager.initialize(foo));
 	}
 
 
-
-
-	@Test
-	public void getGameThumbnailFile() throws IOException {
+    @Test
+    void getGameThumbnailFile() throws Exception {
 
 		File profileDir = new File("/tmp/sudoq/FileManagerTests/getGameThumbnailFile/profiles");
 		profileDir.mkdirs();

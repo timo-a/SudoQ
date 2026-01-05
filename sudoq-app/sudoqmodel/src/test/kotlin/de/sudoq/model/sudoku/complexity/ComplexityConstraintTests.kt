@@ -3,7 +3,6 @@ package de.sudoq.model.sudoku.complexity
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should throw`
 import org.amshove.kluent.invoking
-import org.junit.Assert
 import org.junit.jupiter.api.Test
 import java.lang.IllegalArgumentException
 
@@ -20,28 +19,28 @@ class ComplexityConstraintTests {
     }
 
     @Test
-    fun testInvalidIdentifierRange() {
+    fun invalidIdentifierRange() {
         invoking {
             ComplexityConstraint(Complexity.difficult, 5, 2000, 1000, 5)
         }.`should throw`(IllegalArgumentException::class)
     }
 
     @Test
-    fun testNegativeMinIdentifier() {
+    fun negativeMinIdentifier() {
         invoking {
             ComplexityConstraint(Complexity.easy, 5, -5, 100, 3)
         }.`should throw`(IllegalArgumentException::class)
     }
 
     @Test
-    fun testNegativeAverageCells() {
+    fun negativeAverageCells() {
         invoking {
             ComplexityConstraint(Complexity.easy, -5, 10, 100, 3)
         }.`should throw`(IllegalArgumentException::class)
     }
 
     @Test
-    fun testIllegalNumberOfHelpers() {
+    fun illegalNumberOfHelpers() {
         invoking {
             ComplexityConstraint(Complexity.infernal, 5, 1000, 2000, -5)
         }.`should throw`(IllegalArgumentException::class)

@@ -1,8 +1,8 @@
 package de.sudoq.model.solverGenerator.solver;
 
-import org.junit.rules.TemporaryFolder;
-
+import java.io.File;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -16,6 +16,7 @@ import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.persistence.sudokuType.SudokuTypeRepo;
+
 //import de.sudoq.model.utility.persistence.sudokuType.SudokuTypeRepo;
 
 /**
@@ -23,7 +24,7 @@ import de.sudoq.persistence.sudokuType.SudokuTypeRepo;
  */
 public class SudokuMockUps {
 
-    static TemporaryFolder tmpSudokus = new TemporaryFolder();
+    //static File tmpSudokus = Files.createTempDirectory("junit").toFile();
 
 
     private static final IRepo<SudokuType> str = new SudokuTypeRepo4Tests();

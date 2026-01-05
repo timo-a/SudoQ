@@ -109,7 +109,7 @@ class CellTests {
     }
 
     @Test
-    fun testIsSolvedCorrect() {
+    fun isSolvedCorrect() {
         val f = Cell(true, 5, -1, 9)
         f.isSolvedCorrect.`should be false`()
 
@@ -124,7 +124,7 @@ class CellTests {
     }
 
     @Test
-    fun testIsNotWrong() {
+    fun isNotWrong() {
         val f = Cell(true, 4, -1, 9)
         f.currentValue = 0
         f.isNotWrong.`should be false`()
@@ -132,7 +132,7 @@ class CellTests {
     ///
 
     @Test
-    fun testEqual() {
+    fun equal() {
         val f = Cell(true, 3, -1, 9)
         val g = Cell(true, 3, -1, 9)
 
@@ -153,7 +153,7 @@ class CellTests {
     }
 
     @Test
-    fun testClearIsEmpty() {
+    fun clearIsEmpty() {
         val f = Cell(true, 3, -1, 9)
         f.currentValue = 5
 
@@ -180,7 +180,7 @@ class CellTests {
     }
 
     @Test
-    open fun testValueTooHigh() {
+    open fun valueTooHigh() {
         val cell = Cell(true, 2, 0, 4)
         invoking { run { cell.currentValue = 4 } } `should throw` IllegalArgumentException::class
     }

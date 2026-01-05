@@ -2,7 +2,6 @@ package de.sudoq.model.actionTree
 
 import de.sudoq.model.game.GameStateHandler
 import de.sudoq.model.sudoku.Cell
-import org.junit.Assert
 import org.amshove.kluent.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -10,7 +9,7 @@ import org.junit.jupiter.api.Test
 class AddElementsTest {
 
     @Test
-    fun testAddingRedundantElement() {
+    fun addingRedundantElement() {
         val stateHandler = GameStateHandler()
         //ActionTree at = new ActionTree();
         val factory: ActionFactory = SolveActionFactory()
@@ -27,7 +26,7 @@ class AddElementsTest {
     }
 
     @Test
-    fun testAddingRedundantElementBelow() {
+    fun addingRedundantElementBelow() {
         /*        r      intended values, not diffs
 		 *       / \
 		 *      1    2

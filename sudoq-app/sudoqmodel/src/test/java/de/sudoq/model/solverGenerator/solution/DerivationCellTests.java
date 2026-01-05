@@ -1,17 +1,18 @@
 package de.sudoq.model.solverGenerator.solution;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.BitSet;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import de.sudoq.model.sudoku.Position;
 
-public class DerivationCellTests {
+class DerivationCellTests {
 
-	@Test
-	public void standardTest() {
+    @Test
+    void standardTest() {
 		BitSet relevantCandidates = new BitSet();
 		relevantCandidates.set(5);
 		relevantCandidates.set(3);
@@ -24,14 +25,14 @@ public class DerivationCellTests {
 		assertEquals(derivation.getIrrelevantCandidates(), irrelevantCandidates);
 	}
 
-	@Test(expected = NullPointerException.class)
-	public void positionNull() {
-		new DerivationCell(null, new BitSet(), new BitSet());
+    @Test
+    void positionNull() {
+		assertThrows(NullPointerException.class, () -> new DerivationCell(null, new BitSet(), new BitSet()));
 	}
 
-	@Test(expected = NullPointerException.class)
-	public void candidatesNull() {
-		new DerivationCell(Position.get(1, 1), null, null);
+    @Test
+    void candidatesNull() {
+		assertThrows(NullPointerException.class, () -> new DerivationCell(Position.get(1, 1), null, null));
 	}
 
 }

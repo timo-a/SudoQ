@@ -1,7 +1,7 @@
 package de.sudoq.model.solverGenerator.solver;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -21,23 +21,23 @@ import de.sudoq.model.sudoku.UniqueConstraintBehavior;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Created by timo on 17.03.17.
  */
-public class LeftoverNoteTests {
+class LeftoverNoteTests {
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testIllegalArgumentComplexity() {
-        new LeftoverNoteHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), -1);
+    @Test
+    void illegalArgumentComplexity() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new LeftoverNoteHelper(new SolverSudoku(new Sudoku(TypeBuilder.get99())), -1));
     }
 
     @Test
-    public void LeftoverTest(){
+    void LeftoverTest(){
         //GIVEN
         String pattern = "¹²³⁴ .     .   . \n"
                        + ".    .     .   . \n"

@@ -1,10 +1,11 @@
 package de.sudoq.model.solverGenerator.solver;
 
-import org.junit.Before;
-import org.junit.Test;
-
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.Utility;
@@ -19,16 +20,9 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.persistence.sudokuType.SudokuTypeRepo;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 //import de.sudoq.external;
 
-public class SolverRegressionTests {
+class SolverRegressionTests {
 
     private Sudoku sudoku;
     private Sudoku sudoku16x16;
@@ -37,8 +31,8 @@ public class SolverRegressionTests {
 
     private static final boolean PRINT_SOLUTIONS = false;
 
-    @Before
-    public void before() {
+    @BeforeEach
+    void before() {
         IRepo<SudokuType> str = new SudokuTypeRepo4Tests();
 
 
@@ -52,7 +46,7 @@ public class SolverRegressionTests {
 
 
     @Test
-    public void testRegression1on9x9() {
+    void regression1on9x9() {
         String r2 = ". . 7 9 . 1 8 2 6 \n"
                   + "2 8 4 5 6 7 . . 3 \n"
                   + ". . 1 . . 8 7 . . \n"
@@ -73,7 +67,7 @@ public class SolverRegressionTests {
     }
 
     @Test
-    public void testSamurai1(){
+    void samurai1(){
         String pattern = ". 7 . . . 2 0 . 8       . 5 . . . . 3 . . "
                 + "5 0 . 8 . 3 7 . .       0 . . 4 2 5 8 7 . "
                 + "3 8 6 . 0 . . . 5       . . 6 8 3 . . . . "
@@ -102,8 +96,9 @@ public class SolverRegressionTests {
         assertTrue(solver.solveAll(true, false, false));
 
     }
+
     @Test
-    public void testSamurai1_moreSolutions(){
+    void samurai1MoreSolutions(){
         String pattern =             "4 7 1 . . 2 0 3 8       7 5 8 1 0 6 3 4 2 "
                                    + "5 0 2 8 4 3 7 . .       0 1 3 4 2 5 8 7 6 "
                                    + "3 8 6 7 0 1 4 2 5       4 2 6 8 3 7 0 1 5 "
@@ -159,7 +154,7 @@ public class SolverRegressionTests {
 
 
     @Test
-    public void testSamurai1_subBoard_a(){
+    void samurai1SubBoardA(){
         String pattern = ". 7 . . . 2 0 . 8 "
                        + "5 0 . 8 . 3 7 . . "
                        + "3 8 6 . 0 . . . 5 "

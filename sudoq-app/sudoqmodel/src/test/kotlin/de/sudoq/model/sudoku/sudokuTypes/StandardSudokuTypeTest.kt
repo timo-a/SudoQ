@@ -4,8 +4,6 @@ import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint
 import org.amshove.kluent.*
-import org.amshove.kluent.`should be false`
-import org.junit.Assert
 import org.junit.jupiter.api.Test
 
 class StandardSudokuTypeTest {

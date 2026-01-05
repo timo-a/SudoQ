@@ -31,7 +31,7 @@ class SymbolIteratorTest {
     }
 
     @Test
-    fun testArbitrary() {
+    fun arbitrary() {
         val sst = TypeBuilder.getType(SudokuTypes.standard4x4)
         for (i in intArrayOf(1, 2, 3, 20, 100)) {
             sst.setNumberOfSymbols(i)

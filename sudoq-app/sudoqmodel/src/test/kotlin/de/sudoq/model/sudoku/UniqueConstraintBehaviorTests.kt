@@ -9,7 +9,7 @@ import org.junit.jupiter.api.*
 class UniqueConstraintBehaviorTests {
 
     @Test
-    fun testConstraint() {
+    fun constraint() {
 
         val sudoku = mockk<Sudoku>(relaxed = true)
 
