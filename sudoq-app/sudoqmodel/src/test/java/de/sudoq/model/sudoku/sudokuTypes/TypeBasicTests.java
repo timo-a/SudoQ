@@ -15,8 +15,6 @@ import de.sudoq.model.sudoku.Sudoku;
 
 public class TypeBasicTests {
 
-	PositionMap<Integer> map = new PositionMap<Integer>(Position.get(9, 9));
-
 	int[] su1 = { 9, 5, 8, 3, 1, 2, 7, 6, 4
 	            , 4, 6, 1, 5, 7, 9, 8, 2, 3
 	            , 3, 7, 2, 4, 6, 8, 9, 5, 1
@@ -38,11 +36,10 @@ public class TypeBasicTests {
 
         SudokuType s99 = TypeBuilder.getType(SudokuTypes.standard9x9);
 
-        for(Position pos : s99.getValidPositions()) {
-            map.put(pos, su1[pos.getY() * 9 + pos.getX()]);
-        };
+        PositionMap<Integer> map = new PositionMap<>(Position.get(9, 9), s99.getValidPositions(),
+                p -> su1[p.getY() * 9 + p.getX()]);
 
-		Sudoku sudoku1 = new Sudoku(s99, map, new PositionMap<Boolean>(Position.get(9, 9)));
+		Sudoku sudoku1 = new Sudoku(s99, map, new PositionMap<>(Position.get(9, 9)));
 		for (Cell f : sudoku1)
 			f.setCurrentValue(f.getSolution());
 		assertTrue(sudoku1.getSudokuType().checkSudoku(sudoku1));

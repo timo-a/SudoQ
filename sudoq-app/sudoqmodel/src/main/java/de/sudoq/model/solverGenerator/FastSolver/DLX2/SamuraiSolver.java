@@ -47,12 +47,8 @@ public class SamuraiSolver implements FastSolver {
     @Override
     public PositionMap<Integer> getSolutions() {
         int[][] solution = samurai.solutions.get(0);
-        PositionMap<Integer> pm = new PositionMap<>(Position.get(21, 21));
-        for (Position p : s.getSudokuType().getValidPositions()) {
-            pm.put(p, solution[p.getY()][p.getX()] - 1);
-        }
-
-        return pm;
+        return new PositionMap<>(Position.get(21, 21), s.getSudokuType().getValidPositions(),
+                position -> solution[position.getY()][position.getX()] - 1);
     }
 
     @Override

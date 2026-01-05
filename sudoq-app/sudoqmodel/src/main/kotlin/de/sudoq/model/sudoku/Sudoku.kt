@@ -30,7 +30,7 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
 
     /** Eine Map, welche jeder Position des Sudokus ein Feld zuweist */
     @JvmField
-    var cells: HashMap<Position, Cell>? = null
+    var cells: HashMap<Position, Cell>? = null //todo why isn't this a [PositionMap]?
 
     private var cellPositions: MutableMap<Int, Position>? = null
 

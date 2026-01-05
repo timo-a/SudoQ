@@ -157,7 +157,7 @@ public class NakedHelperTests {
     @Test
     public void testNakedInvalidCandidateLists() {
         SolverSudoku sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
-        for (Position p : sudoku.positions)
+        for (Position p : sudoku.getPositions())
             sudoku.getCurrentCandidates(p).clear();
 
 

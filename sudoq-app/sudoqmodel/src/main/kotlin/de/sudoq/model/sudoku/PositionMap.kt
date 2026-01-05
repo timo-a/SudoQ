@@ -22,16 +22,16 @@ class PositionMap<T>(private var dimension: Position) : Cloneable {
     var values: Array<Array<T?>>
 
     /**
-     * Adds the object at the position, an existing mapping will be overwritten
+     * Adds the value at the position, an existing mapping will be overwritten
      *
      * @param pos [Position] at which to insert the object
-     * @param object the object to insert
-     * @return the previous object at that position or null if there was none
+     * @param value the value to insert
+     * @return the previous value at that position or null if there was none
      */
-    fun put(pos: Position, `object`: T): T? {
+    fun put(pos: Position, value: T): T? {
         require(!(pos.x > dimension.x || pos.y > dimension.y))
         val ret = values[pos.x][pos.y]
-        values[pos.x][pos.y] = `object`
+        values[pos.x][pos.y] = value
         return ret
     }
 
@@ -41,31 +41,12 @@ class PositionMap<T>(private var dimension: Position) : Cloneable {
      * @param pos [Position] to query object for
      * @return the object at the specified position or null if there is no mapping
      */
-    operator fun get(pos: Position): T? {
+    operator fun get(pos: Position): T? {//todo can this be made nonnullable?
         require(pos.x <= dimension.x) { "x coordinate of pos was > " + dimension.x + ": " + pos.x }
         require(pos.y <= dimension.y) { "y coordinate of pos was > " + dimension.y + ": " + pos.y }
-        assert(pos.x < dimension.x)
-        assert(pos.y < dimension.y)
-        assert(pos.x >= 0)
-        assert(pos.y >= 0)
+        assert(pos.x in 0 until dimension.x)
+        assert(pos.y in 0 until dimension.y)
         return values[pos.x][pos.y]
-    }
-
-    /**
-     * Returns a "deep copy" of this [PositionMap].
-     * `clone` is called on every object in the map.
-     *
-     * @return A "deep copy" of this PositionMap
-     */
-    public override fun clone(): PositionMap<T> {
-        val result = PositionMap<T>(dimension)
-        for (i in 0 until dimension.x) {
-            for (j in 0 until dimension.y) {
-                if (values[i][j] != null)
-                    result.put(Position[i, j], values[i][j]!!)
-            }
-        }
-        return result
     }
 
     /**
@@ -79,4 +60,19 @@ class PositionMap<T>(private var dimension: Position) : Cloneable {
         require(!(dimension.x < 1 || dimension.y < 1)) { "Specified dimension or one of its components was null." }
         values = Array(dimension.x) { arrayOfNulls<Any>(dimension.y) } as Array<Array<T?>>
     }
+
+    /**
+     * Creates and populates a PositionMap by applying a mapping function to an iterable of positions.
+     *
+     * @param dimension The dimensions of the map.
+     * @param positions An iterable of [Position]s to populate the map with.
+     * @param mapper A function that takes a [Position] and returns the corresponding value of type T.
+     */
+    constructor(dimension: Position, positions: Iterable<Position>, mapper: (Position) -> T) : this(dimension) {
+        require(positions.count() <= dimension.x * dimension.y) //for samurai there are less positions
+        for (pos in positions) {
+            this.put(pos, mapper(pos))
+        }
+    }
+
 }

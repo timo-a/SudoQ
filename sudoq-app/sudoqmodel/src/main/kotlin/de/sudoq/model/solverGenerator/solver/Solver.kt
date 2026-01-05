@@ -144,7 +144,7 @@ open class Solver(sudoku: Sudoku) {
             }
 
             // try to solve fields where only one note is remaining TODO why not just make a naked single?!(efficiency?)
-            for (p in solverSudoku.positions!!) {
+            for (p in solverSudoku.positions) {
                 val b: BitSet = solverSudoku.getCurrentCandidates(p)
                 if (b.cardinality() == 1) { //we found a field where only one note remains
                     if (!solverSudoku.hasBranch()) {
@@ -215,10 +215,9 @@ open class Solver(sudoku: Sudoku) {
         //todo remove this function, and maybe actions alltogether
         //System.out.println("start of solveAll2");
         //print9x9(sudoku);
-        val copy = PositionMap<Int>(solverSudoku.sudokuType.size!!)
-        for (p in solverSudoku.positions!!) {
-            copy.put(p, solverSudoku.getCell(p)!!.currentValue)
-        }
+        val copy: PositionMap<Int> = PositionMap(solverSudoku.sudokuType.size!!, solverSudoku.positions)
+            { p -> solverSudoku.getCell(p)!!.currentValue }
+
         val solved = solveAll(buildDerivation, false, false)
 
         //System.out.println("solved: "+solved);
@@ -226,7 +225,7 @@ open class Solver(sudoku: Sudoku) {
 
         // Restore old state if solutions shall not be applied or if sudoku could not be solved
         if (!applySolutions || !solved) {
-            for (p in solverSudoku.positions!!) {
+            for (p in solverSudoku.positions) {
                 solverSudoku.getCell(p)!!.setCurrentValue(copy[p]!!, false)
             }
         }
@@ -305,10 +304,8 @@ open class Solver(sudoku: Sudoku) {
         val ambiguous = false
 
         //map position -> value
-        val copy = PositionMap<Int>(solverSudoku.sudokuType.size!!)
-        for (p in solverSudoku.positions!!) {
-            copy.put(p, solverSudoku.getCell(p)!!.currentValue)
-        }
+        val copy: PositionMap<Int> = PositionMap(solverSudoku.sudokuType.size!!, solverSudoku.positions)
+            { p -> solverSudoku.getCell(p)!!.currentValue }
 
         /////debug
         //int q = this.sudoku.getComplexityValue();
@@ -322,7 +319,7 @@ open class Solver(sudoku: Sudoku) {
             solved = true
             // store the correct solution
             if (solution != null) {
-                for (p in solverSudoku.positions!!) {
+                for (p in solverSudoku.positions) {
                     val curVal = solverSudoku.getCell(p)!!.currentValue
                     solution.put(p, curVal)
                 }
@@ -339,7 +336,7 @@ open class Solver(sudoku: Sudoku) {
         //this.sudoku.complexityValue is overwritten by the attempt at finding a second solution
 
         // restore initial state
-        for (p in solverSudoku.positions!!) solverSudoku.getCell(p)!!
+        for (p in solverSudoku.positions) solverSudoku.getCell(p)!!
             .setCurrentValue(copy[p]!!, false)
 
 
@@ -369,14 +366,8 @@ open class Solver(sudoku: Sudoku) {
      * @return the solutions of the last `solve`-call.
      */
     val solutionsMap: PositionMap<Int>
-        get() {
-            val solutions = PositionMap<Int>(solverSudoku.sudokuType.size!!)
-            for (p in solverSudoku.positions!!) {
-                val curVal = solverSudoku.getCell(p)!!.currentValue
-                solutions.put(p, curVal)
-            }
-            return solutions
-        }
+        get() = PositionMap(solverSudoku.sudokuType.size!!, solverSudoku.positions)
+             { p -> solverSudoku.getCell(p)!!.currentValue }
 
     /**
      * Indicates whether further solutions exist for a sudoku where we've already found one.
@@ -641,7 +632,7 @@ if there is another candidate -> advance
         val newSolution = Solution()
         do {
             hasNakedSingle = false
-            for (p in solverSudoku.positions!!) {
+            for (p in solverSudoku.positions) {
                 val b: BitSet = solverSudoku.getCurrentCandidates(p)
                 if (b.cardinality() == 1) {
                     if (addDerivations) {
@@ -700,7 +691,7 @@ if there is another candidate -> advance
      * @return true, falls das Sudoku gelöst ist, false andernfalls
      */
     protected val isFilledCompletely: Boolean
-        get() = solverSudoku.positions!!.map(solverSudoku::getCell)
+        get() = solverSudoku.positions.map(solverSudoku::getCell)
             .none { it!!.isNotSolved }
 
 
