@@ -12,9 +12,12 @@ android {
         minSdk = 19
         targetSdk = 34
         multiDexEnabled = true
-        resConfigs("en", "de", "fr")
         testApplicationId = "de.sudoq.test"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    androidResources {
+        localeFilters.addAll(listOf("en", "de", "fr"))
     }
 
     sourceSets {
