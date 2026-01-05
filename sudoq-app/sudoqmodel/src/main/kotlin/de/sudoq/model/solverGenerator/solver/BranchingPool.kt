@@ -24,21 +24,21 @@ class BranchingPool {
     /**
      * Returns an unused Branching initialized with Position `p` and Candidate `candidate`.
      * If possible a branch is recycled, otherwise newly instantiated.
-     *
+     * todo recycling probably no longer necessary
      * @return a Branching initialized with `p` and `candidate`
      * @throws IllegalArgumentException
      * Wird geworfen, falls die spezifizierte Position null ist
      */
-    fun getBranching(p: Position, candidate: Int): Branching {
+    fun getBranching(p: Position, candidate: Int, candidates: PositionMap<CandidateSet>): Branching {
 
         /* fetch a new Branching. Preferrably recycle one from unused */
         val ret: Branching
         /* if no unused Branchings ready */
         if (branchingsReservoir.isEmpty()) {
-            ret = Branching(p, candidate)
+            ret = Branching(p, candidate, candidates)
         } else {
             ret = branchingsReservoir.pop()
-            ret.initializeWith(p, candidate)
+            ret.initializeWith(p, candidate, candidates)
         }
         branchingsInUse.push(ret) //store it among the used
         return ret
@@ -71,7 +71,7 @@ class BranchingPool {
      * Alle Attribute sind package scope verfügbar, um diese direkt bearbeiten zu können.
      * Aus Performancegründen wurde auf einen Zugriff durch Getter/Setter-Methoden verzichtet.
      */
-    inner class Branching(p: Position, candidate: Int) {
+    inner class Branching(p: Position, candidate: Int, candidates: PositionMap<CandidateSet>) {
         /**
          * Die Position, an der gebrancht wurde
          */
@@ -93,7 +93,7 @@ class BranchingPool {
         /**
          * Eine Map, welche für jede Position dessen Kandidaten vor dem Branchen speichert.
          */
-        var candidates: PositionMap<CandidateSet>? = null
+        lateinit var candidates: PositionMap<CandidateSet>
 
         /**
          * Der Komplexitätswert für diesen Branch
@@ -101,10 +101,11 @@ class BranchingPool {
         var complexityValue = 0
 
         //we have an extra method here to ensure that reinitialization as well as initialization are invariant with regard to pos, can, complxVal
-        fun initializeWith(p: Position, candidate: Int) {
+        fun initializeWith(p: Position, candidate: Int, candidates: PositionMap<CandidateSet>) {
             position = p
             this.candidate = candidate
             complexityValue = 0
+            this.candidates = candidates
         }
 
         /**
@@ -112,7 +113,7 @@ class BranchingPool {
          * position and candidate are set by parameter values, complexity value is set to 0
          */
         init {
-            initializeWith(p, candidate)
+            initializeWith(p, candidate, candidates)
         }
     }
 

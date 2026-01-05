@@ -152,14 +152,14 @@ public class SolverSudokuTests {
 		sudoku.startNewBranch(Position.get(1, 1), 1);
 		sudoku.resetCandidates();
 		assertFalse(sudoku.hasBranch());
-		for (Position p : sudoku.positions) {
+		for (Position p : sudoku.getPositions()) {
 			if (sudoku.getCell(p).getCurrentValue() != -1) {
 				assertEquals(0, sudoku.getCurrentCandidates(p).cardinality());
 			} else {
 				int currentCandidate = -1;
 				for (int i = 0; i < sudoku.getCurrentCandidates(p).cardinality(); i++) {
 					currentCandidate = sudoku.getCurrentCandidates(p).nextSetBit(currentCandidate + 1);
-					for (Constraint c : sudoku.constraints.get(p)) {
+					for (Constraint c : sudoku.getConstraints().get(p)) {
 						for (Position pos : c) {
                             assertNotEquals(sudoku.getCell(pos).getCurrentValue(), currentCandidate);
 						}

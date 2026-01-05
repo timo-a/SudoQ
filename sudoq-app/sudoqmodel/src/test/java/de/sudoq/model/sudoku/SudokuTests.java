@@ -94,10 +94,8 @@ public class SudokuTests {
 	@Test
 	public void testInitializeWithoutSetValues() {
 		SudokuType sudokuType = TypeBuilder.getType(SudokuTypes.standard9x9);
-		PositionMap<Integer> solutions = new PositionMap<>(Position.get(9, 9));
-        for (Position pos : sudokuType.getValidPositions()) {
-            solutions.put(pos, 0);
-		}
+		PositionMap<Integer> solutions = new PositionMap<>(Position.get(9, 9),
+                sudokuType.getValidPositions(), p -> 0);
 		Sudoku sudoku = new Sudoku(sudokuType, solutions, null);
 
 		assertTrue("Sudokutype isn't the same", sudoku.getSudokuType() == sudokuType);
@@ -164,10 +162,10 @@ public class SudokuTests {
 	@Test
 	public void testInitializeSudokuWithValues() {
         SudokuType s99 = TypeBuilder.getType(SudokuTypes.standard9x9);
-		PositionMap<Integer> map = new PositionMap<>(s99.getSize());
+		PositionMap<Integer> map = new PositionMap<>(s99.getSize(), s99.getValidPositions(),
+                pos -> pos.getX() + 1);
 		PositionMap<Boolean> setValues = new PositionMap<>(s99.getSize());
 		for (Position pos : s99.getValidPositions()) {
-            map.put(pos, pos.getX() + 1);
             if (pos.getX() != pos.getY()) {
                 setValues.put(pos, true);
 			}
@@ -230,10 +228,8 @@ public class SudokuTests {
 	@Test
 	public void testHasErrors() {
 		SudokuType sudokuType = TypeBuilder.getType(SudokuTypes.standard9x9);
-		PositionMap<Integer> solutions = new PositionMap<>(Position.get(9, 9));
-		for (Position pos : sudokuType.getValidPositions()) {
-            solutions.put(pos, 0);
-		}
+		PositionMap<Integer> solutions = new PositionMap<>(Position.get(9, 9),
+                sudokuType.getValidPositions(), p -> 0);
 		Sudoku sudoku = new Sudoku(sudokuType, solutions, null);
 		sudoku.getCell(Position.get(0, 0)).setCurrentValue(1);
 		assertTrue(sudoku.hasErrors());
