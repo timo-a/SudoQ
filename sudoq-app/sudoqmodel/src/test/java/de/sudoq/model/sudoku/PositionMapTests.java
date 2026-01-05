@@ -22,10 +22,6 @@ public class PositionMapTests {
 		assertTrue(map.get(Position.get(3, 2)).get(7));
 		b.clear();
 		assertEquals(map.get(Position.get(3, 2)).cardinality(), 0);
-
-		PositionMap<BitSet> map2 = map.clone();
-		assertEquals(map.get(Position.get(3, 2)), map2.get(Position.get(3, 2)));
-		assertEquals(map.get(Position.get(2, 3)), map2.get(Position.get(2, 3)));
 	}
 
 	@Test

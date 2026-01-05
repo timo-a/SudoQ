@@ -11,22 +11,22 @@ import java.util.*
 class SolverSudoku : Sudoku {
 
     /**
-     * Eine Liste aller Positionen dieses Sudokus
+     * A list of all [Position]s in this sudoku
      */
-    @JvmField
-    var positions: MutableList<Position>? = null
+    lateinit var positions: MutableList<Position>
+        private set
 
     /**
-     * Mappt die Positionen auf eine Liste von Constraints, zu welchen diese Position gehört
+     * Maps each [Position]s in this sudoku to a list of Constraints, that contain it
      */
-    @JvmField
-    var constraints: PositionMap<ArrayList<Constraint>>? = null
+    lateinit var constraints: PositionMap<ArrayList<Constraint>>
+         private set
 
     /**
      * Mappt die Positionen auf ein BitSet, welches die Kandidaten für dieses Feld repräsentiert nach jedem
      * Branching-Schritt repräsentiert
      */
-    private var currentCandidates: PositionMap<CandidateSet>? = null
+    private lateinit var currentCandidates: PositionMap<CandidateSet>
 
     /**
      * Speichert die Positionen an denen gebrancht wurde. (implizit in den einzelnen branchings )
@@ -93,22 +93,19 @@ class SolverSudoku : Sudoku {
 
         // initialize the list of positions
         //this.positions = new ArrayList<>(fields.keySet());
-        positions = ArrayList(cells!!.keys) //for debugging we need the same as once
+        //positions = ArrayList(cells!!.keys) //for debugging we need the same as once
 
-
-        /* For debugging, we need predictable order */
+        // For debugging, we need predictable order
         positions = Generator.getPositions(sudoku).toMutableList() //TODO remove again
 
 
         // initialize new SolverSudoku with the fields of the specified one
-        for (p in positions!!)
+        for (p in positions)
             cells!![p] = (sudoku.getCell(p)!!.clone() as Cell)
 
         // initialize the constraints lists for each position and the initial
         // candidates for each field
-        constraints = PositionMap(sudokuType.size!!)
-        for (p in positions!!)
-            constraints!!.put(p, ArrayList())
+        constraints = PositionMap(sudokuType.size!!, positions) { _ -> ArrayList() }
 
 
         //if we were functional
@@ -119,10 +116,10 @@ class SolverSudoku : Sudoku {
         val allConstraints: Iterable<Constraint> = sudoku.sudokuType
         for (constr in allConstraints)
             for (pos in constr.getPositions())
-                constraints!![pos]!!.add(constr)
+                constraints[pos]!!.add(constr)
 
         // initialize the candidates map
-        positionPool = PositionMapPool(sudokuType.size, positions)
+        positionPool = PositionMapPool(sudokuType.size!!, positions)
         branchPool = BranchingPool()
         currentCandidates = positionPool!!.positionMap
 
@@ -130,11 +127,11 @@ class SolverSudoku : Sudoku {
         when (mode) {
             Initialization.NEW_CANDIDATES -> resetCandidates()
             Initialization.USE_EXISTING ->                //solverSudoku's fields take the candidates/notes from sudoku
-                for (p in positions!!)
+                for (p in positions)
                     if (sudoku.getCell(p)!!.isNotSolved) {
                         for (i in sudokuType.symbolIterator)
-                            if (sudoku.getCell(p)!!.isNoteSet(i) != currentCandidates!![p]!![i])
-                                currentCandidates!![p]!!.flip(i)
+                            if (sudoku.getCell(p)!!.isNoteSet(i) != currentCandidates[p]!![i])
+                                currentCandidates[p]!!.flip(i)
                     }
 
             else -> {throw IllegalStateException("Unexpected value: $mode")
@@ -157,8 +154,8 @@ class SolverSudoku : Sudoku {
         currentCandidates = positionPool!!.positionMap
 
         // set the candidate lists of all unsolved cells to 'all possible'
-        positions!!.filter { position -> cells!![position]!!.isNotSolved }
-            .map { position -> currentCandidates!![position]!! }
+        positions.filter { position -> cells!![position]!!.isNotSolved }
+            .map { position -> currentCandidates[position]!! }
             .forEach { candidateSet -> candidateSet.set(0, sudokuType.numberOfSymbols) }
 
         updateCandidates()
@@ -181,17 +178,16 @@ class SolverSudoku : Sudoku {
         require(cells!![pos] != null) { "Position does not exist in this sudoku." }
 
         // initialize a new branch and copy candidate lists of current branch
-        val branch = branchPool!!.getBranching(pos, candidate) //create new branch
-        branch.candidates = currentCandidates //store current candidates there
+        val branch = branchPool!!.getBranching(pos, candidate, currentCandidates) //create new branch, store current candidates there
         currentCandidates =
             positionPool!!.positionMap //current candidates in a new (empty) PositionMap
-        for (p in positions!!)
-            currentCandidates!![p]!!.or(branch.candidates!![p]!!) //fill currentCandidates with candidates from before branching
+        for (p in positions)
+            currentCandidates[p]!!.or(branch.candidates[p]!!) //fill currentCandidates with candidates from before branching
         branchings.push(branch) //put branch (i.e. a backup of what we had before this method was called) on branchings (which seems to be identical to branchpool.branchesinactiveuse)
 
         //the candidate given as parameter is entered as a (user solution)
-        currentCandidates!![pos]!!.clear()
-        currentCandidates!![pos]!!.set(candidate)
+        currentCandidates[pos]!!.clear()
+        currentCandidates[pos]!!.set(candidate)
     }
 
     /**
@@ -218,7 +214,7 @@ class SolverSudoku : Sudoku {
         complexityValue -= lastBranching.complexityValue //substract cmplx scores of techniques that are not used after all todo these techniques are still part of the solution journey... average them in somehow?
 
         //val branchCandidates = this.currentCandidates!!.get(lastBranching.position!!);//candidates of A at critical pos of A
-        currentCandidates!![lastBranching.position!!]!!.clear(lastBranching.candidate);//since we're deleting B, guessing this candidate led to failure -> it is not part of solution, we need to delete it
+        currentCandidates[lastBranching.position!!]!!.clear(lastBranching.candidate);//since we're deleting B, guessing this candidate led to failure -> it is not part of solution, we need to delete it
         branchPool!!.recycleLastBranching()
         positionPool!!.returnPositionMap()
         //if (branchCandidates.isEmpty()) {
@@ -242,18 +238,18 @@ class SolverSudoku : Sudoku {
         var updatedConstraints: ArrayList<Constraint>
         var updatedPositions: ArrayList<Position>
         var isInvalid = false
-        for (position in positions!!) {
+        for (position in positions) {
             if (!isInvalid && !getCell(position)!!.isNotSolved) {
                 // Update fields in unique constraints
-                updatedConstraints = constraints!![position]!!
+                updatedConstraints = constraints[position]!!
                 for (uConstraint in updatedConstraints) {
                     if (!isInvalid && uConstraint.hasUniqueBehavior()) {
                         updatedPositions = uConstraint.getPositions()
                         var up = 0
                         while (up < updatedPositions.size && !isInvalid) {
                             val updatedPosition: Position = updatedPositions[up]
-                            currentCandidates!![updatedPosition]!!.clear(getCell(position)!!.currentValue)
-                            if (currentCandidates!![updatedPosition]!!.isEmpty
+                            currentCandidates[updatedPosition]!!.clear(getCell(position)!!.currentValue)
+                            if (currentCandidates[updatedPosition]!!.isEmpty
                                 && getCell(updatedPosition)!!.isNotSolved
                             )
                                 isInvalid = true
@@ -263,13 +259,13 @@ class SolverSudoku : Sudoku {
                 }
             } else {
                 /* Update candidates in non-unique constraints */
-                updatedConstraints = constraints!![position]!!
+                updatedConstraints = constraints[position]!!
                 val hasNonUnique = updatedConstraints.any { c -> !c.hasUniqueBehavior() }
 
                 //boolean hasNonUnique = updatedConstraints.stream().anyMatch(c -> !c.hasUniqueBehavior());
                 if (hasNonUnique) {
                     val currentCell: Cell = cells!![position]!!
-                    val currentCandidatesSet: BitSet = currentCandidates!![position]!!
+                    val currentCandidatesSet: BitSet = currentCandidates[position]!!
                     var currentCandidate = -1
                     val numberOfCandidates = currentCandidatesSet.cardinality()
                     (0 until numberOfCandidates).forEach { _ ->
@@ -299,25 +295,28 @@ class SolverSudoku : Sudoku {
      */
     fun updateCandidates(pos: Position?, candidate: Int) {
         if (pos == null) return
-        val updatedConstraints = constraints!![pos]!!
+        val updatedConstraints = constraints[pos]!!
         var updatedPositions: ArrayList<Position>
         var checkedConstraints: ArrayList<Constraint>
         for (constr in updatedConstraints) {
             updatedPositions = constr.getPositions()
-            for (uPos in updatedPositions) if (cells!![uPos]!!.isNotSolved) if (constr.hasUniqueBehavior()) currentCandidates!![uPos]!!.clear(
-                candidate
-            ) else {
-                var currentCandidate = -1
-                val numberOfCandidates = currentCandidates!![uPos]!!.cardinality()
-                (0 until numberOfCandidates).forEach { _ ->
-                    currentCandidate = currentCandidates!![uPos]!!.nextSetBit(currentCandidate + 1)
-                    cells!![uPos]!!.setCurrentValue(currentCandidate, false)
-                    checkedConstraints = constraints!![uPos]!!
-                    for (checkedConstraint in checkedConstraints) {
-                        if (!checkedConstraint.isSaturated(this))
-                            currentCandidates!![uPos]!!.clear(currentCandidate)
+            for (uPos in updatedPositions) {
+                if (cells!![uPos]!!.isNotSolved && constr.hasUniqueBehavior())
+                    currentCandidates[uPos]!!.clear(candidate)
+                else {
+                    var currentCandidate = -1
+                    val numberOfCandidates = currentCandidates[uPos]!!.cardinality()
+                    repeat(numberOfCandidates)  {
+                        currentCandidate = currentCandidates[uPos]!!.nextSetBit(currentCandidate + 1)
+                        cells!![uPos]!!.setCurrentValue(currentCandidate, false)
+                        checkedConstraints = constraints[uPos]!!
+                        for (checkedConstraint in checkedConstraints) {
+                            if (!checkedConstraint.isSaturated(this))
+                                //todo this can't be right. the following line is potentially repeated several times... is a break statement missing?
+                                currentCandidates[uPos]!!.clear(currentCandidate)
+                        }
+                        cells!![uPos]!!.setCurrentValue(Cell.EMPTYVAL, false)
                     }
-                    cells!![uPos]!!.setCurrentValue(Cell.EMPTYVAL, false)
                 }
             }
         }
@@ -337,7 +336,7 @@ class SolverSudoku : Sudoku {
         if (pos == null || candidate < 0)
             return
         cells!![pos]!!.setCurrentValue(candidate, false)
-        currentCandidates!![pos]!!.clear()
+        currentCandidates[pos]!!.clear()
         if (hasBranch())
             branchings.peek()!!.solutionsSet.add(pos)
         updateCandidates(pos, candidate)
@@ -373,7 +372,7 @@ class SolverSudoku : Sudoku {
      * Wird geworfen, falls die spezifizierte Position ungültig ist
      */
     fun getCurrentCandidates(pos: Position): CandidateSet {
-        return currentCandidates!![pos]!!
+        return currentCandidates[pos]!!
     }
 
     /**
@@ -387,14 +386,10 @@ class SolverSudoku : Sudoku {
      */
     fun addComplexityValue(value: Int, applyToBranch: Boolean) {
         if (value > 0) {
-            if (branchings!!.size > 0)
-                branchings!!.peek()!!.complexityValue += value
+            if (branchings.isNotEmpty())
+                branchings.peek()!!.complexityValue += value
             complexityValue += value
         }
-    }
-
-    fun getPositions(): List<Position>? {
-        return positions
     }
 
     /**
@@ -404,8 +399,8 @@ class SolverSudoku : Sudoku {
      * @property Die Positionen
      */
     private class PositionMapPool(
-        private val currentDimension: Position?,
-        private val positions: List<Position>?
+        private val currentDimension: Position,
+        private val positions: List<Position>
     ) {
 
 
@@ -455,9 +450,9 @@ class SolverSudoku : Sudoku {
          * Gibt die zuletzt geholte PositionMap an den Pool zurück.
          */
         fun returnPositionMap() {
-            if (!usedMaps.isEmpty()) {
+            if (usedMaps.isNotEmpty()) {
                 val returnedMap = usedMaps.pop()
-                for (pos in positions!!) {
+                for (pos in positions) {
                     returnedMap[pos]!!.clear()
                 }
                 unusedMaps.push(returnedMap)
@@ -469,23 +464,16 @@ class SolverSudoku : Sudoku {
          *
          * @return Eine neue PositionMap der im Konstruktor definierten Größe
          */
-        private fun initialisePositionMap(): PositionMap<CandidateSet> {
-            val newMap = PositionMap<CandidateSet>(currentDimension!!)
-            for (pos in positions!!) {
-                newMap.put(pos, CandidateSet())
-            }
-            return newMap
-        }
+        private fun initialisePositionMap(): PositionMap<CandidateSet> =
+            PositionMap(currentDimension, positions) { _ -> CandidateSet() }
 
         /**
          * Gibt alle PositionMaps an den Pool zurück.
          */
         fun returnAll() {
-            while (!usedMaps.empty()) {
+            while (usedMaps.isNotEmpty()) {
                 returnPositionMap()
             }
         }
-
     }
-
 }

@@ -277,9 +277,9 @@ class SudokuCellView(
      * ConstraintType, false otherwise
      */
     private fun checkConstraint(): Boolean {
-        val constraints: Iterable<Constraint>? = game.sudoku!!.sudokuType
+        val constraints: Iterable<Constraint> = game.sudoku!!.sudokuType
         val sudoku = game.sudoku
-        for (c in constraints!!) {
+        for (c in constraints) {
             if (c.includes(sudoku!!.getPosition(cell.id)!!)) {
                 if (c.hasUniqueBehavior()) {
                     for (pos in c.getPositions()) {
@@ -338,8 +338,8 @@ class SudokuCellView(
         connected = false
         isNoteMode = false
         isInExtraConstraint = false
-        val constraints: Iterable<Constraint>? = game.sudoku!!.sudokuType
-        for (c in constraints!!) {
+        val constraints: Iterable<Constraint> = game.sudoku!!.sudokuType
+        for (c in constraints) {
             if (c.type == ConstraintType.EXTRA &&
                 c.includes(game.sudoku!!.getPosition(cell.id)!!)
             ) {
