@@ -26,7 +26,7 @@ android {
     }
 
     androidResources {
-        localeFilters.addAll(listOf("en", "de", "fr"))
+        localeFilters.addAll(listOf("en", "de", "fr", "ja"))
     }
 
     sourceSets {
