@@ -10,13 +10,15 @@ import de.sudoq.model.solverGenerator.FastSolver.DLX1.DLXSolver
 import de.sudoq.model.solverGenerator.utils.PrettyStandard16x16Repo
 import de.sudoq.model.sudoku.complexity.Complexity
 import org.amshove.kluent.`should be true`
-import org.junit.Test
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Timeout
 import java.nio.file.Path
+import java.util.concurrent.TimeUnit
 
 class RegressionTestSlow {
 
-    @Test(timeout = 5 * 60 * 1000)
-    //@Timeout(value = 6, unit = MINUTES) junit5 only has this annotation from 5.5.1
+    @Test
+    @Timeout(value = 6, unit = TimeUnit.MINUTES)
     fun test1() {
 
         val repo = PrettyStandard16x16Repo()
@@ -53,8 +55,8 @@ class RegressionTestSlow {
     /**
      * Braucht ewig
      */
-    @Test(timeout = 5 * 60 * 1000)
-    //@Timeout(value = 6, unit = MINUTES) junit5 only has this annotation from 5.5.1
+    @Test
+    @Timeout(value = 6, unit = TimeUnit.MINUTES)
     fun test2_backtrack() {
 
         val repo = PrettyStandard16x16Repo()
@@ -70,7 +72,8 @@ class RegressionTestSlow {
      * Braucht ewig
      *
      */
-    @Test(timeout = 5 * 60 * 1000)
+    @Test
+    @Timeout(value = 6, unit = TimeUnit.MINUTES)
     fun test2_fastbacktrack() {
 
         val repo = PrettyStandard16x16Repo()

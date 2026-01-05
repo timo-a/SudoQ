@@ -22,7 +22,7 @@ class ConstraintTests {
     }
 
     @Test
-    fun testAddPositionAndIterate() {
+    fun addPositionAndIterate() {
         val c = Constraint(UniqueConstraintBehavior(), ConstraintType.LINE)
         val p1 = Position[1, 1]
         val p2 = Position[2, 2]
@@ -45,7 +45,7 @@ class ConstraintTests {
     }
 
     @Test
-    fun testSaturation() {
+    fun saturation() {
         val c = Constraint(UniqueConstraintBehavior(), ConstraintType.LINE)
         val posA = Position[0, 0]
         val posB = Position[0, 1]

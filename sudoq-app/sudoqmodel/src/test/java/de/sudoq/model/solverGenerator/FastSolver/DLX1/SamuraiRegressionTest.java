@@ -1,9 +1,11 @@
 package de.sudoq.model.solverGenerator.FastSolver.DLX1;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.text.SimpleDateFormat;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Calendar;
 
 import de.sudoq.model.TestWithInitCleanforSingletons;
@@ -12,13 +14,11 @@ import de.sudoq.model.solverGenerator.FastSolver.FastSolver;
 import de.sudoq.model.solverGenerator.solver.SudokuMockUps;
 import de.sudoq.model.sudoku.Sudoku;
 
-import static org.junit.Assert.assertTrue;
-
-public class SamuraiRegressionTest {
+class SamuraiRegressionTest {
 
 
     @Test
-    public void testSamurai1(){
+    void samurai1(){
         String pattern =  ". . . . 1 . . 3 .       . . . 1 9 . 5 . . "
                         + ". 5 3 . . . . . .       . . . . . . . 7 . "
                         + "4 . . . . . . . .       . . . 2 . . . . . "
@@ -49,7 +49,7 @@ public class SamuraiRegressionTest {
 
 
     @Test
-    public void testSamurai2(){
+    void samurai2(){
         String pattern =  ". . . . 1 . . 3 .       . . . 1 9 . 5 . . "
                 + ". 5 3 . . . . . .       . . . . . . . 7 . "
                 + "4 . . . . . . . .       . . . 2 . . . . . "
@@ -102,9 +102,8 @@ public class SamuraiRegressionTest {
             + ". . . . . . . . .       . . . . . . . . . ";
 
 
-
     @Test
-    public void testSamuraiAsFound(){
+    void samuraiAsFound(){
         System.out.println(new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()));
         for (int i = 0; i < 9; i++)
             permutationApplicator(i, badPattern);

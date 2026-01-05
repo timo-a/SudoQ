@@ -1,66 +1,65 @@
 package de.sudoq.model.actionTree;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import de.sudoq.model.sudoku.Cell;
 
 public class ActionTreeTests {
 
-	@Test
-	public void testConstruction() {
+    @Test
+    void construction() {
 		ActionTree at = new ActionTree();
 		assertNotNull(at.getRoot());
 	}
 
-	@Test(expected = NullPointerException.class)
-	public void testAddingElementsMountOnNull() {
+    @Test
+    void addingElementsMountOnNull() {
 		ActionTree at = new ActionTree();
 		ActionFactory factory = new SolveActionFactory();
 		Cell cell = new Cell(-1, 1);
 
 		ActionTreeElement ate = at.getRoot();
 
-		at.add(factory.createAction(2, cell), null);
+		assertThrows(NullPointerException.class, () -> at.add(factory.createAction(2, cell), null));
 	}
 
-	@Test
-	public void testAddingElements() {
+    @Test
+    void addingElements() {
 		ActionTree at = new ActionTree();
 		ActionFactory factory = new SolveActionFactory();
 		Cell cell = new Cell(-1, 1);
 
 		ActionTreeElement ate = at.getRoot();//add(factory.createAction(1, field), null);
-		assertEquals(ate.getId(), 1);
+        assertEquals(1, ate.getId());
 
-		assertEquals(at.add(factory.createAction(1, cell), ate).getId(), 2);
+        assertEquals(2, at.add(factory.createAction(1, cell), ate).getId());
 
-		assertEquals(ate.getChildrenList().size(), 1);
+        assertEquals(1, ate.getChildrenList().size());
 	}
 
-	@Test
-	public void testEquals() {
+    @Test
+    void equals() {
 		assertNotEquals(new ActionTree(), new Object());
 
 		ActionTree at = new ActionTree();
 		ActionTree at2 = new ActionTree();
 		at2.add(new SolveActionFactory().createAction(5, new Cell(-1, 1)), at2.getRoot());
-		assertFalse(at.equals(at2));
-		assertTrue(at.equals(at));
+        assertNotEquals(at, at2);
+        assertEquals(at, at);
 	}
 
-	@Test
-	public void testGettingElementsById() {
+    @Test
+    void gettingElementsById() {
 		ActionTree at = new ActionTree();
 		ActionFactory factory = new SolveActionFactory();
 		Cell cell = new Cell(-1, 1);
@@ -81,8 +80,8 @@ public class ActionTreeTests {
 		assertTrue(ate2.isSplitUp());
 	}
 
-	@Test
-	public void testSearchForInexistentId() {
+    @Test
+    void searchForInexistentId() {
 		ActionTree at = new ActionTree();
 		ActionFactory factory = new SolveActionFactory();
 		Cell cell = new Cell(-1, 1);
@@ -113,9 +112,9 @@ public class ActionTreeTests {
 		//assertFalse(at.isConsistent());
 	}
 
-	// AT170
-	@Test
-	public void testFindPath() {
+    // AT170
+    @Test
+    void findPath() {
 		ActionTree at = new ActionTree();
 		ActionFactory factory = new SolveActionFactory();
 		Cell cell0 = new Cell( 4, 0);
@@ -148,9 +147,8 @@ public class ActionTreeTests {
 	}
 
 
-
-	@Test
-	public void testFindPathBetweenDifferentTrees() {
+    @Test
+    void findPathBetweenDifferentTrees() {
 		ActionTree at1 = new ActionTree();
 		ActionTree at2 = new ActionTree();
 

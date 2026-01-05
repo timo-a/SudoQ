@@ -1,16 +1,16 @@
 package de.sudoq.model.profile;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 import de.sudoq.model.profile.Statistics;
 
-public class StatisticsTests {
+class StatisticsTests {
 
-	@Test
-	public void test() {
+    @Test
+    void test() {
 		Statistics[] types = Statistics.values();
 		for (Statistics type : types) {
 			assertEquals(Statistics.valueOf(type.toString()), type);

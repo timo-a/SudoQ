@@ -1,7 +1,8 @@
 package de.sudoq.model.solverGenerator
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 
 class KotlinTest {
     @Test
-    fun test_loading() = Assertions.assertTrue(true)
+    fun loading() = assertTrue(true)
 }

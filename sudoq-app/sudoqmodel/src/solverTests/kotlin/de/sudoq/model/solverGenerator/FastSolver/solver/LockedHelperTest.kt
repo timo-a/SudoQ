@@ -13,8 +13,7 @@ import de.sudoq.model.sudoku.complexity.Complexity
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should be false`
 import org.amshove.kluent.`should be true`
-import org.junit.Assert
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.io.File
 import java.nio.file.Path
 import java.util.ArrayList
@@ -24,7 +23,7 @@ class LockedHelperTest {
     val standard9x9Repo = PrettyStandard9x9Repo()
 
     @Test
-    fun testLockedUpdateOne() { //TODO can the sudoku be mocked on the spot?
+    fun lockedUpdateOne() { //TODO can the sudoku be mocked on the spot?
         /*¹²³⁴⁵⁶⁷⁸⁹
           9    8     4 | ¹²   ¹²⁷  ³⁶ | ¹³⁵ ⁶⁷  ⁵⁷
           ³⁷   ⁶⁷    2 | 5    ¹⁷⁸  ³⁶ | ¹³⁹ 4   ⁷⁸⁹

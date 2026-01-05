@@ -1,7 +1,7 @@
 package de.sudoq.model;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,8 +16,8 @@ public class TestWithInitCleanforSingletons {
 
 	protected static ProfileManager profileManager;
 
-	@BeforeClass
-	public static void init() throws IOException {
+    @BeforeAll
+    static void init() throws IOException {
 
 		setupProfiles();
 
@@ -55,8 +55,8 @@ public class TestWithInitCleanforSingletons {
 		ProfileSingleton.Companion.getInstance(profileDir, new ProfileRepo(profileDir), new ProfilesListRepo(profileDir));
 	}
 
-	@AfterClass
-	public static void clean() throws IOException, SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+    @AfterAll
+    static void clean() throws IOException, SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 		//java.lang.reflect.Field f = FileManager.class.getDeclaredField("profiles");
 		//f.setAccessible(true);
 		//f.set(null, null);

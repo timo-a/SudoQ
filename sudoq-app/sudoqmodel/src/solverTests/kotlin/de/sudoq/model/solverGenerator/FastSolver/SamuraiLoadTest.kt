@@ -21,7 +21,7 @@ class SamuraiLoadTest {
     //todo loop through all types to see if all sudokus in the assets are solvable, but how often do you need to run these (once before any release?), what is the purpose?
     @ParameterizedTest
     @MethodSource("providePaths")
-    fun testSamurai(path: String) {
+    fun samurai(path: String) {
         val repo = PrettySamuraiRepo()
         val s: Sudoku = repo.read(Paths.get(path), Complexity.arbitrary)
         val fs = FastSolverFactory.getSolver(s)

@@ -1,10 +1,10 @@
 package de.sudoq.model.solverGenerator;
 
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -18,13 +18,14 @@ import de.sudoq.model.sudoku.PositionMap;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
+
 public class TransformerTests implements GeneratorCallback {
 
 
 	PositionMap<Integer> map = new PositionMap<Integer>(Position.get(9, 9));
 
-	@Test
-	public void transformS99Test1() {
+    @Test
+    void transformS99Test1() {
 
 		int[] values = { 9, 5, 8, 3, 1, 2, 7, 6, 4, 4, 6, 1, 5, 7, 9, 8, 2, 3, 3, 7, 2, 4, 6, 8, 9, 5, 1, 8, 9, 6, 1,
 				2, 3, 5, 4, 7, 1, 4, 3, 7, 9, 5, 2, 8, 6, 5, 2, 7, 6, 8, 4, 3, 1, 9, 7, 8, 5, 9, 4, 1, 6, 3, 2, 2, 1,
@@ -39,8 +40,8 @@ public class TransformerTests implements GeneratorCallback {
 		assertTrue(validSudoku(sudoku1));
 	}
 
-	@Test
-	public void transformS66Test1() {
+    @Test
+    void transformS66Test1() {
 
 		int[] values = { 5, 2, 6, 3, 1, 4, 4, 3, 1, 6, 2, 5, 1, 6, 5, 4, 3, 2, 2, 4, 3, 5, 6, 1, 3, 1, 4, 2, 5, 6, 6,
 				5, 2, 1, 4, 3 };
@@ -53,8 +54,8 @@ public class TransformerTests implements GeneratorCallback {
 		assertTrue(validSudoku(sudoku1));
 	}
 
-	@Test
-	public void transformS44Test1() {
+    @Test
+    void transformS44Test1() {
 
 		int[] values = { 3, 2, 4, 1, 1, 4, 2, 3, 4, 3, 1, 2, 2, 1, 3, 4 };
 
@@ -65,8 +66,8 @@ public class TransformerTests implements GeneratorCallback {
 		assertTrue(validSudoku(sudoku1));
 	}
 
-	@Test
-	public void transformS1616Test1() {
+    @Test
+    void transformS1616Test1() {
 
 		map = new PositionMap<Integer>(Position.get(16, 16));
 
@@ -94,8 +95,8 @@ public class TransformerTests implements GeneratorCallback {
 		assertTrue(validSudoku(sudoku1));
 	}
 
-	@Test
-	public void transformSudokuXTest1() {
+    @Test
+    void transformSudokuXTest1() {
 
 		map = new PositionMap<Integer>(Position.get(9, 9));
 
@@ -111,8 +112,8 @@ public class TransformerTests implements GeneratorCallback {
 		assertTrue(validSudoku(sudoku1));
 	}
 
-	@Test
-	public void transformSudokuHyperTest1() {
+    @Test
+    void transformSudokuHyperTest1() {
 
 		map = new PositionMap<Integer>(Position.get(9, 9));
 
@@ -130,8 +131,8 @@ public class TransformerTests implements GeneratorCallback {
 		assertTrue(validSudoku(sudoku1));
 	}
 
-	@Test
-	public void transformSudokuStairStepTest1() {
+    @Test
+    void transformSudokuStairStepTest1() {
 
 		map = new PositionMap<Integer>(Position.get(9, 9));
 
@@ -149,8 +150,8 @@ public class TransformerTests implements GeneratorCallback {
 		assertTrue(validSudoku(sudoku1));
 	}
 
-	@Test
-	public void transformSudokuSquigglyATest1() {
+    @Test
+    void transformSudokuSquigglyATest1() {
 
 		map = new PositionMap<Integer>(Position.get(9, 9));
 
@@ -168,8 +169,8 @@ public class TransformerTests implements GeneratorCallback {
 		assertTrue(validSudoku(sudoku1));
 	}
 
-	@Test
-	public void transformSudokuSquigglyBTest1() {
+    @Test
+    void transformSudokuSquigglyBTest1() {
 
 		map = new PositionMap<Integer>(Position.get(9, 9));
 
@@ -191,8 +192,8 @@ public class TransformerTests implements GeneratorCallback {
 		assertTrue(validSudoku(sudoku1));
 	}
 
-	@Test
-	public void transformSamuraiTest() {
+    @Test
+    void transformSamuraiTest() {
 
 		String values = "819247365   983472651" +
 				"274365198   751863429" +

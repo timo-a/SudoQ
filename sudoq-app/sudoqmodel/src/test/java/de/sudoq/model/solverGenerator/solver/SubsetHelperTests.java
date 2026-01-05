@@ -1,10 +1,10 @@
 package de.sudoq.model.solverGenerator.solver;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import de.sudoq.model.Utility;
 import de.sudoq.model.solverGenerator.solver.helper.HiddenHelper;
@@ -19,8 +19,8 @@ public class SubsetHelperTests extends HiddenHelper{
 		super(new SolverSudoku(new Sudoku(TypeBuilder.get99())),4,0 );
 	}
 
-	@Test
-	public void testGetNextSubset(){
+    @Test
+    void testGetNextSubset(){
 
 		for(int i : new int[]{0,1,2,3, 5,7})
 			constraintSet.set(i);
@@ -42,10 +42,8 @@ public class SubsetHelperTests extends HiddenHelper{
 	}
 
 
-
-
-	@Test
-	public void testHiddenUpdateOne() {
+    @Test
+    void hiddenUpdateOne() {
 		SolverSudoku sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
 		setVal(sudoku, 1,1, 1);
 		setVal(sudoku, 3,1, 3);
@@ -66,23 +64,23 @@ public class SubsetHelperTests extends HiddenHelper{
 		sudoku.resetCandidates();
 
 		SubsetHelper helper = new HiddenHelper(sudoku, 2, 22);
-		assertEquals(helper.getComplexityScore(), 22);
+        assertEquals(22, helper.getComplexityScore());
 
-		assertEquals(getCardinality(sudoku, 1, 0), 2);
-		assertEquals(getCardinality(sudoku, 1, 1), 2);
-		assertEquals(getCardinality(sudoku, 8, 1), 2);
-		assertEquals(getCardinality(sudoku, 8, 1), 2);
-		assertEquals(getCardinality(sudoku, 0, 2), 4);
-		assertEquals(getCardinality(sudoku, 2, 2), 4);
+        assertEquals(2, getCardinality(sudoku, 1, 0));
+        assertEquals(2, getCardinality(sudoku, 1, 1));
+        assertEquals(2, getCardinality(sudoku, 8, 1));
+        assertEquals(2, getCardinality(sudoku, 8, 1));
+        assertEquals(4, getCardinality(sudoku, 0, 2));
+        assertEquals(4, getCardinality(sudoku, 2, 2));
 
 		// Use helper 1 time to remove candidates 1 and 8 from Positions 0,2 and
 		// 2,2
 		helper.update(true);
 
-		assertEquals(getCardinality(sudoku, 1, 0), 2);
-		assertEquals(getCardinality(sudoku, 1, 1), 2);
-		assertEquals(getCardinality(sudoku, 0, 2), 2);
-		assertEquals(getCardinality(sudoku, 2, 2), 2);
+        assertEquals(2, getCardinality(sudoku, 1, 0));
+        assertEquals(2, getCardinality(sudoku, 1, 1));
+        assertEquals(2, getCardinality(sudoku, 0, 2));
+        assertEquals(2, getCardinality(sudoku, 2, 2));
 
 		assertFalse(getCandidate(sudoku, 0, 2,  0));
 		assertFalse(getCandidate(sudoku, 0, 2,  2));
@@ -90,8 +88,8 @@ public class SubsetHelperTests extends HiddenHelper{
 		assertFalse(getCandidate(sudoku, 2, 2,  2));
 	}
 
-	@Test
-	public void testHiddenUpdateAll() {
+    @Test
+    void hiddenUpdateAll() {
 		SolverSudoku sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
 		for(int i : new int[]{1,  3,4,5,6,7,8})
 			setVal(sudoku, i,1, i);
@@ -109,22 +107,22 @@ public class SubsetHelperTests extends HiddenHelper{
 		sudoku.resetCandidates();
 
 		SubsetHelper helper = new HiddenHelper(sudoku, 2, 22);
-		assertEquals(helper.getComplexityScore(), 22);
+        assertEquals(22, helper.getComplexityScore());
 
-		assertEquals(getCardinality(sudoku, 1, 0), 2);
-		assertEquals(getCardinality(sudoku, 1, 1), 2);
-		assertEquals(getCardinality(sudoku, 8, 1), 2);
-		assertEquals(getCardinality(sudoku, 8, 1), 2);
-		assertEquals(getCardinality(sudoku, 0, 2), 4);
-		assertEquals(getCardinality(sudoku, 2, 2), 4);
+        assertEquals(2, getCardinality(sudoku, 1, 0));
+        assertEquals(2, getCardinality(sudoku, 1, 1));
+        assertEquals(2, getCardinality(sudoku, 8, 1));
+        assertEquals(2, getCardinality(sudoku, 8, 1));
+        assertEquals(4, getCardinality(sudoku, 0, 2));
+        assertEquals(4, getCardinality(sudoku, 2, 2));
 
 		while (helper.update(true))
 			;
 
-		assertEquals(getCardinality(sudoku, 1, 0), 2);
-		assertEquals(getCardinality(sudoku, 1, 1), 2);
-		assertEquals(getCardinality(sudoku, 0, 2), 2);
-		assertEquals(getCardinality(sudoku, 2, 2), 2);
+        assertEquals(2, getCardinality(sudoku, 1, 0));
+        assertEquals(2, getCardinality(sudoku, 1, 1));
+        assertEquals(2, getCardinality(sudoku, 0, 2));
+        assertEquals(2, getCardinality(sudoku, 2, 2));
 
 		assertFalse(getCandidate(sudoku, 0, 2,  0));
 		assertFalse(getCandidate(sudoku, 0, 2,  2));

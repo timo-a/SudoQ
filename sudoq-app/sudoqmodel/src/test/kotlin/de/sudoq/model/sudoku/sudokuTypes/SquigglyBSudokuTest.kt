@@ -4,7 +4,8 @@ import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.Position
 import org.amshove.kluent.`should be null`
 import org.amshove.kluent.`should be`
-import org.junit.Assert
+import org.amshove.kluent.`should contain`
+import org.amshove.kluent.`should contain all`
 import org.junit.jupiter.api.Test
 import java.util.ArrayList
 
@@ -51,7 +52,7 @@ class SquigglyBSudokuTest : SquigglySudokuTypesTest() {
         m.add(Position[5, 2])
         m.add(Position[5, 3])
         m.add(Position[6, 3])
-        for (p in c) Assert.assertTrue("unvollst. set $c", m.contains(p))
+        assertions(m, c)
     }
 
     override fun constraintsD(c: Constraint) {

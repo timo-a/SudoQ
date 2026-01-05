@@ -1,11 +1,12 @@
 package de.sudoq.model.game;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import de.sudoq.model.ModelChangeListener;
 import de.sudoq.model.actionTree.ActionFactory;
@@ -13,10 +14,10 @@ import de.sudoq.model.actionTree.ActionTreeElement;
 import de.sudoq.model.actionTree.SolveActionFactory;
 import de.sudoq.model.sudoku.Cell;
 
-public class GameStateHandlerTests {
+class GameStateHandlerTests {
 
-	@Test
-	public void testConstruction() {
+    @Test
+    void construction() {
 		GameStateHandler stateHandler = new GameStateHandler();
 		// the following 3 actions shouldnt do anything
 		stateHandler.undo();
@@ -27,20 +28,20 @@ public class GameStateHandlerTests {
 		Cell cell = new Cell(-1, 9);
 
 		stateHandler.addAndExecute(af.createAction(5, cell));
-		assertEquals(cell.getCurrentValue(), 5);
-		assertTrue(stateHandler.getActionTree().getSize() !=0);
+        assertEquals(5, cell.getCurrentValue());
+		assertNotSame(stateHandler.getActionTree().getSize(),0);
 	}
 
-	@Test
-	public void testNullAction() {
+    @Test
+    void nullAction() {
 		GameStateHandler gsh = new GameStateHandler();
 		ActionTreeElement a = gsh.getCurrentState();
 		a.undo();
 		a.execute();
 	}
 
-	@Test
-	public void testUndoRedo() {
+    @Test
+    void undoRedo() {
 		GameStateHandler stateHandler = new GameStateHandler();
 		ActionFactory af = new SolveActionFactory();
 		Cell cell1 = new Cell(-1, 9);
@@ -75,8 +76,8 @@ public class GameStateHandlerTests {
 		assertEquals(7, cell3.getCurrentValue());
 	}
 
-	@Test
-	public void testTapSameSymbol4Times() {
+    @Test
+    void tapSameSymbol4Times() {
 		/* regression for: press three times '3' on same field.
 		 * first 2 beheave as expected, 3rd does nothing and 4 crashes */
 		GameStateHandler stateHandler = new GameStateHandler();
@@ -98,8 +99,8 @@ public class GameStateHandlerTests {
 	}
 
 
-	@Test
-	public void testGoTo() {
+    @Test
+    void goTo() {
 		GameStateHandler stateHandler = new GameStateHandler();
 		ActionFactory af = new SolveActionFactory();
 		Cell cell = new Cell(-1, 9);
@@ -135,8 +136,8 @@ public class GameStateHandlerTests {
 		assertEquals(7, cell.getCurrentValue());
 	}
 
-	@Test
-	public void testEmptyUndoStack() {
+    @Test
+    void emptyUndoStack() {
 		GameStateHandler stateHandler = new GameStateHandler();
 		ActionFactory af = new SolveActionFactory();
 		Cell f_1 = new Cell(-1, 9);
@@ -173,8 +174,8 @@ public class GameStateHandlerTests {
 		assertEquals(b2, stateHandler.getCurrentState());
 	}
 
-	@Test
-	public void testStateMarking() {
+    @Test
+    void stateMarking() {
 		GameStateHandler stateHandler = new GameStateHandler();
 		ActionFactory af = new SolveActionFactory();
 		Cell cell = new Cell(-1, 9);
@@ -191,8 +192,8 @@ public class GameStateHandlerTests {
 		assertFalse(stateHandler.isMarked(null));
 	}
 
-	@Test
-	public void testThereAndBackAgain() {
+    @Test
+    void thereAndBackAgain() {
 		GameStateHandler stateHandler = new GameStateHandler();
 		ActionFactory af = new SolveActionFactory();
 		// Vier Felder
@@ -235,8 +236,8 @@ public class GameStateHandlerTests {
 
 	}
 
-	@Test
-	public void testGotoDownwards() {
+    @Test
+    void gotoDownwards() {
 		GameStateHandler stateHandler = new GameStateHandler();
 		ActionFactory af = new SolveActionFactory();
 		Cell cell = new Cell(-1, 9);
@@ -251,8 +252,8 @@ public class GameStateHandlerTests {
 		assertEquals(current, stateHandler.getCurrentState());
 	}
 
-	@Test
-	public void testLocking() {
+    @Test
+    void locking() {
 		final GameStateHandler stateHandler = new GameStateHandler();
 		final ActionFactory af = new SolveActionFactory();
 		final Cell f = new Cell(-1, 9);

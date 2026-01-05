@@ -1,21 +1,21 @@
 package de.sudoq.model.actionTree;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import de.sudoq.model.sudoku.Cell;
 
-public class ActionTreeIteratorTests {
+class ActionTreeIteratorTests {
 
 	@Test
-	public void testCompleteness() {
+	void completeness() {
 		ActionTree at = new ActionTree();
 		ActionFactory factory = new SolveActionFactory();
 		Cell cell = new Cell(-1, 1);
@@ -40,8 +40,9 @@ public class ActionTreeIteratorTests {
 
 		assertEquals(5, i);
 	}
+
 	@Test
-	public void testCompleteness2() {
+	void completeness2() {
 		ActionTree at = new ActionTree();
 		ActionFactory factory = new SolveActionFactory();
 		Cell cell = new Cell(-1, 1);
@@ -67,8 +68,9 @@ public class ActionTreeIteratorTests {
 		assertEquals(5, i);
 	}
 
-	@Test //TODO expect with annotations
-	public void testExceptions() {
+    //TODO expect with annotations
+    @Test
+    void exceptions() {
 		ActionTree at = new ActionTree();//has automatic root element
 		Iterator<ActionTreeElement> iterator = at.iterator();
 

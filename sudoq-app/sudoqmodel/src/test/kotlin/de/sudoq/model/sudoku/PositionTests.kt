@@ -3,8 +3,7 @@ package de.sudoq.model.sudoku
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should throw`
 import org.amshove.kluent.invoking
-import org.junit.Assert
-import org.junit.jupiter.api.Assertions
+import org.amshove.kluent.`should not be equal to`
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
@@ -30,51 +29,38 @@ class PositionTests {
 
     @ParameterizedTest
     @CsvSource(
-        "1, 2, 3, 4, 0",
-        "0, 0, 0, 0, 1",
-        "4, 4, 4, 3, 0",
-        "4, 5, 4, 5, 1",
-        "7987, 21523, 7987, 21523, 1",
-        "7987, 21523, 7988, 21521, 0")
-    fun equalTest(pX: Int, pY: Int, qX: Int, qY: Int, expected: Int) {
+        "0, 0, 0, 0",
+        "4, 5, 4, 5",
+        "7987, 21523, 7987, 21523")
+    fun `same coordinates should be equal`(pX: Int, pY: Int, qX: Int, qY: Int) {
         val posA = Position[pX, pY]
         val posB = Position[qX, qY]
-        //posA.`should be equal to`(posB)
-        val result = posA == posB
-        Assert.assertTrue(
-            "equals() works not correct.",
-            result && expected == 1 || !result && expected == 0
-        )
+        posA `should be equal to` posB
+        posA.hashCode() `should be equal to` posB.hashCode()
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "1, 2, 3, 4",
+        "4, 4, 4, 3",
+        "7987, 21523, 7988, 21521")
+    fun `different coordinates should not be equal`(pX: Int, pY: Int, qX: Int, qY: Int) {
+        val posA = Position[pX, pY]
+        val posB = Position[qX, qY]
+        posA `should not be equal to` posB
+        posA.hashCode() `should not be equal to` posB.hashCode()
     }
 
     @Test
     fun equalTest2() {
         val pos = Position[1, 0]
-        Assert.assertFalse("equal accepts null", pos.equals(null))
-        Assert.assertFalse("equal accepts int", pos.equals(9))
-    }
-
-    @ParameterizedTest
-    @CsvSource("1, 2, 3, 4, 0",
-        "0, 0, 0, 0, 1",
-        "4, 4, 4, 3, 0",
-        "4, 5, 4, 5, 1",
-        "7987, 21523, 7987, 21523, 1",
-        "7987, 21523, 7988, 21521, 0"
-    )
-    fun hashCodeTest(pX: Int, pY: Int, qX: Int, qY: Int, expected: Int) {
-        val posA = Position[2, 2]
-        val posB = Position[2, 2]
-
-        val eq = posA == posB
-        val hash = posA.hashCode() == posB.hashCode()
-        Assertions.assertFalse { eq && !hash }
+        pos `should not be equal to` null
+        pos `should not be equal to` 9 //wrong type can be passed, but is not equal
     }
 
     @Test
     fun testToString() {
-        val p = Position[5, 9]
-        Assert.assertEquals(p.toString(), "5, 9")
+        Position[5, 9].toString() `should be equal to` "5, 9"
     }
 
 }

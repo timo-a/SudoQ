@@ -7,10 +7,6 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(kotlin("reflect"))
 
-    //support for junit4 tests
-    testImplementation(libs.junit)
-    testRuntimeOnly(libs.junit.vintage.engine)
-
     testImplementation(project(":sudoq-persistence-xml"))
     testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.junit.jupiter.params)

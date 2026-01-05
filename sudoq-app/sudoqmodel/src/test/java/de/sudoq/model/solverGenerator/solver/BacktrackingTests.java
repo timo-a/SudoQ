@@ -1,14 +1,16 @@
 package de.sudoq.model.solverGenerator.solver;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.concurrent.TimeUnit;
 
 import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
@@ -20,26 +22,26 @@ import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
-public class BacktrackingTests {
+class BacktrackingTests {
 
     private static SudokuTypeRepo4Tests sudokuTypeRepo = new SudokuTypeRepo4Tests();
 
     private PrettySudokuRepo2 sudokuRepo = new PrettySudokuRepo2(sudokuTypeRepo);
 
-	@Test
-	public void testInitialisation() {
+    @Test
+    void initialisation() {
 		SolverSudoku sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
 		Backtracking back = new Backtracking(sudoku, 10);
-		assertEquals(back.getComplexityScore(), 10);
+        assertEquals(10, back.getComplexityScore());
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void testIInitialisationWithInvalidComplexity() {
-		new Backtracking(new SolverSudoku(new Sudoku(TypeBuilder.get99())), -2);
+    @Test
+    void iInitialisationWithInvalidComplexity() {
+		assertThrows(IllegalArgumentException.class, () -> new Backtracking(new SolverSudoku(new Sudoku(TypeBuilder.get99())), -2));
 	}
 
-	@Test
-	public void testUpdateOne() {
+    @Test
+    void updateOne() {
 		SolverSudoku sudoku = new SolverSudoku(new Sudoku(TypeBuilder.get99()));
 		Backtracking back = new Backtracking(sudoku, 10);
 
@@ -50,8 +52,9 @@ public class BacktrackingTests {
 		assertEquals(deriv.getCellIterator().next().getPosition(), Position.get(1, 3));
 	}
 
-	@Test(timeout = 6000)
-	public void testAlreadySolved() {//todo can we do this with 4x4 (too) so it is simpler?
+    @Test
+    @Timeout(value = 6, unit = TimeUnit.SECONDS)
+    void alreadySolved() {//todo can we do this with 4x4 (too) so it is simpler?
         Path sudokuPath = Paths.get("sudokus/x_easy_1.pretty");
         Sudoku sudoku = sudokuRepo.read(sudokuPath, Complexity.easy);
         Solver solver = new Solver(sudoku);

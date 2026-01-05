@@ -16,14 +16,15 @@ import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
 
 
-public class SudokuTest {
+class SudokuTest {
 
     private static SudokuTypeRepo4Tests sudokuTypeRepo = new SudokuTypeRepo4Tests();
 
     private PrettySudokuRepo2 sudokuRepo = new PrettySudokuRepo2(sudokuTypeRepo);
 
-    @Test //todo this test doesn't have any assertions...
-	public void testSolveSudoku() {
+    //todo this test doesn't have any assertions...
+    @Test
+    void solveSudoku() {
         Path sudokuPath = Paths.get("sudokus/9_lockedCandidates_1.pretty");
         Sudoku s = sudokuRepo.read(sudokuPath, Complexity.easy);
         System.out.println(s);

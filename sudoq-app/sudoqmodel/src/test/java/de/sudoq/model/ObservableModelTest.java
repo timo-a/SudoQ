@@ -1,34 +1,36 @@
 package de.sudoq.model;
 
-import static org.junit.Assert.assertTrue;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public class ObservableModelTest {
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
+
+class ObservableModelTest {
 
 	static ObservableModel<Void> observable;
 	static Listener<Void> listener;
 
-	@BeforeClass
-	public static void initObservable() {
+    @BeforeAll
+    static void initObservable() {
 		observable = new ObservableModelImpl<Void>() {};
 		listener = new Listener<>();
 	}
 
-	@Test
-	public void testNotification() {
+    @Test
+    void notification() {
 
 		observable.registerListener(listener);
-		assertTrue(listener.callCount == 0);
+        assertEquals(0, listener.callCount);
 
 		observable.notifyListeners(null);
-		assertTrue(listener.callCount == 1);
+        assertEquals(1, listener.callCount);
 
 		observable.removeListener(listener);
 		observable.notifyListeners(null);
-		assertTrue(listener.callCount == 1);
+        assertEquals(1, listener.callCount);
 	}
 
 	static class Listener<T> implements ModelChangeListener<T> {

@@ -1,21 +1,21 @@
 package de.sudoq.model.solverGenerator.solution;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.BitSet;
 import java.util.Iterator;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.ConstraintType;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.UniqueConstraintBehavior;
 
-public class SolveDerivationTests {
+class SolveDerivationTests {
 
-	@Test
-	public void standardTest() {
+    @Test
+    void standardTest() {
 		DerivationBlock[] blocks = new DerivationBlock[2];
 		SolveDerivation sd = new SolveDerivation();
 		Constraint constr = new Constraint(new UniqueConstraintBehavior(), ConstraintType.LINE);
