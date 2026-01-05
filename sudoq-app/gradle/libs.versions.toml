@@ -4,7 +4,7 @@ agp = "8.13.2"
 kotlin = "2.3.0"
 
 # Dependencies
-appcompat = "1.6.1"
+appcompat = "1.7.1"
 material = "1.12.0"
 multidex = "2.0.1"
 junit = "4.13.2"
