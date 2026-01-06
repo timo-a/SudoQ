@@ -108,7 +108,7 @@ class GenerationAlgo(
         cellsToDefine = getNumberOfCellsToDefine(sudoku.sudokuType, desiredComplexityConstraint)
 
         //A mapping from position to solution
-        var solution = PositionMap<Int?>(sudoku.sudokuType.size!!)
+        var solution = PositionMap<Int?>(sudoku.sudokuType.size)
         val iteration = 0
         //System.out.println("Fields to define: "+fieldsToDefine);
 
@@ -272,7 +272,7 @@ class GenerationAlgo(
     ): Int {
         //TODO What do we have the allocation factor for??? can't it always be expressed through avg-fields?
         val standardAllocationFactor = type!!.getStandardAllocationFactor()
-        val cellsOnSudokuBoard = type.size!!.x * type.size!!.y
+        val cellsOnSudokuBoard = type.size.x * type.size.y
         val cellsByType =
             (cellsOnSudokuBoard * standardAllocationFactor).toInt() //TODO wäre freeFields.size nicht passender?
         val cellsByComp = desiredComplexityConstraint!!.averageCells
@@ -304,8 +304,8 @@ class GenerationAlgo(
      */
     private fun addDefinedCell(): Position? {
         //TODO not sure what they do
-        val xSize = sudoku.sudokuType.size!!.x
-        val ySize = sudoku.sudokuType.size!!.y
+        val xSize = sudoku.sudokuType.size.x
+        val ySize = sudoku.sudokuType.size.y
 
         // Ein Array von Markierungen zum Testen, welches Felder belegt werden können
         /*true means marked, i.e. already defined or not part of the game e.g. 0,10 for samurai

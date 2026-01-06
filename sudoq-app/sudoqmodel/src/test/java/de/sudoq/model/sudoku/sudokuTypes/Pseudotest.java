@@ -23,13 +23,14 @@ public class Pseudotest {
 
 	public SudokuType usual(SudokuType oldType){
 
-        SudokuType s = new SudokuType(oldType.getEnumType(), 9, 0f, Position.get(9,9),
-                Position.get(1,1), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ComplexityConstraintBuilder());
-		s.setNumberOfSymbols(oldType.getNumberOfSymbols());
-		s.setDimensions(oldType.getSize());
-		//s.standardAllocationFactor = oldType.getStandardAllocationFactor();
-		for(Constraint c : oldType)
-			s.addConstraint(c);
+        SudokuType s = new SudokuType(
+                oldType.getEnumType(),
+                oldType.getNumberOfSymbols(),
+                oldType.getStandardAllocationFactor(),
+                oldType.getSize(), Position.get(1,1),
+                new ArrayList<>(oldType.getConstraints()),
+                new ArrayList<>(),
+                new ArrayList<>(), new ComplexityConstraintBuilder());
 		for (PermutationProperties p : oldType.getPermutationProperties())
 			s.getPermutationProperties().add(p);
 		
@@ -40,7 +41,7 @@ public class Pseudotest {
 	                          Complexity.arbitrary};
 
         for(Complexity c : comps)
-            s.ccb.getSpecimen().put(c, oldType.buildComplexityConstraint(c));
+            s.getCcb().getSpecimen().put(c, oldType.buildComplexityConstraint(c));
         
 		return s;
 	}

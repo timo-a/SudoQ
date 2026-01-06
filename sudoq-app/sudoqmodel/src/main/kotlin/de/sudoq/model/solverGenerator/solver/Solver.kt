@@ -215,7 +215,7 @@ open class Solver(sudoku: Sudoku) {
         //todo remove this function, and maybe actions alltogether
         //System.out.println("start of solveAll2");
         //print9x9(sudoku);
-        val copy: PositionMap<Int> = PositionMap(solverSudoku.sudokuType.size!!, solverSudoku.positions)
+        val copy: PositionMap<Int> = PositionMap(solverSudoku.sudokuType.size, solverSudoku.positions)
             { p -> solverSudoku.getCell(p)!!.currentValue }
 
         val solved = solveAll(buildDerivation, false, false)
@@ -304,7 +304,7 @@ open class Solver(sudoku: Sudoku) {
         val ambiguous = false
 
         //map position -> value
-        val copy: PositionMap<Int> = PositionMap(solverSudoku.sudokuType.size!!, solverSudoku.positions)
+        val copy: PositionMap<Int> = PositionMap(solverSudoku.sudokuType.size, solverSudoku.positions)
             { p -> solverSudoku.getCell(p)!!.currentValue }
 
         /////debug
@@ -366,7 +366,7 @@ open class Solver(sudoku: Sudoku) {
      * @return the solutions of the last `solve`-call.
      */
     val solutionsMap: PositionMap<Int>
-        get() = PositionMap(solverSudoku.sudokuType.size!!, solverSudoku.positions)
+        get() = PositionMap(solverSudoku.sudokuType.size, solverSudoku.positions)
              { p -> solverSudoku.getCell(p)!!.currentValue }
 
     /**

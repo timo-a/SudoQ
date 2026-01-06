@@ -15,7 +15,7 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 /** Provides functions to create a [SudokuType] or an empty [Sudoku] */
 class SudokuBuilder(private val type: SudokuType?) {
 
-    private val solutions: PositionMap<Int> = PositionMap(type!!.size!!)
+    private val solutions: PositionMap<Int> = PositionMap(type!!.size)
     private val setValues: PositionMap<Boolean> = PositionMap(type?.size!!)
 
     /**

@@ -105,7 +105,7 @@ class SolverSudoku : Sudoku {
 
         // initialize the constraints lists for each position and the initial
         // candidates for each field
-        constraints = PositionMap(sudokuType.size!!, positions) { _ -> ArrayList() }
+        constraints = PositionMap(sudokuType.size, positions) { _ -> ArrayList() }
 
 
         //if we were functional
@@ -119,7 +119,7 @@ class SolverSudoku : Sudoku {
                 constraints[pos]!!.add(constr)
 
         // initialize the candidates map
-        positionPool = PositionMapPool(sudokuType.size!!, positions)
+        positionPool = PositionMapPool(sudokuType.size, positions)
         branchPool = BranchingPool()
         currentCandidates = positionPool!!.positionMap
 

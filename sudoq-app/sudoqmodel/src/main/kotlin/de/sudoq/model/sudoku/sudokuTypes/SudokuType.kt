@@ -14,8 +14,6 @@ import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint
 import de.sudoq.model.sudoku.complexity.ComplexityFactory
-import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * A SudokuType represents the Attributes of a specific sudoku type.
@@ -26,6 +24,8 @@ import kotlin.collections.ArrayList
  * @param standardAllocationFactor The ratio of fields that are to be allocated i.e. already filled
  * when starting a sudoku game
  * @param size dimensions of the board
+ *  - x is the maximum number of (columns) horizontal cells
+ *  - y is the maximum number of (rows) vertical cells
  * @param blockSize The dimensions of one quadratic block, e.g.
  *  - for a normal 9x9 Sudoku: 3,3.
  *  - for 4x4: 2,2
@@ -36,14 +36,14 @@ import kotlin.collections.ArrayList
  *
  */
 open class SudokuType(val enumType: SudokuTypes,
-                      var numberOfSymbols: Int,  //should be val as should the others
-                      private var standardAllocationFactor: Float,
-                      size: Position, //TODO use val directly
-                      var blockSize: Position,
-                      @JvmField var constraints: MutableList<Constraint>,//todo should be neither mutable nor reassignable
-                      var permutationProperties: List<PermutationProperties>,
-                      var helperList: MutableList<Helpers>,
-                      @JvmField var ccb: ComplexityConstraintBuilder
+                      val numberOfSymbols: Int,  //should be val as should the others
+                      private val standardAllocationFactor: Float,
+                      val size: Position,
+                      val blockSize: Position,
+                      val constraints: List<Constraint>,
+                      val permutationProperties: List<PermutationProperties>,
+                      val helperList: List<Helpers>,
+                      val ccb: ComplexityConstraintBuilder
 ) : Iterable<Constraint>, ComplexityFactory {
 
     /**
@@ -54,31 +54,20 @@ open class SudokuType(val enumType: SudokuTypes,
     }
 
     /**
-     * The size of the sudoku as a [Position] object where
-     * the x-coordinate is the maximum number of (columns) horizontal cells and
-     * the y-coordinate is the maximum number of (rows) vertical cells.
-     */
-    var size: Position? = size
-        protected set
-
-    /**
      * All [Position]s that are contained in at least one constraint.
      * (For a Samurai sudoku not all positions are part of a constraint)
      */
-    protected var positions: MutableList<Position>
-
+    protected val positions: List<Position>
 
     init {
         require(numberOfSymbols >= 0) { "Number of symbols < 0 : $numberOfSymbols" }
-        positions = ArrayList()
-        for (c in constraints) for (p in c) if (!positions.contains(p)) positions.add(p)
+        positions = constraints.flatMap { it.getPositions() }.distinct().toList()
     }
 
     /**
      * Checks if the passed [Sudoku] satisfies all [Constraint]s of this [SudokuType].
      *
      * @param sudoku Sudoku to check for constraint satisfaction
-
      * @return true, iff the sudoku satisfies all constraints
      */
     fun checkSudoku(sudoku: Sudoku): Boolean {
@@ -108,20 +97,12 @@ open class SudokuType(val enumType: SudokuTypes,
     val validPositions: Iterable<Position>
         get() = Positions()
 
-
     /**
      * returns a (monotone) Iterable over all symbols in this type starting at 0, for use in for each loops
      * @return a (monotone) Iterable over all symbols in this type starting at 0
      */
     val symbolIterator: Iterable<Int>
-        get() = object : AbstractList<Int>() {
-            override fun get(index: Int): Int {
-                return index
-            }
-
-            override val size: Int
-                get() = numberOfSymbols
-        }
+        get() = 0 until numberOfSymbols
 
     /**
      * Returns a complexity constraint for a complexity.
@@ -132,38 +113,12 @@ open class SudokuType(val enumType: SudokuTypes,
         return ccb.getComplexityConstraint(complexity)
     }
 
-
     /**
      * Returns the sudoku type as string.
      *
      * @return sudoku type as string
      */
     override fun toString(): String {
-        return "" + enumType
-    }
-
-    fun setDimensions(p: Position) {
-        size = p
-    }
-
-    /**
-     * @return A list of the [Constraint]s of this SudokuType.
-     */
-    @Deprecated(
-        "Gibt eine Liste der Constraints, welche zu diesem Sudokutyp gehören zurück. " +
-                "Hinweis: Wenn möglich stattdessen den Iterator benutzen.",
-        ReplaceWith(
-            "iterator()",
-            "kotlin.collections.Iterator",
-            "de.sudoq.model.sudoku.Constraint"
-        )
-    )
-    fun getConstraints(): ArrayList<Constraint> {
-        return constraints as ArrayList<Constraint>
-    }
-
-    //make a method that returns an iterator over all positions !=null. I think we need this a lot
-    fun addConstraint(c: Constraint) {
-        constraints.add(c)
+        return enumType.toString() //todo should be distinct from the enum, maybe "$enumType object"?
     }
 }

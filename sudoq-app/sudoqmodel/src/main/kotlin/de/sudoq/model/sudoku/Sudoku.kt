@@ -245,8 +245,8 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
         val OFFSET = if (sudokuType.numberOfSymbols < 10) "" else " "
         val EMPTY = if (sudokuType.numberOfSymbols < 10) "x" else "xx"
         val NONE = if (sudokuType.numberOfSymbols < 10) " " else "  "
-        for (j in 0 until sudokuType.size!!.y) {
-            for (i in 0 until sudokuType.size!!.x) {
+        for (j in 0 until sudokuType.size.y) {
+            for (i in 0 until sudokuType.size.x) {
                 val f = getCell(Position[i, j])
                 var op: String
                 if (f != null) { //feld existiert

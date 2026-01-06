@@ -10,11 +10,11 @@ object SudokuTypeMapper {
             sudokuType.enumType,
             sudokuType.numberOfSymbols,
             sudokuType.getStandardAllocationFactor(),
-            sudokuType.size!!,
+            sudokuType.size,
             sudokuType.blockSize,
-            sudokuType.constraints,
+            sudokuType.constraints.toMutableList(),
             SetOfPermutationPropertiesBE(sudokuType.permutationProperties),
-            sudokuType.helperList,
+            sudokuType.helperList.toMutableList(),
             sudokuType.ccb
         )
     }
