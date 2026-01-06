@@ -86,9 +86,4 @@ class StandardSudokuType6x6Tests {
     fun enumTypeTest() {
         sst66.enumType.`should be`(SudokuTypes.standard6x6)
     }
-
-    @Test
-    fun buildComplexityConstraintTest() {
-        sst66.buildComplexityConstraint(null).`should be null`()
-    }
 }

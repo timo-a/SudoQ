@@ -11,8 +11,7 @@ import org.junit.jupiter.api.Timeout;
 
 import java.util.concurrent.TimeUnit;
 
-import de.sudoq.model.Utility;
-import de.sudoq.model.persistence.IRepo;
+import de.sudoq.model.ports.persistence.ReadRepo;
 import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.Position;
@@ -33,7 +32,7 @@ class SolverIntegrationTests {
 	private static final boolean PRINT_SOLUTIONS = false ;
 
 	//this is a dummy so it compiles todo use xmls from resources
-	private IRepo<SudokuType> sudokuTypeRepo = new SudokuTypeRepo4Tests();
+	private ReadRepo<SudokuType> sudokuTypeRepo = new SudokuTypeRepo4Tests();
 
     @BeforeEach
     void before() {

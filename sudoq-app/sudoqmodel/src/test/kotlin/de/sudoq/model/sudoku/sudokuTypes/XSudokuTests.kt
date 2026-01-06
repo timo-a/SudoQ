@@ -40,9 +40,4 @@ class XSudokuTests {
     fun enumTypeTest() {
         stX.enumType.`should be`(SudokuTypes.Xsudoku)
     }
-
-    @Test
-    fun buildComplexityConstraintTest() {
-        stX.buildComplexityConstraint(null).`should be null`()
-    }
 }

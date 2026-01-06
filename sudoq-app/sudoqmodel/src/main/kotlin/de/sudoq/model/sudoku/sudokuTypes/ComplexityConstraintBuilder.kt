@@ -6,17 +6,14 @@ import java.util.*
 
 /**
  * Builder for Complexity constraints.
+ * todo vielleicht war das mal ein builder, aber jetzt wirkt es nutzlos, prüfen ob er entfernt werden kann
  */
-class ComplexityConstraintBuilder {
-    var specimen: MutableMap<Complexity?, ComplexityConstraint> = HashMap()
+class ComplexityConstraintBuilder(//todo this is not a "builder", rather a "holder", add assertions
+    val specimen: Map<Complexity, ComplexityConstraint>
+) {
 
-    constructor()
-    constructor(specimen: MutableMap<Complexity?, ComplexityConstraint>) {
-        this.specimen = specimen
-    }
-
-    fun getComplexityConstraint(complexity: Complexity?): ComplexityConstraint? {
-        return if (complexity != null && specimen.containsKey(complexity)) {
+    fun getComplexityConstraint(complexity: Complexity): ComplexityConstraint? {
+        return if (specimen.containsKey(complexity)) {
             specimen[complexity]!!.clone() as ComplexityConstraint
         } else null
     }

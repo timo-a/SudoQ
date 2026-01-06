@@ -7,7 +7,7 @@
  */
 package de.sudoq.model.solverGenerator
 
-import de.sudoq.model.persistence.IRepo
+import de.sudoq.model.ports.persistence.ReadRepo
 import de.sudoq.model.solverGenerator.solver.Solver
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.Sudoku
@@ -28,7 +28,7 @@ import java.util.*
  *
  * @see Solver
  */
-class Generator(private val sudokuTypeRepo: IRepo<SudokuType>) {
+class Generator(private val sudokuTypeRepo: ReadRepo<SudokuType>) {
 
     private var random: Random
 
@@ -94,8 +94,8 @@ class Generator(private val sudokuTypeRepo: IRepo<SudokuType>) {
          */
         fun getPositions(sudoku: Sudoku): List<Position> {
 
-            val xLim = sudoku.sudokuType.size!!.x
-            val yLim = sudoku.sudokuType.size!!.y
+            val xLim = sudoku.sudokuType.size.x
+            val yLim = sudoku.sudokuType.size.y
 
             val allPositions = (0 until xLim).flatMap { x ->
                 (0 until yLim)

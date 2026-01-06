@@ -1,7 +1,6 @@
 package de.sudoq.persistence
 
-import de.sudoq.model.persistence.IRepo
-import de.sudoq.persistence.XmlTree
+import de.sudoq.model.ports.persistence.ReadRepo
 
 /**
  * A class that can be (de-)serialised to/from XML.
@@ -23,5 +22,5 @@ interface XmlableWithRepo<T> {
      * @throws IllegalArgumentException if the XML Representation has an unsupported structure.
      */
     @Throws(IllegalArgumentException::class)
-    fun fillFromXml(xmlTreeRepresentation: XmlTree, repo: IRepo<T>)
+    fun fillFromXml(xmlTreeRepresentation: XmlTree, repo: ReadRepo<T>)
 }

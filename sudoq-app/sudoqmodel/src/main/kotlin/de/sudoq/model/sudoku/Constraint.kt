@@ -15,52 +15,18 @@ import java.util.*
  * In a standard sudoku for example the rows, columns and blocks are [Constraint] objects.
  *
  * @property behavior Describes the constraint that the cells have to satisfy
- * @param type Type of the Constraint
+ * @property type Type of the Constraint
+ * @property name Name of the Constraint should start with one of "extra block", "Block", "Column", "Row".
+ * @property positions A set of [Position]s, that together satisfy a constraint
  */
-class Constraint(private var behavior: ConstraintBehavior, type: ConstraintType) :
-    Iterable<Position> {
+class Constraint(private val behavior: ConstraintBehavior,
+                 val type: ConstraintType,
+                 val name: String,
+                 vararg positions: Position
+) : Iterable<Position> {
 
-    /** A List of [Position]s of all [Cells], that together satisfy a constraint */
-    private var positions: MutableList<Position> = ArrayList()
-
-    /** Name of the Constraint should start with one of "extra block", "Block", "Column", "Row".
-     */
-    var name: String
-        private set
-
-    /** Type of the Constraint */
-    var type: ConstraintType = type
-        private set
-
-
-    init {
-        name = "Constraint with $behavior"
-    }
-
-    /**
-     * Set name as well. TODO is it ever called with name == null?
-     *
-     * @param name Name of the Constraint should start with one of "extra block", "Block", "Column", "Row".
-     */
-    constructor(behavior: ConstraintBehavior, type: ConstraintType, name: String?) : this(
-        behavior,
-        type
-    ) {
-        if (name != null)
-            this.name = name
-    }
-
-    /**
-     * Adds a [Position] to the contraint
-     * @param position The [Position] to add to this constraint
-     * TODO make those tests subclasses and set method to private
-     */
-    @Deprecated("""exclusively used in tests""")
-    fun addPosition(position: Position) {
-        if (position !in positions) {
-            positions.add(position)
-        }
-    }
+    //we don't want duplicates -> Set, and linkedSetOf preserves the order, just in case
+    private val positions: Set<Position> = linkedSetOf(*positions)
 
     /**
      * Checks if the Sudoku satisfies this Constraint.
@@ -121,13 +87,14 @@ class Constraint(private var behavior: ConstraintBehavior, type: ConstraintType)
      *
      * @return a list of positions in this constraint
      */
-    fun getPositions(): ArrayList<Position> {//TODO change to immutable list
-        return positions as ArrayList<Position>
+    fun getPositions(): List<Position> {//TODO test for ordering
+        return positions.toList()
     }
 
-    @Deprecated("only used by Constraintmapper in app, remove when possible")
-    fun setPositions(ps: List<Position>){
-        positions = ps.toMutableList()
-    }
+    constructor(behavior: ConstraintBehavior, type: ConstraintType, vararg positions: Position)
+            : this(behavior, type, "Constraint with $behavior", *positions)
 
+    init {
+        //todo require(positions.isNotEmpty())
+    }
 }

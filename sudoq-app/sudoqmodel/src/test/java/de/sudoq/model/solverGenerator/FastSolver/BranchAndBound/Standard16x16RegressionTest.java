@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Timeout;
 
 import java.util.concurrent.TimeUnit;
 
-import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.files.FileManagerTests;
 import de.sudoq.model.solverGenerator.FastSolver.DLX1.DLXSolver;
 import de.sudoq.model.solverGenerator.FastSolver.FastSolver;

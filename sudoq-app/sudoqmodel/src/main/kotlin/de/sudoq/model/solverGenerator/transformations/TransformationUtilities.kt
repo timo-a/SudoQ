@@ -38,7 +38,7 @@ internal fun rotate270(sudoku: Sudoku) {
 }
 
 internal fun mirrorHorizontally(sudoku: Sudoku) {
-    val width = sudoku.sudokuType.size!!.x
+    val width = sudoku.sudokuType.size.x
     for (i in 0 until width / 2) {
         swap_columns(sudoku, i, width - 1 - i)
     }
@@ -50,7 +50,7 @@ internal fun mirrorVertically(sudoku: Sudoku) {
 }
 
 internal fun mirrorDiagonallyDown(sudoku: Sudoku) {
-    val width = sudoku.sudokuType.size!!.x
+    val width = sudoku.sudokuType.size.x
     for (i in 0 until width - 1) { // zeilen
         for (j in i + 1 until width) { // zeilenElemente
             swapCells(
@@ -102,7 +102,7 @@ internal fun inBlockColumnPermutation(sudoku: Sudoku) {
  */
 internal fun horizontalBlockPermutation(sudoku: Sudoku) {
     val collumnsPerBlock = sudoku.sudokuType.blockSize.x
-    val numberOfHorizontalBlocks = sudoku.sudokuType.size!!.x / collumnsPerBlock
+    val numberOfHorizontalBlocks = sudoku.sudokuType.size.x / collumnsPerBlock
     rotate_horizontally_By1(sudoku, numberOfHorizontalBlocks, collumnsPerBlock)
     horizontalBlockSwaps(sudoku, numberOfHorizontalBlocks, collumnsPerBlock)
 }
@@ -114,7 +114,7 @@ internal fun horizontalBlockPermutation(sudoku: Sudoku) {
  */
 internal fun verticalBlockPermutation(sudoku: Sudoku) {
     val rowsPerBlock = sudoku.sudokuType.blockSize.y
-    val numberOfVertikalBlocks = sudoku.sudokuType.size!!.y / rowsPerBlock
+    val numberOfVertikalBlocks = sudoku.sudokuType.size.y / rowsPerBlock
     Rotate90().permutate(sudoku)
     rotate_horizontally_By1(sudoku, numberOfVertikalBlocks, rowsPerBlock)
     horizontalBlockSwaps(sudoku, numberOfVertikalBlocks, rowsPerBlock)
@@ -140,7 +140,7 @@ private fun swapColumnOfBlocks(
 
 /* swaps two columns */
 private fun swap_columns(sudoku: Sudoku, column1: Int, column2: Int) {
-    val height = sudoku.sudokuType.size!!.y
+    val height = sudoku.sudokuType.size.y
     for (j in 0 until height) {
         val a = Position[column1, j]
         val b = Position[column2, j]
@@ -183,7 +183,7 @@ private fun horizontalBlockSwaps(
  * @param blockWidth Number of columns per block (standard has 3, 16x16 has 4)
  */
 private fun inBlockColumnPermutation(sudoku: Sudoku, blockWidth: Int) {
-    val numberOfHorizontalBlocks = (sudoku.sudokuType.size!!.x
+    val numberOfHorizontalBlocks = (sudoku.sudokuType.size.x
             / sudoku.sudokuType.blockSize.x)
     for (i in 0 until numberOfHorizontalBlocks) {
         for (j in 0 until blockWidth) {

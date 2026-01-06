@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Calendar;
 
-import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.solverGenerator.FastSolver.DLX2.SamuraiSolver;
 import de.sudoq.model.solverGenerator.FastSolver.FastSolver;
 import de.sudoq.model.solverGenerator.solver.SudokuMockUps;

@@ -22,9 +22,9 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 
 import de.sudoq.model.Utility;
+import de.sudoq.model.ports.persistence.ReadRepo;
 import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests;
 import de.sudoq.model.utility.FileManager;
-import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.profile.ProfileSingleton;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solver.ComplexityRelation;
@@ -63,33 +63,7 @@ public class GeneratorTests implements GeneratorCallback {
     @BeforeEach
     void beforeTest() {
 		TypeBuilder.get99();
-		IRepo<SudokuType> dummySoItCompiles = new IRepo<SudokuType>() {
-			@NotNull
-			@Override
-			public List<Integer> ids() {
-				throw new NotImplementedException();
-			}
-
-			@Override
-			public SudokuType create() {
-				return null;
-			}
-
-			@Override
-			public SudokuType read(int id) {
-				return null;
-			}
-
-			@Override
-			public SudokuType update(SudokuType SudokuType) {
-				return null;
-			}
-
-			@Override
-			public void delete(int id) {
-
-			}
-		};
+		ReadRepo<SudokuType> dummySoItCompiles = id -> null;
 		generator = new Generator(dummySoItCompiles/*sudokuDir*/);
 	}
 

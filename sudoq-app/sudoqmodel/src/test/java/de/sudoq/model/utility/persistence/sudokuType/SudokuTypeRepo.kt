@@ -1,6 +1,6 @@
 package de.sudoq.model.utility.persistence.sudokuType
 
-/*class SudokuTypeRepo() : IRepo<SudokuType> {
+/*class SudokuTypeRepo() : ReadRepo<SudokuType> {
 
     private val typesDir: File = FileUtils.getFile("src","test", "resources", "persistence", "SudokuTypes");
 
