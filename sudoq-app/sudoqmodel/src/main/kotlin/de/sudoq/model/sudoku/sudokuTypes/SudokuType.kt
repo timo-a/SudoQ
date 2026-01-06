@@ -19,20 +19,20 @@ import de.sudoq.model.sudoku.complexity.ComplexityFactory
  * A SudokuType represents the Attributes of a specific sudoku type.
  * This includes especially the Constraints that describe a sudoku type.
  *
- * @param enumType Enum holding this Type
- * @param numberOfSymbols Number of symbols that can be entered in a cell
- * @param standardAllocationFactor The ratio of fields that are to be allocated i.e. already filled
+ * @property enumType Enum holding this Type
+ * @property numberOfSymbols Number of symbols that can be entered in a cell
+ * @property standardAllocationFactor The ratio of fields that are to be allocated i.e. already filled
  * when starting a sudoku game
- * @param size dimensions of the board
+ * @property size dimensions of the board
  *  - x is the maximum number of (columns) horizontal cells
  *  - y is the maximum number of (rows) vertical cells
- * @param blockSize The dimensions of one quadratic block, e.g.
+ * @property blockSize The dimensions of one quadratic block, e.g.
  *  - for a normal 9x9 Sudoku: 3,3.
  *  - for 4x4: 2,2
  *  - but for Squiggly or Stairstep: 0,0
- * @param constraints The list of constraints for this sudoku type
- * @param permutationProperties The list of permutations for this sudoku type
- * @param helperList The list of helpers for this sudoku type
+ * @property constraints The list of constraints for this sudoku type
+ * @property permutationProperties The list of permutations for this sudoku type
+ * @property helperList The list of helpers for this sudoku type
  *
  */
 open class SudokuType(val enumType: SudokuTypes,
