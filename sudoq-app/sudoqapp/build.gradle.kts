@@ -53,6 +53,5 @@ dependencies {
     testImplementation(libs.junit.jupiter.params)
     testImplementation(libs.kluent)
     testImplementation(libs.mockk)
-    testImplementation(project(mapOf("path" to ":sudoq-persistence-xml")))
     testRuntimeOnly(libs.junit.jupiter.engine)
 }
