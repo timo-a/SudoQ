@@ -16,6 +16,15 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    testOptions {
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
+
     androidResources {
         localeFilters.addAll(listOf("en", "de", "fr"))
     }
@@ -54,4 +63,5 @@ dependencies {
     testImplementation(libs.kluent)
     testImplementation(libs.mockk)
     testRuntimeOnly(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.junit.platform.launcher)
 }
