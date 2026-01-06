@@ -57,7 +57,7 @@ class GameManager(private var profile: ProfileManager,
             game.id,
             Date(),
             game.isFinished(),
-            game.sudoku!!.sudokuType?.enumType!!,
+            game.sudoku!!.sudokuType.enumType,
             game.sudoku!!.complexity!!
         )
 

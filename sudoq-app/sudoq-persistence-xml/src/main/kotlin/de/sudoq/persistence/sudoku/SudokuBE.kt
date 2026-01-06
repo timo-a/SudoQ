@@ -48,7 +48,7 @@ class SudokuBE() : XmlableWithRepo<SudokuType> {
             representation.addAttribute(XmlAttribute("id", "" + id))
         }
         representation.addAttribute(XmlAttribute("transformCount", "" + transformCount))
-        representation.addAttribute(XmlAttribute("type", "" + sudokuType!!.enumType!!.ordinal))
+        representation.addAttribute(XmlAttribute("type", "" + sudokuType!!.enumType.ordinal))
         if (complexity != null) {
             representation.addAttribute(XmlAttribute("complexity", "" + complexity!!.ordinal))
         }

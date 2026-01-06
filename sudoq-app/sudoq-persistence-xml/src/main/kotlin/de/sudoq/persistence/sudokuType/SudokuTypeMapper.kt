@@ -7,7 +7,7 @@ object SudokuTypeMapper {
 
     fun toBE(sudokuType: SudokuType): SudokuTypeBE {
         return SudokuTypeBE(
-            sudokuType.enumType!!,
+            sudokuType.enumType,
             sudokuType.numberOfSymbols,
             sudokuType.getStandardAllocationFactor(),
             sudokuType.size!!,
