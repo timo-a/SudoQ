@@ -37,7 +37,8 @@ class SymbolIteratorTest {
     @ValueSource(ints = [1, 2, 3, 20, 100])
     fun arbitrary(numOfSymbols: Int) {
         val arbitrarySudokuType = SudokuType(SudokuTypes.standard4x4, numOfSymbols, 0f, Position[1,1],
-            Position[1,1], ArrayList(), ArrayList(), ArrayList(), ComplexityConstraintBuilder())
+            Position[1,1], ArrayList(), ArrayList(), ArrayList(),
+            ComplexityConstraintBuilder(HashMap()))
         testEquality(arbitrarySudokuType)
     }
 

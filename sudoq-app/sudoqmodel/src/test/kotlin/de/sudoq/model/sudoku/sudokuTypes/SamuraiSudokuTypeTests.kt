@@ -123,8 +123,4 @@ class SamuraiSudokuTypeTests {
         samurai.enumType.`should be`(SudokuTypes.samurai)
     }
 
-    @Test
-    fun buildComplexityConstraintTest() {
-        samurai.buildComplexityConstraint(null).`should be null`()
-    }
 }

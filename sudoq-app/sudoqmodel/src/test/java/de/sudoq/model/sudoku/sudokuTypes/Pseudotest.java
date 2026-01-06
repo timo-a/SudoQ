@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,8 @@ public class Pseudotest {
                 oldType.getSize(), Position.get(1,1),
                 new ArrayList<>(oldType.getConstraints()),
                 new ArrayList<>(),
-                new ArrayList<>(), new ComplexityConstraintBuilder());
+                new ArrayList<>(),
+                new ComplexityConstraintBuilder(new HashMap<>()));
 		for (PermutationProperties p : oldType.getPermutationProperties())
 			s.getPermutationProperties().add(p);
 		
@@ -92,11 +94,6 @@ public class Pseudotest {
     @Test
     void getAllocationFactorTest() {
         assertEquals(0.25f, stHy.getStandardAllocationFactor());
-	}
-
-    @Test
-    void buildComplexityConstraintInitializedWithNullShouldReturnNull() {
-		assertNull(stHy.buildComplexityConstraint(null), "passing null to buildComplexityConstraint should return null.");
 	}
 
     //This tests just specification, is such a test relevant?

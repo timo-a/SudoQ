@@ -421,7 +421,7 @@ open class Solver(sudoku: Sudoku) {
             if (followComplexityConstraints) {
                 //if complexity is relevant restrict helpers
                 complConstr =
-                    solverSudoku.sudokuType.buildComplexityConstraint(solverSudoku.complexity)
+                    solverSudoku.sudokuType.buildComplexityConstraint(solverSudoku.complexity!!)
                 numberOfHelpers =
                     complConstr!!.numberOfAllowedHelpers //TODO specifying a max helper would be clearer
             } else {
@@ -725,7 +725,9 @@ if there is another candidate -> advance
      */
     init {
         solverSudoku = SolverSudoku(sudoku)
-        complConstr = sudoku.sudokuType.buildComplexityConstraint(sudoku.complexity)
+        complConstr = if (sudoku.complexity == null) null //manche methoden setzen den wert nochmal vom solver... todo ausmisten, refactoren
+        else sudoku.sudokuType.buildComplexityConstraint(sudoku.complexity!!)
+
         helper = makeHelperList()
         numberOfHelpers = helper.size
     }

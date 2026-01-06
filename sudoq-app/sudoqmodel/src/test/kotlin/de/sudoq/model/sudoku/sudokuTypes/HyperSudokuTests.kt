@@ -68,9 +68,4 @@ class HyperSudokuTests {
         stHy.enumType.`should be`(SudokuTypes.HyperSudoku)
     }
 
-    @Test
-    fun buildComplexityConstraintTest() {
-        stHy.buildComplexityConstraint(null).`should be null`()
-    }
-
 }

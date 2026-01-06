@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import de.sudoq.model.sudoku.CandidateSet;
@@ -195,7 +196,8 @@ class SolverSudokuTests {
         c.addPosition(Position.get(3, 0));
 
         SudokuType type = new SudokuType(SudokuTypes.standard4x4, 4, 0f, Position.get(4,4),
-                Position.get(1,1), List.of(c), new ArrayList<>(), new ArrayList<>(), new ComplexityConstraintBuilder());
+                Position.get(1,1), List.of(c), new ArrayList<>(), new ArrayList<>(),
+                new ComplexityConstraintBuilder(new HashMap<>()));
 
 		SolverSudoku sudoku = new SolverSudoku(new Sudoku(type));
 		assertEquals(4, sudoku.getSudokuType().getNumberOfSymbols());

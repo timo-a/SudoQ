@@ -28,5 +28,5 @@ interface Xmlable {
      * @throws IllegalArgumentException if the XML Representation has an unsupported structure.
      */
     @Throws(IllegalArgumentException::class)
-    fun fillFromXml(xmlTreeRepresentation: XmlTree)
+    fun fillFromXml(xmlTreeRepresentation: XmlTree)//todo can this be a static fun that returns the instance rather than filling it?
 }

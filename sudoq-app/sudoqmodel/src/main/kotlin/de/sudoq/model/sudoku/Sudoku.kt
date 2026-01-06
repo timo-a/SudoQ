@@ -51,8 +51,8 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
     @JvmOverloads
     constructor(
         type: SudokuType,
-        map: PositionMap<Int>? = PositionMap((type.size)!!),
-        setValues: PositionMap<Boolean>? = PositionMap((type.size)!!)
+        map: PositionMap<Int>? = PositionMap(type.size),
+        setValues: PositionMap<Boolean>? = PositionMap(type.size)
     ) {
         var cellIdCounter = 1
         cellPositions = HashMap()

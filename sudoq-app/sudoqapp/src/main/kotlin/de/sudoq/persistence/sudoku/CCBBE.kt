@@ -6,7 +6,7 @@ import de.sudoq.persistence.XmlTree
 import de.sudoq.persistence.Xmlable
 import java.util.HashMap
 
-class CCBBE(var specimen: MutableMap<Complexity?, ComplexityConstraint> = HashMap())
+class CCBBE(var specimen: Map<Complexity, ComplexityConstraint> = HashMap())
     : Xmlable {
 
     override fun toXmlTree(): XmlTree {
@@ -19,12 +19,11 @@ class CCBBE(var specimen: MutableMap<Complexity?, ComplexityConstraint> = HashMa
 
     @Throws(IllegalArgumentException::class)
     override fun fillFromXml(xmlTreeRepresentation: XmlTree) {
-        specimen = HashMap()
-        for (sub in xmlTreeRepresentation) {
+        specimen = xmlTreeRepresentation.associate {
             val ccBE = ComplexityConstraintBE()
-            ccBE.fillFromXml(sub)
+            ccBE.fillFromXml(it)
             val cc = ComplexityConstraintMapper.fromBE(ccBE)
-            specimen[cc.complexity] = cc
+            cc.complexity to cc
         }
     }
 

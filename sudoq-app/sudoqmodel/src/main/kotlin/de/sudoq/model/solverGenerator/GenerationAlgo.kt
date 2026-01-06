@@ -71,7 +71,7 @@ class GenerationAlgo(
      * Schwierigkeitsgrades
      */
     private val desiredComplexityConstraint: ComplexityConstraint? =
-        sudoku.sudokuType.buildComplexityConstraint(sudoku.complexity)
+        sudoku.sudokuType.buildComplexityConstraint(sudoku.complexity!!)
 
 
     /**
@@ -91,6 +91,7 @@ class GenerationAlgo(
             if (!sudoku.getCell(p)!!.isNotSolved) suBi.setFixed(p)
         }
         val res = suBi.createSudoku()
+        res.complexity = sudoku.complexity!! //vorsichtshalber dazunehmen
 
         //we want to know the solutions used, so quickly an additional solver
         val quickSolver = Solver(res)

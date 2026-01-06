@@ -9,11 +9,6 @@ class SquigglyASudokuTests {
     private val squigglyA: SudokuType = TypeBuilder.getType(SudokuTypes.squigglya)
 
     @Test
-    fun buildComplexityConstraintTest() {
-		squigglyA.buildComplexityConstraint(null).`should be null`();
-    }
-
-    @Test
     fun enumTypeTests() {
         squigglyA.enumType.`should be`(SudokuTypes.squigglya)
     }

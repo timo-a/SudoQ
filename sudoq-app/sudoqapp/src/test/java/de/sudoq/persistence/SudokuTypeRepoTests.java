@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -77,7 +78,7 @@ public class SudokuTypeRepoTests {
     public void testUpdate() {
         SudokuTypeRepo sTR = new SudokuTypeRepo(new File("dummy"));
         SudokuType dummySudokuType = new SudokuType(SudokuTypes.standard4x4, 9, 0f, Position.get(1,1),
-        Position.get(1,1), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ComplexityConstraintBuilder());
+        Position.get(1,1), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ComplexityConstraintBuilder(new HashMap<>()));
         Assertions.assertThrows(NotImplementedError.class, () -> sTR.update(dummySudokuType));
     }
 

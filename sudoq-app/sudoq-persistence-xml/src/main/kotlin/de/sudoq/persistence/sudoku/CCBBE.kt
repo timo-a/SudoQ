@@ -6,7 +6,7 @@ import de.sudoq.persistence.XmlTree
 import de.sudoq.persistence.Xmlable
 import java.util.HashMap
 
-class CCBBE(var specimen: MutableMap<Complexity?, ComplexityConstraint> = HashMap())
+class CCBBE(var specimen: MutableMap<Complexity, ComplexityConstraint> = HashMap())
     : Xmlable {
 
     override fun toXmlTree(): XmlTree {

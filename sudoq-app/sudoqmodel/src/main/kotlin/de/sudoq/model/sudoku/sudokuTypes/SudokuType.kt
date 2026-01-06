@@ -109,7 +109,7 @@ open class SudokuType(val enumType: SudokuTypes,
      *
      * @param complexity Complexity for which to return a ComplexityConstraint
      */
-    override fun buildComplexityConstraint(complexity: Complexity?): ComplexityConstraint? {
+    override fun buildComplexityConstraint(complexity: Complexity): ComplexityConstraint? {
         return ccb.getComplexityConstraint(complexity)
     }
 

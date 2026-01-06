@@ -12,10 +12,4 @@ class StairStepSudokuTests {
     fun enumTypeTests() {
         stair.enumType.`should be`(SudokuTypes.stairstep)
     }
-
-    @Test
-    fun buildComplexityConstraintTest() {
-        stair.buildComplexityConstraint(null).`should be null`()
-    }
-
 }

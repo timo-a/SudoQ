@@ -143,9 +143,4 @@ class SquigglyBSudokuTest : SquigglySudokuTypesTest() {
     fun enumTypeTests() {
         squig.enumType.`should be`(SudokuTypes.squigglyb);
     }
-
-    @Test
-    fun buildComplexityConstraintTest() {
-        squig.buildComplexityConstraint(null).`should be null`()
-    }
 }

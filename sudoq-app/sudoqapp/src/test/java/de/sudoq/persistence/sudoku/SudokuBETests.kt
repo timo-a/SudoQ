@@ -44,7 +44,7 @@ class SudokuBETests {
     @Throws(IllegalArgumentException::class, IOException::class)
     fun testFillFromXml() {
         val dummySudokuType = SudokuType(SudokuTypes.standard4x4, 9, 0f, Position[1,1],
-            Position[1,1], ArrayList(), ArrayList(), ArrayList(), ComplexityConstraintBuilder()
+            Position[1,1], ArrayList(), ArrayList(), ArrayList(), ComplexityConstraintBuilder(HashMap())
         )
         val sudoku = SudokuBE(
             6374, 0,

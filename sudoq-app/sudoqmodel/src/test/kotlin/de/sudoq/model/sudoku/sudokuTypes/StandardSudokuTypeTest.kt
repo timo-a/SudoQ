@@ -37,20 +37,11 @@ class StandardSudokuTypeTest {
     fun enumTypeTest() {
         sst.enumType.`should be`(SudokuTypes.standard9x9)
     }
-
-    @Test
-    fun complexityTest() {
-        val type = TypeBuilder.getType(SudokuTypes.standard9x9)
-        type.buildComplexityConstraint(null).`should be null`()
-    }
 }
 
 class SST18x18 : SudokuType(SudokuTypes.standard4x4, 9, 0f, Position[1,1], Position[1,1],
-    ArrayList(), ArrayList(), ArrayList(), ComplexityConstraintBuilder()) {
-
-    override fun buildComplexityConstraint(complexity: Complexity?): ComplexityConstraint? {
-        return null
-    }
+    ArrayList(), ArrayList(), ArrayList(),
+    ComplexityConstraintBuilder(HashMap())) {
 
     override fun getStandardAllocationFactor(): Float = 0f
 
