@@ -20,15 +20,31 @@ import kotlin.collections.ArrayList
 /**
  * A SudokuType represents the Attributes of a specific sudoku type.
  * This includes especially the Constraints that describe a sudoku type.
+ *
+ * @param enumType Enum holding this Type
+ * @param numberOfSymbols Number of symbols that can be entered in a cell
+ * @param standardAllocationFactor The ratio of fields that are to be allocated i.e. already filled
+ * when starting a sudoku game
+ * @param size dimensions of the board
+ * @param blockSize The dimensions of one quadratic block, e.g.
+ *  - for a normal 9x9 Sudoku: 3,3.
+ *  - for 4x4: 2,2
+ *  - but for Squiggly or Stairstep: 0,0
+ * @param constraints The list of constraints for this sudoku type
+ * @param permutationProperties The list of permutations for this sudoku type
+ * @param helperList The list of helpers for this sudoku type
+ *
  */
-open class SudokuType : Iterable<Constraint>, ComplexityFactory {
-
-    /** Enum holding this Type */
-    open var enumType: SudokuTypes? = null
-    //TODO make fillFromXML statis - make this nonnullable
-
-    /** The ratio of fields that are to be allocated i.e. already filled when starting  a sudoku game  */
-    private var standardAllocationFactor: Float = 0f
+open class SudokuType(val enumType: SudokuTypes,
+                      var numberOfSymbols: Int,  //should be val as should the others
+                      private var standardAllocationFactor: Float,
+                      size: Position, //TODO use val directly
+                      var blockSize: Position,
+                      @JvmField var constraints: MutableList<Constraint>,//todo should be neither mutable nor reassignable
+                      var permutationProperties: List<PermutationProperties>,
+                      var helperList: MutableList<Helpers>,
+                      @JvmField var ccb: ComplexityConstraintBuilder
+) : Iterable<Constraint>, ComplexityFactory {
 
     /**
      * Gibt den Standard Belegungsfaktor zurück
@@ -42,93 +58,20 @@ open class SudokuType : Iterable<Constraint>, ComplexityFactory {
      * the x-coordinate is the maximum number of (columns) horizontal cells and
      * the y-coordinate is the maximum number of (rows) vertical cells.
      */
-    var size: Position? = null
+    var size: Position? = size
         protected set
-
-    /**
-     * The Dimensions of one quadratic block, i.e. for a normal 9x9 Sudoku: 3,3.
-     * But for Squiggly or Stairstep: 0,0
-     * and for 4x4: 2,2
-     */
-    var blockSize: Position = Position.get(0, 0)
-        protected set
-
-    /**
-     * Number of symbols that can be entered in a cell.
-     */
-    var numberOfSymbols = 0
-        private set
-
-    /**
-     * The list of constraints for this sudoku type
-     */
-    @JvmField
-    var constraints: MutableList<Constraint>
 
     /**
      * All [Position]s that are contained in at least one constraint.
      * (For a Samurai sudoku not all positions are part of a constraint)
      */
-    protected lateinit var positions: MutableList<Position>
-
-    /**
-     * list of admissible permutations for this sudoku type
-     */
-    var permutationProperties: List<PermutationProperties>
-
-    var helperList: MutableList<Helpers>
-
-    @JvmField
-    var ccb: ComplexityConstraintBuilder
+    protected var positions: MutableList<Position>
 
 
-    /**
-     * Creates a SudokuType
-     *
-     * @param width width of the sudoku in cells
-     * @param height height of the sudoku in cells
-     * @param numberOfSymbols the number of symbols that can be used in this sudoku
-     */
-    constructor(width: Int, height: Int, numberOfSymbols: Int) {
+    init {
         require(numberOfSymbols >= 0) { "Number of symbols < 0 : $numberOfSymbols" }
-        require(width >= 0) { "Sudoku width < 0 : $width" }
-        require(height >= 0) { "Sudoku height < 0 : $height" }
-        enumType = null
-        standardAllocationFactor = -1.0f
-        this.numberOfSymbols = numberOfSymbols
-        size = Position.get(width, height)
-
-        constraints = ArrayList()
         positions = ArrayList()
-        permutationProperties = ArrayList()
-        helperList = ArrayList()
-        ccb = ComplexityConstraintBuilder()
-    }
-
-    /**
-     * used to initialize from SudokuTypeBE
-     */
-    constructor(
-        enumType: SudokuTypes,
-        numberOfSymbols: Int,
-        standardAllocationFactor: Float,
-        size: Position,
-        blockSize: Position,
-        constraints: MutableList<Constraint>,
-        permutationProperties: List<PermutationProperties>,
-        helperList: MutableList<Helpers>,
-        ccb: ComplexityConstraintBuilder
-    ) {
-        this.enumType = enumType
-        this.numberOfSymbols = numberOfSymbols
-        this.standardAllocationFactor = standardAllocationFactor
-        this.size = size
-        this.blockSize = blockSize
-        this.constraints = constraints
-        this.permutationProperties = permutationProperties
-        this.helperList = helperList
-        this.ccb = ccb
-        initPositionsList()
+        for (c in constraints) for (p in c) if (!positions.contains(p)) positions.add(p)
     }
 
     /**
@@ -199,20 +142,8 @@ open class SudokuType : Iterable<Constraint>, ComplexityFactory {
         return "" + enumType
     }
 
-    /**
-     * Sets the type
-     * @param type Type
-     */
-    fun setTypeName(type: SudokuTypes) {
-        enumType = type
-    }
-
     fun setDimensions(p: Position) {
         size = p
-    }
-
-    fun setNumberOfSymbols(numberOfSymbols: Int) {
-        if (numberOfSymbols > 0) this.numberOfSymbols = numberOfSymbols
     }
 
     /**
@@ -235,11 +166,4 @@ open class SudokuType : Iterable<Constraint>, ComplexityFactory {
     fun addConstraint(c: Constraint) {
         constraints.add(c)
     }
-
-    private fun initPositionsList() {
-        positions = ArrayList()
-        for (c in constraints) for (p in c) if (!positions.contains(p)) positions.add(p)
-    }
-
-
 }

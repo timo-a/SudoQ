@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test
 import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
+import de.sudoq.model.sudoku.Position
+import de.sudoq.model.sudoku.sudokuTypes.ComplexityConstraintBuilder
 import testutils.SudokuTypeProvider
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.persistence.XmlHelper
@@ -41,9 +43,12 @@ class SudokuBETests {
     @Test
     @Throws(IllegalArgumentException::class, IOException::class)
     fun testFillFromXml() {
+        val dummySudokuType = SudokuType(SudokuTypes.standard4x4, 9, 0f, Position[1,1],
+            Position[1,1], ArrayList(), ArrayList(), ArrayList(), ComplexityConstraintBuilder()
+        )
         val sudoku = SudokuBE(
             6374, 0,
-            SudokuType(9, 9, 9),
+            dummySudokuType,
             Complexity.easy, HashMap()
         )
         val tree = sudoku.toXmlTree()

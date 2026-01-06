@@ -45,12 +45,8 @@ class StandardSudokuTypeTest {
     }
 }
 
-class SST18x18 : SudokuType(18, 18, 18) {
-    override var enumType: SudokuTypes?
-        get() = null
-        set(enumType) {
-            super.enumType = enumType
-        }
+class SST18x18 : SudokuType(SudokuTypes.standard4x4, 9, 0f, Position[1,1], Position[1,1],
+    ArrayList(), ArrayList(), ArrayList(), ComplexityConstraintBuilder()) {
 
     override fun buildComplexityConstraint(complexity: Complexity?): ComplexityConstraint? {
         return null

@@ -6,12 +6,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import de.sudoq.model.sudoku.Position;
+import de.sudoq.model.sudoku.sudokuTypes.ComplexityConstraintBuilder;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import kotlin.NotImplementedError;
@@ -73,7 +76,9 @@ public class SudokuTypeRepoTests {
     @Test
     public void testUpdate() {
         SudokuTypeRepo sTR = new SudokuTypeRepo(new File("dummy"));
-        Assertions.assertThrows(NotImplementedError.class, () -> sTR.update(new SudokuType(9,9,9)));
+        SudokuType dummySudokuType = new SudokuType(SudokuTypes.standard4x4, 9, 0f, Position.get(1,1),
+        Position.get(1,1), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ComplexityConstraintBuilder());
+        Assertions.assertThrows(NotImplementedError.class, () -> sTR.update(dummySudokuType));
     }
 
     /**

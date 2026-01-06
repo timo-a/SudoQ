@@ -1,8 +1,11 @@
 package de.sudoq.model.sudoku.sudokuTypes
 
+import de.sudoq.model.sudoku.Position
 import org.amshove.kluent.`should be`
 import org.amshove.kluent.`should not be null`
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 class SymbolIteratorTest {
 
@@ -30,13 +33,12 @@ class SymbolIteratorTest {
         testEquality(sst)
     }
 
-    @Test
-    fun arbitrary() {
-        val sst = TypeBuilder.getType(SudokuTypes.standard4x4)
-        for (i in intArrayOf(1, 2, 3, 20, 100)) {
-            sst.setNumberOfSymbols(i)
-            testEquality(sst)
-        }
+    @ParameterizedTest
+    @ValueSource(ints = [1, 2, 3, 20, 100])
+    fun arbitrary(numOfSymbols: Int) {
+        val arbitrarySudokuType = SudokuType(SudokuTypes.standard4x4, numOfSymbols, 0f, Position[1,1],
+            Position[1,1], ArrayList(), ArrayList(), ArrayList(), ComplexityConstraintBuilder())
+        testEquality(arbitrarySudokuType)
     }
 
     private fun testEquality(sst: SudokuType?) {

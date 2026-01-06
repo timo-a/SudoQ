@@ -7,12 +7,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import de.sudoq.model.Utility;
 import de.sudoq.model.sudoku.Constraint;
+import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
 
@@ -21,11 +22,9 @@ public class Pseudotest {
 	SudokuType stHy = TypeBuilder.getType(SudokuTypes.HyperSudoku);
 
 	public SudokuType usual(SudokuType oldType){
-		
-		SudokuType s = new SudokuType(9, 9, 9);
-		s.setTypeName(oldType.getEnumType());
-		
-		
+
+        SudokuType s = new SudokuType(oldType.getEnumType(), 9, 0f, Position.get(9,9),
+                Position.get(1,1), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ComplexityConstraintBuilder());
 		s.setNumberOfSymbols(oldType.getNumberOfSymbols());
 		s.setDimensions(oldType.getSize());
 		//s.standardAllocationFactor = oldType.getStandardAllocationFactor();
