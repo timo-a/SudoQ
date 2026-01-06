@@ -3,19 +3,16 @@ package de.sudoq.model.sudoku;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.junit.jupiter.api.Test;
 
-import de.sudoq.model.persistence.IRepo;
+import de.sudoq.model.ports.persistence.ReadRepo;
 import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
 class SudokuBuilderTests {
 
-	private final IRepo<SudokuType> str = new SudokuTypeRepo4Tests();
+	private final ReadRepo<SudokuType> str = new SudokuTypeRepo4Tests();
 
 	Cell cell;
 

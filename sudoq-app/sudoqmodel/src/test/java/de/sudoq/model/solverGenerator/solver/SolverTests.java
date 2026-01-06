@@ -22,8 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
 
-import de.sudoq.model.TestWithInitCleanforSingletons;
-import de.sudoq.model.persistence.IRepo;
+import de.sudoq.model.ports.persistence.ReadRepo;
 import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.solverGenerator.solution.Solution;
@@ -46,7 +45,7 @@ class SolverTests {
 
 	private static final boolean PRINT_SOLUTIONS = false;
 
-	private IRepo<SudokuType> sudokuTypeRepo = new SudokuTypeRepo4Tests();
+	private ReadRepo<SudokuType> sudokuTypeRepo = new SudokuTypeRepo4Tests();
 
 
     @BeforeEach

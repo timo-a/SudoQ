@@ -64,9 +64,4 @@ class StandardSudokuType4x4Tests {
     fun enumTypeTest() {
         sst44.enumType.`should be`(SudokuTypes.standard4x4)
     }
-
-    @Test
-    fun buildComplexityConstraintTest() {
-        sst44.buildComplexityConstraint(null).`should be null`()
-    }
 }

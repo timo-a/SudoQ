@@ -6,7 +6,7 @@ import de.sudoq.model.actionTree.SolveAction
 import de.sudoq.model.actionTree.SolveActionFactory
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.game.GameStateHandler
-import de.sudoq.model.persistence.IRepo
+import de.sudoq.model.ports.persistence.ReadRepo
 import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.persistence.XmlAttribute
@@ -79,7 +79,7 @@ class GameBE : XmlableWithRepo<SudokuType> {
         return representation
     }
 
-    override fun fillFromXml(xmlTreeRepresentation: XmlTree, sudokuTypeRepo: IRepo<SudokuType>) {
+    override fun fillFromXml(xmlTreeRepresentation: XmlTree, sudokuTypeRepo: ReadRepo<SudokuType>) {
         id = xmlTreeRepresentation.getAttributeValue("id")!!.toInt()
         time = xmlTreeRepresentation.getAttributeValue("time")!!.toInt()
         val currentStateId = xmlTreeRepresentation.getAttributeValue("currentTurnId")!!.toInt()

@@ -7,7 +7,7 @@
  */
 package de.sudoq.model.sudoku
 
-import de.sudoq.model.persistence.IRepo
+import de.sudoq.model.ports.persistence.ReadRepo
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider.getSudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
@@ -15,7 +15,7 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 /** Provides functions to create a [SudokuType] or an empty [Sudoku] */
 class SudokuBuilder(private val type: SudokuType?) {
 
-    private val solutions: PositionMap<Int> = PositionMap(type!!.size!!)
+    private val solutions: PositionMap<Int> = PositionMap(type!!.size)
     private val setValues: PositionMap<Boolean> = PositionMap(type?.size!!)
 
     /**
@@ -24,7 +24,7 @@ class SudokuBuilder(private val type: SudokuType?) {
      * @param type Enum-Type of the [Sudoku] to create
      * @throws NullPointerException if type invalid.
      */
-    constructor(type: SudokuTypes, sudokuTypeRepo: IRepo<SudokuType>) : this(getSudokuType(type, sudokuTypeRepo))
+    constructor(type: SudokuTypes, sudokuTypeRepo: ReadRepo<SudokuType>) : this(getSudokuType(type, sudokuTypeRepo))
 
     /**
      * Creates a [Sudoku] with the SudokeType of this builder and the entered Solutions.

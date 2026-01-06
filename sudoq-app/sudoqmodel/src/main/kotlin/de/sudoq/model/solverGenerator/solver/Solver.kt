@@ -215,7 +215,7 @@ open class Solver(sudoku: Sudoku) {
         //todo remove this function, and maybe actions alltogether
         //System.out.println("start of solveAll2");
         //print9x9(sudoku);
-        val copy: PositionMap<Int> = PositionMap(solverSudoku.sudokuType.size!!, solverSudoku.positions)
+        val copy: PositionMap<Int> = PositionMap(solverSudoku.sudokuType.size, solverSudoku.positions)
             { p -> solverSudoku.getCell(p)!!.currentValue }
 
         val solved = solveAll(buildDerivation, false, false)
@@ -304,7 +304,7 @@ open class Solver(sudoku: Sudoku) {
         val ambiguous = false
 
         //map position -> value
-        val copy: PositionMap<Int> = PositionMap(solverSudoku.sudokuType.size!!, solverSudoku.positions)
+        val copy: PositionMap<Int> = PositionMap(solverSudoku.sudokuType.size, solverSudoku.positions)
             { p -> solverSudoku.getCell(p)!!.currentValue }
 
         /////debug
@@ -366,7 +366,7 @@ open class Solver(sudoku: Sudoku) {
      * @return the solutions of the last `solve`-call.
      */
     val solutionsMap: PositionMap<Int>
-        get() = PositionMap(solverSudoku.sudokuType.size!!, solverSudoku.positions)
+        get() = PositionMap(solverSudoku.sudokuType.size, solverSudoku.positions)
              { p -> solverSudoku.getCell(p)!!.currentValue }
 
     /**
@@ -421,7 +421,7 @@ open class Solver(sudoku: Sudoku) {
             if (followComplexityConstraints) {
                 //if complexity is relevant restrict helpers
                 complConstr =
-                    solverSudoku.sudokuType.buildComplexityConstraint(solverSudoku.complexity)
+                    solverSudoku.sudokuType.buildComplexityConstraint(solverSudoku.complexity!!)
                 numberOfHelpers =
                     complConstr!!.numberOfAllowedHelpers //TODO specifying a max helper would be clearer
             } else {
@@ -725,7 +725,9 @@ if there is another candidate -> advance
      */
     init {
         solverSudoku = SolverSudoku(sudoku)
-        complConstr = sudoku.sudokuType.buildComplexityConstraint(sudoku.complexity)
+        complConstr = if (sudoku.complexity == null) null //manche methoden setzen den wert nochmal vom solver... todo ausmisten, refactoren
+        else sudoku.sudokuType.buildComplexityConstraint(sudoku.complexity!!)
+
         helper = makeHelperList()
         numberOfHelpers = helper.size
     }

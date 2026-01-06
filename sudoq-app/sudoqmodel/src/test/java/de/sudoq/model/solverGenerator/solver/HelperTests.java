@@ -12,7 +12,6 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.solverGenerator.solution.SolveDerivation;
 import de.sudoq.model.solverGenerator.solver.helper.HiddenHelper;
 import de.sudoq.model.solverGenerator.solver.helper.LastDigitHelper;

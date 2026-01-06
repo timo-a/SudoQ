@@ -1,6 +1,7 @@
 package de.sudoq.persistence.sudoku
 
 import de.sudoq.model.persistence.IRepo
+import de.sudoq.model.ports.persistence.ReadRepo
 import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
@@ -13,14 +14,14 @@ class SudokuRepo(
     private val outerSudokusDir: File,
     type: SudokuTypes,
     complexity: Complexity,
-    private val sudokuTypeRepo: IRepo<SudokuType>
+    private val sudokuTypeRepo: ReadRepo<SudokuType>
 ) : IRepo<Sudoku> {
 
     private val sudokusDir: File = getSudokuDir(type, complexity)
 
-    constructor(sudokusDir: File, sudoku: Sudoku, sudokuTypeRepo: IRepo<SudokuType>) : this(
+    constructor(sudokusDir: File, sudoku: Sudoku, sudokuTypeRepo: ReadRepo<SudokuType>) : this(
         sudokusDir,
-        sudoku.sudokuType.enumType!!,
+        sudoku.sudokuType.enumType,
         sudoku.complexity!!,
         sudokuTypeRepo
     )
@@ -64,7 +65,7 @@ class SudokuRepo(
     override fun update(t: Sudoku): Sudoku {
         val file = File(
             getSudokuDir(
-                t.sudokuType.enumType!!,
+                t.sudokuType.enumType,
                 t.complexity!!
             ).absolutePath + File.separator + "sudoku_" + t.id + ".xml"
         )

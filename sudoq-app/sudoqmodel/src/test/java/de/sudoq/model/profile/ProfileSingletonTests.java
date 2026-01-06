@@ -7,11 +7,10 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 
-import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.Utility;
 import de.sudoq.model.game.Assistances;
 
-class ProfileSingletonTests extends TestWithInitCleanforSingletons {
+class ProfileSingletonTests {
 
 	/*@Test
 	public void testProfiles() {

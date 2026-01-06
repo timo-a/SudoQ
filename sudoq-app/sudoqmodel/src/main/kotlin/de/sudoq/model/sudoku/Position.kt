@@ -45,7 +45,7 @@ class Position(val x: Int, val y: Int) {
      * @param p a position to subtract from this position
      * @return distance between this and other as position(this-p)
      */
-    fun distance(p: Position): Position {
+    fun distance(p: Position): Position {//todo overload minus operator
         return Position(x - p.x, y - p.y)
     }
 
