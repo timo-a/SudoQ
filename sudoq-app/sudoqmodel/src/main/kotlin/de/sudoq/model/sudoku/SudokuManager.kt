@@ -7,8 +7,8 @@
  */
 package de.sudoq.model.sudoku
 
-import de.sudoq.model.persistence.IRepo
 import de.sudoq.model.persistence.xml.sudoku.ISudokuRepoProvider
+import de.sudoq.model.ports.persistence.ReadRepo
 import de.sudoq.model.solverGenerator.Generator
 import de.sudoq.model.solverGenerator.GeneratorCallback
 import de.sudoq.model.solverGenerator.solution.Solution
@@ -19,7 +19,7 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 
 /** Responsible for maintaining existing Sudokus.
  * Implemented as Singleton. */
-open class SudokuManager(val sudokuTypeRepo: IRepo<SudokuType>,
+open class SudokuManager(val sudokuTypeRepo: ReadRepo<SudokuType>,
                          private val sudokuRepoProvider: ISudokuRepoProvider) : GeneratorCallback {
 
     private val generator = Generator(sudokuTypeRepo)

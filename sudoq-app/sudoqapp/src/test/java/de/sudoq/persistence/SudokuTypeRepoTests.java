@@ -6,12 +6,16 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import de.sudoq.model.sudoku.Position;
+import de.sudoq.model.sudoku.sudokuTypes.ComplexityConstraintBuilder;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import kotlin.NotImplementedError;
@@ -22,17 +26,6 @@ public class SudokuTypeRepoTests {
 
     @TempDir
     public File tempFolder;
-
-    /**
-     * Create is not implemented.
-     * The types are copied directly.
-     * todo do the initial fill via create and update?
-     */
-    @Test
-    public void testCreate() {
-        SudokuTypeRepo sTR = new SudokuTypeRepo(new File("dummy"));
-        Assertions.assertThrows(NotImplementedError.class, () -> sTR.create());
-    }
 
     /**
      * Verifies that read can successfully load a sudokuType.
@@ -63,27 +56,6 @@ public class SudokuTypeRepoTests {
 
         Assertions.assertSame(0, SudokuTypes.standard9x9.ordinal(), "standard should have ordinal 0");
         Assertions.assertSame(SudokuTypes.standard9x9, st.getEnumType());
-    }
-
-    /**
-     * Update is not implemented.
-     * The types are copied directly in the beginning and not supposed to change.
-     * todo do the initial fill via create and update?
-     */
-    @Test
-    public void testUpdate() {
-        SudokuTypeRepo sTR = new SudokuTypeRepo(new File("dummy"));
-        Assertions.assertThrows(NotImplementedError.class, () -> sTR.update(new SudokuType(9,9,9)));
-    }
-
-    /**
-     * Delete is not implemented.
-     * There is no use case for it.
-     */
-    @Test
-    public void testDelete() {
-        SudokuTypeRepo sTR = new SudokuTypeRepo(new File("dummy"));
-        Assertions.assertThrows(NotImplementedError.class, () -> sTR.delete(0));
     }
 
     @AfterAll //todo delete after tempdir works

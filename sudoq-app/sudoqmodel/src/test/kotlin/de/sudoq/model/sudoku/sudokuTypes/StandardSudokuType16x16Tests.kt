@@ -19,10 +19,4 @@ class StandardSudokuType16x16Tests {
     fun enumTypeTest() {
             sst1616.enumType.`should be`(SudokuTypes.standard16x16)
     }
-
-    @Test
-    fun buildComplexityConstraintTest() {
-        val standard16x16 = TypeBuilder.getType(SudokuTypes.standard16x16)
-        standard16x16.buildComplexityConstraint(null).`should be null`()
-    }
 }

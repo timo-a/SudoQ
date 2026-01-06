@@ -1,21 +1,22 @@
 package de.sudoq.persistence.sudokuType
 
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
+import de.sudoq.persistence.sudoku.CCBMapper
 import de.sudoq.persistence.sudoku.sudokuTypes.SetOfPermutationPropertiesBE
 
 object SudokuTypeMapper {
 
     fun toBE(sudokuType: SudokuType): SudokuTypeBE {
         return SudokuTypeBE(
-            sudokuType.enumType!!,
+            sudokuType.enumType,
             sudokuType.numberOfSymbols,
             sudokuType.getStandardAllocationFactor(),
-            sudokuType.size!!,
+            sudokuType.size,
             sudokuType.blockSize,
-            sudokuType.constraints,
+            sudokuType.constraints.toMutableList(),
             SetOfPermutationPropertiesBE(sudokuType.permutationProperties),
-            sudokuType.helperList,
-            sudokuType.ccb
+            sudokuType.helperList.toMutableList(),
+            CCBMapper.toBE(sudokuType.ccb)
         )
     }
 
@@ -29,7 +30,7 @@ object SudokuTypeMapper {
             sudokuTypeBE.constraints,
             sudokuTypeBE.permutationProperties,
             sudokuTypeBE.helperList,
-            sudokuTypeBE.ccb
+            CCBMapper.fromBE(sudokuTypeBE.ccb)
         )
     }
 }

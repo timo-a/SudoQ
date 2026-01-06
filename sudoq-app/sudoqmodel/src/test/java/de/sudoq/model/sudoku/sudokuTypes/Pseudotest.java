@@ -7,12 +7,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import de.sudoq.model.Utility;
 import de.sudoq.model.sudoku.Constraint;
+import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
 
@@ -21,16 +23,16 @@ public class Pseudotest {
 	SudokuType stHy = TypeBuilder.getType(SudokuTypes.HyperSudoku);
 
 	public SudokuType usual(SudokuType oldType){
-		
-		SudokuType s = new SudokuType(9, 9, 9);
-		s.setTypeName(oldType.getEnumType());
-		
-		
-		s.setNumberOfSymbols(oldType.getNumberOfSymbols());
-		s.setDimensions(oldType.getSize());
-		//s.standardAllocationFactor = oldType.getStandardAllocationFactor();
-		for(Constraint c : oldType)
-			s.addConstraint(c);
+
+        SudokuType s = new SudokuType(
+                oldType.getEnumType(),
+                oldType.getNumberOfSymbols(),
+                oldType.getStandardAllocationFactor(),
+                oldType.getSize(), Position.get(1,1),
+                new ArrayList<>(oldType.getConstraints()),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ComplexityConstraintBuilder(new HashMap<>()));
 		for (PermutationProperties p : oldType.getPermutationProperties())
 			s.getPermutationProperties().add(p);
 		
@@ -41,7 +43,7 @@ public class Pseudotest {
 	                          Complexity.arbitrary};
 
         for(Complexity c : comps)
-            s.ccb.getSpecimen().put(c, oldType.buildComplexityConstraint(c));
+            s.getCcb().getSpecimen().put(c, oldType.buildComplexityConstraint(c));
         
 		return s;
 	}
@@ -92,11 +94,6 @@ public class Pseudotest {
     @Test
     void getAllocationFactorTest() {
         assertEquals(0.25f, stHy.getStandardAllocationFactor());
-	}
-
-    @Test
-    void buildComplexityConstraintInitializedWithNullShouldReturnNull() {
-		assertNull(stHy.buildComplexityConstraint(null), "passing null to buildComplexityConstraint should return null.");
 	}
 
     //This tests just specification, is such a test relevant?

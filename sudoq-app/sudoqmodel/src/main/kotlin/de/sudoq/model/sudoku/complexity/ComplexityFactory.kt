@@ -9,6 +9,7 @@ package de.sudoq.model.sudoku.complexity
 
 /**
  * This interface specifies methods to create ComplexityConstraints subject to a complexity.
+ * todo seems redundant, try to remove
  */
 interface ComplexityFactory {
 
@@ -19,7 +20,7 @@ interface ComplexityFactory {
      * @return A ComplexityConstraint for the given complexity of null, if complexity constraint is not valid
      * Todo throw illegalArgException instead
      */
-    fun buildComplexityConstraint(complexity: Complexity?): ComplexityConstraint? //todo make non-nullable
+    fun buildComplexityConstraint(complexity: Complexity): ComplexityConstraint? //todo review if this can be nonnullable. maybe 4x4 does not have infernal? should arbitrary be accepted?
 
     /**
      * Returns the factor that indicates the number of [Cell]s, that are randomly prefilled and

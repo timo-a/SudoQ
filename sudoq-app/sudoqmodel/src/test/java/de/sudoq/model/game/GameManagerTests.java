@@ -12,8 +12,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import de.sudoq.model.Utility;
-import de.sudoq.model.utility.FileManager;
-import de.sudoq.model.persistence.IRepo;
+import de.sudoq.model.ports.persistence.ReadRepo;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.profile.ProfileSingleton;
 import de.sudoq.model.sudoku.Cell;
@@ -27,28 +26,9 @@ public class GameManagerTests {
 	private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
 
 	//this is a dummy so it compiles todo use xmls from resources
-	private static IRepo<SudokuType> sudokuTypeRepo = new IRepo<SudokuType>() {
-		@NotNull
-		@Override
-		public List<Integer> ids() {
-			throw new NotImplementedException();
-		}
-
-		@Override
-		public void delete(int id) { throw new NotImplementedException(); }
-
-		@Override
-		public SudokuType update(SudokuType sudokuBE) { throw new NotImplementedException(); }
-
-		@Override
-		public SudokuType read(int id) {
-			throw new NotImplementedException();
-		}
-
-		@Override
-		public SudokuType create() { throw new NotImplementedException(); }
-
-	};
+	private static ReadRepo<SudokuType> sudokuTypeRepo = id -> {
+        throw new NotImplementedException();
+    };
 
 //	@BeforeAll
 //	public static void init() throws IOException {

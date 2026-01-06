@@ -382,7 +382,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
      * Setzt den Text für Typ und Schwierigkeit des aktuellen Sudokus.
      */
     private fun setTypeText() {
-        val type = Utility.type2string(this, game!!.sudoku!!.sudokuType.enumType!!)
+        val type = Utility.type2string(this, game!!.sudoku!!.sudokuType.enumType)
         val comp = Utility.complexity2string(this, game!!.sudoku!!.complexity!!)
         val ab = supportActionBar
         ab!!.title = type

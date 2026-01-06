@@ -105,7 +105,7 @@ class SolverSudoku : Sudoku {
 
         // initialize the constraints lists for each position and the initial
         // candidates for each field
-        constraints = PositionMap(sudokuType.size!!, positions) { _ -> ArrayList() }
+        constraints = PositionMap(sudokuType.size, positions) { _ -> ArrayList() }
 
 
         //if we were functional
@@ -119,7 +119,7 @@ class SolverSudoku : Sudoku {
                 constraints[pos]!!.add(constr)
 
         // initialize the candidates map
-        positionPool = PositionMapPool(sudokuType.size!!, positions)
+        positionPool = PositionMapPool(sudokuType.size, positions)
         branchPool = BranchingPool()
         currentCandidates = positionPool!!.positionMap
 
@@ -236,7 +236,7 @@ class SolverSudoku : Sudoku {
      */
     fun updateCandidates() {
         var updatedConstraints: ArrayList<Constraint>
-        var updatedPositions: ArrayList<Position>
+        var updatedPositions: List<Position>
         var isInvalid = false
         for (position in positions) {
             if (!isInvalid && !getCell(position)!!.isNotSolved) {
@@ -296,7 +296,7 @@ class SolverSudoku : Sudoku {
     fun updateCandidates(pos: Position?, candidate: Int) {
         if (pos == null) return
         val updatedConstraints = constraints[pos]!!
-        var updatedPositions: ArrayList<Position>
+        var updatedPositions: List<Position>
         var checkedConstraints: ArrayList<Constraint>
         for (constr in updatedConstraints) {
             updatedPositions = constr.getPositions()

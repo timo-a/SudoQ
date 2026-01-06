@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.sudoku.Sudoku;
@@ -14,7 +13,7 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 public class GeneratorUnitTests implements GeneratorCallback {
 
 	//this is a dummy so it compiles todo use xmls from resources
-	//private IRepo<SudokuType> sudokuTypeRepo = new SudokuTypeRepo();
+	//private ReadRepo<SudokuType> sudokuTypeRepo = new SudokuTypeRepo();
 
 	/*@Test
 	public void testNull() {

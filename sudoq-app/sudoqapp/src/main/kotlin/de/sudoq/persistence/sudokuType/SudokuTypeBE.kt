@@ -30,13 +30,13 @@ class SudokuTypeBE : Xmlable {
 
     var helperList: MutableList<Helpers>
 
-    var ccb: ComplexityConstraintBuilder
+    var ccb: CCBBE
 
     constructor() {
         constraints = ArrayList()
         permutationProperties = SetOfPermutationPropertiesBE()
         helperList = ArrayList()
-        ccb = ComplexityConstraintBuilder()
+        ccb = CCBBE()
     }
 
 
@@ -49,7 +49,7 @@ class SudokuTypeBE : Xmlable {
         constraints: MutableList<Constraint>,
         permutationProperties: SetOfPermutationPropertiesBE,
         helperList: MutableList<Helpers>,
-        ccb: ComplexityConstraintBuilder
+        ccb: CCBBE
     ) {
         this.enumType = enumType
         this.numberOfSymbols = numberOfSymbols
@@ -83,7 +83,7 @@ class SudokuTypeBE : Xmlable {
             hList.addAttribute(XmlAttribute("i", "" + helperList[i].ordinal))
         }
         representation.addChild(hList)
-        representation.addChild(CCBMapper.toBE(ccb).toXmlTree())
+        representation.addChild(ccb.toXmlTree())
 
         // TODO complexity builderdata
         return representation
@@ -121,9 +121,9 @@ class SudokuTypeBE : Xmlable {
                     }
                 }
                 CCBBE.TITLE -> {
-                    var ccbbe = CCBBE()
+                    val ccbbe = CCBBE()
                     ccbbe.fillFromXml(sub)
-                    ccb = CCBMapper.fromBE(ccbbe)
+                    ccb = ccbbe
                 }
                 else -> {
                 }

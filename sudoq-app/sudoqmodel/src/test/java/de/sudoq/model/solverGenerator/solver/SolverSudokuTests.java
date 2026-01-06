@@ -10,13 +10,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import de.sudoq.model.sudoku.CandidateSet;
 import de.sudoq.model.sudoku.Constraint;
 import de.sudoq.model.sudoku.ConstraintType;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.SumConstraintBehavior;
+import de.sudoq.model.sudoku.sudokuTypes.ComplexityConstraintBuilder;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
 
 class SolverSudokuTests {
@@ -183,18 +189,13 @@ class SolverSudokuTests {
     @Test
     void nonUniqueConstraints() {
 		// Create new type with a sum constraint
-		
-		
-		SudokuType type = new SudokuType(4, 4, 4);
-		type.getConstraints().clear();//TODO dirty da wir nicht wissen dürfen ob getCons nur eine kopie gibt
-		//sum constraint
-		Constraint c = new Constraint(new SumConstraintBehavior(10), ConstraintType.LINE);
-		c.addPosition(Position.get(0, 0));
-		c.addPosition(Position.get(1, 0));
-		c.addPosition(Position.get(2, 0));
-		c.addPosition(Position.get(3, 0));
-		type.addConstraint(c);
+        Constraint c = new Constraint(new SumConstraintBehavior(10), ConstraintType.LINE,
+                Position.get(0, 0), Position.get(1, 0), Position.get(2, 0),
+                Position.get(3, 0));
 
+        SudokuType type = new SudokuType(SudokuTypes.standard4x4, 4, 0f, Position.get(4,4),
+                Position.get(1,1), List.of(c), new ArrayList<>(), new ArrayList<>(),
+                new ComplexityConstraintBuilder(new HashMap<>()));
 
 		SolverSudoku sudoku = new SolverSudoku(new Sudoku(type));
 		assertEquals(4, sudoku.getSudokuType().getNumberOfSymbols());

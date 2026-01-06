@@ -4,6 +4,7 @@ import de.sudoq.model.sudoku.Constraint
 import org.amshove.kluent.`should be null`
 import org.amshove.kluent.`should be true`
 import org.amshove.kluent.`should be`
+import org.amshove.kluent.`should match all with`
 import org.amshove.kluent.shouldHaveSize
 import org.junit.jupiter.api.Test
 import java.util.*
@@ -17,7 +18,7 @@ class SamuraiSudokuTypeTests {
 
         samurai.constraints.shouldHaveSize(5 * 9 + 5 * 9 + 5 * 9 - 4)
 
-        for (c in samurai) c.shouldHaveSize(9)
+        samurai.forEach { it.shouldHaveSize(9) }
         checkBlockOfRows(0, 0, 0)
         checkBlockOfRows(12, 0, 9)
         checkBlockOfRows(0, 12, 18)
@@ -123,8 +124,4 @@ class SamuraiSudokuTypeTests {
         samurai.enumType.`should be`(SudokuTypes.samurai)
     }
 
-    @Test
-    fun buildComplexityConstraintTest() {
-        samurai.buildComplexityConstraint(null).`should be null`()
-    }
 }

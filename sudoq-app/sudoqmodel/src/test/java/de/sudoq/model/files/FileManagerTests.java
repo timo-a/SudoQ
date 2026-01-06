@@ -12,11 +12,9 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
-import de.sudoq.model.TestWithInitCleanforSingletons;
 import de.sudoq.model.Utility;
-import de.sudoq.model.persistence.IRepo;
+import de.sudoq.model.ports.persistence.ReadRepo;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
-import de.sudoq.model.profile.ProfileSingleton;
 import de.sudoq.model.utility.FileManager;
 
 public class FileManagerTests {
@@ -65,33 +63,7 @@ public class FileManagerTests {
 		Utility.clearDir(profileDir);
 		//ProfileSingleton p = ProfileSingleton.Companion.getInstance(profileDir); //needs to be called first otherwise it failes as an indiviidual and sometimes as part of all the tests in this class
 
-		IRepo<SudokuType> str = new IRepo<SudokuType>() {
-			@NotNull
-			@Override
-			public List<Integer> ids() {
-				throw new NotImplementedException();
-			}
-
-			@Override
-			public SudokuType create() {
-				return null;
-			}
-
-			@Override
-			public SudokuType read(int id) {
-				return null;
-			}
-
-			@Override
-			public SudokuType update(SudokuType SudokuType) {
-				return null;
-			}
-
-			@Override
-			public void delete(int id) {
-
-			}
-		};
+		ReadRepo<SudokuType> str = id -> null;
 
 		//GameRepo gameRepo = new GameRepo(p.getProfilesDir(), p.getCurrentProfileID(), str);
 		//assertEquals(1, gameRepo.getNextFreeGameId());//currentProfileID==-1
