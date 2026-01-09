@@ -10,6 +10,7 @@ package de.sudoq.model.game
 import de.sudoq.model.persistence.IRepo
 import de.sudoq.model.persistence.xml.game.IGamesListRepo
 import de.sudoq.model.persistence.xml.sudoku.ISudokuRepoProvider
+import de.sudoq.model.ports.persistence.ReadRepo
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.sudoku.SudokuManager
 import de.sudoq.model.sudoku.complexity.Complexity
@@ -24,7 +25,8 @@ import java.util.*
 class GameManager(private var profile: ProfileManager,
                   private var gameRepo: IRepo<Game>,
                   private var gamesListRepo: IGamesListRepo,
-                  val sudokuTypeRepo: IRepo<SudokuType>) {
+                  val sudokuTypeRepo: ReadRepo<SudokuType>
+) {
 
 
     private var games: MutableList<GameData>

@@ -28,17 +28,6 @@ public class SudokuTypeRepoTests {
     public File tempFolder;
 
     /**
-     * Create is not implemented.
-     * The types are copied directly.
-     * todo do the initial fill via create and update?
-     */
-    @Test
-    public void testCreate() {
-        SudokuTypeRepo sTR = new SudokuTypeRepo(new File("dummy"));
-        Assertions.assertThrows(NotImplementedError.class, () -> sTR.create());
-    }
-
-    /**
      * Verifies that read can successfully load a sudokuType.
      */
     @Test
@@ -67,29 +56,6 @@ public class SudokuTypeRepoTests {
 
         Assertions.assertSame(0, SudokuTypes.standard9x9.ordinal(), "standard should have ordinal 0");
         Assertions.assertSame(SudokuTypes.standard9x9, st.getEnumType());
-    }
-
-    /**
-     * Update is not implemented.
-     * The types are copied directly in the beginning and not supposed to change.
-     * todo do the initial fill via create and update?
-     */
-    @Test
-    public void testUpdate() {
-        SudokuTypeRepo sTR = new SudokuTypeRepo(new File("dummy"));
-        SudokuType dummySudokuType = new SudokuType(SudokuTypes.standard4x4, 9, 0f, Position.get(1,1),
-        Position.get(1,1), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ComplexityConstraintBuilder(new HashMap<>()));
-        Assertions.assertThrows(NotImplementedError.class, () -> sTR.update(dummySudokuType));
-    }
-
-    /**
-     * Delete is not implemented.
-     * There is no use case for it.
-     */
-    @Test
-    public void testDelete() {
-        SudokuTypeRepo sTR = new SudokuTypeRepo(new File("dummy"));
-        Assertions.assertThrows(NotImplementedError.class, () -> sTR.delete(0));
     }
 
     @AfterAll //todo delete after tempdir works

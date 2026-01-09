@@ -10,9 +10,11 @@ import org.junit.jupiter.api.Timeout
 
 import de.sudoq.model.persistence.IRepo;
 import de.sudoq.model.persistence.xml.sudoku.ISudokuRepoProvider;
+import de.sudoq.model.ports.persistence.ReadRepo
+import de.sudoq.model.ports.persistence.SudokuTypeRepo
 import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.complexity.Complexity;
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.persistence.XmlHelper;
 import de.sudoq.persistence.sudoku.SudokuBE;
@@ -22,7 +24,7 @@ import java.util.concurrent.TimeUnit
 
 class SudokuManagerTests {
 
-	private val sudokuTypeRepo : IRepo<SudokuType> = SudokuTypeRepo4Tests();
+	private val sudokuTypeRepo : ReadRepo<SudokuType> = SudokuTypeRepo4Tests();
 
     private val sudokuRepo : IRepo<Sudoku> = object : IRepo<Sudoku> {
 

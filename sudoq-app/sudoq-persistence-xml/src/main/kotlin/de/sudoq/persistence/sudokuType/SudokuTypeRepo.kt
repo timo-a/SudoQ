@@ -1,15 +1,12 @@
 package de.sudoq.persistence.sudokuType
 
-import de.sudoq.model.persistence.IRepo
+import de.sudoq.model.ports.persistence.ReadRepo
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.persistence.XmlHelper
 import java.io.File
 
-open class SudokuTypeRepo(private val sudokuDir: File) : IRepo<SudokuType> {
-    override fun create(): SudokuType {
-        TODO("Not yet implemented")
-    }
+open class SudokuTypeRepo(private val sudokuDir: File) : ReadRepo<SudokuType> {
 
     override fun read(id: Int): SudokuType {
         val st: SudokuTypes = SudokuTypes.values()[id]
@@ -48,19 +45,5 @@ open class SudokuTypeRepo(private val sudokuDir: File) : IRepo<SudokuType> {
         }
         throw IllegalStateException("Something went wrong loading sudoku type for $type")
     }
-
-
-    override fun update(t: SudokuType): SudokuType {
-        TODO("Not yet implemented")
-    }
-
-    override fun delete(id: Int) {
-        TODO("Not yet implemented")
-    }
-
-    override fun ids(): List<Int> {
-        TODO("Not yet implemented")
-    }
-
 
 }

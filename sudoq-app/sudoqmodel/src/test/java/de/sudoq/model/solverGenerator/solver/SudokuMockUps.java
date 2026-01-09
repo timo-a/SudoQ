@@ -1,12 +1,6 @@
 package de.sudoq.model.solverGenerator.solver;
 
-import java.io.File;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import de.sudoq.model.persistence.IRepo;
+import de.sudoq.model.ports.persistence.ReadRepo;
 import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests;
 import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Position;
@@ -26,7 +20,7 @@ public class SudokuMockUps {
     //static File tmpSudokus = Files.createTempDirectory("junit").toFile();
 
 
-    private static final IRepo<SudokuType> str = new SudokuTypeRepo4Tests();
+    private static final ReadRepo<SudokuType> str = new SudokuTypeRepo4Tests();
 
     public static Sudoku stringTo9x9Sudoku(String pattern){
         Sudoku s = new SudokuBuilder(SudokuTypes.standard9x9, str).createSudoku();

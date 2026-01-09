@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import de.sudoq.model.persistence.IRepo;
+import de.sudoq.model.ports.persistence.ReadRepo;
 import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.PositionMap;
@@ -28,7 +28,7 @@ class SolverRegressionTests {
 
     @BeforeEach
     void before() {
-        IRepo<SudokuType> str = new SudokuTypeRepo4Tests();
+        ReadRepo<SudokuType> str = new SudokuTypeRepo4Tests();
 
 
         sudoku = new SudokuBuilder(SudokuTypes.standard9x9, str).createSudoku();

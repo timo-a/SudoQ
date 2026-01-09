@@ -1,6 +1,6 @@
 package de.sudoq.persistence.sudoku
 
-import de.sudoq.model.persistence.IRepo
+import de.sudoq.model.ports.persistence.ReadRepo
 import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.complexity.Complexity
@@ -69,7 +69,7 @@ class SudokuBE() : XmlableWithRepo<SudokuType> {
     /**
      * {@inheritDoc}
      */
-    override fun fillFromXml(xmlTreeRepresentation: XmlTree, sudokuTypeRepo: IRepo<SudokuType>) {
+    override fun fillFromXml(xmlTreeRepresentation: XmlTree, sudokuTypeRepo: ReadRepo<SudokuType>) {
         // initialisation
         var cellIdCounter = 1
         cells = HashMap()

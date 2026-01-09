@@ -1,5 +1,6 @@
 package de.sudoq.model.solverGenerator.utils
 
+import de.sudoq.model.ports.persistence.ReadRepo
 import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.ConstraintType
 import de.sudoq.model.sudoku.Position
@@ -13,16 +14,14 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes.*
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes.Xsudoku
-import de.sudoq.persistence.sudokuType.SudokuTypeRepo
-import io.mockk.InternalPlatformDsl.toArray
-import java.io.File
+
 import kotlin.math.sqrt
 
 operator fun Position.plus(other: Position): Position {
     return Position[this.x + other.x, this.y + other.y]
 }
 
-class SudokuTypeRepo4Tests: SudokuTypeRepo {
+class SudokuTypeRepo4Tests : ReadRepo<SudokuType> {
 
     override fun read(id: Int): SudokuType =
         when(id) {
@@ -467,22 +466,5 @@ class SudokuTypeRepo4Tests: SudokuTypeRepo {
     fun mkPermutationProperties(vararg i: Int): List<PermutationProperties> =
         i.map { PermutationProperties.entries[it] }
 
-
-
-
-
-    constructor(): super(constructFile())
-
-    companion object {
-        private fun getFromResourceDirectory(relativePath: String): File {
-            val classLoader = SudokuTypeRepo4Tests::class.java.classLoader
-            return File(classLoader.getResource(relativePath)!!.file)
-        }
-
-        private fun constructFile(): File {
-            return getFromResourceDirectory("persistence/SudokuTypes")
-        }
-
-    }
 }
 

@@ -4,6 +4,7 @@ import de.sudoq.model.game.Game
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.game.GameStateHandler
 import de.sudoq.model.persistence.IRepo
+import de.sudoq.model.ports.persistence.ReadRepo
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.complexity.Complexity
@@ -21,7 +22,7 @@ import java.io.IOException
 class GameRepo(
     profilesDir: File,
     profileId: Int,
-    private val sudokuTypeRepo: IRepo<SudokuType>
+    private val sudokuTypeRepo: ReadRepo<SudokuType>
 ) : IRepo<Game> {
 
 
