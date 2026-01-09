@@ -42,7 +42,7 @@ open class SudokuType(val enumType: SudokuTypes,
                       val blockSize: Position,
                       val constraints: List<Constraint>,
                       val permutationProperties: List<PermutationProperties>,
-                      val helperList: List<Helpers>,
+                      val helperList: List<Helpers>,//todo immer leer?
                       val ccb: ComplexityConstraintBuilder
 ) : Iterable<Constraint>, ComplexityFactory {
 

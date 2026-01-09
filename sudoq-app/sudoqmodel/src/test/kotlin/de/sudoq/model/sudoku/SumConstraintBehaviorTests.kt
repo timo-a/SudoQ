@@ -35,15 +35,8 @@ class SumConstraintBehaviorTests {
         every { sudoku.getCell(Position[1, 1]) } returns mkCell(4,2)
         every { sudoku.getCell(Position[1, 2]) } returns mkCell(5,3)
 
-        val constraint = Constraint(SumConstraintBehavior(12), ConstraintType.LINE)
-
-        constraint.addPosition(Position[0, 0])
-        constraint.addPosition(Position[0, 1])
-        constraint.addPosition(Position[0, 2])
-        constraint.addPosition(Position[1, 0])
-        constraint.addPosition(Position[1, 1])
-        constraint.addPosition(Position[1, 2])
-
+        val constraint = Constraint(SumConstraintBehavior(12), ConstraintType.LINE, Position[0, 0],
+            Position[0, 1], Position[0, 2], Position[1, 0], Position[1, 1], Position[1, 2])
         constraint.hasUniqueBehavior().`should be false`()
         constraint.isSaturated(sudoku).`should be true`()
         sudoku.getCell(Position[1, 1])!!.currentValue = 3

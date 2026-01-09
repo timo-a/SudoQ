@@ -236,7 +236,7 @@ class SolverSudoku : Sudoku {
      */
     fun updateCandidates() {
         var updatedConstraints: ArrayList<Constraint>
-        var updatedPositions: ArrayList<Position>
+        var updatedPositions: List<Position>
         var isInvalid = false
         for (position in positions) {
             if (!isInvalid && !getCell(position)!!.isNotSolved) {
@@ -296,7 +296,7 @@ class SolverSudoku : Sudoku {
     fun updateCandidates(pos: Position?, candidate: Int) {
         if (pos == null) return
         val updatedConstraints = constraints[pos]!!
-        var updatedPositions: ArrayList<Position>
+        var updatedPositions: List<Position>
         var checkedConstraints: ArrayList<Constraint>
         for (constr in updatedConstraints) {
             updatedPositions = constr.getPositions()

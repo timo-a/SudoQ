@@ -33,13 +33,8 @@ class UniqueConstraintBehaviorTests {
         every { sudoku.getCell(Position[1, 1]) } returns cell11
         every { sudoku.getCell(Position[1, 2]) } returns cell12
 
-        val constraint = Constraint(UniqueConstraintBehavior(), ConstraintType.LINE)
-        constraint.addPosition(Position[0, 0])
-        constraint.addPosition(Position[0, 1])
-        constraint.addPosition(Position[0, 2])
-        constraint.addPosition(Position[1, 0])
-        constraint.addPosition(Position[1, 1])
-        constraint.addPosition(Position[1, 2])
+        val constraint = Constraint(UniqueConstraintBehavior(), ConstraintType.LINE, Position[0, 0],
+            Position[0, 1], Position[0, 2], Position[1, 0], Position[1, 1], Position[1, 2])
         constraint.hasUniqueBehavior().`should be true`()
         constraint.isSaturated(sudoku).`should be true`()
 

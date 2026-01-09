@@ -365,7 +365,7 @@ class UserInteractionMediator(
         val restrictedSet: MutableSet<Int> = HashSet()
         val type = s!!.sudokuType
         val relevantConstraints: MutableList<Constraint> = ArrayList()
-        for (c in type!!) if (c.getPositions()
+        for (c in type) if (c.getPositions()
                 .contains(s.getPosition(currentCell.id))
         ) relevantConstraints.add(c)
 

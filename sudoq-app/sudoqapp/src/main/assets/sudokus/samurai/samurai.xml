@@ -308,7 +308,8 @@
 <position x="16" y="12"></position>
 <position x="17" y="12"></position>
 <position x="18" y="12"></position>
-<position x="19" y="12"></position>
+<position x="19" y="12"></position>                ArrayList(),
+
 <position x="20" y="12"></position>
 </constraint>
 <constraint behavior="class de.sudoq.model.sudoku.UniqueConstraintBehavior" name="Row 28" type="0">

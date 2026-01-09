@@ -15,7 +15,6 @@ import de.sudoq.model.sudoku.SudokuBuilder;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.persistence.sudokuType.SudokuTypeRepo;
 
 //import de.sudoq.model.utility.persistence.sudokuType.SudokuTypeRepo;
 

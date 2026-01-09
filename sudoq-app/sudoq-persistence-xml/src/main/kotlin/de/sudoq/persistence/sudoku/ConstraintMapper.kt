@@ -5,11 +5,7 @@ import de.sudoq.model.sudoku.UniqueConstraintBehavior
 
 object ConstraintMapper {
 
-    fun fromBE(cBE: ConstraintBE): Constraint {
-        val c = Constraint(cBE.behavior, cBE.type, cBE.name)
-        c.setPositions(cBE.positions)
-        return c
-    }
+    fun fromBE(cBE: ConstraintBE) = Constraint(cBE.behavior, cBE.type, cBE.name, *cBE.positions.toTypedArray())
 
     fun toBE(c: Constraint): ConstraintBE {
         require(c.hasUniqueBehavior())
@@ -18,7 +14,7 @@ object ConstraintMapper {
         return ConstraintBE(UniqueConstraintBehavior(),
             c.type,
             c.name,
-            c.getPositions())
+            c.getPositions().toMutableList())
     }
 
 

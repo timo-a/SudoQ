@@ -118,7 +118,7 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
 
         /* In case highlighting of current row and col is activated,
 		   pass each pos its constraint-mates */if (game.isAssistanceAvailable(Assistances.markRowColumn)) {
-            var positions: ArrayList<Position>
+            var positions: List<Position>
             val allConstraints: Iterable<Constraint> = game.sudoku!!.sudokuType
             for (c in allConstraints) if (c.type == ConstraintType.LINE) {
                 positions = c.getPositions()
