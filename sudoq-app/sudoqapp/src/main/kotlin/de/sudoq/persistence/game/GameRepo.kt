@@ -12,7 +12,6 @@ import de.sudoq.model.sudoku.sudokuTypes.ComplexityConstraintBuilder
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.persistence.XmlHelper
-import kotlinx.coroutines.newSingleThreadContext
 import java.io.File
 import java.io.IOException
 
@@ -37,7 +36,9 @@ class GameRepo(
     override fun create(): Game {
         val id = getNextFreeGameId()
         val dummySudokuType = SudokuType(SudokuTypes.standard4x4, 9, 0f, Position[1,1],
-            Position[1,1], ArrayList(), ArrayList(), ArrayList(), ComplexityConstraintBuilder(HashMap()))
+            Position[1,1], ArrayList(), ArrayList(), ArrayList(),
+            ComplexityConstraintBuilder(HashMap())
+        )
         val dummySudoku = Sudoku(-1, 0, dummySudokuType, Complexity.arbitrary, HashMap())
         return Game(id, dummySudoku)
     }

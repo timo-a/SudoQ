@@ -9,7 +9,7 @@ object ComplexityConstraintMapper {
             complexityConstraint.complexity,
             complexityConstraint.averageCells,
             complexityConstraint.minComplexityIdentifier,
-            complexityConstraint.minComplexityIdentifier,
+            complexityConstraint.maxComplexityIdentifier,
             complexityConstraint.numberOfAllowedHelpers)
     }
 
@@ -18,7 +18,7 @@ object ComplexityConstraintMapper {
             complexityConstraintBE.complexity,
             complexityConstraintBE.averageCells,
             complexityConstraintBE.minComplexityIdentifier,
-            complexityConstraintBE.minComplexityIdentifier,
+            complexityConstraintBE.maxComplexityIdentifier,
             complexityConstraintBE.numberOfAllowedHelpers
         )
     }
