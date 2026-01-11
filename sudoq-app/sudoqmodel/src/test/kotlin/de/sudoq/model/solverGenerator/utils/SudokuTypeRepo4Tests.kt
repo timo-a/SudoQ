@@ -180,7 +180,6 @@ class SudokuTypeRepo4Tests : ReadRepo<SudokuType> {
     }
 
     fun createSamuraiConstraints(): List<Constraint> {
-        val len = 9
         val topLeft = createSquareConstraints(9)
         val topRight = topLeft
             .map { c -> Constraint(UniqueConstraintBehavior(), ConstraintType.LINE,
@@ -220,247 +219,85 @@ class SudokuTypeRepo4Tests : ReadRepo<SudokuType> {
     }
 
     fun createSquigglyAConstraints(): List<Constraint> {
-        val blocks = listOf(
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block A",
-                Position[0, 0],
-                Position[1, 0],
-                Position[0, 1],
-                Position[1, 1],
-                Position[2, 1],
-                Position[1, 2],
-                Position[2, 2],
-                Position[3, 2],
-                Position[2, 3]),
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block B",
-                Position[2, 0],
-                Position[3, 0],
-                Position[4, 0],
-                Position[5, 0],
-                Position[6, 0],
-                Position[3, 1],
-                Position[4, 1],
-                Position[5, 1],
-                Position[4, 2]),
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block C",
-                Position[7, 0],
-                Position[8, 0],
-                Position[6, 1],
-                Position[7, 1],
-                Position[8, 1],
-                Position[5, 2],
-                Position[6, 2],
-                Position[7, 2],
-                Position[6, 3]),
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block D",
-                Position[0, 2],
-                Position[0, 3],
-                Position[1, 3],
-                Position[0, 4],
-                Position[1, 4],
-                Position[2, 4],
-                Position[0, 5],
-                Position[1, 5],
-                Position[0, 6]),
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block E",
-                Position[8, 2],
-                Position[7, 3],
-                Position[8, 3],
-                Position[6, 4],
-                Position[7, 4],
-                Position[8, 4],
-                Position[7, 5],
-                Position[8, 5],
-                Position[8, 6]),
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block F",
-                Position[3, 3],
-                Position[4, 3],
-                Position[5, 3],
-                Position[3, 4],
-                Position[4, 4],
-                Position[5, 4],
-                Position[3, 5],
-                Position[4, 5],
-                Position[5, 5]),
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block G",
-                Position[2, 5],
-                Position[1, 6],
-                Position[2, 6],
-                Position[3, 6],
-                Position[0, 7],
-                Position[1, 7],
-                Position[2, 7],
-                Position[0, 8],
-                Position[1, 8]),
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block H",
-                Position[6, 5],
-                Position[5, 6],
-                Position[6, 6],
-                Position[7, 6],
-                Position[6, 7],
-                Position[7, 7],
-                Position[8, 7],
-                Position[7, 8],
-                Position[8, 8]),
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block I",
-                Position[4, 6],
-                Position[3, 7],
-                Position[4, 7],
-                Position[5, 7],
-                Position[2, 8],
-                Position[3, 8],
-                Position[4, 8],
-                Position[5, 8],
-                Position[6, 8]))
+        val pattern = """
+        A  A  B  B  B  B  B  C  C
+        A  A  A  B  B  B  C  C  C
+        D  A  A  A  B  C  C  C  E
+        D  D  A  F  F  F  C  E  E
+        D  D  D  F  F  F  E  E  E
+        D  D  G  F  F  F  H  E  E
+        D  G  G  G  I  H  H  H  E
+        G  G  G  I  I  I  H  H  H
+        G  G  I  I  I  I  I  H  H
+        """.trimIndent()
+
+        val blocks: List<Constraint> = parseBlockConstraints(pattern)
 
         return createSquareConstraints(9).filter { c -> c.type != ConstraintType.BLOCK } + blocks
     }
+
+
     fun createSquigglyBConstraints(): List<Constraint> {
-        val blocks = listOf(
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block A",
-                Position[0, 0],
-                Position[1, 0],
-                Position[2, 0],
-                Position[3, 0],
-                Position[4, 0],
-                Position[0, 1],
-                Position[1, 1],
-                Position[0, 2],
-                Position[0, 3]),
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block B",
-                Position[5, 0],
-                Position[6, 0],
-                Position[7, 0],
-                Position[8, 0],
-                Position[7, 1],
-                Position[8, 1],
-                Position[8, 2],
-                Position[8, 3],
-                Position[8, 4]),
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block C",
-                Position[2, 1],
-                Position[3, 1],
-                Position[4, 1],
-                Position[5, 1],
-                Position[1, 2],
-                Position[2, 2],
-                Position[5, 2],
-                Position[5, 3],
-                Position[6, 3]),
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block D",
-                Position[6, 1],
-                Position[6, 2],
-                Position[7, 2],
-                Position[7, 3],
-                Position[7, 4],
-                Position[5, 5],
-                Position[6, 5],
-                Position[7, 5],
-                Position[5, 6]),
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block E",
-                Position[3, 2],
-                Position[1, 3],
-                Position[2, 3],
-                Position[3, 3],
-                Position[1, 4],
-                Position[1, 5],
-                Position[1, 6],
-                Position[2, 6],
-                Position[2, 7]),
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block F",
-                Position[4, 2],
-                Position[4, 3],
-                Position[2, 4],
-                Position[3, 4],
-                Position[4, 4],
-                Position[5, 4],
-                Position[6, 4],
-                Position[4, 5],
-                Position[4, 6]),
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block G",
-                Position[0, 4],
-                Position[0, 5],
-                Position[0, 6],
-                Position[0, 7],
-                Position[1, 7],
-                Position[0, 8],
-                Position[1, 8],
-                Position[2, 8],
-                Position[3, 8]),
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block H",
-                Position[2, 5],
-                Position[3, 5],
-                Position[3, 6],
-                Position[6, 6],
-                Position[7, 6],
-                Position[3, 7],
-                Position[4, 7],
-                Position[5, 7],
-                Position[6, 7]),
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block I",
-                Position[8, 5],
-                Position[8, 6],
-                Position[7, 7],
-                Position[8, 7],
-                Position[4, 8],
-                Position[5, 8],
-                Position[6, 8],
-                Position[7, 8],
-                Position[8, 8])
-        )
+        val pattern = """
+        A  A  A  A  A  B  B  B  B
+        A  A  C  C  C  C  D  B  B
+        A  C  C  E  F  C  D  D  B
+        A  E  E  E  F  C  C  D  B
+        G  E  F  F  F  F  F  D  B
+        G  E  H  H  F  D  D  D  I
+        G  E  E  H  F  D  H  H  I
+        G  G  E  H  H  H  H  I  I
+        G  G  G  G  I  I  I  I  I
+        """.trimIndent()
+
+        val blocks: List<Constraint> = parseBlockConstraints(pattern)
 
         return createSquareConstraints(9).filter { c -> c.type != ConstraintType.BLOCK } + blocks
     }
 
     fun createStairstepConstraints(): List<Constraint> {
-//        val blocks = listOf(
+        val pattern = """
+        A  A  A  A  B  B  B  C  C
+        A  A  A  B  B  B  C  C  C
+        A  A  B  B  B  C  C  C  C
+        D  D  D  D  E  E  E  F  F
+        D  D  D  E  E  E  F  F  F
+        D  D  E  E  E  F  F  F  F
+        G  G  G  G  H  H  H  I  I
+        G  G  G  H  H  H  I  I  I
+        G  G  H  H  H  I  I  I  I
+        """.trimIndent()
 
-        val p1 = listOf(
-        Position[0, 0],
-        Position[1, 0],
-        Position[2, 0],
-        Position[3, 0],
-        Position[0, 1],
-        Position[1, 1],
-        Position[2, 1],
-        Position[0, 2],
-        Position[1, 2]).toTypedArray()
-
-        val p2 = listOf(
-        Position[4, 0],
-        Position[5, 0],
-        Position[6, 0],
-        Position[3, 1],
-        Position[4, 1],
-        Position[5, 1],
-        Position[2, 2],
-        Position[3, 2],
-        Position[4, 2]).toTypedArray()
-
-
-        val p3 = listOf(
-        Position[7, 0],
-        Position[8, 0],
-        Position[6, 1],
-        Position[7, 1],
-        Position[8, 1],
-        Position[5, 2],
-        Position[6, 2],
-        Position[7, 2],
-        Position[8, 2]).toTypedArray()
-
-        val blocks = listOf(
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block A", *p1),
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block B", *p2),
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block C", *p3),
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block D", *p1.map { it + Position[0,3] }.toTypedArray()),
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block E", *p2.map { it + Position[0,3] }.toTypedArray()),
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block F", *p3.map { it + Position[0,3] }.toTypedArray()),
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block G", *p1.map { it + Position[0,6] }.toTypedArray()),
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block H", *p2.map { it + Position[0,6] }.toTypedArray()),
-            Constraint(UniqueConstraintBehavior(), ConstraintType.BLOCK, "Block I", *p3.map { it + Position[0,6] }.toTypedArray())
-        )
+        val blocks: List<Constraint> = parseBlockConstraints(pattern)
 
         return createSquareConstraints(9).filter { c -> c.type != ConstraintType.BLOCK } + blocks
+    }
+
+    private fun parseBlockConstraints(pattern: String): List<Constraint> {
+        val blocks: List<Constraint> = pattern.lines().mapIndexed { y, line ->
+            line.split("  ").mapIndexed { x, c -> c to Position[x, y] }
+        }.flatten()
+            .groupBy({ it.first }, { it.second })
+            .entries.map { (key, posList) ->
+                Constraint(
+                    UniqueConstraintBehavior(),
+                    ConstraintType.LINE,
+                    "Block $key",
+                    *posList.sortedByYX().toTypedArray()
+                )
+            }
+        return blocks
+    }
+
+    //todo Positions soll Comparable implementieren, dann kann Constraints im Constructor selber sortieren
+    val Position.Companion.readingOrder: Comparator<Position>
+        get() = compareBy<Position> { it.y }.thenBy { it.x }
+
+    /**
+     * Extension to sort any Iterable of Positions using the Y-X reading order.
+     */
+    fun Iterable<Position>.sortedByYX(): List<Position> {
+        return this.sortedWith(Position.readingOrder)
     }
 
     fun mkPermutationProperties(vararg i: Int): List<PermutationProperties> =

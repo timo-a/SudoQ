@@ -3,8 +3,6 @@ package de.sudoq.model.sudoku;
 import io.mockk.every
 import io.mockk.mockk
 
-import java.io.File;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout
 

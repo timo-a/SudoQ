@@ -1,8 +1,6 @@
 package de.sudoq.model.sudoku.sudokuTypes
 
 import de.sudoq.model.sudoku.Position
-import de.sudoq.model.sudoku.complexity.Complexity
-import de.sudoq.model.sudoku.complexity.ComplexityConstraint
 import org.amshove.kluent.*
 import org.junit.jupiter.api.Test
 

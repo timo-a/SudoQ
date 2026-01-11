@@ -109,7 +109,7 @@ class GenerationAlgo(
         cellsToDefine = getNumberOfCellsToDefine(sudoku.sudokuType, desiredComplexityConstraint)
 
         //A mapping from position to solution
-        var solution = PositionMap<Int?>(sudoku.sudokuType.size)
+        var solution : PositionMap<Int?>
         val iteration = 0
         //System.out.println("Fields to define: "+fieldsToDefine);
 

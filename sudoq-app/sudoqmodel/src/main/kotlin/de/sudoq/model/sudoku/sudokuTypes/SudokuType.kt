@@ -44,7 +44,7 @@ open class SudokuType(val enumType: SudokuTypes,
                       val permutationProperties: List<PermutationProperties>,
                       val helperList: List<Helpers>,//todo immer leer?
                       val ccb: ComplexityConstraintBuilder
-) : Iterable<Constraint>, ComplexityFactory {
+) : Iterable<Constraint> by constraints, ComplexityFactory {
 
     /**
      * Gibt den Standard Belegungsfaktor zurück
@@ -74,20 +74,7 @@ open class SudokuType(val enumType: SudokuTypes,
         return constraints.all { it.isSaturated(sudoku) }
     }
 
-    /**
-     * Returns an Iterator over the [Constraint]s of this sudoku type.
-     *
-     * @return Iterator over the [Constraint]s of this sudoku type
-     */
-    override fun iterator(): Iterator<Constraint> {
-        return constraints.iterator()
-    }
-
-    private inner class Positions : Iterable<Position> {
-        override fun iterator(): Iterator<Position> {
-            return positions.iterator()
-        }
-    }
+    private inner class Positions : Iterable<Position> by positions
 
     /**
      * Returns an iterator over all valid positions in this type.

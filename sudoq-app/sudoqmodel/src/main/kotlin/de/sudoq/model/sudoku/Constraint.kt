@@ -7,8 +7,6 @@
  */
 package de.sudoq.model.sudoku
 
-import java.util.*
-
 /**
  * A Constraint comprises [Cell]s (or rather their [Position]s) in a Sudoku, so that they have to
  * satisfy certain requirements in the form of a [ConstraintBehavior].
@@ -22,11 +20,13 @@ import java.util.*
 class Constraint(private val behavior: ConstraintBehavior,
                  val type: ConstraintType,
                  val name: String,
-                 vararg positions: Position
-) : Iterable<Position> {
+                 private val positions: Set<Position>
+) : Iterable<Position> by positions {
 
-    //we don't want duplicates -> Set, and linkedSetOf preserves the order, just in case
-    private val positions: Set<Position> = linkedSetOf(*positions)
+    constructor(behavior: ConstraintBehavior, type: ConstraintType, name: String, vararg positions: Position)
+            : this(behavior, type, name,
+        //linkedSetOf preserves the order, just in case
+        linkedSetOf(*positions))
 
     /**
      * Checks if the Sudoku satisfies this Constraint.
@@ -37,15 +37,6 @@ class Constraint(private val behavior: ConstraintBehavior,
      */
     fun isSaturated(sudoku: Sudoku): Boolean {
         return behavior.check(this, sudoku)
-    }
-
-    /**
-     * An iterator over the [Position]s in this constraint.
-     *
-     * @return An iterator over the [Position]s in this constraint.
-     */
-    override fun iterator(): Iterator<Position> {
-        return positions.iterator()
     }
 
     /**
