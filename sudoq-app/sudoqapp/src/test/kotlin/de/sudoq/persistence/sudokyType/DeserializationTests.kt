@@ -6,9 +6,7 @@ import de.sudoq.persistence.sudokuType.SudokuTypeBE
 import de.sudoq.persistence.sudokuType.SudokuTypeMapper
 import org.amshove.kluent.`should be`
 import org.amshove.kluent.`should be equal to`
-import org.amshove.kluent.`should be true`
 import org.amshove.kluent.`should not be`
-import org.amshove.kluent.`should not be null`
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import java.io.File

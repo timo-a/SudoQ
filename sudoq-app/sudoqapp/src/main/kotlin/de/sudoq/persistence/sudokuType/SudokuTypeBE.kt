@@ -3,7 +3,6 @@ package de.sudoq.persistence.sudokuType
 import de.sudoq.model.solverGenerator.solver.helper.Helpers
 import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.Position
-import de.sudoq.model.sudoku.sudokuTypes.ComplexityConstraintBuilder
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.persistence.XmlAttribute
 import de.sudoq.persistence.XmlTree
@@ -22,7 +21,7 @@ class SudokuTypeBE : Xmlable {
 
     var size: Position? = null
 
-    var blockSize: Position = Position.get(0, 0)
+    var blockSize: Position = Position[0, 0]
 
     var constraints: MutableList<Constraint>
 
@@ -126,6 +125,7 @@ class SudokuTypeBE : Xmlable {
                     ccb = ccbbe
                 }
                 else -> {
+                    /* unexpected, do nothing */
                 }
             }
         }

@@ -2,10 +2,7 @@ package de.sudoq.model.sudoku.sudokuTypes
 
 import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.Position
-import org.amshove.kluent.`should be null`
 import org.amshove.kluent.`should be`
-import org.amshove.kluent.`should contain`
-import org.amshove.kluent.`should contain all`
 import org.junit.jupiter.api.Test
 import java.util.ArrayList
 
@@ -141,6 +138,6 @@ class SquigglyBSudokuTest : SquigglySudokuTypesTest() {
 
     @Test
     fun enumTypeTests() {
-        squig.enumType.`should be`(SudokuTypes.squigglyb);
+        squig.enumType.`should be`(SudokuTypes.squigglyb)
     }
 }
