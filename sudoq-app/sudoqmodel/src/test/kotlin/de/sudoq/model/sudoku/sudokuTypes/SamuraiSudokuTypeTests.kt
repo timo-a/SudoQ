@@ -1,10 +1,8 @@
 package de.sudoq.model.sudoku.sudokuTypes
 
 import de.sudoq.model.sudoku.Constraint
-import org.amshove.kluent.`should be null`
 import org.amshove.kluent.`should be true`
 import org.amshove.kluent.`should be`
-import org.amshove.kluent.`should match all with`
 import org.amshove.kluent.shouldHaveSize
 import org.junit.jupiter.api.Test
 import java.util.*

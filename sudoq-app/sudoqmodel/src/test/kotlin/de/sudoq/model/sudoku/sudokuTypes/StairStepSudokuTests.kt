@@ -1,6 +1,5 @@
 package de.sudoq.model.sudoku.sudokuTypes
 
-import org.amshove.kluent.`should be null`
 import org.amshove.kluent.`should be`
 import org.junit.jupiter.api.Test
 

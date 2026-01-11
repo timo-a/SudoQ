@@ -25,7 +25,6 @@ import de.sudoq.model.game.Game
 import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.ConstraintType
 import de.sudoq.model.sudoku.Position
-import java.util.*
 
 /**
  * Eine View als RealativeLayout, die eine Sudoku-Anzeige verwaltet.
@@ -168,7 +167,7 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
         Log.d(LOG_TAG, "SudokuLayout.refresh()")
         if (sudokuCellViews != null) {
             val type = game.sudoku!!.sudokuType
-            val typeSize = type!!.size
+            val typeSize = type.size
             val cellPlusSpacing = currentCellViewSize + currentSpacing
             //Iterate over all positions within the size 
             for (p in type.validPositions) {
@@ -181,7 +180,7 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
                 getSudokuCellView(p).invalidate()
             }
             //still not sure why we are doing this...
-            val x = typeSize!!.x
+            val x = typeSize.x
             val y = typeSize.y
             //both x and y are over the limit. Why do we go there? we could just do it outside the loop, why was it ever put it in there?!
             val params = LayoutParams(currentCellViewSize, defaultCellViewSize)
