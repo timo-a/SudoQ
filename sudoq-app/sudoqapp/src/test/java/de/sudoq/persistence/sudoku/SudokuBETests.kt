@@ -1,5 +1,7 @@
 package de.sudoq.persistence.sudoku
 
+import de.sudoq.model.ports.persistence.ReadRepo
+import de.sudoq.model.sudoku.Cell
 import java.io.IOException
 import java.util.*
 
@@ -23,12 +25,12 @@ class SudokuBETests {
 
     @Test
     fun testToXml() {
-        val sudoku = SudokuBE(4357, 0, sudokuType9x9, Complexity.easy, HashMap())
+        val sudoku = SudokuBE(4357, 0, sudokuType9x9, Complexity.easy, hashMapOf(
+            Position[0,0] to Cell(true, 0, 0, 9),
+        ))
         val tree = sudoku.toXmlTree()
         tree.numberOfChildren `should be greater than` 0
         tree.numberOfChildren.`should be positive`()
-
-        0.shouldBePositive()
 
         tree.getAttributeValue("id") `should be equal to` "4357"
 
@@ -36,16 +38,19 @@ class SudokuBETests {
 
         tree.getAttributeValue("complexity") `should be equal to` Complexity.easy.ordinal.toString()
 
-        tree.numberOfChildren.toLong() `should be equal to` 81
+        tree.numberOfChildren.toLong() `should be equal to` 1
 
     }
 
     @Test
     @Throws(IllegalArgumentException::class, IOException::class)
     fun testFillFromXml() {
+
         val dummySudokuType = SudokuType(SudokuTypes.standard4x4, 9, 0f, Position[1,1],
             Position[1,1], ArrayList(), ArrayList(), ArrayList(), ComplexityConstraintBuilder(HashMap())
         )
+        val mockSudokuTypeRepo = ReadRepo<SudokuType> { dummySudokuType }
+
         val sudoku = SudokuBE(
             6374, 0,
             dummySudokuType,
@@ -53,19 +58,35 @@ class SudokuBETests {
         )
         val tree = sudoku.toXmlTree()
         println(XmlHelper().buildXmlStructure(tree))
+
         val rebuilt = SudokuBE()
-        //rebuilt.fillFromXml(tree, mockSudokuTypeRepo) todo mock so that 9x9 is returned
-        rebuilt `should be equal to` sudoku
+        rebuilt.fillFromXml(tree, mockSudokuTypeRepo)
+        equals(rebuilt, sudoku)
+    }
+
+    private fun equals(
+        first: SudokuBE,
+        second: SudokuBE
+    ) {
+        first.id `should be equal to` second.id
+        first.transformCount `should be equal to` second.transformCount
+        first.sudokuType `should be equal to` second.sudokuType
+        first.complexity `should be equal to` second.complexity
+        if (first.cells == null) {
+            second.cells `should be` null
+        } else {
+            second.cells `should not be` null
+            second.cells!!.size `should be equal to` first.cells!!.size
+        }
     }
 
 
     @Test
-        //(expected = java.lang.IllegalArgumentException::class)
     fun testFromXmlError() {
         val sudoku = Sudoku(sudokuType9x9)
         val sudokuBE = SudokuBE(
             sudoku.id, sudoku.transformCount,
-            sudoku.sudokuType, sudoku.complexity!!, sudoku.cells!!
+            sudoku.sudokuType, Complexity.difficult, sudoku.cells!!
         )
         val tree = sudokuBE.toXmlTree()
         val iterator: Iterator<XmlTree> = tree.getChildren()
@@ -83,9 +104,10 @@ class SudokuBETests {
         val sudoku = Sudoku(sudokuType9x9)
         val sudokuBE = SudokuBE(
             sudoku.id, sudoku.transformCount,
-            sudoku.sudokuType, sudoku.complexity!!, sudoku.cells!!
+            sudoku.sudokuType, Complexity.difficult, sudoku.cells!!
         )
         val tree = sudokuBE.toXmlTree()
+        // make it so every fieldmap has only one child: "Test"
         val iterator: Iterator<XmlTree> = tree.getChildren()
         while (iterator.hasNext()) {
             val sub = iterator.next()
@@ -96,21 +118,24 @@ class SudokuBETests {
             }
             sub.addChild(XmlTree("Test"))
         }
-        //todo use mock
-    // sudokuBE.fillFromXml(tree, SudokuTests.sudokuTypeRepo)
+        val mockSudokuTypeRepo = ReadRepo { sudokuType9x9 }
+        val s2 = SudokuBE()
+        invoking { s2.fillFromXml(tree, mockSudokuTypeRepo) } `should throw` IllegalArgumentException::class
     }
 
     @Test
     fun testFromXmlAdditionalChild() {
         val sudoku = Sudoku(sudokuType9x9)
-        val sudokuBE = SudokuBE(sudoku.id, sudoku.transformCount, sudoku.sudokuType,
-            sudoku.complexity!!, sudoku.cells!!
+        val sudokuBE = SudokuBE(2, sudoku.transformCount, sudoku.sudokuType,
+            Complexity.difficult, sudoku.cells!!
         )
+        val mockSudokuTypeRepo = ReadRepo { sudokuType9x9 }
         val tree = sudokuBE.toXmlTree()
-        tree.addChild(XmlTree("Test"))
+
+        tree.addChild(XmlTree("Test"))//this addition is expected not to influence the result
         val s2 = SudokuBE()
-        //todo use mock s2.fillFromXml(tree, SudokuTests.sudokuTypeRepo)
-        s2 `should be equal to` sudoku
+        s2.fillFromXml(tree, mockSudokuTypeRepo)
+        equals(s2, sudokuBE)
     }
 
 }

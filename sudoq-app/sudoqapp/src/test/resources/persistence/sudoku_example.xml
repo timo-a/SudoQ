@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE sudoku SYSTEM "sudoku.dtd">
+
+<sudoku id="234123" type="4" complexity="4">
+	<fieldmap id="1" editable="true" solution="5">
+		<position x="2" y="5" />
+	</fieldmap>
+	<fieldmap id="2" editable="true" solution="3">
+		<position x="4" y="7" />
+	</fieldmap>
+</sudoku>

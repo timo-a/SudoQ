@@ -93,15 +93,12 @@ class SudokuBE() : XmlableWithRepo<SudokuType> {
                 val fieldId = sub.getAttributeValue("id")!!.toInt()
                 val editable = java.lang.Boolean.parseBoolean(sub.getAttributeValue("editable"))
                 val solution = sub.getAttributeValue("solution")!!.toInt()
-                var x = -1
-                var y = -1
                 // check if there is only one child element
                 require(sub.numberOfChildren == 1)
                 val position = sub.getChildren().next()
-                if (position.name == "position") {
-                    x = position.getAttributeValue("x")!!.toInt()
-                    y = position.getAttributeValue("y")!!.toInt()
-                }
+                require(position.name == "position")
+                val x = position.getAttributeValue("x")!!.toInt()
+                val y = position.getAttributeValue("y")!!.toInt()
                 val pos = Position[x, y]
                 val cell = Cell(editable, solution, fieldId, sudokuType!!.numberOfSymbols)
                 cells!![pos] = cell
