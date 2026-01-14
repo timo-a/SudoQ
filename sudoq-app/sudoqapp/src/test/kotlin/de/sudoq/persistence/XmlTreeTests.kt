@@ -31,7 +31,7 @@ class XmlTreeTests {
         val attribute = XmlAttribute("xyzName", "xyzValue")
         tree.addAttribute(attribute)
         tree.getAttributeValue("xyzName") `should be equal to` "xyzValue"
-        tree.getAttributeValue("notExistingAttribute").`should not be null`()
+        tree.getAttributeValue("notExistingAttribute") `should be` null
     }
 
     @Test

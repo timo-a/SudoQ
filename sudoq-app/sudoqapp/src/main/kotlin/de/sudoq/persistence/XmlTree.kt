@@ -22,8 +22,8 @@ class XmlTree(name: String) : Iterable<XmlTree> {
         private set
 
     /** Number of child nodes. */
-    var numberOfChildren: Int //todo redundant since we can just query the list object
-        private set
+     val numberOfChildren: Int
+        get() = children.size
 
     /** List of Attributes in this node */
     private val attributes: MutableList<XmlAttribute>
@@ -37,7 +37,6 @@ class XmlTree(name: String) : Iterable<XmlTree> {
         content = ""
         attributes = ArrayList()
         children = ArrayList()
-        numberOfChildren = 0
     }
 
     @Deprecated("content can not be read apparently.")
@@ -98,7 +97,6 @@ class XmlTree(name: String) : Iterable<XmlTree> {
      */
     fun addChild(child: XmlTree) {
         children.add(child)
-        numberOfChildren++
     }
 
     /**
