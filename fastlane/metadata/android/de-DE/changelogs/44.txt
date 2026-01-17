@@ -1,0 +1,2 @@
+ - Breaking change: MinSdk angehoben von 19 auf 21
+ - Interne Änderungen am Code
