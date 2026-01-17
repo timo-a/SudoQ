@@ -7,9 +7,7 @@
  */
 package de.sudoq.controller.menus
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.AsyncTask
 import android.os.Bundle
@@ -31,6 +29,7 @@ import de.sudoq.persistence.profile.ProfileRepo
 import de.sudoq.persistence.profile.ProfilesListRepo
 import java.io.*
 import java.util.regex.Pattern
+import androidx.core.content.edit
 
 /**
  * Eine Splash Activity für die SudoQ-App, welche einen Splash-Screen zeigt,
@@ -85,19 +84,9 @@ class SplashActivity : SudoqCompatActivity() {
             startedCopying = savedInstanceState.getBoolean(SAVE_STARTED_COPYING.toString())
         }
 
-        // Get the preferences and look if assets where completely copied before
-        val settings = getSharedPreferences("Prefs", 0)
-
-        /* get version value */
-        try {
-            currentVersionName = this.packageManager.getPackageInfo(this.packageName, 0).versionName
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.message?.let { Log.v(LOG_TAG, it) }
-        }
-
         /* is this a new version? */
-        val oldVersionName = settings.getString(VERSION_TAG, NO_VERSION_YET)!!
-        if (updateSituation(oldVersionName) && !startedCopying) {
+        val lastVersion = getLastVersion()
+        if (updateSituation(lastVersion) && !startedCopying) {
             /*hint*/
             alertIfNoAssetFolder()
             Log.v(LOG_TAG, "we will do an initialization")
@@ -114,17 +103,37 @@ class SplashActivity : SudoqCompatActivity() {
         }
     }
 
+    private fun getLastVersion(): Int {
+        val settings = getSharedPreferences("Prefs", 0)
+
+        //as of version code:3.0.0, name:44, the current "version code" is stored in shared preferences.
+        //up until then only the "version name" was stored. Version name are much harder to compare,
+        // I don't know why they weren't used from the beginning.
+        // If no version code is stored the version was at most 43, so that is the default value
+        val lastVersion = settings.getInt(VERSION_CODE_TAG, 43)
+
+        //1.1.0b = 25 needed an upgrade too, but we only stored the name then, so if the last
+        // version we are upgrading from is < 1.1.0b (=25), we return 24
+        // this way versions 25 to 43 don't get an asset update that they don't need and
+        // versions 0-24 do get the update that they need
+        if (lastVersion == 43 && NEWEST_ASSET_VERSION_CODE < 43) {
+            val oldVersionName = settings.getString(VERSION_NAME_TAG, NO_VERSION_YET) ?: NO_VERSION_YET
+
+            val olderThan110b =  try {
+                older(oldVersionName, NEWEST_ASSET_VERSION_NAME)
+            } catch (_: Exception) {
+                true //when in doubt DO an update!
+            }
+            if (olderThan110b)
+                return NEWEST_ASSET_VERSION_CODE - 1
+        }
+        return lastVersion
+    }
     /* Specifies whether this is a regular start or an assets-update,
 	 * i.e. version has changed and assets have to be copied
-	 *
-	 * 'protected' for unit test
 	 */
-    private fun updateSituation(oldVersionName: String): Boolean {
-        return try {
-            older(oldVersionName, NEWEST_ASSET_VERSION)
-        } catch (e: Exception) {
-            true //when in doubt DO an update!
-        }
+    private fun updateSituation(lastVersion: Int): Boolean {
+        return lastVersion < NEWEST_ASSET_VERSION_CODE
     }
 
     /** is version a older than b?
@@ -211,10 +220,14 @@ class SplashActivity : SudoqCompatActivity() {
      */
     private inner class Initialization(val sudokuDir: File) : AsyncTask<Void?, Void?, Void?>() {
 
-        public override fun onPostExecute(v: Void?) {
+        override fun onPostExecute(v: Void?) {
             val settings = getSharedPreferences("Prefs", 0)
-            settings.edit().putBoolean(INITIALIZED_TAG, true).apply()
-            settings.edit().putString(VERSION_TAG, currentVersionName).apply()
+            settings.edit {
+                putBoolean(INITIALIZED_TAG, true)
+                //we still store the version name just in case
+                putString(VERSION_NAME_TAG, CURRENT_VERSION_NAME)
+                putInt(VERSION_CODE_TAG, CURRENT_VERSION_CODE)
+            }
             Log.d(LOG_TAG, "Assets completely copied")
             
             Handler(Looper.getMainLooper()).postDelayed({
@@ -227,7 +240,7 @@ class SplashActivity : SudoqCompatActivity() {
          * Kopiert alle Sudoku Vorlagen.
          */
         private fun copyAssets() {
-            var types = SudokuTypes.values()
+            var types = SudokuTypes.entries.toTypedArray()
             types = swap99tothefront(types)
 
             for (t in types) {
@@ -297,9 +310,12 @@ class SplashActivity : SudoqCompatActivity() {
         var splashTime = 2500
         private const val HEAD_DIRECTORY = "sudokus"
         private const val INITIALIZED_TAG = "Initialized"
-        private const val VERSION_TAG = "version"
+        private const val VERSION_NAME_TAG = "version"
+        private const val VERSION_CODE_TAG = "version_code"
         private const val NO_VERSION_YET = "0.0.0"
-        private const val NEWEST_ASSET_VERSION = "1.1.0b"
-        private var currentVersionName = ""
+        private const val NEWEST_ASSET_VERSION_NAME = "1.1.0b"
+        private const val NEWEST_ASSET_VERSION_CODE = 25
+        private const val CURRENT_VERSION_NAME = BuildConfig.VERSION_NAME
+        private const val CURRENT_VERSION_CODE = BuildConfig.VERSION_CODE
     }
 }
