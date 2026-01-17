@@ -16,15 +16,21 @@ mockk = "1.14.7"
 mockkAgentJvm = "1.14.7"
 apacheCommonsIo = "2.21.0"
 apacheCommonsLang3 = "3.20.0"
+kotlinxCoroutines = "1.10.1"
+androidxLifecycle = "2.8.7"
 
 [libraries]
 # AndroidX
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-multidex = { group = "androidx.multidex", name = "multidex", version.ref = "multidex" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidxLifecycle" }
 
 # Google
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+# Kotlin
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 
 # Testing
 junit = { group = "junit", name = "junit", version.ref = "junit" }

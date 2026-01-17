@@ -9,14 +9,13 @@ package de.sudoq.controller.menus
 
 import android.content.Intent
 import android.content.res.Configuration
-import android.os.AsyncTask
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.Menu
 import android.widget.Toast
+import androidx.core.content.edit
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.lifecycleScope
 import androidx.multidex.BuildConfig
 import de.sudoq.R
 import de.sudoq.controller.SudoqCompatActivity
@@ -27,9 +26,14 @@ import de.sudoq.model.sudoku.complexity.Complexity.Companion.playableValues
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.persistence.profile.ProfileRepo
 import de.sudoq.persistence.profile.ProfilesListRepo
-import java.io.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import java.util.regex.Pattern
-import androidx.core.content.edit
 
 /**
  * Eine Splash Activity für die SudoQ-App, welche einen Splash-Screen zeigt,
@@ -78,7 +82,7 @@ class SplashActivity : SudoqCompatActivity() {
         val profileDir = pm.profilesDir
         val filenames = profileDir!!.list()
         Log.d("ProfileD", "onCreate: after init: ${filenames?.joinToString(", ")}")
-        check(filenames != null && filenames.size >= 2) { "Too few files. initialization was not successfull" }
+        check(filenames != null && filenames.size >= 2) { "Too few files. initialization was not successful" }
 
         if (savedInstanceState != null) {
             startedCopying = savedInstanceState.getBoolean(SAVE_STARTED_COPYING.toString())
@@ -91,15 +95,93 @@ class SplashActivity : SudoqCompatActivity() {
             alertIfNoAssetFolder()
             Log.v(LOG_TAG, "we will do an initialization")
             val sudokus : File = getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE)
-            Initialization(sudokus).execute()
             startedCopying = true
+            lifecycleScope.launch {
+                initializeAssets(sudokus)
+                delay(splashTime.toLong())
+                isReady = true
+                goToMainMenu()
+            }
         } else {
             Log.v(LOG_TAG, "we will not do an initialization")
             // If no initialization is needed, we still want to wait for the minimum splash time
-            Handler(Looper.getMainLooper()).postDelayed({
+            lifecycleScope.launch {
+                delay(splashTime.toLong())
                 isReady = true
                 goToMainMenu()
-            }, splashTime.toLong())
+            }
+        }
+    }
+
+    private suspend fun initializeAssets(sudokuDir: File) = withContext(Dispatchers.IO) {
+        Log.d(LOG_TAG, "Starting to copy templates")
+        copyAssets(sudokuDir)
+
+        withContext(Dispatchers.Main) {
+            val settings = getSharedPreferences("Prefs", 0)
+            settings.edit {
+                putBoolean(INITIALIZED_TAG, true)
+                //we still store the version name just in case
+                putString(VERSION_NAME_TAG, CURRENT_VERSION_NAME)
+                putInt(VERSION_CODE_TAG, CURRENT_VERSION_CODE)
+            }
+            Log.d(LOG_TAG, "Assets completely copied")
+        }
+    }
+
+    /**
+     * Kopiert alle Sudoku Vorlagen.
+     */
+    private fun copyAssets(sudokuDir: File) {
+        var types = SudokuTypes.entries.toTypedArray()
+        types = swap99tothefront(types)
+
+        for (t in types) {
+            val sourceType = HEAD_DIRECTORY + File.separator + t.toString() + File.separator
+            val targetType = sudokuDir.absolutePath + File.separator + t.toString() + File.separator
+            copyFile("$sourceType$t.xml", "$targetType$t.xml")
+            for (c in playableValues()) {
+                val sourceComplexity = sourceType + c.toString() + File.separator
+                val targetComplexity = targetType + c.toString() + File.separator
+                val fnames = getSubfiles(sourceType + c.toString())
+                fnames?.forEach { filename ->
+                    copyFile(sourceComplexity + filename, targetComplexity + filename)
+                }
+            }
+        }
+    }
+
+    private fun swap99tothefront(types: Array<SudokuTypes>): Array<SudokuTypes> {
+        if (types[0] !== SudokuTypes.standard9x9) {
+            val pos9x9 = types.indexOf(SudokuTypes.standard9x9)
+            if (pos9x9 != -1) {
+                types[pos9x9] = types[0]
+                types[0] = SudokuTypes.standard9x9
+            }
+        }
+        return types
+    }
+
+    private fun getSubfiles(relPath: String): Array<String>? {
+        return try {
+            assets.list(relPath)
+        } catch (e: IOException) {
+            e.message?.let { Log.e(LOG_TAG, it) }
+            null
+        }
+    }
+
+    private fun copyFile(sourcePath: String, destinationPath: String) {
+        File(destinationPath).parentFile?.mkdirs()
+        val destination = File(destinationPath)
+        try {
+            assets.open(sourcePath).use { input ->
+                FileOutputStream(destination).use { output ->
+                    Utility.copyFileOnStreamLevel(input, output)
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(LOG_TAG, "Error copying file: $sourcePath", e)
         }
     }
 
@@ -169,7 +251,7 @@ class SplashActivity : SudoqCompatActivity() {
     private fun alertIfNoAssetFolder() {
         try {
             val l = assets.list("")
-            val foundSudokusInAssetfolder = l!!.contains(HEAD_DIRECTORY)
+            val foundSudokusInAssetfolder = l?.contains(HEAD_DIRECTORY) ?: false
             if (!foundSudokusInAssetfolder) {
                 val msg = "This app will probably crash once you try to start a new sudoku. " +
                         "This is because the person who compiled this app forgot about the 'assets' folder. " +
@@ -211,95 +293,6 @@ class SplashActivity : SudoqCompatActivity() {
             val startMainMenuIntent = Intent(this, MainActivity::class.java)
             startActivity(startMainMenuIntent)
             finish()
-        }
-    }
-
-    /**
-     * Ein AsyncTask zur Initialisierung des Benutzers und der Vorlagen für den
-     * ersten Start.
-     */
-    private inner class Initialization(val sudokuDir: File) : AsyncTask<Void?, Void?, Void?>() {
-
-        override fun onPostExecute(v: Void?) {
-            val settings = getSharedPreferences("Prefs", 0)
-            settings.edit {
-                putBoolean(INITIALIZED_TAG, true)
-                //we still store the version name just in case
-                putString(VERSION_NAME_TAG, CURRENT_VERSION_NAME)
-                putInt(VERSION_CODE_TAG, CURRENT_VERSION_CODE)
-            }
-            Log.d(LOG_TAG, "Assets completely copied")
-            
-            Handler(Looper.getMainLooper()).postDelayed({
-                isReady = true
-                goToMainMenu()
-            }, splashTime.toLong())
-        }
-
-        /**
-         * Kopiert alle Sudoku Vorlagen.
-         */
-        private fun copyAssets() {
-            var types = SudokuTypes.entries.toTypedArray()
-            types = swap99tothefront(types)
-
-            for (t in types) {
-                val sourceType = HEAD_DIRECTORY + File.separator + t.toString() + File.separator
-                val targetType = sudokuDir.absolutePath + File.separator + t.toString() + File.separator
-                copyFile("$sourceType$t.xml", "$targetType$t.xml")
-                for (c in playableValues()) {
-                    val sourceComplexity = sourceType + c.toString() + File.separator
-                    val targetComplexity = targetType + c.toString() + File.separator
-                    val fnames = getSubfiles(sourceType + c.toString())
-                    fnames?.forEach { filename ->
-                        copyFile(sourceComplexity + filename, targetComplexity + filename)
-                    }
-                }
-            }
-        }
-
-        private fun swap99tothefront(types: Array<SudokuTypes>): Array<SudokuTypes> {
-            if (types[0] !== SudokuTypes.standard9x9) {
-                var pos9x9 = 0
-                while (pos9x9 < types.size) {
-                    if (types[pos9x9] === SudokuTypes.standard9x9) break
-                    pos9x9++
-                }
-                if (pos9x9 < types.size) {
-                    types[pos9x9] = types[0]
-                    types[0] = SudokuTypes.standard9x9
-                }
-            }
-            return types
-        }
-
-        private fun getSubfiles(relPath: String): Array<String>? {
-            return try {
-                assets.list(relPath)
-            } catch (e: IOException) {
-                e.message?.let { Log.e(LOG_TAG, it) }
-                null
-            }
-        }
-
-        private fun copyFile(sourcePath: String, destinationPath: String) {
-            File(destinationPath).parentFile?.mkdirs()
-            val destination = File(destinationPath)
-            try {
-                assets.open(sourcePath).use { input ->
-                    FileOutputStream(destination).use { output ->
-                        Utility.copyFileOnStreamLevel(input, output)
-                    }
-                }
-            } catch (e: Exception) {
-                Log.e(LOG_TAG, "Error copying file: $sourcePath", e)
-            }
-        }
-
-        override fun doInBackground(vararg params: Void?): Void? {
-            Log.d(LOG_TAG, "Starting to copy templates")
-            copyAssets()
-            return null
         }
     }
 
