@@ -33,7 +33,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.util.regex.Pattern
+import java.lang.Character.isDigit
 
 /**
  * Eine Splash Activity für die SudoQ-App, welche einen Splash-Screen zeigt,
@@ -188,21 +188,23 @@ class SplashActivity : SudoqCompatActivity() {
     private fun getLastVersion(): Int {
         val settings = getSharedPreferences("Prefs", 0)
 
-        //as of version code:3.0.0, name:44, the current "version code" is stored in shared preferences.
+        //as of version code:45, name:3.0.0, the current "version code" is stored in shared preferences.
         //up until then only the "version name" was stored. Version name are much harder to compare,
         // I don't know why they weren't used from the beginning.
-        // If no version code is stored the version was at most 43, so that is the default value
-        val lastVersion = settings.getInt(VERSION_CODE_TAG, 43)
+        // If no version code is stored the version was at most 44, so that is the default value
+        val lastVersion = settings.getInt(VERSION_CODE_TAG, 44)
 
         //1.1.0b = 25 needed an upgrade too, but we only stored the name then, so if the last
         // version we are upgrading from is < 1.1.0b (=25), we return 24
-        // this way versions 25 to 43 don't get an asset update that they don't need and
+        // this way versions 25 to 44 don't get an asset update that they don't need and
         // versions 0-24 do get the update that they need
-        if (lastVersion == 43 && NEWEST_ASSET_VERSION_CODE < 43) {
+        if (lastVersion == 44
+            //safety in case we forget to remove this loop once we release new assets after 45
+            && NEWEST_ASSET_VERSION_CODE < 44) {
             val oldVersionName = settings.getString(VERSION_NAME_TAG, NO_VERSION_YET) ?: NO_VERSION_YET
 
-            val olderThan110b =  try {
-                older(oldVersionName, NEWEST_ASSET_VERSION_NAME)
+            val olderThan110b = try {
+                Version.parse(oldVersionName) < Version.parse(NEWEST_ASSET_VERSION_NAME)
             } catch (_: Exception) {
                 true //when in doubt DO an update!
             }
@@ -211,6 +213,7 @@ class SplashActivity : SudoqCompatActivity() {
         }
         return lastVersion
     }
+
     /* Specifies whether this is a regular start or an assets-update,
 	 * i.e. version has changed and assets have to be copied
 	 */
@@ -218,34 +221,30 @@ class SplashActivity : SudoqCompatActivity() {
         return lastVersion < NEWEST_ASSET_VERSION_CODE
     }
 
-    /** is version a older than b?
-     * a,b = "12.68.87(abc..)"   */
-    @Throws(Exception::class)
-    fun older(a: String, b: String): Boolean {
-        val aTokenized = versionToNumbers(a)
-        val bTokenized = versionToNumbers(b)
-        assert(aTokenized.size == bTokenized.size)
-        for (i in aTokenized.indices) {
-            val aTok = aTokenized[i]
-            val bTok = bTokenized[i]
-            if (aTok < bTok) return true else if (aTok > bTok) return false
-        }
-        return false
-    }
+    class Version private constructor(val major: Int, val minor: Int, val patch: Int, val letter: Char) : Comparable<Version> {
+        override fun compareTo(other: Version): Int = compareBy<Version>(
+            { it.major }, { it.minor }, { it.patch }, { it.letter }).compare(this, other)
 
-    @Throws(Exception::class)
-    private fun versionToNumbers(version: String): IntArray {
-        val pattern = "(\\d+)[.](\\d+)[.](\\d+)([a-z]?)"
-        val r = Pattern.compile(pattern)
-        val m = r.matcher(version)
-        m.find()
-        val result = IntArray(4)
-        if (m.groupCount() == 4) {
-            val letter = m.group(4)!!
-            if (letter.length == 1) result[3] = letter[0] - 'a' + 1
+        init {
+            require(major >= 0)
+            require(minor >= 0)
+            require(patch >= 0)
         }
-        for (i in intArrayOf(1, 2, 3)) result[i - 1] = m.group(i).toInt()
-        return result
+
+        companion object {
+            fun parse(s: String) : Version {
+                val parts = s.split('.', limit = 3)
+                val a = parts[0]
+                val b = parts[1]
+                val (c, letters) = parts[2].partition { isDigit(it) }
+                val letter = when (letters.length) {
+                    0 -> '_' // < 'a'
+                    1 -> letters[0]
+                    else -> throw IllegalArgumentException()
+                }
+                return Version(a.toInt(), b.toInt(), c.toInt(), letter)
+            }
+        }
     }
 
     private fun alertIfNoAssetFolder() {
@@ -299,6 +298,7 @@ class SplashActivity : SudoqCompatActivity() {
     companion object {
         private val LOG_TAG = SplashActivity::class.java.simpleName
         private const val SAVE_STARTED_COPYING = 1
+
         @JvmField
         var splashTime = 2500
         private const val HEAD_DIRECTORY = "sudokus"
