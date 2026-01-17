@@ -7,6 +7,7 @@ kotlin = "2.3.0"
 appcompat = "1.7.1"
 material = "1.13.0"
 multidex = "2.0.1"
+coreSplashscreen = "1.0.1"
 junit = "4.13.2"
 junitJupiter = "6.0.1"
 junitPlatform = "6.0.1"
@@ -20,6 +21,7 @@ apacheCommonsLang3 = "3.20.0"
 # AndroidX
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-multidex = { group = "androidx.multidex", name = "multidex", version.ref = "multidex" }
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
 
 # Google
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }

@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.multidex)
+    implementation(libs.androidx.core.splashscreen)
 
     testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.junit.jupiter.params)

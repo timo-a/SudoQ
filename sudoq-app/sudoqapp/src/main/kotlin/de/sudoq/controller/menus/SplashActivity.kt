@@ -13,9 +13,13 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.AsyncTask
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.Menu
 import android.widget.Toast
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.multidex.BuildConfig
 import de.sudoq.R
 import de.sudoq.controller.SudoqCompatActivity
 import de.sudoq.controller.menus.preferences.LanguageCode
@@ -25,7 +29,6 @@ import de.sudoq.model.sudoku.complexity.Complexity.Companion.playableValues
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.persistence.profile.ProfileRepo
 import de.sudoq.persistence.profile.ProfilesListRepo
-//import org.apache.commons.lang3.StringUtils
 import java.io.*
 import java.util.regex.Pattern
 
@@ -36,9 +39,9 @@ import java.util.regex.Pattern
  */
 class SplashActivity : SudoqCompatActivity() {
     /**
-     * Die Zeit, die schon vergangen ist, seit der SplashScreen gestartet wurde
+     * Besagt, ob die Initialisierung abgeschlossen ist.
      */
-    private var waited = 0
+    private var isReady = false
 
     /**
      * Besagt, ob der Kopiervorgang der Templates bereits gestartet wurde
@@ -46,15 +49,13 @@ class SplashActivity : SudoqCompatActivity() {
     private var startedCopying = false
 
     /**
-     * Der SplashThread
-     */
-    private var splashThread: Thread? = null
-
-    /**
      * {@inheritDoc}
      */
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+
+        splashScreen.setKeepOnScreenCondition { !isReady }
 
         // Load the language setting from preferences:
         val languageCode = LanguageUtility.loadLanguageCodeFromPreferences(this)
@@ -63,11 +64,6 @@ class SplashActivity : SudoqCompatActivity() {
         if (languageCode != LanguageCode.system && languageCode != LanguageUtility.resolveSystemLanguage()) {
             LanguageUtility.setResourceLocale(this, languageCode)
         }
-        // This should be applied app wide until manual preference changes.
-        // If something else changes the locale for reasons, it will be noticed.
-
-        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        setContentView(R.layout.splash)
 
         // If there is no profile initialize one
         val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
@@ -82,15 +78,11 @@ class SplashActivity : SudoqCompatActivity() {
         //confirm that there is a profile
         val profileDir = pm.profilesDir
         val filenames = profileDir!!.list()
-        Log.d("ProfileD", "onCreate: after init: ${filenames.joinToString(", ")}")
-        check(filenames.size >= 2) { "Too few files. initialization was not successfull" }
+        Log.d("ProfileD", "onCreate: after init: ${filenames?.joinToString(", ")}")
+        check(filenames != null && filenames.size >= 2) { "Too few files. initialization was not successfull" }
 
-        // Restore waited time after interruption or set it to 0
-        if (savedInstanceState == null) {
-            waited = 0
-        } else {
-            waited = savedInstanceState.getInt(SAVE_WAITED.toString() + "")
-            startedCopying = savedInstanceState.getBoolean(SAVE_STARTED_COPYING.toString() + "")
+        if (savedInstanceState != null) {
+            startedCopying = savedInstanceState.getBoolean(SAVE_STARTED_COPYING.toString())
         }
 
         // Get the preferences and look if assets where completely copied before
@@ -106,33 +98,20 @@ class SplashActivity : SudoqCompatActivity() {
         /* is this a new version? */
         val oldVersionName = settings.getString(VERSION_TAG, NO_VERSION_YET)!!
         if (updateSituation(oldVersionName) && !startedCopying) {
-
             /*hint*/
             alertIfNoAssetFolder()
             Log.v(LOG_TAG, "we will do an initialization")
             val sudokus : File = getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE)
-            Initialization(sudokus).execute(null, null, null)
+            Initialization(sudokus).execute()
             startedCopying = true
-        } else
+        } else {
             Log.v(LOG_TAG, "we will not do an initialization")
-
-        /* splash thread*/
-        splashThread = object : Thread() {
-            override fun run() {
-                try {
-                    while (waited < splashTime) {
-                        sleep(100)
-                        if (waited < splashTime) {
-                            waited += 100
-                        }
-                    }
-                    goToMainMenu()
-                } catch (e: InterruptedException) {
-                    // do nothing
-                }
-            }
+            // If no initialization is needed, we still want to wait for the minimum splash time
+            Handler(Looper.getMainLooper()).postDelayed({
+                isReady = true
+                goToMainMenu()
+            }, splashTime.toLong())
         }
-        (splashThread as Thread).start()
     }
 
     /* Specifies whether this is a regular start or an assets-update,
@@ -182,19 +161,13 @@ class SplashActivity : SudoqCompatActivity() {
         try {
             val l = assets.list("")
             val foundSudokusInAssetfolder = l!!.contains(HEAD_DIRECTORY)
-            //TODO make this work:
-            //boolean fsaf = Stream.of(l).anyMatch(s -> s.equals(HEAD_DIRECTORY));
             if (!foundSudokusInAssetfolder) {
                 val msg = "This app will probably crash once you try to start a new sudoku. " +
                         "This is because the person who compiled this app forgot about the 'assets' folder. " +
                         "Please tell him that!"
                 Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
-                Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
-                Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
             }
-            //Toast.makeText(this, l[0].equals(HEAD_DIRECTORY)+"", Toast.LENGTH_SHORT).show();
         } catch (e1: IOException) {
-            // TODO Auto-generated catch block
             e1.printStackTrace()
         }
     }
@@ -202,10 +175,9 @@ class SplashActivity : SudoqCompatActivity() {
     /**
      * Speichert die bereits im Splash gewartete Zeit.
      */
-    @SuppressLint("MissingSuperCall") //todo try out adding super call
     public override fun onSaveInstanceState(outState: Bundle) {
-        outState.putInt(SAVE_WAITED.toString() + "", waited)
-        outState.putBoolean(SAVE_STARTED_COPYING.toString() + "", startedCopying)
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(SAVE_STARTED_COPYING.toString(), startedCopying)
     }
 
     /**
@@ -216,41 +188,21 @@ class SplashActivity : SudoqCompatActivity() {
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public override fun onPause() {
-        super.onPause()
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    override fun onBackPressed() {
-        super.onBackPressed()
-        splashThread!!.interrupt()
-        finish()
-    }
-
-    /**
      * {@inheritDoc}
      */
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     /**
      * Wechselt in die MainMenu-Activity
      */
     private fun goToMainMenu() {
-        finish()
-        // overridePendingTransition(android.R.anim.fade_in,
-        // android.R.anim.fade_out);
-        val startMainMenuIntent = Intent(this, MainActivity::class.java)
-        // startMainMenuIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        startActivity(startMainMenuIntent)
-        // overridePendingTransition(android.R.anim.fade_in,
-        // android.R.anim.fade_out);
+        if (!isFinishing) {
+            val startMainMenuIntent = Intent(this, MainActivity::class.java)
+            startActivity(startMainMenuIntent)
+            finish()
+        }
     }
 
     /**
@@ -259,44 +211,35 @@ class SplashActivity : SudoqCompatActivity() {
      */
     private inner class Initialization(val sudokuDir: File) : AsyncTask<Void?, Void?, Void?>() {
 
-
         public override fun onPostExecute(v: Void?) {
             val settings = getSharedPreferences("Prefs", 0)
-            settings.edit().putBoolean(INITIALIZED_TAG, true).commit()
-            settings.edit().putString(VERSION_TAG, currentVersionName).commit()
+            settings.edit().putBoolean(INITIALIZED_TAG, true).apply()
+            settings.edit().putString(VERSION_TAG, currentVersionName).apply()
             Log.d(LOG_TAG, "Assets completely copied")
+            
+            Handler(Looper.getMainLooper()).postDelayed({
+                isReady = true
+                goToMainMenu()
+            }, splashTime.toLong())
         }
 
         /**
          * Kopiert alle Sudoku Vorlagen.
          */
         private fun copyAssets() {
-            /* sudoku types*/
             var types = SudokuTypes.values()
-            /* ensure sudoku9x9 is first element ->  will be finished first.
-             * Reason: people will probably want to play 9x9 first
-             * kind of unnecessary because 9x9 is declared first in SudokuTypes, but maybe that will change*/types =
-                swap99tothefront(types)
+            types = swap99tothefront(types)
 
-            /* actual copying*/
             for (t in types) {
-                val sourceType =
-                    HEAD_DIRECTORY + File.separator + t.toString() + File.separator // e.g. .../standard9x9/
-                val targetType =
-                    sudokuDir.absolutePath + File.separator + t.toString() + File.separator
-                copyFile(
-                    "$sourceType$t.xml",
-                    "$targetType$t.xml"
-                )
+                val sourceType = HEAD_DIRECTORY + File.separator + t.toString() + File.separator
+                val targetType = sudokuDir.absolutePath + File.separator + t.toString() + File.separator
+                copyFile("$sourceType$t.xml", "$targetType$t.xml")
                 for (c in playableValues()) {
                     val sourceComplexity = sourceType + c.toString() + File.separator
                     val targetComplexity = targetType + c.toString() + File.separator
                     val fnames = getSubfiles(sourceType + c.toString())
-                    for (filename in fnames!!) {
-                        copyFile(
-                            sourceComplexity + filename,
-                            targetComplexity + filename
-                        )
+                    fnames?.forEach { filename ->
+                        copyFile(sourceComplexity + filename, targetComplexity + filename)
                     }
                 }
             }
@@ -304,56 +247,39 @@ class SplashActivity : SudoqCompatActivity() {
 
         private fun swap99tothefront(types: Array<SudokuTypes>): Array<SudokuTypes> {
             if (types[0] !== SudokuTypes.standard9x9) {
-                /* find index */
-                var pos9x9: Int = 0
+                var pos9x9 = 0
                 while (pos9x9 < types.size) {
                     if (types[pos9x9] === SudokuTypes.standard9x9) break
                     pos9x9++
                 }
-
-                /* swap */
-                types[pos9x9] = types[0]
-                types[0] = SudokuTypes.standard9x9
+                if (pos9x9 < types.size) {
+                    types[pos9x9] = types[0]
+                    types[0] = SudokuTypes.standard9x9
+                }
             }
             return types
         }
 
-        /** apache FileUtils.copyFile does not work!!!  */ /* get all files/directories in relPath */
         private fun getSubfiles(relPath: String): Array<String>? {
-            var files: Array<String>? = null
-            try {
-                files = assets.list(relPath)
+            return try {
+                assets.list(relPath)
             } catch (e: IOException) {
                 e.message?.let { Log.e(LOG_TAG, it) }
+                null
             }
-            return files
         }
 
-        /**TODO  do shorter with library
-         * Copies content from sourcePath to destination
-         *
-         * @param sourcePath
-         * @param destinationPath
-         */
         private fun copyFile(sourcePath: String, destinationPath: String) {
-            File(destinationPath).parentFile.mkdirs()
+            File(destinationPath).parentFile?.mkdirs()
             val destination = File(destinationPath)
-            val `in`: InputStream
-            val out: OutputStream
             try {
-                `in` = assets.open(sourcePath)
-                val abs = destination.absolutePath
-                out = FileOutputStream(abs)
-                Utility.copyFileOnStreamLevel(`in`, out)
-                `in`.close()
-                out.flush()
-                out.close()
-            } catch (e: IOException) {
-                e.message?.let { Log.e(LOG_TAG, it) }
-                Log.e(LOG_TAG, "there seems to be an io exception")
-            } catch (e: FileNotFoundException) {
-                e.message?.let { Log.e(LOG_TAG, it) }
-                Log.e(LOG_TAG, "there seems to be a file not found exception")
+                assets.open(sourcePath).use { input ->
+                    FileOutputStream(destination).use { output ->
+                        Utility.copyFileOnStreamLevel(input, output)
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(LOG_TAG, "Error copying file: $sourcePath", e)
             }
         }
 
@@ -365,24 +291,8 @@ class SplashActivity : SudoqCompatActivity() {
     }
 
     companion object {
-        /**
-         * Das Log-Tag für das LogCat.
-         */
         private val LOG_TAG = SplashActivity::class.java.simpleName
-
-        /**
-         * Konstante für das Speichern der bereits gewarteten Zeit.
-         */
-        private const val SAVE_WAITED = 0
-
-        /**
-         * Konstante für das Speichern des bereits begonnenen Kopiervorgangs.
-         */
         private const val SAVE_STARTED_COPYING = 1
-
-        /**
-         * Die minimale Anzeigedauer des SplashScreens
-         */
         @JvmField
         var splashTime = 2500
         private const val HEAD_DIRECTORY = "sudokus"
