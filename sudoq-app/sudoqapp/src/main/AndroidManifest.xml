@@ -17,7 +17,7 @@
                   android:noHistory="true"
                   android:configChanges="orientation"
                   android:windowActionBar="false"
-                  android:theme="@style/Theme.AppCompat.NoActionBar"
+                  android:theme="@style/Theme.App.Starting"
                   android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -70,8 +70,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
         </provider>
-
-
 
     </application>
 
