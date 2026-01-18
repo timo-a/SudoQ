@@ -152,17 +152,19 @@ open class ProfileManager(
     fun noProfiles(): Boolean { //query profileRepo directly
         if (!profilesDir.exists()) return true
 
-        /*System.out.println("getnrp");
-		for(String s: profiles.list())
-			System.out.println(profiles.list());
-		System.out.println("getnrpEND");*/
-        var count =
-            profilesDir.list()!!.size //one folder for each profile + file listing all profiles
-        if (File(profilesDir, "profiles.xml").exists()) {
-            //if profiles.xml exists subtract it from count
-            count--
+        // we expect
+        // <ProfilesDir>
+        // |- gestures
+        // |- profiles.xml
+        // '- profile_x
+        //     |- profile.xml
+        //     |- games.xml
+        //     '- games        //may be empty
+        val fileExists = profilesDir.listFiles()!!.any { it.name.startsWith("profile_")
+                && it.isDirectory
+                && it.listFiles()!!.any { it.name == "profile.xml" }
         }
-        return count == 0
+        return !fileExists
     }
 
 
