@@ -192,7 +192,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
         pm.loadCurrentProfile()
         //todo: pass externally initialized object to constructor
         val gameRepo = GameRepo(
-            pm.profilesDir!!,
+            pm.profilesDir,
             pm.currentProfileID,
             sudokuTypeRepo)
         val gamesFile = File(pm.currentProfileDir, "games.xml")

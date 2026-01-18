@@ -10,9 +10,11 @@ package de.sudoq.model.profile
 import de.sudoq.model.ObservableModelImpl
 import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.GameSettings
+import de.sudoq.model.persistence.IProfileRepo
 import de.sudoq.model.persistence.IRepo
 import de.sudoq.model.persistence.xml.profile.IProfilesListRepo
 import java.io.File
+import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -23,7 +25,7 @@ import kotlin.collections.ArrayList
  */
 open class ProfileManager(
     val profilesDir: File,
-    val profileRepo: IRepo<Profile>,
+    val profileRepo: IProfileRepo,
     val profilesListRepo: IProfilesListRepo
 ) : ObservableModelImpl<ProfileManager>() {
 //TODO split into profile handler and profile
@@ -71,7 +73,7 @@ open class ProfileManager(
     val appSettings: AppSettings //todo read from currentProfile instead, same above
         get() = currentProfile.appSettings
 
-    var statistics: IntArray?
+    var statistics: IntArray
         get() = currentProfile.statistics
         set(value) {
             currentProfile.statistics = value
@@ -82,19 +84,18 @@ open class ProfileManager(
         get() = File(profilesDir.absolutePath, "profile_$currentProfileID")
 
     init {
-        if (!profilesDir.canWrite())
-            throw IllegalArgumentException("profiles dir cannot write")
+        require(profilesDir.canWrite()) { "profiles dir cannot write" }
     }
 
 
     /** assumes an empty directory */
-    fun initialize() {
+    fun initialize(name: String) {
         if (!profilesDir.exists())
             profilesDir.mkdirs()
 
         //create a new profile
         //currentProfile = profileRepo!!.create()
-        createInitialProfile()
+        createInitialProfile(name)
 
 
     }
@@ -104,26 +105,11 @@ open class ProfileManager(
      *///todo shouldn't this method be called in the constructor?
     fun loadCurrentProfile() {//todo if all works bundle similarities
         //if the profiles (list) file doesn't exist
-        if (!profilesDir.exists()) {
-            profilesListRepo.createProfilesFile()
-            currentProfile = profileRepo.create()
-            profilesListRepo.addProfile(currentProfile)
-            notifyListeners(this)
-            return
-        }
-
-        if (profilesDir.list()!!.isEmpty() || !File(profilesDir, "profiles.xml").exists()) {
-            profilesListRepo.createProfilesFile()
-        }
-
+        check(profilesDir.exists())
+        check(profilesDir.list()!!.isNotEmpty())
+        check(File(profilesDir, "profiles.xml").exists())
+        check(profilesListRepo.getProfileNamesList().isNotEmpty())
         //if there are no profiles
-        if (profilesListRepo.getProfileNamesList().isEmpty()) {
-            currentProfile = profileRepo.create()
-            profilesListRepo.addProfile(currentProfile)
-            notifyListeners(this)
-            return
-        }
-
 
         val currentProfileID =
             profilesListRepo.getCurrentProfileId()//todo put directly into setter of currentProfileID???
@@ -225,13 +211,12 @@ open class ProfileManager(
     /**
      * Diese Methode erstellt ein neues Profil.
      */
-    fun createAnotherProfile() {
+    fun createAnotherProfile(name: String) {
         if (currentProfileID != -1) {
             profileRepo.update(currentProfile) // save current profile xml
         }
 
-        currentProfile = profileRepo.create()
-        profilesListRepo.addProfile(currentProfile)
+        createProfile(name)
 
         notifyListeners(this)
     }
@@ -239,14 +224,23 @@ open class ProfileManager(
     /**
      * Diese Methode erstellt ein neues Profil.
      */
-    fun createInitialProfile() {
+    fun createInitialProfile(name: String) {
 
         if(!profilesListRepo.profilesFileExists()) {
             profilesListRepo.createProfilesFile()
         }
-        currentProfile = profileRepo.create()
-        profilesListRepo.addProfile(currentProfile)
+        createProfile(name)
+    }
 
+    fun createProfile(name: String) {
+        check(profilesListRepo.profilesFileExists())
+
+        val id = profileRepo.getFreeId()
+        currentProfile = Profile(id, name)
+        currentProfile.assistances.setAssistance(Assistances.markRowColumn)
+        currentProfile.statistics[Statistics.fastestSolvingTime.ordinal] = INITIAL_TIME_RECORD
+        profileRepo.create(currentProfile)
+        profilesListRepo.addProfile(currentProfile)
     }
 
 
@@ -347,7 +341,7 @@ open class ProfileManager(
      * der einzutragende Wert
      */
     fun setStatistic(stat: Statistics, value: Int) {
-        statistics!![stat.ordinal] = value
+        statistics[stat.ordinal] = value
     }
 
     /**
@@ -360,9 +354,7 @@ open class ProfileManager(
      * @return Der Wert der spezifizierten Statistik als String, oder null falls
      * diese ungültig ist
      */
-    fun getStatistic(stat: Statistics?): Int {
-        return if (stat == null) -1 else statistics!![stat.ordinal]
-    }
+    fun getStatistic(stat: Statistics): Int = statistics[stat.ordinal]
 
     companion object {
         const val INITIAL_TIME_RECORD = 5999

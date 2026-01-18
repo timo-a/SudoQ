@@ -72,15 +72,14 @@ class SplashActivity : SudoqCompatActivity() {
         val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
         val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
         if (pm.noProfiles()) {
-            pm.initialize()
-            pm.name = getString(R.string.default_user_name)
+            pm.initialize(getString(R.string.default_user_name))
             pm.saveChanges()
         } else {
             pm.loadCurrentProfile()
         }
         //confirm that there is a profile
         val profileDir = pm.profilesDir
-        val filenames = profileDir!!.list()
+        val filenames = profileDir.list()
         Log.d("ProfileD", "onCreate: after init: ${filenames?.joinToString(", ")}")
         check(filenames != null && filenames.size >= 2) { "Too few files. initialization was not successful" }
 

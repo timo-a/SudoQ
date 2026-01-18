@@ -107,7 +107,7 @@ class PlayerPreferencesActivity : PreferencesActivity() {
                 }
             }
             if (newIndex != 0) newProfileName += newIndex
-            p.createAnotherProfile()
+            p.createAnotherProfile(newProfileName)
             name!!.setText(newProfileName)
         }
     }

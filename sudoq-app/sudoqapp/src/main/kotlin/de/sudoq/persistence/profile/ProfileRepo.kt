@@ -1,43 +1,22 @@
 package de.sudoq.persistence.profile
 
-import de.sudoq.model.game.Assistances
-import de.sudoq.model.game.GameSettings
-import de.sudoq.model.persistence.IRepo
+import de.sudoq.model.persistence.IProfileRepo
 import de.sudoq.model.persistence.xml.profile.IProfilesListRepo
 import de.sudoq.model.profile.Profile
-import de.sudoq.model.profile.ProfileManager
-import de.sudoq.model.profile.Statistics
 import de.sudoq.persistence.XmlHelper
 import de.sudoq.persistence.XmlTree
 import java.io.File
 import java.io.IOException
 
 
-class ProfileRepo(private val profilesDir: File) : IRepo<Profile> {
+class ProfileRepo(private val profilesDir: File) : IProfileRepo {
 
-    override fun create(): Profile {
+    override fun getFreeId(): Int = newProfileID
 
-        return create(newProfileID)
+    override fun create(profile: Profile) {
+        createProfileFiles(profile.id)
+        update(profile)
     }
-
-    private fun create(id: Int): Profile {
-
-        val newProfile = ProfileBE(id)
-        newProfile.name = ProfileManager.DEFAULT_PROFILE_NAME
-        newProfile.currentGame = -1
-        newProfile.assistances = GameSettings()
-        newProfile.assistances.setAssistance(Assistances.markRowColumn)
-        //		this.gameSettings.setGestures(false);
-        //this.appSettings.setDebug(false);
-        newProfile.statistics = IntArray(Statistics.values().size)
-        newProfile.statistics!![Statistics.fastestSolvingTime.ordinal] = ProfileManager.INITIAL_TIME_RECORD
-
-        createProfileFiles(id)
-        // save new profile xml
-        val profileReloaded = updateBE(newProfile)
-        return ProfileMapper.fromBE(profileReloaded)
-    }
-
 
     /**
      * Erstellt die Ordnerstruktur und nötige Dateien für das Profil mit der
@@ -46,7 +25,7 @@ class ProfileRepo(private val profilesDir: File) : IRepo<Profile> {
      * @param id
      * ID des Profils
      */
-    private fun createProfileFiles(id: Int) {
+    fun createProfileFiles(id: Int) {
         val profileDir = getProfileDirFor(id)
         profileDir.mkdir()
         File(profileDir, "games").mkdir()
@@ -142,10 +121,7 @@ class ProfileRepo(private val profilesDir: File) : IRepo<Profile> {
     private val newProfileID: Int
         get() {
             val used = getProfileIdsList()
-
-            var i = 1
-            while (used.contains(i)) i++
-            return i
+            return generateSequence(1) { it + 1 }.first { !used.contains(it) }
         }
 
 

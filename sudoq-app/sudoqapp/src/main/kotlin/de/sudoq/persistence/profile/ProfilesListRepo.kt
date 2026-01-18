@@ -10,16 +10,14 @@ import java.io.IOException
 
 class ProfilesListRepo(private val profilesDir: File) : IProfilesListRepo {
 //todo names and ids are redundant. just iterate through the profiles everytime?
+//what does this file relly provide, just "current profile"?
 
     override fun addProfile(newProfile: Profile) {
-        //todo move to repo
-        val newProfileID = newProfile.id
-
         // add into profiles.xml and save it
         val profiles = profilesXml
         val profileTree = XmlTree("profile")
         profileTree.addAttribute(XmlAttribute(ID, newProfile.id.toString()))
-        profileTree.addAttribute(XmlAttribute(NAME, newProfile.name!!))
+        profileTree.addAttribute(XmlAttribute(NAME, newProfile.name))
         profiles.addChild(profileTree)
         profiles.updateAttribute(XmlAttribute(CURRENT, newProfile.id.toString()))
         saveProfilesFile(profiles)
@@ -75,7 +73,7 @@ class ProfilesListRepo(private val profilesDir: File) : IProfilesListRepo {
         val profiles = profilesXml
         for (profile in profiles) {
             if (profile.getAttributeValue(ID)!!.toInt() == changedProfile.id) {
-                profile.updateAttribute(XmlAttribute(NAME, changedProfile.name!!))
+                profile.updateAttribute(XmlAttribute(NAME, changedProfile.name))
             }
         }
         saveProfilesFile(profiles)

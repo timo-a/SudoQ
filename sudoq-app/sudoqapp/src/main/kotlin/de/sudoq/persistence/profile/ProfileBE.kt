@@ -48,8 +48,8 @@ class ProfileBE(val id: Int) : Xmlable {
                 appSettings = AppSettingsMapper.fromBE(appSettingsBE)
             }
         }
-        statistics = IntArray(Statistics.values().size)
-        for (stat in Statistics.values()) {
+        statistics = IntArray(Statistics.entries.size)
+        for (stat in Statistics.entries) {
             statistics!![stat.ordinal] =
                 xmlTreeRepresentation.getAttributeValue(stat.name)!!.toInt()
         }
@@ -64,7 +64,7 @@ class ProfileBE(val id: Int) : Xmlable {
         representation.addAttribute(XmlAttribute("currentGame", currentGame.toString()))
         representation.addAttribute(XmlAttribute("name", name!!))
         representation.addChild(GameSettingsMapper.toBE(assistances).toXmlTree())
-        for (stat in Statistics.values()) {
+        for (stat in Statistics.entries) {
             representation.addAttribute(
                 XmlAttribute(
                     stat.name,
