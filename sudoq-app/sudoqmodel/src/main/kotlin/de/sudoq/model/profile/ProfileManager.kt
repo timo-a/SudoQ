@@ -296,16 +296,16 @@ open class ProfileManager(
      *
      * @return die Namensliste
      */
-    val profilesNameList: ArrayList<String> //todo change return type to just List<String>
-        get() = ArrayList(profilesListRepo.getProfileNamesList())
+    val profilesNameList: List<String>
+        get() = profilesListRepo.getProfileNamesList()
 
     /**
      * Gibt eine Integer Liste mit allen Profilids zurück.
      *
      * @return die Idliste
      */
-    val profilesIdList: ArrayList<Int> //todo change return type to just List<Int>
-        get() = ArrayList(profilesListRepo.getProfileIdsList())
+    val profilesIdList: List<Int>
+        get() = profilesListRepo.getProfileIdsList()
 
     /**
      * Setzt eine Assistance in den Preferences auf true oder false.
@@ -315,10 +315,11 @@ open class ProfileManager(
      * @param value
      * true um die Assistance anzuschalten, sonst false
      */
-    fun setAssistance(assistance: Assistances?, value: Boolean) {
-        if (value) assistances.setAssistance(assistance!!) else assistances.clearAssistance(
-            assistance!!
-        )
+    fun setAssistance(assistance: Assistances, value: Boolean) {
+        if (value)
+            assistances.setAssistance(assistance)
+        else
+            assistances.clearAssistance(assistance)
         // notifyListeners(this);
     }
 
@@ -334,10 +335,7 @@ open class ProfileManager(
      * @return boolean true, falls die spezifizierte Hilfestellung im aktuellen
      * Profil aktiviert ist, false falls sie es nicht oder ungültig ist
      */
-    fun getAssistance(asst: Assistances?): Boolean {
-        return assistances.getAssistance(asst!!)
-    }
-
+    fun getAssistance(asst: Assistances): Boolean = assistances.getAssistance(asst)
 
     /**
      * Setzt den Wert der gegebenen Statistik für dieses Profil auf den
@@ -348,8 +346,7 @@ open class ProfileManager(
      * @param value
      * der einzutragende Wert
      */
-    fun setStatistic(stat: Statistics?, value: Int) {
-        if (stat == null) return
+    fun setStatistic(stat: Statistics, value: Int) {
         statistics!![stat.ordinal] = value
     }
 

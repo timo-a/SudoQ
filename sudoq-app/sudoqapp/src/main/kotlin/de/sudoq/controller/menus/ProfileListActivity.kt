@@ -29,10 +29,10 @@ class ProfileListActivity : SudoqListActivity(), OnItemClickListener {
     /** Ein Array der Profil-Dateinamen der Form "Profile_ID", wobei ID der
      *  jeweiligen ID des Profils entspricht.
      */
-    private var profileIds: ArrayList<Int>? = null
+    private lateinit var profileIds: List<Int>
 
     /** Ein Array der Profilnamen */
-    private var profileNames: ArrayList<String>? = null
+    private lateinit var profileNames: List<String>
 
     /**
      * Wird beim ersten Start der Activity aufgerufen.
@@ -52,7 +52,6 @@ class ProfileListActivity : SudoqListActivity(), OnItemClickListener {
         pm.loadCurrentProfile()
         profileIds = pm.profilesIdList
         profileNames = pm.profilesNameList
-        Log.d(LOG_TAG, "Array length: " + pm.profilesNameList.size)
         val adapter = ArrayAdapter(this, R.layout.profilelist_item, pm.profilesNameList)
         listAdapter = adapter
         listView!!.onItemClickListener = this
@@ -71,8 +70,8 @@ class ProfileListActivity : SudoqListActivity(), OnItemClickListener {
      * ID der ausgewählten View
      */
     override fun onItemClick(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
-        val profileName = profileNames!![position]
-        val profileId = profileIds!![position]
+        val profileName = profileNames[position]
+        val profileId = profileIds[position]
         Log.d(LOG_TAG, "Clicked on name $profileName with id:$profileId")
         val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
         val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
