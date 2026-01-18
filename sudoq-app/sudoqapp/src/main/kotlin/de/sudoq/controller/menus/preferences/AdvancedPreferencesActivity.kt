@@ -93,7 +93,7 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
         languageSpinner.adapter = languageAdapter
 
         //set language
-        val languageCode = LanguageUtility.loadLanguageCodeFromPreferences(this)
+        val languageCode = LanguageUtility.loadAppLanguage()
         languageSpinner.setSelection(languageCode.ordinal)
         // nested Listener for languageSpinner
         languageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -107,27 +107,14 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
                 }
 
                 // If position is out of bounds set it to the system language index:
-                if (pos >= LanguageCode.values().size) {
-                    pos = LanguageCode.system.ordinal
+                if (pos >= LanguageCode.entries.size) {
+                    pos = LanguageCode.SYSTEM.ordinal
                 }
 
                 // Translate the position to enum language value:
-                val enumCode = LanguageCode.values()[pos]
+                val enumCode = LanguageCode.entries[pos]
 
-                // Store the chosen language setting to preferences:
-                LanguageUtility.saveLanguageCodeToPreferences(this@AdvancedPreferencesActivity, enumCode)
-
-                // Resolve the enum language if system:
-                var newLanguageCode = enumCode
-                if (newLanguageCode == LanguageCode.system) {
-                    // Either the real system language (if possible) or english will be applied here:
-                    newLanguageCode = LanguageUtility.resolveSystemLanguage()
-                }
-                // Apply the new language choice to the resources (regardless if it is the same):
-                LanguageUtility.setResourceLocale(this@AdvancedPreferencesActivity, newLanguageCode)
-
-                // Restart this activity (if required):
-                restartIfWrongLanguage()
+                LanguageUtility.setAppLanguage(enumCode)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {

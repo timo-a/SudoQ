@@ -20,8 +20,6 @@ import androidx.multidex.BuildConfig
 import dagger.hilt.android.AndroidEntryPoint
 import de.sudoq.R
 import de.sudoq.controller.SudoqCompatActivity
-import de.sudoq.controller.menus.preferences.LanguageCode
-import de.sudoq.controller.menus.preferences.LanguageUtility
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.sudoku.complexity.Complexity.Companion.playableValues
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
@@ -64,14 +62,6 @@ class SplashActivity : SudoqCompatActivity() {
         super.onCreate(savedInstanceState)
 
         splashScreen.setKeepOnScreenCondition { !isReady }
-
-        // Load the language setting from preferences:
-        val languageCode = LanguageUtility.loadLanguageCodeFromPreferences(this)
-        Log.i("SudoQLanguage", "Using language setting: $languageCode")
-        // If the desired language is not 'system' and not the current system language, update the resources (globally):
-        if (languageCode != LanguageCode.system && languageCode != LanguageUtility.resolveSystemLanguage()) {
-            LanguageUtility.setResourceLocale(this, languageCode)
-        }
 
         //confirm that there is a profile
         val profileDir = profileManager.profilesDir

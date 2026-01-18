@@ -23,7 +23,7 @@ import de.sudoq.controller.tutorial.TutorialActivity
  * Eine ListActivity, welche die für einwandfreie Funktionalität der SudoQ-App
  * notwendigen Initialisierungsarbeiten ausführt.
  */
-open class SudoqListActivity : LanguageAdaptingCompatActivity() {
+open class SudoqListActivity : AppCompatActivity() {
     private var mListView: ListView? = null
     protected val listView: ListView?
         protected get() {
