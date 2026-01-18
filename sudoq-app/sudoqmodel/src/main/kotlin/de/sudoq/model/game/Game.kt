@@ -386,7 +386,7 @@ class Game {
     }
 
     val isLefthandedModeActive: Boolean
-        get() = gameSettings!!.isLefthandModeSet
+        get() = gameSettings!!.isLeftHandModeSet
 
 
     /**

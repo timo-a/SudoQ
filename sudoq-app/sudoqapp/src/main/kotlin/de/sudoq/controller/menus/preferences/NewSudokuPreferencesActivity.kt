@@ -13,19 +13,17 @@ import android.util.Log
 import android.view.View
 import android.widget.CheckBox
 import androidx.appcompat.widget.Toolbar
+import dagger.hilt.android.AndroidEntryPoint
 import de.sudoq.R
 import de.sudoq.controller.menus.NewSudokuActivity
 import de.sudoq.controller.menus.preferences.AdvancedPreferencesActivity.ParentActivity
 import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.GameSettings
-import de.sudoq.model.profile.ProfileManager
-import de.sudoq.model.profile.ProfileSingleton.Companion.getInstance
-import de.sudoq.persistence.profile.ProfileRepo
-import de.sudoq.persistence.profile.ProfilesListRepo
 
 /**
  * Wird aufgerufen in Hauptmenü-> neues Sudoku -> einstellungen
  */
+@AndroidEntryPoint
 class NewSudokuPreferencesActivity : PreferencesActivity() {
     /* shortcut for NewSudokuActivity.gameSettings */
     var confSettings: GameSettings? = null
@@ -65,9 +63,7 @@ class NewSudokuPreferencesActivity : PreferencesActivity() {
         restrictCandidates!!.isChecked =
             confSettings!!.getAssistance(Assistances.restrictCandidates)
 
-        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
-        pm.registerListener(this)
+        profileManager.registerListener(this)
     }
 
     /**
@@ -87,17 +83,14 @@ class NewSudokuPreferencesActivity : PreferencesActivity() {
      * Saves currend state of buttons/checkboxes to gameSettings
      */
     override fun adjustValuesAndSave() {
-        confSettings!!.setGestures(gesture!!.isChecked)
+        confSettings!!.isGesturesSet = gesture!!.isChecked
         saveCheckbox(autoAdjustNotes!!, Assistances.autoAdjustNotes, confSettings!!)
         saveCheckbox(markRowColumn!!, Assistances.markRowColumn, confSettings!!)
         saveCheckbox(markWrongSymbol!!, Assistances.markWrongSymbol, confSettings!!)
         saveCheckbox(restrictCandidates!!, Assistances.restrictCandidates, confSettings!!)
         //confSettings.setHelper();
         //confSettings.setCrash();
-        //todo singleton not necessary
-        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val p = getInstance(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
-        p.saveChanges()
+        profileManager.saveChanges()
     }
 
     /**
@@ -111,18 +104,16 @@ class NewSudokuPreferencesActivity : PreferencesActivity() {
     }
 
     override fun saveToProfile() {
-        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val p = getInstance(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
-        p.isGestureActive = gesture!!.isChecked
+        profileManager.isGestureActive = gesture!!.isChecked
         saveAssistance(Assistances.autoAdjustNotes, autoAdjustNotes!!)
         saveAssistance(Assistances.markRowColumn, markRowColumn!!)
         saveAssistance(Assistances.markWrongSymbol, markWrongSymbol!!)
         saveAssistance(Assistances.restrictCandidates, restrictCandidates!!)
-        p.setHelperActive(confSettings!!.isHelperSet)
-        p.setLefthandActive(confSettings!!.isLefthandModeSet)
+        profileManager.setHelperActive(confSettings!!.isHelpersSet)
+        profileManager.setLefthandActive(confSettings!!.isLeftHandModeSet)
 
         //restrict types is automatically saved to profile...
-        p.saveChanges()
+        profileManager.saveChanges()
     }
 
     /* parameter View only needed to be foud by xml who clicks this*/

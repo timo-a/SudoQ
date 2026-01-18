@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import de.sudoq.model.Utility;
 import de.sudoq.model.ports.persistence.ReadRepo;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
-import de.sudoq.model.profile.ProfileSingleton;
 import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
@@ -22,7 +21,7 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 public class GameManagerTests {
 
 	static File profileDir = new File("/tmp/sudoq/GameManagerTests/profile");
-	static ProfileSingleton p;
+	//static ProfileSingleton p; todo use profileManager
 	private static File sudokuDir  = new File(Utility.RES + File.separator + "tmp_suds");
 
 	//this is a dummy so it compiles todo use xmls from resources

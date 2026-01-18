@@ -51,7 +51,6 @@ open class SudoqListActivity : LanguageAdaptingCompatActivity() {
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        System.setProperty("org.xml.sax.driver", "org.xmlpull.v1.sax2.Driver")
     }
 
     /**

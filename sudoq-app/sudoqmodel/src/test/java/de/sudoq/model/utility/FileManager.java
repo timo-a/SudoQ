@@ -11,7 +11,6 @@ package de.sudoq.model.utility;
 
 import java.io.File;
 
-import de.sudoq.model.profile.ProfileSingleton;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 
@@ -53,18 +52,6 @@ public final class FileManager {
 
 
     // Profiles todo move all to profileManager
-
-    // Games
-
-    /**
-     * Gibt die Spieleliste Datei des aktuellen Profils zurück
-     *
-     * @return das File welches auf die Spieleliste zeigt
-     */
-    public static File getGamesFile(ProfileSingleton p) {
-        File currentProfile = p.getCurrentProfileDir();
-        return new File(currentProfile, "games.xml");
-    }
 
     // Sudokus
 

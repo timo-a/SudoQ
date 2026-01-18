@@ -14,27 +14,26 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.appcompat.widget.Toolbar
+import dagger.hilt.android.AndroidEntryPoint
 import de.sudoq.R
 import de.sudoq.controller.menus.NewSudokuActivity
 import de.sudoq.model.game.GameSettings
-import de.sudoq.model.profile.ProfileManager
-import de.sudoq.persistence.profile.ProfileRepo
-import de.sudoq.persistence.profile.ProfilesListRepo
 
 /**
  * Activity um Profile zu bearbeiten und zu verwalten
  *
  */
+@AndroidEntryPoint
 class AdvancedPreferencesActivity : PreferencesActivity() {
     enum class ParentActivity {
         PROFILE, NEW_SUDOKU, NOT_SPECIFIED
     }
 
-    var lefthand: CheckBox? = null
+    lateinit var lefthand: CheckBox
 
     //    override var restricttypes: Button? = null
-    private var helper: CheckBox? = null
-    private var debug: CheckBox? = null
+    private lateinit var helper: CheckBox
+    private lateinit var debug: CheckBox
     private var debugCounter: Byte = 0
     private var langSpinnerInit = true
 
@@ -60,27 +59,23 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
         debug = findViewById<View>(R.id.checkbox_debug) as CheckBox
         //exporter      = (CheckBox) findViewById(R.id.checkbox_exportcrash_trigger);
         gameSettings = NewSudokuActivity.gameSettings
-        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
-        check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
-        pm.loadCurrentProfile()
-        val profileGameSettings = pm.assistances
+        val profileGameSettings = profileManager.assistances
         when (caller) {
             ParentActivity.NEW_SUDOKU -> {
-                debug!!.isChecked = pm.appSettings.isDebugSet
-                if (debug!!.isChecked) {
-                    debug!!.visibility = View.VISIBLE
+                debug.isChecked = profileManager.appSettings.isDebugSet
+                if (debug.isChecked) {
+                    debug.visibility = View.VISIBLE
                 }
-                helper!!.isChecked = gameSettings!!.isHelperSet
-                lefthand!!.isChecked = gameSettings!!.isLefthandModeSet
+                helper.isChecked = gameSettings!!.isHelpersSet
+                lefthand.isChecked = gameSettings!!.isLeftHandModeSet
             }
             ParentActivity.PROFILE, ParentActivity.NOT_SPECIFIED -> {
-                if (debug!!.isChecked) {
-                    debug!!.visibility = View.VISIBLE
+                if (debug.isChecked) {
+                    debug.visibility = View.VISIBLE
                 }
-                debug!!.isChecked = pm.appSettings.isDebugSet
-                helper!!.isChecked = profileGameSettings.isHelperSet
-                lefthand!!.isChecked = profileGameSettings.isLefthandModeSet
+                debug.isChecked = profileManager.appSettings.isDebugSet
+                helper.isChecked = profileGameSettings.isHelpersSet
+                lefthand.isChecked = profileGameSettings.isLeftHandModeSet
             }
         }
         //myCaller.restricttypes.setChecked(a.isreHelperSet());
@@ -147,7 +142,7 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
      */
     override fun refreshValues() {
         //myCaller.lefthand.setChecked(gameSettings.isLefthandModeSet());
-        //myCaller.helper.setChecked(  gameSettings.isHelperSet());
+        //myCaller.helper.setChecked(  gameSettings.isHelpersSet());
     }
 
     /**
@@ -172,7 +167,7 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
     fun count(view: View?) {
         debugCounter++
         if (debugCounter >= 10)
-            debug!!.visibility = View.VISIBLE
+            debug.visibility = View.VISIBLE
     }
 
     private fun askConfirmation(cb: CheckBox) {
@@ -192,14 +187,7 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
         when (caller) {
             ParentActivity.NEW_SUDOKU -> {
                 saveToGameSettings()
-                if (debug != null) {
-                    val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-                    val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir),
-                                            ProfilesListRepo(profilesDir))
-                    check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
-                    pm.loadCurrentProfile()
-                    pm.setDebugActive(debug!!.isChecked)
-                }
+                profileManager.setDebugActive(debug.isChecked)
             }
             ParentActivity.PROFILE -> saveToProfile()
             ParentActivity.NOT_SPECIFIED -> { /* do nothing */ }
@@ -207,23 +195,16 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
     }
 
     private fun saveToGameSettings() {
-        if (lefthand != null && helper != null) {
-            gameSettings!!.setLefthandMode(lefthand!!.isChecked)
-            gameSettings!!.setHelper(helper!!.isChecked)
-        }
+        gameSettings!!.isLeftHandModeSet = lefthand.isChecked
+        gameSettings!!.isHelpersSet = helper.isChecked
     }
 
     override fun saveToProfile() {
-        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir),
-                                ProfilesListRepo(profilesDir))
-        check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
-        pm.loadCurrentProfile()
-        if (debug != null) pm.setDebugActive(debug!!.isChecked)
-        if (helper != null) pm.setHelperActive(helper!!.isChecked)
-        if (lefthand != null) pm.setLefthandActive(lefthand!!.isChecked)
+        profileManager.setDebugActive(debug.isChecked)
+        profileManager.setHelperActive(helper.isChecked)
+        profileManager.setLefthandActive(lefthand.isChecked)
         //restrict types is automatically saved to profile...
-        pm.saveChanges()
+        profileManager.saveChanges()
     }
 
     // ///////////////////////////////////////optionsMenue

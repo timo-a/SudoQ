@@ -16,7 +16,6 @@ import de.sudoq.model.sudoku.SudokuManager
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
-import java.io.File
 import java.util.*
 
 /**
@@ -44,7 +43,6 @@ class GameManager(private var profile: ProfileManager,
         type: SudokuTypes,
         complexity: Complexity,
         assistances: GameSettings,
-        sudokuDir: File,
         sudokuRepoProvider: ISudokuRepoProvider
     ): Game {
         val sm = SudokuManager(sudokuTypeRepo, sudokuRepoProvider)

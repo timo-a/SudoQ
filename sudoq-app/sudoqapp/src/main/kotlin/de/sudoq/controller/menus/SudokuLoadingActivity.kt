@@ -23,38 +23,38 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import dagger.hilt.android.AndroidEntryPoint
 import de.sudoq.R
 import de.sudoq.controller.SudoqListActivity
 import de.sudoq.controller.sudoku.SudokuActivity
 import de.sudoq.model.game.GameData
 import de.sudoq.model.game.GameManager
-import de.sudoq.model.persistence.xml.game.IGamesListRepo
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.persistence.game.GameRepo
-import de.sudoq.persistence.game.GamesListRepo
-import de.sudoq.persistence.profile.ProfileRepo
-import de.sudoq.persistence.profile.ProfilesListRepo
-import de.sudoq.persistence.sudokuType.SudokuTypeRepo
 import java.io.*
 import java.nio.charset.Charset
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Diese Klasse repräsentiert den Lade-Controller des Sudokuspiels. Mithilfe von
  * SudokuLoading können Sudokus geladen werden und daraufhin zur SudokuActivity
  * gewechselt werden.
  */
+@AndroidEntryPoint
 class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLongClickListener {
     /** Attributes  */
-    private var profileManager: ProfileManager? = null
+    @Inject
+    lateinit var profileManager: ProfileManager
+
+    @Inject
+    lateinit var gameRepo: GameRepo
+
+    @Inject
+    lateinit var gameManager: GameManager
+
     private var adapter: SudokuLoadingAdapter? = null
     private var games: List<GameData>? = null
-
-
-    private lateinit var profilesDir: File
-    private lateinit var sudokuDir: File
-    private lateinit var sudokuTypeRepo: SudokuTypeRepo
-    private lateinit var gameManager: GameManager
 
     /*	protected static MenuItem menuDeleteFinished;
 	private static final int MENU_DELETE_FINISHED = 0;
@@ -75,29 +75,6 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        sudokuDir = getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE)
-        sudokuTypeRepo = SudokuTypeRepo(sudokuDir)
-        profileManager = ProfileManager(profilesDir, ProfileRepo(profilesDir),
-                                        ProfilesListRepo(profilesDir))
-
-
-        ///init params for game*repos
-        profileManager!!.loadCurrentProfile()
-        val gameRepo = GameRepo(
-            profileManager!!.profilesDir!!,
-            profileManager!!.currentProfileID,
-            sudokuTypeRepo)
-        val gamesFile = File(profileManager!!.currentProfileDir, "games.xml")
-
-        val gamesDir = File(profileManager!!.currentProfileDir, "games")
-        val gamesListRepo : IGamesListRepo = GamesListRepo(gamesDir, gamesFile)
-
-        gameManager = GameManager(profileManager!!, gameRepo, gamesListRepo, sudokuTypeRepo)
-
-        //needs to be called before setcontentview which calls onContentChanged
-        check(!profileManager!!.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
-        profileManager!!.loadCurrentProfile()
         setContentView(R.layout.sudokuloading)
 
         //toolbar
@@ -199,7 +176,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
     override fun onContentChanged() {
         super.onContentChanged()
         initialiseGames()
-        profileManager!!.currentGame = if (adapter!!.isEmpty) -1 else adapter!!.getItem(0)!!.id
+        profileManager.currentGame = if (adapter!!.isEmpty) -1 else adapter!!.getItem(0)!!.id
     }
 
     /**
@@ -219,7 +196,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
         Log.d(LOG_TAG, position.toString() + "")
         if (fabState == FabStates.INACTIVE) {
             /* selected in order to play */
-            profileManager!!.currentGame = adapter!!.getItem(position)!!.id
+            profileManager.currentGame = adapter!!.getItem(position)!!.id
             startActivity(Intent(this, SudokuActivity::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         } else {
@@ -244,21 +221,17 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
         } else {
             temp_items.add(getString(R.string.sudokuloading_dialog_play))
             temp_items.add(getString(R.string.sudokuloading_dialog_delete))
-            if (profileManager!!.appSettings.isDebugSet) {
+            if (profileManager.appSettings.isDebugSet) {
                 temp_items.add("export as text")
                 temp_items.add("export as file")
             }
         }
         val builder = AlertDialog.Builder(this)
-        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir),
-                                ProfilesListRepo(profilesDir))
-        val gameRepo = GameRepo(pm.profilesDir!!, pm.currentProfileID, sudokuTypeRepo)
         builder.setItems(temp_items.toTypedArray()) { dialog, item ->
             val gameID = adapter!!.getItem(position)!!.id
             when (item) {
                 0 -> { // play
-                    profileManager!!.currentGame = gameID
+                    profileManager.currentGame = gameID
                     val i = Intent(this@SudokuLoadingActivity, SudokuActivity::class.java)
                     startActivity(i)
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
@@ -340,7 +313,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
     private fun initialiseGames() {
         games = gameManager.gameList
         // initialize ArrayAdapter for the profile names and set it
-        adapter = SudokuLoadingAdapter(this, games!!)
+        adapter = SudokuLoadingAdapter(this, games!!, gameRepo)
         listAdapter = adapter
         listView!!.onItemClickListener = this
         listView!!.onItemLongClickListener = this

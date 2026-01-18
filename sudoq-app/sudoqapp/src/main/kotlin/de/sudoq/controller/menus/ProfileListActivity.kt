@@ -13,18 +13,22 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import de.sudoq.R
 import de.sudoq.controller.SudoqListActivity
 import de.sudoq.model.profile.ProfileManager
-import de.sudoq.persistence.profile.ProfileRepo
-import de.sudoq.persistence.profile.ProfilesListRepo
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Diese Klasse stellt eine Acitivity zur Anzeige und Auswahl von
  * Spielerprofilen dar.
  */
+@AndroidEntryPoint
 class ProfileListActivity : SudoqListActivity(), OnItemClickListener {
+
+    @Inject
+    lateinit var profileManager: ProfileManager
 
     /** Ein Array der Profil-Dateinamen der Form "Profile_ID", wobei ID der
      *  jeweiligen ID des Profils entspricht.
@@ -45,14 +49,9 @@ class ProfileListActivity : SudoqListActivity(), OnItemClickListener {
         setContentView(R.layout.profilelist)
         this.title = this.getString(R.string.action_switch_profile)
 
-        //todo make class variable
-        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
-        check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
-        pm.loadCurrentProfile()
-        profileIds = pm.profilesIdList
-        profileNames = pm.profilesNameList
-        val adapter = ArrayAdapter(this, R.layout.profilelist_item, pm.profilesNameList)
+        profileIds = profileManager.profilesIdList
+        profileNames = profileManager.profilesNameList
+        val adapter = ArrayAdapter(this, R.layout.profilelist_item, profileManager.profilesNameList)
         listAdapter = adapter
         listView!!.onItemClickListener = this
     }
@@ -73,11 +72,7 @@ class ProfileListActivity : SudoqListActivity(), OnItemClickListener {
         val profileName = profileNames[position]
         val profileId = profileIds[position]
         Log.d(LOG_TAG, "Clicked on name $profileName with id:$profileId")
-        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
-        check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
-        pm.loadCurrentProfile()
-        pm.changeProfile(profileId)
+        profileManager.changeProfile(profileId)
         finish()
     }
 

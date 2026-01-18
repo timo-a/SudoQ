@@ -7,18 +7,14 @@
  */
 package de.sudoq.controller.sudoku
 
-import android.content.Context
-import de.sudoq.R
 import de.sudoq.model.actionTree.Action
 import de.sudoq.model.actionTree.NoteActionFactory
 import de.sudoq.model.actionTree.SolveActionFactory
 import de.sudoq.model.game.Game
-import de.sudoq.model.profile.ProfileSingleton
+import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.profile.Statistics
 import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.complexity.Complexity
-import de.sudoq.persistence.profile.ProfileRepo
-import de.sudoq.persistence.profile.ProfilesListRepo
 
 /**
  * Der SudokuController ist dafür zuständig auf Aktionen des Benutzers mit dem
@@ -28,7 +24,8 @@ class SudokuController(
     /** Hält eine Referenz auf das Game, welches Daten über das aktuelle Spiel enthält */
     private val game: Game,
     /** Die SudokuActivity. */
-    private val context: SudokuActivity
+    private val context: SudokuActivity,
+    private val profileManager: ProfileManager
 ) : AssistanceRequestListener, ActionListener {
 
     /**
@@ -160,27 +157,15 @@ class SudokuController(
             Complexity.arbitrary -> throw IllegalStateException("unexpected complexity value: 'arbitrary'")
         }
         incrementStatistic(Statistics.playedSudokus)
-        val profilesDir = context.getDir(
-            context.getString(R.string.path_rel_profiles),
-            Context.MODE_PRIVATE
-        )
-        val p = ProfileSingleton.getInstance(profilesDir, ProfileRepo(profilesDir),
-                                             ProfilesListRepo(profilesDir))
-        if (p.getStatistic(Statistics.fastestSolvingTime) > game.time) {
-            p.setStatistic(Statistics.fastestSolvingTime, game.time)
+        if (profileManager.getStatistic(Statistics.fastestSolvingTime) > game.time) {
+            profileManager.setStatistic(Statistics.fastestSolvingTime, game.time)
         }
-        if (p.getStatistic(Statistics.maximumPoints) < game.score) {
-            p.setStatistic(Statistics.maximumPoints, game.score)
+        if (profileManager.getStatistic(Statistics.maximumPoints) < game.score) {
+            profileManager.setStatistic(Statistics.maximumPoints, game.score)
         }
     }
 
     private fun incrementStatistic(s: Statistics) { //TODO this should probably be in model...
-        val profilesDir = context.getDir(
-            context.getString(R.string.path_rel_profiles),
-            Context.MODE_PRIVATE
-        )
-        val p = ProfileSingleton.getInstance(profilesDir, ProfileRepo(profilesDir),
-                                             ProfilesListRepo(profilesDir))
-        p.setStatistic(s, p.getStatistic(s) + 1)
+        profileManager.setStatistic(s, profileManager.getStatistic(s) + 1)
     }
 }

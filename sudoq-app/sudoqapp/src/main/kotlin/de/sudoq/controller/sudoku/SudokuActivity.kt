@@ -26,6 +26,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import dagger.hilt.android.AndroidEntryPoint
 import de.sudoq.R
 import de.sudoq.controller.SudoqCompatActivity
 import de.sudoq.controller.menus.Utility
@@ -39,19 +40,16 @@ import de.sudoq.model.actionTree.SolveAction
 import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.Game
 import de.sudoq.model.game.GameManager
-import de.sudoq.model.persistence.xml.game.IGamesListRepo
-import de.sudoq.model.profile.ProfileSingleton
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Position
 import de.sudoq.persistence.game.GameRepo
-import de.sudoq.persistence.game.GamesListRepo
-import de.sudoq.persistence.profile.ProfileRepo
-import de.sudoq.persistence.profile.ProfilesListRepo
-import de.sudoq.persistence.sudokuType.SudokuTypeRepo
 import de.sudoq.view.*
 import java.io.*
+import javax.inject.Inject
 import kotlin.math.abs
+import java.time.Duration
+import java.util.concurrent.TimeUnit
 
 /**
  * Diese Klasse stellt die Activity des Sudokuspiels dar. Die Klasse hält das
@@ -59,14 +57,18 @@ import kotlin.math.abs
  * Spielfeld zu reagieren. Die Klasse wird außerdem benutzt um zu verwalten,
  * welche Navigationselemente dem Nutzer angezeigt werden.
  */
+@AndroidEntryPoint
 class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListener,
     ActionTreeNavListener {
 
-    private lateinit var profilesFile: File
-    private lateinit var sudokuFile: File
+    @Inject
+    lateinit var profileManager: ProfileManager
 
-    private lateinit var sudokuTypeRepo: SudokuTypeRepo
-    private lateinit var gameManager: GameManager
+    @Inject
+    lateinit var gameRepo: GameRepo
+
+    @Inject
+    lateinit var gameManager: GameManager
 
     /**
      * Eine Referenz auf einen ActionTreeController, der die Verwaltung der
@@ -183,24 +185,6 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
         super.onCreate(savedInstanceState)
         Log.d(LOG_TAG, "Created")
 
-        profilesFile = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        sudokuFile = getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE)
-        sudokuTypeRepo = SudokuTypeRepo(sudokuFile)
-        val pm = ProfileManager(profilesFile, ProfileRepo(profilesFile),
-                                ProfilesListRepo(profilesFile))
-        ///init params for game*repos
-        pm.loadCurrentProfile()
-        //todo: pass externally initialized object to constructor
-        val gameRepo = GameRepo(
-            pm.profilesDir,
-            pm.currentProfileID,
-            sudokuTypeRepo)
-        val gamesFile = File(pm.currentProfileDir, "games.xml")
-        val gamesDir = File(pm.currentProfileDir, "games")
-
-        val gamesListRepo : IGamesListRepo = GamesListRepo(gamesDir, gamesFile)
-        gameManager = GameManager(pm, gameRepo, gamesListRepo, sudokuTypeRepo)
-
         // Load the Game by using current game id
         if (savedInstanceState != null) {
             try {
@@ -209,8 +193,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
                 finish()
             }
         } else {
-            pm.loadCurrentProfile()
-            game = gameManager.load(pm.currentGame)
+            game = gameManager.load(profileManager.currentGame)
         }
 
         if (game != null) {
@@ -221,7 +204,8 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
             val toolbar =
                 findViewById<Toolbar>(R.id.toolbar) //TODO subclass and put time, ... in it
             setSupportActionBar(toolbar)
-            sudokuController = SudokuController(game!!, this)
+            //todo the controller only needs the current profile, which is fix for the current game, but profilemanager does not give it out. does profilemanager need to wrap the profile?
+            sudokuController = SudokuController(game!!, this, profileManager)
             actionTreeController = ActionTreeController(this)
             Log.d(LOG_TAG, "Initialized")
             inflateViewAndButtons()
@@ -237,7 +221,8 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
                 sudokuLayout,
                 game,
                 gestureOverlay,
-                gestureStore
+                gestureStore,
+                profileManager
             )
             mediator!!.registerListener(sudokuController!!)
             mediator!!.registerListener(this)
@@ -267,9 +252,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
             }
             setTypeText()
             updateButtons()
-            val p = ProfileSingleton.getInstance(profilesFile, ProfileRepo(profilesFile),
-                                                 ProfilesListRepo(profilesFile))
-            panel!!.gestureButton!!.isSelected = p.isGestureActive
+            panel!!.gestureButton!!.isSelected = profileManager.isGestureActive
         }
     }
 
@@ -397,10 +380,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
      * Hinweise angezeigt werden sollen
      */
     private fun inflateGestures(firstStart: Boolean) {
-        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val p = ProfileSingleton.getInstance(profilesDir, ProfileRepo(profilesDir),
-                                             ProfilesListRepo(profilesDir))
-        val gestureFile = p.getCurrentGestureFile()
+        val gestureFile = profileManager.getCurrentGestureFile()
         try {
             val fis = FileInputStream(gestureFile)
             gestureStore.load(fis)
@@ -413,13 +393,13 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
                 Log.w(LOG_TAG, "Gesture file cannot be loaded!")
             }
         } catch (e: IOException) {
-            p.isGestureActive = false
+            profileManager.isGestureActive = false
             Toast.makeText(this, R.string.error_gestures_no_library, Toast.LENGTH_SHORT).show()
         }
-        if (firstStart && p.isGestureActive) {
+        if (firstStart && profileManager.isGestureActive) {
             val allGesturesSet = checkGesture()
             if (!allGesturesSet) {
-                p.isGestureActive = false
+                profileManager.isGestureActive = false
                 Toast.makeText(
                     this,
                     getString(R.string.error_gestures_not_complete),
@@ -496,8 +476,6 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
      * gelangt.
      */
     public override fun onPause() {
-        val p = ProfileSingleton.getInstance(profilesFile, ProfileRepo(profilesFile),
-                                             ProfilesListRepo(profilesFile))
         timeHandler.removeCallbacks(timeUpdate)
         //gameid = 1
         gameManager.save(game!!)
@@ -516,8 +494,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
         val sudokuCapture = sudokuLayout!!.drawingCache
         try {
             if (sudokuCapture != null) {
-                val gameRepo = GameRepo(p.profilesDir!!, p.currentProfileID, sudokuTypeRepo)
-                val thumbnail = gameRepo.getGameThumbnailFile(p.currentGame)
+                val thumbnail = gameRepo.getGameThumbnailFile(profileManager.currentGame)
                 sudokuCapture.compress(CompressFormat.PNG, 100, FileOutputStream(thumbnail))
             } else {
                 Log.d(LOG_TAG, getString(R.string.error_thumbnail_get))
@@ -527,8 +504,8 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
         }
         sudokuScrollView!!.zoomFactor = prevZoomFactor
         if (finished) {
-            p.currentGame = ProfileManager.NO_GAME
-            p.saveChanges()
+            profileManager.currentGame = ProfileManager.NO_GAME
+            profileManager.saveChanges()
         }
         super.onPause()
     }
@@ -680,7 +657,6 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
      * Das Update-Runnable für die Zeit
      */
     private val timeUpdate: Runnable = object : Runnable {
-        private val offset = StringBuilder()
         override fun run() {
             game!!.addTime(1)
 
@@ -690,23 +666,19 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
 
 
             /* for easy formatting, we display both: time and penalty on one element separated by \n
-			 * this is not  perfect since we padd with whitespace and the font is not 'mono-style'(=not all letters same width)
+			 * this is not  perfect since we pad with whitespace and the font is not 'mono-style'(=not all letters same width)
 			 * solution would be: create custom xml for action bar, but as of now I see no way how to make this easy.
 			 * to save computing time we cache the offset*/
             var time = gameTimeString
-            var penealty = " (+ $assistancesTimeString)"
-            val d = time.length - penealty.length
-            while (offset.length > abs(d)) {
-                offset.setLength(offset.length - 1)
+            var penalty = " (+ $assistancesTimeString)"
+            if (time.length > penalty.length) {
+                penalty.padStart(time.length - penalty.length, ' ')
+            } else if (time.length < penalty.length){
+                time.padStart(penalty.length - time.length, ' ')
             }
-            while (offset.length < abs(d)) {
-                offset.append(' ')
-            }
-            if (d > 0) penealty = offset.toString() + penealty
-            if (d < 0) time = offset.toString() + time
             timeView.text = """
                 $time
-                $penealty
+                $penalty
                 """.trimIndent()
             timeHandler.postDelayed(this, 1000)
         }
@@ -836,20 +808,17 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
          * @return a string representing the specified time in format "D..D HH:mm:ss"
          */
         @JvmStatic
-        fun getTimeString(time: Int): String {
-            var time = time
-            val seconds = time % 60
-            time /= 60
-            val minutes = time % 60
-            time /= 60
-            val hours = time % 24
-            time /= 24
-            val days = time
-            val pattern = StringBuilder()
-            if (days > 0) pattern.append(days).append(" ")
-            if (hours > 0) pattern.append(String.format("%02d:", hours))
-            pattern.append(String.format("%02d:%02d", minutes, seconds))
-            return pattern.toString()
+        fun getTimeString(timeInSeconds: Int): String {
+            val duration = timeInSeconds.toLong()
+            val days = TimeUnit.SECONDS.toDays(duration)
+            val hours = TimeUnit.SECONDS.toHours(duration) % 24
+            val minutes = TimeUnit.SECONDS.toMinutes(duration) % 60
+            val seconds = duration % 60
+            return when {
+                days  > 0 -> "%d %02d:%02d:%02d".format(days, hours, minutes, seconds)
+                hours > 0 ->      "%d:%02d:%02d".format(      hours, minutes, seconds)
+                else      ->         "%02d:%02d".format(             minutes, seconds)
+            }
         }
     }
 }

@@ -11,28 +11,28 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import dagger.hilt.android.AndroidEntryPoint
 import de.sudoq.R
 import de.sudoq.controller.SudoqCompatActivity
 import de.sudoq.controller.sudoku.SudokuActivity.Companion.getTimeString
-import de.sudoq.model.profile.ProfileSingleton
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.profile.Statistics
-import de.sudoq.persistence.profile.ProfileRepo
-import de.sudoq.persistence.profile.ProfilesListRepo
+import javax.inject.Inject
 
 /**
  * Diese Klasse stellt eine Activity zur Anzeige der Statisik des aktuellen
  * Spielerprofils dar.
  */
+@AndroidEntryPoint
 class StatisticsActivity : SudoqCompatActivity() {
+
+    @Inject
+    lateinit var profileManager: ProfileManager
+
     /** Methods  */
     private fun setScore(textViewID: Int, label: Int, statLabel: Statistics) {
         val current = findViewById<View>(textViewID) as TextView
-        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
-        check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
-        pm.loadCurrentProfile()
-        current.text = "${getString(label)}: ${pm.getStatistic(statLabel)}"
+        current.text = "${getString(label)}: ${profileManager.getStatistic(statLabel)}"
     }
 
     /**
@@ -74,11 +74,7 @@ class StatisticsActivity : SudoqCompatActivity() {
         )
         setScore(R.id.text_score, R.string.statistics_score, Statistics.maximumPoints)
         val current = findViewById<View>(R.id.text_fastest_solving_time) as TextView
-        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
-        check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
-        pm.loadCurrentProfile()
-        val timeRecordInSecs = pm.getStatistic(Statistics.fastestSolvingTime)
+        val timeRecordInSecs = profileManager.getStatistic(Statistics.fastestSolvingTime)
         var timeString = "---"
         if (timeRecordInSecs != ProfileManager.INITIAL_TIME_RECORD) {
             timeString = getTimeString(timeRecordInSecs)

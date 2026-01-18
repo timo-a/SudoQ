@@ -18,14 +18,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
 import de.sudoq.R
 import de.sudoq.model.game.GameData
 import de.sudoq.persistence.game.GameRepo
-import de.sudoq.model.profile.ProfileManager
-import de.sudoq.persistence.profile.ProfileRepo
-import de.sudoq.persistence.profile.ProfilesListRepo
-import de.sudoq.persistence.sudokuType.SudokuTypeRepo
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.text.SimpleDateFormat
@@ -36,14 +31,12 @@ import java.util.*
  *
  * @property @param games die Liste der games
  */
-class SudokuLoadingAdapter(context: Context, private val gameDatas: List<GameData>) :
-    ArrayAdapter<GameData?>(context, R.layout.sudokuloadingitem, gameDatas) {
+class SudokuLoadingAdapter(
+    context: Context,
+    private val gameDatas: List<GameData>,
+    private val gameRepo: GameRepo
+) : ArrayAdapter<GameData?>(context, R.layout.sudokuloadingitem, gameDatas) {
     //todo make non nullable
-
-    private val profilesDir = context.getDir(context.getString(R.string.path_rel_profiles), AppCompatActivity.MODE_PRIVATE)
-    private val sudokuDir = context.getDir(context.getString(R.string.path_rel_sudokus), AppCompatActivity.MODE_PRIVATE)
-    private val sudokuTypeRepo = SudokuTypeRepo(sudokuDir)
-
 
     /**
      * {@inheritDoc}
@@ -56,9 +49,6 @@ class SudokuLoadingAdapter(context: Context, private val gameDatas: List<GameDat
         val sudokuComplexity = rowView.findViewById<View>(R.id.complexity_label) as TextView
         val sudokuTime = rowView.findViewById<View>(R.id.time_label) as TextView
         val sudokuState = rowView.findViewById<View>(R.id.state_label) as TextView
-        val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
-        pm.loadCurrentProfile()
-        val gameRepo = GameRepo(pm.profilesDir!!, pm.currentProfileID, sudokuTypeRepo)
         val currentThumbnailFile = gameRepo.getGameThumbnailFile(gameDatas[position].id)
         try {
             val currentThumbnailBitmap =

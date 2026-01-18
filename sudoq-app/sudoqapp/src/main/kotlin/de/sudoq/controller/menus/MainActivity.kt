@@ -13,29 +13,28 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.widget.Toolbar
+import dagger.hilt.android.AndroidEntryPoint
 import de.sudoq.R
 import de.sudoq.controller.SudoqCompatActivity
 import de.sudoq.controller.menus.preferences.PlayerPreferencesActivity
 import de.sudoq.controller.sudoku.SudokuActivity
 import de.sudoq.model.profile.ProfileManager
-import de.sudoq.persistence.profile.ProfileRepo
-import de.sudoq.persistence.profile.ProfilesListRepo
-import java.io.File
+import javax.inject.Inject
 
 /**
  * Verwaltet das Hauptmenü der App.
  */
+@AndroidEntryPoint
 class MainActivity : SudoqCompatActivity() {
-    private lateinit var profilesFile: File
-    private lateinit var sudokuFile: File
+
+    @Inject
+    lateinit var profileManager: ProfileManager
 
     /**
      * Wird beim ersten Anzeigen des Hauptmenüs aufgerufen. Inflated das Layout.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        profilesFile = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        sudokuFile = getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE)
         //Toast.makeText(this, "onCreate", Toast.LENGTH_LONG).show();
         setContentView(R.layout.mainmenu)
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
@@ -54,11 +53,8 @@ class MainActivity : SudoqCompatActivity() {
     public override fun onResume() {
         super.onResume()
         //Toast.makeText(this, "onResume", Toast.LENGTH_LONG).show();
-        val pm = ProfileManager(profilesFile, ProfileRepo(profilesFile), ProfilesListRepo(profilesFile))
-        check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
-        pm.loadCurrentProfile()
         val continueButton = findViewById<View>(R.id.button_mainmenu_continue) as Button
-        continueButton.isEnabled = pm.currentGame > ProfileManager.NO_GAME
+        continueButton.isEnabled = profileManager.currentGame > ProfileManager.NO_GAME
 
         val loadButton = findViewById<View>(R.id.button_mainmenu_load_sudoku) as Button
         //loadButton.setEnabled(!gm.getGameList().isEmpty());
