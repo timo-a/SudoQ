@@ -13,9 +13,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import de.sudoq.R
 import de.sudoq.model.game.Game
-import de.sudoq.model.profile.ProfileSingleton
-import de.sudoq.persistence.profile.ProfileRepo
-import de.sudoq.persistence.profile.ProfilesListRepo
+import de.sudoq.model.profile.ProfileManager
 import de.sudoq.view.SudokuLayout
 
 /**
@@ -26,12 +24,15 @@ class ControlPanelFragment : Fragment() {
     private lateinit var sl: SudokuLayout
     private lateinit var game: Game
     private lateinit var controller: SudokuController
+    private lateinit var profileManager: ProfileManager
+
 
     fun initialize() {
         activity = getActivity() as SudokuActivity
         sl = activity.sudokuLayout!!
         game = activity.game!!
         controller = activity.sudokuController!!
+        profileManager = activity.profileManager
     }
 
     override fun onCreateView(
@@ -138,8 +139,7 @@ class ControlPanelFragment : Fragment() {
                 Context.MODE_PRIVATE
             )
 
-            val profile = ProfileSingleton.getInstance(profilesDir, ProfileRepo(profilesDir),
-                                                       ProfilesListRepo(profilesDir))
+            val profile = profileManager
             if (activity.checkGesture()) {
                 /* toggle 'gesture active'
 				 * toggle button icon as well */

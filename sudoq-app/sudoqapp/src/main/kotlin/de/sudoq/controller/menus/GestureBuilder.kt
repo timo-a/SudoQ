@@ -18,6 +18,7 @@ import android.view.*
 import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
+import dagger.hilt.android.AndroidEntryPoint
 import de.sudoq.R
 import de.sudoq.controller.SudoqCompatActivity
 import de.sudoq.controller.sudoku.InputListener
@@ -27,19 +28,22 @@ import de.sudoq.controller.sudoku.Symbol.Companion.getInstance
 import de.sudoq.controller.sudoku.board.CellViewPainter.Companion.instance
 import de.sudoq.controller.sudoku.board.CellViewStates
 import de.sudoq.model.profile.ProfileManager
-import de.sudoq.persistence.profile.ProfileRepo
-import de.sudoq.persistence.profile.ProfilesListRepo
 import de.sudoq.view.VirtualKeyboardLayout
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
+import javax.inject.Inject
 
 /**
  * Der GestureBuilder gestattet es dem Benutzer selber Gesten für die Benutzung im Spiel zu definieren, das ermöglicht eine wesentlich höhere Erkennungsrate als mitgelieferte Gesten.
  * @author Anrion
  */
+@AndroidEntryPoint
 class GestureBuilder : SudoqCompatActivity(), OnGesturePerformedListener, InputListener {
+
+    @Inject
+    lateinit var profileManager: ProfileManager
 
     /**
      * Fängt Gesteneingaben des Benutzers ab
@@ -90,9 +94,7 @@ class GestureBuilder : SudoqCompatActivity(), OnGesturePerformedListener, InputL
      * Erzeugt die View für die Gesteneingabe
      */
     private fun inflateGestures() {
-        val profileDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val pm = ProfileManager(profileDir, ProfileRepo(profileDir), ProfilesListRepo(profileDir))
-        val gestureFile = pm.getCurrentGestureFile()
+        val gestureFile = profileManager.getCurrentGestureFile()
         try {
             gestureStore.load(FileInputStream(gestureFile))
         } catch (e: FileNotFoundException) {
@@ -102,9 +104,7 @@ class GestureBuilder : SudoqCompatActivity(), OnGesturePerformedListener, InputL
                 Log.w(LOG_TAG, "Gesture file cannot be loaded!")
             }
         } catch (e: IOException) {
-            check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
-            pm.loadCurrentProfile()
-            pm.isGestureActive = false
+            profileManager.isGestureActive = false
             Toast.makeText(this, R.string.error_gestures_no_library, Toast.LENGTH_SHORT).show()
         }
         gestureOverlay = GestureOverlayView(this)
@@ -149,15 +149,11 @@ class GestureBuilder : SudoqCompatActivity(), OnGesturePerformedListener, InputL
      * Speichert den aktuellen Satz an Gesten om Profile Ordner des aktuellen Benutzers
      */
     private fun saveGestures() {
-        val profileDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val pm = ProfileManager(profileDir, ProfileRepo(profileDir), ProfilesListRepo(profileDir))
-        val gestureFile = pm.getCurrentGestureFile()
+        val gestureFile = profileManager.getCurrentGestureFile()
         try {
             gestureStore.save(FileOutputStream(gestureFile))
         } catch (e: IOException) {
-            check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
-            pm.loadCurrentProfile()
-            pm.isGestureActive = false
+            profileManager.isGestureActive = false
             Toast.makeText(this, R.string.error_gestures_no_library, Toast.LENGTH_SHORT).show()
         }
     }

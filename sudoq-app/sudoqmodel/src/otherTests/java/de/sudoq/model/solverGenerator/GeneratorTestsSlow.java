@@ -13,7 +13,6 @@
 //
 //import de.sudoq.model.Utility;
 //import de.sudoq.model.files.FileManager;
-//import de.sudoq.model.profile.ProfileSingleton;
 //import de.sudoq.model.solverGenerator.solution.Solution;
 //import de.sudoq.model.solverGenerator.solver.ComplexityRelation;
 //import de.sudoq.model.solverGenerator.solver.Solver;
@@ -32,7 +31,7 @@
 //	@BeforeClass
 //	public static void init() throws IOException {
 //		Utility.copySudokus();
-//		ProfileSingleton.getInstance();
+//		ProfileSingleton.getInstance(); todo use profilemanager
 //	}
 //
 //	@AfterClass

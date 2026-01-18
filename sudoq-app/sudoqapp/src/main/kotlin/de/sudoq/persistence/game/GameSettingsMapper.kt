@@ -8,8 +8,8 @@ object GameSettingsMapper {
     fun toBE(gs: GameSettings): GameSettingsBE {
         return GameSettingsBE(
             gs.assistances,
-            gs.isLefthandModeSet,
-            gs.isHelperSet,
+            gs.isLeftHandModeSet,
+            gs.isHelpersSet,
             gs.isGesturesSet,
             SudokuTypesListBE(gs.wantedTypesList)
         )

@@ -26,9 +26,6 @@ open class SudoqCompatActivity : LanguageAdaptingCompatActivity() {
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        System.setProperty("org.xml.sax.driver", "org.xmlpull.v1.sax2.Driver")
-        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val sudokusDir = getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE)
     }
 
     /**

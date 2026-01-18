@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import dagger.hilt.android.AndroidEntryPoint
 import de.sudoq.R
 import de.sudoq.controller.SudoqCompatActivity
 import de.sudoq.controller.menus.preferences.NewSudokuPreferencesActivity
@@ -25,20 +26,10 @@ import de.sudoq.controller.sudoku.SudokuActivity
 import de.sudoq.model.game.GameManager
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.profile.ProfileManager
-import de.sudoq.model.persistence.xml.game.IGamesListRepo
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
-import de.sudoq.persistence.sudoku.sudokuTypes.SudokuTypesListBE
-import de.sudoq.persistence.game.GameRepo
-import de.sudoq.persistence.game.GameSettingsBE
-import de.sudoq.persistence.game.GameSettingsMapper
-import de.sudoq.persistence.game.GamesListRepo
-import de.sudoq.persistence.profile.ProfileRepo
-import de.sudoq.persistence.profile.ProfilesListRepo
 import de.sudoq.persistence.sudoku.SudokuRepoProvider
-import de.sudoq.persistence.sudokuType.SudokuTypeRepo
-import java.io.File
-import java.util.*
+import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 /**
@@ -47,10 +38,20 @@ import kotlin.collections.ArrayList
  *
  * Hauptmenü -> "neues Sudoku" führt hierher
  */
+@AndroidEntryPoint
 class NewSudokuActivity : SudoqCompatActivity() {
 
+    @Inject
+    lateinit var profileManager: ProfileManager
+
+    @Inject
+    lateinit var gameManager: GameManager
+
+    @Inject
+    lateinit var sudokuRepoProvider: SudokuRepoProvider
+
     private var sudokuType: SudokuTypes? = null
-    private var complexity: Complexity? = null
+    private lateinit var complexity: Complexity
 
     /**
      * Wird beim ersten Aufruf der SudokuPreferences aufgerufen. Die Methode
@@ -69,14 +70,7 @@ class NewSudokuActivity : SudoqCompatActivity() {
         ab.setTitle(R.string.sf_sudokupreferences_title)
 
         //for initial settings-values from Profile
-        val profileDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val pm = ProfileManager(profileDir, ProfileRepo(profileDir), ProfilesListRepo(profileDir))
-        check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
-        pm.loadCurrentProfile()
-        val xt = GameSettingsMapper.toBE(pm.assistances).toXmlTree()
-        val gameSettingsBE = GameSettingsBE()
-        gameSettingsBE.fillFromXml(xt)
-        gameSettings = GameSettingsMapper.fromBE(gameSettingsBE)
+        gameSettings = profileManager.assistances.copy()
 
         /** complexity spinner  */
         val complexitySpinner = findViewById<View>(R.id.spinner_sudokucomplexity) as Spinner
@@ -91,7 +85,9 @@ class NewSudokuActivity : SudoqCompatActivity() {
         // nested Listener for complexitySpinner
         complexitySpinner.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-                setSudokuDifficulty(Complexity.values()[pos])
+                complexity = Complexity.entries[pos].also {
+                    Log.d("gameSettings", "complexity changed to:$it")
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -143,11 +139,7 @@ class NewSudokuActivity : SudoqCompatActivity() {
             val sae = StringAndEnum(Utility.type2string(this, st)!!, st)
             wantedSudokuTypes.add(sae)
         }
-        wantedSudokuTypes.sortWith { o1, o2 ->
-            SudokuTypeOrder.getKey(o1.enum) - SudokuTypeOrder.getKey(
-                o2.enum
-            )
-        }
+        wantedSudokuTypes.sortBy { SudokuTypeOrder.getKey(it.enum) }
         Log.d(LOG_TAG, "Sudokutype_1: $sudokuType")
         val typeAdapter =
             ArrayAdapter(this, android.R.layout.simple_spinner_item, wantedSudokuTypes)
@@ -186,37 +178,13 @@ class NewSudokuActivity : SudoqCompatActivity() {
      * von android xml übergebene View
      */
     fun startGame(view: View?) {
-        if (sudokuType != null && complexity != null && gameSettings != null) {
+        if (sudokuType != null && gameSettings != null) {
             try {
-                val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-                val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir),
-                                        ProfilesListRepo(profilesDir))
-                val sudokuDir = getDir(getString(R.string.path_rel_sudokus), MODE_PRIVATE)
-
-                ///init params for game*repos
-                pm.loadCurrentProfile()
-                val sudokuTypeRepo = SudokuTypeRepo(sudokuDir)
-                val gameRepo = GameRepo(
-                    pm.profilesDir!!,
-                    pm.currentProfileID,
-                    sudokuTypeRepo)
-                val gamesFile = File(pm.currentProfileDir, "games.xml")
-
-                val gamesDir = File(pm.currentProfileDir, "games")
-                val gamesListRepo : IGamesListRepo = GamesListRepo(gamesDir, gamesFile)
-
                 ///
-                val gm = GameManager(pm, gameRepo, gamesListRepo, sudokuTypeRepo)
-                val SudokuRepoProvider = SudokuRepoProvider(sudokuDir, sudokuTypeRepo)
-                val game = gm.newGame(sudokuType!!,
-                                      complexity!!,
-                                      gameSettings!!,
-                                      sudokuDir,
-                                      SudokuRepoProvider)
-                check(!pm.noProfiles()) { "there are no profiles. this is  unexpected. they should be initialized in splashActivity" }
-                pm.loadCurrentProfile()
-                pm.currentGame = game.id
-                pm.saveChanges()
+                val game = gameManager.newGame(sudokuType!!, complexity, gameSettings!!,
+                    sudokuRepoProvider)
+                profileManager.currentGame = game.id
+                profileManager.saveChanges()
                 startActivity(Intent(this, SudokuActivity::class.java))
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             } catch (e: IllegalArgumentException) {
@@ -235,7 +203,6 @@ class NewSudokuActivity : SudoqCompatActivity() {
                 Toast.LENGTH_SHORT
             ).show()
             if (sudokuType == null) Toast.makeText(this, "sudokuType", Toast.LENGTH_SHORT).show()
-            if (complexity == null) Toast.makeText(this, "complexity", Toast.LENGTH_SHORT).show()
             if (gameSettings == null) Toast.makeText(this, "gameSetting", Toast.LENGTH_SHORT).show()
             Log.d(LOG_TAG, "else- 'wait please'")
         }
@@ -248,21 +215,9 @@ class NewSudokuActivity : SudoqCompatActivity() {
      * @param type
      * Typ des zu startenden Sudokus
      */
-    fun setSudokuType(type: SudokuTypes?) {
+    fun setSudokuType(type: SudokuTypes) {
         sudokuType = type
-        Log.d(LOG_TAG, "type changed to:" + (type?.toString() ?: "null"))
-    }
-
-    /**
-     * Setzt die Schwierigkeit des zu startenden Sudokus. Ist diese null, so
-     * wird nichts getan.
-     *
-     * @param difficulty
-     * Schwierigkeit des zu startenden Sudokus
-     */
-    fun setSudokuDifficulty(difficulty: Complexity) {
-        complexity = difficulty
-        Log.d(LOG_TAG, "complexity changed to:$difficulty")
+        Log.d(LOG_TAG, "type changed to:$type")
     }
 
     /**

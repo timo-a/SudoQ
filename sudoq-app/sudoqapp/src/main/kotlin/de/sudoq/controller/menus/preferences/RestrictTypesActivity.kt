@@ -18,21 +18,24 @@ import android.widget.AdapterView.OnItemClickListener
 import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import dagger.hilt.android.AndroidEntryPoint
 import de.sudoq.R
 import de.sudoq.controller.SudoqListActivity
-import de.sudoq.model.profile.ProfileSingleton.Companion.getInstance
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
-import de.sudoq.persistence.sudoku.sudokuTypes.SudokuTypesListBE
-import de.sudoq.persistence.profile.ProfileRepo
-import de.sudoq.persistence.profile.ProfilesListRepo
+import javax.inject.Inject
 
 /**
  * Diese Klasse repräsentiert den Lade-Controller des Sudokuspiels. Mithilfe von
  * SudokuLoading können Sudokus geladen werden und daraufhin zur SudokuActivity
  * gewechselt werden.
  */
+@AndroidEntryPoint
 class RestrictTypesActivity : SudoqListActivity(), OnItemClickListener, OnItemLongClickListener {
+
+    @Inject
+    lateinit var profileManager: ProfileManager
+
     /** Attributes  */
     private var adapter: RestrictTypesAdapter? = null
     private var types: ArrayList<SudokuTypes>? = null
@@ -136,9 +139,7 @@ class RestrictTypesActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
                 R.string.advanced_settings_restrict_types_empty_warning,
                 Toast.LENGTH_SHORT
             ) else if (types!!.contains(st)) types!!.remove(st) else types!!.add(st)
-        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val p = getInstance(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
-        p.saveChanges()
+        profileManager.saveChanges()
         adapter!!.notifyDataSetChanged()
     }
 
@@ -154,10 +155,7 @@ class RestrictTypesActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
     }
 
     private fun initialiseTypes() {
-        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val pm = ProfileManager(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
-        pm.loadCurrentProfile()
-        types = pm.assistances.wantedTypesList
+        types = profileManager.assistances.wantedTypesList
         // initialize ArrayAdapter for the type names and set it
         adapter = RestrictTypesAdapter(this, types!!)
         listAdapter = adapter

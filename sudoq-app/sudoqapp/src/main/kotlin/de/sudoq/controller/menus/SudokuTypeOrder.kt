@@ -27,7 +27,7 @@ object SudokuTypeOrder {
             SudokuTypes.stairstep
         )
         //enum id -> ui pos
-        ordinals = IntArray(SudokuTypes.values().size)
+        ordinals = IntArray(SudokuTypes.entries.size)
         for ((uiPos, enum) in order.withIndex()) {
             ordinals[enum.ordinal] = uiPos
         }

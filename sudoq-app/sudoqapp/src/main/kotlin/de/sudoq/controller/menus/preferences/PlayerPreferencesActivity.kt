@@ -14,20 +14,19 @@ import android.view.*
 import android.widget.CheckBox
 import android.widget.EditText
 import androidx.appcompat.widget.Toolbar
+import dagger.hilt.android.AndroidEntryPoint
 import de.sudoq.R
 import de.sudoq.controller.menus.ProfileListActivity
 import de.sudoq.controller.menus.StatisticsActivity
 import de.sudoq.controller.menus.preferences.AdvancedPreferencesActivity.ParentActivity
 import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.GameSettings
-import de.sudoq.model.profile.ProfileSingleton.Companion.getInstance
-import de.sudoq.persistence.profile.ProfileRepo
-import de.sudoq.persistence.profile.ProfilesListRepo
 
 /**
  * Activity um Profile zu bearbeiten und zu verwalten
  * aufgerufen im Hauptmenü 4. Button
  */
+@AndroidEntryPoint
 class PlayerPreferencesActivity : PreferencesActivity() {
     var name: EditText? = null
     private var firstStartup = false
@@ -58,24 +57,19 @@ class PlayerPreferencesActivity : PreferencesActivity() {
         name!!.isSingleLine = true // no multiline names
         firstStartup = false
         createProfile = true
-        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val p = getInstance(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
-        p.registerListener(this)
+        profileManager.registerListener(this)
     }
 
     /**
      * Aktualisiert die Werte in den Views
      */
     override fun refreshValues() {
-        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val profile = getInstance(profilesDir, ProfileRepo(profilesDir),
-                                  ProfilesListRepo(profilesDir))
-        name!!.setText(profile.name)
-        gesture!!.isChecked = profile.isGestureActive
-        autoAdjustNotes!!.isChecked = profile.getAssistance(Assistances.autoAdjustNotes)
-        markRowColumn!!.isChecked = profile.getAssistance(Assistances.markRowColumn)
-        markWrongSymbol!!.isChecked = profile.getAssistance(Assistances.markWrongSymbol)
-        restrictCandidates!!.isChecked = profile.getAssistance(Assistances.restrictCandidates)
+        name!!.setText(profileManager.name)
+        gesture!!.isChecked = profileManager.isGestureActive
+        autoAdjustNotes!!.isChecked = profileManager.getAssistance(Assistances.autoAdjustNotes)
+        markRowColumn!!.isChecked = profileManager.getAssistance(Assistances.markRowColumn)
+        markWrongSymbol!!.isChecked = profileManager.getAssistance(Assistances.markWrongSymbol)
+        restrictCandidates!!.isChecked = profileManager.getAssistance(Assistances.restrictCandidates)
     }
 
     /**
@@ -93,10 +87,7 @@ class PlayerPreferencesActivity : PreferencesActivity() {
             var newProfileName = getString(R.string.profile_preference_new_profile)
             var newIndex = 0
             /* increment newIndex to be bigger than the others */
-            val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-            val p = getInstance(profilesDir, ProfileRepo(profilesDir),
-                                ProfilesListRepo(profilesDir))
-            val l: List<String> = p.profilesNameList
+            val l: List<String> = profileManager.profilesNameList
             for (s in l) if (s.startsWith(newProfileName)) {
                 val currentIndex = s.substring(newProfileName.length)
                 try {
@@ -107,7 +98,7 @@ class PlayerPreferencesActivity : PreferencesActivity() {
                 }
             }
             if (newIndex != 0) newProfileName += newIndex
-            p.createAnotherProfile(newProfileName)
+            profileManager.createAnotherProfile(newProfileName)
             name!!.setText(newProfileName)
         }
     }
@@ -127,21 +118,17 @@ class PlayerPreferencesActivity : PreferencesActivity() {
      * Uebernimmt die Werte der Views im Profil und speichert die aenderungen
      */
     override fun adjustValuesAndSave() {
-        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val p = getInstance(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
-        p.name = name!!.text.toString()
+        profileManager.name = name!!.text.toString()
         saveToProfile()
     }
 
     override fun saveToProfile() {
-        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val p = getInstance(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
-        p.isGestureActive = gesture!!.isChecked
+        profileManager.isGestureActive = gesture!!.isChecked
         saveAssistance(Assistances.autoAdjustNotes, autoAdjustNotes!!)
         saveAssistance(Assistances.markRowColumn, markRowColumn!!)
         saveAssistance(Assistances.markWrongSymbol, markWrongSymbol!!)
         saveAssistance(Assistances.restrictCandidates, restrictCandidates!!)
-        p.saveChanges()
+        profileManager.saveChanges()
     }
 
     /* parameter View only needed to be found by xml who clicks this */
@@ -170,9 +157,7 @@ class PlayerPreferencesActivity : PreferencesActivity() {
      * von der android xml übergebene view
      */
     private fun deleteProfile() {
-        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val p = getInstance(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
-        p.deleteProfile()
+        profileManager.deleteProfile()
     }
 
     // ///////////////////////////////////////optionsMenue
@@ -209,9 +194,7 @@ class PlayerPreferencesActivity : PreferencesActivity() {
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
-        val profilesDir = getDir(getString(R.string.path_rel_profiles), MODE_PRIVATE)
-        val p = getInstance(profilesDir, ProfileRepo(profilesDir), ProfilesListRepo(profilesDir))
-        val multipleProfiles = p.numberOfAvailableProfiles > 1
+        val multipleProfiles = profileManager.numberOfAvailableProfiles > 1
         menu.findItem(R.id.action_delete_profile).isVisible = multipleProfiles
         menu.findItem(R.id.action_switch_profile).isVisible = multipleProfiles
         return true

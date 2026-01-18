@@ -263,7 +263,7 @@ open class ProfileManager(
     var isGestureActive: Boolean
         get() = assistances.isGesturesSet
         set(value) {
-            assistances.setGestures(value)
+            assistances.isGesturesSet = value
         }
 
     /**
@@ -276,11 +276,11 @@ open class ProfileManager(
 
     /*Advanced Settings*/
     fun setLefthandActive(value: Boolean) {
-        assistances.setLefthandMode(value)
+        assistances.isLeftHandModeSet = value
     }
 
     fun setHelperActive(value: Boolean) {
-        assistances.setHelper(value)
+        assistances.isHelpersSet = value
     }
 
     fun setDebugActive(value: Boolean) {

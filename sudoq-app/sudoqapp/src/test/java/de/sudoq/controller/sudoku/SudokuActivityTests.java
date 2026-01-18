@@ -20,7 +20,7 @@ public class SudokuActivityTests {
         assertEquals(      "00:25", SudokuActivity.getTimeString(       25));
         assertEquals(      "01:40", SudokuActivity.getTimeString(      100));
         assertEquals(      "16:40", SudokuActivity.getTimeString(    1_000));
-        assertEquals(   "02:46:40", SudokuActivity.getTimeString(   10_000));
+        assertEquals(    "2:46:40", SudokuActivity.getTimeString(   10_000));
         assertEquals( "1 03:46:40", SudokuActivity.getTimeString(  100_000));
         assertEquals("11 13:46:40", SudokuActivity.getTimeString(1_000_000));
 

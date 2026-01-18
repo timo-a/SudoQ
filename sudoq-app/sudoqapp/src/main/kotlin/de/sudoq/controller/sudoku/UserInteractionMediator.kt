@@ -7,7 +7,6 @@
  */
 package de.sudoq.controller.sudoku
 
-import android.content.Context
 import android.gesture.Gesture
 import android.gesture.GestureOverlayView
 import android.gesture.GestureOverlayView.OnGesturePerformedListener
@@ -21,12 +20,10 @@ import de.sudoq.controller.sudoku.CellInteractionListener.SelectEvent
 import de.sudoq.controller.sudoku.board.CellViewStates
 import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.Game
-import de.sudoq.model.profile.ProfileSingleton
+import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.Sudoku
-import de.sudoq.persistence.profile.ProfileRepo
-import de.sudoq.persistence.profile.ProfilesListRepo
 import de.sudoq.view.GestureInputOverlay
 import de.sudoq.view.SudokuCellView
 import de.sudoq.view.SudokuLayout
@@ -42,7 +39,8 @@ class UserInteractionMediator(
     sudokuView: SudokuLayout?,
     game: Game?,
     gestureOverlay: GestureInputOverlay?,
-    gestureStore: GestureStore
+    gestureStore: GestureStore,
+    private val profileManager: ProfileManager
 ) : OnGesturePerformedListener, InputListener, CellInteractionListener, ObservableActionCaster {
     /**
      * Flag für den Notizmodus.
@@ -105,14 +103,7 @@ class UserInteractionMediator(
 
     override fun onCellSelected(view: SudokuCellView, e: SelectEvent) {
         if (!game!!.isFinished()) {
-            val c = view.context
-            val profilesDir = c.getDir(
-                c.getString(R.string.path_rel_profiles),
-                Context.MODE_PRIVATE
-            )
-            val p = ProfileSingleton.getInstance(profilesDir, ProfileRepo(profilesDir),
-                                                 ProfilesListRepo(profilesDir))
-            if (p.isGestureActive) {
+            if (profileManager.isGestureActive) {
                 cellSelectedGestureMode(view, e)
             } else {
                 cellSelectedNumPadMode(view, e)

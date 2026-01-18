@@ -26,20 +26,11 @@ open class GameSettings(
         "would be private if not for GameSettingsMapper. " +
                 "Not supposed to be used by others."
     ) val assistances: BitSet = BitSet(),
-    isLeftHandModeSet: Boolean = false,
-    isHelperSet: Boolean = false,
-    isGestureSet: Boolean = false,
-    val wantedTypesList: ArrayList<SudokuTypes> = ArrayList(listOf(*SudokuTypes.values()))
+    var isLeftHandModeSet: Boolean = false,
+    var isHelpersSet: Boolean = false,
+    var isGesturesSet: Boolean = false,
+    val wantedTypesList: ArrayList<SudokuTypes> = ArrayList(SudokuTypes.entries)
 ) {
-
-    var isLefthandModeSet = isLeftHandModeSet
-        private set
-
-    var isHelperSet = isHelperSet
-        private set
-
-    var isGesturesSet = isGestureSet
-        private set
 
     /**
      * Sets an assistance to true
@@ -49,7 +40,7 @@ open class GameSettings(
     fun setAssistance(assistance: Assistances) {
         assistances.set(
             2.0.pow((assistance.ordinal + 1).toDouble()).toInt()
-        ) //TODO that looks wrong...
+        ) //TODO that looks wrong... we can fix it here, but need to keep it in persistence
     }
 
     /**
@@ -71,17 +62,6 @@ open class GameSettings(
         return assistances[2.0.pow((assistance.ordinal + 1).toDouble()).toInt()]
     }
 
-    /* additional settings */
-    fun setGestures(value: Boolean) {
-        isGesturesSet = value
-    }
-
-    fun setLefthandMode(value: Boolean) {
-        isLefthandModeSet = value
-    }
-
-    fun setHelper(value: Boolean) {
-        isHelperSet = value
-    }
+    fun copy(): GameSettings = GameSettings(assistances.clone() as BitSet, isLeftHandModeSet, isHelpersSet, isGesturesSet, ArrayList(wantedTypesList))
 
 }
