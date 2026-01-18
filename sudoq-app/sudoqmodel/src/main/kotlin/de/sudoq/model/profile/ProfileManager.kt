@@ -21,9 +21,13 @@ import kotlin.collections.ArrayList
  * which is maintained by SharedPreferences of the Android-API.
  *
  */
-open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
-//private constructor because class is static
+open class ProfileManager(
+    val profilesDir: File,
+    val profileRepo: IRepo<Profile>,
+    val profilesListRepo: IProfilesListRepo
+) : ObservableModelImpl<ProfileManager>() {
 //TODO split into profile handler and profile
+//todo we used to have several profiles and supported switching between them. At some point this was removed to cut down complexity. but at some point we might want to bring it back
 
     lateinit var currentProfile: Profile //initialized in loadCurrentProfile
 
@@ -51,7 +55,7 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
         get() = currentProfile.currentGame
         set(value) {
             currentProfile.currentGame = value
-            profileRepo!!.update(currentProfile)
+            profileRepo.update(currentProfile)
         }
 
     /**
@@ -74,40 +78,18 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
             currentProfile.statistics = value
         }
 
-    var profileRepo: IRepo<Profile>? = null //TODO refactor initialization, set it right
-    var profilesListRepo: IProfilesListRepo? = null //TODO refactor initialization, set it right
+    val currentProfileDir: File = File(profilesDir.absolutePath, "profile_$currentProfileID")
 
-    var currentProfileDir: File? = null
-        get() = File(profilesDir!!.absolutePath, "profile_$currentProfileID")
-        private set
-
-    var profilesDir: File? = null //todo remove noargs constructor, make non-nullable
-        set(value) {
-            if (value == null)
-                throw IllegalArgumentException("profiles dir is null")
-            if (!value.canWrite())
-                throw IllegalArgumentException("profiles dir cannot write")
-
-            field = value
-        }
-
-    constructor(profilesDir: File,
-                profileRepo: IRepo<Profile>,
-                profilesListRepo: IProfilesListRepo) : this() {
-        this.profileRepo = profileRepo
-        this.profilesListRepo = profilesListRepo
-
+    init {
         if (!profilesDir.canWrite())
             throw IllegalArgumentException("profiles dir cannot write")
-
-        this.profilesDir = profilesDir
     }
 
 
     /** assumes an empty directory */
     fun initialize() {
-        if (!profilesDir!!.exists())
-            profilesDir!!.mkdirs()
+        if (!profilesDir.exists())
+            profilesDir.mkdirs()
 
         //create a new profile
         //currentProfile = profileRepo!!.create()
@@ -121,31 +103,31 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
      */
     fun loadCurrentProfile() {//todo if all works bundle similarities
         //if the profiles (list) file doesn't exist
-        if (!profilesDir!!.exists()) {
-            profilesListRepo!!.createProfilesFile()
-            currentProfile = profileRepo!!.create()
-            profilesListRepo!!.addProfile(currentProfile)
+        if (!profilesDir.exists()) {
+            profilesListRepo.createProfilesFile()
+            currentProfile = profileRepo.create()
+            profilesListRepo.addProfile(currentProfile)
             notifyListeners(this)
             return
         }
 
-        if (profilesDir!!.list().isEmpty() || !File(profilesDir, "profiles.xml").exists()) {
-            profilesListRepo!!.createProfilesFile()
+        if (profilesDir.list()!!.isEmpty() || !File(profilesDir, "profiles.xml").exists()) {
+            profilesListRepo.createProfilesFile()
         }
 
         //if there are no profiles
-        if (profilesListRepo!!.getProfileNamesList().isEmpty()) {
-            currentProfile = profileRepo!!.create()
-            profilesListRepo!!.addProfile(currentProfile)
+        if (profilesListRepo.getProfileNamesList().isEmpty()) {
+            currentProfile = profileRepo.create()
+            profilesListRepo.addProfile(currentProfile)
             notifyListeners(this)
             return
         }
 
 
         val currentProfileID =
-            profilesListRepo!!.getCurrentProfileId()//todo put directly into setter of currentProfileID???
+            profilesListRepo.getCurrentProfileId()//todo put directly into setter of currentProfileID???
 
-        currentProfile = profileRepo!!.read(currentProfileID)
+        currentProfile = profileRepo.read(currentProfileID)
 
         notifyListeners(this)
     }
@@ -157,10 +139,10 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
     fun deleteProfile() {
         if (numberOfAvailableProfiles > 1) {
 
-            profilesListRepo!!.deleteProfileFromList(currentProfileID)
+            profilesListRepo.deleteProfileFromList(currentProfileID)
 
-            profileRepo!!.delete(currentProfileID)
-            setProfile(profilesListRepo!!.getNextProfile())
+            profileRepo.delete(currentProfileID)
+            setProfile(profilesListRepo.getNextProfile())
         }
     }
 
@@ -170,7 +152,7 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
      * @return Anzahl nicht geloeschter Profile
      */
     val numberOfAvailableProfiles: Int
-        get() = profilesListRepo!!.getProfilesCount()
+        get() = profilesListRepo.getProfilesCount()
 
 
     // Profiles todo move all to profileManager
@@ -181,14 +163,14 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
      * @return die Anzahl der Profile
      */
     fun noProfiles(): Boolean { //query profileRepo directly
-        if (!profilesDir!!.exists()) return true
+        if (!profilesDir.exists()) return true
 
         /*System.out.println("getnrp");
 		for(String s: profiles.list())
 			System.out.println(profiles.list());
 		System.out.println("getnrpEND");*/
         var count =
-            profilesDir!!.list()!!.size //one folder for each profile + file listing all profiles
+            profilesDir.list()!!.size //one folder for each profile + file listing all profiles
         if (File(profilesDir, "profiles.xml").exists()) {
             //if profiles.xml exists subtract it from count
             count--
@@ -212,7 +194,7 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
     fun changeProfile(profileID: Int): Boolean {
         val oldProfileID = currentProfileID
         if (profileID == oldProfileID) return true
-        profileRepo!!.update(currentProfile)// save current
+        profileRepo.update(currentProfile)// save current
         return setProfile(profileID)
     }
 
@@ -220,10 +202,10 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
      * Setzt das neue Profil ohne das alte zu speichern (zB nach löschen)
      */
     private fun setProfile(profileID: Int): Boolean {
-        currentProfile = profileRepo!!.read(profileID) // load new values
+        currentProfile = profileRepo.read(profileID) // load new values
 
         // set current profile in profiles.xml
-        profilesListRepo!!.setCurrentProfileId(profileID)
+        profilesListRepo.setCurrentProfileId(profileID)
         notifyListeners(this)
         return false
     }
@@ -234,9 +216,9 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
      * profiles.xml, welche Informationen ueber alle Profile enthaelt
      */
     fun saveChanges() {
-        profileRepo!!.update(currentProfile)
+        profileRepo.update(currentProfile)
 
-        profilesListRepo!!.updateProfilesList(currentProfile)
+        profilesListRepo.updateProfilesList(currentProfile)
     }
 
     /**
@@ -244,11 +226,11 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
      */
     fun createAnotherProfile() {
         if (currentProfileID != -1) {
-            profileRepo!!.update(currentProfile) // save current profile xml
+            profileRepo.update(currentProfile) // save current profile xml
         }
 
-        currentProfile = profileRepo!!.create()
-        profilesListRepo!!.addProfile(currentProfile)
+        currentProfile = profileRepo.create()
+        profilesListRepo.addProfile(currentProfile)
 
         notifyListeners(this)
     }
@@ -258,11 +240,11 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
      */
     fun createInitialProfile() {
 
-        if(!profilesListRepo!!.profilesFileExists()) {
-            profilesListRepo!!.createProfilesFile()
+        if(!profilesListRepo.profilesFileExists()) {
+            profilesListRepo.createProfilesFile()
         }
-        currentProfile = profileRepo!!.create()
-        profilesListRepo!!.addProfile(currentProfile)
+        currentProfile = profileRepo.create()
+        profilesListRepo.addProfile(currentProfile)
 
     }
 
@@ -315,7 +297,7 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
      */
     val profilesNameList: ArrayList<String> //todo change return type to just List<String>
         get() {
-            return ArrayList(profilesListRepo!!.getProfileNamesList())
+            return ArrayList(profilesListRepo.getProfileNamesList())
         }
 
     /**
@@ -325,7 +307,7 @@ open class ProfileManager() : ObservableModelImpl<ProfileManager>() {
      */
     val profilesIdList: ArrayList<Int> //todo change return type to just List<Int>
         get() {
-            return ArrayList(profilesListRepo!!.getProfileIdsList())
+            return ArrayList(profilesListRepo.getProfileIdsList())
         }
 
     /**
