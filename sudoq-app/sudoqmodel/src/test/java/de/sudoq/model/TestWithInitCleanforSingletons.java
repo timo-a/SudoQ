@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.IOException;
 
 import de.sudoq.model.utility.FileManager;
-import de.sudoq.model.profile.ProfileSingleton;
 import de.sudoq.model.profile.ProfileManager;
 import de.sudoq.persistence.profile.ProfileRepo;
 import de.sudoq.persistence.profile.ProfilesListRepo;
@@ -47,15 +46,7 @@ public class TestWithInitCleanforSingletons {
 
 	}
 
-	public static void legacyInit(){
-		Utility.copySudokus();
-		File profileDir = new File("/tmp/sudoq/CatchAll/profile");
-		profileDir.mkdirs();
-
-		ProfileSingleton.Companion.getInstance(profileDir, new ProfileRepo(profileDir), new ProfilesListRepo(profileDir));
-	}
-
-	@AfterClass
+    @AfterClass
 	public static void clean() throws IOException, SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 		//java.lang.reflect.Field f = FileManager.class.getDeclaredField("profiles");
 		//f.setAccessible(true);
