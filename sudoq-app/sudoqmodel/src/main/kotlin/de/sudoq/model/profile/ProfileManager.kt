@@ -29,13 +29,14 @@ open class ProfileManager(
 //TODO split into profile handler and profile
 //todo we used to have several profiles and supported switching between them. At some point this was removed to cut down complexity. but at some point we might want to bring it back
 
-    lateinit var currentProfile: Profile //initialized in loadCurrentProfile
+    private lateinit var currentProfile: Profile //initialized in loadCurrentProfile
 
+    //todo is it save to just give out the current profile instead of having all these delegating methods?
 
     /**
      * Name of the current player profiles
      */
-    var name: String?
+    var name: String
         get() = currentProfile.name
         set(value) {
             currentProfile.name = value
@@ -44,9 +45,9 @@ open class ProfileManager(
     /**
      * ID of the player profile
      */
-    var currentProfileID = -1
+    val currentProfileID: Int
+        //get because dependent on lateinit currentProfile
         get() = currentProfile.id
-        private set //todo should not be used, try val
 
     /**
      * ID of the current [Game]
@@ -61,16 +62,14 @@ open class ProfileManager(
     /**
      * AssistanceSet representing the available Assistances
      */
-    var assistances = GameSettings()
+    val assistances: GameSettings
         get() = currentProfile.assistances
-        private set
 
     /**
      * AppSettings object representing settings bound to the app in general
      */
-    var appSettings = AppSettings() //todo read from currentProfile instead, same above
+    val appSettings: AppSettings //todo read from currentProfile instead, same above
         get() = currentProfile.appSettings
-        private set
 
     var statistics: IntArray?
         get() = currentProfile.statistics
@@ -78,7 +77,9 @@ open class ProfileManager(
             currentProfile.statistics = value
         }
 
-    val currentProfileDir: File = File(profilesDir.absolutePath, "profile_$currentProfileID")
+    val currentProfileDir: File
+        //this is a get because currentProfileID is depends on lateinit currentProfile
+        get() = File(profilesDir.absolutePath, "profile_$currentProfileID")
 
     init {
         if (!profilesDir.canWrite())
@@ -100,7 +101,7 @@ open class ProfileManager(
 
     /**
      * Loads the current [ProfileManager] from profiles.xml
-     */
+     *///todo shouldn't this method be called in the constructor?
     fun loadCurrentProfile() {//todo if all works bundle similarities
         //if the profiles (list) file doesn't exist
         if (!profilesDir.exists()) {
@@ -296,9 +297,7 @@ open class ProfileManager(
      * @return die Namensliste
      */
     val profilesNameList: ArrayList<String> //todo change return type to just List<String>
-        get() {
-            return ArrayList(profilesListRepo.getProfileNamesList())
-        }
+        get() = ArrayList(profilesListRepo.getProfileNamesList())
 
     /**
      * Gibt eine Integer Liste mit allen Profilids zurück.
@@ -306,9 +305,7 @@ open class ProfileManager(
      * @return die Idliste
      */
     val profilesIdList: ArrayList<Int> //todo change return type to just List<Int>
-        get() {
-            return ArrayList(profilesListRepo.getProfileIdsList())
-        }
+        get() = ArrayList(profilesListRepo.getProfileIdsList())
 
     /**
      * Setzt eine Assistance in den Preferences auf true oder false.
