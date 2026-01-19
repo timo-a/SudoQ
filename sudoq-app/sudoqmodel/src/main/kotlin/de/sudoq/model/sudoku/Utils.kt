@@ -30,10 +30,10 @@ fun getGroupShape(pList: List<Position>): Utils.ConstraintShape {
 object Utils {
     @JvmStatic
     fun positionToRealWorld(p: Position): Position {
-        return Position(
+        return Position[
             p.x + 1,
             p.y + 1
-        )
+        ]
     }
 
     @JvmStatic

@@ -9,7 +9,7 @@ object PositionMapper {
     }
 
     fun fromBE(pBE: PositionBE): Position {
-        return Position(pBE.x, pBE.y)
+        return Position[pBE.x, pBE.y]
     }
 
 }

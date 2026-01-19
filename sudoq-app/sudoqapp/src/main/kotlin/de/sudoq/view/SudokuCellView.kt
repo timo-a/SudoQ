@@ -11,8 +11,6 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.util.Log
-import android.view.MotionEvent
 import android.view.View
 import de.sudoq.controller.sudoku.CellInteractionListener
 import de.sudoq.controller.sudoku.ObservableCellInteraction
@@ -20,9 +18,6 @@ import de.sudoq.controller.sudoku.Symbol
 import de.sudoq.controller.sudoku.board.CellViewPainter
 import de.sudoq.controller.sudoku.board.CellViewStates
 import de.sudoq.model.ModelChangeListener
-import de.sudoq.model.actionTree.Action
-import de.sudoq.model.actionTree.NoteAction
-import de.sudoq.model.actionTree.SolveAction
 import de.sudoq.model.game.Game
 import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Constraint
@@ -243,28 +238,34 @@ class SudokuCellView(
      */
     private fun updateMarking() {
         val editable = cell.isEditable
-        //TODO no idea what 'wrong' is doing, i just etracted it for clarity
-        val wrong = markWrongSymbol && !cell.isNotWrong && checkConstraint()
         val state: CellViewStates =
             if (connected)
                 if (editable)
-                    if (wrong) CellViewStates.CONNECTED_WRONG
-                    else CellViewStates.CONNECTED
+                    CellViewStates.CONNECTED
                 else CellViewStates.SELECTED_FIXED
             else if (cellSelected)
                 if (editable)
                     if (isNoteMode)
-                        if (wrong)
-                            CellViewStates.SELECTED_NOTE_WRONG
-                        else CellViewStates.SELECTED_NOTE
-                    else if (wrong) CellViewStates.SELECTED_INPUT_WRONG
+                        CellViewStates.SELECTED_NOTE
                     else CellViewStates.SELECTED_INPUT
                 else CellViewStates.SELECTED_FIXED
             else if (editable)
-                if (wrong) CellViewStates.DEFAULT_WRONG
-                else CellViewStates.DEFAULT
+                CellViewStates.DEFAULT
             else CellViewStates.FIXED
-        CellViewPainter.instance!!.setMarking(this, state)
+
+        //If the assistance 'mark wrong symbols' is on symbols may be painted red
+        val wrong = markWrongSymbol // assistance is on
+                && anyUniqueConstraintViolated() // assistance applies
+
+        val postprocessedState = if (!wrong) state else when (state) {
+            CellViewStates.CONNECTED -> CellViewStates.CONNECTED_WRONG
+            CellViewStates.SELECTED_NOTE -> CellViewStates.SELECTED_NOTE_WRONG
+            CellViewStates.SELECTED_INPUT -> CellViewStates.SELECTED_INPUT_WRONG
+            CellViewStates.DEFAULT -> CellViewStates.DEFAULT_WRONG
+            else -> state
+        }
+
+        CellViewPainter.instance!!.setMarking(this, postprocessedState)
         invalidate()
     }
 
@@ -276,26 +277,17 @@ class SudokuCellView(
      * @return true, if the value of this cell violates the UniqueConstraints or is part of another
      * ConstraintType, false otherwise
      */
-    private fun checkConstraint(): Boolean {
-        val constraints: Iterable<Constraint>? = game.sudoku!!.sudokuType
-        val sudoku = game.sudoku
-        for (c in constraints!!) {
-            if (c.includes(sudoku!!.getPosition(cell.id)!!)) {
-                if (c.hasUniqueBehavior()) {
-                    for (pos in c.getPositions()) {
-                        //if a different position has the same value
-                        if (pos !== sudoku.getPosition(cell.id)
-                            && sudoku.getCell(pos)!!.currentValue == cell.currentValue
-                        ) {
-                            return true
-                        }
-                    }
-                } else {
-                    return true //if no unique-constraint -> automatically satisfied
-                }
-            }
-        }
-        return false
+    private fun anyUniqueConstraintViolated(): Boolean {
+        val sudoku = game.sudoku!!
+        val pos = sudoku.getPosition(cell.id)!!
+        val constraints: Iterable<Constraint> = sudoku.sudokuType
+        return constraints
+            .filter { it.includes(pos) } // pos must be in constraint
+            .filter { it.hasUniqueBehavior() }
+            .flatMap { it.getPositions() }
+            .filter { it != pos } // must be different position
+            .map { sudoku.getCell(it)!!.currentValue } // look at values
+            .distinct().contains(cell.currentValue) // does any match?
     }
 
     override fun registerListener(listener: CellInteractionListener) {
@@ -338,8 +330,8 @@ class SudokuCellView(
         connected = false
         isNoteMode = false
         isInExtraConstraint = false
-        val constraints: Iterable<Constraint>? = game.sudoku!!.sudokuType
-        for (c in constraints!!) {
+        val constraints: Iterable<Constraint> = game.sudoku!!.sudokuType
+        for (c in constraints) {
             if (c.type == ConstraintType.EXTRA &&
                 c.includes(game.sudoku!!.getPosition(cell.id)!!)
             ) {
