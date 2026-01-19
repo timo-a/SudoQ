@@ -51,7 +51,7 @@ public abstract class Utility {
         StringBuilder sb = new StringBuilder();
         for (int j = 0; j < sudoku.getSudokuType().getSize().getY(); j++) {
             for (int i = 0; i < sudoku.getSudokuType().getSize().getX(); i++) {
-                Cell f = sudoku.getCell(Position.get(i, j));
+                Cell f = sudoku.getCell(Position.Companion.get(i, j));
                 String op;
                 if (f != null){//feld existiert
                     int value = f.getCurrentValue();

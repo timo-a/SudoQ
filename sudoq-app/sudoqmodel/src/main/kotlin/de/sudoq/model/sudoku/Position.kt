@@ -9,13 +9,13 @@ package de.sudoq.model.sudoku
 
 /**
  * A two dimensional cartesian Coordinate.
- * Implemented as Flyweight (not quite, but Position.get(x,y) gives memoized instances)
+ * Implemented as partial Flyweight, common instances are memoized
  *
  * @property x the x coordinate
  * @property y the y coordinate
  *
  */
-class Position(val x: Int, val y: Int) {
+class Position private constructor(val x: Int, val y: Int) {
 
     /**
      * Tests for equality with other [Position].
@@ -52,22 +52,17 @@ class Position(val x: Int, val y: Int) {
     /**
      * Returns a String representation of this [Position].
      */
-    override fun toString(): String {
-        return "$x, $y"
-    }
+    override fun toString(): String = "$x, $y"
 
     companion object {
+
+        private const val CACHE_SIZE = 25
 
         /**
          * The Position array memoizes expected (x,y ∈ [0,24]) values
          */
-        private val positions: Array<Array<Position>> by lazy {
-            // 25x25 are the dimensions of a samurai sudoku, our largest one
-            Array(25) { x ->
-                Array(25) { y ->
-                    Position(x, y)
-                }
-            }
+        private val CACHE: Array<Position> = Array(CACHE_SIZE * CACHE_SIZE) { i ->
+            Position(x = i % CACHE_SIZE, y = i / CACHE_SIZE)
         }
 
         /**
@@ -78,12 +73,12 @@ class Position(val x: Int, val y: Int) {
          * @return Position instance with the coordinates
          * @throws IllegalArgumentException if either coordinate is negative
          */
-        @JvmStatic
+        @JvmStatic//still needed in java tests
         operator fun get(x: Int, y: Int): Position {
             require(x >= 0 && y >= 0) { "a parameter is less than zero" }
 
             return if (x < 25 && y < 25) {
-                positions[x][y]
+                CACHE[x + y * CACHE_SIZE]
             } else {
                 Position(x, y)
             }

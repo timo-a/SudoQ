@@ -116,11 +116,11 @@ class SudokuTypeRepo4Tests : ReadRepo<SudokuType> {
     fun createSquareConstraints(len: Int): List<Constraint> {
         val blockLen : Int = sqrt(len.toFloat()).toInt()
         val rows = (0 until len).map {
-            val positions = (0 until len).map { x -> Position(x, it) }.toTypedArray()
+            val positions = (0 until len).map { x -> Position[x, it] }.toTypedArray()
             Constraint(UniqueConstraintBehavior(), ConstraintType.LINE, "Row $it", *positions)
         }
         val columns = (0 until len).map {
-            val positions = (0 until len).map { y -> Position(it, y) }.toTypedArray()
+            val positions = (0 until len).map { y -> Position[it, y] }.toTypedArray()
             Constraint(UniqueConstraintBehavior(), ConstraintType.LINE, "Column $it", *positions)
         }
 
@@ -137,11 +137,11 @@ class SudokuTypeRepo4Tests : ReadRepo<SudokuType> {
     fun create66Constraints(): List<Constraint> {
         val len = 6
         val rows = (0 until len).map {
-            val positions = (0 until len).map { x -> Position(x, it) }.toTypedArray()
+            val positions = (0 until len).map { x -> Position[x, it] }.toTypedArray()
             Constraint(UniqueConstraintBehavior(), ConstraintType.LINE, "Row $it", *positions)
         }
         val columns = (0 until len).map {
-            val positions = (0 until len).map { y -> Position(it, y) }.toTypedArray()
+            val positions = (0 until len).map { y -> Position[it, y] }.toTypedArray()
             Constraint(UniqueConstraintBehavior(), ConstraintType.LINE, "Column $it", *positions)
         }
 

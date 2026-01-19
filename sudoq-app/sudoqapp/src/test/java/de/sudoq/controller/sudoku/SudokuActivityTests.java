@@ -44,7 +44,7 @@ public class SudokuActivityTests {
     }
 
     private static void a(Position pos){
-        pos = new Position(9,8);
+        pos = Position.Companion.get(9,8);
     }
 
     private static Date D = new Date();

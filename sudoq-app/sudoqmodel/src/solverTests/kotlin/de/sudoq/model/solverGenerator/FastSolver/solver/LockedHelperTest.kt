@@ -8,7 +8,6 @@ import de.sudoq.model.solverGenerator.solver.helper.SolveHelper
 import de.sudoq.model.solverGenerator.utils.PrettyStandard9x9Repo
 import de.sudoq.model.solverGenerator.utils.PrettySudokuRepo
 import de.sudoq.model.sudoku.Position
-import de.sudoq.model.sudoku.Position.Companion.get
 import de.sudoq.model.sudoku.complexity.Complexity
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should be false`

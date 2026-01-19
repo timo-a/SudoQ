@@ -24,12 +24,12 @@ class Standard16x16Parser : SudokuParser() {
                 for (r in 0 until 6) {
                     for (c in 0..8) {
                         val cell = parseCell(range.nextInt(), type, ss[r][c])
-                        val p = Position.get(c,r)
+                        val p = Position[c, r]
                         put(p,cell)
                     }
                     for (c in 9..17) {
                         val cell = parseCell(range.nextInt(), type, ss[r][c])
-                        val p = Position.get(c+3, r)//we skip a gap of 3
+                        val p = Position[c+3, r]//we skip a gap of 3
                         put(p,cell)
                     }
                 }
@@ -37,7 +37,7 @@ class Standard16x16Parser : SudokuParser() {
                 for (r in 6 until 9) {
                     for (c in 0..20) {
                         val cell = parseCell(range.nextInt(), type, ss[r][c])
-                        val p = Position.get(c, r)
+                        val p = Position[c, r]
                         put(p,cell)
                     }
                 }
@@ -45,7 +45,7 @@ class Standard16x16Parser : SudokuParser() {
                 for (r in 9 until 12) {
                     for (c in 0 until 3) {
                         val cell = parseCell(range.nextInt(), type, ss[r][c])
-                        val p = Position.get(c+6, r)
+                        val p = Position[c+6, r]
                         put(p,cell)
                     }
                 }
@@ -53,7 +53,7 @@ class Standard16x16Parser : SudokuParser() {
                 for (r in 12 until 15) {
                     for (c in 0..20) {
                         val cell = parseCell(range.nextInt(), type, ss[r][c])
-                        val p = Position.get(c, r)
+                        val p = Position[c, r]
                         put(p,cell)
                     }
                 }
@@ -61,12 +61,12 @@ class Standard16x16Parser : SudokuParser() {
                 for (r in 15 until 21) {
                     for (c in 0..8) {
                         val cell = parseCell(range.nextInt(), type, ss[r][c])
-                        val p = Position.get(c,r)
+                        val p = Position[c, r]
                         put(p,cell)
                     }
                     for (c in 9..17) {
                         val cell = parseCell(range.nextInt(), type, ss[r][c])
-                        val p = Position.get(c+3, r)//we skip a gap of 3
+                        val p = Position[c+3, r]//we skip a gap of 3
                         put(p,cell)
                     }
                 }
