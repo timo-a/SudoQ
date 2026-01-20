@@ -1,0 +1,1 @@
+ - Fixt die Hilfestellung: "Falsche Symbole markieren"
