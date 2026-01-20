@@ -1,0 +1,2 @@
+- Changement important: mise à jour de MinSdk de la version 19 à 21
+- Refactorisation interne

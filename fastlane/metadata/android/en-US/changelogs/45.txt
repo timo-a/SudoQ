@@ -1,0 +1,2 @@
+ - Breaking change: update MinSdk from 19 to 21
+ - internal refactor
