@@ -1,153 +1,134 @@
-package de.sudoq.model.solverGenerator.solver;
+package de.sudoq.model.solverGenerator.solver
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static de.sudoq.model.sudoku.sudokuTypes.SudokuTypes.standard9x9;
+import de.sudoq.model.ports.persistence.ReadRepo
+import de.sudoq.model.solverGenerator.solution.Solution
+import de.sudoq.model.solverGenerator.solution.SolveDerivation
+import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests
+import de.sudoq.model.sudoku.Cell
+import de.sudoq.model.sudoku.Position
+import de.sudoq.model.sudoku.PositionMap
+import de.sudoq.model.sudoku.Sudoku
+import de.sudoq.model.sudoku.SudokuBuilder
+import de.sudoq.model.sudoku.complexity.Complexity
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
+import org.amshove.kluent.`should be`
+import org.amshove.kluent.`should not be`
+import org.amshove.kluent.`should not be equal to`
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Timeout
+import org.junit.jupiter.api.function.Executable
+import java.util.concurrent.TimeUnit
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
-import java.util.stream.Stream;
+internal class SolverTests {
+    private var sudoku: Sudoku? = null
+    private var sudoku16x16: Sudoku? = null
+    private var solver: Solver? = null
+    private var solution16x16: PositionMap<Int?>? = null
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Timeout;
-
-
-import de.sudoq.model.ports.persistence.ReadRepo;
-import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
-import de.sudoq.model.solverGenerator.solution.Solution;
-import de.sudoq.model.solverGenerator.solution.SolveDerivation;
-import de.sudoq.model.sudoku.Cell;
-import de.sudoq.model.sudoku.Constraint;
-import de.sudoq.model.sudoku.Position;
-import de.sudoq.model.sudoku.PositionMap;
-import de.sudoq.model.sudoku.Sudoku;
-import de.sudoq.model.sudoku.SudokuBuilder;
-import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-
-class SolverTests {
-
-	private Sudoku sudoku;
-	private Sudoku sudoku16x16;
-	private Solver solver;
-	private PositionMap<Integer> solution16x16;
-
-	private static final boolean PRINT_SOLUTIONS = false;
-
-	private ReadRepo<SudokuType> sudokuTypeRepo = new SudokuTypeRepo4Tests();
+    private val sudokuTypeRepo: ReadRepo<SudokuType> = SudokuTypeRepo4Tests()
 
 
     @BeforeEach
-    void before() {
-		sudoku = new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku();
-		sudoku.setComplexity(Complexity.arbitrary);
-		solver = new Solver(sudoku);
-		sudoku16x16 = new SudokuBuilder(SudokuTypes.standard16x16, sudokuTypeRepo).createSudoku();
-		sudoku16x16.setComplexity(Complexity.arbitrary);
-		solution16x16 = new PositionMap<Integer>(sudoku16x16.getSudokuType().getSize());
-	}
-
-    @Test
-    void test1(){
-        Sudoku initialSudoku = new Sudoku(sudokuTypeRepo.read(standard9x9.ordinal()));
-        for (int i=0; i < 8; i++)
-            initialSudoku.getCell(Position.get(i,0)).setCurrentValue(i);
-        Solver solver = new Solver(initialSudoku);
-        solver.solveAll(true, false, true);
-        List<Solution> ls = solver.getSolutions();
-        System.out.println(ls.getFirst());
+    fun before() {
+        sudoku = SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku()
+        sudoku!!.complexity = Complexity.arbitrary
+        solver = Solver(sudoku!!)
+        sudoku16x16 = SudokuBuilder(SudokuTypes.standard16x16, sudokuTypeRepo).createSudoku()
+        sudoku16x16!!.complexity = Complexity.arbitrary
+        solution16x16 = PositionMap(sudoku16x16!!.sudokuType.size)
     }
 
-	/** convenience init sudoku	 */
-	private void initSudoku9x9(Sudoku sudoku){
-		    
-		String s= "0    52  "+
-		          " 2  0  3 "+
-		          "  84    6"+
-		          "  52     "+
-		          " 1  7    "+
-		          "6    3   "+
-		          "  48    2"+
-		          "8     0  "+
-		          " 7  1  6 ";
+    @Test
+    fun test1() {
+        val initialSudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal)!!)
+        for (i in 0..7) initialSudoku.getCell(Position[i, 0])!!.currentValue = i
+        val solver = Solver(initialSudoku)
+        solver.solveAll(true, false, true)
+        val ls: List<Solution> = solver.solutions!!
+        println(ls.first())
+    }
 
-		sudoku.getCell(Position.get(0, 0)).setCurrentValue(0);
-		sudoku.getCell(Position.get(5, 0)).setCurrentValue(6);
-		sudoku.getCell(Position.get(7, 0)).setCurrentValue(8);
-		sudoku.getCell(Position.get(1, 1)).setCurrentValue(2);
-		sudoku.getCell(Position.get(4, 1)).setCurrentValue(1);
-		sudoku.getCell(Position.get(8, 1)).setCurrentValue(7);
-		sudoku.getCell(Position.get(2, 2)).setCurrentValue(8);
-		sudoku.getCell(Position.get(3, 2)).setCurrentValue(5);
-		sudoku.getCell(Position.get(6, 2)).setCurrentValue(4);
-		sudoku.getCell(Position.get(2, 3)).setCurrentValue(4);
-		sudoku.getCell(Position.get(3, 3)).setCurrentValue(2);
-		sudoku.getCell(Position.get(6, 3)).setCurrentValue(8);
-		sudoku.getCell(Position.get(1, 4)).setCurrentValue(0);
-		sudoku.getCell(Position.get(4, 4)).setCurrentValue(7);
-		sudoku.getCell(Position.get(8, 4)).setCurrentValue(1);
-		sudoku.getCell(Position.get(0, 5)).setCurrentValue(5);
-		sudoku.getCell(Position.get(5, 5)).setCurrentValue(3);
-		sudoku.getCell(Position.get(0, 6)).setCurrentValue(2);
-		sudoku.getCell(Position.get(7, 6)).setCurrentValue(0);
-		sudoku.getCell(Position.get(1, 7)).setCurrentValue(3);
-		sudoku.getCell(Position.get(8, 7)).setCurrentValue(6);
-		sudoku.getCell(Position.get(2, 8)).setCurrentValue(6);
-		sudoku.getCell(Position.get(6, 8)).setCurrentValue(2);
-	}
+    /** convenience init sudoku	  */
+    private fun initSudoku9x9(sudoku: Sudoku) {
+        val s = "0    52  " +
+                " 2  0  3 " +
+                "  84    6" +
+                "  52     " +
+                " 1  7    " +
+                "6    3   " +
+                "  48    2" +
+                "8     0  " +
+                " 7  1  6 "
+
+        sudoku.getCell(Position[0, 0])!!.currentValue = 0
+        sudoku.getCell(Position[5, 0])!!.currentValue = 6
+        sudoku.getCell(Position[7, 0])!!.currentValue = 8
+        sudoku.getCell(Position[1, 1])!!.currentValue = 2
+        sudoku.getCell(Position[4, 1])!!.currentValue = 1
+        sudoku.getCell(Position[8, 1])!!.currentValue = 7
+        sudoku.getCell(Position[2, 2])!!.currentValue = 8
+        sudoku.getCell(Position[3, 2])!!.currentValue = 5
+        sudoku.getCell(Position[6, 2])!!.currentValue = 4
+        sudoku.getCell(Position[2, 3])!!.currentValue = 4
+        sudoku.getCell(Position[3, 3])!!.currentValue = 2
+        sudoku.getCell(Position[6, 3])!!.currentValue = 8
+        sudoku.getCell(Position[1, 4])!!.currentValue = 0
+        sudoku.getCell(Position[4, 4])!!.currentValue = 7
+        sudoku.getCell(Position[8, 4])!!.currentValue = 1
+        sudoku.getCell(Position[0, 5])!!.currentValue = 5
+        sudoku.getCell(Position[5, 5])!!.currentValue = 3
+        sudoku.getCell(Position[0, 6])!!.currentValue = 2
+        sudoku.getCell(Position[7, 6])!!.currentValue = 0
+        sudoku.getCell(Position[1, 7])!!.currentValue = 3
+        sudoku.getCell(Position[8, 7])!!.currentValue = 6
+        sudoku.getCell(Position[2, 8])!!.currentValue = 6
+        sudoku.getCell(Position[6, 8])!!.currentValue = 2
+    }
 
     @Test
     @Timeout(value = 3, unit = TimeUnit.SECONDS)
-    void solveOneAutomaticallyApplied() {
-        Sudoku sudoku = new Sudoku(sudokuTypeRepo.read(standard9x9.ordinal()));
-        initSudoku9x9(sudoku);
-        Solver solver = new Solver(sudoku);
-        SolverSudoku solverSudoku = solver.solverSudoku;
-        Solution solution = solver.solveOne(true);
-        while (solution != null && solution.getAction() != null) {
-            System.out.println("loop in test");
-            SolveDerivation sd = solution.getDerivations().getLast();
-            Cell c = solverSudoku.getCell(sd.getCellIterator().next().getPosition());
-            assertNotEquals(Cell.EMPTYVAL, c.getCurrentValue());
-            solution = solver.solveOne(true);
+    fun solveOneAutomaticallyApplied() {
+        val sudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal)!!)
+        initSudoku9x9(sudoku)
+        val solver = Solver(sudoku)
+        val solverSudoku = solver.solverSudoku
+        var solution = solver.solveOne(true)
+        while (solution != null && solution.action != null) {
+            println("loop in test")
+            val sd: SolveDerivation = solution.getDerivations().last()
+            val c = solverSudoku.getCell(sd.cellIterator.next().position)
+            c!!.currentValue `should not be equal to` Cell.EMPTYVAL
+            solution = solver.solveOne(true)
         }
 
         // after solving everything, every cell should be filled
-        for (Cell f : solverSudoku) {
-            assertNotEquals(Cell.EMPTYVAL, f.getCurrentValue());
+        for (f in solverSudoku) {
+            f.currentValue `should not be equal to` Cell.EMPTYVAL
         }
     }
 
 
     @Test
     @Timeout(value = 3, unit = TimeUnit.SECONDS)
-    void solveOneManuallyApplied() {
-        Sudoku sudoku = new Sudoku(sudokuTypeRepo.read(standard9x9.ordinal()));
-        initSudoku9x9(sudoku);
-        Solver solver = new Solver(sudoku);
-        SolverSudoku solverSudoku = solver.solverSudoku;
-        Solution solution = solver.solveOne(false);
-        while (solution != null && solution.getAction() != null) {
-            SolveDerivation sd = solution.getDerivations().getLast();
-            solution.getAction().execute();
-            Cell c = solverSudoku.getCell(sd.getCellIterator().next().getPosition());
-            assertNotEquals(Cell.EMPTYVAL, c.getCurrentValue());
-            solution = solver.solveOne(false);
+    fun solveOneManuallyApplied() {
+        val sudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal)!!)
+        initSudoku9x9(sudoku)
+        val solver = Solver(sudoku)
+        val solverSudoku = solver.solverSudoku
+        var solution = solver.solveOne(false)
+        while (solution != null && solution.action != null) {
+            val sd: SolveDerivation = solution.getDerivations().last()
+            solution.action!!.execute()
+            val c = solverSudoku.getCell(sd.cellIterator.next().position)
+            c!!.currentValue `should not be equal to` Cell.EMPTYVAL
+            solution = solver.solveOne(false)
         }
 
-        for (Cell f : solverSudoku) {
-            assertNotEquals(Cell.EMPTYVAL, f.getCurrentValue());
+        for (f in solverSudoku) {
+            f.currentValue `should not be equal to` Cell.EMPTYVAL
         }
     }
 
@@ -156,242 +137,226 @@ class SolverTests {
      */
     @Test
     @Timeout(value = 3, unit = TimeUnit.SECONDS)
-    void solveOneIncorrect() {
+    fun solveOneIncorrect() {
         // GIVEN
-        Sudoku initialSudoku = new Sudoku(sudokuTypeRepo.read(standard9x9.ordinal()));
-        for (int i=0; i < 8; i++)
-            initialSudoku.getCell(Position.get(i,0)).setCurrentValue(i);
-        initialSudoku.getCell(Position.get(1,0)).setCurrentValue(0);//set a second cell to 0
-        Solver solver = new Solver(initialSudoku);
+        val initialSudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal)!!)
+        for (i in 0..7) initialSudoku.getCell(Position[i, 0])!!.currentValue = i
+        initialSudoku.getCell(Position[1, 0])!!.currentValue = 0 //set a second cell to 0
+        val solver = Solver(initialSudoku)
 
         // WHEN
-        Solution solution = solver.solveOne(true);
+        val solution = solver.solveOne(true)
 
         // THEN
-        assertNull(solution);
-	}
+        solution `should be` null
+    }
 
     @Test
     @Timeout(value = 3, unit = TimeUnit.SECONDS)
-    void solveAll() {
-        Sudoku sudoku = new Sudoku(sudokuTypeRepo.read(standard9x9.ordinal()));
-        initSudoku9x9(sudoku);
-        Solver solver = new Solver(sudoku);
-        SolverSudoku solverSudoku = solver.solverSudoku;
+    fun solveAll() {
+        val sudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal)!!)
+        initSudoku9x9(sudoku)
+        val solver = Solver(sudoku)
+        val solverSudoku = solver.solverSudoku
 
-        solver.solveAll(true, false, false);
-        List<Solution> solutions = solver.getSolutions();
-        for (Solution solution : solutions) {
-            for (SolveDerivation sd: solution.getDerivations())
-                assertNotNull(sd);
+        solver.solveAll(true, false, false)
+        val solutions: List<Solution> = solver.solutions!!
+        for (solution in solutions) {
+            for (sd in solution.getDerivations()) sd `should not be` null
         }
 
-        for (Cell f : solverSudoku)
-            assertNotEquals(Cell.EMPTYVAL, f.getCurrentValue());
+        for (f in solverSudoku) f.currentValue `should not be equal to` Cell.EMPTYVAL
     }
 
     @Test
     @Timeout(value = 3, unit = TimeUnit.SECONDS)
-    void solveAllIncorrect() {
+    fun solveAllIncorrect() {
         // GIVEN
-        Sudoku initialSudoku = new Sudoku(sudokuTypeRepo.read(standard9x9.ordinal()));
-        for (int i=0; i < 8; i++)
-            initialSudoku.getCell(Position.get(i,0)).setCurrentValue(i);
-        initialSudoku.getCell(Position.get(1,0)).setCurrentValue(0);//set a second cell to 0
-        Solver solver = new Solver(initialSudoku);
+        val initialSudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal))
+        for (i in 0..7) initialSudoku.getCell(Position[i, 0])!!.currentValue = i
+        initialSudoku.getCell(Position[1, 0])!!.currentValue = 0 //set a second cell to 0
+        val solver = Solver(initialSudoku)
 
         // WHEN
-        boolean response = solver.solveAll(true, false);
+        val response = solver.solveAll(true, false)
 
         // THEN
-        assertFalse(response);
+        response `should be` false
     }
 
-    @Test
-    void solveAllIllegalComplexity() {
-		solver.solverSudoku.setComplexity(null);
-		assertThrows(IllegalArgumentException.class, () -> solver.validate(null));
-	}
 
     @Test
-    void nullSudoku() {
-		assertThrows(NullPointerException.class, () -> new Solver(null));
-	}
+    fun hashing() {
+        val map: MutableMap<Position?, Int?> = HashMap()
+        for (i in 0..15) {
+            for (j in 0..15) {
+                map[Position[i, j]] = 16 * i + j
+            }
+        }
 
-    @Test
-    void hashing() {
-		Map<Position, Integer> map = new HashMap<Position, Integer>();
-		for (int i = 0; i < 16; i++) {
-			for (int j = 0; j < 16; j++) {
-				map.put(Position.get(i, j), 16 * i + j);
-			}
-		}
-
-		int count = 0;
-		for (int i = 0; i < 16; i++) {
-			for (int j = 0; j < 16; j++) {
-				assertEquals(map.get(Position.get(i, j)), Integer.valueOf(count));
-				count++;
-			}
-		}
-	}
-
-    @Test
-    void standard16x16() {
-        List<String> pattern = Arrays.asList(//
-                "__F_9_C734_5AE__",//
-                "C___5______BD93_",//
-                "_63A0_E_9__D5B_1",//
-                "458_3D___2_0F_C_",//
-
-                "F_5__46__D_3_2__",//
-                "8B___C__2__41___",//
-                "2__CE__A_0__3__9",//
-                "391E_2__A786____",//
-
-                "BE75_03___D_____",//
-                "_8C_2______7__1_",//
-                "_A9__1FD5B28E___",//
-                "___D___B_C_____6",//
-
-                "E_D_8_1_6A___5_F",//
-                "__0_A9______2___",//
-                "______D_____6C7A",//
-                "___1_B_2_F__0_E_"
-        );
-        parse16x16(pattern);
-
-		sudoku16x16.setComplexity(Complexity.arbitrary);
-		Solver solver = new Solver(sudoku16x16);
-		ComplexityRelation cr = solver.validate(solution16x16);
-		//assertEquals(ComplexityRelation.CONSTRAINT_SATURATION, cr); todo fix complexity determiation
-
-		// copy solution to current value
-		for (int j = 0; j < sudoku16x16.getSudokuType().getSize().getY(); j++) {
-			for (int i = 0; i < sudoku16x16.getSudokuType().getSize().getX(); i++) {
-				sudoku16x16.getCell(Position.get(i, j)).setCurrentValue(solution16x16.get(Position.get(i, j)));
-			}
-		}
-
-		// check constraints
-		for (Constraint c : sudoku16x16.getSudokuType()) {
-			assertTrue(c.isSaturated(sudoku16x16));
-		}
-
-		System.out.println("Solution (16x16) - Complexity: " + solver.solverSudoku.getComplexityValue());
-		if (PRINT_SOLUTIONS) {
-			StringBuilder sb = new StringBuilder();
-			for (int j = 0; j < sudoku16x16.getSudokuType().getSize().getY(); j++) {
-				for (int i = 0; i < sudoku16x16.getSudokuType().getSize().getX(); i++) {
-					int value = sudoku16x16.getCell(Position.get(i, j)).getCurrentValue();
-					String op = value + "";
-					if (value < 10)
-						op = " " + value;
-					if (value == -1)
-						op = " x";
-					sb.append(op + ", ");
-				}
-				sb.append("\n");
-			}
-			System.out.println(sb);
-		}
-	}
-
-    private void parse16x16(List<String> pattern) {
-        for(int row = 0; row < pattern.size(); row++) {
-            String rowS = pattern.get(row);
-            for(int col = 0; col < rowS.length(); col++) {
-                char c = rowS.charAt(col);
-                if (c == '_')
-                    continue;
-                solution16x16.put(Position.get(col, row), parseHex(c));
+        var count = 0
+        for (i in 0..15) {
+            for (j in 0..15) {
+                Assertions.assertEquals(map[Position[i, j]], count)
+                count++
             }
         }
     }
 
-    private static int parseHex(char c) {
-            if ('0' <= c && c <= '9')
-                return c - '0';
-            else if ('A' <= c && c <= 'F'){
-                return c - 'A';
-            } else throw new IllegalArgumentException("illegal character: " + c);
+    @Test
+    fun standard16x16() {
+        val pattern: MutableList<String> = mutableListOf( //
+            "__F_9_C734_5AE__",  //
+            "C___5______BD93_",  //
+            "_63A0_E_9__D5B_1",  //
+            "458_3D___2_0F_C_",  //
+
+            "F_5__46__D_3_2__",  //
+            "8B___C__2__41___",  //
+            "2__CE__A_0__3__9",  //
+            "391E_2__A786____",  //
+
+            "BE75_03___D_____",  //
+            "_8C_2______7__1_",  //
+            "_A9__1FD5B28E___",  //
+            "___D___B_C_____6",  //
+
+            "E_D_8_1_6A___5_F",  //
+            "__0_A9______2___",  //
+            "______D_____6C7A",  //
+            "___1_B_2_F__0_E_"
+        )
+        parse16x16(pattern)
+
+        sudoku16x16!!.complexity = Complexity.arbitrary
+        val solver = Solver(sudoku16x16!!)
+        val cr = solver.validate(solution16x16)
+
+        //assertEquals(ComplexityRelation.CONSTRAINT_SATURATION, cr); todo fix complexity determiation
+
+        // copy solution to current value
+        for (j in 0..<sudoku16x16!!.sudokuType.size.y) {
+            for (i in 0..<sudoku16x16!!.sudokuType.size.x) {
+                sudoku16x16!!.getCell(Position[i, j])!!.currentValue = solution16x16!![Position[i, j]]!!
+            }
+        }
+
+        // check constraints
+        for (c in sudoku16x16!!.sudokuType) {
+            c.isSaturated(sudoku16x16!!) `should be` true
+        }
+
+        println("Solution (16x16) - Complexity: " + solver.solverSudoku.complexityValue)
+        if (PRINT_SOLUTIONS) {
+            val sb = StringBuilder()
+            for (j in 0..<sudoku16x16!!.sudokuType.size.y) {
+                for (i in 0..<sudoku16x16!!.sudokuType.size.x) {
+                    val value = sudoku16x16!!.getCell(Position[i, j])!!.currentValue
+                    var op = value.toString() + ""
+                    if (value < 10) op = " " + value
+                    if (value == -1) op = " x"
+                    sb.append(op + ", ")
+                }
+                sb.append("\n")
+            }
+            println(sb)
+        }
+    }
+
+    private fun parse16x16(pattern: MutableList<String>) {
+        for (row in pattern.indices) {
+            val rowS = pattern[row]
+            for (col in 0..<rowS.length) {
+                val c = rowS[col]
+                if (c == '_') continue
+                solution16x16!!.put(Position[col, row], parseHex(c))
+            }
+        }
     }
 
     @Test
-    void standard16x16No2() {
-        List<String> pattern = Arrays.asList(//
-                "0__123__B_5___6_",
-                "__7___6__2__895A",
-                "_B__9__0_C_A__D_",
-                "2__E1__D___8__B_",
+    fun standard16x16No2() {
+        val pattern: MutableList<String> = mutableListOf( //
+            "0__123__B_5___6_",
+            "__7___6__2__895A",
+            "_B__9__0_C_A__D_",
+            "2__E1__D___8__B_",
 
-                "C___7__9_B1_0E__",
-                "A65____F___E__4C",
-                "___9_4E__3_7__A_",
-                "F__48B__0_____7_",
+            "C___7__9_B1_0E__",
+            "A65____F___E__4C",
+            "___9_4E__3_7__A_",
+            "F__48B__0_____7_",
 
-                "_1_____C__B47__2",
-                "_C__E_2__D7_F___",
-                "47__0___1___C8E_",
-                "__B3_5F_C__6___4",
+            "_1_____C__B47__2",
+            "_C__E_2__D7_F___",
+            "47__0___1___C8E_",
+            "__B3_5F_C__6___4",
 
-                "_2__B___5__3A__F",
-                "_6__F_4_D__0__1_",
-                "A0E8__C__1___D__",
-                "_D___A_1__C24__B"
-        );
-        parse16x16(pattern);
+            "_2__B___5__3A__F",
+            "_6__F_4_D__0__1_",
+            "A0E8__C__1___D__",
+            "_D___A_1__C24__B"
+        )
+        parse16x16(pattern)
 
-		sudoku16x16.setComplexity(Complexity.arbitrary);
-		Solver solver = new Solver(sudoku16x16);
-        ComplexityRelation cr = solver.validate(solution16x16);
+        sudoku16x16!!.complexity = Complexity.arbitrary
+        val solver = Solver(sudoku16x16!!)
+        val cr = solver.validate(solution16x16)
+
         //assertEquals(ComplexityRelation.CONSTRAINT_SATURATION, cr);
 
-		// copy solution to current value
-		for (int j = 0; j < sudoku16x16.getSudokuType().getSize().getY(); j++) {
-			for (int i = 0; i < sudoku16x16.getSudokuType().getSize().getX(); i++) {
-				sudoku16x16.getCell(Position.get(i, j)).setCurrentValue(solution16x16.get(Position.get(i, j)));
-			}
-		}
+        // copy solution to current value
+        for (j in 0..<sudoku16x16!!.sudokuType.size.y) {
+            for (i in 0..<sudoku16x16!!.sudokuType.size.x) {
+                sudoku16x16!!.getCell(Position[i, j])!!.currentValue = solution16x16!![Position[i, j]]!!
+            }
+        }
 
-		// check constraints
-		for (Constraint c : sudoku16x16.getSudokuType()) {
-			assertTrue(c.isSaturated(sudoku16x16));
-		}
+        // check constraints
+        for (c in sudoku16x16!!.sudokuType) {
+            c.isSaturated(sudoku16x16!!) `should be` true
+        }
 
-		// print solution if wanted
-		System.out.println("Solution (16x16) - Complexity: " + solver.solverSudoku.getComplexityValue());
-		if (PRINT_SOLUTIONS) {
-			StringBuilder sb = new StringBuilder();
-			for (int j = 0; j < sudoku16x16.getSudokuType().getSize().getY(); j++) {
-				for (int i = 0; i < sudoku16x16.getSudokuType().getSize().getX(); i++) {
-					int value = sudoku16x16.getCell(Position.get(i, j)).getCurrentValue();
-					String op = value + "";
-					if (value < 10)
-						op = " " + value;
-					if (value == -1)
-						op = " x";
-					sb.append(op + ", ");
-				}
-				sb.append("\n");
-			}
-			System.out.println(sb);
-		}
-	}
+        // print solution if wanted
+        println("Solution (16x16) - Complexity: " + solver.solverSudoku.complexityValue)
+        if (PRINT_SOLUTIONS) {
+            val sb = StringBuilder()
+            for (j in 0..<sudoku16x16!!.sudokuType.size.y) {
+                for (i in 0..<sudoku16x16!!.sudokuType.size.x) {
+                    val value = sudoku16x16!!.getCell(Position[i, j])!!.currentValue
+                    var op = value.toString() + ""
+                    if (value < 10) op = " " + value
+                    if (value == -1) op = " x"
+                    sb.append(op + ", ")
+                }
+                sb.append("\n")
+            }
+            println(sb)
+        }
+    }
 
     @Test
-    void noConstraintSaturation() {
-		sudoku.getCell(Position.get(0, 0)).setCurrentValue(0);
-		sudoku.getCell(Position.get(1, 0)).setCurrentValue(0);
+    fun noConstraintSaturation() {
+        sudoku!!.getCell(Position[0, 0])!!.currentValue = 0
+        sudoku!!.getCell(Position[1, 0])!!.currentValue = 0
 
-		sudoku.setComplexity(Complexity.arbitrary);
-		Solver solver = new Solver(sudoku);
-		assertEquals(ComplexityRelation.INVALID, solver.validate(null));
-	}
+        sudoku!!.complexity = Complexity.arbitrary
+        val solver = Solver(sudoku!!)
+        Assertions.assertEquals(ComplexityRelation.INVALID, solver.validate(null))
+    }
 
-}
+    companion object {
+        private const val PRINT_SOLUTIONS = false
 
-// TEMPLATE 16x16
+        private fun parseHex(c: Char): Int {
+            return when (c) {
+                in '0'..'9' -> c.code - '0'.code
+                in 'A'..'F' -> c.code - 'A'.code
+                else -> throw IllegalArgumentException("illegal character: $c")
+            }
+        }
+    }
+} // TEMPLATE 16x16
 /*
  * sudoku16x16.getField(Position.get(0, 0)).setCurrentValue(0); sudoku16x16.getField(Position.get(1,
  * 0)).setCurrentValue(6); sudoku16x16.getField(Position.get(2, 0)).setCurrentValue(7); sudoku16x16.getField(new
@@ -548,3 +513,4 @@ class SolverTests {
  * Position(13, 15)).setCurrentValue(2); sudoku16x16.getField(Position.get(14, 15)).setCurrentValue(9);
  * sudoku16x16.getField(Position.get(15, 15)).setCurrentValue(4);
  */
+

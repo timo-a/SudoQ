@@ -1,27 +1,18 @@
-package de.sudoq.model.solverGenerator.solution;
+package de.sudoq.model.solverGenerator.solution
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import de.sudoq.model.sudoku.Constraint
+import de.sudoq.model.sudoku.ConstraintType
+import de.sudoq.model.sudoku.UniqueConstraintBehavior
+import org.amshove.kluent.`should be equal to`
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.function.Executable
 
-import org.junit.jupiter.api.Test;
-
-import de.sudoq.model.solverGenerator.solution.DerivationBlock;
-import de.sudoq.model.sudoku.Constraint;
-import de.sudoq.model.sudoku.ConstraintType;
-import de.sudoq.model.sudoku.UniqueConstraintBehavior;
-
-class DerivationBlockTests {
-
+internal class DerivationBlockTests {
     @Test
-    void standardTest() {
-		Constraint constr = new Constraint(new UniqueConstraintBehavior(), ConstraintType.LINE);
-		DerivationBlock block = new DerivationBlock(constr);
-		assertEquals(block.getBlock(), constr);
-	}
-
-    @Test
-    void constraintNull() {
-		assertThrows(NullPointerException.class, () -> new DerivationBlock(null));
-	}
-
+    fun standardTest() {
+        val constr = Constraint(UniqueConstraintBehavior(), ConstraintType.LINE)
+        val block = DerivationBlock(constr)
+        constr `should be equal to` block.block
+    }
 }

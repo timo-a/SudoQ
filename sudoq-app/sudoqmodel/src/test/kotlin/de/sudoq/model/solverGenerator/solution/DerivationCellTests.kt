@@ -1,38 +1,24 @@
-package de.sudoq.model.solverGenerator.solution;
+package de.sudoq.model.solverGenerator.solution
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import de.sudoq.model.sudoku.Position
+import org.amshove.kluent.`should be equal to`
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.function.Executable
+import java.util.BitSet
 
-import java.util.BitSet;
-
-import org.junit.jupiter.api.Test;
-
-import de.sudoq.model.sudoku.Position;
-
-class DerivationCellTests {
-
+internal class DerivationCellTests {
     @Test
-    void standardTest() {
-		BitSet relevantCandidates = new BitSet();
-		relevantCandidates.set(5);
-		relevantCandidates.set(3);
-		BitSet irrelevantCandidates = new BitSet();
-		irrelevantCandidates.set(1);
-		irrelevantCandidates.set(2);
-		DerivationCell derivation = new DerivationCell(Position.get(1, 1), relevantCandidates, irrelevantCandidates);
-		assertEquals(derivation.getPosition(), Position.get(1, 1));
-		assertEquals(derivation.getRelevantCandidates(), relevantCandidates);
-		assertEquals(derivation.getIrrelevantCandidates(), irrelevantCandidates);
-	}
-
-    @Test
-    void positionNull() {
-		assertThrows(NullPointerException.class, () -> new DerivationCell(null, new BitSet(), new BitSet()));
-	}
-
-    @Test
-    void candidatesNull() {
-		assertThrows(NullPointerException.class, () -> new DerivationCell(Position.get(1, 1), null, null));
-	}
-
+    fun standardTest() {
+        val relevantCandidates = BitSet()
+        relevantCandidates.set(5)
+        relevantCandidates.set(3)
+        val irrelevantCandidates = BitSet()
+        irrelevantCandidates.set(1)
+        irrelevantCandidates.set(2)
+        val derivation = DerivationCell(Position[1, 1], relevantCandidates, irrelevantCandidates)
+        Assertions.assertEquals(derivation.position, Position[1, 1])
+        derivation.relevantCandidates `should be equal to` relevantCandidates
+        derivation.irrelevantCandidates `should be equal to` irrelevantCandidates
+    }
 }

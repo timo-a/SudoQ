@@ -1,447 +1,430 @@
-package de.sudoq.model.game;
+package de.sudoq.model.game
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import de.sudoq.model.actionTree.NoteActionFactory
+import de.sudoq.model.actionTree.SolveActionFactory
+import de.sudoq.model.solverGenerator.Generator
+import de.sudoq.model.solverGenerator.GeneratorCallback
+import de.sudoq.model.solverGenerator.solution.Solution
+import de.sudoq.model.solverGenerator.utils.PrettySudokuRepo2
+import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests
+import de.sudoq.model.sudoku.Cell
+import de.sudoq.model.sudoku.Position
+import de.sudoq.model.sudoku.PositionMap
+import de.sudoq.model.sudoku.Sudoku
+import de.sudoq.model.sudoku.SudokuBuilder
+import de.sudoq.model.sudoku.complexity.Complexity
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider.getSudokuType
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
+import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder
+import org.amshove.kluent.invoking
+import org.amshove.kluent.`should be`
+import org.amshove.kluent.`should be equal to`
+import org.amshove.kluent.`should not be`
+import org.amshove.kluent.`should not be equal to`
+import org.amshove.kluent.`should throw`
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
+import java.nio.file.Paths
+import java.time.Duration
+import java.time.temporal.ChronoUnit
+import java.util.concurrent.CompletableFuture
 
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-
-import org.junit.jupiter.api.Test;
-
-import de.sudoq.model.Utility;
-import de.sudoq.model.actionTree.ActionTreeElement;
-import de.sudoq.model.actionTree.NoteActionFactory;
-import de.sudoq.model.actionTree.SolveActionFactory;
-import de.sudoq.model.solverGenerator.Generator;
-import de.sudoq.model.solverGenerator.GeneratorCallback;
-import de.sudoq.model.solverGenerator.solution.Solution;
-import de.sudoq.model.solverGenerator.utils.PrettySudokuRepo2;
-import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests;
-import de.sudoq.model.sudoku.Cell;
-import de.sudoq.model.sudoku.Position;
-import de.sudoq.model.sudoku.PositionMap;
-import de.sudoq.model.sudoku.Sudoku;
-import de.sudoq.model.sudoku.SudokuBuilder;
-import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
-
-class GameTests {
-
-	private static SudokuTypeRepo4Tests sudokuTypeRepo = new SudokuTypeRepo4Tests();
-
-    private PrettySudokuRepo2 sudokuRepo = new PrettySudokuRepo2(sudokuTypeRepo);
+internal class GameTests {
+    private val sudokuRepo = PrettySudokuRepo2(sudokuTypeRepo)
 
     /**
-     * This is the former @BeforeAll init method. it takes suspiciously long to generate a sudoku todo inestigate!
-     * */
+     * This is the former @BeforeAll init method. it takes suspiciously long to generate a sudoku todo investigate!
+     */
     @Test
-    void debugGeneration() throws Exception {
-        TypeBuilder.get99(); //just to force initialization of filemanager
+    @Throws(Exception::class)
+    fun debugGeneration() {
+        TypeBuilder.get99() //just to force initialization of filemanager
 
-        CompletableFuture<Sudoku> future = new CompletableFuture<>();
+        val future = CompletableFuture<Sudoku?>()
 
-        GeneratorCallback gc = new GeneratorCallback() {
-            @Override
-            public void generationFinished(Sudoku sudoku) {
-                future.complete(sudoku);
+        val gc: GeneratorCallback = object : GeneratorCallback {
+            override fun generationFinished(sudoku: Sudoku) {
+                future.complete(sudoku)
             }
 
-            @Override
-            public void generationFinished(Sudoku sudoku, List<Solution> sl) {
-                future.complete(sudoku);
+            override fun generationFinished(sudoku: Sudoku, sl: List<Solution>) {
+                future.complete(sudoku)
             }
-        };
-        new Generator(sudokuTypeRepo).generate(SudokuTypes.standard9x9, Complexity.easy, gc);
-        assertTimeoutPreemptively(Duration.of(60, ChronoUnit.SECONDS), () -> {
-            future.get();
-        });
-        Sudoku sudoku = future.get();
-        assertNotNull(sudoku, "sudoku is null");
+        }
+        Generator(sudokuTypeRepo).generate(SudokuTypes.standard9x9, Complexity.easy, gc)
+        Assertions.assertTimeoutPreemptively(Duration.of(60, ChronoUnit.SECONDS)) {
+            future.get()
+        }
+        val sudoku = future.get()
+        sudoku `should not be` null
     }
 
     @Test
-    void instantiation() {
-		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku());
-        assertEquals(2, game.getId());
-		assertNotNull(game.getStateHandler());
-        assertEquals(Cell.EMPTYVAL, game.getSudoku().getCell(Position.get(8, 8)).getCurrentValue());
-		assertNull(game.getSudoku().getCell(Position.get(10, 2)));
-		assertEquals(0, game.getAssistancesCost());
-	}
+    fun instantiation() {
+        val game = Game(2, SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku())
+        game.id `should be equal to` 2
+        game.stateHandler `should not be` null
+        game.sudoku!!.getCell(Position[8, 8])!!.currentValue `should be equal to` Cell.EMPTYVAL
+        game.sudoku!!.getCell(Position[10, 2]) `should be` null
+        game.assistancesCost `should be equal to` 0
+    }
 
     @Test
-    void nullInstantiation() {
-		assertThrows(NullPointerException.class, () -> new Game(2, null));
-	}
+    fun gameInteraction() {
+        val game = Game(2, SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku())
+
+        val pos = Position[1, 1]
+        val start = game.currentState
+        val f = game.sudoku!!.getCell(pos)
+        game.addAndExecute(SolveActionFactory().createAction(3, f!!)) //setze 3
+        game.addAndExecute(SolveActionFactory().createAction(4, f)) //setze 4
+        game.isMarked(game.currentState) `should be` false
+        game.addAndExecute(SolveActionFactory().createAction(5, f)) //setze 5
+        game.sudoku!!.getCell(pos)!!.currentValue `should be equal to` 5
+        game.markCurrentState()
+        game.isMarked(game.currentState) `should be` true
+
+        game.goToState(start)
+        f.currentValue `should be equal to` Cell.EMPTYVAL
+        game.isFinished() `should be` false
+
+        game.redo()
+        game.redo()
+        f.currentValue `should be equal to` 5 //schlägt fehl
+        game.undo()
+        f.currentValue `should be equal to` Cell.EMPTYVAL
+        game.redo()
+        game.checkSudoku() `should be` false
+
+        game.addTime(23)
+        game.time `should be equal to` 23
+    }
 
     @Test
-    void gameInteraction() {
-		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku());
+    fun equals() {
+        val game = Game(2, SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku())
+        game `should be equal to` game
+        val game2 = Game(3, SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku())
+        game2 `should not be equal to` game
 
-		Position pos = Position.get(1, 1);
-		ActionTreeElement start = game.getCurrentState();
-        Cell f = game.getSudoku().getCell(pos);
-		game.addAndExecute(new SolveActionFactory().createAction(3, f));//setze 3
-		game.addAndExecute(new SolveActionFactory().createAction(4, f));//setze 4
-		assertFalse(game.isMarked(game.getCurrentState()));
-		game.addAndExecute(new SolveActionFactory().createAction(5, f));//setze 5
-		assertEquals(5, game.getSudoku().getCell(pos).getCurrentValue());
-		game.markCurrentState();
-		assertTrue(game.isMarked(game.getCurrentState()));
+        val pos = Position[1, 1]
+        val start = game.currentState
 
-		game.goToState(start);
-		assertEquals(Cell.EMPTYVAL, f.getCurrentValue());
-		assertFalse(game.isFinished());
+        game.addAndExecute(SolveActionFactory().createAction(3, game.sudoku!!.getCell(pos)!!))
+        game.addAndExecute(SolveActionFactory().createAction(4, game.sudoku!!.getCell(pos)!!))
+        game.addAndExecute(SolveActionFactory().createAction(5, game.sudoku!!.getCell(pos)!!))
+        game.markCurrentState()
 
-		game.redo();
-		game.redo();
-		assertEquals(5, f.getCurrentValue());//schlägt fehl
-		game.undo();
-		assertEquals(Cell.EMPTYVAL, f.getCurrentValue());
-		game.redo();
-		assertFalse(game.checkSudoku());
+        game.goToState(start)
 
-		game.addTime(23);
-        assertEquals(23, game.getTime());
-	}
+        game.redo()
+        game.redo()
+        game.undo()
+
+        game2 `should not be equal to` game
+        game `should be equal to` game
+
+        game `should not be equal to` Any()
+    }
 
     @Test
-    void equals() {
-		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku());
-		assertEquals(game, game);
-		Game game2 = new Game(3, new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku());
-		assertNotEquals(game, game2);
+    fun gameXML() {
+        val s = SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku()
+        s.id = 5
+        val game = Game(2, s)
 
-		Position pos = Position.get(1, 1);
-		ActionTreeElement start = game.getCurrentState();
+        val pos = Position[1, 1]
+        val start = game.currentState
 
-		game.addAndExecute(new SolveActionFactory().createAction(3, game.getSudoku().getCell(pos)));
-		game.addAndExecute(new SolveActionFactory().createAction(4, game.getSudoku().getCell(pos)));
-		game.addAndExecute(new SolveActionFactory().createAction(5, game.getSudoku().getCell(pos)));
-		game.markCurrentState();
+        game.addAndExecute(SolveActionFactory().createAction(3, game.sudoku!!.getCell(pos)!!))
+        game.addAndExecute(SolveActionFactory().createAction(4, game.sudoku!!.getCell(pos)!!))
+        game.addAndExecute(SolveActionFactory().createAction(5, game.sudoku!!.getCell(pos)!!))
+        game.addAndExecute(NoteActionFactory().createAction(2, game.sudoku!!.getCell(pos)!!))
+        game.sudoku!!.getCell(pos)!!.currentValue `should be equal to` 5
+        game.markCurrentState()
+        game.isMarked(game.currentState) `should be` true
 
-		game.goToState(start);
+        game.goToState(start)
 
-		game.redo();
-		game.redo();
-		game.undo();
-
-		assertNotEquals(game, game2);
-		assertEquals(game, game);
-
-		assertNotEquals(game, new Object());
-	}
-
-    @Test
-    void gameXML() {
-		Sudoku s = new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku();
-		s.setId(5);
-		Game game = new Game(2, s);
-
-		Position pos = Position.get(1, 1);
-		ActionTreeElement start = game.getCurrentState();
-
-		game.addAndExecute(new SolveActionFactory().createAction(3, game.getSudoku().getCell(pos)));
-		game.addAndExecute(new SolveActionFactory().createAction(4, game.getSudoku().getCell(pos)));
-		game.addAndExecute(new SolveActionFactory().createAction(5, game.getSudoku().getCell(pos)));
-		game.addAndExecute(new NoteActionFactory().createAction(2, game.getSudoku().getCell(pos)));
-        assertEquals(5, game.getSudoku().getCell(pos).getCurrentValue());
-		game.markCurrentState();
-		assertTrue(game.isMarked(game.getCurrentState()));
-
-		game.goToState(start);
-
-		game.redo();
-		game.redo();
-		game.undo();
-
-	}
+        game.redo()
+        game.redo()
+        game.undo()
+    }
 
     // Regression Test for Issue-89
     @Test
-    void finishedAttributeConsistency() {
-		SudokuBuilder sb = new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo);
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
-				sb.addSolution(Position.get(i, j), 1);
-			}
-		}
-		Game game = new Game(1, sb.createSudoku());
-		assertTrue(game.solveAll());
-		assertTrue(game.isFinished());
-
-	}
-
+    fun finishedAttributeConsistency() {
+        val sb = SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo)
+        for (i in 0..8) {
+            for (j in 0..8) {
+                sb.addSolution(Position[i, j], 1)
+            }
+        }
+        val game = Game(1, sb.createSudoku())
+        game.solveAll() `should be` true
+        game.isFinished() `should be` true
+    }
 
     @Test
-    void setNullAssistances() {
-		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku());
-		assertThrows(NullPointerException.class, () -> game.setAssistances(null));
-	}
+    fun assistanceSetting() {
+        val game = Game(2, SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku())
+
+        game.setAssistances(object : GameSettings() {
+            override fun getAssistance(assistance: Assistances): Boolean = true
+        })
+
+        Assistances.entries
+            .map(game::isAssistanceAvailable)
+            .forEach(Assertions::assertTrue)
+    }
 
     @Test
-    void assistanceSetting() {
-		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku());
+    fun help() {
+        class SudokuMock : Sudoku(
+            getSudokuType(SudokuTypes.standard9x9, sudokuTypeRepo), PositionMap(Position[9, 9]),
+            PositionMap(Position[9, 9])
+        ) {
+            override var isFinished: Boolean = false
+                private set
+            private var errors = false
 
-		game.setAssistances(new GameSettings() {
-			@Override
-			public boolean getAssistance(Assistances assistance) {
-				return true;
-			}
-		});
+            public override fun hasErrors(): Boolean {
+                return errors
+            }
 
-		for (Assistances a : Assistances.values()) {
-			assertTrue(game.isAssistanceAvailable(a));
-		}
-	}
+            fun toogleErrors() {
+                errors = !errors
+            }
 
-    @Test
-    void help() {
-		class SudokuMock extends Sudoku {
-			private boolean finished = false;
-			private boolean errors = false;
+            fun toogleFinished() {
+                this.isFinished = !this.isFinished
+            }
+        }
 
-			public SudokuMock() {
-				super(SudokuTypeProvider.getSudokuType(SudokuTypes.standard9x9, sudokuTypeRepo), new PositionMap<Integer>(Position.get(9, 9)),
-						new PositionMap<Boolean>(Position.get(9, 9)));
-			}
+        val sudoku = SudokuMock()
+        val game = Game(2, sudoku)
 
-			@Override
-			public boolean isFinished() {
-				return finished;
-			}
+        game.solveCell(null) `should be` false
+        game.solveCell(Cell(true, -1, 3, 9)) `should be` false
 
-			@Override
-			public boolean hasErrors() {
-				return errors;
-			}
+        game.addAndExecute(SolveActionFactory().createAction(2, game.sudoku!!.getCell(Position[0, 0])!!))
+        sudoku.toogleErrors()
+        game.checkSudoku() `should be` false
+        game.currentState.isMistake `should be` true
+        game.solveCell() `should be` false
+        game.solveCell(game.sudoku!!.getCell(Position[0, 0])) `should be` false
+        game.solveAll() `should be` false
 
-			public void toogleErrors() {
-				errors = !errors;
-			}
-
-			public void toogleFinished() {
-				finished = !finished;
-			}
-
-		}
-		SudokuMock sudoku = new SudokuMock();
-		Game game = new Game(2, sudoku);
-
-		assertFalse(game.solveCell(null));
-		assertFalse(game.solveCell(new Cell(true, -1, 3, 9)));
-
-		game.addAndExecute(new SolveActionFactory().createAction(2, game.getSudoku().getCell(Position.get(0, 0))));
-		sudoku.toogleErrors();
-		assertFalse(game.checkSudoku());
-		assertTrue(game.getCurrentState().isMistake());
-		assertFalse(game.solveCell());
-		assertFalse(game.solveCell(game.getSudoku().getCell(Position.get(0, 0))));
-		assertFalse(game.solveAll());
-
-		sudoku.toogleErrors();
-		sudoku.toogleFinished();
-		game.addAndExecute(new SolveActionFactory().createAction(Cell.EMPTYVAL,
-				game.getSudoku().getCell(Position.get(0, 0))));
-		game.addAndExecute(new SolveActionFactory().createAction(1, game.getSudoku().getCell(Position.get(0, 0))));
-		assertEquals(Cell.EMPTYVAL, game.getSudoku().getCell(Position.get(0, 0)).getCurrentValue());
-	}
+        sudoku.toogleErrors()
+        sudoku.toogleFinished()
+        game.addAndExecute(
+            SolveActionFactory().createAction(
+                Cell.EMPTYVAL,
+                game.sudoku!!.getCell(Position[0, 0])!!
+            )
+        )
+        game.addAndExecute(SolveActionFactory().createAction(1, game.sudoku!!.getCell(Position[0, 0])!!))
+        game.sudoku!!.getCell(Position[0, 0])!!.currentValue `should be equal to` Cell.EMPTYVAL
+    }
 
     @Test
-    void noteAdjustment() {
-		Game game = new Game(2, new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku());
-		GameSettings as = new GameSettings();
-		as.setAssistance(Assistances.autoAdjustNotes);
-		game.setAssistances(as);
+    fun noteAdjustment() {
+        val game = Game(2, SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku())
+        val `as` = GameSettings()
+        `as`.setAssistance(Assistances.autoAdjustNotes)
+        game.setAssistances(`as`)
 
-		game.addAndExecute(new NoteActionFactory().createAction(2, game.getSudoku().getCell(Position.get(1, 0))));
-		game.addAndExecute(new NoteActionFactory().createAction(3, game.getSudoku().getCell(Position.get(1, 0))));
-		game.addAndExecute(new NoteActionFactory().createAction(2, game.getSudoku().getCell(Position.get(0, 1))));
-		game.addAndExecute(new NoteActionFactory().createAction(3, game.getSudoku().getCell(Position.get(0, 1))));
+        game.addAndExecute(NoteActionFactory().createAction(2, game.sudoku!!.getCell(Position[1, 0])!!))
+        game.addAndExecute(NoteActionFactory().createAction(3, game.sudoku!!.getCell(Position[1, 0])!!))
+        game.addAndExecute(NoteActionFactory().createAction(2, game.sudoku!!.getCell(Position[0, 1])!!))
+        game.addAndExecute(NoteActionFactory().createAction(3, game.sudoku!!.getCell(Position[0, 1])!!))
 
-		assertTrue(game.getSudoku().getCell(Position.get(0, 1)).isNoteSet(2));
-		assertTrue(game.getSudoku().getCell(Position.get(1, 0)).isNoteSet(2));
-		assertTrue(game.getSudoku().getCell(Position.get(0, 1)).isNoteSet(3));
-		assertTrue(game.getSudoku().getCell(Position.get(1, 0)).isNoteSet(3));
+        game.sudoku!!.getCell(Position[0, 1])!!.isNoteSet(2) `should be` true
+        game.sudoku!!.getCell(Position[1, 0])!!.isNoteSet(2) `should be` true
+        game.sudoku!!.getCell(Position[0, 1])!!.isNoteSet(3) `should be` true
+        game.sudoku!!.getCell(Position[1, 0])!!.isNoteSet(3) `should be` true
 
-		game.addAndExecute(new SolveActionFactory().createAction(2, game.getSudoku().getCell(Position.get(0, 0))));
+        game.addAndExecute(SolveActionFactory().createAction(2, game.sudoku!!.getCell(Position[0, 0])!!))
 
-		assertTrue(game.getSudoku().getCell(Position.get(0, 1)).isNoteSet(3));
-		assertTrue(game.getSudoku().getCell(Position.get(1, 0)).isNoteSet(3));
-		assertFalse(game.getSudoku().getCell(Position.get(0, 1)).isNoteSet(2));
-		assertFalse(game.getSudoku().getCell(Position.get(1, 0)).isNoteSet(2));
-	}
+        game.sudoku!!.getCell(Position[0, 1])!!.isNoteSet(3) `should be` true
+        game.sudoku!!.getCell(Position[1, 0])!!.isNoteSet(3) `should be` true
+        game.sudoku!!.getCell(Position[0, 1])!!.isNoteSet(2) `should be` false
+        game.sudoku!!.getCell(Position[1, 0])!!.isNoteSet(2) `should be` false
+    }
 
-    @Test
-    void score() {
-		for (Complexity c : Complexity.values()) {
-			Sudoku sudoku = new Sudoku(TypeBuilder.get99());
-			sudoku.setComplexity(c);
-			Game game = new Game(0, sudoku);
-			game.addTime(60);
-			switch (c) {
-			case easy:
-                assertEquals(2430, game.getScore());
-				break;
-			case medium:
-                assertEquals(7290, game.getScore());
-				break;
-			case difficult:
-                assertEquals(21870, game.getScore());
-				break;
-			case infernal:
-                assertEquals(65610, game.getScore());
-				break;
-			}
-		}
-	}
+    @ParameterizedTest
+    @CsvSource(value = ["easy,2430", "medium,7290", "difficult,21870", "infernal,65610"])
+    fun score(c: Complexity, score: Int) {
+        val sudoku = Sudoku(TypeBuilder.get99())
+        sudoku.complexity = c
+        val game = Game(0, sudoku)
+        game.addTime(60)
+        game.score `should be equal to` score
+    }
 
     @Test
-    synchronized void solve() {
-        Path sudokuPath = Paths.get("sudokus/9_lockedCandidates_1.pretty");
-        Sudoku sudoku = sudokuRepo.read(sudokuPath, Complexity.easy);
-        assertNotNull(sudoku);
-        Game game = new Game(1, sudoku);
-		ArrayList<Cell> unsolvedCells = new ArrayList<Cell>();
-		for (Cell f : sudoku) {
-			if (f.isEditable()) {
-				f.clearCurrentValue();
-				unsolvedCells.add(f);
-			}
-		}
-		assertTrue(game.checkSudoku());
-		assertTrue(game.solveCell());
-		boolean hasNewSolved = false;
-		for (Cell f : sudoku) {
-			if (f.isEditable() && f.isSolvedCorrect()) {
-				if (hasNewSolved) {
-					fail("Solve field solved more than one field");
-				} else {
-					hasNewSolved = true;
-					unsolvedCells.remove(f);
-				}
-			}
-		}
-		assertTrue(hasNewSolved);
-		assertTrue(game.checkSudoku());
-		assertFalse(game.isFinished());
-		assertTrue(game.solveCell(unsolvedCells.get(0)));
-		assertTrue(unsolvedCells.get(0).isSolvedCorrect());
-		unsolvedCells.remove(0);
-		assertFalse(game.isFinished());
-		assertTrue(game.solveAll());
-		for (Cell f : unsolvedCells) {
-			assertTrue(f.isSolvedCorrect());
-		}
-		assertTrue(game.isFinished());
-		assertTrue(game.isFinished());
-	}
+    fun `score for arbitrary should not be possible`() {
+        val sudoku = Sudoku(TypeBuilder.get99())
+        sudoku.complexity = Complexity.arbitrary
+        val game = Game(0, sudoku)
+        game.addTime(60)
+        invoking { game.score } `should throw` IllegalStateException::class
+    }
 
     @Test
-    synchronized void goToLastCorrectState() {
-        Path sudokuPath = Paths.get("sudokus/9_lockedCandidates_1.pretty");
-        Sudoku sudoku = sudokuRepo.read(sudokuPath, Complexity.easy);
-        assertNotNull(sudoku);
-		Game game = new Game(1, sudoku);
+    @Synchronized
+    fun solve() {
+        val sudokuPath = Paths.get("sudokus/9_lockedCandidates_1.pretty")
+        val sudoku = sudokuRepo.read(sudokuPath, Complexity.easy)
+        sudoku `should not be` null
+        val game = Game(1, sudoku)
+        val unsolvedCells = ArrayList<Cell>()
+        for (f in sudoku) {
+            if (f.isEditable) {
+                f.clearCurrentValue()
+                unsolvedCells.add(f)
+            }
+        }
+        game.checkSudoku() `should be` true
+        game.solveCell() `should be` true
+        var hasNewSolved = false
+        for (f in sudoku) {
+            if (f.isEditable && f.isSolvedCorrect) {
+                if (hasNewSolved) {
+                    Assertions.fail<Any>("Solve field solved more than one field")
+                } else {
+                    hasNewSolved = true
+                    unsolvedCells.remove(f)
+                }
+            }
+        }
+        hasNewSolved `should be` true
+        game.checkSudoku() `should be` true
+        game.isFinished() `should be` false
+        game.solveCell(unsolvedCells[0]) `should be` true
+        unsolvedCells[0].isSolvedCorrect `should be` true
+        unsolvedCells.removeAt(0)
+        game.isFinished() `should be` false
+        game.solveAll() `should be` true
+        for (f in unsolvedCells) {
+            f.isSolvedCorrect `should be` true
+        }
+        game.isFinished() `should be` true
+        game.isFinished() `should be` true
+    }
 
-		Cell unsolvedCell = null;
-		for (Cell f : sudoku) {
-			if (f.isEditable()) {
-				f.clearCurrentValue();
-				if (unsolvedCell == null)
-					unsolvedCell = f;
-			}
-		}
+    @Test
+    @Synchronized
+    fun goToLastCorrectState() {
+        val sudokuPath = Paths.get("sudokus/9_lockedCandidates_1.pretty")
+        val sudoku = sudokuRepo.read(sudokuPath, Complexity.easy)
+        sudoku `should not be` null
+        val game = Game(1, sudoku)
 
-		int oldAssistanceCost = game.getAssistancesCost();
-		game.goToLastCorrectState();
-        assertEquals(oldAssistanceCost+3, game.getAssistancesCost());
-		oldAssistanceCost = game.getAssistancesCost();
+        var unsolvedCell: Cell? = null
+        for (f in sudoku) {
+            if (f.isEditable) {
+                f.clearCurrentValue()
+                if (unsolvedCell == null) unsolvedCell = f
+            }
+        }
 
-		if (unsolvedCell.getSolution() < 8) {
-			game.addAndExecute(new SolveActionFactory().createAction(8, unsolvedCell));
-		} else {
-			game.addAndExecute(new SolveActionFactory().createAction(7, unsolvedCell));
-		}
+        var oldAssistanceCost = game.assistancesCost
+        game.goToLastCorrectState()
+        game.assistancesCost `should be equal to` oldAssistanceCost + 3
+        oldAssistanceCost = game.assistancesCost
 
-		game.goToLastCorrectState();
-        assertEquals(oldAssistanceCost + 3, game.getAssistancesCost());
-		oldAssistanceCost = game.getAssistancesCost();
-        assertEquals(Cell.EMPTYVAL, unsolvedCell.getCurrentValue());
-		assertTrue(game.getCurrentState().isCorrect());
-	}
+        if (unsolvedCell!!.solution < 8) {
+            game.addAndExecute(SolveActionFactory().createAction(8, unsolvedCell))
+        } else {
+            game.addAndExecute(SolveActionFactory().createAction(7, unsolvedCell))
+        }
+
+        game.goToLastCorrectState()
+        game.assistancesCost `should be equal to` oldAssistanceCost + 3
+        oldAssistanceCost = game.assistancesCost
+        unsolvedCell.currentValue `should be equal to` Cell.EMPTYVAL
+        game.currentState.isCorrect `should be` true
+    }
 
     // Regression Test for Issue-90
     @Test
-    void autoAdjustNotesForAutomaticSolving() {
-		SudokuBuilder sb = new SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo);
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
-				sb.addSolution(Position.get(i, j), 1);
-			}
-		}
-		Game game = new Game(2, sb.createSudoku());
-		GameSettings as = new GameSettings();
-		as.setAssistance(Assistances.autoAdjustNotes);
-		game.setAssistances(as);
+    fun autoAdjustNotesForAutomaticSolving() {
+        val sb = SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo)
+        for (i in 0..8) {
+            for (j in 0..8) {
+                sb.addSolution(Position[i, j], 1)
+            }
+        }
+        val game = Game(2, sb.createSudoku())
+        val `as` = GameSettings()
+        `as`.setAssistance(Assistances.autoAdjustNotes)
+        game.setAssistances(`as`)
 
-        for(Position pos: game.getSudoku().getSudokuType().getValidPositions()) {
-            game.addAndExecute(new NoteActionFactory().createAction(1, game.getSudoku().getCell(pos)));
-            assertTrue(game.getSudoku().getCell(pos).isNoteSet(1));
-		}
+        for (pos in game.sudoku!!.sudokuType.validPositions) {
+            game.addAndExecute(NoteActionFactory().createAction(1, game.sudoku!!.getCell(pos)!!))
+            game.sudoku!!.getCell(pos)!!.isNoteSet(1) `should be` true
+        }
 
-		assertTrue(game.solveCell());
-		boolean done = false;
-		int x = -1;
-		int y = -1;
-		for (int i = 0; i < 9 && !done; i++) {
-			for (int j = 0; j < 9 && !done; j++) {
-				if (game.getSudoku().getCell(Position.get(i, j)).getCurrentValue() == 1) {
-					done = true;
-					x = i;
-					y = j;
-				}
-			}
-		}
-		assertTrue(done);
+        game.solveCell() `should be` true
+        var done = false
+        var x = -1
+        var y = -1
+        run {
+            var i = 0
+            while (i < 9 && !done) {
+                var j = 0
+                while (j < 9 && !done) {
+                    if (game.sudoku!!.getCell(Position[i, j])!!.currentValue == 1) {
+                        done = true
+                        x = i
+                        y = j
+                    }
+                    j++
+                }
+                i++
+            }
+        }
+        done `should be` true
 
-		for (int i = 0; i < 9; i++) {
-			assertFalse(game.getSudoku().getCell(Position.get(x, i)).isNoteSet(1));
-			assertFalse(game.getSudoku().getCell(Position.get(i, y)).isNoteSet(1));
-		}
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
-				assertFalse(game.getSudoku().getCell(Position.get((x - (x % 3) + i), (y - (y % 3) + j))).isNoteSet(1));
-			}
-		}
+        for (i in 0..8) {
+            game.sudoku!!.getCell(Position[x, i])!!.isNoteSet(1) `should be` false
+            game.sudoku!!.getCell(Position[i, y])!!.isNoteSet(1) `should be` false
+        }
+        for (i in 0..2) {
+            for (j in 0..2) {
+                game.sudoku!!.getCell(
+                    Position[
+                        (x - (x % 3) + i),
+                        (y - (y % 3) + j)
+                    ]
+                )!!.isNoteSet(1) `should be` false
+            }
+        }
 
-		x = (x + 3) % 9;
-		y = (y + 3) % 9;
-		game.solveCell(game.getSudoku().getCell(Position.get(x, y)));
+        x = (x + 3) % 9
+        y = (y + 3) % 9
+        game.solveCell(game.sudoku!!.getCell(Position[x, y]))
 
-		for (int i = 0; i < 9; i++) {
-			assertFalse(game.getSudoku().getCell(Position.get(x, i)).isNoteSet(1));
-			assertFalse(game.getSudoku().getCell(Position.get(i, y)).isNoteSet(1));
-		}
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
-				assertFalse(game.getSudoku().getCell(Position.get((x - (x % 3) + i), (y - (y % 3) + j))).isNoteSet(1));
-			}
-		}
-	}
+        for (i in 0..8) {
+            game.sudoku!!.getCell(Position[x, i])!!.isNoteSet(1) `should be` false
+            game.sudoku!!.getCell(Position[i, y])!!.isNoteSet(1) `should be` false
+        }
+        for (i in 0..2) {
+            for (j in 0..2) {
+                game.sudoku!!.getCell(
+                    Position[
+                        (x - (x % 3) + i),
+                        (y - (y % 3) + j)
+                    ]
+                )!!.isNoteSet(1) `should be` false
+            }
+        }
+    }
+
+    companion object {
+        private val sudokuTypeRepo = SudokuTypeRepo4Tests()
+    }
 }

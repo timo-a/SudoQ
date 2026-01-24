@@ -1,198 +1,179 @@
-package de.sudoq.model.solverGenerator.solver;
+package de.sudoq.model.solverGenerator.solver
 
-import de.sudoq.model.ports.persistence.ReadRepo;
-import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests;
-import de.sudoq.model.sudoku.Cell;
-import de.sudoq.model.sudoku.Position;
-import de.sudoq.model.sudoku.Sudoku;
-import de.sudoq.model.sudoku.SudokuBuilder;
-import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
+import de.sudoq.model.ports.persistence.ReadRepo
+import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests
+import de.sudoq.model.sudoku.Cell
+import de.sudoq.model.sudoku.Position
+import de.sudoq.model.sudoku.Sudoku
+import de.sudoq.model.sudoku.SudokuBuilder
+import de.sudoq.model.sudoku.complexity.Complexity
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 
 //import de.sudoq.model.utility.persistence.sudokuType.SudokuTypeRepo;
-
 /**
  * Created by timo on 02.09.16.
  */
-public class SudokuMockUps {
-
+object SudokuMockUps {
     //static File tmpSudokus = Files.createTempDirectory("junit").toFile();
+    private val str: ReadRepo<SudokuType> = SudokuTypeRepo4Tests()
 
-
-    private static final ReadRepo<SudokuType> str = new SudokuTypeRepo4Tests();
-
-    public static Sudoku stringTo9x9Sudoku(String pattern){
-        Sudoku s = new SudokuBuilder(SudokuTypes.standard9x9, str).createSudoku();
-        s.setComplexity(Complexity.arbitrary);
-        return transform(s, pattern);
+    fun stringTo9x9Sudoku(pattern: String): Sudoku {
+        val s = SudokuBuilder(SudokuTypes.standard9x9, str).createSudoku()
+        s.complexity = Complexity.arbitrary
+        return transform(s, pattern)
     }
 
-    public static Sudoku stringTo16x16Sudoku(String pattern){
-        Sudoku s = new SudokuBuilder(SudokuTypes.standard16x16, str).createSudoku();
-        s.setComplexity(Complexity.arbitrary);
-        return transformX(16, s, pattern);
+    @JvmStatic
+    fun stringTo16x16Sudoku(pattern: String): Sudoku {
+        val s = SudokuBuilder(SudokuTypes.standard16x16, str).createSudoku()
+        s.complexity = Complexity.arbitrary
+        return transformX(16, s, pattern)
     }
 
     /* expects values in [1,9] */
-    public static Sudoku stringToSamuraiSudoku(String pattern){
-        Sudoku s = new SudokuBuilder(SudokuTypes.samurai, str).createSudoku();
-        s.setComplexity(Complexity.arbitrary);
-        int dim = 21;
-        for(int y=0; y<dim; y++)
-            for(int x=0; x<dim; x++){
-                char c = pattern.charAt(2*(dim*y+x));
-                Cell f =  s.getCell(Position.get(x, y));
-                if (f==null)
-                    ;//pass
-                else if (c == '.'){
-                    //empty
-                }else if ('0' < c && c <= '9'){
-                    f.setCurrentValue(c-'0' -1);
-                }else
-                    throw new IllegalArgumentException("parse error");
-            }
-
-
-        return s;
-    }
-
-
-    public static Sudoku getLockedCandidates1(){
-        //http://hodoku.sourceforge.net/en/tech_intersections.php //sudoku_1 in resources
-        String pattern = "9    8     4       ¹²   ¹²⁷  ³⁶       ¹³⁵  ⁶⁷   ⁵⁷    \n"
-                       + "³⁷   ⁶⁷    2       5    ¹⁷⁸  ³⁶       ¹³⁹  4    ⁷⁸⁹   \n"
-                       + "³⁵⁷  ⁵⁶⁷   1       9    ⁷⁸   4        ³⁵   ⁶⁷⁸  2     \n"
-
-                       + "⁵⁸   ¹⁴⁵   6       ¹⁴⁸  9    7        2    3    ⁴⁵⁸   \n"
-                       + "⁵⁷⁸  ¹⁴⁵⁷  3       6    ¹⁴⁸  2        ⁵⁹   ⁷⁸   ⁴⁵⁷⁸⁹ \n"
-                       + "2    ⁴⁷    9       ⁴⁸   3    5        6    1    ⁴⁷⁸   \n"
-
-                       + "1    9     5       7    6    8        4    2    3     \n"
-                       + "4    2     7       3    5    1        8    9    6     \n"
-                       + "6    3     8       ²⁴   ²⁴   9        7    5    1     \n";
-
-        return stringTo9x9Sudoku(pattern);
-    }
-
-
-    public static Sudoku getXWing(){
-        String pattern = "⁵⁸ 4  1    7   2   9     ⁶⁸ 3  ⁵⁶ \n"
-                       + "7  6  9    ¹⁸  ¹⁵⁸ 3     4  ⁵⁸ 2  \n"
-                       + "⁵⁸ 3  2    6   4   ⁵⁸    7  1  9  \n"
-
-                       + "4  ²⁸ 3    9   ⁵⁸  ²⁵⁶⁸  1  7  ⁵⁶ \n"
-                       + "6  ²⁸ 7    ¹²⁸ ¹⁵⁸ 4     9  ⁵⁸ 3  \n"
-                       + "1  9  5    3   7   ⁶⁸    ⁶⁸ 2  4  \n" 
-                       
-                       + "2  1  4    5   6   7     3  9  8  \n"
-                       + "3  7  6    ²⁸  9   ²⁸    5  4  1  \n"
-                       + "9  5  8    4   3   1     2  6  7  \n";
-
-        return stringTo9x9Sudoku(pattern);
-    }
-
-
-
-    public static Sudoku stringToSudoku(SudokuTypes type, String pattern){
-        Sudoku sudoku = new SudokuBuilder(type, str).createSudoku();
-        sudoku.setComplexity(Complexity.arbitrary);
-        int xLim = sudoku.getSudokuType().getSize().getX();
-
-        String[] candidates = pattern.split("\\s+");
-        for(Position pos : sudoku.getSudokuType().getValidPositions()) {
-            String currentEntry = candidates[xLim * pos.getY() + pos.getX()];
-                Cell f =  sudoku.getCell(pos);
-                clearCandidates(f, sudoku);
-
-                if("0123456789".contains(currentEntry))
-                    f.setCurrentValue(Integer.parseInt(currentEntry)-1);
-                else if(currentEntry.equals("."))
-                    ;//pass -> completely empty
-                else
-                    for(Character c:currentEntry.toCharArray())
-                        f.toggleNote(Character.getNumericValue(c)-1);
-
-         }
-        return sudoku;
-    }
-
-    private static Sudoku transform(Sudoku sudoku, String pattern){
-        String[] candidates = pattern.split("\\s+");
-        for (Position pos : sudoku.getSudokuType().getValidPositions()) {
-            String gu = candidates[9* pos.getY()+pos.getX()];
-            Cell f =  sudoku.getCell(pos);
-            clearCandidates(f,sudoku);
-
-            switch (gu.length()){
-                case 0: break;
-                case 1: {
-                    if(gu.charAt(0) == '.') {
-                        ; //pass '.' -> kein eintrag, keine notizen
-                    } else {
-                        f.setCurrentValue(Integer.parseInt(gu) - 1);
-                    }
-                    break;
-                }
-                default:
-                    for(Character c:gu.toCharArray())
-                        f.toggleNote(Character.getNumericValue(c)-1);
-                }
+    @JvmStatic
+    fun stringToSamuraiSudoku(pattern: String): Sudoku {
+        val s = SudokuBuilder(SudokuTypes.samurai, str).createSudoku()
+        s.complexity = Complexity.arbitrary
+        val dim = 21
+        for (y in 0..<dim) for (x in 0..<dim) {
+            val c = pattern[2 * (dim * y + x)]
+            val f = s.getCell(Position[x, y])
+            if (f == null) ; else if (c == '.') {
+                //empty
+            } else if (c in '1'..'9') {
+                f.currentValue = c.code - '0'.code - 1
+            } else throw IllegalArgumentException("parse error")
         }
-        return sudoku;
+
+
+        return s
     }
 
 
+    val lockedCandidates1: Sudoku
+        get() {
+            //http://hodoku.sourceforge.net/en/tech_intersections.php //sudoku_1 in resources
+            val pattern =
+                ("9    8     4       ¹²   ¹²⁷  ³⁶       ¹³⁵  ⁶⁷   ⁵⁷    \n"
+                        + "³⁷   ⁶⁷    2       5    ¹⁷⁸  ³⁶       ¹³⁹  4    ⁷⁸⁹   \n"
+                        + "³⁵⁷  ⁵⁶⁷   1       9    ⁷⁸   4        ³⁵   ⁶⁷⁸  2     \n"
+
+                        + "⁵⁸   ¹⁴⁵   6       ¹⁴⁸  9    7        2    3    ⁴⁵⁸   \n"
+                        + "⁵⁷⁸  ¹⁴⁵⁷  3       6    ¹⁴⁸  2        ⁵⁹   ⁷⁸   ⁴⁵⁷⁸⁹ \n"
+                        + "2    ⁴⁷    9       ⁴⁸   3    5        6    1    ⁴⁷⁸   \n"
+
+                        + "1    9     5       7    6    8        4    2    3     \n"
+                        + "4    2     7       3    5    1        8    9    6     \n"
+                        + "6    3     8       ²⁴   ²⁴   9        7    5    1     \n")
+
+            return stringTo9x9Sudoku(pattern)
+        }
 
 
-    private static Sudoku transformX(int dim, Sudoku sudoku, String pattern){
-        String[] candidates = pattern.split("\\s+");
-        for(int y=0; y<dim; y++)
-            for(int x=0; x<dim; x++){
-                String gu = candidates[dim*y+x];
-                Cell f =  sudoku.getCell(Position.get(x, y));
-                clearCandidates(f,sudoku);
+    val xWing: Sudoku
+        get() {
+            val pattern = ("⁵⁸ 4  1    7   2   9     ⁶⁸ 3  ⁵⁶ \n"
+                    + "7  6  9    ¹⁸  ¹⁵⁸ 3     4  ⁵⁸ 2  \n"
+                    + "⁵⁸ 3  2    6   4   ⁵⁸    7  1  9  \n"
 
-                if (gu.equals(".")){
-                    //empty
-                }else if ('0' <= gu.charAt(0) &&
-                                 gu.charAt(0) <= '9'){
-                    f.setCurrentValue(Integer.parseInt(gu)-1);
-                }else
-                    for(Character c:gu.toCharArray())
-                            f.toggleNote(Character.getNumericValue(c)-1);
+                    + "4  ²⁸ 3    9   ⁵⁸  ²⁵⁶⁸  1  7  ⁵⁶ \n"
+                    + "6  ²⁸ 7    ¹²⁸ ¹⁵⁸ 4     9  ⁵⁸ 3  \n"
+                    + "1  9  5    3   7   ⁶⁸    ⁶⁸ 2  4  \n"
+
+                    + "2  1  4    5   6   7     3  9  8  \n"
+                    + "3  7  6    ²⁸  9   ²⁸    5  4  1  \n"
+                    + "9  5  8    4   3   1     2  6  7  \n")
+
+            return stringTo9x9Sudoku(pattern)
+        }
+
+
+    fun stringToSudoku(type: SudokuTypes, pattern: String): Sudoku {
+        val sudoku = SudokuBuilder(type, str).createSudoku()
+        sudoku.complexity = Complexity.arbitrary
+        val xLim = sudoku.sudokuType.size.x
+
+        val candidates =
+            pattern.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        for (pos in sudoku.sudokuType.validPositions) {
+            val currentEntry = candidates[xLim * pos.y + pos.x]
+            val f = sudoku.getCell(pos)
+            SudokuMockUps.clearCandidates(f!!, sudoku)
+
+            if ("0123456789".contains(currentEntry)) f.currentValue = currentEntry.toInt() - 1
+            else if (currentEntry == ".") ;
+            else for (c in currentEntry.toCharArray()) f.toggleNote(
+                Character.getNumericValue(c) - 1
+            )
+        }
+        return sudoku
+    }
+
+    private fun transform(sudoku: Sudoku, pattern: String): Sudoku {
+        val candidates =
+            pattern.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        for (pos in sudoku.sudokuType.validPositions) {
+            val gu = candidates[9 * pos.y + pos.x]
+            val f = sudoku.getCell(pos)
+            SudokuMockUps.clearCandidates(f!!, sudoku)
+
+            when (gu.length) {
+                0 -> {}
+                1 -> {
+                    if (gu[0] == '.') {
+                        //pass '.' -> kein eintrag, keine notizen
+                    } else {
+                        f.currentValue = gu.toInt() - 1
+                    }
                 }
 
-        return sudoku;
-    }
-
-    private static void clearCandidates(Cell f, Sudoku sudoku){
-        for(int i : sudoku.getSudokuType().getSymbolIterator())
-            if(f.isNoteSet(i))
-                f.toggleNote(i);
-    }
-
-    private static void setCandidates(Cell f, Sudoku sudoku){
-        for(int i : sudoku.getSudokuType().getSymbolIterator())
-            if(!f.isNoteSet(i))
-                f.toggleNote(i);
+                else -> for (c in gu.toCharArray()) f.toggleNote(Character.getNumericValue(c) - 1)
+            }
+        }
+        return sudoku
     }
 
 
-    public static String increase9By1(String pattern){
-        return pattern.replace("8","9")
-                      .replace("7","8")
-                      .replace("6","7")
-                      .replace("5","6")
-                      .replace("4","5")
-                      .replace("3","4")
-                      .replace("2","3")
-                      .replace("1","2")
-                      .replace("0","1");
+    private fun transformX(dim: Int, sudoku: Sudoku, pattern: String): Sudoku {
+        val candidates =
+            pattern.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        for (y in 0..<dim) for (x in 0..<dim) {
+            val gu = candidates[dim * y + x]
+            val f = sudoku.getCell(Position[x, y])
+            SudokuMockUps.clearCandidates(f!!, sudoku)
+
+            if (gu == ".") { /* empty */ }
+            else if (gu.get(0) in '0'..'9')
+                f.currentValue = gu.toInt() - 1
+            else
+                for (c in gu.toCharArray()) f.toggleNote(Character.getNumericValue(c) - 1)
+        }
+
+        return sudoku
+    }
+
+    private fun clearCandidates(f: Cell, sudoku: Sudoku) {
+        for (i in sudoku.sudokuType.symbolIterator) if (f.isNoteSet(i)) f.toggleNote(i)
+    }
+
+    private fun setCandidates(f: Cell, sudoku: Sudoku) {
+        for (i in sudoku.sudokuType.symbolIterator) if (!f.isNoteSet(i)) f.toggleNote(i)
     }
 
 
-    /* untested
+    fun increase9By1(pattern: String): String {
+        return pattern.replace("8", "9")
+            .replace("7", "8")
+            .replace("6", "7")
+            .replace("5", "6")
+            .replace("4", "5")
+            .replace("3", "4")
+            .replace("2", "3")
+            .replace("1", "2")
+            .replace("0", "1")
+    } /* untested
     private static Sudoku transform1Constraint(String pattern){
         pattern = "2 4 5 ²⁴³ ⁶";
         String[] candidates = pattern.split("\\s+");
@@ -222,10 +203,7 @@ public class SudokuMockUps {
         }
         return sudoku;
     }*/
-}
-
-
-/*
+} /*
 0, 0 -> -1
 1, 0 ->  3
 2, 0 -> -1
@@ -311,3 +289,5 @@ public class SudokuMockUps {
 1, 8 -> -1
 
 */
+
+

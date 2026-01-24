@@ -1,28 +1,21 @@
-package de.sudoq.model.solverGenerator.solver;
+package de.sudoq.model.solverGenerator.solver
 
-import de.sudoq.model.sudoku.Position;
-import de.sudoq.model.sudoku.Sudoku;
+import de.sudoq.model.sudoku.Position
+import de.sudoq.model.sudoku.Sudoku
 
-public final class SudokuTestUtilities {
-
-	private SudokuTestUtilities() {
-
-	}
-
-	public static void printSudoku(Sudoku sudoku) {
-		StringBuilder sb = new StringBuilder();
-		for (int j = 0; j < sudoku.getSudokuType().getSize().getY(); j++) {
-			for (int i = 0; i < sudoku.getSudokuType().getSize().getX(); i++) {
-				int value = sudoku.getCell(Position.get(i, j)).getCurrentValue();
-				String op = value + "";
-				if (String.valueOf(value).length() < 2)
-					op = " " + value;
-				if (value == -1)
-					op = "--";
-				sb.append(op + ", ");
-			}
-			sb.append("\n");
-		}
-		System.out.println(sb);
-	}
+object SudokuTestUtilities {
+    fun printSudoku(sudoku: Sudoku) {
+        val sb = StringBuilder()
+        for (j in 0..<sudoku.sudokuType.size.y) {
+            for (i in 0..<sudoku.sudokuType.size.x) {
+                val value = sudoku.getCell(Position[i, j])!!.currentValue
+                var op = value.toString() + ""
+                if (value.toString().length < 2) op = " " + value
+                if (value == -1) op = "--"
+                sb.append(op + ", ")
+            }
+            sb.append("\n")
+        }
+        println(sb)
+    }
 }

@@ -1,62 +1,44 @@
-package de.sudoq.model.sudoku;
+package de.sudoq.model.sudoku
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import de.sudoq.model.ports.persistence.ReadRepo
+import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests
+import de.sudoq.model.sudoku.sudokuTypes.SudokuType
+import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
+import org.amshove.kluent.invoking
+import org.amshove.kluent.`should be`
+import org.amshove.kluent.`should match all with`
+import org.amshove.kluent.`should throw`
+import org.junit.jupiter.api.Test
 
-import org.junit.jupiter.api.Test;
+internal class SudokuBuilderTests {
+    private val str: ReadRepo<SudokuType> = SudokuTypeRepo4Tests()
 
-import de.sudoq.model.ports.persistence.ReadRepo;
-import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
-
-class SudokuBuilderTests {
-
-	private final ReadRepo<SudokuType> str = new SudokuTypeRepo4Tests();
-
-	Cell cell;
-
-    @Test
-    void initialisation() {
-		for (SudokuTypes t : SudokuTypes.values()) {
-            testBuildergeneric(t);
-		}
-	}
-
-	private void testBuildergeneric(SudokuTypes t) {
-		Sudoku sudoku = new SudokuBuilder(t, str).createSudoku();
-		for (Position pos : sudoku.getSudokuType().getValidPositions()) {
-            cell = sudoku.getCell(pos);
-            if (cell != null)
-                assertEquals(Cell.EMPTYVAL, cell.getCurrentValue());
-		}
-	}
+    var cell: Cell? = null
 
     @Test
-    void builderWithSolutions() {
-		SudokuBuilder sb = new SudokuBuilder(SudokuTypes.standard9x9, str);
-		sb.addSolution(Position.get(0, 0), 5);
-		sb.setFixed(Position.get(0, 0));
-		sb.addSolution(Position.get(0, 1), 3);
-		Sudoku s = sb.createSudoku();
+    fun initialisation() = SudokuTypes.entries.forEach(::testBuildergeneric)
 
-		assertEquals(5, s.getCell(Position.get(0, 0)).getSolution());
-		assertEquals(5, s.getCell(Position.get(0, 0)).getCurrentValue());
-		assertEquals(3, s.getCell(Position.get(0, 1)).getSolution());
-		assertEquals(Cell.EMPTYVAL, s.getCell(Position.get(0, 1)).getCurrentValue());
+    private fun testBuildergeneric(t: SudokuTypes) {
+        val sudoku = SudokuBuilder(t, str).createSudoku()
+        sudoku.sudokuType.validPositions
+            .mapNotNull { sudoku.getCell(it) }
+            .`should match all with` { it.currentValue == Cell.EMPTYVAL }
+    }
 
-		try {
-			sb.addSolution(Position.get(1, 3), -5);
-			fail("no exception");
-		} catch (IllegalArgumentException e) {
-			// great
-		}
-		try {
-			sb.addSolution(Position.get(1, 3), 9);
-			fail("no exception");
-		} catch (IllegalArgumentException e) {
-			// great
-		}
-	}
+    @Test
+    fun builderWithSolutions() {
+        val sb = SudokuBuilder(SudokuTypes.standard9x9, str)
+        sb.addSolution(Position[0, 0], 5)
+        sb.setFixed(Position[0, 0])
+        sb.addSolution(Position[0, 1], 3)
+        val s = sb.createSudoku()
 
+        s.getCell(Position[0, 0])!!.solution `should be` 5
+        s.getCell(Position[0, 0])!!.currentValue `should be` 5
+        s.getCell(Position[0, 1])!!.solution `should be` 3
+        s.getCell(Position[0, 1])!!.currentValue `should be` Cell.EMPTYVAL
+
+        invoking { sb.addSolution(Position[1, 3], -5) } `should throw` IllegalArgumentException::class
+        invoking { sb.addSolution(Position[1, 3], 9) } `should throw` IllegalArgumentException::class
+    }
 }

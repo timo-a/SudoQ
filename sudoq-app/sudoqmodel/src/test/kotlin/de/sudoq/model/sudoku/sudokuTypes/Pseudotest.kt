@@ -1,52 +1,13 @@
-package de.sudoq.model.sudoku.sudokuTypes;
+package de.sudoq.model.sudoku.sudokuTypes
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import de.sudoq.model.sudoku.complexity.Complexity
+import de.sudoq.model.sudoku.complexity.ComplexityConstraint
+import org.amshove.kluent.`should be equal to`
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
-import de.sudoq.model.sudoku.Constraint;
-import de.sudoq.model.sudoku.Position;
-import de.sudoq.model.sudoku.complexity.Complexity;
-import de.sudoq.model.sudoku.complexity.ComplexityConstraint;
-
-public class Pseudotest {
-
-	SudokuType stHy = TypeBuilder.getType(SudokuTypes.HyperSudoku);
-
-	public SudokuType usual(SudokuType oldType){
-
-        SudokuType s = new SudokuType(
-                oldType.getEnumType(),
-                oldType.getNumberOfSymbols(),
-                oldType.getStandardAllocationFactor(),
-                oldType.getSize(), Position.get(1,1),
-                new ArrayList<>(oldType.getConstraints()),
-                new ArrayList<>(),
-                new ArrayList<>(),
-                new ComplexityConstraintBuilder(new HashMap<>()));
-		for (PermutationProperties p : oldType.getPermutationProperties())
-			s.getPermutationProperties().add(p);
-		
-		Complexity[] comps = {Complexity.easy,
-	                          Complexity.medium,
-	                          Complexity.difficult,
-	                          Complexity.infernal,
-	                          Complexity.arbitrary};
-
-        for(Complexity c : comps)
-            s.getCcb().getSpecimen().put(c, oldType.buildComplexityConstraint(c));
-        
-		return s;
-	}
+class Pseudotest {
+    var stHy: SudokuType = TypeBuilder.getType(SudokuTypes.HyperSudoku)
 
     /*    private void filestuff(SudokuType st){
             System.out.println(st.getEnumType());
@@ -61,11 +22,10 @@ public class Pseudotest {
             }
             st.fillFromXml(st.toXmlTree());
         }*/
-    
     @Test
-    void createXmlTypes() {
-		return;
-		/*
+    fun createXmlTypes() {
+        return
+        /*
 		TypeStandard old = new StandardSudokuType9x9();
 		SudokuType st = usual(old);
 		st.setBlockDimensions(old.getBlockSize());
@@ -84,63 +44,69 @@ public class Pseudotest {
 		oldy = new StairStepSudokuType9x9(); st = usual(oldy); st.setBlockDimensions(oldy.getBlockSize()); filestuff(st);
 		oldy = new SamuraiSudokuType();      st = usual(oldy); st.setBlockDimensions(oldy.getBlockSize()); filestuff(st);
 		*/
-	}
+    }
 
     @Test
-    void getEnumTypeTest() {
-		assertSame(stHy.getEnumType(), SudokuTypes.HyperSudoku);
-	}
+    fun getEnumTypeTest() {
+        Assertions.assertSame(stHy.enumType, SudokuTypes.HyperSudoku)
+    }
 
     @Test
-    void getAllocationFactorTest() {
-        assertEquals(0.25f, stHy.getStandardAllocationFactor());
-	}
+    fun getAllocationFactorTest() {
+        Assertions.assertEquals(0.25f, stHy.getStandardAllocationFactor())
+    }
 
     //This tests just specification, is such a test relevant?
     @Test
-    void buildComplexityConstraintEasy() {
-		ComplexityConstraint reference = new ComplexityConstraint(
-				Complexity.easy, 40, 500, 1500, 2);
-		ComplexityConstraint test = stHy.buildComplexityConstraint(Complexity.easy);
-		assertTrue(complexityEqual(test, reference));
-	}
+    fun buildComplexityConstraintEasy() {
+        val reference = ComplexityConstraint(
+            Complexity.easy, 40, 500, 1500, 2
+        )
+        val test = stHy.buildComplexityConstraint(Complexity.easy)
+        complexityEqual(test!!, reference)
+    }
 
     @Test
-    void buildComplexityConstraintMedium() {
-		ComplexityConstraint reference = new ComplexityConstraint(
-				Complexity.medium, 32, 1500, 3500, 3);
-		ComplexityConstraint test = stHy.buildComplexityConstraint(Complexity.medium);
-		assertTrue(complexityEqual(test, reference));
-	}
+    fun buildComplexityConstraintMedium() {
+        val reference = ComplexityConstraint(
+            Complexity.medium, 32, 1500, 3500, 3
+        )
+        val test = stHy.buildComplexityConstraint(Complexity.medium)
+        complexityEqual(test!!, reference)
+    }
 
     @Test
-    void buildComplexityConstraintDifficult() {
-		ComplexityConstraint reference = new ComplexityConstraint(
-				Complexity.difficult, 28, 3500, 6000, Integer.MAX_VALUE);
-		ComplexityConstraint test = stHy.buildComplexityConstraint(Complexity.difficult);
-		assertTrue(complexityEqual(test, reference));
-	}
+    fun buildComplexityConstraintDifficult() {
+        val reference = ComplexityConstraint(
+            Complexity.difficult, 28, 3500, 6000, Int.MAX_VALUE
+        )
+        val test = stHy.buildComplexityConstraint(Complexity.difficult)
+        complexityEqual(test!!, reference)
+    }
 
     @Test
-    void buildComplexityConstraintInfernal() {
-		ComplexityConstraint reference = new ComplexityConstraint(
-				Complexity.infernal, 27, 6000, 25000, Integer.MAX_VALUE);
-		ComplexityConstraint test = stHy.buildComplexityConstraint(Complexity.infernal);
-		assertTrue(complexityEqual(test, reference));
-	}
+    fun buildComplexityConstraintInfernal() {
+        val reference = ComplexityConstraint(
+            Complexity.infernal, 27, 6000, 25000, Int.MAX_VALUE
+        )
+        val test = stHy.buildComplexityConstraint(Complexity.infernal)
+        complexityEqual(test!!, reference)
+    }
 
     @Test
-    void buildComplexityConstraintArbitrary() {
-		ComplexityConstraint reference = new ComplexityConstraint(
-				Complexity.arbitrary, 32, 1, Integer.MAX_VALUE, Integer.MAX_VALUE);
-		ComplexityConstraint test = stHy.buildComplexityConstraint(Complexity.arbitrary);
-		assertTrue(complexityEqual(test, reference));
-	}
+    fun buildComplexityConstraintArbitrary() {
+        val reference = ComplexityConstraint(
+            Complexity.arbitrary, 32, 1, Int.MAX_VALUE, Int.MAX_VALUE
+        )
+        val test = stHy.buildComplexityConstraint(Complexity.arbitrary)
+        complexityEqual(test!!, reference)
+    }
 
-	private boolean complexityEqual(ComplexityConstraint c1, ComplexityConstraint c2) {
-		return c1.getComplexity() == c2.getComplexity() && c1.getAverageCells() == c2.getAverageCells()
-				&& c1.getMinComplexityIdentifier() == c2.getMinComplexityIdentifier()
-				&& c1.getMaxComplexityIdentifier() == c2.getMaxComplexityIdentifier()
-				&& c1.getNumberOfAllowedHelpers() == c2.getNumberOfAllowedHelpers();
-	}
+    private fun complexityEqual(c1: ComplexityConstraint, c2: ComplexityConstraint) {
+        c1.complexity `should be equal to` c2.complexity
+        c1.averageCells `should be equal to` c2.averageCells
+        c1.minComplexityIdentifier `should be equal to` c2.minComplexityIdentifier
+        c1.maxComplexityIdentifier `should be equal to` c2.maxComplexityIdentifier
+        c1.numberOfAllowedHelpers `should be equal to` c2.numberOfAllowedHelpers
+    }
 }

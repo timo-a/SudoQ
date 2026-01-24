@@ -1,21 +1,13 @@
-package de.sudoq.model.solverGenerator.solver;
+package de.sudoq.model.solverGenerator.solver
+
+import org.amshove.kluent.`should be equal to`
+import org.junit.jupiter.api.Test
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-
-import org.junit.jupiter.api.Test;
-
-import de.sudoq.model.solverGenerator.solver.ComplexityRelation;
-
-class ComplexityRelationTests {
-
+internal class ComplexityRelationTests {
     @Test
-    void test() {
-		ComplexityRelation[] types = ComplexityRelation.values();
-		for (ComplexityRelation type : types) {
-            assertEquals(ComplexityRelation.valueOf(type.toString()), type);
-		}
-	}
-
+    fun test() {
+        val types = ComplexityRelation.entries.toTypedArray()
+        types.forEach { it `should be equal to` ComplexityRelation.valueOf(it.toString()) }
+    }
 }

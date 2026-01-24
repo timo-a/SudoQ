@@ -1,37 +1,26 @@
-package de.sudoq.model.solverGenerator.solver;
+package de.sudoq.model.solverGenerator.solver
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import de.sudoq.model.sudoku.CandidateSet
+import de.sudoq.model.sudoku.Position
+import de.sudoq.model.sudoku.PositionMap
+import org.amshove.kluent.`should be equal to`
+import org.junit.jupiter.api.Test
 
-import org.junit.jupiter.api.Test;
-
-import de.sudoq.model.sudoku.CandidateSet;
-import de.sudoq.model.sudoku.Position;
-import de.sudoq.model.sudoku.PositionMap;
-
-class BranchingPoolTests {
-    private PositionMap<CandidateSet> dummyPositionMap = new PositionMap<>(Position.get(9,9));
+internal class BranchingPoolTests {
+    private val dummyPositionMap = PositionMap<CandidateSet>(Position[9, 9])
 
     @Test
-    void complete() {
-		BranchingPool pool = new BranchingPool();
-        assertEquals(1, pool.getBranching(Position.get(1, 5), 1, dummyPositionMap).candidate);
-		assertEquals(pool.getBranching(Position.get(1, 5), 2, dummyPositionMap).position, Position.get(1, 5));
-		// new branchings to be initialized
-		pool.getBranching(Position.get(1, 5), 4, dummyPositionMap);
+    fun complete() {
+        val pool = BranchingPool()
+        pool.getBranching(Position[1, 5], 1, dummyPositionMap).candidate `should be equal to` 1
+        pool.getBranching(Position[1, 5], 2, dummyPositionMap).position `should be equal to` Position[1, 5]
 
-		pool.recycleAllBranchings();
-		// return another branching
-		pool.recycleLastBranching();
+        // new branchings to be initialized
+        pool.getBranching(Position[1, 5], 4, dummyPositionMap)
 
-	}
-
-    @Test
-    void getBranchingNull() {
-		BranchingPool pool = new BranchingPool();
-
-		// should throw exception
-		assertThrows(NullPointerException.class, () -> pool.getBranching(null, 5, dummyPositionMap));
-	}
+        pool.recycleAllBranchings()
+        // return another branching
+        pool.recycleLastBranching()
+    }
 
 }
