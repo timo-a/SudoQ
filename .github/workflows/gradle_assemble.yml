@@ -28,6 +28,6 @@ jobs:
           chmod +x gradlew
     - name: assemble release with Gradle //build would try to build playground as well
       run: |
-          echo "$(pwd)"      
+          echo "$(pwd)"
           cd sudoq-app
           ./gradlew assembleRelease

@@ -33,12 +33,6 @@ sourceSets {
     val main by getting
     val test by getting
 
-    create("kotlintests") {
-        kotlin.srcDir("src/test/kotlin")
-        resources.srcDir("src/othertest/resources")
-        compileClasspath += main.output + test.output
-        runtimeClasspath += main.output + test.output
-    }
     create("othertests") {
         java.srcDir("src/otherTests/java")
         kotlin.srcDir("src/otherTests/kotlin")
@@ -56,9 +50,6 @@ sourceSets {
 }
 
 configurations {
-    getByName("kotlintestsImplementation") {
-        extendsFrom(testImplementation.get())
-    }
     getByName("othertestsImplementation") {
         extendsFrom(testImplementation.get())
     }
@@ -66,23 +57,11 @@ configurations {
         extendsFrom(testImplementation.get())
     }
 
-    getByName("kotlintestsRuntimeOnly") {
-        extendsFrom(testRuntimeOnly.get())
-    }
     getByName("othertestsRuntimeOnly") {
         extendsFrom(testRuntimeOnly.get())
     }
     getByName("solvertestsRuntimeOnly") {
         extendsFrom(testRuntimeOnly.get())
-    }
-}
-
-val kotlinTest by tasks.registering(Test::class) {
-    testClassesDirs = sourceSets.getByName("kotlintests").output.classesDirs
-    classpath = sourceSets.getByName("kotlintests").runtimeClasspath
-    useJUnitPlatform()
-    testLogging {
-        events("passed", "skipped", "failed")
     }
 }
 

@@ -29,10 +29,10 @@ jobs:
       run: |
           echo "$(pwd)"
           cd sudoq-app
-          ./gradlew sudoqmodel:kotlinTests
-    - name: Upload kotlin test report
+          ./gradlew sudoqapp:testDebugUnitTest
+    - name: Upload app unit test report
       if: failure()
       uses: actions/upload-artifact@v6
       with:
-        name: sudoqmodel-kotlin-test-report
-        path: sudoq-app/sudoqmodel/build/reports/tests/kotlinTests/
+        name: sudoqapp-unit-test-report
+        path: sudoq-app/sudoqapp/build/reports/tests/testDebugUnitTest/
