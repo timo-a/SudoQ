@@ -16,7 +16,7 @@ import de.sudoq.model.sudoku.SudokuManager
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
-import java.util.*
+import java.util.Date
 
 /**
  * Singleton for creating and loading sudoku games.
@@ -33,9 +33,9 @@ class GameManager(private var profile: ProfileManager,
     /**
      * Creates a new gam and sets up the necessary files.
      *
-     * @param type The type of the [Sudoku]
+     * @param type The type of the [de.sudoq.model.sudoku.Sudoku]
      * @param complexity The complexity of the Sudoku
-     * @param assistsances The available assistances for the game
+     * @param assistances The available assistances for the game
      * @return The new [Game]
      *
      */
@@ -50,15 +50,14 @@ class GameManager(private var profile: ProfileManager,
         sm.usedSudoku(sudoku) //TODO warum instanziierung, wenn laut doc singleton?
 
         val newGameID = gameRepo.create().id //due to interface we cannot pass sudoku to the new game
-        val game = Game(newGameID, sudoku)
-        game.setAssistances(assistances)
+        val game = Game(newGameID, sudoku, assistances)
         gameRepo.update(game)
         val gameData = GameData(
             game.id,
             Date(),
             game.isFinished(),
-            game.sudoku!!.sudokuType.enumType,
-            game.sudoku!!.complexity!!
+            game.sudoku.sudokuType.enumType,
+            game.sudoku.complexity!!
         )
 
         games.add(gameData)

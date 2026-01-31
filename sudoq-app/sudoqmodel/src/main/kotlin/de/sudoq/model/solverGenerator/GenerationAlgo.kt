@@ -12,10 +12,17 @@ import de.sudoq.model.solverGenerator.FastSolver.FastSolverFactory
 import de.sudoq.model.solverGenerator.solution.SolveDerivation
 import de.sudoq.model.solverGenerator.solver.ComplexityRelation
 import de.sudoq.model.solverGenerator.solver.Solver
-import de.sudoq.model.sudoku.*
+import de.sudoq.model.sudoku.Cell
+import de.sudoq.model.sudoku.Position
+import de.sudoq.model.sudoku.PositionMap
+import de.sudoq.model.sudoku.Sudoku
+import de.sudoq.model.sudoku.SudokuBuilder
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
-import java.util.*
+import java.util.LinkedList
+import java.util.Queue
+import java.util.Random
+import java.util.Stack
 
 /**
  * Bietet die Möglichkeit Sudokus zu generieren.
@@ -86,9 +93,9 @@ class GenerationAlgo(
         // Call the callback
         val suBi = SudokuBuilder(sudoku.sudokuType)
         for (p in getPositions(solvedSudoku!!)) {
-            val value = solvedSudoku!!.getCell(p)!!.solution
+            val value = solvedSudoku!!.getCell(p).solution
             suBi.addSolution(p, value)
-            if (!sudoku.getCell(p)!!.isNotSolved) suBi.setFixed(p)
+            if (!sudoku.getCell(p).isNotSolved) suBi.setFixed(p)
         }
         val res = suBi.createSudoku()
         res.complexity = sudoku.complexity!! //vorsichtshalber dazunehmen
@@ -170,7 +177,7 @@ class GenerationAlgo(
         for (pos in getPositions(sudoku)) {
             val fSudoku = sudoku.getCell(pos)
             val fSolved = pattern.getCell(pos)
-            fSudoku!!.setCurrentValue(fSolved!!.solution, false)
+            fSudoku.setCurrentValue(fSolved.solution, false)
         }
         val reallocationAmount = 2 //getReallocationAmount(sudoku.getSudokuType(), 0.05);
         var plusminuscounter = 0
@@ -328,13 +335,14 @@ class GenerationAlgo(
         while (p == null && count < xSize * ySize) {
             val x = random.nextInt(xSize)
             val y = random.nextInt(ySize)
-            if (sudoku.getCell(Position[x, y]) == null) { //position existiert nicht
+            if (sudoku.getCellNullable(Position[x, y]) == null) { //position existiert nicht
                 markings[x][y] = true
                 count++
             } else if (!markings[x][y]) { //pos existiert und ist unmarkiert
                 p = Position[x, y]
             }
         }
+        checkNotNull(p)
 
         //construct a list of symbols starting at arbitrary point. there is no short way to do this without '%' 
         val numSym = sudoku.sudokuType.numberOfSymbols
@@ -347,12 +355,12 @@ class GenerationAlgo(
         //constraint-saturierende belegung suchen 
         var valid = false
         for (s in symbols) {
-            sudoku.getCell(p!!)!!.setCurrentValue(s, false)
+            sudoku.getCell(p).setCurrentValue(s, false)
             //alle constraints saturiert?
             valid = sudoku.sudokuType.all { it.isSaturated(sudoku) }
 
             if (!valid)
-                sudoku.getCell(p)!!.setCurrentValue(Cell.EMPTYVAL, false)
+                sudoku.getCell(p).setCurrentValue(Cell.EMPTYVAL, false)
 
 
             if (valid) {
@@ -370,8 +378,8 @@ class GenerationAlgo(
      */
     private fun addDefinedCell2(i: Int = random.nextInt(freeCells.size)) {
         val p = freeCells.removeAt(i) //used to be 0, random just in case
-        val fSudoku = sudoku.getCell(p)
-        val fSolved = solvedSudoku!!.getCell(p)
+        val fSudoku = sudoku.getCellNullable(p)//check what positions go into freeCalls
+        val fSolved = solvedSudoku!!.getCellNullable(p)
         fSudoku!!.setCurrentValue(fSolved!!.solution, false)
         definedCells.add(p)
     }
@@ -391,7 +399,7 @@ class GenerationAlgo(
         if (definedCells.isEmpty()) return null
         val nr = random.nextInt(definedCells.size)
         val p = definedCells.removeAt(nr)
-        sudoku.getCell(p)!!.setCurrentValue(Cell.EMPTYVAL, false)
+        sudoku.getCell(p).setCurrentValue(Cell.EMPTYVAL, false)
         freeCells.add(p)
         return p
     }
@@ -433,7 +441,7 @@ class GenerationAlgo(
         @JvmStatic ///todo Generator has same function...
         fun getPositions(sudoku: Sudoku): List<Position> {
             val p: List<Position> = sudoku.sudokuType.validPositions
-                .filter { sudoku.getCell(it) != null } //todo necessary?
+                .filter { sudoku.getCellNullable(it) != null } //todo necessary?
                 .toList()
 
             return p

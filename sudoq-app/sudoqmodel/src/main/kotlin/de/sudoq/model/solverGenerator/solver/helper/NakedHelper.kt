@@ -6,7 +6,8 @@ import de.sudoq.model.solverGenerator.solver.SolverSudoku
 import de.sudoq.model.solvingAssistant.HintTypes
 import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.Position
-import java.util.*
+import java.util.BitSet
+import java.util.Stack
 
 /**
  * Dieser konkrete SolveHelper implementiert eine Vorgehensweise zum Lösen eines Sudokus.
@@ -61,7 +62,7 @@ open class NakedHelper(sudoku: SolverSudoku, level: Int, complexity: Int) :
         var foundSubset = false
         derivation = null
         val positions = Stack<Position>()
-        for (p in constraint.getPositions()) if (sudoku.getCell(p)!!.isNotSolved) positions.add(p)
+        for (p in constraint.getPositions()) if (sudoku.getCell(p).isNotSolved) positions.add(p)
         do {
             val subsetCount =
                 filterForSubsets(positions) //subsetPositions = {p | p ∈ positions, p.candidates ⊆ currentSet && |p.candidates| ∈ [1,level]}

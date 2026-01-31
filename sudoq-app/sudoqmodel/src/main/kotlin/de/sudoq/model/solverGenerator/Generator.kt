@@ -15,7 +15,7 @@ import de.sudoq.model.sudoku.SudokuBuilder
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
-import java.util.*
+import java.util.Random
 
 /**
  * Diese Klasse stellt verschiedene Methoden zum Erstellen eines validen, neuen
@@ -102,7 +102,7 @@ class Generator(private val sudokuTypeRepo: ReadRepo<SudokuType>) {
                     .map { y -> Position[x, y] }
             }
 
-            return allPositions.filter { sudoku.getCell(it) != null }
+            return allPositions.filter { sudoku.getCellNullable(it) != null }
         }
     }
 

@@ -10,8 +10,6 @@ package de.sudoq.model.solverGenerator.transformations
 import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.Sudoku
-import java.util.*
-import kotlin.collections.set
 
 /**
  * Fundamental building blocks for transformations
@@ -63,8 +61,8 @@ internal fun mirrorDiagonallyDown(sudoku: Sudoku) {
 }
 
 internal fun swapCells(sudoku: Sudoku, a: Position, b: Position) {
-    val tmp = sudoku.getCell(a)
-    sudoku.setCell(sudoku.getCell(b), a)
+    val tmp = sudoku.getCellNullable(a)
+    sudoku.setCell(sudoku.getCellNullable(b), a)
     sudoku.setCell(tmp, b)
 }
 
@@ -210,7 +208,7 @@ fun changeSymbols(sudoku: Sudoku) {
     val permutationRule = createPermutation(sudoku)
     for (p in sudoku.sudokuType.validPositions) {
         val f = sudoku.getCell(p)
-        val oldSymbol = f!!.solution
+        val oldSymbol = f.solution
         val newSymbol = permutationRule[oldSymbol]!!
         if (newSymbol != oldSymbol) // nur wenn sich was ändert, sonst bleibts ja gleich
             sudoku.setCell(Cell(f.isEditable, newSymbol, f.id, f.numberOfValues), p)

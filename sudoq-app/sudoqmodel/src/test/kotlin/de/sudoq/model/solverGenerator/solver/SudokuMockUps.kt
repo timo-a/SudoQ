@@ -39,7 +39,7 @@ object SudokuMockUps {
         val dim = 21
         for (y in 0..<dim) for (x in 0..<dim) {
             val c = pattern[2 * (dim * y + x)]
-            val f = s.getCell(Position[x, y])
+            val f = s.getCellNullable(Position[x, y])
             if (f == null) ; else if (c == '.') {
                 //empty
             } else if (c in '1'..'9') {
@@ -100,7 +100,7 @@ object SudokuMockUps {
         for (pos in sudoku.sudokuType.validPositions) {
             val currentEntry = candidates[xLim * pos.y + pos.x]
             val f = sudoku.getCell(pos)
-            SudokuMockUps.clearCandidates(f!!, sudoku)
+            SudokuMockUps.clearCandidates(f, sudoku)
 
             if ("0123456789".contains(currentEntry)) f.currentValue = currentEntry.toInt() - 1
             else if (currentEntry == ".") ;
@@ -117,7 +117,7 @@ object SudokuMockUps {
         for (pos in sudoku.sudokuType.validPositions) {
             val gu = candidates[9 * pos.y + pos.x]
             val f = sudoku.getCell(pos)
-            SudokuMockUps.clearCandidates(f!!, sudoku)
+            SudokuMockUps.clearCandidates(f, sudoku)
 
             when (gu.length) {
                 0 -> {}
@@ -142,7 +142,7 @@ object SudokuMockUps {
         for (y in 0..<dim) for (x in 0..<dim) {
             val gu = candidates[dim * y + x]
             val f = sudoku.getCell(Position[x, y])
-            SudokuMockUps.clearCandidates(f!!, sudoku)
+            SudokuMockUps.clearCandidates(f, sudoku)
 
             if (gu == ".") { /* empty */ }
             else if (gu.get(0) in '0'..'9')

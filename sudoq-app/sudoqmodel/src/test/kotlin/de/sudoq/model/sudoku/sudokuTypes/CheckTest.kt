@@ -35,7 +35,7 @@ class CheckTest {
         val sudoku1 = Sudoku(s99, map, PositionMap(Position[9, 9]))
         for (f in sudoku1) f.currentValue = f.solution
         sudoku1.sudokuType.checkSudoku(sudoku1).`should be true`()
-        sudoku1.getCell(Position[0, 0])!!.currentValue = 5
+        sudoku1.getCell(Position[0, 0]).currentValue = 5
         sudoku1.sudokuType.checkSudoku(sudoku1).`should be false`()
     }
 }

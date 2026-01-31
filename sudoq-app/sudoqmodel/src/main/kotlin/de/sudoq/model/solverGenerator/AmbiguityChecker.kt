@@ -18,13 +18,13 @@ object AmbiguityChecker {
      * @param sudoku Sudoku object to be tested for multiple solutions
      * @return true if there are several solutions false otherwise
      */
-    @JvmStatic
-    fun isAmbiguous(sudoku: Sudoku?): Boolean {
-        val solver = Solver(sudoku!!)
+    fun isAmbiguous(sudoku: Sudoku): Boolean {
+        val solver = Solver(sudoku)
         val result = solver.solveAll(buildDerivation = false, false, false)
-        firstBranchPosition = if (solver.getSolverSudoku()
-                .hasBranch()
-        ) solver.getSolverSudoku().firstBranchPosition else null //lest old values persist
+        firstBranchPosition = if (solver.getSolverSudoku().hasBranch())
+            solver.getSolverSudoku().firstBranchPosition
+        else
+            null //lest old values persist
         return result && solver.severalSolutionsExist()
     }
 }

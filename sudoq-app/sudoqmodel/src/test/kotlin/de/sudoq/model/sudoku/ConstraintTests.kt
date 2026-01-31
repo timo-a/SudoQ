@@ -3,8 +3,8 @@ package de.sudoq.model.sudoku
 import io.mockk.every
 import io.mockk.mockk
 import org.amshove.kluent.`should be equal to`
-import org.amshove.kluent.`should be true`
 import org.amshove.kluent.`should be false`
+import org.amshove.kluent.`should be true`
 import org.junit.jupiter.api.Test
 
 class ConstraintTests {

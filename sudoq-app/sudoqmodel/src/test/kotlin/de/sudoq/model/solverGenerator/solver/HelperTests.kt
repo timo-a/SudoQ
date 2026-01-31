@@ -127,6 +127,6 @@ internal class HelperTests {
     }
 
     private fun setVal(s: Sudoku, x: Int, y: Int, `val`: Int) {
-        s.getCell(Position[x - 1, y - 1])!!.currentValue = `val` - 1
+        s.getCell(Position[x - 1, y - 1]).currentValue = `val` - 1
     }
 }

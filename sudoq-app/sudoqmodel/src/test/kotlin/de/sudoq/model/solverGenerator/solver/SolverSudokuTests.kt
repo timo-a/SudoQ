@@ -12,14 +12,14 @@ import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder
 import org.amshove.kluent.invoking
 import org.amshove.kluent.`should be`
 import org.amshove.kluent.`should be equal to`
-import org.amshove.kluent.`should not be equal to`
 import org.amshove.kluent.`should not be`
+import org.amshove.kluent.`should not be equal to`
 import org.amshove.kluent.`should throw`
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 internal class SolverSudokuTests {
-    var sudoku: SolverSudoku? = null
+    lateinit var sudoku: SolverSudoku
 
     @BeforeEach
     fun before() {
@@ -39,8 +39,8 @@ internal class SolverSudokuTests {
         //GIVEN
         val s = Sudoku(TypeBuilder.get99())
         val p = Position[5, 7]
-        s.getCell(p)!!.toggleNote(2)
-        s.getCell(p)!!.toggleNote(3)
+        s.getCell(p).toggleNote(2)
+        s.getCell(p).toggleNote(3)
         val sudoku = SolverSudoku(s, SolverSudoku.Initialization.USE_EXISTING)
 
         //WHEN
@@ -58,11 +58,11 @@ internal class SolverSudokuTests {
         //GIVEN
         val s = Sudoku(TypeBuilder.get99())
         val p1 = Position[5, 7]
-        s.getCell(p1)!!.toggleNote(2)
-        s.getCell(p1)!!.toggleNote(3)
+        s.getCell(p1).toggleNote(2)
+        s.getCell(p1).toggleNote(3)
         val p2 = Position[8, 4]
-        s.getCell(p2)!!.toggleNote(4)
-        s.getCell(p2)!!.toggleNote(5)
+        s.getCell(p2).toggleNote(4)
+        s.getCell(p2).toggleNote(5)
         val sudoku = SolverSudoku(s, SolverSudoku.Initialization.USE_EXISTING)
 
         //WHEN
@@ -85,82 +85,82 @@ internal class SolverSudokuTests {
     @Test
     fun standardSudoku() {
         val firstPos = Position[5, 7]
-        sudoku!!.getCurrentCandidates(firstPos).clear()
-        sudoku!!.getCurrentCandidates(firstPos).set(2)
-        sudoku!!.getCurrentCandidates(firstPos).set(3)
+        sudoku.getCurrentCandidates(firstPos).clear()
+        sudoku.getCurrentCandidates(firstPos).set(2)
+        sudoku.getCurrentCandidates(firstPos).set(3)
 
         val secondPos = Position[8, 4]
-        sudoku!!.getCurrentCandidates(secondPos).clear()
-        sudoku!!.getCurrentCandidates(secondPos).set(0)
+        sudoku.getCurrentCandidates(secondPos).clear()
+        sudoku.getCurrentCandidates(secondPos).set(0)
 
         val thirdPos = Position[3, 2]
 
 
         // Verify test initialization: sudoku should have no branch
-        sudoku!!.hasBranch() `should be` false
+        sudoku.hasBranch() `should be` false
 
-        sudoku!!.getCurrentCandidates(firstPos).cardinality() `should be equal to` 2
-        sudoku!!.startNewBranch(firstPos, 2)
+        sudoku.getCurrentCandidates(firstPos).cardinality() `should be equal to` 2
+        sudoku.startNewBranch(firstPos, 2)
         //new branch only one possible candidate
-        sudoku!!.getCurrentCandidates(firstPos).cardinality() `should be equal to` 1
+        sudoku.getCurrentCandidates(firstPos).cardinality() `should be equal to` 1
         // Other candidate 4 should not be available on new branch
-        sudoku!!.getCurrentCandidates(firstPos).get(4) `should be` false
-        sudoku!!.getCurrentCandidates(firstPos).get(2) `should be` true // "Only 2"
+        sudoku.getCurrentCandidates(firstPos).get(4) `should be` false
+        sudoku.getCurrentCandidates(firstPos).get(2) `should be` true // "Only 2"
 
-        val candidatesOnTopBranch = sudoku!!.lastBranch.candidates[firstPos]
-        candidatesOnTopBranch `should not be` sudoku!!.getCurrentCandidates(firstPos)
+        val candidatesOnTopBranch = sudoku.lastBranch.candidates[firstPos]
+        candidatesOnTopBranch `should not be` sudoku.getCurrentCandidates(firstPos)
         candidatesOnTopBranch!!.isSet(2) `should be` true
         candidatesOnTopBranch.isSet(3) `should be` true
 
 
-        sudoku!!.startNewBranch(secondPos, 0)
-        sudoku!!.branchLevel `should be equal to` 2
-        sudoku!!.killCurrentBranch()
-        sudoku!!.branchLevel `should be equal to` 1
-        sudoku!!.getCurrentCandidates(secondPos).cardinality() `should be equal to` 0
+        sudoku.startNewBranch(secondPos, 0)
+        sudoku.branchLevel `should be equal to` 2
+        sudoku.killCurrentBranch()
+        sudoku.branchLevel `should be equal to` 1
+        sudoku.getCurrentCandidates(secondPos).cardinality() `should be equal to` 0
 
-        sudoku!!.killCurrentBranch()
-        sudoku!!.hasBranch() `should be` false
+        sudoku.killCurrentBranch()
+        sudoku.hasBranch() `should be` false
         // after killing the branch the stashed away possibility should be available again
-        sudoku!!.getCurrentCandidates(firstPos).get(3) `should be` true
+        sudoku.getCurrentCandidates(firstPos).get(3) `should be` true
         // after killing the branch the wrong guess should no longer be a candidate
-        sudoku!!.getCurrentCandidates(firstPos).get(2) `should be` false
+        sudoku.getCurrentCandidates(firstPos).get(2) `should be` false
 
-        sudoku!!.startNewBranch(thirdPos, 0)
-        sudoku!!.getCurrentCandidates(firstPos).cardinality() `should be equal to` 1
-        sudoku!!.resetCandidates()
+        sudoku.startNewBranch(thirdPos, 0)
+        sudoku.getCurrentCandidates(firstPos).cardinality() `should be equal to` 1
+        sudoku.resetCandidates()
     }
 
     // TODO Tests for a sudoku with at least one constraint behavior that is not the unique one
 
     @Test
     fun invalidArguments() {
-        sudoku!!.updateCandidates(null, 1)
-        sudoku!!.setSolution(null, 1)
-        sudoku!!.setSolution(Position[1, 0], 7)
-        sudoku!!.setSolution(Position[1, 0], -1)
+        sudoku.updateCandidates(null, 1)
+        sudoku.setSolution(null, 1)
+        sudoku.setSolution(Position[1, 0], 7)
+        sudoku.setSolution(Position[1, 0], -1)
     }
 
     @Test
     fun constraintSaturationChecks() {
-        sudoku!!.setSolution(Position[0, 0], 1)
-        sudoku!!.setSolution(Position[0, 1], 1)
+        sudoku.setSolution(Position[0, 0], 1)
+        sudoku.setSolution(Position[0, 1], 1)
     }
 
     @Test
     fun resetCandidatesStack() {
-        sudoku!!.startNewBranch(Position[1, 1], 1)
-        sudoku!!.resetCandidates()
-        sudoku!!.hasBranch() `should be` false
-        for (p in sudoku!!.positions) {
-            if (sudoku!!.getCell(p)!!.currentValue != -1) {
-                sudoku!!.getCurrentCandidates(p).cardinality() `should be equal to` 0
+        sudoku.startNewBranch(Position[1, 1], 1)
+        sudoku.resetCandidates()
+        sudoku.hasBranch() `should be` false
+        for (p in sudoku.positions) {
+            if (sudoku.getCell(p).currentValue != -1) {
+                sudoku.getCurrentCandidates(p).cardinality() `should be equal to` 0
             } else {
                 var currentCandidate = -1
-                for (i in 0..<sudoku!!.getCurrentCandidates(p).cardinality()) {
-                    currentCandidate = sudoku!!.getCurrentCandidates(p).nextSetBit(currentCandidate + 1)
-                    for (c in sudoku!!.constraints[p]!!) for (pos in c) {
-                        sudoku!!.getCell(pos)!!.currentValue `should not be equal to` currentCandidate
+                for (i in 0..<sudoku.getCurrentCandidates(p).cardinality()) {
+                    currentCandidate = sudoku.getCurrentCandidates(p).nextSetBit(currentCandidate + 1)
+                    for (c in sudoku.constraints[p]!!) for (pos in c) {
+                        sudoku.getCell(pos).currentValue `should not be equal to` currentCandidate
                     }
                 }
             }
@@ -169,13 +169,13 @@ internal class SolverSudokuTests {
 
     @Test
     fun branchNonExistingPosition() {
-        invoking { sudoku!!.startNewBranch(Position[10, 4], 1)
+        invoking { sudoku.startNewBranch(Position[10, 4], 1)
         } `should throw` IllegalArgumentException::class
     }
 
     @Test
     fun addNegaitveComplexity() {
-        sudoku!!.addComplexityValue(-5, true)
+        sudoku.addComplexityValue(-5, true)
     }
 
     @Test
@@ -206,7 +206,7 @@ internal class SolverSudokuTests {
         sudoku.setSolution(Position[0, 0], 3)
         sudoku.setSolution(Position[1, 0], 2)
         sudoku.startNewBranch(Position[2, 0], 3)
-        sudoku.getCell(Position[2, 0])!!.currentValue = 3
+        sudoku.getCell(Position[2, 0]).currentValue = 3
         sudoku.updateCandidates()
         sudoku.getCurrentCandidates(Position[3, 0]).cardinality() `should be equal to` 1
         sudoku.getCurrentCandidates(Position[3, 0]).nextSetBit(0) `should be equal to` 2

@@ -5,15 +5,14 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import de.sudoq.model.utility.FileManager;
 import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
+import de.sudoq.model.utility.FileManager;
 
 /**
  * abstract utility class for operations shared by several tests
@@ -51,7 +50,7 @@ public abstract class Utility {
         StringBuilder sb = new StringBuilder();
         for (int j = 0; j < sudoku.getSudokuType().getSize().getY(); j++) {
             for (int i = 0; i < sudoku.getSudokuType().getSize().getX(); i++) {
-                Cell f = sudoku.getCell(Position.Companion.get(i, j));
+                Cell f = sudoku.getCellNullable(Position.Companion.get(i, j));
                 String op;
                 if (f != null){//feld existiert
                     int value = f.getCurrentValue();
@@ -62,7 +61,7 @@ public abstract class Utility {
                         op = "x";
                     sb.append(op + " ");
                 }else{
-                    sb.append("  ");
+                    sb.append("  ");//todo why wouldn't it exist?
 
                 }
             }
@@ -75,7 +74,7 @@ public abstract class Utility {
     /** returns all positions of non-null Fields of sudoku */
     public static List<Position> getPositionsByRow(Sudoku sudoku){
         return StreamSupport.stream(sudoku.getSudokuType().getValidPositions().spliterator(), false)
-                .filter(p -> sudoku.getCell(p) != null)
+                .filter(p -> sudoku.getCellNullable(p) != null)
                 .collect(Collectors.toList());
     }
 

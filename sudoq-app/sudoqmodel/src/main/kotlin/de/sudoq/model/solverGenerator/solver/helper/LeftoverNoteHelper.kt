@@ -30,10 +30,10 @@ open class LeftoverNoteHelper(sudoku: SolverSudoku, complexity: Int) :
         val filled = CandidateSet()
         val notes = CandidateSet()
         for (p in c) {
-            if (sudoku.getCell(p)!!.isNotSolved)
+            if (sudoku.getCell(p).isNotSolved)
                 notes.or(sudoku.getCurrentCandidates(p)) //collect all notes
             else
-                filled.set(sudoku.getCell(p)!!.currentValue) //collect all entered solution
+                filled.set(sudoku.getCell(p).currentValue) //collect all entered solution
         }
         return filled.hasCommonElement(notes)
     }
@@ -42,10 +42,10 @@ open class LeftoverNoteHelper(sudoku: SolverSudoku, complexity: Int) :
         val filled = CandidateSet()
         val notes = CandidateSet()
         for (p in c) {
-            if (sudoku.getCell(p)!!.isNotSolved)
+            if (sudoku.getCell(p).isNotSolved)
                 notes.or(sudoku.getCurrentCandidates(p))
             else
-                filled.set(sudoku.getCell(p)!!.currentValue)
+                filled.set(sudoku.getCell(p).currentValue)
         }
         filled.and(notes)
         return filled.nextSetBit(0)
@@ -53,7 +53,7 @@ open class LeftoverNoteHelper(sudoku: SolverSudoku, complexity: Int) :
 
     private fun deleteNote(c: Constraint, note: Int) {
         for (p in c)
-            if (sudoku.getCell(p)!!.isNotSolved && sudoku.getCell(p)!!.isNoteSet(note))
+            if (sudoku.getCell(p).isNotSolved && sudoku.getCell(p).isNoteSet(note))
                 sudoku.getCurrentCandidates(p).clear(note)
     }
 

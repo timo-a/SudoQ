@@ -83,11 +83,11 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
         CellViewPainter.instance!!.flushMarkings()
         removeAllViews()
         val sudoku = game.sudoku
-        val sudokuType = sudoku!!.sudokuType
+        val sudokuType = sudoku.sudokuType
         val isMarkWrongSymbolAvailable = game.isAssistanceAvailable(Assistances.markWrongSymbol)
         sudokuCellViews = Array(sudokuType.size.x + 1) { arrayOfNulls(sudokuType.size.y + 1) }
         for (p in sudokuType.validPositions) {
-            val cell = sudoku.getCell(p)
+            val cell = sudoku.getCellNullable(p)
             if (cell != null) {
                 val x = p.x
                 val y = p.y
@@ -108,7 +108,7 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
         sudokuCellViews!![x][y] = SudokuCellView(
             context,
             game,
-            game.sudoku!!.getCell(Position[x - 1, y - 1])!!,
+            game.sudoku.getCell(Position[x - 1, y - 1]),
             isMarkWrongSymbolAvailable
         )
         this.addView(sudokuCellViews!![x][y], params)
@@ -118,7 +118,7 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
         /* In case highlighting of current row and col is activated,
 		   pass each pos its constraint-mates */if (game.isAssistanceAvailable(Assistances.markRowColumn)) {
             var positions: List<Position>
-            val allConstraints: Iterable<Constraint> = game.sudoku!!.sudokuType
+            val allConstraints: Iterable<Constraint> = game.sudoku.sudokuType
             for (c in allConstraints) if (c.type == ConstraintType.LINE) {
                 positions = c.getPositions()
                 for (i in positions.indices) for (k in i + 1 until positions.size) {
@@ -166,7 +166,7 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
     private fun refresh() {
         Log.d(LOG_TAG, "SudokuLayout.refresh()")
         if (sudokuCellViews != null) {
-            val type = game.sudoku!!.sudokuType
+            val type = game.sudoku.sudokuType
             val typeSize = type.size
             val cellPlusSpacing = currentCellViewSize + currentSpacing
             //Iterate over all positions within the size 
@@ -226,7 +226,7 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
      */
     fun optiZoom(width: Int, height: Int) {
         Log.d(LOG_TAG, "SudokuView height intern: " + this.measuredHeight)
-        val sudokuType = game.sudoku!!.sudokuType
+        val sudokuType = game.sudoku.sudokuType
         val size = if (width < height) width else height
         val numberOfCells = if (width < height) sudokuType.size.x else sudokuType.size.y
         defaultCellViewSize = (size - (numberOfCells + 1) * spacing) / numberOfCells
@@ -292,7 +292,7 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
      * {@inheritDoc}
      */
     override fun registerListener(listener: CellInteractionListener) {
-        val sudokuType = game.sudoku!!.sudokuType
+        val sudokuType = game.sudoku.sudokuType
         for (p in sudokuType.validPositions) getSudokuCellView(p).registerListener(listener)
     }
 
@@ -300,7 +300,7 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
      * {@inheritDoc}
      */
     override fun removeListener(listener: CellInteractionListener) {
-        val sudokuType = game.sudoku!!.sudokuType
+        val sudokuType = game.sudoku.sudokuType
         for (p in sudokuType.validPositions) getSudokuCellView(p).removeListener(listener)
     }
 
@@ -340,7 +340,7 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
         // this.currentCellViewSize = this.defaultCellViewSize;
         setWillNotDraw(false)
         paint = Paint()
-        boardPainter = BoardPainter(this, game.sudoku!!.sudokuType)
+        boardPainter = BoardPainter(this, game.sudoku.sudokuType)
         CellViewPainter.instance!!.setSudokuLayout(this)
         hintPainter = HintPainter(this)
         inflateSudoku()

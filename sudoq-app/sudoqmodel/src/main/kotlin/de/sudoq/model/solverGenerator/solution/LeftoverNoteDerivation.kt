@@ -7,7 +7,6 @@ import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.Utils
 import de.sudoq.model.sudoku.getGroupShape
-import java.util.*
 
 /**
  * Created by timo on 04.10.16.
@@ -24,7 +23,7 @@ class LeftoverNoteDerivation(val constraint: Constraint, val note: Int) :
         val af = NoteActionFactory()
         for (p in constraint) {
             val f = sudoku.getCell(p)
-            if (f!!.isNoteSet(note) && f.isNotSolved) actionlist.add(af.createAction(note, f))
+            if (f.isNoteSet(note) && f.isNotSolved) actionlist.add(af.createAction(note, f))
         }
         return actionlist
     }

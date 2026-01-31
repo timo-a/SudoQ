@@ -6,7 +6,8 @@ import de.sudoq.model.solverGenerator.solver.SolverSudoku
 import de.sudoq.model.solvingAssistant.HintTypes
 import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.Position
-import java.util.*
+import java.util.BitSet
+import java.util.Vector
 
 class NoNotesHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku, complexity) {
 
@@ -14,7 +15,7 @@ class NoNotesHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku,
         var foundOne = false
         var candidate: Position
         val emptyPos = Vector<Position>()
-        for (p in sudoku.sudokuType.validPositions) if (sudoku.getCell(p)!!.isCompletelyEmpty) emptyPos.add(
+        for (p in sudoku.sudokuType.validPositions) if (sudoku.getCell(p).isCompletelyEmpty) emptyPos.add(
             p
         )
         foundOne = emptyPos.size > 0
@@ -37,7 +38,7 @@ class NoNotesHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku,
                 for (c in cmap[p]!!) {
                     for (pi in c.getPositions()) {
                         val f = sudoku.getCell(pi)
-                        if (f!!.isSolved) allCandidates.remove(f.currentValue)
+                        if (f.isSolved) allCandidates.remove(f.currentValue)
                     }
                 }
                 val relevant = BitSet()

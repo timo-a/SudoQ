@@ -66,8 +66,8 @@ internal class GameTests {
         val game = Game(2, SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku())
         game.id `should be equal to` 2
         game.stateHandler `should not be` null
-        game.sudoku!!.getCell(Position[8, 8])!!.currentValue `should be equal to` Cell.EMPTYVAL
-        game.sudoku!!.getCell(Position[10, 2]) `should be` null
+        game.sudoku.getCell(Position[8, 8]).currentValue `should be equal to` Cell.EMPTYVAL
+        game.sudoku.getCellNullable(Position[10, 2]) `should be` null
         game.assistancesCost `should be equal to` 0
     }
 
@@ -77,12 +77,12 @@ internal class GameTests {
 
         val pos = Position[1, 1]
         val start = game.currentState
-        val f = game.sudoku!!.getCell(pos)
-        game.addAndExecute(SolveActionFactory().createAction(3, f!!)) //setze 3
+        val f = game.sudoku.getCell(pos)
+        game.addAndExecute(SolveActionFactory().createAction(3, f)) //setze 3
         game.addAndExecute(SolveActionFactory().createAction(4, f)) //setze 4
         game.isMarked(game.currentState) `should be` false
         game.addAndExecute(SolveActionFactory().createAction(5, f)) //setze 5
-        game.sudoku!!.getCell(pos)!!.currentValue `should be equal to` 5
+        game.sudoku.getCell(pos).currentValue `should be equal to` 5
         game.markCurrentState()
         game.isMarked(game.currentState) `should be` true
 
@@ -112,9 +112,9 @@ internal class GameTests {
         val pos = Position[1, 1]
         val start = game.currentState
 
-        game.addAndExecute(SolveActionFactory().createAction(3, game.sudoku!!.getCell(pos)!!))
-        game.addAndExecute(SolveActionFactory().createAction(4, game.sudoku!!.getCell(pos)!!))
-        game.addAndExecute(SolveActionFactory().createAction(5, game.sudoku!!.getCell(pos)!!))
+        game.addAndExecute(SolveActionFactory().createAction(3, game.sudoku.getCell(pos)))
+        game.addAndExecute(SolveActionFactory().createAction(4, game.sudoku.getCell(pos)))
+        game.addAndExecute(SolveActionFactory().createAction(5, game.sudoku.getCell(pos)))
         game.markCurrentState()
 
         game.goToState(start)
@@ -138,11 +138,11 @@ internal class GameTests {
         val pos = Position[1, 1]
         val start = game.currentState
 
-        game.addAndExecute(SolveActionFactory().createAction(3, game.sudoku!!.getCell(pos)!!))
-        game.addAndExecute(SolveActionFactory().createAction(4, game.sudoku!!.getCell(pos)!!))
-        game.addAndExecute(SolveActionFactory().createAction(5, game.sudoku!!.getCell(pos)!!))
-        game.addAndExecute(NoteActionFactory().createAction(2, game.sudoku!!.getCell(pos)!!))
-        game.sudoku!!.getCell(pos)!!.currentValue `should be equal to` 5
+        game.addAndExecute(SolveActionFactory().createAction(3, game.sudoku.getCell(pos)))
+        game.addAndExecute(SolveActionFactory().createAction(4, game.sudoku.getCell(pos)))
+        game.addAndExecute(SolveActionFactory().createAction(5, game.sudoku.getCell(pos)))
+        game.addAndExecute(NoteActionFactory().createAction(2, game.sudoku.getCell(pos)))
+        game.sudoku.getCell(pos).currentValue `should be equal to` 5
         game.markCurrentState()
         game.isMarked(game.currentState) `should be` true
 
@@ -169,11 +169,13 @@ internal class GameTests {
 
     @Test
     fun assistanceSetting() {
-        val game = Game(2, SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku())
-
-        game.setAssistances(object : GameSettings() {
+        val mockGameSettings = object : GameSettings() {
             override fun getAssistance(assistance: Assistances): Boolean = true
-        })
+        }
+        val game = Game(2,
+            SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku(),
+            mockGameSettings
+        )
 
         Assistances.entries
             .map(game::isAssistanceAvailable)
@@ -209,12 +211,12 @@ internal class GameTests {
         game.solveCell(null) `should be` false
         game.solveCell(Cell(true, -1, 3, 9)) `should be` false
 
-        game.addAndExecute(SolveActionFactory().createAction(2, game.sudoku!!.getCell(Position[0, 0])!!))
+        game.addAndExecute(SolveActionFactory().createAction(2, game.sudoku.getCell(Position[0, 0])))
         sudoku.toogleErrors()
         game.checkSudoku() `should be` false
         game.currentState.isMistake `should be` true
         game.solveCell() `should be` false
-        game.solveCell(game.sudoku!!.getCell(Position[0, 0])) `should be` false
+        game.solveCell(game.sudoku.getCell(Position[0, 0])) `should be` false
         game.solveAll() `should be` false
 
         sudoku.toogleErrors()
@@ -222,36 +224,34 @@ internal class GameTests {
         game.addAndExecute(
             SolveActionFactory().createAction(
                 Cell.EMPTYVAL,
-                game.sudoku!!.getCell(Position[0, 0])!!
+                game.sudoku.getCell(Position[0, 0])
             )
         )
-        game.addAndExecute(SolveActionFactory().createAction(1, game.sudoku!!.getCell(Position[0, 0])!!))
-        game.sudoku!!.getCell(Position[0, 0])!!.currentValue `should be equal to` Cell.EMPTYVAL
+        game.addAndExecute(SolveActionFactory().createAction(1, game.sudoku.getCell(Position[0, 0])))
+        game.sudoku.getCell(Position[0, 0]).currentValue `should be equal to` Cell.EMPTYVAL
     }
 
     @Test
     fun noteAdjustment() {
-        val game = Game(2, SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku())
-        val `as` = GameSettings()
-        `as`.setAssistance(Assistances.autoAdjustNotes)
-        game.setAssistances(`as`)
+        val `as` = GameSettings().also { it.setAssistance(Assistances.autoAdjustNotes) }
+        val game = Game(2, SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku(), `as`)
 
-        game.addAndExecute(NoteActionFactory().createAction(2, game.sudoku!!.getCell(Position[1, 0])!!))
-        game.addAndExecute(NoteActionFactory().createAction(3, game.sudoku!!.getCell(Position[1, 0])!!))
-        game.addAndExecute(NoteActionFactory().createAction(2, game.sudoku!!.getCell(Position[0, 1])!!))
-        game.addAndExecute(NoteActionFactory().createAction(3, game.sudoku!!.getCell(Position[0, 1])!!))
+        game.addAndExecute(NoteActionFactory().createAction(2, game.sudoku.getCell(Position[1, 0])))
+        game.addAndExecute(NoteActionFactory().createAction(3, game.sudoku.getCell(Position[1, 0])))
+        game.addAndExecute(NoteActionFactory().createAction(2, game.sudoku.getCell(Position[0, 1])))
+        game.addAndExecute(NoteActionFactory().createAction(3, game.sudoku.getCell(Position[0, 1])))
 
-        game.sudoku!!.getCell(Position[0, 1])!!.isNoteSet(2) `should be` true
-        game.sudoku!!.getCell(Position[1, 0])!!.isNoteSet(2) `should be` true
-        game.sudoku!!.getCell(Position[0, 1])!!.isNoteSet(3) `should be` true
-        game.sudoku!!.getCell(Position[1, 0])!!.isNoteSet(3) `should be` true
+        game.sudoku.getCell(Position[0, 1]).isNoteSet(2) `should be` true
+        game.sudoku.getCell(Position[1, 0]).isNoteSet(2) `should be` true
+        game.sudoku.getCell(Position[0, 1]).isNoteSet(3) `should be` true
+        game.sudoku.getCell(Position[1, 0]).isNoteSet(3) `should be` true
 
-        game.addAndExecute(SolveActionFactory().createAction(2, game.sudoku!!.getCell(Position[0, 0])!!))
+        game.addAndExecute(SolveActionFactory().createAction(2, game.sudoku.getCell(Position[0, 0])))
 
-        game.sudoku!!.getCell(Position[0, 1])!!.isNoteSet(3) `should be` true
-        game.sudoku!!.getCell(Position[1, 0])!!.isNoteSet(3) `should be` true
-        game.sudoku!!.getCell(Position[0, 1])!!.isNoteSet(2) `should be` false
-        game.sudoku!!.getCell(Position[1, 0])!!.isNoteSet(2) `should be` false
+        game.sudoku.getCell(Position[0, 1]).isNoteSet(3) `should be` true
+        game.sudoku.getCell(Position[1, 0]).isNoteSet(3) `should be` true
+        game.sudoku.getCell(Position[0, 1]).isNoteSet(2) `should be` false
+        game.sudoku.getCell(Position[1, 0]).isNoteSet(2) `should be` false
     }
 
     @ParameterizedTest
@@ -358,14 +358,12 @@ internal class GameTests {
                 sb.addSolution(Position[i, j], 1)
             }
         }
-        val game = Game(2, sb.createSudoku())
-        val `as` = GameSettings()
-        `as`.setAssistance(Assistances.autoAdjustNotes)
-        game.setAssistances(`as`)
+        val `as` = GameSettings().also { it.setAssistance(Assistances.autoAdjustNotes) }
+        val game = Game(2, sb.createSudoku(), `as`)
 
-        for (pos in game.sudoku!!.sudokuType.validPositions) {
-            game.addAndExecute(NoteActionFactory().createAction(1, game.sudoku!!.getCell(pos)!!))
-            game.sudoku!!.getCell(pos)!!.isNoteSet(1) `should be` true
+        for (pos in game.sudoku.sudokuType.validPositions) {
+            game.addAndExecute(NoteActionFactory().createAction(1, game.sudoku.getCell(pos)))
+            game.sudoku.getCell(pos).isNoteSet(1) `should be` true
         }
 
         game.solveCell() `should be` true
@@ -377,7 +375,7 @@ internal class GameTests {
             while (i < 9 && !done) {
                 var j = 0
                 while (j < 9 && !done) {
-                    if (game.sudoku!!.getCell(Position[i, j])!!.currentValue == 1) {
+                    if (game.sudoku.getCell(Position[i, j]).currentValue == 1) {
                         done = true
                         x = i
                         y = j
@@ -390,36 +388,36 @@ internal class GameTests {
         done `should be` true
 
         for (i in 0..8) {
-            game.sudoku!!.getCell(Position[x, i])!!.isNoteSet(1) `should be` false
-            game.sudoku!!.getCell(Position[i, y])!!.isNoteSet(1) `should be` false
+            game.sudoku.getCell(Position[x, i]).isNoteSet(1) `should be` false
+            game.sudoku.getCell(Position[i, y]).isNoteSet(1) `should be` false
         }
         for (i in 0..2) {
             for (j in 0..2) {
-                game.sudoku!!.getCell(
+                game.sudoku.getCell(
                     Position[
                         (x - (x % 3) + i),
                         (y - (y % 3) + j)
                     ]
-                )!!.isNoteSet(1) `should be` false
+                ).isNoteSet(1) `should be` false
             }
         }
 
         x = (x + 3) % 9
         y = (y + 3) % 9
-        game.solveCell(game.sudoku!!.getCell(Position[x, y]))
+        game.solveCell(game.sudoku.getCellNullable(Position[x, y]))
 
         for (i in 0..8) {
-            game.sudoku!!.getCell(Position[x, i])!!.isNoteSet(1) `should be` false
-            game.sudoku!!.getCell(Position[i, y])!!.isNoteSet(1) `should be` false
+            game.sudoku.getCell(Position[x, i]).isNoteSet(1) `should be` false
+            game.sudoku.getCell(Position[i, y]).isNoteSet(1) `should be` false
         }
         for (i in 0..2) {
             for (j in 0..2) {
-                game.sudoku!!.getCell(
+                game.sudoku.getCell(
                     Position[
                         (x - (x % 3) + i),
                         (y - (y % 3) + j)
                     ]
-                )!!.isNoteSet(1) `should be` false
+                ).isNoteSet(1) `should be` false
             }
         }
     }

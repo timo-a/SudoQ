@@ -7,36 +7,30 @@
  */
 package de.sudoq.model.game
 
-import de.sudoq.model.actionTree.*
+import de.sudoq.model.actionTree.Action
+import de.sudoq.model.actionTree.ActionTree
+import de.sudoq.model.actionTree.ActionTreeElement
+import de.sudoq.model.actionTree.NoteActionFactory
+import de.sudoq.model.actionTree.SolveActionFactory
 import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.complexity.Complexity
-import java.util.*
+import java.util.Random
 import kotlin.math.pow
 
 /**
  * This class represents a sudoku game.
  * Functions as a Facade towards the controller.
+ *
+ * @property id Unique id for the game
+ * @property sudoku The sudoku of the game.
+ * @property gameSettings game settings
+ * @property stateHandler manages the game state
  */
-class Game {
-
-    /**
-     * Unique id for the game
-     */
-    var id: Int
-        private set
-
-    /**
-     * The sudoku of the game.
-     */
-    var sudoku: Sudoku? = null //todo make nonnullable
-        private set
-
-    /**
-     * manages the game state
-     */
-    var stateHandler: GameStateHandler? = null //todo make non-nullable
-        private set
+class Game private constructor(val id: Int, val sudoku: Sudoku,
+                               val gameSettings: GameSettings,
+                               val stateHandler: GameStateHandler
+){
 
     /**
      * Passed time since start of the game in seconds
@@ -49,11 +43,6 @@ class Game {
      */
     var assistancesCost = 0
         private set
-
-    /**
-     * game settings
-     */
-    var gameSettings: GameSettings? = null //TODO make non-nullable
 
     /**
      * Indicates if game is finished
@@ -69,40 +58,35 @@ class Game {
         stateHandler: GameStateHandler,
         gameSettings: GameSettings,
         finished: Boolean
-    ) {
-
-        this.id = id
+    ) : this(id, sudoku, gameSettings, stateHandler) {
         this.time = time
         this.assistancesCost = assistancesCost
-        this.sudoku = sudoku
-        this.stateHandler = stateHandler
-        this.gameSettings = gameSettings
         this.finished = finished
     }
 
 
     /**
-     * Protected constructor to prevent instatiation outside this package.
-     * (apparently thats not possible in kotlin...)
-     * Available assistances are set from current profile. TODO really? make explicit instead
+     * Protected constructor to prevent instantiation outside this package.
+     * (apparently that's not possible in kotlin...)
      *
      * @param id ID of the game
      * @param sudoku Sudoku of the new game
      */
-    constructor(id: Int, sudoku: Sudoku) {//todo check visibility - make internal?
-        this.id = id
-        gameSettings = GameSettings()
-        this.sudoku = sudoku
-        this.time = 0
-        stateHandler = GameStateHandler()
+    constructor(id: Int, sudoku: Sudoku) : this(id, sudoku, GameSettings(), GameStateHandler()) {//todo check visibility - make internal?
     }
-
     /**
-     * creates a completely empty game
+     * Protected constructor to prevent instantiation outside this package.
+     * (apparently that's not possible in kotlin...)
+     *
+     * @param id ID of the game
+     * @param sudoku Sudoku of the new game
      */
-    // package scope!
-    internal constructor() {//TODO who uses this? can it be removed?
-        id = -1
+    constructor(id: Int, sudoku: Sudoku, assistances: GameSettings) : this(id, sudoku, assistances, GameStateHandler()) {//todo check visibility - make internal?
+        /* calculate costs of passive assistances add them to the total assistance cost */
+        if (isAssistanceAvailable(Assistances.autoAdjustNotes)) assistancesCost += 4
+        if (isAssistanceAvailable(Assistances.markRowColumn)) assistancesCost += 2
+        if (isAssistanceAvailable(Assistances.markWrongSymbol)) assistancesCost += 6
+        if (isAssistanceAvailable(Assistances.restrictCandidates)) assistancesCost += 12
     }
 
     /**
@@ -119,10 +103,9 @@ class Game {
      */
     val score: Int
         get() {
-            fun power(expo: Double): Int = sudoku!!.sudokuType?.numberOfSymbols?.let {
-                it.toDouble().pow(expo).toInt()
-            }!!
-            val scoreFactor = when (sudoku!!.complexity) {
+            fun power(expo: Double): Int = sudoku.sudokuType.numberOfSymbols
+                .toDouble().pow(expo).toInt()
+            val scoreFactor = when (sudoku.complexity) {
                 Complexity.infernal -> power(4.0)
                 Complexity.difficult -> power(3.5)
                 Complexity.medium -> power(3.0)
@@ -153,7 +136,7 @@ class Game {
      * @return true, if sudoku is correct so far, false otherwise
      */
     private fun checkSudokuValidity(): Boolean {
-        val correct = !sudoku!!.hasErrors()
+        val correct = !sudoku.hasErrors()
         if (correct) {
             currentState.markCorrect()
         } else {
@@ -169,8 +152,8 @@ class Game {
      */
     fun addAndExecute(action: Action) {
         if (finished) return
-        stateHandler!!.addAndExecute(action)
-        sudoku!!.getCell(action.cellId)?.let { updateNotes(it) }
+        stateHandler.addAndExecute(action)
+        updateNotes(sudoku.getCell(action.cellId))
         if (isFinished()) finished = true
     }
 
@@ -182,27 +165,16 @@ class Game {
      */
     private fun updateNotes(cell: Cell) {
         if (!isAssistanceAvailable(Assistances.autoAdjustNotes)) return
-        val editedPos = sudoku!!.getPosition(cell.id)
+        val editedPos = sudoku.getPosition(cell.id)
         val value = cell.currentValue
 
-        /*this.sudoku.getSudokuType().getConstraints().stream().filter(c -> c.includes(editedPos))
-                                                             .flatMap(c -> c.getPositions().stream())
-                                                             .filter(changePos -> this.sudoku.getField(changePos).isNoteSet(value))
-                                                             .forEachOrdered(changePos -> this.addAndExecute(new NoteActionFactory().createAction(value, this.sudoku.getField(changePos))));
-        should work, but to tired to try*/
+        val relevantConstraints = sudoku.sudokuType.constraints.filter { it.includes(editedPos) }
+        val relevantCells = relevantConstraints.flatMap { it.getPositions() }.map { sudoku.getCell(it) }
 
-        for (c in sudoku!!.sudokuType) {
-            if (c.includes(editedPos!!)) {
-                for (changePos in c) {
-                    if (sudoku!!.getCell(changePos)?.isNoteSet(value)!!) {
-                        addAndExecute(
-                            NoteActionFactory().createAction(
-                                value,
-                                sudoku!!.getCell(changePos)!!
-                            )
-                        )
-                    }
-                }
+        //transforming this to stream never works, probably because of side effects in addAndExecute
+        relevantCells.forEach { cell ->
+            if (cell.isNoteSet(value)) {
+                addAndExecute(NoteActionFactory().createAction(value, cell))
             }
         }
     }
@@ -215,34 +187,34 @@ class Game {
      *
      */
     fun goToState(ate: ActionTreeElement) {
-        stateHandler!!.goToState(ate)
+        stateHandler.goToState(ate)
     }
 
     /**
      * Undoes the last action. Goes one step back in the action tree.
      */
     fun undo() {
-        stateHandler!!.undo()
+        stateHandler.undo()
     }
 
     /**
      * Redo the last [Action]. Goes one step forward in the action tree.
      */
     fun redo() {
-        stateHandler!!.redo()
+        stateHandler.redo()
     }
 
     /**
      * The action tree node of the current state.
      */
     val currentState: ActionTreeElement
-        get() = stateHandler!!.currentState!! //todo find a way to ensure it can never be null (the implicit root)
+        get() = stateHandler.currentState!! //todo find a way to ensure it can never be null (the implicit root)
 
     /**
      * Marks the current state to better find it later.
      */
     fun markCurrentState() {
-        stateHandler!!.markCurrentState() //TODO what doe this mean is it a book mark?
+        stateHandler.markCurrentState() //TODO what doe this mean is it a book mark?
     }
 
     /**
@@ -252,7 +224,7 @@ class Game {
      * @return true iff it is marked
      */
     fun isMarked(ate: ActionTreeElement?): Boolean {
-        return stateHandler!!.isMarked(ate)
+        return stateHandler.isMarked(ate)
     }
 
     /**
@@ -261,7 +233,7 @@ class Game {
      * @return true iff sudoku is finished (and correct)
      */
     fun isFinished(): Boolean {
-        return finished || sudoku!!.isFinished
+        return finished || sudoku.isFinished
     }
 
     /**
@@ -272,7 +244,7 @@ class Game {
      * @return true, if cell could be solved, false otherwise
      */
     fun solveCell(cell: Cell?): Boolean { //TODO don't accept null
-        if (sudoku!!.hasErrors() || cell == null) return false
+        if (sudoku.hasErrors() || cell == null) return false
         assistancesCost += 3
         val solution = cell.solution
         return if (solution != Cell.EMPTYVAL) {
@@ -289,9 +261,9 @@ class Game {
      * @return true, if a cell could be solved, false otherwise
      */
     fun solveCell(): Boolean {
-        if (sudoku!!.hasErrors()) return false
+        if (sudoku.hasErrors()) return false
         assistancesCost += 3
-        for (f in sudoku!!) {
+        for (f in sudoku) {
             if (f.isNotSolved) {
                 addAndExecute(SolveActionFactory().createAction(f.solution, f))
                 break
@@ -311,9 +283,9 @@ class Game {
      * @return true, iff the sudoku could be solved, false otherwise
      */
     fun solveAll(): Boolean {
-        if (sudoku!!.hasErrors()) return false
+        if (sudoku.hasErrors()) return false
         val unsolvedCells: MutableList<Cell> = ArrayList()
-        for (f in sudoku!!) {
+        for (f in sudoku) {
             if (f.isNotSolved) {
                 unsolvedCells.add(f)
             }
@@ -352,26 +324,11 @@ class Game {
      * Goes back to the root if there is no bookmark. TODO maybe better if nothing happens in that case
      */
     fun goToLastBookmark() {
-        while (stateHandler!!.currentState != stateHandler!!.actionTree.root
-            && !stateHandler!!.currentState!!.isMarked
+        while (stateHandler.currentState != stateHandler.actionTree.root
+            && !stateHandler.currentState!!.isMarked
         ) {
             undo()
         }
-    }
-
-    /**
-     * Sets the available assistances.
-     *
-     * @param assistances Die Assistances die für dieses Game gesetzt werden soll
-     */
-    fun setAssistances(assistances: GameSettings) {
-        gameSettings = assistances
-
-        /* calculate costs of passive assistances add them to the total assistance cost */
-        if (isAssistanceAvailable(Assistances.autoAdjustNotes)) assistancesCost += 4
-        if (isAssistanceAvailable(Assistances.markRowColumn)) assistancesCost += 2
-        if (isAssistanceAvailable(Assistances.markWrongSymbol)) assistancesCost += 6
-        if (isAssistanceAvailable(Assistances.restrictCandidates)) assistancesCost += 12
     }
 
     /**
@@ -381,24 +338,11 @@ class Game {
      *
      * @return true, if the assistance is available
      */
-    fun isAssistanceAvailable(assist: Assistances): Boolean {//TODO don't accept null
-        return gameSettings!!.getAssistance(assist)
+    fun isAssistanceAvailable(assist: Assistances): Boolean {
+        return gameSettings.getAssistance(assist)
     }
 
     val isLefthandedModeActive: Boolean
-        get() = gameSettings!!.isLeftHandModeSet
+        get() = gameSettings.isLeftHandModeSet
 
-
-    /**
-     * {@inheritDoc}
-     */
-    override fun equals(other: Any?): Boolean {//todo refactor
-        if (other is Game) {
-            return (id == other.id
-                    && sudoku == other.sudoku
-                    && stateHandler!!.actionTree == other.stateHandler!!.actionTree
-                    && currentState == other.currentState)
-        }
-        return false
-    }
 }

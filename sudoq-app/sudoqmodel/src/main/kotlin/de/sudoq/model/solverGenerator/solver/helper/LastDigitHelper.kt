@@ -8,7 +8,9 @@ import de.sudoq.model.solvingAssistant.HintTypes
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.Utils.classifyGroup
 import de.sudoq.model.sudoku.Utils.positionToRealWorld
-import java.util.*
+import java.util.AbstractList
+import java.util.BitSet
+import java.util.Vector
 
 /**
  * Helper that searches for an `open Single`, a constraint in which exactly one field is not solved -&gt; can be be solved by principle of exclusion.
@@ -32,7 +34,7 @@ class LastDigitHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudok
     ): Position? {
         assert(remaining.isEmpty())
         var candidate: Position? = null //no empty fields found
-        for (p in positions) if (sudoku.getCell(p)!!.isNotSolved) {
+        for (p in positions) if (sudoku.getCell(p).isNotSolved) {
             if (candidate == null) //found our first empty field
                 candidate = p else {
                 candidate = null //found 2nd empty -> break
@@ -57,7 +59,7 @@ class LastDigitHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudok
 
                 //make List with all values entered in this constraint
                 val otherSolutions: MutableList<Int> = ArrayList()
-                for (p in remaining) otherSolutions.add(sudoku.getCell(p!!)!!.currentValue)
+                for (p in remaining) otherSolutions.add(sudoku.getCell(p!!).currentValue)
 
                 //make list with all possible values
                 val possibleSolutions: MutableList<Int> =

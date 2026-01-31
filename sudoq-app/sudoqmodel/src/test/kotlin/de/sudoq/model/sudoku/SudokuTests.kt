@@ -6,7 +6,15 @@ import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder
-import org.amshove.kluent.*
+import org.amshove.kluent.invoking
+import org.amshove.kluent.`should be`
+import org.amshove.kluent.`should be equal to`
+import org.amshove.kluent.`should be false`
+import org.amshove.kluent.`should be null`
+import org.amshove.kluent.`should be true`
+import org.amshove.kluent.`should not be equal to`
+import org.amshove.kluent.`should not be null`
+import org.amshove.kluent.shouldNotThrow
 import org.junit.jupiter.api.Test
 
 class SudokuTests {
@@ -21,7 +29,7 @@ class SudokuTests {
         sudoku.isFinished.`should be false`()
 
         for (pos in sudokuType99.validPositions)
-            sudoku.getCell(pos).`should not be null`()
+            invoking { sudoku.getCell(pos) }.shouldNotThrow(IllegalArgumentException::class)
 
         for (f in sudoku)
             f.`should not be null`()
@@ -42,7 +50,7 @@ class SudokuTests {
         sudoku.isFinished.`should be false`()
 
         for (pos in sudokuType99.validPositions)
-            sudoku.getCell(pos).`should not be null`()
+            invoking { sudoku.getCell(pos) }.shouldNotThrow(IllegalArgumentException::class)
 
         for (f in sudoku)
             f.`should not be null`()
@@ -64,9 +72,8 @@ class SudokuTests {
         sudoku.sudokuType.`should be`(sudokuType99)
         sudoku.isFinished.`should be false`()
 
-        for (pos in sudokuType99.validPositions) {
-            sudoku.getCell(pos).`should not be null`()
-        }
+        for (pos in sudokuType99.validPositions)
+            invoking { sudoku.getCell(pos) }.shouldNotThrow(IllegalArgumentException::class)
 
         sudoku.transformCount.`should be`(0)
         sudoku.id.`should be`(0)
@@ -81,11 +88,11 @@ class SudokuTests {
     fun getCell() {
         val sudoku = Sudoku(sudokuType99)
         val p12 = Position[1, 2]
-        sudoku.getCell(Position[9, 10]).`should be null`() //because out of board
+        sudoku.getCellNullable(Position[9, 10]).`should be null`() //because out of board
 
         val f = sudoku.getCell(p12)
-        f!!.currentValue = 6
-        sudoku.getCell(p12)!!.currentValue.`should be`(6)
+        f.currentValue = 6
+        sudoku.getCell(p12).currentValue.`should be`(6)
     }
 
     @Test
@@ -100,8 +107,8 @@ class SudokuTests {
     @Test//TODO no chance to fail...
     fun iterator() {
         val su = Sudoku(sudokuType99)
-        su.getCell(Position[0, 0])!!.currentValue = 5
-        su.getCell(Position[1, 4])!!.currentValue = 4
+        su.getCell(Position[0, 0]).currentValue = 5
+        su.getCell(Position[1, 4]).currentValue = 4
         val i = su.iterator()
         var aThere = false
         var bThere = false
@@ -121,13 +128,13 @@ class SudokuTests {
             sudokuType99.validPositions.filter { pos -> pos.x != pos.y }) {
             _ -> true }
         val sudoku = Sudoku(sudokuType99, map, setValues)
-        var cell: Cell?
+        var cell: Cell
         for (pos in sudokuType99.validPositions) {
             cell = sudoku.getCell(pos)
             if (pos.x == pos.y) {
-                cell!!.isEditable.`should be true`()
+                cell.isEditable.`should be true`()
             } else {
-                cell!!.isEditable.`should be false`()
+                cell.isEditable.`should be false`()
             }
         }
     }
@@ -138,11 +145,11 @@ class SudokuTests {
         val sudoku = SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku()
         val listener = Listener();
 
-        sudoku.getCell(Position[0, 0])!!.currentValue = 2
+        sudoku.getCell(Position[0, 0]).currentValue = 2
         listener.callCount `should be` 0
 
         sudoku.registerListener(listener);
-        sudoku.getCell(Position[3, 2])!!.currentValue = 5
+        sudoku.getCell(Position[3, 2]).currentValue = 5
         listener.callCount `should be` 1
    }
 
@@ -178,7 +185,7 @@ class SudokuTests {
             solutions.put(pos, 0)
         }
         val sudoku = Sudoku(sudokuType, solutions, null)
-        sudoku.getCell(Position[0, 0])!!.currentValue = 1
+        sudoku.getCell(Position[0, 0]).currentValue = 1
         sudoku.hasErrors().`should be true`()
     }
 
@@ -196,7 +203,7 @@ class SudokuTests {
     fun toString44() {
         val sudokuType = TypeBuilder.getType(SudokuTypes.standard4x4)
         val sudoku = Sudoku(sudokuType)
-        sudoku.getCell(Position[1, 1])!!.currentValue = 3
+        sudoku.getCell(Position[1, 1]).currentValue = 3
         sudoku.cells!!.remove(Position[1, 2])
         sudoku.toString().`should be equal to`(
             """
@@ -212,7 +219,7 @@ class SudokuTests {
     fun toString99() {
         val sudokuType = TypeBuilder.getType(SudokuTypes.standard16x16)
         val sudoku = Sudoku(sudokuType)
-        sudoku.getCell(Position[1, 1])!!.currentValue = 12
+        sudoku.getCell(Position[1, 1]).currentValue = 12
         sudoku.toString().`should be equal to`(
             """
             xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx

@@ -13,20 +13,21 @@ import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import org.amshove.kluent.`should be`
+import org.amshove.kluent.`should match all with`
 import org.amshove.kluent.`should not be`
 import org.amshove.kluent.`should not be equal to`
+import org.amshove.kluent.shouldContainNone
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Timeout
-import org.junit.jupiter.api.function.Executable
 import java.util.concurrent.TimeUnit
 
 internal class SolverTests {
-    private var sudoku: Sudoku? = null
-    private var sudoku16x16: Sudoku? = null
-    private var solver: Solver? = null
-    private var solution16x16: PositionMap<Int?>? = null
+    private lateinit var sudoku: Sudoku
+    private lateinit var sudoku16x16: Sudoku
+    private lateinit var solver: Solver
+    private lateinit var solution16x16: PositionMap<Int?>
 
     private val sudokuTypeRepo: ReadRepo<SudokuType> = SudokuTypeRepo4Tests()
 
@@ -34,17 +35,17 @@ internal class SolverTests {
     @BeforeEach
     fun before() {
         sudoku = SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku()
-        sudoku!!.complexity = Complexity.arbitrary
-        solver = Solver(sudoku!!)
+        sudoku.complexity = Complexity.arbitrary
+        solver = Solver(sudoku)
         sudoku16x16 = SudokuBuilder(SudokuTypes.standard16x16, sudokuTypeRepo).createSudoku()
-        sudoku16x16!!.complexity = Complexity.arbitrary
-        solution16x16 = PositionMap(sudoku16x16!!.sudokuType.size)
+        sudoku16x16.complexity = Complexity.arbitrary
+        solution16x16 = PositionMap(sudoku16x16.sudokuType.size)
     }
 
     @Test
     fun test1() {
-        val initialSudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal)!!)
-        for (i in 0..7) initialSudoku.getCell(Position[i, 0])!!.currentValue = i
+        val initialSudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal))
+        for (i in 0..7) initialSudoku.getCell(Position[i, 0]).currentValue = i
         val solver = Solver(initialSudoku)
         solver.solveAll(true, false, true)
         val ls: List<Solution> = solver.solutions!!
@@ -63,35 +64,35 @@ internal class SolverTests {
                 "8     0  " +
                 " 7  1  6 "
 
-        sudoku.getCell(Position[0, 0])!!.currentValue = 0
-        sudoku.getCell(Position[5, 0])!!.currentValue = 6
-        sudoku.getCell(Position[7, 0])!!.currentValue = 8
-        sudoku.getCell(Position[1, 1])!!.currentValue = 2
-        sudoku.getCell(Position[4, 1])!!.currentValue = 1
-        sudoku.getCell(Position[8, 1])!!.currentValue = 7
-        sudoku.getCell(Position[2, 2])!!.currentValue = 8
-        sudoku.getCell(Position[3, 2])!!.currentValue = 5
-        sudoku.getCell(Position[6, 2])!!.currentValue = 4
-        sudoku.getCell(Position[2, 3])!!.currentValue = 4
-        sudoku.getCell(Position[3, 3])!!.currentValue = 2
-        sudoku.getCell(Position[6, 3])!!.currentValue = 8
-        sudoku.getCell(Position[1, 4])!!.currentValue = 0
-        sudoku.getCell(Position[4, 4])!!.currentValue = 7
-        sudoku.getCell(Position[8, 4])!!.currentValue = 1
-        sudoku.getCell(Position[0, 5])!!.currentValue = 5
-        sudoku.getCell(Position[5, 5])!!.currentValue = 3
-        sudoku.getCell(Position[0, 6])!!.currentValue = 2
-        sudoku.getCell(Position[7, 6])!!.currentValue = 0
-        sudoku.getCell(Position[1, 7])!!.currentValue = 3
-        sudoku.getCell(Position[8, 7])!!.currentValue = 6
-        sudoku.getCell(Position[2, 8])!!.currentValue = 6
-        sudoku.getCell(Position[6, 8])!!.currentValue = 2
+        sudoku.getCell(Position[0, 0]).currentValue = 0
+        sudoku.getCell(Position[5, 0]).currentValue = 6
+        sudoku.getCell(Position[7, 0]).currentValue = 8
+        sudoku.getCell(Position[1, 1]).currentValue = 2
+        sudoku.getCell(Position[4, 1]).currentValue = 1
+        sudoku.getCell(Position[8, 1]).currentValue = 7
+        sudoku.getCell(Position[2, 2]).currentValue = 8
+        sudoku.getCell(Position[3, 2]).currentValue = 5
+        sudoku.getCell(Position[6, 2]).currentValue = 4
+        sudoku.getCell(Position[2, 3]).currentValue = 4
+        sudoku.getCell(Position[3, 3]).currentValue = 2
+        sudoku.getCell(Position[6, 3]).currentValue = 8
+        sudoku.getCell(Position[1, 4]).currentValue = 0
+        sudoku.getCell(Position[4, 4]).currentValue = 7
+        sudoku.getCell(Position[8, 4]).currentValue = 1
+        sudoku.getCell(Position[0, 5]).currentValue = 5
+        sudoku.getCell(Position[5, 5]).currentValue = 3
+        sudoku.getCell(Position[0, 6]).currentValue = 2
+        sudoku.getCell(Position[7, 6]).currentValue = 0
+        sudoku.getCell(Position[1, 7]).currentValue = 3
+        sudoku.getCell(Position[8, 7]).currentValue = 6
+        sudoku.getCell(Position[2, 8]).currentValue = 6
+        sudoku.getCell(Position[6, 8]).currentValue = 2
     }
 
     @Test
     @Timeout(value = 3, unit = TimeUnit.SECONDS)
     fun solveOneAutomaticallyApplied() {
-        val sudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal)!!)
+        val sudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal))
         initSudoku9x9(sudoku)
         val solver = Solver(sudoku)
         val solverSudoku = solver.solverSudoku
@@ -100,21 +101,19 @@ internal class SolverTests {
             println("loop in test")
             val sd: SolveDerivation = solution.getDerivations().last()
             val c = solverSudoku.getCell(sd.cellIterator.next().position)
-            c!!.currentValue `should not be equal to` Cell.EMPTYVAL
+            c.currentValue `should not be equal to` Cell.EMPTYVAL
             solution = solver.solveOne(true)
         }
 
         // after solving everything, every cell should be filled
-        for (f in solverSudoku) {
-            f.currentValue `should not be equal to` Cell.EMPTYVAL
-        }
+        solverSudoku.shouldContainNone { f -> f.currentValue == Cell.EMPTYVAL }
     }
 
 
     @Test
     @Timeout(value = 3, unit = TimeUnit.SECONDS)
     fun solveOneManuallyApplied() {
-        val sudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal)!!)
+        val sudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal))
         initSudoku9x9(sudoku)
         val solver = Solver(sudoku)
         val solverSudoku = solver.solverSudoku
@@ -123,13 +122,11 @@ internal class SolverTests {
             val sd: SolveDerivation = solution.getDerivations().last()
             solution.action!!.execute()
             val c = solverSudoku.getCell(sd.cellIterator.next().position)
-            c!!.currentValue `should not be equal to` Cell.EMPTYVAL
+            c.currentValue `should not be equal to` Cell.EMPTYVAL
             solution = solver.solveOne(false)
         }
 
-        for (f in solverSudoku) {
-            f.currentValue `should not be equal to` Cell.EMPTYVAL
-        }
+        solverSudoku.shouldContainNone { f -> f.currentValue == Cell.EMPTYVAL }
     }
 
     /**
@@ -139,9 +136,9 @@ internal class SolverTests {
     @Timeout(value = 3, unit = TimeUnit.SECONDS)
     fun solveOneIncorrect() {
         // GIVEN
-        val initialSudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal)!!)
-        for (i in 0..7) initialSudoku.getCell(Position[i, 0])!!.currentValue = i
-        initialSudoku.getCell(Position[1, 0])!!.currentValue = 0 //set a second cell to 0
+        val initialSudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal))
+        for (i in 0..7) initialSudoku.getCell(Position[i, 0]).currentValue = i
+        initialSudoku.getCell(Position[1, 0]).currentValue = 0 //set a second cell to 0
         val solver = Solver(initialSudoku)
 
         // WHEN
@@ -154,7 +151,7 @@ internal class SolverTests {
     @Test
     @Timeout(value = 3, unit = TimeUnit.SECONDS)
     fun solveAll() {
-        val sudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal)!!)
+        val sudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal))
         initSudoku9x9(sudoku)
         val solver = Solver(sudoku)
         val solverSudoku = solver.solverSudoku
@@ -173,8 +170,8 @@ internal class SolverTests {
     fun solveAllIncorrect() {
         // GIVEN
         val initialSudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal))
-        for (i in 0..7) initialSudoku.getCell(Position[i, 0])!!.currentValue = i
-        initialSudoku.getCell(Position[1, 0])!!.currentValue = 0 //set a second cell to 0
+        for (i in 0..7) initialSudoku.getCell(Position[i, 0]).currentValue = i
+        initialSudoku.getCell(Position[1, 0]).currentValue = 0 //set a second cell to 0
         val solver = Solver(initialSudoku)
 
         // WHEN
@@ -228,30 +225,28 @@ internal class SolverTests {
         )
         parse16x16(pattern)
 
-        sudoku16x16!!.complexity = Complexity.arbitrary
-        val solver = Solver(sudoku16x16!!)
+        sudoku16x16.complexity = Complexity.arbitrary
+        val solver = Solver(sudoku16x16)
         val cr = solver.validate(solution16x16)
 
         //assertEquals(ComplexityRelation.CONSTRAINT_SATURATION, cr); todo fix complexity determiation
 
         // copy solution to current value
-        for (j in 0..<sudoku16x16!!.sudokuType.size.y) {
-            for (i in 0..<sudoku16x16!!.sudokuType.size.x) {
-                sudoku16x16!!.getCell(Position[i, j])!!.currentValue = solution16x16!![Position[i, j]]!!
+        for (j in 0..<sudoku16x16.sudokuType.size.y) {
+            for (i in 0..<sudoku16x16.sudokuType.size.x) {
+                sudoku16x16.getCell(Position[i, j]).currentValue = solution16x16[Position[i, j]]!!
             }
         }
 
         // check constraints
-        for (c in sudoku16x16!!.sudokuType) {
-            c.isSaturated(sudoku16x16!!) `should be` true
-        }
+        sudoku16x16.sudokuType `should match all with` { c -> c.isSaturated(sudoku16x16) }
 
         println("Solution (16x16) - Complexity: " + solver.solverSudoku.complexityValue)
         if (PRINT_SOLUTIONS) {
             val sb = StringBuilder()
-            for (j in 0..<sudoku16x16!!.sudokuType.size.y) {
-                for (i in 0..<sudoku16x16!!.sudokuType.size.x) {
-                    val value = sudoku16x16!!.getCell(Position[i, j])!!.currentValue
+            for (j in 0..<sudoku16x16.sudokuType.size.y) {
+                for (i in 0..<sudoku16x16.sudokuType.size.x) {
+                    val value = sudoku16x16.getCell(Position[i, j]).currentValue
                     var op = value.toString() + ""
                     if (value < 10) op = " " + value
                     if (value == -1) op = " x"
@@ -269,7 +264,7 @@ internal class SolverTests {
             for (col in 0..<rowS.length) {
                 val c = rowS[col]
                 if (c == '_') continue
-                solution16x16!!.put(Position[col, row], parseHex(c))
+                solution16x16.put(Position[col, row], parseHex(c))
             }
         }
     }
@@ -299,31 +294,29 @@ internal class SolverTests {
         )
         parse16x16(pattern)
 
-        sudoku16x16!!.complexity = Complexity.arbitrary
-        val solver = Solver(sudoku16x16!!)
+        sudoku16x16.complexity = Complexity.arbitrary
+        val solver = Solver(sudoku16x16)
         val cr = solver.validate(solution16x16)
 
         //assertEquals(ComplexityRelation.CONSTRAINT_SATURATION, cr);
 
         // copy solution to current value
-        for (j in 0..<sudoku16x16!!.sudokuType.size.y) {
-            for (i in 0..<sudoku16x16!!.sudokuType.size.x) {
-                sudoku16x16!!.getCell(Position[i, j])!!.currentValue = solution16x16!![Position[i, j]]!!
+        for (j in 0..<sudoku16x16.sudokuType.size.y) {
+            for (i in 0..<sudoku16x16.sudokuType.size.x) {
+                sudoku16x16.getCell(Position[i, j]).currentValue = solution16x16[Position[i, j]]!!
             }
         }
 
         // check constraints
-        for (c in sudoku16x16!!.sudokuType) {
-            c.isSaturated(sudoku16x16!!) `should be` true
-        }
+        sudoku16x16.sudokuType `should match all with` { c -> c.isSaturated(sudoku16x16) }
 
         // print solution if wanted
         println("Solution (16x16) - Complexity: " + solver.solverSudoku.complexityValue)
         if (PRINT_SOLUTIONS) {
             val sb = StringBuilder()
-            for (j in 0..<sudoku16x16!!.sudokuType.size.y) {
-                for (i in 0..<sudoku16x16!!.sudokuType.size.x) {
-                    val value = sudoku16x16!!.getCell(Position[i, j])!!.currentValue
+            for (j in 0..<sudoku16x16.sudokuType.size.y) {
+                for (i in 0..<sudoku16x16.sudokuType.size.x) {
+                    val value = sudoku16x16.getCell(Position[i, j]).currentValue
                     var op = value.toString() + ""
                     if (value < 10) op = " " + value
                     if (value == -1) op = " x"
@@ -337,11 +330,11 @@ internal class SolverTests {
 
     @Test
     fun noConstraintSaturation() {
-        sudoku!!.getCell(Position[0, 0])!!.currentValue = 0
-        sudoku!!.getCell(Position[1, 0])!!.currentValue = 0
+        sudoku.getCell(Position[0, 0]).currentValue = 0
+        sudoku.getCell(Position[1, 0]).currentValue = 0
 
-        sudoku!!.complexity = Complexity.arbitrary
-        val solver = Solver(sudoku!!)
+        sudoku.complexity = Complexity.arbitrary
+        val solver = Solver(sudoku)
         Assertions.assertEquals(ComplexityRelation.INVALID, solver.validate(null))
     }
 

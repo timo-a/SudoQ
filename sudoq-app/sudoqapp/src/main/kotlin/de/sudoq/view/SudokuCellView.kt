@@ -22,7 +22,6 @@ import de.sudoq.model.game.Game
 import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.ConstraintType
-import java.util.*
 
 /**
  * This subclass of a View represents a cell in a sudoku. It extends the functionality of the
@@ -278,15 +277,15 @@ class SudokuCellView(
      * ConstraintType, false otherwise
      */
     private fun anyUniqueConstraintViolated(): Boolean {
-        val sudoku = game.sudoku!!
-        val pos = sudoku.getPosition(cell.id)!!
+        val sudoku = game.sudoku
+        val pos = sudoku.getPosition(cell.id)
         val constraints: Iterable<Constraint> = sudoku.sudokuType
         return constraints
             .filter { it.includes(pos) } // pos must be in constraint
             .filter { it.hasUniqueBehavior() }
             .flatMap { it.getPositions() }
             .filter { it != pos } // must be different position
-            .map { sudoku.getCell(it)!!.currentValue } // look at values
+            .map { sudoku.getCell(it).currentValue } // look at values
             .distinct().contains(cell.currentValue) // does any match?
     }
 
@@ -330,10 +329,10 @@ class SudokuCellView(
         connected = false
         isNoteMode = false
         isInExtraConstraint = false
-        val constraints: Iterable<Constraint> = game.sudoku!!.sudokuType
+        val constraints: Iterable<Constraint> = game.sudoku.sudokuType
         for (c in constraints) {
             if (c.type == ConstraintType.EXTRA &&
-                c.includes(game.sudoku!!.getPosition(cell.id)!!)
+                c.includes(game.sudoku.getPosition(cell.id))
             ) {
                 isInExtraConstraint = true
                 break

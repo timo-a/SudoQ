@@ -44,12 +44,18 @@ import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Position
 import de.sudoq.persistence.game.GameRepo
-import de.sudoq.view.*
-import java.io.*
-import javax.inject.Inject
-import kotlin.math.abs
-import java.time.Duration
+import de.sudoq.view.FullScrollLayout
+import de.sudoq.view.GestureInputOverlay
+import de.sudoq.view.SudokuCellView
+import de.sudoq.view.SudokuLayout
+import de.sudoq.view.VirtualKeyboardLayout
+import java.io.FileInputStream
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 /**
  * Diese Klasse stellt die Activity des Sudokuspiels dar. Die Klasse hält das
@@ -161,7 +167,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
 
     /** Methods  */
     private fun initializeSymbolSet() {
-        currentSymbolSet = when (game!!.sudoku!!.sudokuType.numberOfSymbols) {
+        currentSymbolSet = when (game!!.sudoku.sudokuType.numberOfSymbols) {
             4 -> Symbol.MAPPING_NUMBERS_FOUR
             6 -> Symbol.MAPPING_NUMBERS_SIX
             9 -> Symbol.MAPPING_NUMBERS_NINE
@@ -218,9 +224,9 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
             val keyboardView = findViewById<VirtualKeyboardLayout>(R.id.virtual_keyboard)
             mediator = UserInteractionMediator(
                 keyboardView,
-                sudokuLayout,
-                game,
-                gestureOverlay,
+                sudokuLayout!!,
+                game!!,
+                gestureOverlay!!,
                 gestureStore,
                 profileManager
             )
@@ -233,7 +239,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
                 val lastAction = game!!.currentState.action
 
                 fun getCellView(cellId: Int): SudokuCellView {
-                    val currentPosition = game!!.sudoku!!.getPosition(cellId)!!
+                    val currentPosition = game!!.sudoku.getPosition(cellId)
                     return sudokuLayout!!.getSudokuCellView(currentPosition)
                 }
 
@@ -313,7 +319,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
             gestureOverlay != null && gestureOverlay!!.visibility == View.VISIBLE
         )
         if (sudokuLayout!!.currentCellView != null) {
-            val position = game!!.sudoku!!.getPosition(sudokuLayout!!.currentCellView!!.cell.id)!!
+            val position = game!!.sudoku.getPosition(sudokuLayout!!.currentCellView!!.cell.id)
             outState.putInt(SAVE_FIELD_X.toString(), position.x)
             outState.putInt(SAVE_FIELD_Y.toString(), position.y)
         } else {
@@ -365,8 +371,8 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
      * Setzt den Text für Typ und Schwierigkeit des aktuellen Sudokus.
      */
     private fun setTypeText() {
-        val type = Utility.type2string(this, game!!.sudoku!!.sudokuType.enumType)
-        val comp = Utility.complexity2string(this, game!!.sudoku!!.complexity!!)
+        val type = Utility.type2string(this, game!!.sudoku.sudokuType.enumType)
+        val comp = Utility.complexity2string(this, game!!.sudoku.complexity!!)
         val ab = supportActionBar
         ab!!.title = type
         ab.subtitle = comp
@@ -433,7 +439,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
         instance!!.setMarking(currentControlsView, CellViewStates.KEYBOARD)
         val keyboardView = findViewById<VirtualKeyboardLayout>(R.id.virtual_keyboard)
         instance!!.setMarking(keyboardView, CellViewStates.KEYBOARD)
-        keyboardView.refresh(game!!.sudoku!!.sudokuType.numberOfSymbols)
+        keyboardView.refresh(game!!.sudoku.sudokuType.numberOfSymbols)
     }
 
     /**
@@ -460,7 +466,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
         val symbolSet = Symbol.getInstance().symbolSet!!
         val gestures = gestureStore.gestureEntries
 
-        return symbolSet.all { gestures.contains(it) }
+        return symbolSet.all(gestures::contains)
     }
 
     /**

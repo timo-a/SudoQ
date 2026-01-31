@@ -7,7 +7,7 @@ import de.sudoq.model.sudoku.CandidateSet
 import de.sudoq.model.sudoku.CandidateSet.Companion.fromBitSet
 import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.Sudoku
-import java.util.*
+import java.util.Stack
 
 /**
  * Created by timo on 04.10.16.
@@ -43,7 +43,7 @@ class NakedSetDerivation(technique: HintTypes) : SolveDerivation(technique) {
         val actionlist: MutableList<Action> = ArrayList()
         val af = NoteActionFactory()
         for (df in externalCells) for (note in fromBitSet(df.relevantCandidates).setBits) actionlist.add(
-            af.createAction(note, sudoku.getCell(df.position)!!)
+            af.createAction(note, sudoku.getCell(df.position))
         )
         return actionlist
     }

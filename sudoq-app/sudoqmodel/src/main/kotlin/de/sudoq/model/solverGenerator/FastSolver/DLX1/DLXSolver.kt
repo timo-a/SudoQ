@@ -81,10 +81,10 @@ open class DLXSolver(s: Sudoku) : FastSolver {
 
     override fun getSolutions(): PositionMap<Int> {
         val solution = bothSolutionsForDebugPurposes!![0]
-        val pm: PositionMap<Int> = PositionMap(Position[solution[0]!!.size, solution.size])
+        val pm: PositionMap<Int> = PositionMap(Position[solution[0].size, solution.size])
 
-        for (r in solution.indices) for (c in solution[0]!!.indices) {
-            if (solution[r]!![c] != -1) pm.put(Position[c, r], solution[r]!![c] - 1)
+        for (r in solution.indices) for (c in solution[0].indices) {
+            if (solution[r][c] != -1) pm.put(Position[c, r], solution[r][c] - 1)
         }
         return pm
     }
@@ -104,7 +104,7 @@ open class DLXSolver(s: Sudoku) : FastSolver {
             val dim = s.sudokuType.size
             val sarray = Array<IntArray?>(dim.y) { IntArray(dim.x) }
             for (r in sarray.indices) for (c in sarray[0]!!.indices) {
-                val f = s.getCell(Position[c, r])
+                val f = s.getCellNullable(Position[c, r])
                 sarray[r]!![c] = if (f == null)
                     -1 //if pos doesn't exist e.g. (9,0) in SamuraiSudoku
                 else

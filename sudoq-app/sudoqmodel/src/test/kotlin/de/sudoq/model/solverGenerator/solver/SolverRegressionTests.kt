@@ -15,10 +15,10 @@ import org.junit.jupiter.api.Test
 
 //import de.sudoq.external;
 internal class SolverRegressionTests {
-    private var sudoku: Sudoku? = null
-    private var sudoku16x16: Sudoku? = null
-    private var solver: Solver? = null
-    private var solution16x16: PositionMap<Int?>? = null
+    private lateinit var sudoku: Sudoku
+    private lateinit var sudoku16x16: Sudoku
+    private lateinit var solver: Solver
+    private lateinit var solution16x16: PositionMap<Int?>
 
     @BeforeEach
     fun before() {
@@ -26,11 +26,11 @@ internal class SolverRegressionTests {
 
 
         sudoku = SudokuBuilder(SudokuTypes.standard9x9, str).createSudoku()
-        sudoku!!.complexity = Complexity.arbitrary
-        solver = Solver(sudoku!!)
+        sudoku.complexity = Complexity.arbitrary
+        solver = Solver(sudoku)
         sudoku16x16 = SudokuBuilder(SudokuTypes.standard16x16, str).createSudoku()
-        sudoku16x16!!.complexity = Complexity.arbitrary
-        solution16x16 = PositionMap(sudoku16x16!!.sudokuType.size)
+        sudoku16x16.complexity = Complexity.arbitrary
+        solution16x16 = PositionMap(sudoku16x16.sudokuType.size)
     }
 
 

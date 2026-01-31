@@ -13,7 +13,7 @@ import de.sudoq.controller.sudoku.hints.HintFormulator.getText
 import de.sudoq.model.game.Game
 import de.sudoq.model.solvingAssistant.SolvingAssistant.giveAHint
 import de.sudoq.view.SudokuLayout
-import java.util.*
+import java.util.Stack
 
 /**
  * Created by timo on 29.10.16.
@@ -89,7 +89,7 @@ class AssistancesDialogFragment : DialogFragment() {
     }
 
     private fun hint(activity: SudokuActivity) {
-        val sd = giveAHint(game.sudoku!!)
+        val sd = giveAHint(game.sudoku)
         val tv = activity.findViewById<View>(R.id.hintText) as TextView
         tv.text = getText(activity, sd)
         activity.setModeHint()
@@ -114,7 +114,7 @@ class AssistancesDialogFragment : DialogFragment() {
             sl!!.hintPainter.deleteAll()
             sl!!.invalidate()
             sl!!.hintPainter.invalidateAll()
-            for (a in sd.getActionList(game.sudoku!!)) {
+            for (a in sd.getActionList(game.sudoku)) {
                 controller!!.onHintAction(a)
                 activity.onInputAction()
                 /* in case we delete a note in the focussed cell */

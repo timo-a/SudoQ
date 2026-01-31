@@ -5,7 +5,6 @@ import de.sudoq.model.actionTree.SolveActionFactory
 import de.sudoq.model.solvingAssistant.HintTypes
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.Sudoku
-import java.util.*
 
 class LastCandidateDerivation(val position: Position, private val remainingNote: Int) :
     SolveDerivation(HintTypes.LastCandidate) {
@@ -18,7 +17,7 @@ class LastCandidateDerivation(val position: Position, private val remainingNote:
 
     override fun getActionList(sudoku: Sudoku): List<Action> {
         val af = SolveActionFactory()
-        actionlist.add(af.createAction(remainingNote, sudoku.getCell(position)!!))
+        actionlist.add(af.createAction(remainingNote, sudoku.getCell(position)))
         return actionlist
     }
 

@@ -7,7 +7,8 @@ import de.sudoq.model.sudoku.CandidateSet
 import de.sudoq.model.sudoku.CandidateSet.Companion.fromBitSet
 import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.Sudoku
-import java.util.*
+import java.util.BitSet
+import java.util.Stack
 
 class HiddenSetDerivation(technique: HintTypes) : SolveDerivation(technique) {
 
@@ -46,7 +47,7 @@ class HiddenSetDerivation(technique: HintTypes) : SolveDerivation(technique) {
         while (it.hasNext()) {
             val df = it.next()
             for (note in fromBitSet(df.irrelevantCandidates).setBits)
-                actionlist.add(af.createAction(note, sudoku.getCell(df.position)!!))
+                actionlist.add(af.createAction(note, sudoku.getCell(df.position)))
         }
         return actionlist
     }

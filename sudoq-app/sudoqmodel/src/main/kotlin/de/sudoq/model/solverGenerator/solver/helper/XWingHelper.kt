@@ -4,8 +4,11 @@ import de.sudoq.model.solverGenerator.solution.DerivationCell
 import de.sudoq.model.solverGenerator.solution.XWingDerivation
 import de.sudoq.model.solverGenerator.solver.SolverSudoku
 import de.sudoq.model.solvingAssistant.HintTypes
-import de.sudoq.model.sudoku.*
-import java.util.*
+import de.sudoq.model.sudoku.CandidateSet
+import de.sudoq.model.sudoku.Constraint
+import de.sudoq.model.sudoku.Position
+import de.sudoq.model.sudoku.Utils
+import de.sudoq.model.sudoku.getGroupShape
 
 //TODO test this!!!
 /**
@@ -52,14 +55,14 @@ class XWingHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku, c
             val col1 = cols[c1]
             val row1 = rows[r1]
             val topLeft = intersectionPoint(row1, col1)
-            if (topLeft == null || !sudoku.getCell(topLeft)!!.isNotSolved) continue
+            if (topLeft == null || !sudoku.getCell(topLeft).isNotSolved) continue
             for (c2 in c1 + 1 until cols.size) {
                 val col2 = cols[c2]
 
                 //avoid overlapping columns as can happen with samurai sudokus
                 if (intersectionPoint<Position?>(col1, col2) != null) continue
                 val topRight = intersectionPoint(row1, col2)
-                if (topRight == null || !sudoku.getCell(topRight)!!.isNotSolved) continue
+                if (topRight == null || !sudoku.getCell(topRight).isNotSolved) continue
                 for (r2 in r1 + 1 until rows.size) {
                     val row2 = rows[r2]
 
@@ -67,8 +70,8 @@ class XWingHelper(sudoku: SolverSudoku, complexity: Int) : SolveHelper(sudoku, c
                     if (intersectionPoint<Position?>(row1, row2) != null) continue
                     val bottomRight = intersectionPoint(col2, row2)
                     val bottomLeft = intersectionPoint(row2, col1)
-                    if (bottomRight != null && sudoku.getCell(bottomRight)!!.isNotSolved
-                        && bottomLeft != null && sudoku.getCell(bottomLeft)!!.isNotSolved
+                    if (bottomRight != null && sudoku.getCell(bottomRight).isNotSolved
+                        && bottomLeft != null && sudoku.getCell(bottomLeft).isNotSolved
                     ) {
                         /* we found a # of 2rows, 2 cols now check if 2 are locked ...*/
                         val intersectionPoints = arrayOf(topLeft, topRight, bottomLeft, bottomRight)

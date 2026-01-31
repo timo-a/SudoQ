@@ -13,7 +13,7 @@ import android.gesture.GestureOverlayView.OnGesturePerformedListener
 import android.gesture.GestureStore
 import android.gesture.Prediction
 import android.util.Log
-import android.view.*
+import android.view.View
 import android.widget.Toast
 import de.sudoq.R
 import de.sudoq.controller.sudoku.CellInteractionListener.SelectEvent
@@ -28,17 +28,19 @@ import de.sudoq.view.GestureInputOverlay
 import de.sudoq.view.SudokuCellView
 import de.sudoq.view.SudokuLayout
 import de.sudoq.view.VirtualKeyboardLayout
-import java.util.*
 
 /**
  * Ein Vermittler zwischen einem Sudoku und den verschiedenen
  * Eingabemöglichkeiten, also insbesondere Tastatur und Gesten-View.
+ *
+ * @property sudokuView responsible for displaying a sudoku and its views
+ * @property game the current game
  */
 class UserInteractionMediator(
     virtualKeyboard: VirtualKeyboardLayout,
-    sudokuView: SudokuLayout?,
-    game: Game?,
-    gestureOverlay: GestureInputOverlay?,
+    private val sudokuView: SudokuLayout,
+    private val game: Game,
+    private val gestureOverlay: GestureInputOverlay,
     gestureStore: GestureStore,
     private val profileManager: ProfileManager
 ) : OnGesturePerformedListener, InputListener, CellInteractionListener, ObservableActionCaster {
@@ -48,53 +50,37 @@ class UserInteractionMediator(
     private var noteMode = false
 
     /**
-     * Die SudokuView, die die Anzeige eines Sudokus mit seinen Feldern
-     * übernimmt.
-     */
-    private val sudokuView: SudokuLayout?
-
-    /**
      * Virtuelles Keyboard, welches beim Antippen eines Feldes angezeigt wird.
      */
     private val virtualKeyboard: VirtualKeyboardLayout
 
     /**
-     * Das aktuelle Spiel.
-     */
-    private val game: Game?
-
-    /**
      * Eine Liste der ActionListener.
      */
-    private val actionListener: MutableList<ActionListener?>
-
-    /**
-     * Die Gesten-View.
-     */
-    private val gestureOverlay: GestureInputOverlay?
+    private val actionListener: MutableList<ActionListener> = ArrayList()
 
     /**
      * Die Bibliothek für die Gesteneingabe.
      */
     private val gestureStore: GestureStore
     override fun onInput(symbol: Int) {
-        val currentField = sudokuView!!.currentCellView
+        val currentField = sudokuView.currentCellView
 
         for (listener in actionListener) {
             if (noteMode) {
                 if (currentField!!.cell.isNoteSet(symbol)) {
-                    listener!!.onNoteDelete(currentField.cell, symbol)
+                    listener.onNoteDelete(currentField.cell, symbol)
                     restrictCandidates() //because github issue #116 see below
                     //in case we deleted a now impossible,
                     // we immediately restrict so it cant be selected again
                 } else {
-                    listener!!.onNoteAdd(currentField.cell, symbol)
+                    listener.onNoteAdd(currentField.cell, symbol)
                 }
             } else {
                 if (symbol == currentField!!.cell.currentValue) {
-                    listener!!.onDeleteEntry(currentField.cell)
+                    listener.onDeleteEntry(currentField.cell)
                 } else {
-                    listener!!.onAddEntry(currentField.cell, symbol)
+                    listener.onAddEntry(currentField.cell, symbol)
                 }
             }
         }
@@ -102,7 +88,7 @@ class UserInteractionMediator(
     }
 
     override fun onCellSelected(view: SudokuCellView, e: SelectEvent) {
-        if (!game!!.isFinished()) {
+        if (!game.isFinished()) {
             if (profileManager.isGestureActive) {
                 cellSelectedGestureMode(view, e)
             } else {
@@ -113,7 +99,7 @@ class UserInteractionMediator(
     }
 
     private fun cellSelectedNumPadMode(view: SudokuCellView, e: SelectEvent) {
-        var currentField = sudokuView!!.currentCellView
+        var currentField = sudokuView.currentCellView
         val freshlySelected = currentField != view
         if (freshlySelected) {
             noteMode = e == SelectEvent.Long
@@ -123,10 +109,10 @@ class UserInteractionMediator(
             currentField?.deselect(true)
             currentField = view
             currentField.setNoteState(noteMode)
-            currentField.select(game!!.isAssistanceAvailable(Assistances.markRowColumn))
+            currentField.select(game.isAssistanceAvailable(Assistances.markRowColumn))
         } else {
             noteMode = !noteMode
-            currentField!!.setNoteState(noteMode)
+            currentField.setNoteState(noteMode)
         }
         if (currentField.cell.isEditable) {
             restrictCandidates()
@@ -136,8 +122,8 @@ class UserInteractionMediator(
         }
     }
 
-    private fun cellSelectedGestureMode(view: SudokuCellView?, e: SelectEvent) {
-        var currentCellView = sudokuView!!.currentCellView
+    private fun cellSelectedGestureMode(view: SudokuCellView, e: SelectEvent) {
+        var currentCellView = requireNotNull(sudokuView.currentCellView)
         val currentCell: Cell
         /* select for the first time -> set a solution */
         val freshlySelected = currentCellView != view
@@ -146,10 +132,10 @@ class UserInteractionMediator(
             noteMode = e == SelectEvent.Long
             Log.d("gesture-verify", "cellSelectedGestureMode: this.noteMode =$noteMode")
             sudokuView.currentCellView = view
-            currentCellView?.deselect(true)
+            currentCellView.deselect(true)
             currentCellView = view
-            currentCellView?.setNoteState(noteMode)
-            currentCellView!!.select(game!!.isAssistanceAvailable(Assistances.markRowColumn))
+            currentCellView.setNoteState(noteMode)
+            currentCellView.select(game.isAssistanceAvailable(Assistances.markRowColumn))
             currentCell = currentCellView.cell
             if (currentCell.isEditable) {
                 restrictCandidates()
@@ -161,11 +147,11 @@ class UserInteractionMediator(
                 //Long press -> user can input note directly
                 Log.d("gesture-verify", "cellSelectedGestureMode: noteMode: $noteMode")
                 restrictCandidates()
-                if (noteMode) gestureOverlay!!.activateForNote() else gestureOverlay!!.activateForEntry()
+                if (noteMode) gestureOverlay.activateForNote() else gestureOverlay.activateForEntry()
             }
             /* second click on the same cell*/
         } else {
-            currentCell = currentCellView!!.cell
+            currentCell = currentCellView.cell
             /* set solution via touchy swypy*/
             if (currentCell.isEditable) {
 
@@ -176,7 +162,7 @@ class UserInteractionMediator(
                     return
                 }
                 restrictCandidates()
-                if (noteMode) gestureOverlay!!.activateForNote() else gestureOverlay!!.activateForEntry()
+                if (noteMode) gestureOverlay.activateForNote() else gestureOverlay.activateForEntry()
             } else {
                 //if it is not editable don't do anything
                 //this.noteMode = !this.noteMode;
@@ -189,8 +175,8 @@ class UserInteractionMediator(
      * Aktualisiert die Anzeige der Tastatur.
      */
     fun updateKeyboard() {
-        val currentField = sudokuView!!.currentCellView
-        for (i in game!!.sudoku!!.sudokuType.symbolIterator) {
+        val currentField = sudokuView.currentCellView
+        for (i in game.sudoku.sudokuType.symbolIterator) {
             val state: CellViewStates = if (currentField != null && i == currentField.cell.currentValue && !noteMode)
                 CellViewStates.SELECTED_INPUT_BORDER
             else if (currentField != null && currentField.cell.isNoteSet(i) && noteMode)
@@ -242,84 +228,80 @@ class UserInteractionMediator(
         val prediction = predictions[0]
         if (prediction.score > 1.5) {
             for (listener in actionListener) {
-                if (noteMode) updateNoteFromGesture(
-                    listener,
-                    prediction
-                ) else updateEntryFromGesture(listener, prediction)
+                if (noteMode)
+                    updateNoteFromGesture(listener, prediction)
+                else
+                    updateEntryFromGesture(listener, prediction)
             }
         }
         overlay.removeAllViews()
     }
 
-    private fun updateEntryFromGesture(listener: ActionListener?, prediction: Prediction) {
-        val currentCell = sudokuView!!.currentCellView!!.cell
+    private fun updateEntryFromGesture(listener: ActionListener, prediction: Prediction) {
+        val currentCell = sudokuView.currentCellView!!.cell
         val currentValue: String = Symbol.getInstance().getMapping(currentCell.currentValue)
         if (prediction.name == currentValue) {
-            listener!!.onDeleteEntry(currentCell)
+            listener.onDeleteEntry(currentCell)
         } else {
             var number: Int = Symbol.getInstance().getAbstract(prediction.name)
             val save = currentCell.currentValue
-            if (number >= game!!.sudoku!!.sudokuType.numberOfSymbols) number = -1
+            if (number >= game.sudoku.sudokuType.numberOfSymbols) number = -1
             if (number != -1 && game.isAssistanceAvailable(Assistances.restrictCandidates)) {
                 currentCell.setCurrentValue(number, false)
-                for (c in game.sudoku!!.sudokuType) {
-                    if (!c.isSaturated(game.sudoku!!)) {
+                for (c in game.sudoku.sudokuType) {
+                    if (!c.isSaturated(game.sudoku)) {
                         number = -2
                         break
                     }
                 }
                 currentCell.setCurrentValue(save, false)
             }
-            if (number != -1 && number != -2) {
-                listener!!.onAddEntry(currentCell, number)
-                gestureOverlay!!.visibility = View.INVISIBLE
-            } else if (number == -1) {
-                Toast.makeText(
+            when(number) {
+                -1 -> Toast.makeText(
                     sudokuView.context,
-                    sudokuView.context.getString(R.string.toast_invalid_symbol), Toast.LENGTH_SHORT
-                ).show()
-            } else if (number == -2) {
-                Toast.makeText(
+                    sudokuView.context.getString(R.string.toast_invalid_symbol),
+                    Toast.LENGTH_SHORT).show()
+                -2 -> Toast.makeText(
                     sudokuView.context,
                     sudokuView.context.getString(R.string.toast_restricted_symbol),
-                    Toast.LENGTH_SHORT
-                ).show()
+                    Toast.LENGTH_SHORT).show()
+                else -> {
+                    listener.onAddEntry(currentCell, number)
+                    gestureOverlay.visibility = View.INVISIBLE
+                }
             }
         }
     }
 
-    private fun updateNoteFromGesture(listener: ActionListener?, prediction: Prediction) {
-        val currentCell = sudokuView!!.currentCellView!!.cell
+    private fun updateNoteFromGesture(listener: ActionListener, prediction: Prediction) {
+        val currentCell = sudokuView.currentCellView!!.cell
         var predictedNote: Int = Symbol.getInstance().getAbstract(prediction.name)
         if (currentCell.isNoteSet(predictedNote)) {
-            listener!!.onNoteDelete(currentCell, predictedNote)
+            listener.onNoteDelete(currentCell, predictedNote)
         } else {
             val save = sudokuView.currentCellView!!.cell.currentValue
-            if (predictedNote >= game!!.sudoku!!.sudokuType.numberOfSymbols) predictedNote = -1
+            if (predictedNote >= game.sudoku.sudokuType.numberOfSymbols)
+                predictedNote = -1
             if (predictedNote != -1 && game.isAssistanceAvailable(Assistances.restrictCandidates)) {
                 sudokuView.currentCellView!!.cell.setCurrentValue(predictedNote, false)
-                for (c in game.sudoku!!.sudokuType) {
-                    if (!c.isSaturated(game.sudoku!!)) {
-                        predictedNote = -2
-                        break
-                    }
+                if (game.sudoku.sudokuType.any { !it.isSaturated(game.sudoku) }) {
+                    predictedNote = -2
                 }
                 currentCell.toggleNote(predictedNote)
             }
-            if (predictedNote != -1 && predictedNote != -2) {
-                listener!!.onNoteAdd(currentCell, predictedNote)
-                gestureOverlay!!.visibility = View.INVISIBLE
-            } else if (predictedNote == -1) {
-                Toast.makeText(
+            when(predictedNote) {
+                -1 -> Toast.makeText(
                     sudokuView.context,
-                    sudokuView.context.getString(R.string.toast_invalid_symbol), Toast.LENGTH_SHORT
-                ).show()
-            } else if (predictedNote == -2) {
-                Toast.makeText(
+                    sudokuView.context.getString(R.string.toast_invalid_symbol),
+                    Toast.LENGTH_SHORT).show()
+                -2 -> Toast.makeText(
                     sudokuView.context,
                     sudokuView.context.getString(R.string.toast_restricted_symbol),
-                    Toast.LENGTH_SHORT
-                ).show()
+                    Toast.LENGTH_SHORT).show()
+                else -> {
+                    listener.onNoteAdd(currentCell, predictedNote)
+                    gestureOverlay.visibility = View.INVISIBLE
+                }
             }
         }
     }
@@ -329,53 +311,42 @@ class UserInteractionMediator(
      */
     fun restrictCandidates() {
         virtualKeyboard.enableAllButtons()
-        val currectFieldView = sudokuView!!.currentCellView ?: return
+        val currectFieldView = sudokuView.currentCellView ?: return
         //maybe there is no focus, then pass
         val currentCell = currectFieldView.cell
-        val type = game!!.sudoku!!.sudokuType
-        /* only if assistance 'input assistance' if enabled */if (game.isAssistanceAvailable(
-                Assistances.restrictCandidates
-            )
-        ) {
+        val type = game.sudoku.sudokuType
+        /* only if assistance 'input assistance' if enabled */
+        if (game.isAssistanceAvailable(Assistances.restrictCandidates)) {
             val allPossible = getRestrictedSymbolSet(game.sudoku, currentCell, noteMode)
-            for (i in type!!.symbolIterator) if (!allPossible.contains(i)) virtualKeyboard.disableButton(
-                i
-            )
+            type.symbolIterator
+                .filter { !allPossible.contains(it) }
+                .forEach(virtualKeyboard::disableButton)
         }
     }
 
     /* compute the symbols that the keyboard offers if `input assistance`
-          i.e. "grey out values that apprear in the same constraint" is selected.
+          i.e. "grey out values that appear in the same constraint" is selected.
        caution
           */
     @Synchronized
     private fun getRestrictedSymbolSet(
-        s: Sudoku?, currentCell: Cell,
+        s: Sudoku, currentCell: Cell,
         noteMode: Boolean
     ): Set<Int> {
         val restrictedSet: MutableSet<Int> = HashSet()
-        val type = s!!.sudokuType
-        val relevantConstraints: MutableList<Constraint> = ArrayList()
-        for (c in type) if (c.getPositions()
-                .contains(s.getPosition(currentCell.id))
-        ) relevantConstraints.add(c)
+        val type = s.sudokuType
+        val relevantConstraints: List<Constraint> = type.constraints
+            .filter { c -> c.includes(s.getPosition(currentCell.id)) }
 
         /* save val of current view */
         val save = currentCell.currentValue
 
-        /* iterate over all symbols e.g. 0-8 */for (i in type.symbolIterator) {
+        /* iterate over all symbols e.g. 0-8 */
+        for (i in type.symbolIterator) {
 
             /* set cellval to current symbol */
             currentCell.setCurrentValue(i, false)
-            var possible = true
-            /* for every constraint */for (c in relevantConstraints) {
-
-                /* if constraint not satisfied -> disable */
-                if (!c.isSaturated(s)) {
-                    possible = false
-                    break
-                }
-            }
+            val possible = relevantConstraints.all { c -> c.isSaturated(s) }
             if (possible) restrictedSet.add(i)
             currentCell.setCurrentValue(Cell.EMPTYVAL, false) // unneccessary
         }
@@ -385,9 +356,8 @@ class UserInteractionMediator(
 		 * it would be stupid if we were in the mode where notes are set
 		 * and would disable a now impossible note that had been set by user.
 		 * Because then, it can't be unset by the user */
-        val setNotes: MutableSet<Int> = HashSet()
-        if (noteMode) for (i in type.symbolIterator) if (currentCell.isNoteSet(i)) setNotes.add(i)
-        restrictedSet.addAll(setNotes)
+        if (noteMode)
+            restrictedSet.addAll(type.symbolIterator.filter(currentCell::isNoteSet))
         return restrictedSet
     }
 
@@ -397,24 +367,16 @@ class UserInteractionMediator(
      * @param virtualKeyboard
      * Das virtuelle Keyboard, auf dem der Benutzer Eingaben
      * vornehmen kann
-     * @param sudokuView
-     * Die View des Sudokus
-     * @param game
-     * Das aktuelle Spiel
      * @param gestureOverlay
      * Die Gesten-View auf der der Benutzer Gesten eingeben kann
      * @param gestureStore
      * Die Bibliothek der Gesten
      */
     init {
-        actionListener = ArrayList()
-        this.game = game
-        this.sudokuView = sudokuView
         this.virtualKeyboard = virtualKeyboard
         this.virtualKeyboard.registerListener(this)
-        this.gestureOverlay = gestureOverlay
         this.gestureStore = gestureStore
-        this.gestureOverlay!!.addOnGesturePerformedListener(this)
-        this.sudokuView!!.registerListener(this)
+        this.gestureOverlay.addOnGesturePerformedListener(this)
+        this.sudokuView.registerListener(this)
     }
 }

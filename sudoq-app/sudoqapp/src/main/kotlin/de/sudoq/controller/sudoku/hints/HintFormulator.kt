@@ -7,10 +7,15 @@ import androidx.core.content.pm.PackageInfoCompat
 import de.sudoq.R
 import de.sudoq.controller.menus.Utility
 import de.sudoq.controller.sudoku.SudokuActivity
-import de.sudoq.model.solverGenerator.solution.*
+import de.sudoq.model.solverGenerator.solution.HiddenSetDerivation
+import de.sudoq.model.solverGenerator.solution.LastDigitDerivation
+import de.sudoq.model.solverGenerator.solution.LeftoverNoteDerivation
+import de.sudoq.model.solverGenerator.solution.LockedCandidatesDerivation
+import de.sudoq.model.solverGenerator.solution.NakedSetDerivation
+import de.sudoq.model.solverGenerator.solution.SolveDerivation
 import de.sudoq.model.solvingAssistant.HintTypes
 import de.sudoq.model.sudoku.getGroupShape
-import java.util.*
+import java.util.BitSet
 
 /**
  * Created by timo on 04.10.16.
@@ -49,7 +54,7 @@ object HintFormulator {
 
     private fun aCellIsEmpty(sActivity: SudokuActivity): Boolean {
         val sudoku = sActivity.game!!.sudoku
-        return sudoku!!.any { it.isCompletelyEmpty }
+        return sudoku.any { it.isCompletelyEmpty }
     }
 
     private fun lastDigitText(context: Context, sd: SolveDerivation): String {

@@ -109,8 +109,8 @@ class ControlPanelFragment : Fragment() {
         val activity = getActivity() as SudokuActivity
         val actionTreeShown = activity.isActionTreeShown
         val finished = activity.finished
-        Buttons.redoButton!!.isEnabled = game.stateHandler!!.canRedo() && !actionTreeShown
-        Buttons.undoButton!!.isEnabled = game.stateHandler!!.canUndo() && !actionTreeShown
+        Buttons.redoButton!!.isEnabled = game.stateHandler.canRedo() && !actionTreeShown
+        Buttons.undoButton!!.isEnabled = game.stateHandler.canUndo() && !actionTreeShown
         Buttons.actionTreeButton!!.isEnabled = !actionTreeShown
         Buttons.assistancesButton!!.isEnabled = !actionTreeShown && !finished
         Buttons.gestureButton!!.isEnabled = !actionTreeShown

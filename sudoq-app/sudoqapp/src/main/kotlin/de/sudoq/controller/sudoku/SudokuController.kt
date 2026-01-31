@@ -125,11 +125,11 @@ class SudokuController(
      * {@inheritDoc}
      */
     override fun onSolveAll(): Boolean {
-        for (f in game.sudoku!!) {
-            if (!f.isNotWrong) {
-                game.addAndExecute(SolveActionFactory().createAction(Cell.EMPTYVAL, f))
-            }
-        }
+        game.sudoku
+            .filterNot { it.isNotWrong }
+            .map { SolveActionFactory().createAction(Cell.EMPTYVAL, it) }
+            .forEach(game::addAndExecute)
+
         val res = game.solveAll()
         if (res) handleFinish(true)
         return res
@@ -149,7 +149,7 @@ class SudokuController(
      * Updatet die Spielerstatistik des aktuellen Profils in der App.
      */
     private fun updateStatistics() {
-        when (game.sudoku!!.complexity!!) {
+        when (game.sudoku.complexity!!) {
             Complexity.infernal -> incrementStatistic(Statistics.playedInfernalSudokus)
             Complexity.difficult -> incrementStatistic(Statistics.playedDifficultSudokus)
             Complexity.medium -> incrementStatistic(Statistics.playedMediumSudokus)

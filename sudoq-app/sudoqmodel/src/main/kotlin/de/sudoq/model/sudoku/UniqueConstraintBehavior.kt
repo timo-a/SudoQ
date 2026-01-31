@@ -7,8 +7,6 @@
  */
 package de.sudoq.model.sudoku
 
-import java.util.*
-
 /** UniqueConstraintBehavior means no symbol may appear twice within a constraint. */
 class UniqueConstraintBehavior : ConstraintBehavior {
 
@@ -26,7 +24,7 @@ class UniqueConstraintBehavior : ConstraintBehavior {
         foundNumbers.clear()
         val positions = constraint.getPositions()
         for (pos in positions) {
-            currentValue = sudoku.getCell(pos)!!.currentValue
+            currentValue = sudoku.getCell(pos).currentValue
             if (currentValue != -1)
                 if (foundNumbers.contains(currentValue))
                     return false

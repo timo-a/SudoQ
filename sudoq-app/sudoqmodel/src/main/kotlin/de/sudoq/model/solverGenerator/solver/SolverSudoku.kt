@@ -2,8 +2,14 @@ package de.sudoq.model.solverGenerator.solver
 
 import de.sudoq.model.solverGenerator.Generator
 import de.sudoq.model.solverGenerator.solver.BranchingPool.Branching
-import de.sudoq.model.sudoku.*
-import java.util.*
+import de.sudoq.model.sudoku.CandidateSet
+import de.sudoq.model.sudoku.Cell
+import de.sudoq.model.sudoku.Constraint
+import de.sudoq.model.sudoku.Position
+import de.sudoq.model.sudoku.PositionMap
+import de.sudoq.model.sudoku.Sudoku
+import java.util.BitSet
+import java.util.Stack
 
 /**
  * Eine für den Lösungsalgorithmus optimierte und erweiterte Sudoku Klasse
@@ -101,7 +107,7 @@ class SolverSudoku : Sudoku {
 
         // initialize new SolverSudoku with the fields of the specified one
         for (p in positions)
-            cells!![p] = (sudoku.getCell(p)!!.clone() as Cell)
+            cells!![p] = (sudoku.getCell(p).clone() as Cell)
 
         // initialize the constraints lists for each position and the initial
         // candidates for each field
@@ -128,9 +134,9 @@ class SolverSudoku : Sudoku {
             Initialization.NEW_CANDIDATES -> resetCandidates()
             Initialization.USE_EXISTING ->                //solverSudoku's fields take the candidates/notes from sudoku
                 for (p in positions)
-                    if (sudoku.getCell(p)!!.isNotSolved) {
+                    if (sudoku.getCell(p).isNotSolved) {
                         for (i in sudokuType.symbolIterator)
-                            if (sudoku.getCell(p)!!.isNoteSet(i) != currentCandidates[p]!![i])
+                            if (sudoku.getCell(p).isNoteSet(i) != currentCandidates[p]!![i])
                                 currentCandidates[p]!!.flip(i)
                     }
 
@@ -239,7 +245,7 @@ class SolverSudoku : Sudoku {
         var updatedPositions: List<Position>
         var isInvalid = false
         for (position in positions) {
-            if (!isInvalid && !getCell(position)!!.isNotSolved) {
+            if (!isInvalid && !getCell(position).isNotSolved) {
                 // Update fields in unique constraints
                 updatedConstraints = constraints[position]!!
                 for (uConstraint in updatedConstraints) {
@@ -248,9 +254,9 @@ class SolverSudoku : Sudoku {
                         var up = 0
                         while (up < updatedPositions.size && !isInvalid) {
                             val updatedPosition: Position = updatedPositions[up]
-                            currentCandidates[updatedPosition]!!.clear(getCell(position)!!.currentValue)
+                            currentCandidates[updatedPosition]!!.clear(getCell(position).currentValue)
                             if (currentCandidates[updatedPosition]!!.isEmpty
-                                && getCell(updatedPosition)!!.isNotSolved
+                                && getCell(updatedPosition).isNotSolved
                             )
                                 isInvalid = true
                             up++

@@ -125,7 +125,7 @@ class SubsetHelperTests : HiddenHelper(SolverSudoku(Sudoku(TypeBuilder.get99()))
          * @param val value starting with 1
          */
         fun setVal(s: Sudoku, x: Int, y: Int, `val`: Int) {
-            s.getCell(Position[x - 1, y - 1])!!.currentValue = `val` - 1
+            s.getCell(Position[x - 1, y - 1]).currentValue = `val` - 1
         }
 
         fun getCardinality(s: SolverSudoku, x: Int, y: Int): Int {

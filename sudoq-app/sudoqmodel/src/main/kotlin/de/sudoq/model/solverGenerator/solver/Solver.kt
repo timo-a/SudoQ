@@ -151,7 +151,7 @@ open class Solver(sudoku: Sudoku) {
                         //if there are no branches create solution-object
                         solution.action = SolveActionFactory().createAction(
                             b.nextSetBit(0),
-                            solverSudoku.getCell(p)!!
+                            solverSudoku.getCell(p)
                         )
                         val deriv = SolveDerivation()
                         deriv.setDescription("Custom Derivation in solveOne ~ Naked Single")
@@ -216,7 +216,7 @@ open class Solver(sudoku: Sudoku) {
         //System.out.println("start of solveAll2");
         //print9x9(sudoku);
         val copy: PositionMap<Int> = PositionMap(solverSudoku.sudokuType.size, solverSudoku.positions)
-            { p -> solverSudoku.getCell(p)!!.currentValue }
+            { p -> solverSudoku.getCell(p).currentValue }
 
         val solved = solveAll(buildDerivation, false, false)
 
@@ -226,7 +226,7 @@ open class Solver(sudoku: Sudoku) {
         // Restore old state if solutions shall not be applied or if sudoku could not be solved
         if (!applySolutions || !solved) {
             for (p in solverSudoku.positions) {
-                solverSudoku.getCell(p)!!.setCurrentValue(copy[p]!!, false)
+                solverSudoku.getCell(p).setCurrentValue(copy[p]!!, false)
             }
         }
         return solved
@@ -305,7 +305,7 @@ open class Solver(sudoku: Sudoku) {
 
         //map position -> value
         val copy: PositionMap<Int> = PositionMap(solverSudoku.sudokuType.size, solverSudoku.positions)
-            { p -> solverSudoku.getCell(p)!!.currentValue }
+            { p -> solverSudoku.getCell(p).currentValue }
 
         /////debug
         //int q = this.sudoku.getComplexityValue();
@@ -320,7 +320,7 @@ open class Solver(sudoku: Sudoku) {
             // store the correct solution
             if (solution != null) {
                 for (p in solverSudoku.positions) {
-                    val curVal = solverSudoku.getCell(p)!!.currentValue
+                    val curVal = solverSudoku.getCell(p).currentValue
                     solution.put(p, curVal)
                 }
             }
@@ -336,7 +336,7 @@ open class Solver(sudoku: Sudoku) {
         //this.sudoku.complexityValue is overwritten by the attempt at finding a second solution
 
         // restore initial state
-        for (p in solverSudoku.positions) solverSudoku.getCell(p)!!
+        for (p in solverSudoku.positions) solverSudoku.getCell(p)
             .setCurrentValue(copy[p]!!, false)
 
 
@@ -367,7 +367,7 @@ open class Solver(sudoku: Sudoku) {
      */
     val solutionsMap: PositionMap<Int>
         get() = PositionMap(solverSudoku.sudokuType.size, solverSudoku.positions)
-             { p -> solverSudoku.getCell(p)!!.currentValue }
+             { p -> solverSudoku.getCell(p).currentValue }
 
     /**
      * Indicates whether further solutions exist for a sudoku where we've already found one.
@@ -679,7 +679,7 @@ if there is another candidate -> advance
         get() {
             fun invalid(vp: Position): Boolean =
                 solverSudoku.getCurrentCandidates(vp).isEmpty //no solution entered
-                        && solverSudoku.getCell(vp)!!.isNotSolved //no candidates left
+                        && solverSudoku.getCell(vp).isNotSolved //no candidates left
 
             return solverSudoku.sudokuType.validPositions.any(::invalid)
         }
@@ -692,7 +692,7 @@ if there is another candidate -> advance
      */
     protected val isFilledCompletely: Boolean
         get() = solverSudoku.positions.map(solverSudoku::getCell)
-            .none { it!!.isNotSolved }
+            .none { it.isNotSolved }
 
 
     /**

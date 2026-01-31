@@ -8,7 +8,7 @@ object SudokuTestUtilities {
         val sb = StringBuilder()
         for (j in 0..<sudoku.sudokuType.size.y) {
             for (i in 0..<sudoku.sudokuType.size.x) {
-                val value = sudoku.getCell(Position[i, j])!!.currentValue
+                val value = sudoku.getCell(Position[i, j]).currentValue
                 var op = value.toString() + ""
                 if (value.toString().length < 2) op = " " + value
                 if (value == -1) op = "--"

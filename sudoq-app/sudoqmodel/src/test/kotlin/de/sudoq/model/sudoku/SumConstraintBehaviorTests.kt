@@ -2,12 +2,11 @@ package de.sudoq.model.sudoku
 
 import io.mockk.every
 import io.mockk.mockk
+import org.amshove.kluent.invoking
 import org.amshove.kluent.`should be false`
 import org.amshove.kluent.`should be true`
 import org.amshove.kluent.`should throw`
-import org.amshove.kluent.invoking
-import org.junit.jupiter.api.*
-import java.lang.IllegalArgumentException
+import org.junit.jupiter.api.Test
 
 class SumConstraintBehaviorTests {
 
@@ -39,9 +38,9 @@ class SumConstraintBehaviorTests {
             Position[0, 1], Position[0, 2], Position[1, 0], Position[1, 1], Position[1, 2])
         constraint.hasUniqueBehavior().`should be false`()
         constraint.isSaturated(sudoku).`should be true`()
-        sudoku.getCell(Position[1, 1])!!.currentValue = 3
+        sudoku.getCell(Position[1, 1]).currentValue = 3
         constraint.isSaturated(sudoku).`should be false`()
-        sudoku.getCell(Position[1, 2])!!.currentValue = 2
+        sudoku.getCell(Position[1, 2]).currentValue = 2
         constraint.isSaturated(sudoku).`should be true`()
     }
 

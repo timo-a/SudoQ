@@ -14,7 +14,6 @@ import de.sudoq.persistence.XmlTree
 import de.sudoq.persistence.XmlableWithRepo
 import de.sudoq.persistence.sudoku.SudokuBE
 import de.sudoq.persistence.sudoku.SudokuMapper
-import java.util.ArrayList
 
 class GameBE : XmlableWithRepo<SudokuType> {
 
@@ -115,7 +114,7 @@ class GameBE : XmlableWithRepo<SudokuType> {
 
                 // every element has e parent
                 val field_id = sub.getAttributeValue(ActionTreeElementBE.FIELD_ID)!!.toInt()
-                val f = sudoku!!.getCell(field_id)!!
+                val f = sudoku!!.getCell(field_id)
                 if (sub.getAttributeValue(ActionTreeElementBE.ACTION_TYPE) == SolveAction::class.java.simpleName) {
                     stateHandler!!.addAndExecute(
                         SolveActionFactory().createAction(

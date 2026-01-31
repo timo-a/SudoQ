@@ -1,7 +1,6 @@
 package de.sudoq.persistence.game
 
 import de.sudoq.model.game.Game
-import de.sudoq.persistence.game.GameBE
 
 object GameMapper {//test
 
@@ -10,9 +9,9 @@ object GameMapper {//test
             game.id,
             game.time,
             game.assistancesCost,
-            game.sudoku!!,
-            game.stateHandler!!,
-            game.gameSettings!!,
+            game.sudoku,
+            game.stateHandler,
+            game.gameSettings,
             game.isFinished()
         )
     }

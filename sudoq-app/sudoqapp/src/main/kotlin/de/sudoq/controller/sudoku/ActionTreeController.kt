@@ -10,14 +10,19 @@ package de.sudoq.controller.sudoku
 import android.content.Context
 import android.content.res.Configuration
 import android.util.Log
-import android.view.*
+import android.view.View
 import android.widget.RelativeLayout
 import de.sudoq.R
 import de.sudoq.model.ModelChangeListener
 import de.sudoq.model.actionTree.ActionTreeElement
 import de.sudoq.view.FullScrollLayout
 import de.sudoq.view.ZoomableView
-import de.sudoq.view.actionTree.*
+import de.sudoq.view.actionTree.ActionElement
+import de.sudoq.view.actionTree.ActionTreeElementView
+import de.sudoq.view.actionTree.ActiveElement
+import de.sudoq.view.actionTree.BookmarkedElement
+import de.sudoq.view.actionTree.BranchingElement
+import de.sudoq.view.actionTree.BranchingLine
 
 /**
  * Reagiert auf Interaktionen des Benutzers mit dem Aktionsbaum.
@@ -127,8 +132,8 @@ class ActionTreeController(
         relativeLayout = ActionTreeLayout(context)
 
         // Setting active element
-        active = context.game!!.stateHandler!!.currentState
-        val root = context.game!!.stateHandler!!.actionTree.root
+        active = context.game!!.stateHandler.currentState
+        val root = context.game!!.stateHandler.actionTree.root
 
         // Get screen orientation
         orientation = context.resources.configuration.orientation
@@ -384,7 +389,7 @@ class ActionTreeController(
      * Wird geworfen, falls der übergebene Context null ist
      */
     init {
-        this.context.game!!.stateHandler!!.registerListener(this)
+        this.context.game!!.stateHandler.registerListener(this)
         actionTreeLayout =
             context.findViewById<View>(R.id.sudoku_action_tree_layout) as RelativeLayout
         actionTreeScroll =

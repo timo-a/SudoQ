@@ -21,7 +21,7 @@ internal class SudokuBuilderTests {
     private fun testBuildergeneric(t: SudokuTypes) {
         val sudoku = SudokuBuilder(t, str).createSudoku()
         sudoku.sudokuType.validPositions
-            .mapNotNull { sudoku.getCell(it) }
+            .mapNotNull { sudoku.getCellNullable(it) }
             .`should match all with` { it.currentValue == Cell.EMPTYVAL }
     }
 
@@ -33,10 +33,10 @@ internal class SudokuBuilderTests {
         sb.addSolution(Position[0, 1], 3)
         val s = sb.createSudoku()
 
-        s.getCell(Position[0, 0])!!.solution `should be` 5
-        s.getCell(Position[0, 0])!!.currentValue `should be` 5
-        s.getCell(Position[0, 1])!!.solution `should be` 3
-        s.getCell(Position[0, 1])!!.currentValue `should be` Cell.EMPTYVAL
+        s.getCell(Position[0, 0]).solution `should be` 5
+        s.getCell(Position[0, 0]).currentValue `should be` 5
+        s.getCell(Position[0, 1]).solution `should be` 3
+        s.getCell(Position[0, 1]).currentValue `should be` Cell.EMPTYVAL
 
         invoking { sb.addSolution(Position[1, 3], -5) } `should throw` IllegalArgumentException::class
         invoking { sb.addSolution(Position[1, 3], 9) } `should throw` IllegalArgumentException::class

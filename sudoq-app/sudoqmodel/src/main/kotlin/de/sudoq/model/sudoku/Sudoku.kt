@@ -11,10 +11,6 @@ import de.sudoq.model.ModelChangeListener
 import de.sudoq.model.ObservableModelImpl
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
-import java.util.*
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.set
 
 /**
  * This class represents a Sudoku with mit seinem Typ, seinen Feldern und seinem Schwierigkeitsgrad.
@@ -108,13 +104,25 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
 
     /**
      * Returns the [Cell] at the specified [Position].
+     *
+     * @param position Position of the cell
+     * @return Cell at the [Position]
+     * @throws IllegalArgumentException if the position is not mapped to a [Cell].
+     */
+    fun getCell(position: Position): Cell {
+        return requireNotNull(cells!![position])
+    }
+
+    /**
+     * Returns the [Cell] at the specified [Position].
      * If the position is not mapped to a cell, null is returned
      *
      * @param position Position of the cell
      * @return Cell at the [Position] or null if it is not mapped to a [Cell].
      */
-    fun getCell(position: Position): Cell? {
-        //todo refactor so that a miss leads to illegal args exception
+    @Deprecated("use getCell(Position)", ReplaceWith("getCell(position)"))
+    fun getCellNullable(position: Position): Cell? {
+        //todo refactor all calls still using this
         return cells!![position]
     }
 
@@ -124,8 +132,8 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
      * @param id ID of the [Cell] to return
      * @return the [Cell] at the specified id or null of id not found
      */
-    fun getCell(id: Int): Cell? {
-        return getCell(cellPositions!![id]!!)
+    fun getCell(id: Int): Cell {
+        return getCellNullable(cellPositions!![id]!!)!!
     }
 
     /**
@@ -160,13 +168,13 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
 
     /**
      * Returns the [Position] of the [Cell] if the given id.
-     * Ist id noch nicht vergeben wird null zurückgegeben
+     * If there is no such position, an IllegalArgumentException is thrown.
      *
      * @param id ID of the Cell of the Position to return
-     * @return the [Position] of the id or null if id not found
+     * @return the [Position] of the id
      */
-    fun getPosition(id: Int): Position? {
-        return cellPositions!![id]
+    fun getPosition(id: Int): Position {
+        return requireNotNull(cellPositions!![id], { "id not found" })
     }
 
     /**
@@ -247,7 +255,7 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
         val NONE = if (sudokuType.numberOfSymbols < 10) " " else "  "
         for (j in 0 until sudokuType.size.y) {
             for (i in 0 until sudokuType.size.x) {
-                val f = getCell(Position[i, j])
+                val f = getCellNullable(Position[i, j])
                 var op: String
                 if (f != null) { //feld existiert
                     val value = f.currentValue

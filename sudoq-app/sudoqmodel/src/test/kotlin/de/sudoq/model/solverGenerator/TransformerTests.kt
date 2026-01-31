@@ -292,7 +292,7 @@ class TransformerTests : GeneratorCallback {
             for (i in 0..<c.size) {
                 elcount = 0
                 for (p in c) {
-                    if (sudoku.getCell(p)!!.solution == i) elcount++
+                    if (sudoku.getCell(p).solution == i) elcount++
                 }
                 if (elcount != 1) {
                     return false
@@ -318,7 +318,7 @@ class TransformerTests : GeneratorCallback {
         fun printSudoku9x9(sudoku: Sudoku, length: Int) {
             println("tada:")
             for (y in 0..<length) {
-                for (x in 0..<length) print(" " + sudoku.getCell(Position[x, y])!!.solution)
+                for (x in 0..<length) print(" " + sudoku.getCell(Position[x, y]).solution)
                 println()
             }
             println()

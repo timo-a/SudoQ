@@ -8,9 +8,13 @@
 package de.sudoq.model.game
 
 import de.sudoq.model.ObservableModelImpl
-import de.sudoq.model.actionTree.*
+import de.sudoq.model.actionTree.Action
+import de.sudoq.model.actionTree.ActionTree
 import de.sudoq.model.actionTree.ActionTree.Companion.findPath
-import java.util.*
+import de.sudoq.model.actionTree.ActionTreeElement
+import de.sudoq.model.actionTree.NoteAction
+import de.sudoq.model.actionTree.SolveAction
+import java.util.Stack
 
 /**
  * Diese Klasse verwaltet den Zustand eines Spiels durch einen ActionTree und stellt Funktionalität für die Verwaltung
@@ -93,12 +97,9 @@ class GameStateHandler : ObservableModelImpl<ActionTreeElement>() {
     private fun findExistingChildren(
         mountingElement: ActionTreeElement?,
         action: Action
-    ): List<ActionTreeElement> {
-        val l: MutableList<ActionTreeElement> = Stack()
-        if (mountingElement != null) {
-            for (ateI in mountingElement.childrenList) if (ateI.actionEquals(action)) l.add(ateI)
-        }
-        return l
+    ): List<ActionTreeElement> = when(mountingElement) {
+        null -> emptyList()
+        else -> mountingElement.childrenList.filter { it.actionEquals(action) }
     }
 
     private fun isActionAStepBack(mountingElement: ActionTreeElement?, action: Action): Boolean {
