@@ -1,6 +1,6 @@
-# This workflow runs the kotlin unit tests in sudoqmodel
+# This workflow runs the unit tests in sudoqapp
 
-name: Model Junit Tests for Kotlin
+name: App Junit Tests
 
 on:
   push:
@@ -25,12 +25,12 @@ jobs:
           echo "$(pwd)"
           cd sudoq-app
           chmod +x gradlew
-    - name: junit tests in model with Gradle
+    - name: junit tests in app with Gradle
       run: |
           echo "$(pwd)"
           cd sudoq-app
           ./gradlew sudoqapp:testDebugUnitTest
-    - name: Upload app unit test report
+    - name: Upload test report
       if: failure()
       uses: actions/upload-artifact@v6
       with:
