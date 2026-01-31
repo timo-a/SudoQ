@@ -2,7 +2,7 @@
 # Plugins
 agp = "8.13.2"
 kotlin = "2.3.0"
-ksp = "2.3.0"
+ksp = "2.3.5"
 hilt = "2.58"
 
 
