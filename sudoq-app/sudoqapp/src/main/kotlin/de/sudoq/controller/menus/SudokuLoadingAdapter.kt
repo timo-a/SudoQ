@@ -17,14 +17,18 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import de.sudoq.R
 import de.sudoq.model.game.GameData
 import de.sudoq.persistence.game.GameRepo
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.TimeZone
 
 /**
  * Adapter für die Anzeige aller Spiele des Spielers
@@ -33,10 +37,27 @@ import java.util.*
  */
 class SudokuLoadingAdapter(
     context: Context,
-    private val gameDatas: List<GameData>,
+    gameDatas: MutableList<GameData>,
     private val gameRepo: GameRepo
-) : ArrayAdapter<GameData?>(context, R.layout.sudokuloadingitem, gameDatas) {
-    //todo make non nullable
+) : ArrayAdapter<GameData>(context, R.layout.sudokuloadingitem, gameDatas) {
+
+    private val selectedItems = mutableSetOf<Int>()
+
+    fun toggleSelection(position: Int) {
+        if (selectedItems.contains(position)) {
+            selectedItems.remove(position)
+        } else {
+            selectedItems.add(position)
+        }
+        notifyDataSetChanged()
+    }
+
+    fun clearSelection() {
+        selectedItems.clear()
+        notifyDataSetChanged()
+    }
+
+    fun getSelectedPositions(): List<Int> = selectedItems.toList()
 
     /**
      * {@inheritDoc}
@@ -44,12 +65,24 @@ class SudokuLoadingAdapter(
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val rowView = inflater.inflate(R.layout.sudokuloadingitem, parent, false)
+
+        if (selectedItems.contains(position)) {
+            rowView.setBackgroundColor(Color.LTGRAY)
+        } else {
+            rowView.setBackgroundColor(Color.TRANSPARENT)
+        }
+
+        val gameData = getItem(position)
+        if (gameData == null) {
+            return rowView
+        }
+
         val thumbnail = rowView.findViewById<View>(R.id.sudoku_loading_item_thumbnail) as ImageView
         val sudokuType = rowView.findViewById<View>(R.id.type_label) as TextView
         val sudokuComplexity = rowView.findViewById<View>(R.id.complexity_label) as TextView
         val sudokuTime = rowView.findViewById<View>(R.id.time_label) as TextView
         val sudokuState = rowView.findViewById<View>(R.id.state_label) as TextView
-        val currentThumbnailFile = gameRepo.getGameThumbnailFile(gameDatas[position].id)
+        val currentThumbnailFile = gameRepo.getGameThumbnailFile(gameData.id)
         try {
             val currentThumbnailBitmap =
                 BitmapFactory.decodeStream(FileInputStream(currentThumbnailFile))
@@ -82,14 +115,14 @@ class SudokuLoadingAdapter(
                 .show()
             (context as SudokuLoadingActivity).finish()
         }
-        sudokuType.text = Utility.type2string(context, gameDatas[position].type)
-        sudokuComplexity.text = Utility.complexity2string(context, gameDatas[position].complexity)
+        sudokuType.text = Utility.type2string(context, gameData.type)
+        sudokuComplexity.text = Utility.complexity2string(context, gameData.complexity)
         val tz = TimeZone.getDefault()
         val sdf = SimpleDateFormat(context.getString(R.string.time_format))
         sdf.timeZone = tz
-        val date = sdf.format(gameDatas[position].playedAt)
+        val date = sdf.format(gameData.playedAt)
         sudokuTime.text = date
-        if (gameDatas[position].isFinished) {
+        if (gameData.isFinished) {
             sudokuState.text = context.getString(R.string.check_mark)
             sudokuState.setTextColor(Color.GREEN)
             sudokuType.setTextColor(Color.GRAY)

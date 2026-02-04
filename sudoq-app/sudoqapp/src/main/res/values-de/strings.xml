@@ -139,11 +139,10 @@
     <string name="tx_no_sudokus_to_load">Keine gespeicherten Sudokus vorhanden.</string>
     <string name="sudokuloading_delete_finished">Gelöste Sudokus löschen</string>
     <string name="sudokuloading_delete_all">Alle Sudokus löschen</string>
-    <string name="sf_loading_back">Zurück</string>
-    
-    <string name="sudokuloading_dialog_play">spielen</string>
-    <string name="sudokuloading_dialog_delete">löschen</string>
-    
+
+    <string name="sudokuloading_delete">löschen</string>
+    <string name="sudokuloading_delete_selected_confirmation">Möchtest du wirklich alle ausgewählen Sudokus löschen?</string>
+    <string name="number_of_sudokus_selected">%1$d ausgewählt</string>
     
     <!--  Defaults -->
     <string name="default_user_name">Profil 1</string>
