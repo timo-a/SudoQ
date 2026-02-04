@@ -8,21 +8,18 @@
 package de.sudoq.controller.menus
 
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
-import android.view.*
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 import de.sudoq.R
 import de.sudoq.controller.SudoqListActivity
@@ -31,9 +28,6 @@ import de.sudoq.model.game.GameData
 import de.sudoq.model.game.GameManager
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.persistence.game.GameRepo
-import java.io.*
-import java.nio.charset.Charset
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -53,19 +47,9 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
     @Inject
     lateinit var gameManager: GameManager
 
-    private var adapter: SudokuLoadingAdapter? = null
-    private var games: List<GameData>? = null
-
-    /*	protected static MenuItem menuDeleteFinished;
-	private static final int MENU_DELETE_FINISHED = 0;
-
-	protected static MenuItem menuDeleteSpecific;
-	private static final int MENU_DELETE_SPECIFIC = 1; commented out to make sure it's not needed*/
-    private enum class FabStates {
-        DELETE, INACTIVE, GO_BACK
-    } //Floating Action Button
-
-    private var fabState = FabStates.INACTIVE
+    private lateinit var adapter: SudokuLoadingAdapter
+    private lateinit var games: List<GameData>
+    private var actionMode: ActionMode? = null
 
     /**
      * Wird aufgerufen, wenn SudokuLoading nach Programmstart zum ersten Mal
@@ -80,8 +64,6 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
         //toolbar
         initToolBar()
 
-        initFAB(this)
-
         initialiseGames()
     }
 
@@ -92,29 +74,6 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
         ab!!.setHomeAsUpIndicator(R.drawable.launcher)
         ab.setDisplayHomeAsUpEnabled(true)
         ab.setDisplayShowTitleEnabled(true)
-    }
-
-    private fun initFAB(ctx: Context) {
-        val fab = findViewById<FloatingActionButton>(R.id.fab)
-        fab.setOnClickListener(object : View.OnClickListener {
-            var trash = ContextCompat.getDrawable(ctx, R.drawable.ic_delete_white_24dp)
-            var close = ContextCompat.getDrawable(ctx, R.drawable.ic_close_white_24dp)
-            override fun onClick(view: View) {
-                when (fabState) {
-                    FabStates.INACTIVE -> {
-                        // ...
-                        fabState = FabStates.DELETE
-                        fab.setImageDrawable(close)
-                        Toast.makeText(ctx, R.string.fab_go_back, Toast.LENGTH_LONG).show()
-                    }
-                    FabStates.DELETE -> {
-                        fabState = FabStates.INACTIVE
-                        fab.setImageDrawable(trash)
-                    }
-                    FabStates.GO_BACK -> goBack(view)
-                }
-            }
-        })
     }
 
     /// Action Bar
@@ -176,7 +135,7 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
     override fun onContentChanged() {
         super.onContentChanged()
         initialiseGames()
-        profileManager.currentGame = if (adapter!!.isEmpty) -1 else adapter!!.getItem(0)!!.id
+        profileManager.currentGame = if (adapter.isEmpty) -1 else adapter.getItem(0)!!.id
     }
 
     /**
@@ -193,16 +152,20 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
      * ID der angeklickten View
      */
     override fun onItemClick(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
-        Log.d(LOG_TAG, position.toString() + "")
-        if (fabState == FabStates.INACTIVE) {
-            /* selected in order to play */
-            profileManager.currentGame = adapter!!.getItem(position)!!.id
-            startActivity(Intent(this, SudokuActivity::class.java))
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        if (actionMode == null) {
+            val game = adapter.getItem(position)
+            if (game != null) {
+                profileManager.currentGame = game.id
+                startActivity(Intent(this, SudokuActivity::class.java))
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
         } else {
-            /*selected in order to delete*/
-            gameManager.deleteGame(adapter!!.getItem(position)!!.id)
-            onContentChanged()
+            adapter.toggleSelection(position)
+            actionMode!!.title =
+                getString(R.string.number_of_sudokus_selected, adapter.getSelectedPositions().size)
+            if (adapter.getSelectedPositions().isEmpty()) {
+                actionMode!!.finish()
+            }
         }
     }
 
@@ -212,138 +175,58 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
         position: Int,
         id: Long
     ): Boolean {
-        Log.d(LOG_TAG, "LongClick on $position")
+        if (actionMode != null) return false
 
-        /*gather all options */
-        val temp_items: MutableList<CharSequence> = ArrayList()
-        val specialcase = false
-        if (specialcase) {
-        } else {
-            temp_items.add(getString(R.string.sudokuloading_dialog_play))
-            temp_items.add(getString(R.string.sudokuloading_dialog_delete))
-            if (profileManager.appSettings.isDebugSet) {
-                temp_items.add("export as text")
-                temp_items.add("export as file")
-            }
+        actionMode = startSupportActionMode(actionModeCallback)
+        adapter.toggleSelection(position)
+        actionMode?.title = getString(R.string.number_of_sudokus_selected, 1)
+        return true
+    }
+
+    private val actionModeCallback = object : ActionMode.Callback {
+        override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
+            mode.menuInflater.inflate(R.menu.action_bar_sudoku_loading_contextual, menu)
+            return true
         }
-        val builder = AlertDialog.Builder(this)
-        builder.setItems(temp_items.toTypedArray()) { dialog, item ->
-            val gameID = adapter!!.getItem(position)!!.id
-            when (item) {
-                0 -> { // play
-                    profileManager.currentGame = gameID
-                    val i = Intent(this@SudokuLoadingActivity, SudokuActivity::class.java)
-                    startActivity(i)
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                }
-                1 -> { // delete
-                    gameManager.deleteGame(gameID)
-                    onContentChanged()
-                }
-                2 -> {
-                    val gameFile = gameRepo.getGameFile(gameID)
-                    var str = "there was an error reading the file, sorry"
-                    var fis: FileInputStream? = null
-                    try {
-                        fis = FileInputStream(gameFile)
-                        val data = ByteArray(gameFile.length().toInt())
-                        fis.read(data)
-                        fis.close()
-                        str = String(data, Charset.forName("UTF-8"))
-                    } catch (e: FileNotFoundException) {
-                        e.printStackTrace()
-                    } catch (e: IOException) {
-                        e.printStackTrace()
+
+        override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean = false
+
+        override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean = when (item.itemId) {
+            R.id.action_delete_selected -> {
+                AlertDialog.Builder(this@SudokuLoadingActivity)
+                    .setMessage(R.string.sudokuloading_delete_selected_confirmation)
+                    .setPositiveButton(R.string.dialog_yes) { _, _ ->
+                        val selectedPositions = adapter.getSelectedPositions()
+                        val itemsToRemove = selectedPositions.mapNotNull { pos -> adapter.getItem(pos) }
+                        itemsToRemove.forEach { gameData ->
+                            gameManager.deleteGame(gameData.id)
+                            adapter.remove(gameData)
+                        }
+                        mode.finish()
+                        onContentChanged()
                     }
-                    val sendIntent = Intent()
-                    sendIntent.action = Intent.ACTION_SEND //
-                    //sendIntent.putExtra(Intent.EXTRA_FROM_STORAGE, gameFile);
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, str)
-                    sendIntent.type = "text/plain"
-                    startActivity(sendIntent)
-                }
-                3 -> {
-                    //already defined under 2
-                    val gameFile = gameRepo.getGameFile(gameID)
-                    /* we can only copy from 'files' subdir, so we have to move the file there first */
-                    val tmpFile = File(filesDir, gameFile.name)
-                    val `in`: InputStream
-                    val out: OutputStream
-                    try {
-                        `in` = FileInputStream(gameFile)
-                        out = FileOutputStream(tmpFile)
-                        Utility.copyFileOnStreamLevel(`in`, out)
-                        `in`.close()
-                        out.flush()
-                        out.close()
-                    } catch (e: IOException) {
-                        e.message?.let { Log.e(LOG_TAG, it) }
-                        Log.e(LOG_TAG, "there seems to be an io exception")
-                    } catch (e: FileNotFoundException) {
-                        e.message?.let { Log.e(LOG_TAG, it) }
-                        Log.e(LOG_TAG, "there seems to be a file not found exception")
-                    }
-                    Log.v("file-share", "tmpfile: " + tmpFile.absolutePath)
-                    Log.v("file-share", "gamefile is null? " + (gameFile == null))
-                    Log.v("file-share", "gamefile getPath " + gameFile.path)
-                    Log.v("file-share", "gamefile getAbsolutePath " + gameFile.absolutePath)
-                    Log.v("file-share", "gamefile getName " + gameFile.name)
-                    Log.v("file-share", "gamefile getParent " + gameFile.parent)
-                    val fileUri = FileProvider.getUriForFile(
-                        this@SudokuLoadingActivity,
-                        "de.sudoq.fileprovider", tmpFile
-                    )
-                    Log.v("file-share", "uri is null? " + (fileUri == null))
-                    val sendIntent = Intent()
-                    sendIntent.action = Intent.ACTION_SEND //
-                    //sendIntent.putExtra(Intent.EXTRA_FROM_STORAGE, gameFile);
-                    sendIntent.putExtra(Intent.EXTRA_STREAM, fileUri)
-                    sendIntent.type = "text/plain"
-                    sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    //startActivity(Intent.createChooser(sendIntent, "Share to"));
-                    startActivity(sendIntent)
-                }
+                    .setNegativeButton(R.string.dialog_no, null)
+                    .show()
+                true
             }
+            else -> false
         }
-        val alert = builder.create()
-        alert.show()
-        return true //prevent itemclick from fire-ing as well
+
+        override fun onDestroyActionMode(mode: ActionMode) {
+            adapter.clearSelection()
+            actionMode = null
+        }
     }
 
     private fun initialiseGames() {
         games = gameManager.gameList
-        // initialize ArrayAdapter for the profile names and set it
-        adapter = SudokuLoadingAdapter(this, games!!, gameRepo)
+        adapter = SudokuLoadingAdapter(this, games.toMutableList(), gameRepo)
         listAdapter = adapter
         listView!!.onItemClickListener = this
         listView!!.onItemLongClickListener = this
         val noGamesTextView = findViewById<TextView>(R.id.no_games_text_view)
-        if (games!!.isEmpty()) {
-            noGamesTextView.visibility = View.VISIBLE
-            val fab = findViewById<FloatingActionButton>(R.id.fab)
-            fab.setImageDrawable(
-                ContextCompat.getDrawable(
-                    this,
-                    R.drawable.ic_arrow_back_white_24dp
-                )
-            )
-            fabState = FabStates.GO_BACK
-        } else {
-            noGamesTextView.visibility = View.INVISIBLE
-            //pass
-        }
+        noGamesTextView.visibility = if (games.isEmpty()) View.VISIBLE else View.INVISIBLE
     }
-
-    /**
-     * Führt die onBackPressed-Methode aus.
-     *
-     * @param view
-     * unbenutzt
-     */
-    fun goBack(view: View?) {
-        super.onBackPressed()
-    }
-
 
     /**
      * Just for testing!
@@ -351,25 +234,9 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
      * number of saved games
      */
     val size: Int
-        get() = games!!.size
-
-    private inner class FAB(context: Context) : FloatingActionButton(context) {
-        private var fs: FabStates? = null
-        fun setState(fs: FabStates?) {
-            this.fs = fs
-            val id: Int = when (fs) {
-                FabStates.DELETE -> R.drawable.ic_close_white_24dp
-                FabStates.INACTIVE -> R.drawable.ic_delete_white_24dp
-                else -> R.drawable.ic_arrow_back_white_24dp
-            }
-            super.setImageDrawable(ContextCompat.getDrawable(this.context, id))
-        }
-    }
+        get() = games.size
 
     companion object {
-        /**
-         * Der Log-Tag für das LogCat
-         */
         private val LOG_TAG = SudokuLoadingActivity::class.java.simpleName
     }
 }

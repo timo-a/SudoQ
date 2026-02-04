@@ -35,6 +35,7 @@
         <item name="colorAccent">#7c6354</item>
         <!--item name="android:textColorSecondary">#7c6354</item-->
         <item name="android:windowBackground">@color/window_background</item>
+        <item name="windowActionModeOverlay">true</item>
     </style>
 
     <style name="Theme.DesignDemo.Dialog" parent="Theme.AppCompat.Dialog">

@@ -120,6 +120,7 @@ class GameManager(private var profile: ProfileManager,
         }
         gameRepo.delete(id)
         updateGamesList()
+        games.remove(games.find { it.id == id })
     }
 
     /**

@@ -14,20 +14,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
     <ListView android:id="@id/android:list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:cacheColorHint="#00000000">
     </ListView>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_delete_white_24dp" />
 
     <TextView
         android:id="@+id/no_games_text_view"
@@ -38,7 +29,6 @@
         android:textStyle="bold"
         android:textSize="24sp"
         android:textColor="@android:color/black"/>
-
 
     </FrameLayout>
 </LinearLayout>
