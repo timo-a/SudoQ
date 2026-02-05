@@ -65,11 +65,8 @@ class Symbol private constructor(mapping: Array<String>) : Iterable<Int> {
      * @return Die Feldgröße des Notizrasters.
      */
     fun getRasterSize(): Int {
-        return if (symbolSet != null) {
-            ceil(sqrt(symbolSet!!.size.toDouble())).toInt()
-        } else {
-            throw IllegalStateException("No symbol set! Symbol not instanciated!")
-        }
+        checkNotNull(symbolSet) {"No symbol set! Symbol not instantiated!"}
+        return ceil(sqrt(symbolSet!!.size.toDouble())).toInt()
     }
 
     /// for iterating over symbols
@@ -129,7 +126,7 @@ class Symbol private constructor(mapping: Array<String>) : Iterable<Int> {
          */
         @JvmStatic
         fun getInstance(): Symbol {
-            return instance ?: throw IllegalStateException("Symbol not instanciated!")
+            return (checkNotNull(instance) { "Symbol not instantiated!" })
         }
 
         /**

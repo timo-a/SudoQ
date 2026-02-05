@@ -140,8 +140,7 @@ class SolverSudoku : Sudoku {
                                 currentCandidates[p]!!.flip(i)
                     }
 
-            else -> {throw IllegalStateException("Unexpected value: $mode")
-            }
+            else -> throw IllegalStateException("Unexpected value: $mode")
         }
     }
 

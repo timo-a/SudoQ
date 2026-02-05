@@ -1,7 +1,6 @@
 package de.sudoq.persistence.sudokuType
 
 import de.sudoq.model.persistence.IRepo
-import de.sudoq.persistence.sudokuType.SudokuTypeBE
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.persistence.XmlHelper
@@ -35,9 +34,7 @@ class SudokuTypeBERepo(private val sudokuDir: File) : IRepo<SudokuTypeBE> {
      */
     private fun getSudokuType(type: SudokuTypes): SudokuTypeBE {
         val f = getSudokuTypeFile(type)
-        if (!f.exists()) {
-            throw IllegalStateException("no sudoku type file found for $type")
-        }
+        check(f.exists()) { "no sudoku type file found for $type" }
         val helper = XmlHelper()
         try {
             val t = SudokuTypeBE()
