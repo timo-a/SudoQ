@@ -5,15 +5,10 @@ import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.complexity.Complexity
-import de.sudoq.model.sudoku.sudokuTypes.ComplexityConstraintBuilder
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
-import org.apache.commons.lang3.Validate
 import java.io.File
 import java.nio.file.Path
-import java.text.ParseException
-import java.util.stream.IntStream.range
-import kotlin.collections.HashMap
 
 open class PrettySudokuRepo2(val typeRepo: SudokuTypeRepo4Tests) : IRepo<Sudoku> {
 
@@ -95,7 +90,7 @@ open class PrettySudokuRepo2(val typeRepo: SudokuTypeRepo4Tests) : IRepo<Sudoku>
                     }
                 }
             }
-            else -> {throw IllegalArgumentException("Invalid value for cell: $s")}
+            else -> throw IllegalArgumentException("Invalid value for cell: $s")
         }
         return c
     }

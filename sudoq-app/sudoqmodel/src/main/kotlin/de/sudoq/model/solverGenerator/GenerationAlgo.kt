@@ -221,7 +221,7 @@ class GenerationAlgo(
                 }
                 ComplexityRelation.CONSTRAINT_SATURATION -> {} //do nothing
 
-                else -> {throw IllegalStateException("Unexpected value: $rel")}
+                else -> throw IllegalStateException("Unexpected value: $rel")
             }
             plusminuscounter++
         }

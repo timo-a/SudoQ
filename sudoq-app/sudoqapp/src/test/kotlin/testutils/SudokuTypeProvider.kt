@@ -35,9 +35,7 @@ object SudokuTypeProvider {
      * @return a [SudokuType] of null if type cannot be mapped
      */
     private fun readSudokuType(xmlFile: File): SudokuTypeBE {
-        if (!xmlFile.exists()) {
-            throw IllegalStateException("file does not exist")
-        }
+        check(xmlFile.exists()) { "file does not exist" }
         val helper = XmlHelper()
         try {
             val t = SudokuTypeBE()

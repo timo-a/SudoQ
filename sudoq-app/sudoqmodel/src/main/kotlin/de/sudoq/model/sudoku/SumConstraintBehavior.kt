@@ -34,8 +34,6 @@ class SumConstraintBehavior(private val sum: Int) : ConstraintBehavior {
     }
 
     init {
-        if (sum < 0) {
-            throw IllegalArgumentException()
-        }
+        require(sum >= 0)
     }
 }

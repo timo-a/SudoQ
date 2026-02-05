@@ -30,9 +30,7 @@ class SudokuTypeRepo(private val sudokuDir: File) : ReadRepo<SudokuType> {
      */
     private fun getSudokuType(type: SudokuTypes): SudokuType {
         val f = getSudokuTypeFile(type)
-        if (!f.exists()) {
-            throw IllegalStateException("no sudoku type file found for $type")
-        }
+        check(f.exists()) { "no sudoku type file found for $type" }
         val helper = XmlHelper()
         try {
             val t = SudokuTypeBE()

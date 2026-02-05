@@ -7,7 +7,6 @@ import de.sudoq.model.sudoku.UniqueConstraintBehavior
 import de.sudoq.persistence.XmlAttribute
 import de.sudoq.persistence.XmlTree
 import de.sudoq.persistence.Xmlable
-import java.util.ArrayList
 
 //Todo instead of dummy values, use an interface with constructor(xt: XmlTree)
 class ConstraintBE(var behavior: ConstraintBehavior = UniqueConstraintBehavior(),
@@ -33,11 +32,9 @@ class ConstraintBE(var behavior: ConstraintBehavior = UniqueConstraintBehavior()
     @Throws(IllegalArgumentException::class)
     override fun fillFromXml(xmlTreeRepresentation: XmlTree) {
         val behavior = xmlTreeRepresentation.getAttributeValue("behavior")!!
-        if (behavior.contains("Unique")) {
-            this.behavior = UniqueConstraintBehavior()
-        } else {
-            throw IllegalArgumentException("Undefined constraint behavior")
-        }
+        require(behavior.contains("Unique")) { "Undefined constraint behavior" }
+        this.behavior = UniqueConstraintBehavior()
+
         name = xmlTreeRepresentation.getAttributeValue("name")!!
         type = ConstraintType.values()[xmlTreeRepresentation.getAttributeValue("type")!!.toInt()]
         for (sub in xmlTreeRepresentation) {
