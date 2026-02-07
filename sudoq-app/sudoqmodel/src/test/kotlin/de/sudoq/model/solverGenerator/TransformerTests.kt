@@ -1,6 +1,5 @@
 package de.sudoq.model.solverGenerator
 
-import de.sudoq.model.solverGenerator.solution.Solution
 import de.sudoq.model.solverGenerator.transformations.Transformer.transform
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.PositionMap
@@ -8,10 +7,9 @@ import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder
 import org.amshove.kluent.`should be`
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
-class TransformerTests : GeneratorCallback {
+class TransformerTests {
     var map: PositionMap<Int> = PositionMap(Position[9, 9])
 
     @Test
@@ -300,18 +298,6 @@ class TransformerTests : GeneratorCallback {
             }
         }
         return true
-    }
-
-    override fun generationFinished(sudoku: Sudoku) {
-        Assertions.assertTrue(validSudoku(sudoku))
-        // printSudoku9x9(sudoku, 9);
-        (this as Object).notifyAll()
-    }
-
-    override fun generationFinished(sudoku: Sudoku, sl: List<Solution>) {
-        Assertions.assertTrue(validSudoku(sudoku))
-        // printSudoku9x9(sudoku, 9);
-        (this as Object).notifyAll()
     }
 
     companion object {
