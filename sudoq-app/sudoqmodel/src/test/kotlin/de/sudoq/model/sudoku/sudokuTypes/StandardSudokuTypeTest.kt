@@ -1,7 +1,9 @@
 package de.sudoq.model.sudoku.sudokuTypes
 
 import de.sudoq.model.sudoku.Position
-import org.amshove.kluent.*
+import org.amshove.kluent.`should be`
+import org.amshove.kluent.`should contain all`
+import org.amshove.kluent.`should not be null`
 import org.junit.jupiter.api.Test
 
 class StandardSudokuTypeTest {
@@ -18,14 +20,13 @@ class StandardSudokuTypeTest {
     @Test
     fun nonQuadraticBlocksTest() {
         val ss18: SudokuType = SST18x18()
-        val p0 = Position[0, 0]
-        val p1 = Position[5, 0]
-        val p2 = Position[0, 2]
-        val p3 = Position[5, 2]
+        val positions = setOf(
+            Position[0, 0], Position[5, 0],
+            Position[0, 2], Position[5, 2]
+        )
         for (c in ss18) {
             if (c.toString().contains("Block 0")) {
-
-                c.`should contain all`(listOf(p0, p1, p2,p3))
+                c `should contain all` positions
             }
         }
     }
@@ -33,7 +34,7 @@ class StandardSudokuTypeTest {
 
     @Test
     fun enumTypeTest() {
-        sst.enumType.`should be`(SudokuTypes.standard9x9)
+        sst.enumType `should be` SudokuTypes.standard9x9
     }
 }
 
