@@ -18,7 +18,7 @@ import de.sudoq.R
 import de.sudoq.controller.SudoqCompatActivity
 import de.sudoq.controller.menus.preferences.PlayerPreferencesActivity
 import de.sudoq.controller.sudoku.SudokuActivity
-import de.sudoq.model.profile.ProfileManager
+import de.sudoq.model.profile.Profile
 import javax.inject.Inject
 
 /**
@@ -28,7 +28,7 @@ import javax.inject.Inject
 class MainActivity : SudoqCompatActivity() {
 
     @Inject
-    lateinit var profileManager: ProfileManager
+    lateinit var profile: Profile
 
     /**
      * Wird beim ersten Anzeigen des Hauptmenüs aufgerufen. Inflated das Layout.
@@ -54,7 +54,7 @@ class MainActivity : SudoqCompatActivity() {
         super.onResume()
         //Toast.makeText(this, "onResume", Toast.LENGTH_LONG).show();
         val continueButton = findViewById<View>(R.id.button_mainmenu_continue) as Button
-        continueButton.isEnabled = profileManager.currentGame > ProfileManager.NO_GAME
+        continueButton.isEnabled = profile.hasCurrentGame()
 
         val loadButton = findViewById<View>(R.id.button_mainmenu_load_sudoku) as Button
         //loadButton.setEnabled(!gm.getGameList().isEmpty());

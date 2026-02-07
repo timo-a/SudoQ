@@ -8,9 +8,7 @@
 package de.sudoq.model.game
 
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.math.pow
+import java.util.EnumMap
 
 /**
  * This class holds all settings concerning a [Game]:
@@ -18,14 +16,7 @@ import kotlin.math.pow
  * - additional options like lefthandmode, hints...
  */
 open class GameSettings(
-    /**
-     * A BitSet representing available [Assistances]
-     * TODO make private again after GameSettingsMapper no longer needs it
-     */
-    @Deprecated(
-        "would be private if not for GameSettingsMapper. " +
-                "Not supposed to be used by others."
-    ) val assistances: BitSet = BitSet(),
+    assistances: EnumMap<Assistances, Boolean> = EnumMap(Assistances::class.java),
     var isLeftHandModeSet: Boolean = false,
     var isHelpersSet: Boolean = false,
     var isGesturesSet: Boolean = false,
@@ -33,14 +24,17 @@ open class GameSettings(
 ) {
 
     /**
+     * An EnumMap representing available [Assistances]
+     */
+    private val assistances = assistances
+
+    /**
      * Sets an assistance to true
      *
      * @param assistance The assistance to set
      */
     fun setAssistance(assistance: Assistances) {
-        assistances.set(
-            2.0.pow((assistance.ordinal + 1).toDouble()).toInt()
-        ) //TODO that looks wrong... we can fix it here, but need to keep it in persistence
+        assistances[assistance] = true
     }
 
     /**
@@ -49,7 +43,7 @@ open class GameSettings(
      * @param assistance The assistance to set
      */
     fun clearAssistance(assistance: Assistances) {
-        assistances.clear(2.0.pow((assistance.ordinal + 1).toDouble()).toInt())
+        assistances[assistance] = false
     }
 
     /**
@@ -59,9 +53,9 @@ open class GameSettings(
      * @return true, if assistance is set, false otherwise
      */
     open fun getAssistance(assistance: Assistances): Boolean {
-        return assistances[2.0.pow((assistance.ordinal + 1).toDouble()).toInt()]
+        return assistances[assistance] ?: false
     }
 
-    fun copy(): GameSettings = GameSettings(assistances.clone() as BitSet, isLeftHandModeSet, isHelpersSet, isGesturesSet, ArrayList(wantedTypesList))
-
+    fun copy(): GameSettings = GameSettings(EnumMap<Assistances, Boolean>(assistances),
+        isLeftHandModeSet, isHelpersSet, isGesturesSet, ArrayList(wantedTypesList))
 }

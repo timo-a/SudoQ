@@ -1,6 +1,5 @@
 package de.sudoq.controller.sudoku
 
-import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,7 +12,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import de.sudoq.R
 import de.sudoq.model.game.Game
-import de.sudoq.model.profile.ProfileManager
+import de.sudoq.model.game.GameSettings
 import de.sudoq.view.SudokuLayout
 
 /**
@@ -24,7 +23,7 @@ class ControlPanelFragment : Fragment() {
     private lateinit var sl: SudokuLayout
     private lateinit var game: Game
     private lateinit var controller: SudokuController
-    private lateinit var profileManager: ProfileManager
+    private lateinit var gameSettings: GameSettings
 
 
     fun initialize() {
@@ -32,7 +31,7 @@ class ControlPanelFragment : Fragment() {
         sl = activity.sudokuLayout!!
         game = activity.game!!
         controller = activity.sudokuController!!
-        profileManager = activity.profileManager
+        gameSettings = game.gameSettings
     }
 
     override fun onCreateView(
@@ -134,19 +133,13 @@ class ControlPanelFragment : Fragment() {
         } else if (v === Buttons.actionTreeButton) {
             activity.toogleActionTree()
         } else if (v === Buttons.gestureButton) {
-            val profilesDir = activity.getDir(
-                getString(R.string.path_rel_profiles),
-                Context.MODE_PRIVATE
-            )
-
-            val profile = profileManager
             if (activity.checkGesture()) {
                 /* toggle 'gesture active'
 				 * toggle button icon as well */
-                profile.isGestureActive = !profile.isGestureActive
-                v.setSelected(profile.isGestureActive)
+                gameSettings.isGesturesSet = !gameSettings.isGesturesSet
+                v.setSelected(gameSettings.isGesturesSet)
             } else {
-                profile.isGestureActive = false
+                gameSettings.isGesturesSet = false
                 v.setSelected(false)
                 Toast.makeText(
                     activity,

@@ -328,15 +328,10 @@ class SudokuCellView(
         cellSelected = false
         connected = false
         isNoteMode = false
-        isInExtraConstraint = false
-        val constraints: Iterable<Constraint> = game.sudoku.sudokuType
-        for (c in constraints) {
-            if (c.type == ConstraintType.EXTRA &&
-                c.includes(game.sudoku.getPosition(cell.id))
-            ) {
-                isInExtraConstraint = true
-                break
-            }
+        val thisPosition = game.sudoku.getPosition(cell.id)
+        isInExtraConstraint = game.sudoku.sudokuType.constraints
+            .filter { it.type == ConstraintType.EXTRA }
+            .any { it.includes(thisPosition)
         }
         updateMarking()
         setOnClickListener(OnClickCellListener(this))

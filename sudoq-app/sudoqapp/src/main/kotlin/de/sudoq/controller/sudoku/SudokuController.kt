@@ -11,10 +11,8 @@ import de.sudoq.model.actionTree.Action
 import de.sudoq.model.actionTree.NoteActionFactory
 import de.sudoq.model.actionTree.SolveActionFactory
 import de.sudoq.model.game.Game
-import de.sudoq.model.profile.ProfileManager
-import de.sudoq.model.profile.Statistics
+import de.sudoq.model.profile.ProfileStatistics
 import de.sudoq.model.sudoku.Cell
-import de.sudoq.model.sudoku.complexity.Complexity
 
 /**
  * Der SudokuController ist dafür zuständig auf Aktionen des Benutzers mit dem
@@ -25,7 +23,7 @@ class SudokuController(
     private val game: Game,
     /** Die SudokuActivity. */
     private val context: SudokuActivity,
-    private val profileManager: ProfileManager
+    private val statistics: ProfileStatistics
 ) : AssistanceRequestListener, ActionListener {
 
     /**
@@ -77,7 +75,7 @@ class SudokuController(
     override fun onAddEntry(cell: Cell, value: Int) {
         game.addAndExecute(SolveActionFactory().createAction(value, cell))
         if (game.isFinished()) {
-            updateStatistics()
+            statistics.updateAfterWin(game.sudoku.complexity!!, game.time, game.score)
             handleFinish(false)
         }
     }
@@ -85,7 +83,7 @@ class SudokuController(
     fun onHintAction(a: Action) {
         game.addAndExecute(a)
         if (game.isFinished()) {
-            updateStatistics()
+            statistics.updateAfterWin(game.sudoku.complexity!!, game.time, game.score)
             handleFinish(false)
         }
     }
@@ -103,7 +101,7 @@ class SudokuController(
     override fun onSolveOne(): Boolean {
         val res = game.solveCell()
         if (game.isFinished()) {
-            updateStatistics()
+            statistics.updateAfterWin(game.sudoku.complexity!!, game.time, game.score)
             handleFinish(false)
         }
         return res
@@ -115,7 +113,7 @@ class SudokuController(
     override fun onSolveCurrent(cell: Cell): Boolean {
         val res = game.solveCell(cell)
         if (game.isFinished()) {
-            updateStatistics()
+            statistics.updateAfterWin(game.sudoku.complexity!!, game.time, game.score)
             handleFinish(false)
         }
         return res
@@ -145,27 +143,4 @@ class SudokuController(
         context.setFinished(true, surrendered)
     }
 
-    /**
-     * Updatet die Spielerstatistik des aktuellen Profils in der App.
-     */
-    private fun updateStatistics() {
-        when (game.sudoku.complexity!!) {
-            Complexity.infernal -> incrementStatistic(Statistics.playedInfernalSudokus)
-            Complexity.difficult -> incrementStatistic(Statistics.playedDifficultSudokus)
-            Complexity.medium -> incrementStatistic(Statistics.playedMediumSudokus)
-            Complexity.easy -> incrementStatistic(Statistics.playedEasySudokus)
-            Complexity.arbitrary -> throw IllegalStateException("unexpected complexity value: 'arbitrary'")
-        }
-        incrementStatistic(Statistics.playedSudokus)
-        if (profileManager.getStatistic(Statistics.fastestSolvingTime) > game.time) {
-            profileManager.setStatistic(Statistics.fastestSolvingTime, game.time)
-        }
-        if (profileManager.getStatistic(Statistics.maximumPoints) < game.score) {
-            profileManager.setStatistic(Statistics.maximumPoints, game.score)
-        }
-    }
-
-    private fun incrementStatistic(s: Statistics) { //TODO this should probably be in model...
-        profileManager.setStatistic(s, profileManager.getStatistic(s) + 1)
-    }
 }
