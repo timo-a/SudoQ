@@ -38,7 +38,6 @@ android {
                 "src/main/res/layouts/sudoku",
                 "src/main/res/layouts/tutorial",
                 "src/main/res/layout",
-                "src/main/res",
                 "src/main/res-screen/hints/",
                 "src/main/res-screen/main_menu/",
                 "src/main/res-screen/preferences/"
