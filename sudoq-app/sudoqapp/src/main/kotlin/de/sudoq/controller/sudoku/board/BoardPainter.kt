@@ -120,10 +120,9 @@ class BoardPainter(var sl: SudokuLayout, var type: SudokuType) {
                  */
                 if (isRight && !isBottom && !belowRightMember) {
                     canvas.drawLine(
-                        (
-                                leftMargin + (p.x + 1) * cellSizeAndSpacing - spacing - 1 + i).toFloat(),
-                        topMargin + (p.y + 1) * cellSizeAndSpacing - spacing - edgeRadius, (
-                                leftMargin + (p.x + 1) * cellSizeAndSpacing - spacing - 1 + i).toFloat(),
+                        (leftMargin + (p.x + 1) * cellSizeAndSpacing - spacing - 1 + i).toFloat(),
+                        topMargin + (p.y + 1) * cellSizeAndSpacing - spacing - edgeRadius,
+                        (leftMargin + (p.x + 1) * cellSizeAndSpacing - spacing - 1 + i).toFloat(),
                         topMargin + (p.y + 1) * cellSizeAndSpacing + edgeRadius,
                         paint
                     )
@@ -131,10 +130,10 @@ class BoardPainter(var sl: SudokuLayout, var type: SudokuType) {
                 /*For a cell at the bottom, initializeWith edge to right neighbour */
                 if (isBottom && !isRight && !belowRightMember) {
                     canvas.drawLine(
-                        leftMargin + (p.x + 1) * cellSizeAndSpacing - edgeRadius - spacing, (
-                                topMargin + (p.y + 1) * cellSizeAndSpacing - spacing - 1 + i).toFloat(),
-                        leftMargin + (p.x + 1) * cellSizeAndSpacing + edgeRadius, (
-                                topMargin + (p.y + 1) * cellSizeAndSpacing - spacing - 1 + i).toFloat(),
+                        leftMargin + (p.x + 1) * cellSizeAndSpacing - edgeRadius - spacing,
+                        (topMargin + (p.y + 1) * cellSizeAndSpacing - spacing - 1 + i).toFloat(),
+                        leftMargin + (p.x + 1) * cellSizeAndSpacing + edgeRadius,
+                        (topMargin + (p.y + 1) * cellSizeAndSpacing - spacing - 1 + i).toFloat(),
                         paint
                     )
                 }
@@ -142,10 +141,9 @@ class BoardPainter(var sl: SudokuLayout, var type: SudokuType) {
                 /*For a cell on the left border, initializeWith edge to upper neighbour*/
                 if (isLeft && !isTop && (p.x == 0 || !c.includes(Position[p.x - 1, p.y - 1]))) {
                     canvas.drawLine(
-                        (
-                                leftMargin + p.x * cellSizeAndSpacing - i).toFloat(),
-                        topMargin + p.y * cellSizeAndSpacing - spacing - edgeRadius, (
-                                leftMargin + p.x * cellSizeAndSpacing - i).toFloat(),
+                        (leftMargin + p.x * cellSizeAndSpacing - i).toFloat(),
+                        topMargin + p.y * cellSizeAndSpacing - spacing - edgeRadius,
+                        (leftMargin + p.x * cellSizeAndSpacing - i).toFloat(),
                         topMargin + p.y * cellSizeAndSpacing + edgeRadius,
                         paint
                     )
@@ -153,10 +151,10 @@ class BoardPainter(var sl: SudokuLayout, var type: SudokuType) {
                 /*For a cell at the top initializeWith to the left*/
                 if (isTop && !isLeft && (p.y == 0 || !c.includes(Position[p.x - 1, p.y - 1]))) {
                     canvas.drawLine(
-                        leftMargin + p.x * cellSizeAndSpacing - edgeRadius - spacing, (
-                                topMargin + p.y * cellSizeAndSpacing - i).toFloat(),
-                        leftMargin + p.x * cellSizeAndSpacing + edgeRadius, (
-                                topMargin + p.y * cellSizeAndSpacing - i).toFloat(),
+                        leftMargin + p.x * cellSizeAndSpacing - edgeRadius - spacing,
+                        (topMargin + p.y * cellSizeAndSpacing - i).toFloat(),
+                        leftMargin + p.x * cellSizeAndSpacing + edgeRadius,
+                        (topMargin + p.y * cellSizeAndSpacing - i).toFloat(),
                         paint
                     )
                 }
