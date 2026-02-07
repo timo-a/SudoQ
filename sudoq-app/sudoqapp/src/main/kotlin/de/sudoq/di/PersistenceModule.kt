@@ -9,6 +9,7 @@ import dagger.hilt.components.SingletonComponent
 import de.sudoq.R
 import de.sudoq.model.game.GameManager
 import de.sudoq.model.persistence.xml.game.IGamesListRepo
+import de.sudoq.model.profile.Profile
 import de.sudoq.model.profile.ProfileManager
 import de.sudoq.persistence.game.GameRepo
 import de.sudoq.persistence.game.GamesListRepo
@@ -38,6 +39,9 @@ object PersistenceModule {
         
         return pm
     }
+
+    @Provides
+    fun provideCurrentProfile(profileManager: ProfileManager): Profile = profileManager.currentProfile
 
     @Provides
     @Singleton

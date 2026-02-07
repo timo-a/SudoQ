@@ -1,9 +1,15 @@
 package de.sudoq.persistence.game
 
 import de.sudoq.model.game.Assistances
-import de.sudoq.model.game.Assistances.*
+import de.sudoq.model.game.Assistances.autoAdjustNotes
+import de.sudoq.model.game.Assistances.markRowColumn
+import de.sudoq.model.game.Assistances.markWrongSymbol
+import de.sudoq.model.game.Assistances.restrictCandidates
 import de.sudoq.persistence.XmlTree
-import org.amshove.kluent.*
+import org.amshove.kluent.invoking
+import org.amshove.kluent.`should be false`
+import org.amshove.kluent.`should be true`
+import org.amshove.kluent.`should throw`
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -44,8 +50,8 @@ class GameSettingsBETests {
         a.fillFromXml(t)
 
         a.getAssistance(autoAdjustNotes).`should be true`()
-        a.getAssistance(markRowColumn).`should be false`()
         a.getAssistance(markWrongSymbol).`should be true`()
+        a.getAssistance(markRowColumn).`should be false`()
         a.getAssistance(restrictCandidates).`should be false`()
 
     }

@@ -17,10 +17,8 @@ import androidx.core.content.edit
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import androidx.multidex.BuildConfig
-import dagger.hilt.android.AndroidEntryPoint
 import de.sudoq.R
 import de.sudoq.controller.SudoqCompatActivity
-import de.sudoq.model.profile.ProfileManager
 import de.sudoq.model.sudoku.complexity.Complexity.Companion.playableValues
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import kotlinx.coroutines.Dispatchers
@@ -31,18 +29,13 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.lang.Character.isDigit
-import javax.inject.Inject
 
 /**
  * Eine Splash Activity für die SudoQ-App, welche einen Splash-Screen zeigt,
  * sowie den FileManager initialisiert und die Daten für den ersten Start
  * vorbereitet.
  */
-@AndroidEntryPoint
 class SplashActivity : SudoqCompatActivity() {
-
-    @Inject
-    lateinit var profileManager: ProfileManager
 
     /**
      * Besagt, ob die Initialisierung abgeschlossen ist.
@@ -62,12 +55,6 @@ class SplashActivity : SudoqCompatActivity() {
         super.onCreate(savedInstanceState)
 
         splashScreen.setKeepOnScreenCondition { !isReady }
-
-        //confirm that there is a profile
-        val profileDir = profileManager.profilesDir
-        val filenames = profileDir.list()
-        Log.d("ProfileD", "onCreate: after init: ${filenames?.joinToString(", ")}")
-        check(filenames != null && filenames.size >= 2) { "Too few files. initialization was not successful" }
 
         if (savedInstanceState != null) {
             startedCopying = savedInstanceState.getBoolean(SAVE_STARTED_COPYING.toString())

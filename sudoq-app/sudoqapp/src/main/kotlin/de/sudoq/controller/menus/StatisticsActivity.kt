@@ -15,7 +15,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.sudoq.R
 import de.sudoq.controller.SudoqCompatActivity
 import de.sudoq.controller.sudoku.SudokuActivity.Companion.getTimeString
+import de.sudoq.model.profile.Profile
 import de.sudoq.model.profile.ProfileManager
+import de.sudoq.model.profile.ProfileStatistics
 import de.sudoq.model.profile.Statistics
 import javax.inject.Inject
 
@@ -27,12 +29,14 @@ import javax.inject.Inject
 class StatisticsActivity : SudoqCompatActivity() {
 
     @Inject
-    lateinit var profileManager: ProfileManager
+    lateinit var profile: Profile
+
+    lateinit var statistics: ProfileStatistics
 
     /** Methods  */
     private fun setScore(textViewID: Int, label: Int, statLabel: Statistics) {
         val current = findViewById<View>(textViewID) as TextView
-        current.text = "${getString(label)}: ${profileManager.getStatistic(statLabel)}"
+        current.text = "${getString(label)}: ${statistics.getStatistic(statLabel)}"
     }
 
     /**
@@ -40,6 +44,7 @@ class StatisticsActivity : SudoqCompatActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        statistics = profile.statistics
         setContentView(R.layout.statistics)
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
@@ -74,7 +79,7 @@ class StatisticsActivity : SudoqCompatActivity() {
         )
         setScore(R.id.text_score, R.string.statistics_score, Statistics.maximumPoints)
         val current = findViewById<View>(R.id.text_fastest_solving_time) as TextView
-        val timeRecordInSecs = profileManager.getStatistic(Statistics.fastestSolvingTime)
+        val timeRecordInSecs = statistics.getStatistic(Statistics.fastestSolvingTime)
         var timeString = "---"
         if (timeRecordInSecs != ProfileManager.INITIAL_TIME_RECORD) {
             timeString = getTimeString(timeRecordInSecs)

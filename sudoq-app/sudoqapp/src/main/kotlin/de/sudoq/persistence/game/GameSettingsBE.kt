@@ -2,19 +2,32 @@ package de.sudoq.persistence.game
 
 import de.sudoq.model.game.Assistances
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
-import de.sudoq.persistence.sudoku.sudokuTypes.SudokuTypesListBE
 import de.sudoq.persistence.XmlAttribute
 import de.sudoq.persistence.XmlTree
 import de.sudoq.persistence.Xmlable
-import java.util.*
+import de.sudoq.persistence.sudoku.sudokuTypes.SudokuTypesListBE
+import java.util.BitSet
+import java.util.EnumMap
 import kotlin.math.pow
 
-class GameSettingsBE(val assistances: BitSet = BitSet(),
+class GameSettingsBE(assistances: EnumMap<Assistances, Boolean> = EnumMap(Assistances::class.java),
                      var isLefthandModeSet: Boolean = false,
                      var isHelperSet: Boolean = false,
                      var isGesturesSet: Boolean = false,
-                     val wantedTypesList: SudokuTypesListBE = SudokuTypesListBE(listOf(*SudokuTypes.values()))
+                     val wantedTypesList: SudokuTypesListBE = SudokuTypesListBE(SudokuTypes.entries)
 ) : Xmlable {
+
+    val assistances: BitSet = BitSet()
+
+    init {
+        //for legacy reasons, we have to store the entries in this wierd way
+        Assistances.entries
+            .filter { assistances[it] ?: false }
+            .forEach {
+                this.assistances[2.0.pow((it.ordinal + 1).toDouble()).toInt()] = true
+            }
+    }
+
 
     /**
      * Sets an assistance to true
@@ -64,11 +77,8 @@ class GameSettingsBE(val assistances: BitSet = BitSet(),
      *
      * @return String representation of the AssistanceSet
      */
-    private fun convertAssistancesToString(): String {
-        val bitstring = StringBuilder()
-        for (assist in Assistances.values()) bitstring.append(if (getAssistance(assist)) "1" else "0")
-        return bitstring.toString()
-    }
+    private fun convertAssistancesToString(): String = Assistances.entries.joinToString("") { if (getAssistance(it)) "1" else "0" }
+
     /**
      * Checks if an assistance is set
      *
@@ -89,7 +99,7 @@ class GameSettingsBE(val assistances: BitSet = BitSet(),
     @Throws(IllegalArgumentException::class)
     private fun assistancesfromString(representation: String) {
 
-        for ((i, assist) in Assistances.values().withIndex()) {
+        for ((i, assist) in Assistances.entries.withIndex()) {
             try {
                 if (representation[i] == '1') {
                     setAssistance(assist)

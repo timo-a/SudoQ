@@ -9,26 +9,21 @@ package de.sudoq.model.game
 
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
-import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 
 
 /**
  * Eine Klasse um die zu einem Spiel zugehörigen Daten zu sammeln ohne jeweils
  * das ganze Spiel laden zu müssen.
  *
- * @param playedAt time when the game was last played
  * @property id ID of the game
- * @property type The type of the sudoku
+ * @param playedAt Date when the game was last played
  * @property isFinished  Indicates if the game was completed
+ * @property type The type of the sudoku
  * @property complexity The complexit of the sudoku
  */
 class GameData(
     val id: Int,
-    /**
-     * Date when the game was last played
-     */
     val playedAt: Date,
     val isFinished: Boolean,
     val type: SudokuTypes,

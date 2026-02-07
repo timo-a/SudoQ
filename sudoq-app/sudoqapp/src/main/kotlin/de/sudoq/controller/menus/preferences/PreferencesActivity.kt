@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
 import dagger.hilt.android.AndroidEntryPoint
-import de.sudoq.R
 import de.sudoq.controller.SudoqCompatActivity
 import de.sudoq.controller.menus.GestureBuilder
 import de.sudoq.model.ModelChangeListener

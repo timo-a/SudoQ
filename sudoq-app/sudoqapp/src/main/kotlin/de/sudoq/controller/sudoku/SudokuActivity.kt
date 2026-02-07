@@ -211,7 +211,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
                 findViewById<Toolbar>(R.id.toolbar) //TODO subclass and put time, ... in it
             setSupportActionBar(toolbar)
             //todo the controller only needs the current profile, which is fix for the current game, but profilemanager does not give it out. does profilemanager need to wrap the profile?
-            sudokuController = SudokuController(game!!, this, profileManager)
+            sudokuController = SudokuController(game!!, this, profileManager.currentProfile.statistics)
             actionTreeController = ActionTreeController(this)
             Log.d(LOG_TAG, "Initialized")
             inflateViewAndButtons()

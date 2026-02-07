@@ -11,15 +11,11 @@ import de.sudoq.model.ObservableModelImpl
 import de.sudoq.model.game.Assistances
 import de.sudoq.model.game.GameSettings
 import de.sudoq.model.persistence.IProfileRepo
-import de.sudoq.model.persistence.IRepo
 import de.sudoq.model.persistence.xml.profile.IProfilesListRepo
 import java.io.File
-import java.io.IOException
-import java.util.*
-import kotlin.collections.ArrayList
 
 /**
- * This static class is a wrapper for the currently loaded player profile
+ * Wrapper for the currently loaded player profile
  * which is maintained by SharedPreferences of the Android-API.
  *
  */
@@ -28,10 +24,13 @@ open class ProfileManager(
     val profileRepo: IProfileRepo,
     val profilesListRepo: IProfilesListRepo
 ) : ObservableModelImpl<ProfileManager>() {
-//TODO split into profile handler and profile
+//TODO split into
+// profile handler who manages the profiles and gives out the current one and
+// profile wrapper who manages one profile
 //todo we used to have several profiles and supported switching between them. At some point this was removed to cut down complexity. but at some point we might want to bring it back
 
-    private lateinit var currentProfile: Profile //initialized in loadCurrentProfile
+    lateinit var currentProfile: Profile //initialized in loadCurrentProfile
+        private set
 
     //todo is it save to just give out the current profile instead of having all these delegating methods?
 
@@ -72,12 +71,6 @@ open class ProfileManager(
      */
     val appSettings: AppSettings //todo read from currentProfile instead, same above
         get() = currentProfile.appSettings
-
-    var statistics: IntArray
-        get() = currentProfile.statistics
-        set(value) {
-            currentProfile.statistics = value
-        }
 
     val currentProfileDir: File
         //this is a get because currentProfileID is depends on lateinit currentProfile
@@ -240,7 +233,7 @@ open class ProfileManager(
         val id = profileRepo.getFreeId()
         currentProfile = Profile(id, name)
         currentProfile.assistances.setAssistance(Assistances.markRowColumn)
-        currentProfile.statistics[Statistics.fastestSolvingTime.ordinal] = INITIAL_TIME_RECORD
+        currentProfile.statistics.setStatistic(Statistics.fastestSolvingTime, INITIAL_TIME_RECORD)
         profileRepo.create(currentProfile)
         profilesListRepo.addProfile(currentProfile)
     }
@@ -333,31 +326,6 @@ open class ProfileManager(
      */
     fun getAssistance(asst: Assistances): Boolean = assistances.getAssistance(asst)
 
-    /**
-     * Setzt den Wert der gegebenen Statistik für dieses Profil auf den
-     * gegebenen Wert
-     *
-     * @param stat
-     * die zu setzende Statistik
-     * @param value
-     * der einzutragende Wert
-     */
-    fun setStatistic(stat: Statistics, value: Int) {
-        statistics[stat.ordinal] = value
-    }
-
-    /**
-     * Diese Methode gibt den Wert der spezifizierten Statistik im aktuellen
-     * Spielerprofil zurück. Ist die spezifizierte Statistik ungültig, so wird
-     * null zurückgegeben.
-     *
-     * @param stat
-     * Die Statistik, dessen Wert abgerufen werden soll
-     * @return Der Wert der spezifizierten Statistik als String, oder null falls
-     * diese ungültig ist
-     */
-    fun getStatistic(stat: Statistics): Int = statistics[stat.ordinal]
-
     companion object {
         const val INITIAL_TIME_RECORD = 5999
 
@@ -371,6 +339,4 @@ open class ProfileManager(
          */
         const val DEFAULT_PROFILE_NAME = "unnamed"
     }
-
-
 }
