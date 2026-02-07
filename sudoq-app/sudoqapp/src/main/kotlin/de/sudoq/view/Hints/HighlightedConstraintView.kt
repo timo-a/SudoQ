@@ -62,9 +62,9 @@ class HighlightedConstraintView(
         val spacing = sl.currentSpacing
         for (p in c) {
             /* determine whether the position p is in the (right|left|top|bottom) border of its block constraint.
-					 * test for 0 to avoid illegalArgExc for neg. vals
-					 * careful when trying to optimize this definition: blocks can be squiggly (every additional compound to row/col but extra as in hypersudoku is s.th. different)
-					 * */
+			 * test for 0 to avoid illegalArgExc for neg. vals
+			 * careful when trying to optimize this definition: blocks can be squiggly (every additional compound to row/col but extra as in hypersudoku is s.th. different)
+			 * */
             val isLeft = p.x == 0 || !c.includes(Position[p.x - 1, p.y])
             val isRight = !c.includes(Position[p.x + 1, p.y])
             val isTop = p.y == 0 || !c.includes(Position[p.x, p.y - 1])
@@ -102,32 +102,36 @@ class HighlightedConstraintView(
                 canvas.drawLine(startX, bottomY, stopX, bottomY, paint)
             }
 
-            /* Cells at corners of their block draw a circle for a round circumference*/paint.style =
-                Paint.Style.FILL_AND_STROKE
+            /* Cells at corners of their block draw a circle for a round circumference*/
+            paint.style = Paint.Style.FILL_AND_STROKE
             val radius = edgeRadius + spacing / 2
             val angle = (90 + 10).toShort()
-            /*TopLeft*/if (isLeft && isTop) {
+            /*TopLeft*/
+            if (isLeft && isTop) {
                 val centerX = leftMargin + p.x * cellSizeAndSpacing + edgeRadius
                 val centerY = topMargin + p.y * cellSizeAndSpacing + edgeRadius
                 oval[centerX - radius, centerY - radius, centerX + radius] = centerY + radius
                 canvas.drawArc(oval, (180 - 5).toFloat(), angle.toFloat(), false, paint)
             }
 
-            /* Top Right*/if (isRight && isTop) {
+            /* Top Right*/
+            if (isRight && isTop) {
                 val centerX = leftMargin + (p.x + 1) * cellSizeAndSpacing - spacing - edgeRadius
                 val centerY = topMargin + p.y * cellSizeAndSpacing + edgeRadius
                 oval[centerX - radius, centerY - radius, centerX + radius] = centerY + radius
                 canvas.drawArc(oval, (270 - 5).toFloat(), angle.toFloat(), false, paint)
             }
 
-            /*Bottom Left*/if (isLeft && isBottom) {
+            /*Bottom Left*/
+            if (isLeft && isBottom) {
                 val centerX = leftMargin + p.x * cellSizeAndSpacing + edgeRadius
                 val centerY = topMargin + (p.y + 1) * cellSizeAndSpacing - edgeRadius - spacing
                 oval[centerX - radius, centerY - radius, centerX + radius] = centerY + radius
                 canvas.drawArc(oval, (90 - 5).toFloat(), angle.toFloat(), false, paint)
             }
 
-            /*BottomRight*/if (isRight && isBottom) {
+            /*BottomRight*/
+            if (isRight && isBottom) {
                 val centerX = leftMargin + (p.x + 1) * cellSizeAndSpacing - edgeRadius - spacing
                 val centerY = topMargin + (p.y + 1) * cellSizeAndSpacing - edgeRadius - spacing
                 oval[centerX - radius, centerY - radius, centerX + radius] = centerY + radius
@@ -152,7 +156,8 @@ class HighlightedConstraintView(
                     paint
                 )
             }
-            /*For a cell at the bottom, initializeWith edge to right neighbour */if (isBottom && !isRight && !belowRightMember) {
+            /*For a cell at the bottom, initializeWith edge to right neighbour */
+            if (isBottom && !isRight && !belowRightMember) {
                 canvas.drawLine(
                     leftMargin + (p.x + 1) * cellSizeAndSpacing - edgeRadius - spacing,
                     bottomY,
@@ -161,10 +166,8 @@ class HighlightedConstraintView(
                     paint
                 )
             }
-            /*For a cell on the left border, initializeWith edge to upper neighbour*/if (isLeft && !isTop && (p.x == 0 || !c.includes(
-                    Position[p.x - 1, p.y - 1]
-                ))
-            ) {
+            /*For a cell on the left border, initializeWith edge to upper neighbour*/
+            if (isLeft && !isTop && (p.x == 0 || !c.includes(Position[p.x - 1, p.y - 1]))) {
                 canvas.drawLine(
                     leftX,
                     topMargin + p.y * cellSizeAndSpacing - spacing - edgeRadius,
@@ -174,10 +177,8 @@ class HighlightedConstraintView(
                 )
             }
 
-            /*For a cell at the top initializeWith to the left*/if (isTop && !isLeft && (p.y == 0 || !c.includes(
-                    Position[p.x - 1, p.y - 1]
-                ))
-            ) {
+            /*For a cell at the top initializeWith to the left*/
+            if (isTop && !isLeft && (p.y == 0 || !c.includes(Position[p.x - 1, p.y - 1]))) {
                 canvas.drawLine(
                     leftMargin + p.x * cellSizeAndSpacing - edgeRadius - spacing,
                     topY,
