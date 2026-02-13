@@ -100,7 +100,6 @@ class NewSudokuPreferencesActivity : PreferencesActivity() {
      */
     fun saveChanges(view: View?) {
         saveToProfile()
-        onBackPressed() //go back to parent activity
     }
 
     override fun saveToProfile() {

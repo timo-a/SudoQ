@@ -8,7 +8,6 @@
 package de.sudoq.controller.sudoku
 
 import android.app.AlertDialog
-import android.gesture.GestureOverlayView
 import android.gesture.GestureStore
 import android.graphics.Bitmap.CompressFormat
 import android.os.Bundle
@@ -23,6 +22,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
@@ -165,6 +165,22 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
     /** for time. YES IT IS USED! */
     private var mMenu: Menu? = null
 
+    private val backCallback = object : OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() {
+            when {
+                isActionTreeShown -> toogleActionTree()
+                gestureOverlay?.visibility == View.VISIBLE -> {
+                    gestureOverlay?.visibility = View.INVISIBLE
+                }
+            }
+            // After returning from gesture overlay or action tree, check if it can be disabled
+            updateBackPressState()
+        }
+    }
+    fun updateBackPressState() {
+        // Enable the callback ONLY if there is a UI element to close
+        backCallback.isEnabled = isActionTreeShown || (gestureOverlay?.visibility == View.VISIBLE)
+    }
     /** Methods  */
     private fun initializeSymbolSet() {
         currentSymbolSet = when (game!!.sudoku.sudokuType.numberOfSymbols) {
@@ -260,6 +276,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
             updateButtons()
             panel!!.gestureButton!!.isSelected = profileManager.isGestureActive
         }
+        onBackPressedDispatcher.addCallback(this, backCallback)
     }
 
     class MyGlobalLayoutListener(
@@ -449,6 +466,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
         isActionTreeShown = !isActionTreeShown //toggle value
         actionTreeController!!.setVisibility(isActionTreeShown) //update AT-Controller
         updateButtons()
+        updateBackPressState()
     }
 
     /**
@@ -514,19 +532,6 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
             profileManager.saveChanges()
         }
         super.onPause()
-    }
-
-    /**
-     * Wird aufgerufen, falls die "Zurück"-Taste gedrückt wird.
-     */
-    override fun onBackPressed() {
-        if (isActionTreeShown) {
-            toogleActionTree()
-        } else if (gestureOverlay!!.visibility == GestureOverlayView.VISIBLE) {
-            gestureOverlay!!.visibility = GestureOverlayView.INVISIBLE
-        } else {
-            super.onBackPressed()
-        }
     }
 
     /**
