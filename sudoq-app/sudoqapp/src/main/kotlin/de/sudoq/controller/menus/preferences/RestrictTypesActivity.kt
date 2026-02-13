@@ -38,7 +38,7 @@ class RestrictTypesActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
 
     /** Attributes  */
     private var adapter: RestrictTypesAdapter? = null
-    private var types: ArrayList<SudokuTypes>? = null
+    private lateinit var types: ArrayList<SudokuTypes>
     /** Constructors  */
     /** Methods  */
     /**
@@ -83,7 +83,7 @@ class RestrictTypesActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
         when (item.itemId) {
             R.id.action_restore_all ->
                 /* add (only!) types that are not currently selected */
-                types!!.addAll(SudokuTypes.values().filter { !types!!.contains(it) })
+                types.addAll(SudokuTypes.entries.filterNot(types::contains))
 
             else -> super.onOptionsItemSelected(item)
         }
@@ -96,7 +96,7 @@ class RestrictTypesActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
 
         //Toast.makeText(getApplicationContext(), "prepOpt called. s_1: "+types.size()+" s_2: "+types.getAllTypes().size(), Toast.LENGTH_LONG).show();
         menu.findItem(R.id.action_restore_all).isVisible =
-            types!!.size < SudokuTypes.values().size //offer option to restore all only when some are disabled...
+            types.size < SudokuTypes.entries.size //offer option to restore all only when some are disabled...
         return true
     }
 
@@ -133,12 +133,16 @@ class RestrictTypesActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
 
         /* toggle item */
         val st = adapter!!.getItem(position)
-        if (types!!.contains(st!!) && types!!.size == 1) //trying to remove last element -> deny and warn
+        if (types.contains(st!!) && types.size == 1) //trying to remove last element -> deny and warn
             Toast.makeText(
                 this,
                 R.string.advanced_settings_restrict_types_empty_warning,
                 Toast.LENGTH_SHORT
-            ) else if (types!!.contains(st)) types!!.remove(st) else types!!.add(st)
+            ).show()
+        else if (types.contains(st))
+            types.remove(st)
+        else
+            types.add(st)
         profileManager.saveChanges()
         adapter!!.notifyDataSetChanged()
     }
@@ -157,22 +161,10 @@ class RestrictTypesActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
     private fun initialiseTypes() {
         types = profileManager.assistances.wantedTypesList
         // initialize ArrayAdapter for the type names and set it
-        adapter = RestrictTypesAdapter(this, types!!)
+        adapter = RestrictTypesAdapter(this, types)
         listAdapter = adapter
         listView!!.onItemClickListener = this
         listView!!.onItemLongClickListener = this
     }
 
-    /**
-     * Führt die onBackPressed-Methode aus.
-     *
-     * @param view
-     * unbenutzt
-     */
-    fun goBack(view: View?) {
-        super.onBackPressed()
-    }
-
-    companion object {
-    }
 }

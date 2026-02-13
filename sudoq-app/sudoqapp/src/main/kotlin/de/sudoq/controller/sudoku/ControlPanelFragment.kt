@@ -138,6 +138,7 @@ class ControlPanelFragment : Fragment() {
 				 * toggle button icon as well */
                 gameSettings.isGesturesSet = !gameSettings.isGesturesSet
                 v.setSelected(gameSettings.isGesturesSet)
+                activity.updateBackPressState()
             } else {
                 gameSettings.isGesturesSet = false
                 v.setSelected(false)
