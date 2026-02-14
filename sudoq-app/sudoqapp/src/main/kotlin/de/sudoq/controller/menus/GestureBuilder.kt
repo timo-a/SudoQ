@@ -14,10 +14,15 @@ import android.gesture.GestureStore
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.Gravity
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import dagger.hilt.android.AndroidEntryPoint
 import de.sudoq.R
 import de.sudoq.controller.SudoqCompatActivity
@@ -75,6 +80,19 @@ class GestureBuilder : SudoqCompatActivity(), OnGesturePerformedListener, InputL
      */
     private var virtualKeyboard: VirtualKeyboardLayout? = null
 
+    private val backCallback = object : OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() {
+            if (gestureOverlay!!.isShown) {
+                gestureOverlay!!.visibility = View.INVISIBLE
+            }
+            updateBackPressState()
+        }
+    }
+    private fun updateBackPressState() {
+        // Enable the callback ONLY if the overlay is visible
+        backCallback.isEnabled = gestureOverlay?.isShown == true
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.gesturebuilder)
@@ -83,6 +101,8 @@ class GestureBuilder : SudoqCompatActivity(), OnGesturePerformedListener, InputL
             findViewById<View>(R.id.gesture_builder_virtual_keyboard) as VirtualKeyboardLayout
         inflateGestures()
         refreshKeyboard()
+        onBackPressedDispatcher.addCallback(this, backCallback)
+        updateBackPressState()
     }
 
     override fun onResume() {
@@ -165,6 +185,7 @@ class GestureBuilder : SudoqCompatActivity(), OnGesturePerformedListener, InputL
         gestureStore.addGesture(currentSelectedSymbol, gesture)
         saveGestures()
         gestureOverlay!!.visibility = View.INVISIBLE
+        updateBackPressState()
         refreshKeyboard()
     }
 
@@ -194,13 +215,9 @@ class GestureBuilder : SudoqCompatActivity(), OnGesturePerformedListener, InputL
         virtualKeyboard!!.registerListener(this)
     }
 
-    override fun onBackPressed() {
-        if (gestureOverlay!!.isShown) {
-            gestureOverlay!!.visibility = View.INVISIBLE
-        } else {
-            saveGestures()
-            super.onBackPressed()
-        }
+    override fun onStop() {
+        super.onStop()
+        saveGestures()
     }
 
     /**
@@ -233,6 +250,7 @@ class GestureBuilder : SudoqCompatActivity(), OnGesturePerformedListener, InputL
                 )
             )
             gestureOverlay!!.visibility = View.VISIBLE
+            updateBackPressState()
         }
     }
 
