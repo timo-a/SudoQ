@@ -14,7 +14,6 @@ android:paddingTop="5dp">
     android:layout_height="fill_parent"
     android:layout_weight="1"
     android:layout_margin="0dp"
-    android:onClick="onClick"
     android:src="@drawable/undo" />
 
 <de.sudoq.view.SquareImageButton
@@ -25,7 +24,6 @@ android:paddingTop="5dp">
     android:layout_height="fill_parent"
     android:layout_weight="1"
     android:layout_margin="0dp"
-    android:onClick="onClick"
     android:src="@drawable/redo" />
 
 <de.sudoq.view.SquareImageButton
@@ -36,7 +34,6 @@ android:paddingTop="5dp">
     android:layout_height="fill_parent"
     android:layout_weight="1"
     android:layout_margin="0dp"
-    android:onClick="onClick"
     android:src="@drawable/gesture_button_selector" />
 
 </LinearLayout>

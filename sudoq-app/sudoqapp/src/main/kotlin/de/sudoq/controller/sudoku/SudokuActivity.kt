@@ -447,7 +447,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
         panel =
             supportFragmentManager.findFragmentById(R.id.controlPanelFragment) as ControlPanelFragment
         panel!!.initialize()
-        panel!!.inflateButtons()
+        //panel!!.inflateButtons()
         var currentControlsView: LinearLayout? /* = (LinearLayout) findViewById(R.id.sudoku_time_border);
 		FieldViewPainter.getInstance().setMarking(currentControlsView, FieldViewStates.CONTROLS);*/
         currentControlsView = findViewById(R.id.sudoku_border)

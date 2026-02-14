@@ -89,7 +89,7 @@ class UserInteractionMediator(
 
     override fun onCellSelected(view: SudokuCellView, e: SelectEvent) {
         if (!game.isFinished()) {
-            if (profileManager.isGestureActive) {
+            if (game.gameSettings.isGesturesSet) {
                 cellSelectedGestureMode(view, e)
             } else {
                 cellSelectedNumPadMode(view, e)
@@ -123,7 +123,7 @@ class UserInteractionMediator(
     }
 
     private fun cellSelectedGestureMode(view: SudokuCellView, e: SelectEvent) {
-        var currentCellView = requireNotNull(sudokuView.currentCellView)
+        var currentCellView = sudokuView.currentCellView ?: return //kann in randfällen null sein
         val currentCell: Cell
         /* select for the first time -> set a solution */
         val freshlySelected = currentCellView != view

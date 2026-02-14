@@ -16,7 +16,7 @@
         android:orientation="vertical" >
         <include layout="@layout/toolbar"/>
 
-        <!--whole SudokuField TODO move to own file -->
+        <!--whole Sudoku Board TODO move to own file -->
         <LinearLayout
             android:id="@+id/sudoku_border"
             android:layout_width="fill_parent"
@@ -46,9 +46,8 @@
             android:id="@+id/controlPanelFragment"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="2.5" >
+            android:layout_weight="2.5">
         </fragment>
-
 
     </LinearLayout>
 

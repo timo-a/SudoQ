@@ -16,7 +16,7 @@
         android:orientation="vertical" >
         <include layout="@layout/toolbar"/>
 
-        <!--whole SudokuCell-->
+        <!--whole Sudoku Board -->
         <LinearLayout
             android:id="@+id/sudoku_border"
             android:layout_width="fill_parent"
@@ -41,7 +41,6 @@
             android:orientation="vertical"
             android:background="@color/red" /--> <!-- drawable/background_serious" -->
 
-
         <!-- controll panel -->
         <fragment
             android:name="de.sudoq.controller.sudoku.ControlPanelFragment"
@@ -49,7 +48,6 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="2.5">
-
         </fragment>
 
     </LinearLayout>

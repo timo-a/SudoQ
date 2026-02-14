@@ -28,7 +28,6 @@ android:background="#282828" >
             android:layout_height="1dp"
             android:layout_weight="1"
             android:layout_margin="0dp"
-            android:onClick="onClick"
             android:src="@drawable/help" />
 
         <de.sudoq.view.SquareImageButton
@@ -39,7 +38,6 @@ android:background="#282828" >
             android:layout_height="1dp"
             android:layout_weight="1"
             android:layout_margin="0dp"
-            android:onClick="onClick"
             android:src="@drawable/action_tree" />
     </LinearLayout>
 
@@ -59,7 +57,6 @@ android:background="#282828" >
             android:layout_height="1dp"
             android:layout_weight="1"
             android:layout_margin="0dp"
-            android:onClick="onClick"
             android:src="@drawable/undo" />
 
         <de.sudoq.view.SquareImageButton
@@ -70,7 +67,6 @@ android:background="#282828" >
             android:layout_height="1dp"
             android:layout_weight="1"
             android:layout_margin="0dp"
-            android:onClick="onClick"
             android:src="@drawable/redo" />
 
         <de.sudoq.view.SquareImageButton
@@ -81,7 +77,6 @@ android:background="#282828" >
             android:layout_height="1dp"
             android:layout_weight="1"
             android:layout_margin="0dp"
-            android:onClick="onClick"
             android:src="@drawable/gesture_button_selector" />
 
     </LinearLayout>
