@@ -97,8 +97,7 @@ class GestureBuilder : SudoqCompatActivity(), OnGesturePerformedListener, InputL
         super.onCreate(savedInstanceState)
         setContentView(R.layout.gesturebuilder)
         createSymbol(currentSymbolSet)
-        virtualKeyboard =
-            findViewById<View>(R.id.gesture_builder_virtual_keyboard) as VirtualKeyboardLayout
+        virtualKeyboard = findViewById<VirtualKeyboardLayout>(R.id.gesture_builder_virtual_keyboard)
         inflateGestures()
         refreshKeyboard()
         onBackPressedDispatcher.addCallback(this, backCallback)
@@ -138,7 +137,7 @@ class GestureBuilder : SudoqCompatActivity(), OnGesturePerformedListener, InputL
         gestureOverlay!!.background.alpha = 127
         gestureOverlay!!.visibility = View.INVISIBLE
         gestureOverlay!!.gestureStrokeType = GestureOverlayView.GESTURE_STROKE_TYPE_MULTIPLE
-        val frameLayout = findViewById<View>(R.id.gesture_builder_layout) as FrameLayout
+        val frameLayout = findViewById<FrameLayout>(R.id.gesture_builder_layout)
         frameLayout.addView(gestureOverlay)
     }
 
@@ -151,12 +150,7 @@ class GestureBuilder : SudoqCompatActivity(), OnGesturePerformedListener, InputL
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_delete_all_gestures -> {
-                val gestures = gestureStore.gestureEntries
-                val gestureIterator = gestures.iterator()
-                while (gestureIterator.hasNext()) {
-                    val gestureName = gestureIterator.next() as String
-                    gestureIterator.remove()
-                }
+                gestureStore.gestureEntries.forEach(gestureStore::removeEntry)
                 saveGestures()
                 refreshKeyboard()
             }
@@ -193,13 +187,11 @@ class GestureBuilder : SudoqCompatActivity(), OnGesturePerformedListener, InputL
      * Markiert die Tasten der Tastatur so, dass alle Tasten mit Symbolen, für die bereits Gesten existieren Gelb markiert sind.
      */
     private fun markAlreadyCapturedSymbols() {
-        val gestures = gestureStore.gestureEntries
-        for (sym in currentSymbolSet)
-            if (gestures.contains(sym))
-                virtualKeyboard!!.markCell(
-                    getInstance().getAbstract(sym),
-                    CellViewStates.SELECTED_NOTE
-                )
+        val gestures = gestureStore.gestureEntries.toSet()
+        currentSymbolSet
+            .filter(gestures::contains)
+            .map(getInstance()::getAbstract)
+            .forEach { symInt -> virtualKeyboard!!.markCell(symInt, CellViewStates.SELECTED_NOTE) }
     }
 
     /**
