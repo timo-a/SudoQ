@@ -12,6 +12,7 @@ import android.gesture.GestureStore
 import android.graphics.Bitmap.CompressFormat
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.Gravity
 import android.view.Menu
@@ -146,7 +147,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
     /**
      * Der Handler für die Zeit
      */
-    private val timeHandler = Handler()
+    private val timeHandler = Handler(Looper.getMainLooper())
     //TODO this.finished vs game.finished, which is what
     /**
      * Zeigt an, dass dieses Spiel beendet wurde
@@ -541,11 +542,18 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
      * Wird aufgerufen, falls die Activity terminiert.
      */
     override fun finish() {
-        if (game != null) {
-            gameManager.save(game!!)
-        }
         super.finish()
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            overrideActivityTransition(
+                OVERRIDE_TRANSITION_CLOSE,
+                android.R.anim.fade_in,
+                android.R.anim.fade_out
+            )
+        } else {
+            // Fallback for older devices (Suppressing warning is idiomatic for backward compatibility)
+            @Suppress("DEPRECATION")
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        }
     }
 
     fun setModeHint() {
@@ -621,25 +629,14 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
      * Gibt an, ob der Spieler aufgegeben hat
      */
     private fun showWinDialog(surrendered: Boolean) {
-        val deleteAlert = AlertDialog.Builder(this).create()
-        deleteAlert.setTitle(
-            if (surrendered)
-                getString(R.string.dialog_surrender_title)
-            else
-                getString(R.string.dialog_won_title)
-        )
+        val deleteAlert = AlertDialog.Builder(this)
+            .setTitle(if (surrendered) R.string.dialog_surrender_title else R.string.dialog_won_title)
+            .setMessage("${getString(R.string.dialog_won_text)}\n\n$statisticsString")
+            .setPositiveButton(getString(R.string.dialog_yes)) { _, _ -> finish()}
+            .setNegativeButton(getString(R.string.dialog_no)) { dialog, _ -> dialog.dismiss()}
+            .setCancelable(false)
+            .create()
 
-        deleteAlert.setMessage(
-            """
-            ${getString(R.string.dialog_won_text)}
-            
-            $statisticsString
-            """.trimIndent()
-        )
-        deleteAlert.setButton(getString(R.string.dialog_yes)) { dialog, which -> finish() }
-        deleteAlert.setButton2(getString(R.string.dialog_no)) { dialog, which ->
-            // Dummy: clicking no means staying in the game
-        }
         deleteAlert.show()
     }
 
@@ -649,7 +646,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
      * @return Die Spielstatistik als String
      */
     private val statisticsString: String
-        private get() = """
+        get() = """
              ${getString(R.string.dialog_won_statistics)}:
              
              ${getString(R.string.dialog_won_timeneeded)}: $gameTimeString
