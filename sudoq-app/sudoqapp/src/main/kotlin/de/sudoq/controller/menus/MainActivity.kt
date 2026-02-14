@@ -7,6 +7,7 @@
  */
 package de.sudoq.controller.menus
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -35,9 +36,8 @@ class MainActivity : SudoqCompatActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //Toast.makeText(this, "onCreate", Toast.LENGTH_LONG).show();
         setContentView(R.layout.mainmenu)
-        val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         val ab = supportActionBar
         ab!!.setHomeAsUpIndicator(R.drawable.launcher)
@@ -52,11 +52,10 @@ class MainActivity : SudoqCompatActivity() {
      */
     public override fun onResume() {
         super.onResume()
-        //Toast.makeText(this, "onResume", Toast.LENGTH_LONG).show();
-        val continueButton = findViewById<View>(R.id.button_mainmenu_continue) as Button
+        val continueButton = findViewById<Button>(R.id.button_mainmenu_continue)
         continueButton.isEnabled = profile.hasCurrentGame()
 
-        val loadButton = findViewById<View>(R.id.button_mainmenu_load_sudoku) as Button
+        val loadButton = findViewById<Button>(R.id.button_mainmenu_load_sudoku)
         //loadButton.setEnabled(!gm.getGameList().isEmpty());
         loadButton.isEnabled = true
     }
@@ -76,8 +75,12 @@ class MainActivity : SudoqCompatActivity() {
             }
             R.id.button_mainmenu_continue -> {
                 val continueSudokuIntent = Intent(this, SudokuActivity::class.java)
-                startActivity(continueSudokuIntent)
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                val options = ActivityOptions.makeCustomAnimation(
+                    this,
+                    android.R.anim.fade_in,
+                    android.R.anim.fade_out
+                )
+                startActivity(continueSudokuIntent, options.toBundle())
             }
             R.id.button_mainmenu_load_sudoku -> {
                 val loadSudokuIntent = Intent(this, SudokuLoadingActivity::class.java)
@@ -88,8 +91,5 @@ class MainActivity : SudoqCompatActivity() {
                 startActivity(preferencesIntent)
             }
         }
-    }
-
-    companion object {
     }
 }

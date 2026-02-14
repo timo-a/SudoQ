@@ -7,6 +7,7 @@
  */
 package de.sudoq.controller.menus
 
+import android.app.ActivityOptions
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.res.Configuration
@@ -156,8 +157,12 @@ class SudokuLoadingActivity : SudoqListActivity(), OnItemClickListener, OnItemLo
             val game = adapter.getItem(position)
             if (game != null) {
                 profileManager.currentGame = game.id
-                startActivity(Intent(this, SudokuActivity::class.java))
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                val options = ActivityOptions.makeCustomAnimation(
+                    this,
+                    android.R.anim.fade_in,
+                    android.R.anim.fade_out
+                )
+                startActivity(Intent(this, SudokuActivity::class.java), options.toBundle())
             }
         } else {
             adapter.toggleSelection(position)

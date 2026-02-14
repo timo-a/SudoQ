@@ -7,6 +7,7 @@
  */
 package de.sudoq.controller.menus
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
@@ -30,7 +31,6 @@ import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.persistence.sudoku.SudokuRepoProvider
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 /**
  * SudokuPreferences ermöglicht das Verwalten von Einstellungen eines zu
@@ -185,8 +185,12 @@ class NewSudokuActivity : SudoqCompatActivity() {
                     sudokuRepoProvider)
                 profileManager.currentGame = game.id
                 profileManager.saveChanges()
-                startActivity(Intent(this, SudokuActivity::class.java))
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                val options = ActivityOptions.makeCustomAnimation(
+                    this,
+                    android.R.anim.fade_in,
+                    android.R.anim.fade_out
+                )
+                startActivity(Intent(this, SudokuActivity::class.java), options.toBundle())
             } catch (e: IllegalArgumentException) {
                 Log.e(LOG_TAG, "exception: $e")
                 Toast.makeText(
