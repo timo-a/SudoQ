@@ -13,22 +13,32 @@ import androidx.fragment.app.Fragment
 import de.sudoq.R
 import de.sudoq.model.game.Game
 import de.sudoq.model.game.GameSettings
-import de.sudoq.view.SudokuLayout
 
-/**
- * Created by timo on 04.11.16.
- */
 class ControlPanelFragment : Fragment() {
-    private lateinit var activity: SudokuActivity
-    private lateinit var sl: SudokuLayout
     private lateinit var game: Game
     private lateinit var controller: SudokuController
     private lateinit var gameSettings: GameSettings
 
+    // Buttons
+    private var redoButton: ImageButton? = null
+    private var undoButton: ImageButton? = null
+    private var actionTreeButton: ImageButton? = null
+    var gestureButton: ImageButton? = null
+        private set
+
+        /**
+         * Der "Hilfestellungen anzeigen" Button
+         */
+    private var assistancesButton: ImageButton? = null
+    private var bookmarkButton: Button? = null
+
+        /**
+         * Der "Schließen" Button des ActionTrees
+         */
+    private var closeButton: Button? = null
 
     fun initialize() {
-        activity = getActivity() as SudokuActivity
-        sl = activity.sudokuLayout!!
+        val activity = requireActivity() as SudokuActivity
         game = activity.game!!
         controller = activity.sudokuController!!
         gameSettings = game.gameSettings
@@ -39,65 +49,23 @@ class ControlPanelFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val frameLayout = FrameLayout(getActivity()!!)
+        val frameLayout = FrameLayout(requireActivity())
         populateViewForOrientation(inflater, frameLayout)
         return frameLayout
     }
 
-    /**
-     * Container-Klasse für die Buttons dieser Activity
-     */
-    private object Buttons {
-        /**
-         * Der "Redo" Button
-         */
-        var redoButton: ImageButton? = null
 
-        /**
-         * Der "Undo" Button
-         */
-        var undoButton: ImageButton? = null
+    fun inflateButtons(root: ViewGroup) {
+        val sudokuActivity = requireActivity() as SudokuActivity
 
-        /**
-         * Der "ActionTree anzeigen" Button
-         */
-        var actionTreeButton: ImageButton? = null
-
-        /**
-         * Der "Gesten umschalten" Button
-         */
-        var gestureButton: ImageButton? = null
-
-        /**
-         * Der "Hilfestellungen anzeigen" Button
-         */
-        var assistancesButton: ImageButton? = null
-
-        /**
-         * Der "Lesezeichen" Button des ActionTrees
-         */
-        var bookmarkButton: Button? = null
-
-        /**
-         * Der "Schließen" Button des ActionTrees
-         */
-        var closeButton: Button? = null
-    }
-
-    fun inflateButtons() {
-        Buttons.redoButton = view!!.findViewById<View>(R.id.button_sudoku_redo) as ImageButton
-        Buttons.undoButton = view!!.findViewById<View>(R.id.button_sudoku_undo) as ImageButton
-        Buttons.actionTreeButton =
-            view!!.findViewById<View>(R.id.button_sudoku_actionTree) as ImageButton
-        Buttons.gestureButton =
-            view!!.findViewById<View>(R.id.button_sudoku_toggle_gesture) as ImageButton
-        Buttons.assistancesButton =
-            view!!.findViewById<View>(R.id.button_sudoku_help) as ImageButton
-        val activity = getActivity() as SudokuActivity
-        Buttons.bookmarkButton =
-            activity.findViewById<View>(R.id.sudoku_action_tree_button_bookmark) as Button
-        Buttons.closeButton =
-            activity.findViewById<View>(R.id.sudoku_action_tree_button_close) as Button
+        redoButton = root.findViewById<ImageButton>(R.id.button_sudoku_redo)
+        undoButton = root.findViewById<ImageButton>(R.id.button_sudoku_undo)
+        actionTreeButton = root.findViewById<ImageButton>(R.id.button_sudoku_actionTree)
+        gestureButton = root.findViewById<ImageButton>(R.id.button_sudoku_toggle_gesture)
+        assistancesButton = root.findViewById<ImageButton>(R.id.button_sudoku_help)
+        // todo what are they doing here? They belong in the action tree overlay.
+        bookmarkButton = sudokuActivity.findViewById<Button>(R.id.sudoku_action_tree_button_bookmark)
+        closeButton = sudokuActivity.findViewById<Button>(R.id.sudoku_action_tree_button_close)
     }
 
     /**
@@ -105,97 +73,111 @@ class ControlPanelFragment : Fragment() {
      * sowie die Tastatur
      */
     fun updateButtons() {
-        val activity = getActivity() as SudokuActivity
-        val actionTreeShown = activity.isActionTreeShown
-        val finished = activity.finished
-        Buttons.redoButton!!.isEnabled = game.stateHandler.canRedo() && !actionTreeShown
-        Buttons.undoButton!!.isEnabled = game.stateHandler.canUndo() && !actionTreeShown
-        Buttons.actionTreeButton!!.isEnabled = !actionTreeShown
-        Buttons.assistancesButton!!.isEnabled = !actionTreeShown && !finished
-        Buttons.gestureButton!!.isEnabled = !actionTreeShown
-        val sudokuView = sl
-        activity.mediator!!.setKeyboardState(!finished && sudokuView.currentCellView != null)
+        val sudokuActivity = activity as? SudokuActivity ?: return
+        val actionTreeShown = sudokuActivity.isActionTreeShown
+        val finished = sudokuActivity.finished
+        redoButton?.isEnabled = game.stateHandler.canRedo() && !actionTreeShown
+        undoButton?.isEnabled = game.stateHandler.canUndo() && !actionTreeShown
+        actionTreeButton?.isEnabled = !actionTreeShown
+        assistancesButton?.isEnabled = !actionTreeShown && !finished
+        gestureButton?.isEnabled = !actionTreeShown
+        sudokuActivity.mediator?.setKeyboardState(!finished && sudokuActivity.currentCellView != null)
     }
 
-    val gestureButton: ImageButton?
-        get() = Buttons.gestureButton
-
     fun onClick(v: View) {
-        val activity = getActivity() as SudokuActivity
-        val sudokuController = controller
-        val mediator = activity.mediator
-        if (v === Buttons.undoButton) {
-            sudokuController.onUndo()
-            mediator!!.updateKeyboard()
-        } else if (v === Buttons.redoButton) {
-            sudokuController.onRedo()
-            mediator!!.updateKeyboard()
-        } else if (v === Buttons.actionTreeButton) {
-            activity.toogleActionTree()
-        } else if (v === Buttons.gestureButton) {
-            if (activity.checkGesture()) {
-                /* toggle 'gesture active'
-				 * toggle button icon as well */
-                gameSettings.isGesturesSet = !gameSettings.isGesturesSet
-                v.setSelected(gameSettings.isGesturesSet)
-                activity.updateBackPressState()
-            } else {
-                gameSettings.isGesturesSet = false
-                v.setSelected(false)
-                Toast.makeText(
-                    activity,
-                    getString(R.string.error_gestures_not_complete),
-                    Toast.LENGTH_LONG
-                ).show()
+        val sudokuActivity = requireActivity() as SudokuActivity
+        val mediator = sudokuActivity.mediator
+        when (v) {
+            undoButton -> {
+                controller.onUndo()
+                mediator!!.updateKeyboard()
             }
-        } else if (v === Buttons.assistancesButton) {
-            activity.showAssistancesDialog()
-        } else if (v === Buttons.bookmarkButton) {
-            game.markCurrentState()
-            activity.actionTreeController!!.refresh()
-        } else if (v === Buttons.closeButton) {
-            activity.toogleActionTree()
+            redoButton -> {
+                controller.onRedo()
+                mediator!!.updateKeyboard()
+            }
+            actionTreeButton, closeButton -> {
+                sudokuActivity.toogleActionTree()
+            }
+            gestureButton -> {
+                if (sudokuActivity.checkGesture()) {
+                    /* toggle 'gesture active'
+                     * toggle button icon as well */
+                    gameSettings.isGesturesSet = !gameSettings.isGesturesSet
+                    v.isSelected = gameSettings.isGesturesSet
+                    sudokuActivity.updateBackPressState()
+                } else {
+                    gameSettings.isGesturesSet = false
+                    v.isSelected = false
+                    Toast.makeText(
+                        activity,
+                        getString(R.string.error_gestures_not_complete),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+            assistancesButton -> {
+                sudokuActivity.showAssistancesDialog()
+            }
+            bookmarkButton -> {
+                game.markCurrentState()
+                sudokuActivity.actionTreeController!!.refresh()
+            }
         }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        val inflater = LayoutInflater.from(getActivity())
+        val inflater = LayoutInflater.from(activity)
         populateViewForOrientation(inflater, view as ViewGroup?)
     }
 
     private fun populateViewForOrientation(inflater: LayoutInflater, viewGroup: ViewGroup?) {
-        val activity = getActivity() as SudokuActivity
-        game = activity.game!!
+        val sudokuActivity = requireActivity() as SudokuActivity
+        game = sudokuActivity.game!!
         viewGroup!!.removeAllViewsInLayout()
         val conf = resources.configuration
-        val portraitLeft =
-            conf.orientation == Configuration.ORIENTATION_PORTRAIT && game.isLefthandedModeActive
-        val layout = if (portraitLeft) R.layout.bottom_panel_left else R.layout.bottom_panel
+        // there is only a left handed version for Portrait
+        val portraitLeft = conf.orientation == Configuration.ORIENTATION_PORTRAIT
+                && game.isLefthandedModeActive
+        val layout = if (portraitLeft)
+            R.layout.bottom_panel_left
+        else
+            R.layout.bottom_panel
         val subview = inflater.inflate(layout, viewGroup)
 
         // Find your buttons in subview, set up onclicks, set up callbacks to your parent fragment or activity here.
+
+        inflateButtons(viewGroup)
+
+        val clickListener = View.OnClickListener { v -> onClick(v) }
+
+        undoButton?.setOnClickListener(clickListener)
+        redoButton?.setOnClickListener(clickListener)
+        actionTreeButton?.setOnClickListener(clickListener)
+        gestureButton?.setOnClickListener(clickListener)
+        assistancesButton?.setOnClickListener(clickListener)
+
+        updateButtons()
     }
 
-    //sl.find... doesn't seem to work
-    private val controlPanel: View
-        private get() {
-            val conf = resources.configuration
-            val portraitLeft =
-                conf.orientation == Configuration.ORIENTATION_PORTRAIT && game.isLefthandedModeActive
-            return activity.findViewById(
-                if (portraitLeft)
-                    R.id.controlPanelLeft //sl.find... doesn't seem to work
-                else
-                    R.id.controlPanel
-            )
-        }
-
     fun hide() {
-        controlPanel.visibility = View.GONE
+        view?.visibility = View.GONE
     }
 
     fun show() {
-        controlPanel.visibility = View.VISIBLE
+        view?.visibility = View.VISIBLE
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // Clean up references to views when the fragment view is destroyed
+        redoButton = null
+        undoButton = null
+        actionTreeButton = null
+        gestureButton = null
+        assistancesButton = null
+        bookmarkButton = null
+        closeButton = null
     }
 }
