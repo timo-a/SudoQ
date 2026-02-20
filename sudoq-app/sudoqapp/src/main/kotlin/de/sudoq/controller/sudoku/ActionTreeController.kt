@@ -132,8 +132,8 @@ class ActionTreeController(
         relativeLayout = ActionTreeLayout(context)
 
         // Setting active element
-        active = context.game!!.stateHandler.currentState
-        val root = context.game!!.stateHandler.actionTree.root
+        active = context.game.stateHandler.currentState
+        val root = context.game.stateHandler.actionTree.root
 
         // Get screen orientation
         orientation = context.resources.configuration.orientation
@@ -318,14 +318,14 @@ class ActionTreeController(
      * {@inheritDoc}
      */
     override fun onHoverTreeElement(ate: ActionTreeElement) {
-        context.game!!.goToState(ate)
+        context.game.goToState(ate)
     }
 
     /**
      * {@inheritDoc}
      */
     override fun onLoadState(ate: ActionTreeElement) {
-        context.game!!.goToState(ate)
+        context.game.goToState(ate)
     }
 
     /**
@@ -389,7 +389,7 @@ class ActionTreeController(
      * Wird geworfen, falls der übergebene Context null ist
      */
     init {
-        this.context.game!!.stateHandler.registerListener(this)
+        this.context.game.stateHandler.registerListener(this)
         actionTreeLayout =
             context.findViewById<View>(R.id.sudoku_action_tree_layout) as RelativeLayout
         actionTreeScroll =

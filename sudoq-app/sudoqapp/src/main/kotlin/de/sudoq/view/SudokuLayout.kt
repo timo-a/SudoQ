@@ -38,7 +38,7 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
     /**
      * Das Game, welches diese Anzeige verwaltet
      */
-    private val game: Game = (context as SudokuActivity).game!!
+    private val game: Game = (context as SudokuActivity).game
 
     /**
      * Die Standardgröße eines Feldes

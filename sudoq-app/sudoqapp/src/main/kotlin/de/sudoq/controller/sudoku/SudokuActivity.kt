@@ -113,7 +113,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
     /**
      * Das Game, auf welchem gerade gespielt wird
      */
-    var game: Game? = null
+    lateinit var game: Game
         private set
 
     /**
@@ -184,7 +184,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
     }
     /** Methods  */
     private fun initializeSymbolSet() {
-        currentSymbolSet = when (game!!.sudoku.sudokuType.numberOfSymbols) {
+        currentSymbolSet = when (game.sudoku.sudokuType.numberOfSymbols) {
             4 -> Symbol.MAPPING_NUMBERS_FOUR
             6 -> Symbol.MAPPING_NUMBERS_SIX
             9 -> Symbol.MAPPING_NUMBERS_NINE
@@ -219,64 +219,62 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
             game = gameManager.load(profileManager.currentGame)
         }
 
-        if (game != null) {
+        /* Determine how many numbers are needed. 1-9 or 1-16 ? */
+        initializeSymbolSet()
+        setContentView(if (game.isLefthandedModeActive) R.layout.sudoku_for_lefties else R.layout.sudoku)
+        val toolbar =
+            findViewById<Toolbar>(R.id.toolbar) //TODO subclass and put time, ... in it
+        setSupportActionBar(toolbar)
+        //todo the controller only needs the current profile, which is fix for the current game, but profilemanager does not give it out. does profilemanager need to wrap the profile?
+        sudokuController = SudokuController(game, this, profileManager.currentProfile.statistics)
+        actionTreeController = ActionTreeController(this)
+        Log.d(LOG_TAG, "Initialized")
+        inflateViewAndButtons()
+        Log.d(LOG_TAG, "Inflated view and control_panel")
+        inflateGestures(savedInstanceState == null)
+        Log.d(LOG_TAG, "Inflated gestures")
+        // Scale SudokuView to LayoutSize, when inflating view is finished
+        val vto = sudokuLayout!!.viewTreeObserver
+        vto.addOnGlobalLayoutListener(MyGlobalLayoutListener(this, savedInstanceState))
+        val keyboardView = findViewById<VirtualKeyboardLayout>(R.id.virtual_keyboard)
+        mediator = UserInteractionMediator(
+            keyboardView,
+            sudokuLayout!!,
+            game,
+            gestureOverlay!!,
+            gestureStore,
+            profileManager
+        )
+        mediator!!.registerListener(sudokuController!!)
+        mediator!!.registerListener(this)
+        if (game.isFinished()) {
+            setFinished(showWinDialog = false, surrendered = false)
+        } else {
+            //find the current cell from when the game was saved and mark it selected
+            val lastAction = game.currentState.action
 
-            /* Determine how many numbers are needed. 1-9 or 1-16 ? */
-            initializeSymbolSet()
-            setContentView(if (game!!.isLefthandedModeActive) R.layout.sudoku_for_lefties else R.layout.sudoku)
-            val toolbar =
-                findViewById<Toolbar>(R.id.toolbar) //TODO subclass and put time, ... in it
-            setSupportActionBar(toolbar)
-            //todo the controller only needs the current profile, which is fix for the current game, but profilemanager does not give it out. does profilemanager need to wrap the profile?
-            sudokuController = SudokuController(game!!, this, profileManager.currentProfile.statistics)
-            actionTreeController = ActionTreeController(this)
-            Log.d(LOG_TAG, "Initialized")
-            inflateViewAndButtons()
-            Log.d(LOG_TAG, "Inflated view and control_panel")
-            inflateGestures(savedInstanceState == null)
-            Log.d(LOG_TAG, "Inflated gestures")
-            // Scale SudokuView to LayoutSize, when inflating view is finished
-            val vto = sudokuLayout!!.viewTreeObserver
-            vto.addOnGlobalLayoutListener(MyGlobalLayoutListener(this, savedInstanceState))
-            val keyboardView = findViewById<VirtualKeyboardLayout>(R.id.virtual_keyboard)
-            mediator = UserInteractionMediator(
-                keyboardView,
-                sudokuLayout!!,
-                game!!,
-                gestureOverlay!!,
-                gestureStore,
-                profileManager
-            )
-            mediator!!.registerListener(sudokuController!!)
-            mediator!!.registerListener(this)
-            if (game!!.isFinished()) {
-                setFinished(showWinDialog = false, surrendered = false)
-            } else {
-                //find the current cell from when the game was saved and mark it selected
-                val lastAction = game!!.currentState.action
-
-                fun getCellView(cellId: Int): SudokuCellView {
-                    val currentPosition = game!!.sudoku.getPosition(cellId)
-                    return sudokuLayout!!.getSudokuCellView(currentPosition)
-                }
-
-                when (lastAction) {
-                    // if no action
-                    is ActionTree.MockAction -> { /* */}
-                    is SolveAction -> {
-                        val currentCellView = getCellView(lastAction.cell.id)
-                        currentCellView.programmaticallySelectShort()}
-                    is NoteAction -> {
-                        val currentCellView = getCellView(lastAction.cell.id)
-                        currentCellView.programmaticallySelectLong()}
-                    else -> Log.e("GAME_RESTORE", "last action of unknown type")
-                }
-
+            fun getCellView(cellId: Int): SudokuCellView {
+                val currentPosition = game.sudoku.getPosition(cellId)
+                return sudokuLayout!!.getSudokuCellView(currentPosition)
             }
-            setTypeText()
-            updateButtons()
-            panel!!.gestureButton!!.isSelected = profileManager.isGestureActive
+
+            when (lastAction) {
+                // if no action
+                is ActionTree.MockAction -> { /* */}
+                is SolveAction -> {
+                    val currentCellView = getCellView(lastAction.cell.id)
+                    currentCellView.programmaticallySelectShort()}
+                is NoteAction -> {
+                    val currentCellView = getCellView(lastAction.cell.id)
+                    currentCellView.programmaticallySelectLong()}
+                else -> Log.e("GAME_RESTORE", "last action of unknown type")
+            }
+
         }
+        setTypeText()
+        updateButtons()
+        panel!!.gestureButton!!.isSelected = profileManager.isGestureActive
+
         onBackPressedDispatcher.addCallback(this, backCallback)
     }
 
@@ -331,13 +329,13 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
             sudokuScrollView!!.getScrollValueY() - sudokuLayout!!.currentTopMargin
         )
         outState.putBoolean(SAVE_ACTION_TREE_SHOWN.toString(), isActionTreeShown)
-        outState.putInt(SAVE_GAME_ID.toString(), game!!.id)
+        outState.putInt(SAVE_GAME_ID.toString(), game.id)
         outState.putBoolean(
             SAVE_GESTURE_ACTIVE.toString(),
             gestureOverlay != null && gestureOverlay!!.visibility == View.VISIBLE
         )
         if (sudokuLayout!!.currentCellView != null) {
-            val position = game!!.sudoku.getPosition(sudokuLayout!!.currentCellView!!.cell.id)
+            val position = game.sudoku.getPosition(sudokuLayout!!.currentCellView!!.cell.id)
             outState.putInt(SAVE_FIELD_X.toString(), position.x)
             outState.putInt(SAVE_FIELD_Y.toString(), position.y)
         } else {
@@ -389,8 +387,8 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
      * Setzt den Text für Typ und Schwierigkeit des aktuellen Sudokus.
      */
     private fun setTypeText() {
-        val type = Utility.type2string(this, game!!.sudoku.sudokuType.enumType)
-        val comp = Utility.complexity2string(this, game!!.sudoku.complexity!!)
+        val type = Utility.type2string(this, game.sudoku.sudokuType.enumType)
+        val comp = Utility.complexity2string(this, game.sudoku.complexity!!)
         val ab = supportActionBar
         ab!!.title = type
         ab.subtitle = comp
@@ -460,7 +458,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
         instance!!.setMarking(currentControlsView, CellViewStates.KEYBOARD)
         val keyboardView = findViewById<VirtualKeyboardLayout>(R.id.virtual_keyboard)
         instance!!.setMarking(keyboardView, CellViewStates.KEYBOARD)
-        keyboardView.refresh(game!!.sudoku.sudokuType.numberOfSymbols)
+        keyboardView.refresh(game.sudoku.sudokuType.numberOfSymbols)
     }
 
     /**
@@ -506,7 +504,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
     public override fun onPause() {
         timeHandler.removeCallbacks(timeUpdate)
         //gameid = 1
-        gameManager.save(game!!)
+        gameManager.save(game)
         //gameid = -1
         val prevZoomFactor = sudokuScrollView!!.zoomFactor
         sudokuLayout!!.isDrawingCacheEnabled = true
@@ -596,7 +594,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
     fun setFinished(showWinDialog: Boolean, surrendered: Boolean) {
         finished = true
         updateButtons()
-        sudokuLayout!!.currentCellView?.select(game!!.isAssistanceAvailable(Assistances.markRowColumn))
+        sudokuLayout!!.currentCellView?.select(game.isAssistanceAvailable(Assistances.markRowColumn))
 
         val keyView = findViewById<VirtualKeyboardLayout>(R.id.virtual_keyboard)
         for (i in 0 until keyView.childCount) {
@@ -612,7 +610,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
     }
 
     private val assistancesTimeString: String
-        get() = getTimeString(game!!.assistancesTimeCost)
+        get() = getTimeString(game.assistancesTimeCost)
 
     /**
      * Gibt die vergangene Zeit als formatierten String zurück.
@@ -620,7 +618,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
      * @return Den String für die Zeitanzeige
      */
     private val gameTimeString: String
-        get() = getTimeString(game!!.time)
+        get() = getTimeString(game.time)
 
     /**
      * Zeigt einen Gewinndialog an, der fragt, ob das Spiel beendet werden soll.
@@ -650,7 +648,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
              ${getString(R.string.dialog_won_statistics)}:
              
              ${getString(R.string.dialog_won_timeneeded)}: $gameTimeString
-             ${getString(R.string.dialog_won_score)}: ${game!!.score}
+             ${getString(R.string.dialog_won_score)}: ${game.score}
              """.trimIndent()
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -669,7 +667,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
      */
     private val timeUpdate: Runnable = object : Runnable {
         override fun run() {
-            game!!.addTime(1)
+            game.addTime(1)
 
             //getSupportActionBar().
             val timeView = findViewById<TextView>(R.id.time)
@@ -762,7 +760,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
 
     /** saves the whole game, purpose: save the action tree so a spontaneous crash doesn't lose us actions record  */
     private fun saveActionTree() {
-        gameManager.save(game!!)
+        gameManager.save(game)
     }
 
     companion object {
