@@ -53,7 +53,7 @@ object HintFormulator {
     }
 
     private fun aCellIsEmpty(sActivity: SudokuActivity): Boolean {
-        val sudoku = sActivity.game!!.sudoku
+        val sudoku = sActivity.game.sudoku
         return sudoku.any { it.isCompletelyEmpty }
     }
 

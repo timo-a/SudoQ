@@ -27,7 +27,7 @@ class AssistancesDialogFragment : DialogFragment() {
         // Use the Builder class for convenient dialog construction
         val activity = activity as SudokuActivity//todo just pass everything via constructor?!
         sl = activity.sudokuLayout
-        game = activity.game!!
+        game = activity.game
         controller = activity.sudokuController
         val itemStack = Stack<CharSequence?>()
         itemStack.addAll(
