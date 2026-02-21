@@ -20,9 +20,9 @@ class SamuraiSolver(s: Sudoku) : FastSolver {
     private fun toArray(s: Sudoku): Array<IntArray> {
         val a = Array(21) { IntArray(21) }
         for (pos in s.sudokuType.validPositions) {
-            val f = s.getCellNullable(pos)
-            if (f != null && f.isSolved) a[pos.y][pos.x] =
-                f.currentValue + 1 //s has values [0,8] so we need to add one.
+            val f = s.getCell(pos)
+            if (f.isSolved)
+                a[pos.y][pos.x] = f.currentValue + 1 //s has values [0,8] so we need to add one.
         }
 
         return a

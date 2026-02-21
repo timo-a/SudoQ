@@ -21,7 +21,7 @@ internal class SudokuBuilderTests {
     private fun testBuildergeneric(t: SudokuTypes) {
         val sudoku = SudokuBuilder(t, str).createSudoku()
         sudoku.sudokuType.validPositions
-            .mapNotNull { sudoku.getCellNullable(it) }
+            .map(sudoku::getCell)
             .`should match all with` { it.currentValue == Cell.EMPTYVAL }
     }
 

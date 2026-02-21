@@ -51,18 +51,17 @@ internal fun mirrorDiagonallyDown(sudoku: Sudoku) {
     val width = sudoku.sudokuType.size.x
     for (i in 0 until width - 1) { // zeilen
         for (j in i + 1 until width) { // zeilenElemente
-            swapCells(
-                sudoku,
-                Position[i, j],
-                Position[j, i]
-            )
+            val a = Position[i, j]
+            val b = Position[j, i]
+            if (sudoku.hasCell(a) && sudoku.hasCell(b))
+                swapCells(sudoku, a, b)
         }
     }
 }
 
 internal fun swapCells(sudoku: Sudoku, a: Position, b: Position) {
-    val tmp = sudoku.getCellNullable(a)
-    sudoku.setCell(sudoku.getCellNullable(b), a)
+    val tmp = sudoku.getCell(a)
+    sudoku.setCell(sudoku.getCell(b), a)
     sudoku.setCell(tmp, b)
 }
 
@@ -142,7 +141,8 @@ private fun swap_columns(sudoku: Sudoku, column1: Int, column2: Int) {
     for (j in 0 until height) {
         val a = Position[column1, j]
         val b = Position[column2, j]
-        swapCells(sudoku, a, b)
+        if (sudoku.hasCell(a) && sudoku.hasCell(b))
+            swapCells(sudoku, a, b)
     }
 }
 

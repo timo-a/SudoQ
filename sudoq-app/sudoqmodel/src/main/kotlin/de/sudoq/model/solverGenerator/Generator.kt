@@ -102,7 +102,7 @@ class Generator(private val sudokuTypeRepo: ReadRepo<SudokuType>) {
                     .map { y -> Position[x, y] }
             }
 
-            return allPositions.filter { sudoku.getCellNullable(it) != null }
+            return allPositions.filter(sudoku::hasCell)
         }
     }
 
