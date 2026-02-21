@@ -1,7 +1,5 @@
 package de.sudoq.model.sudoku
 
-import de.sudoq.model.ModelChangeListener
-import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
@@ -137,28 +135,6 @@ class SudokuTests {
             } else {
                 cell.isEditable.`should be false`()
             }
-        }
-    }
-
-    @Test //todo use mockk
-    fun cellChangeNotification() {
-        val sudokuTypeRepo = SudokuTypeRepo4Tests()
-        val sudoku = SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku()
-        val listener = Listener();
-
-        sudoku.getCell(Position[0, 0]).currentValue = 2
-        listener.callCount `should be` 0
-
-        sudoku.registerListener(listener);
-        sudoku.getCell(Position[3, 2]).currentValue = 5
-        listener.callCount `should be` 1
-   }
-
-    class Listener : ModelChangeListener<Cell> {
-        var callCount : Int = 0;
-
-        override fun onModelChanged(obj: Cell) {
-            callCount++;
         }
     }
 

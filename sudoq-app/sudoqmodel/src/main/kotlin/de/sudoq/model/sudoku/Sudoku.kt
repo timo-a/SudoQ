@@ -7,15 +7,13 @@
  */
 package de.sudoq.model.sudoku
 
-import de.sudoq.model.ModelChangeListener
-import de.sudoq.model.ObservableModelImpl
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 
 /**
  * This class represents a Sudoku with mit seinem Typ, seinen Feldern und seinem Schwierigkeitsgrad.
  */
-open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListener<Cell> {
+open class Sudoku : Iterable<Cell>, AbstractSudoku<Cell> {
 
     /** An ID uniquely identifying the Sudoku */
     var id: Int = 0
@@ -29,9 +27,6 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
     var cells: HashMap<Position, Cell>? = null //todo why isn't this a [PositionMap]?
 
     private var cellPositions: MutableMap<Int, Position>? = null
-
-    /** The Type of the Sudoku */
-    val sudokuType: SudokuType
 
     /** The Complexity of this Sudoku */
     var complexity: Complexity? = null
@@ -49,10 +44,9 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
         type: SudokuType,
         map: PositionMap<Int>? = PositionMap.Builder<Int>(type.size).build(),
         setValues: PositionMap<Boolean>? = PositionMap.Builder<Boolean>(type.size).build()
-    ) {
+    ) : super(type) {
         var cellIdCounter = 1
         cellPositions = HashMap()
-        sudokuType = type
         cells = HashMap()
 
         // iterate over the constraints of the type and create the fields
@@ -72,7 +66,6 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
             }
             cells!![position] = f
             cellPositions!![cellIdCounter++] = position
-            f.registerListener(this)
         }
     }
 
@@ -83,17 +76,14 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
         sudokuType: SudokuType,
         complexity: Complexity,
         cells: HashMap<Position, Cell>
-    ) {
+    ) : super(sudokuType) {
         this.id = id
         this.transformCount = transformCount
-        this.sudokuType = sudokuType
         this.complexity = complexity
         this.cells = cells
 
         cellPositions = HashMap()
         cells.forEach { (pos, c) -> cellPositions!![c.id] = pos }
-
-        cells.values.forEach { cell -> cell.registerListener(this) }
     }
 
     /** increases transform count by one */
@@ -200,15 +190,6 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
                 }
             return allCorrect
         }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    override fun onModelChanged(changedCell: Cell) {
-        notifyListeners(changedCell)
-    }
-
 
     /**
      * {@inheritDoc}
