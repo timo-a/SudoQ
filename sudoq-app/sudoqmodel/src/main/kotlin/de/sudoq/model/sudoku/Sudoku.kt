@@ -47,8 +47,8 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
     @JvmOverloads
     constructor(
         type: SudokuType,
-        map: PositionMap<Int>? = PositionMap(type.size),
-        setValues: PositionMap<Boolean>? = PositionMap(type.size)
+        map: PositionMap<Int>? = PositionMap.Builder<Int>(type.size).build(),
+        setValues: PositionMap<Boolean>? = PositionMap.Builder<Boolean>(type.size).build()
     ) {
         var cellIdCounter = 1
         cellPositions = HashMap()
@@ -56,24 +56,23 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
         cells = HashMap()
 
         // iterate over the constraints of the type and create the fields
-        for (constraint in type) {
-            for (position in constraint) {
-                if (!cells!!.containsKey(position)) {
-                    var f: Cell
-                    val solution = map?.get(position)
-                    f = if (solution != null) {
-                        val editable = setValues == null
-                                || setValues[position] == null
-                                || setValues[position] == false
-                        Cell(editable, solution, cellIdCounter, type.numberOfSymbols)
-                    } else {
-                        Cell(cellIdCounter, type.numberOfSymbols)
-                    }
-                    cells!![position] = f
-                    cellPositions!![cellIdCounter++] = position
-                    f.registerListener(this)
+        type.flatMap(Constraint::getPositions).distinct().forEach { position ->
+             var f: Cell
+             val solution = if (map?.contains(position) == true) map[position] else null
+            f = when {
+                solution != null -> {
+                    val editable = setValues == null
+                            || position !in setValues
+                            || !setValues[position]
+                    Cell(editable, solution, cellIdCounter, type.numberOfSymbols)
+                }
+                else -> {
+                    Cell(cellIdCounter, type.numberOfSymbols)
                 }
             }
+            cells!![position] = f
+            cellPositions!![cellIdCounter++] = position
+            f.registerListener(this)
         }
     }
 

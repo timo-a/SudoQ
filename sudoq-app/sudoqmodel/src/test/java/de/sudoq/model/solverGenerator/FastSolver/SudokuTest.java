@@ -35,7 +35,7 @@ class SudokuTest {
             //System.out.println("Fast finds solution");
             PositionMap<Integer> solution = fs.getSolutions();
             SudokuBuilder sub = new SudokuBuilder(s.getSudokuType());
-			for(Position p : GenerationAlgo.getPositions(s)) {
+            for(Position p : GenerationAlgo.getPositions(s)) {
 			    if (solution.get(p) < 0)
 			        System.out.println("hier");
                 sub.addSolution(p, solution.get(p));//fill in all solutions

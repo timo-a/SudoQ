@@ -4,6 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -14,26 +18,19 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.apache.commons.lang3.NotImplementedException;
-import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-
 import de.sudoq.model.Utility;
 import de.sudoq.model.ports.persistence.ReadRepo;
-import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests;
-import de.sudoq.model.utility.FileManager;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solver.ComplexityRelation;
 import de.sudoq.model.solverGenerator.solver.Solver;
 import de.sudoq.model.solverGenerator.transformations.Transformer;
+import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
+import de.sudoq.model.utility.FileManager;
 
 public class GeneratorTests implements GeneratorCallback {
 
@@ -65,13 +62,15 @@ public class GeneratorTests implements GeneratorCallback {
 
 	@Override
 	public synchronized void generationFinished(Sudoku sudoku) {
-        assertEquals(ComplexityRelation.CONSTRAINT_SATURATION, new Solver(sudoku).validate(null));
+        assertEquals(ComplexityRelation.CONSTRAINT_SATURATION,
+				new Solver(sudoku).validateDeprecated(false).getFirst());
 		this.notifyAll();
 	}
 
 	@Override
 	public synchronized void generationFinished(Sudoku sudoku, List<Solution> s) {
-        assertEquals(ComplexityRelation.CONSTRAINT_SATURATION, new Solver(sudoku).validate(null));
+        assertEquals(ComplexityRelation.CONSTRAINT_SATURATION,
+				new Solver(sudoku).validateDeprecated(false).getFirst());
 		this.notifyAll();
 	}
 
