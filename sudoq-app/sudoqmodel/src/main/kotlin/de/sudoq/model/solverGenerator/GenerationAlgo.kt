@@ -335,7 +335,7 @@ class GenerationAlgo(
         while (p == null && count < xSize * ySize) {
             val x = random.nextInt(xSize)
             val y = random.nextInt(ySize)
-            if (sudoku.getCellNullable(Position[x, y]) == null) { //position existiert nicht
+            if (!sudoku.hasCell(Position[x, y])) { //position existiert nicht
                 markings[x][y] = true
                 count++
             } else if (!markings[x][y]) { //pos existiert und ist unmarkiert
@@ -378,9 +378,9 @@ class GenerationAlgo(
      */
     private fun addDefinedCell2(i: Int = random.nextInt(freeCells.size)) {
         val p = freeCells.removeAt(i) //used to be 0, random just in case
-        val fSudoku = sudoku.getCellNullable(p)//check what positions go into freeCalls
-        val fSolved = solvedSudoku!!.getCellNullable(p)
-        fSudoku!!.setCurrentValue(fSolved!!.solution, false)
+        val fSudoku = sudoku.getCell(p)//check what positions go into freeCalls
+        val fSolved = solvedSudoku!!.getCell(p)
+        fSudoku.setCurrentValue(fSolved.solution, false)
         definedCells.add(p)
     }
 
@@ -441,7 +441,7 @@ class GenerationAlgo(
         @JvmStatic ///todo Generator has same function...
         fun getPositions(sudoku: Sudoku): List<Position> {
             val p: List<Position> = sudoku.sudokuType.validPositions
-                .filter { sudoku.getCellNullable(it) != null } //todo necessary?
+                .filter(sudoku::hasCell) //todo necessary?
                 .toList()
 
             return p

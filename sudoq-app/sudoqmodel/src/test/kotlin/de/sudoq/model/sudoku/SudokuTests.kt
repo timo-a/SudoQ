@@ -88,7 +88,7 @@ class SudokuTests {
     fun getCell() {
         val sudoku = Sudoku(sudokuType99)
         val p12 = Position[1, 2]
-        sudoku.getCellNullable(Position[9, 10]).`should be null`() //because out of board
+        sudoku.hasCell(Position[9, 10]) `should be` false //because out of board
 
         val f = sudoku.getCell(p12)
         f.currentValue = 6

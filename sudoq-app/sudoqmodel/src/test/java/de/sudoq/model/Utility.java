@@ -6,10 +6,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import de.sudoq.model.sudoku.Cell;
 import de.sudoq.model.sudoku.Position;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.utility.FileManager;
@@ -50,10 +48,10 @@ public abstract class Utility {
         StringBuilder sb = new StringBuilder();
         for (int j = 0; j < sudoku.getSudokuType().getSize().getY(); j++) {
             for (int i = 0; i < sudoku.getSudokuType().getSize().getX(); i++) {
-                Cell f = sudoku.getCellNullable(Position.Companion.get(i, j));
+                Position p = Position.Companion.get(i, j);
                 String op;
-                if (f != null){//feld existiert
-                    int value = f.getCurrentValue();
+                if (sudoku.hasCell(p)){//cell exists
+                    int value = sudoku.getCell(p).getCurrentValue();
                     op = value + "";
                     if (value < 10)
                         op = "" + value;
@@ -74,8 +72,8 @@ public abstract class Utility {
     /** returns all positions of non-null Fields of sudoku */
     public static List<Position> getPositionsByRow(Sudoku sudoku){
         return StreamSupport.stream(sudoku.getSudokuType().getValidPositions().spliterator(), false)
-                .filter(p -> sudoku.getCellNullable(p) != null)
-                .collect(Collectors.toList());
+                .filter(sudoku::hasCell)
+                .toList();
     }
 
 

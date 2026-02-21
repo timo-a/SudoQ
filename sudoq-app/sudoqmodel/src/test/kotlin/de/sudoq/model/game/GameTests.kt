@@ -67,7 +67,7 @@ internal class GameTests {
         game.id `should be equal to` 2
         game.stateHandler `should not be` null
         game.sudoku.getCell(Position[8, 8]).currentValue `should be equal to` Cell.EMPTYVAL
-        game.sudoku.getCellNullable(Position[10, 2]) `should be` null
+        game.sudoku.hasCell(Position[10, 2]) `should be` false
         game.assistancesCost `should be equal to` 0
     }
 
@@ -404,7 +404,7 @@ internal class GameTests {
 
         x = (x + 3) % 9
         y = (y + 3) % 9
-        game.solveCell(game.sudoku.getCellNullable(Position[x, y]))
+        game.solveCell(game.sudoku.getCell(Position[x, y]))
 
         for (i in 0..8) {
             game.sudoku.getCell(Position[x, i]).isNoteSet(1) `should be` false

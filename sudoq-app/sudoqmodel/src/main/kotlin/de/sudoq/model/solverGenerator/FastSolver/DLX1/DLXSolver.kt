@@ -104,14 +104,15 @@ open class DLXSolver(s: Sudoku) : FastSolver {
             val dim = s.sudokuType.size
             val sarray = Array<IntArray?>(dim.y) { IntArray(dim.x) }
             for (r in sarray.indices) for (c in sarray[0]!!.indices) {
-                val f = s.getCellNullable(Position[c, r])
-                sarray[r]!![c] = if (f == null)
+                sarray[r]!![c] = if (!s.hasCell(Position[c, r]))
                     -1 //if pos doesn't exist e.g. (9,0) in SamuraiSudoku
-                else
+                else {
+                    val f = s.getCell(Position[c, r])
                     if (f.isSolved)
                         f.currentValue + 1
                     else
                         0
+                }
             }
             return sarray
         }

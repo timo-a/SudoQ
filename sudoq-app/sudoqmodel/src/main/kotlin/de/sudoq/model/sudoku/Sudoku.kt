@@ -114,26 +114,14 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
     }
 
     /**
-     * Returns the [Cell] at the specified [Position].
-     * If the position is not mapped to a cell, null is returned
-     *
-     * @param position Position of the cell
-     * @return Cell at the [Position] or null if it is not mapped to a [Cell].
-     */
-    @Deprecated("use getCell(Position)", ReplaceWith("getCell(position)"))
-    fun getCellNullable(position: Position): Cell? {
-        //todo refactor all calls still using this
-        return cells!![position]
-    }
-
-    /**
      * Returns the [Cell] at the id.
      *
      * @param id ID of the [Cell] to return
-     * @return the [Cell] at the specified id or null of id not found
+     * @return the [Cell] at the specified id
      */
     fun getCell(id: Int): Cell {
-        return getCellNullable(cellPositions!![id]!!)!!
+        val p = cellPositions!!.getValue(id)
+        return getCell(p)
     }
 
     /**
@@ -164,6 +152,16 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
 
         return cells?.get(p) != null
 
+    }
+
+    /**
+     * Checks if the id is mapped to a cell
+     */
+    fun hasCell(pos: Position): Boolean {
+        if (cellPositions == null)
+            return false
+
+        return cells!![pos] != null
     }
 
     /**
@@ -217,19 +215,19 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
      * {@inheritDoc}
      */
     override fun equals(other: Any?): Boolean {
-        if (other != null && other is Sudoku) {
-            val complexityMatch = complexity === other.complexity
-            val typeMatch = sudokuType.enumType === other.sudokuType.enumType
-            var fieldsMatch = true
-            for (f in cells!!.values) {
-                if (!other.hasCell(f.id) || f != other.getCell(f.id)) {
-                    fieldsMatch = false
-                    break
-                }
-            }
-            return complexityMatch && typeMatch && fieldsMatch
+        if (other == null) return false
+        if (other !is Sudoku) return false
+
+        val complexityMatch = complexity === other.complexity
+        val typeMatch = sudokuType.enumType === other.sudokuType.enumType
+        val cellsMatch = cells!!.values.all {
+            c -> other.hasCell(c.id) && c == other.getCell(c.id)
         }
-        return false
+        return complexityMatch && typeMatch && cellsMatch
+    }
+
+    override fun hashCode(): Int {
+        return complexity.hashCode() + sudokuType.enumType.hashCode() + cells!!.hashCode()
     }
 
     /**
@@ -255,12 +253,15 @@ open class Sudoku : ObservableModelImpl<Cell>, Iterable<Cell>, ModelChangeListen
         val NONE = if (sudokuType.numberOfSymbols < 10) " " else "  "
         for (j in 0 until sudokuType.size.y) {
             for (i in 0 until sudokuType.size.x) {
-                val f = getCellNullable(Position[i, j])
+                val position = Position[i, j]
                 var op: String
-                if (f != null) { //feld existiert
-                    val value = f.currentValue
-                    op =
-                        if (value == -1) EMPTY else if (value < 10) OFFSET + value else value.toString() + ""
+                if (hasCell(position)) { //cell exists
+                    val value = getCell(position).currentValue
+                    op = when {
+                        value == -1 -> EMPTY
+                        value < 10 -> OFFSET + value
+                        else -> value.toString() + ""
+                    }
                     sb.append(op)
                 } else {
                     sb.append(NONE)

@@ -39,10 +39,13 @@ object SudokuMockUps {
         val dim = 21
         for (y in 0..<dim) for (x in 0..<dim) {
             val c = pattern[2 * (dim * y + x)]
-            val f = s.getCellNullable(Position[x, y])
-            if (f == null) ; else if (c == '.') {
+            val p = Position[x, y]
+            if (!s.hasCell(p)) {
+                // do nothing
+            } else if (c == '.') {
                 //empty
             } else if (c in '1'..'9') {
+                val f = s.getCell(p)
                 f.currentValue = c.code - '0'.code - 1
             } else throw IllegalArgumentException("parse error")
         }
