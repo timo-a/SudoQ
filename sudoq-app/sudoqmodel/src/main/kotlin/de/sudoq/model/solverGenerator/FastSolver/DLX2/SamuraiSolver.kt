@@ -43,7 +43,7 @@ class SamuraiSolver(s: Sudoku) : FastSolver {
 
     override fun getSolutions(): PositionMap<Int> {
         val solution = samurai.solutions[0]
-        return PositionMap(Position[21, 21], s.sudokuType.validPositions)
+        return PositionMap.Builder<Int>(Position[21, 21]).from(s.sudokuType.validPositions)
         { position: Position -> solution[position.y]!![position.x] - 1 }
     }
 

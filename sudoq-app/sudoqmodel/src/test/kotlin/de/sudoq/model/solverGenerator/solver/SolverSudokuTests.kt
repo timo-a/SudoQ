@@ -109,7 +109,7 @@ internal class SolverSudokuTests {
 
         val candidatesOnTopBranch = sudoku.lastBranch.candidates[firstPos]
         candidatesOnTopBranch `should not be` sudoku.getCurrentCandidates(firstPos)
-        candidatesOnTopBranch!!.isSet(2) `should be` true
+        candidatesOnTopBranch.isSet(2) `should be` true
         candidatesOnTopBranch.isSet(3) `should be` true
 
 
@@ -159,8 +159,11 @@ internal class SolverSudokuTests {
                 var currentCandidate = -1
                 for (i in 0..<sudoku.getCurrentCandidates(p).cardinality()) {
                     currentCandidate = sudoku.getCurrentCandidates(p).nextSetBit(currentCandidate + 1)
-                    for (c in sudoku.constraints[p]!!) for (pos in c) {
-                        sudoku.getCell(pos).currentValue `should not be equal to` currentCandidate
+                    sudoku.constraints[p]
+                        .flatMap(Constraint::getPositions)
+                        .map(sudoku::getCell)
+                        .forEach {
+                            it.currentValue `should not be equal to` currentCandidate
                     }
                 }
             }

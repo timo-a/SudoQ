@@ -1,13 +1,13 @@
 package de.sudoq.model.solverGenerator.FastSolver.BranchAndBound
 
 import de.sudoq.model.solverGenerator.AmbiguityChecker.isAmbiguous
-import de.sudoq.model.sudoku.Sudoku
+import de.sudoq.model.solverGenerator.FastSolver.DLX1.DLXSolver
 import de.sudoq.model.solverGenerator.FastSolver.FastAmbiguityChecker
 import de.sudoq.model.solverGenerator.FastSolver.FastSolver
 import de.sudoq.model.solverGenerator.FastSolver.FastSolverFactory
 import de.sudoq.model.solverGenerator.solver.Solver
-import de.sudoq.model.solverGenerator.FastSolver.DLX1.DLXSolver
 import de.sudoq.model.solverGenerator.utils.PrettyStandard16x16Repo
+import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.complexity.Complexity
 import org.amshove.kluent.`should be true`
 import org.junit.jupiter.api.Test
@@ -35,7 +35,7 @@ class RegressionTestSlow {
         val fast = fs.isAmbiguous
         println("fast ambiguous $fast")
         val solver = Solver(s)
-        val cr = solver.validate(null)
+        val cr = solver.validateDeprecated()
         println("solver validate $cr")
         val dlxsolver: FastSolver = DLXSolver(s)
         val dlx1 = dlxsolver.isAmbiguous

@@ -12,27 +12,18 @@ package de.sudoq.model.sudoku
  * Since the mapping is defined directly over the x,y coordinates it is more efficient than a HashMap or a TreeMap.
  *
  * @param T arbitrary type on which to map positions
- * @property dimension the bounding box dimensions of this positions to map
+ * @param dimension the bounding box dimensions of this positions to map, components must be at least 1
+ * @param values value array of this map
+ * @throws IllegalArgumentException if either dimension component is <= 0
  */
-class PositionMap<T>(private var dimension: Position) : Cloneable {
+class PositionMap<T> private constructor(
+    private var dimension: Position,
+    private val values: Array<Array<T?>> = Array(dimension.x) { arrayOfNulls<Any>(dimension.y) } as Array<Array<T?>>
+) : Cloneable {
 
-    /**
-     * Das Werte-Array dieser PositionMap
-     */
-    var values: Array<Array<T?>>
-
-    /**
-     * Adds the value at the position, an existing mapping will be overwritten
-     *
-     * @param pos [Position] at which to insert the object
-     * @param value the value to insert
-     * @return the previous value at that position or null if there was none
-     */
-    fun put(pos: Position, value: T): T? {
-        require(!(pos.x > dimension.x || pos.y > dimension.y))
-        val ret = values[pos.x][pos.y]
-        values[pos.x][pos.y] = value
-        return ret
+    init {
+        require(dimension.x >= 1) { "dimension.x must be at least 1, but is ${dimension.x}" }
+        require(dimension.y >= 1) { "dimension.y must be at least 1, but is ${dimension.y}" }
     }
 
     /**
@@ -41,38 +32,65 @@ class PositionMap<T>(private var dimension: Position) : Cloneable {
      * @param pos [Position] to query object for
      * @return the object at the specified position or null if there is no mapping
      */
-    operator fun get(pos: Position): T? {//todo can this be made nonnullable?
-        require(pos.x <= dimension.x) { "x coordinate of pos was > " + dimension.x + ": " + pos.x }
-        require(pos.y <= dimension.y) { "y coordinate of pos was > " + dimension.y + ": " + pos.y }
-        assert(pos.x in 0 until dimension.x)
-        assert(pos.y in 0 until dimension.y)
-        return values[pos.x][pos.y]
+    operator fun get(pos: Position): T {
+        require(pos.x in 0 until dimension.x) { "x coordinate of pos out of range [0, ${dimension.x-1}]: ${pos.x}" }
+        require(pos.y in 0 until dimension.y) { "y coordinate of pos out of range [0, ${dimension.y-1}]: ${pos.y}" }
+        return values[pos.x][pos.y]!!
     }
 
     /**
-     * Initialises a new PositionMap for as many Entries as dimension defines.
-     * Size must be at least 1 on both components.
+     * Indicates if there is a value for the specified position.
      *
-     * @param dimension size of the domain
-     * @throws IllegalArgumentException if either dimension component is <= 0
+     * @param pos [Position] to query for
+     * @return true iff the PositionMap has a non null value saved for the parameter [pos]
      */
-    init {
-        require(!(dimension.x < 1 || dimension.y < 1)) { "Specified dimension or one of its components was null." }
-        values = Array(dimension.x) { arrayOfNulls<Any>(dimension.y) } as Array<Array<T?>>
+    operator fun contains(pos: Position): Boolean {
+        require(pos.x in 0 until dimension.x) { "x coordinate of pos out of range [0, ${dimension.x-1}]: ${pos.x}" }
+        require(pos.y in 0 until dimension.y) { "y coordinate of pos out of range [0, ${dimension.y-1}]: ${pos.y}" }
+        return values[pos.x][pos.y] != null
     }
 
-    /**
-     * Creates and populates a PositionMap by applying a mapping function to an iterable of positions.
-     *
-     * @param dimension The dimensions of the map.
-     * @param positions An iterable of [Position]s to populate the map with.
-     * @param mapper A function that takes a [Position] and returns the corresponding value of type T.
-     */
-    constructor(dimension: Position, positions: Iterable<Position>, mapper: (Position) -> T) : this(dimension) {
-        require(positions.count() <= dimension.x * dimension.y) //for samurai there are less positions
-        for (pos in positions) {
-            this.put(pos, mapper(pos))
+    class Builder<T>(private var dimension: Position) {
+
+        /**
+         * The 2D-Array of this PositionMap
+         */
+        var values: Array<Array<T?>>
+
+        init {
+            require(dimension.x >= 1 && dimension.y >= 1) { "Specified dimension or one of its components was null." }
+            values = Array(dimension.x) { arrayOfNulls<Any>(dimension.y) } as Array<Array<T?>>
         }
-    }
 
+        /**
+         * Adds the value at the position, an existing mapping will be overwritten
+         *
+         * @param pos [Position] at which to insert the object
+         * @param value the value to insert
+         */
+        fun put(pos: Position, value: T) {
+            require(!(pos.x > dimension.x || pos.y > dimension.y))
+            values[pos.x][pos.y] = value
+        }
+
+        fun build(): PositionMap<T> {
+            return PositionMap(dimension, values)
+        }
+
+        /**
+         * Creates and populates a PositionMap by applying a mapping function to an iterable of positions.
+         *
+         * @param positions An iterable of [Position]s to populate the map with.
+         * @param mapper A function that takes a [Position] and returns the corresponding value of type T.
+         */
+        fun from(positions: Iterable<Position>, mapper: (Position) -> T): PositionMap<T> {
+
+            require(positions.count() <= dimension.x * dimension.y)
+            //for samurai there are less positions
+            for (pos in positions) {
+                 this.put(pos, mapper(pos))
+            }
+            return build()
+         }
+    }
 }

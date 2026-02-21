@@ -185,8 +185,9 @@ internal class GameTests {
     @Test
     fun help() {
         class SudokuMock : Sudoku(
-            getSudokuType(SudokuTypes.standard9x9, sudokuTypeRepo), PositionMap(Position[9, 9]),
-            PositionMap(Position[9, 9])
+            getSudokuType(SudokuTypes.standard9x9, sudokuTypeRepo),
+            PositionMap.Builder<Int>(Position[9, 9]).build(),
+            PositionMap.Builder<Boolean>(Position[9, 9]).build()
         ) {
             override var isFinished: Boolean = false
                 private set

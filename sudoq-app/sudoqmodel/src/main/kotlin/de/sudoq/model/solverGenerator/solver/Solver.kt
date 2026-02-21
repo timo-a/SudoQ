@@ -215,7 +215,7 @@ open class Solver(sudoku: Sudoku) {
         //todo remove this function, and maybe actions alltogether
         //System.out.println("start of solveAll2");
         //print9x9(sudoku);
-        val copy: PositionMap<Int> = PositionMap(solverSudoku.sudokuType.size, solverSudoku.positions)
+        val copy: PositionMap<Int> = PositionMap.Builder<Int>(solverSudoku.sudokuType.size).from(solverSudoku.positions)
             { p -> solverSudoku.getCell(p).currentValue }
 
         val solved = solveAll(buildDerivation, false, false)
@@ -226,7 +226,7 @@ open class Solver(sudoku: Sudoku) {
         // Restore old state if solutions shall not be applied or if sudoku could not be solved
         if (!applySolutions || !solved) {
             for (p in solverSudoku.positions) {
-                solverSudoku.getCell(p).setCurrentValue(copy[p]!!, false)
+                solverSudoku.getCell(p).setCurrentValue(copy[p], false)
             }
         }
         return solved
@@ -298,13 +298,14 @@ open class Solver(sudoku: Sudoku) {
      * @return Ein ComplexityRelation-Objekt, welches die Constraint-gemäße Lösbarkeit beschreibt
      */
     @Deprecated("this function is currently not used in main and often slow in tests => investigate!")
-    fun validate(solution: PositionMap<Int?>?): ComplexityRelation {
+    fun validateDeprecated(createSolution: Boolean = true): Pair<ComplexityRelation, PositionMap<Int>?> {
         var result = ComplexityRelation.INVALID
         var solved = false
         val ambiguous = false
 
         //map position -> value
-        val copy: PositionMap<Int> = PositionMap(solverSudoku.sudokuType.size, solverSudoku.positions)
+        val copy: PositionMap<Int> = PositionMap.Builder<Int>(solverSudoku.sudokuType.size)
+            .from(solverSudoku.positions)
             { p -> solverSudoku.getCell(p).currentValue }
 
         /////debug
@@ -313,12 +314,13 @@ open class Solver(sudoku: Sudoku) {
         //int r = this.sudoku.getComplexityValue();
         /////debug ende
 
+        val solution = PositionMap.Builder<Int>(solverSudoku.sudokuType.size)
 
         //if a solution is found according to the complexity constraints
         if (solveAll(true, true, false)) {
             solved = true
             // store the correct solution
-            if (solution != null) {
+            if (createSolution) {
                 for (p in solverSudoku.positions) {
                     val curVal = solverSudoku.getCell(p).currentValue
                     solution.put(p, curVal)
@@ -336,8 +338,8 @@ open class Solver(sudoku: Sudoku) {
         //this.sudoku.complexityValue is overwritten by the attempt at finding a second solution
 
         // restore initial state
-        for (p in solverSudoku.positions) solverSudoku.getCell(p)
-            .setCurrentValue(copy[p]!!, false)
+        for (p in solverSudoku.positions)
+            solverSudoku.getCell(p).setCurrentValue(copy[p], false)
 
 
         // depending on the result, return an int
@@ -358,7 +360,13 @@ open class Solver(sudoku: Sudoku) {
         }
 
         // System.out.println(sudoku.getComplexityValue() + "(" + sudoku.getComplexityScore() + ") " + result);
-        return result
+        return Pair(
+            result,
+            if (createSolution)
+                solution.build()
+            else
+                null
+        )
     }
 
     /**
@@ -366,7 +374,7 @@ open class Solver(sudoku: Sudoku) {
      * @return the solutions of the last `solve`-call.
      */
     val solutionsMap: PositionMap<Int>
-        get() = PositionMap(solverSudoku.sudokuType.size, solverSudoku.positions)
+        get() = PositionMap.Builder<Int>(solverSudoku.sudokuType.size).from(solverSudoku.positions)
              { p -> solverSudoku.getCell(p).currentValue }
 
     /**

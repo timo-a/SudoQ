@@ -81,12 +81,12 @@ open class DLXSolver(s: Sudoku) : FastSolver {
 
     override fun getSolutions(): PositionMap<Int> {
         val solution = bothSolutionsForDebugPurposes!![0]
-        val pm: PositionMap<Int> = PositionMap(Position[solution[0].size, solution.size])
+        val pm: PositionMap.Builder<Int> = PositionMap.Builder(Position[solution[0].size, solution.size])
 
         for (r in solution.indices) for (c in solution[0].indices) {
             if (solution[r][c] != -1) pm.put(Position[c, r], solution[r][c] - 1)
         }
-        return pm
+        return pm.build()
     }
 
     private inner class AmbiguousTask : Callable<Any?> {

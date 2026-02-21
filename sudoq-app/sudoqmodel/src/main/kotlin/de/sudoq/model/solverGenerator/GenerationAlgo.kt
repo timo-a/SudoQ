@@ -116,7 +116,7 @@ class GenerationAlgo(
         cellsToDefine = getNumberOfCellsToDefine(sudoku.sudokuType, desiredComplexityConstraint)
 
         //A mapping from position to solution
-        var solution : PositionMap<Int?>
+        var solution : PositionMap<Int>
         val iteration = 0
         //System.out.println("Fields to define: "+fieldsToDefine);
 
@@ -160,7 +160,7 @@ class GenerationAlgo(
         // Create the sudoku template generated before
         val sub = SudokuBuilder(sudoku.sudokuType)
         for (p in getPositions(sudoku))
-            sub.addSolution(p, solution[p]!!) //fill in all solutions
+            sub.addSolution(p, solution[p]) //fill in all solutions
         return sub.createSudoku()
     }
 
