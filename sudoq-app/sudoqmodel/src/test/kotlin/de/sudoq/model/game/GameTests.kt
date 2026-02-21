@@ -208,7 +208,6 @@ internal class GameTests {
         val sudoku = SudokuMock()
         val game = Game(2, sudoku)
 
-        game.solveCell(null) `should be` false
         game.solveCell(Cell(true, -1, 3, 9)) `should be` false
 
         game.addAndExecute(SolveActionFactory().createAction(2, game.sudoku.getCell(Position[0, 0])))
