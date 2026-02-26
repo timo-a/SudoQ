@@ -31,6 +31,7 @@ open class Sudoku : Iterable<Cell>, AbstractSudoku<Cell> {
     /** The Complexity of this Sudoku */
     var complexity: Complexity? = null
 
+    constructor(type: SudokuType) : this(type, PositionMap.Builder<Int>(type.size).build(), setOf())
 
     /**
      * All Cells are set as editable.
@@ -39,32 +40,23 @@ open class Sudoku : Iterable<Cell>, AbstractSudoku<Cell> {
      * @param map A Map from Positions to solution values. Values in pre-filled Cells are negated. (actually bitwise negated)
      * @param setValues A Map from Position to whether the value is pre-filled.
      */
-    @JvmOverloads
-    constructor(
-        type: SudokuType,
-        map: PositionMap<Int>? = PositionMap.Builder<Int>(type.size).build(),
-        setValues: PositionMap<Boolean>? = PositionMap.Builder<Boolean>(type.size).build()
-    ) : super(type) {
+    constructor(type: SudokuType, map: PositionMap<Int>, setValues: Set<Position>) : super(type) {
         var cellIdCounter = 1
         cellPositions = HashMap()
         cells = HashMap()
 
         // iterate over the constraints of the type and create the fields
         type.flatMap(Constraint::getPositions).distinct().forEach { position ->
-             var f: Cell
-             val solution = if (map?.contains(position) == true) map[position] else null
-            f = when {
+            val solution = if (map.contains(position)) map[position] else null
+            cells[position] = when {
                 solution != null -> {
-                    val editable = setValues == null
-                            || position !in setValues
-                            || !setValues[position]
+                    val editable = position !in setValues
                     Cell(editable, solution, cellIdCounter, type.numberOfSymbols)
                 }
                 else -> {
                     Cell(cellIdCounter, type.numberOfSymbols)
                 }
             }
-            cells!![position] = f
             cellPositions!![cellIdCounter++] = position
         }
     }

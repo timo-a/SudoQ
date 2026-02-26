@@ -42,7 +42,7 @@ class SudokuTests {
 
     @Test
     fun initializeWithoutSolutions() {
-        val sudoku = Sudoku(sudokuType99, null, null)
+        val sudoku = Sudoku(sudokuType99)
 
         sudoku.sudokuType.`should be`(sudokuType99)
         sudoku.isFinished.`should be false`()
@@ -67,7 +67,7 @@ class SudokuTests {
         val solutions = PositionMap.Builder<Int>(Position[9, 9])
             .from(sudokuType99.validPositions)
             { _ -> 0 }
-        val sudoku = Sudoku(sudokuType99, solutions, null)
+        val sudoku = Sudoku(sudokuType99, solutions, setOf())
         sudoku.sudokuType.`should be`(sudokuType99)
         sudoku.isFinished.`should be false`()
 
@@ -123,9 +123,7 @@ class SudokuTests {
     fun initializeSudokuWithValues() {
         val map = PositionMap.Builder<Int>(Position[9, 9]).from(sudokuType99.validPositions) {
             pos -> pos.x + 1}
-        val setValues = PositionMap.Builder<Boolean>(Position[9, 9])
-            .from(sudokuType99.validPositions.filter { pos -> pos.x != pos.y })
-            { _ -> true }
+        val setValues = sudokuType99.validPositions.filter { pos -> pos.x != pos.y }.toSet()
         val sudoku = Sudoku(sudokuType99, map, setValues)
         var cell: Cell
         for (pos in sudokuType99.validPositions) {
@@ -160,7 +158,7 @@ class SudokuTests {
         val solutions = PositionMap.Builder<Int>(Position[9, 9])
             .from(sudokuType.validPositions)
             { _ -> 0 }
-        val sudoku = Sudoku(sudokuType, solutions, null)
+        val sudoku = Sudoku(sudokuType, solutions, setOf())
         sudoku.getCell(Position[0, 0]).currentValue = 1
         sudoku.hasErrors().`should be true`()
     }
