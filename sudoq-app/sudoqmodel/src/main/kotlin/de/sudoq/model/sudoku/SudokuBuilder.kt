@@ -16,7 +16,7 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 class SudokuBuilder(private val type: SudokuType?) {
 
     private val solutions: PositionMap.Builder<Int> = PositionMap.Builder(type!!.size)
-    private val setValues: PositionMap.Builder<Boolean> = PositionMap.Builder(type?.size!!)
+    private val setValues: MutableSet<Position> = HashSet()
 
     /**
      * Cretaes a Builder for a [Sudoku] of the specified type.
@@ -32,7 +32,7 @@ class SudokuBuilder(private val type: SudokuType?) {
      * @return a new Sudoku
      */
     fun createSudoku(): Sudoku {
-        return Sudoku(type!!, solutions.build(), setValues.build())
+        return Sudoku(type!!, solutions.build(), setValues)
     }
 
     /**
@@ -52,8 +52,8 @@ class SudokuBuilder(private val type: SudokuType?) {
      *
      * @param pos [Position] to mark as pre-filled
      */
-    fun setFixed(pos: Position?) {
-        setValues.put(pos!!, true)
+    fun setFixed(pos: Position) {
+        setValues.add(pos)
     }
 
 }

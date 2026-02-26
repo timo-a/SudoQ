@@ -32,7 +32,7 @@ class CheckTest {
 
         val s99 = TypeBuilder.getType(SudokuTypes.standard9x9)
         val map = PositionMap.Builder<Int>(Position[9, 9]).from(s99.validPositions) { pos -> su1[pos.y * 9 + pos.x]}
-        val sudoku1 = Sudoku(s99, map, PositionMap.Builder<Boolean>(Position[9, 9]).build())
+        val sudoku1 = Sudoku(s99, map, setOf())
         for (f in sudoku1) f.currentValue = f.solution
         sudoku1.sudokuType.checkSudoku(sudoku1).`should be true`()
         sudoku1.getCell(Position[0, 0]).currentValue = 5
