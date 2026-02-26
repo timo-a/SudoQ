@@ -62,7 +62,7 @@ class Generator(private val sudokuTypeRepo: ReadRepo<SudokuType>) {
         if (type == null || complexity == null || callbackObject == null) return false
 
         // Create sudoku
-        val sudoku = SudokuBuilder(type, sudokuTypeRepo).createSudoku()
+        val sudoku = SudokuBuilder(type, sudokuTypeRepo).build()
         sudoku.complexity = complexity
         val t = Thread(GenerationAlgo(sudoku, callbackObject, random))
         t.start()

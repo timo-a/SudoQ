@@ -31,9 +31,7 @@ class SudokuBuilder(private val type: SudokuType?) {
      *
      * @return a new Sudoku
      */
-    fun createSudoku(): Sudoku {
-        return Sudoku(type!!, solutions.build(), setValues)
-    }
+    fun build(): Sudoku = Sudoku(type!!, solutions.build(), setValues)
 
     /**
      * Ads a solution to the Sudoku

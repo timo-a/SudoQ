@@ -63,7 +63,7 @@ internal class GameTests {
 
     @Test
     fun instantiation() {
-        val game = Game(2, SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku())
+        val game = Game(2, SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).build())
         game.id `should be equal to` 2
         game.stateHandler `should not be` null
         game.sudoku.getCell(Position[8, 8]).currentValue `should be equal to` Cell.EMPTYVAL
@@ -73,7 +73,7 @@ internal class GameTests {
 
     @Test
     fun gameInteraction() {
-        val game = Game(2, SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku())
+        val game = Game(2, SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).build())
 
         val pos = Position[1, 1]
         val start = game.currentState
@@ -104,9 +104,9 @@ internal class GameTests {
 
     @Test
     fun equals() {
-        val game = Game(2, SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku())
+        val game = Game(2, SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).build())
         game `should be equal to` game
-        val game2 = Game(3, SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku())
+        val game2 = Game(3, SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).build())
         game2 `should not be equal to` game
 
         val pos = Position[1, 1]
@@ -131,7 +131,7 @@ internal class GameTests {
 
     @Test
     fun gameXML() {
-        val s = SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku()
+        val s = SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).build()
         s.id = 5
         val game = Game(2, s)
 
@@ -162,7 +162,7 @@ internal class GameTests {
                 sb.addSolution(Position[i, j], 1)
             }
         }
-        val game = Game(1, sb.createSudoku())
+        val game = Game(1, sb.build())
         game.solveAll() `should be` true
         game.isFinished() `should be` true
     }
@@ -173,7 +173,7 @@ internal class GameTests {
             override fun getAssistance(assistance: Assistances): Boolean = true
         }
         val game = Game(2,
-            SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku(),
+            SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).build(),
             mockGameSettings
         )
 
@@ -234,7 +234,7 @@ internal class GameTests {
     @Test
     fun noteAdjustment() {
         val `as` = GameSettings().also { it.setAssistance(Assistances.autoAdjustNotes) }
-        val game = Game(2, SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku(), `as`)
+        val game = Game(2, SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).build(), `as`)
 
         game.addAndExecute(NoteActionFactory().createAction(2, game.sudoku.getCell(Position[1, 0])))
         game.addAndExecute(NoteActionFactory().createAction(3, game.sudoku.getCell(Position[1, 0])))
@@ -359,7 +359,7 @@ internal class GameTests {
             }
         }
         val `as` = GameSettings().also { it.setAssistance(Assistances.autoAdjustNotes) }
-        val game = Game(2, sb.createSudoku(), `as`)
+        val game = Game(2, sb.build(), `as`)
 
         for (pos in game.sudoku.sudokuType.validPositions) {
             game.addAndExecute(NoteActionFactory().createAction(1, game.sudoku.getCell(pos)))

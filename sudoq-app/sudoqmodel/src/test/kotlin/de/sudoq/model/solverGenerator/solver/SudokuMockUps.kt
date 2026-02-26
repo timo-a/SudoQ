@@ -19,14 +19,14 @@ object SudokuMockUps {
     private val str: ReadRepo<SudokuType> = SudokuTypeRepo4Tests()
 
     fun stringTo9x9Sudoku(pattern: String): Sudoku {
-        val s = SudokuBuilder(SudokuTypes.standard9x9, str).createSudoku()
+        val s = SudokuBuilder(SudokuTypes.standard9x9, str).build()
         s.complexity = Complexity.arbitrary
         return transform(s, pattern)
     }
 
     @JvmStatic
     fun stringTo16x16Sudoku(pattern: String): Sudoku {
-        val s = SudokuBuilder(SudokuTypes.standard16x16, str).createSudoku()
+        val s = SudokuBuilder(SudokuTypes.standard16x16, str).build()
         s.complexity = Complexity.arbitrary
         return transformX(16, s, pattern)
     }
@@ -34,7 +34,7 @@ object SudokuMockUps {
     /* expects values in [1,9] */
     @JvmStatic
     fun stringToSamuraiSudoku(pattern: String): Sudoku {
-        val s = SudokuBuilder(SudokuTypes.samurai, str).createSudoku()
+        val s = SudokuBuilder(SudokuTypes.samurai, str).build()
         s.complexity = Complexity.arbitrary
         val dim = 21
         for (y in 0..<dim) for (x in 0..<dim) {
@@ -94,7 +94,7 @@ object SudokuMockUps {
 
 
     fun stringToSudoku(type: SudokuTypes, pattern: String): Sudoku {
-        val sudoku = SudokuBuilder(type, str).createSudoku()
+        val sudoku = SudokuBuilder(type, str).build()
         sudoku.complexity = Complexity.arbitrary
         val xLim = sudoku.sudokuType.size.x
 
