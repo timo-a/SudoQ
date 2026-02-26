@@ -26,10 +26,10 @@ internal class SolverIntegrationTests {
 
     @BeforeEach
     fun before() {
-        sudoku = SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku()
+        sudoku = SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).build()
         sudoku.complexity = Complexity.arbitrary
         solver = Solver(sudoku)
-        sudoku16x16 = SudokuBuilder(SudokuTypes.standard16x16, sudokuTypeRepo).createSudoku()
+        sudoku16x16 = SudokuBuilder(SudokuTypes.standard16x16, sudokuTypeRepo).build()
         sudoku16x16!!.complexity = Complexity.arbitrary
     }
 

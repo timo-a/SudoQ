@@ -32,7 +32,7 @@ class SamuraiLoadTest {
         for( p: Position in GenerationAlgo.getPositions(s)) {
             sub.addSolution(p, solution[p]);//fill in all solutions
         }
-        val sudoku = sub.createSudoku();
+        val sudoku = sub.build();
         for (p: Position in GenerationAlgo.getPositions(sudoku)) {
             val f = sudoku.getCell(p);
             f.currentValue = f.solution;

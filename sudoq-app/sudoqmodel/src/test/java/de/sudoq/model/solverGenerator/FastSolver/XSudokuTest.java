@@ -40,7 +40,7 @@ class XSudokuTest {
 			        System.out.println("hier");
                 sub.addSolution(p, solution.get(p));//fill in all solutions
             }
-			Sudoku sudoku = sub.createSudoku();
+			Sudoku sudoku = sub.build();
             for (Position p: GenerationAlgo.getPositions(sudoku)) {
                 Cell f = sudoku.getCell(p);
                 f.setCurrentValue(f.getSolution());

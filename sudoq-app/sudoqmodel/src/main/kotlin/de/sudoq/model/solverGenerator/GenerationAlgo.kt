@@ -97,7 +97,7 @@ class GenerationAlgo(
             suBi.addSolution(p, value)
             if (!sudoku.getCell(p).isNotSolved) suBi.setFixed(p)
         }
-        val res = suBi.createSudoku()
+        val res = suBi.build()
         res.complexity = sudoku.complexity!! //vorsichtshalber dazunehmen
 
         //we want to know the solutions used, so quickly an additional solver
@@ -161,7 +161,7 @@ class GenerationAlgo(
         val sub = SudokuBuilder(sudoku.sudokuType)
         for (p in getPositions(sudoku))
             sub.addSolution(p, solution[p]) //fill in all solutions
-        return sub.createSudoku()
+        return sub.build()
     }
 
     private fun createAllocation(pattern: Sudoku) {
