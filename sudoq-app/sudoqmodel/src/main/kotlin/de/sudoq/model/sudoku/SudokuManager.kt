@@ -22,7 +22,7 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 open class SudokuManager(val sudokuTypeRepo: ReadRepo<SudokuType>,
                          private val sudokuRepoProvider: ISudokuRepoProvider) : GeneratorCallback {
 
-    private val generator = Generator(sudokuTypeRepo)
+    private val generator = Generator()
 
     /** holds the old sudoku while the new sudoku is being generated. */
     private var used: Sudoku? = null
@@ -56,7 +56,7 @@ open class SudokuManager(val sudokuTypeRepo: ReadRepo<SudokuType>,
     fun usedSudoku(sudoku: Sudoku) {
         if (sudoku.transformCount >= 10) {
             used = sudoku
-            generator.generate(sudoku.sudokuType.enumType, sudoku.complexity, this)
+            generator.generate(sudoku.sudokuType, sudoku.complexity, this)
         } else {
             Transformer.transform(sudoku)
             val sudokuRepo = sudokuRepoProvider.getRepo(sudoku)

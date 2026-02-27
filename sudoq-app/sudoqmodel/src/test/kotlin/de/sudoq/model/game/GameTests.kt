@@ -53,7 +53,7 @@ internal class GameTests {
                 future.complete(sudoku)
             }
         }
-        Generator(sudokuTypeRepo).generate(SudokuTypes.standard9x9, Complexity.easy, gc)
+        Generator().generate(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal), Complexity.easy, gc)
         Assertions.assertTimeoutPreemptively(Duration.of(60, ChronoUnit.SECONDS)) {
             future.get()
         }
