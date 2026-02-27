@@ -131,8 +131,7 @@ internal class GameTests {
 
     @Test
     fun gameXML() {
-        val s = SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).build()
-        s.id = 5
+        val s = SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).id(5).build()
         val game = Game(2, s)
 
         val pos = Position[1, 1]
