@@ -22,7 +22,7 @@ open class Sudoku private constructor(
     type: SudokuType,
     val cells: HashMap<Position, Cell>, //todo why isn't this a [PositionMap]?)
     private val cellPositions: MutableMap<Int, Position>
-): Iterable<Cell>, AbstractSudoku<Cell>(type) {
+): Iterable<Cell>, AbstractSudoku<Cell>(type), ReadableCells {
 
     /** Counts how often the Sudoku was already transformed */
     var transformCount = 0
@@ -218,5 +218,9 @@ open class Sudoku private constructor(
         sb.deleteAt(sb.length - 1)//delete last newline
         return sb.toString()
     }
+
+    override fun getCurrentValue(pos: Position): Int = getCell(pos).currentValue
+
+    override fun isSolved(pos: Position): Boolean = getCell(pos).isSolved
 
 }

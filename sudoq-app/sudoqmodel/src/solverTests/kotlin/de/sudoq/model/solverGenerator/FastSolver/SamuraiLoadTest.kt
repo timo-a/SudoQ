@@ -1,6 +1,5 @@
 package de.sudoq.model.solverGenerator.FastSolver
 
-import de.sudoq.model.solverGenerator.GenerationAlgo
 import de.sudoq.model.solverGenerator.utils.PrettySamuraiRepo
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.PositionMap
@@ -29,11 +28,11 @@ class SamuraiLoadTest {
 
         val solution: PositionMap<Int>  = fs.getSolutions();
         val sub = SudokuBuilderLegacy(s.sudokuType);
-        for( p: Position in GenerationAlgo.getPositions(s)) {
+        for( p: Position in s.sudokuType.validPositions) {
             sub.addSolution(p, solution[p]);//fill in all solutions
         }
         val sudoku = sub.build();
-        for (p: Position in GenerationAlgo.getPositions(sudoku)) {
+        for (p: Position in sudoku.sudokuType.validPositions) {
             val f = sudoku.getCell(p);
             f.currentValue = f.solution;
         }

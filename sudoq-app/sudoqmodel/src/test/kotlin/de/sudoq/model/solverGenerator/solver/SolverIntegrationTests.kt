@@ -65,6 +65,7 @@ internal class SolverIntegrationTests {
         sudoku.getCell(Position[1, 8]).currentValue = 8
         sudoku.getCell(Position[4, 8]).currentValue = 6
         sudoku.getCell(Position[6, 8]).currentValue = 0
+        solver = Solver(sudoku)
 
         val pair = solver!!.validateDeprecated()
         pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
@@ -153,6 +154,7 @@ internal class SolverIntegrationTests {
         sudoku.getCell(Position[8, 1]).currentValue = 6
         sudoku.getCell(Position[8, 3]).currentValue = 7
         sudoku.getCell(Position[8, 4]).currentValue = 0
+        solver = Solver(sudoku)
 
         val pair = solver!!.validateDeprecated()
         pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
@@ -209,6 +211,7 @@ internal class SolverIntegrationTests {
         sudoku.getCell(Position[1, 8]).currentValue = 6
         sudoku.getCell(Position[3, 8]).currentValue = 2
         sudoku.getCell(Position[4, 8]).currentValue = 0
+        solver = Solver(sudoku)
 
         val pair = solver!!.validateDeprecated()
         pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
@@ -255,6 +258,7 @@ internal class SolverIntegrationTests {
         sudoku.getCell(Position[2, 8]).currentValue = 8
         sudoku.getCell(Position[4, 8]).currentValue = 4
         sudoku.getCell(Position[6, 8]).currentValue = 7
+        solver = Solver(sudoku)
 
         val pair = solver!!.validateDeprecated()
         pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
@@ -301,6 +305,7 @@ internal class SolverIntegrationTests {
         sudoku.getCell(Position[4, 8]).currentValue = 7
         sudoku.getCell(Position[6, 8]).currentValue = 5
         sudoku.getCell(Position[8, 8]).currentValue = 1
+        solver = Solver(sudoku)
 
         val pair = solver!!.validateDeprecated()
         pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
@@ -348,6 +353,7 @@ internal class SolverIntegrationTests {
         sudoku.getCell(Position[5, 8]).currentValue = 1
         sudoku.getCell(Position[7, 8]).currentValue = 0
         sudoku.getCell(Position[8, 8]).currentValue = 2
+        solver = Solver(sudoku)
 
         val pair = solver!!.validateDeprecated()
         pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
@@ -386,6 +392,7 @@ internal class SolverIntegrationTests {
         sudoku.getCell(Position[5, 7]).currentValue = 0
         sudoku.getCell(Position[8, 7]).currentValue = 4
         sudoku.getCell(Position[6, 8]).currentValue = 3
+        solver = Solver(sudoku)
 
         val pair = solver!!.validateDeprecated()
         pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
@@ -423,6 +430,7 @@ internal class SolverIntegrationTests {
         sudoku.getCell(Position[6, 7]).currentValue = 3
         sudoku.getCell(Position[4, 8]).currentValue = 0
         sudoku.getCell(Position[8, 8]).currentValue = 2
+        solver = Solver(sudoku)
 
         val pair = solver!!.validateDeprecated()
         pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
@@ -460,6 +468,7 @@ internal class SolverIntegrationTests {
         sudoku.getCell(Position[0, 8]).currentValue = 6
         sudoku.getCell(Position[3, 8]).currentValue = 8
         sudoku.getCell(Position[6, 8]).currentValue = 7
+        solver = Solver(sudoku)
 
         val pair = solver!!.validateDeprecated()
         pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
@@ -497,6 +506,7 @@ internal class SolverIntegrationTests {
         sudoku.getCell(Position[1, 8]).currentValue = 4
         sudoku.getCell(Position[3, 8]).currentValue = 7
         sudoku.getCell(Position[6, 8]).currentValue = 8
+        solver = Solver(sudoku)
 
         val pair = solver!!.validateDeprecated()
         pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
@@ -534,6 +544,7 @@ internal class SolverIntegrationTests {
         sudoku.getCell(Position[1, 8]).currentValue = 4
         sudoku.getCell(Position[4, 8]).currentValue = 1
         sudoku.getCell(Position[7, 8]).currentValue = 6
+        solver = Solver(sudoku)
 
         val pair = solver!!.validateDeprecated()
         pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
@@ -570,6 +581,7 @@ internal class SolverIntegrationTests {
         sudoku.getCell(Position[4, 8]).currentValue = 0
         sudoku.getCell(Position[7, 8]).currentValue = 3
         sudoku.getCell(Position[8, 8]).currentValue = 1
+        solver = Solver(sudoku)
 
         val pair = solver!!.validateDeprecated()
         pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
@@ -599,6 +611,7 @@ internal class SolverIntegrationTests {
         sudoku.getCell(Position[0, 7]).currentValue = 1
         sudoku.getCell(Position[8, 7]).currentValue = 4
         sudoku.getCell(Position[0, 8]).currentValue = 0
+        solver = Solver(sudoku)
 
         val pair = solver!!.validateDeprecated()
         pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
@@ -636,6 +649,7 @@ internal class SolverIntegrationTests {
         sudoku.getCell(Position[3, 8]).currentValue = 6
         sudoku.getCell(Position[5, 8]).currentValue = 3
         sudoku.getCell(Position[8, 8]).currentValue = 5
+        solver = Solver(sudoku)
 
         val pair = solver!!.validateDeprecated()
         pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
@@ -675,6 +689,7 @@ internal class SolverIntegrationTests {
         sudoku.getCell(Position[2, 7]).currentValue = 2
         sudoku.getCell(Position[3, 7]).currentValue = 0
         sudoku.getCell(Position[5, 8]).currentValue = 6
+        solver = Solver(sudoku)
 
         val pair = solver!!.validateDeprecated()
         pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
@@ -708,6 +723,7 @@ internal class SolverIntegrationTests {
         sudoku.getCell(Position[8, 7]).currentValue = 6
         sudoku.getCell(Position[2, 8]).currentValue = 6
         sudoku.getCell(Position[6, 8]).currentValue = 2
+        solver = Solver(sudoku)
 
         solver!!.solverSudoku.complexity = Complexity.easy
         val pair = solver!!.validateDeprecated()
@@ -745,6 +761,7 @@ internal class SolverIntegrationTests {
         sudoku.getCell(Position[7, 7]).currentValue = 2
         sudoku.getCell(Position[5, 8]).currentValue = 8
         sudoku.getCell(Position[6, 8]).currentValue = 6
+        solver = Solver(sudoku)
 
         val pair = solver!!.validateDeprecated()
         pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
