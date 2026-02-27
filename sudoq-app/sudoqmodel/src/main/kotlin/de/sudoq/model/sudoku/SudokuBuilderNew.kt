@@ -13,7 +13,7 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider.getSudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 
 /** Provides functions to create a [SudokuType] or an empty [Sudoku] */
-class SudokuBuilder(private val type: SudokuType?) {
+class SudokuBuilderNew(private val type: SudokuType?) {
 
     var id: Int = 0
 
@@ -28,7 +28,7 @@ class SudokuBuilder(private val type: SudokuType?) {
      */
     constructor(type: SudokuTypes, sudokuTypeRepo: ReadRepo<SudokuType>) : this(getSudokuType(type, sudokuTypeRepo))
 
-    fun id(id: Int): SudokuBuilder {
+    fun id(id: Int): SudokuBuilderNew {
         this.id = id
         return this
     }
@@ -38,7 +38,7 @@ class SudokuBuilder(private val type: SudokuType?) {
      *
      * @return a new Sudoku
      */
-    fun build(): Sudoku = Sudoku(type!!, solutions.build(), setValues, id)
+    fun build(): SudokuUnderConstruction = SudokuUnderConstruction(type!!, solutions.build(), setValues, id)
 
     /**
      * Ads a solution to the Sudoku

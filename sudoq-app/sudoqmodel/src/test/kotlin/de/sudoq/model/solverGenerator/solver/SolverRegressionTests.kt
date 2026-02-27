@@ -4,7 +4,7 @@ import de.sudoq.model.ports.persistence.ReadRepo
 import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.Sudoku
-import de.sudoq.model.sudoku.SudokuBuilder
+import de.sudoq.model.sudoku.SudokuBuilderLegacy
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
@@ -23,10 +23,10 @@ internal class SolverRegressionTests {
         val str: ReadRepo<SudokuType> = SudokuTypeRepo4Tests()
 
 
-        sudoku = SudokuBuilder(SudokuTypes.standard9x9, str).build()
+        sudoku = SudokuBuilderLegacy(SudokuTypes.standard9x9, str).build()
         sudoku.complexity = Complexity.arbitrary
         solver = Solver(sudoku)
-        sudoku16x16 = SudokuBuilder(SudokuTypes.standard16x16, str).build()
+        sudoku16x16 = SudokuBuilderLegacy(SudokuTypes.standard16x16, str).build()
         sudoku16x16.complexity = Complexity.arbitrary
     }
 

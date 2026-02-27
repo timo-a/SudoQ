@@ -8,7 +8,7 @@ import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.PositionMap
 import de.sudoq.model.sudoku.Sudoku
-import de.sudoq.model.sudoku.SudokuBuilder
+import de.sudoq.model.sudoku.SudokuBuilderLegacy
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
@@ -33,10 +33,10 @@ internal class SolverTests {
 
     @BeforeEach
     fun before() {
-        sudoku = SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).build()
+        sudoku = SudokuBuilderLegacy(SudokuTypes.standard9x9, sudokuTypeRepo).build()
         sudoku.complexity = Complexity.arbitrary
         solver = Solver(sudoku)
-        sudoku16x16 = SudokuBuilder(SudokuTypes.standard16x16, sudokuTypeRepo).build()
+        sudoku16x16 = SudokuBuilderLegacy(SudokuTypes.standard16x16, sudokuTypeRepo).build()
         sudoku16x16.complexity = Complexity.arbitrary
         solution16x16 = PositionMap.Builder(sudoku16x16.sudokuType.size)
     }

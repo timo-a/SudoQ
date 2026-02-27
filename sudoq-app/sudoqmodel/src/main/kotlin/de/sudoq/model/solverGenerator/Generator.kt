@@ -10,7 +10,7 @@ package de.sudoq.model.solverGenerator
 import de.sudoq.model.solverGenerator.solver.Solver
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.Sudoku
-import de.sudoq.model.sudoku.SudokuBuilder
+import de.sudoq.model.sudoku.SudokuBuilderNew
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import java.util.Random
@@ -52,13 +52,13 @@ class Generator() {
      */
     fun generate(
         type: SudokuType,
-        complexity: Complexity?,
+        complexity: Complexity,
         callbackObject: GeneratorCallback?
     ): Boolean {
-        if (complexity == null || callbackObject == null) return false
+        if (callbackObject == null) return false
 
         // Create sudoku
-        val sudoku = SudokuBuilder(type).build()
+        val sudoku = SudokuBuilderNew(type).build()
         sudoku.complexity = complexity
         val t = Thread(GenerationAlgo(sudoku, callbackObject, random))
         t.start()
