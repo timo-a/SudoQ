@@ -5,7 +5,7 @@ import de.sudoq.model.solverGenerator.utils.PrettySamuraiRepo
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.PositionMap
 import de.sudoq.model.sudoku.Sudoku
-import de.sudoq.model.sudoku.SudokuBuilder
+import de.sudoq.model.sudoku.SudokuBuilderLegacy
 import de.sudoq.model.sudoku.complexity.Complexity
 import org.amshove.kluent.`should be true`
 import org.junit.jupiter.params.ParameterizedTest
@@ -28,7 +28,7 @@ class SamuraiLoadTest {
         fs.hasSolution().`should be true`()
 
         val solution: PositionMap<Int>  = fs.getSolutions();
-        val sub = SudokuBuilder(s.sudokuType);
+        val sub = SudokuBuilderLegacy(s.sudokuType);
         for( p: Position in GenerationAlgo.getPositions(s)) {
             sub.addSolution(p, solution[p]);//fill in all solutions
         }

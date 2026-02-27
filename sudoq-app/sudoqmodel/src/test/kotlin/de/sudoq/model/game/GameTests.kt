@@ -11,7 +11,7 @@ import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.PositionMap
 import de.sudoq.model.sudoku.Sudoku
-import de.sudoq.model.sudoku.SudokuBuilder
+import de.sudoq.model.sudoku.SudokuBuilderLegacy
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider.getSudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
@@ -63,7 +63,7 @@ internal class GameTests {
 
     @Test
     fun instantiation() {
-        val game = Game(2, SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).build())
+        val game = Game(2, SudokuBuilderLegacy(SudokuTypes.standard9x9, sudokuTypeRepo).build())
         game.id `should be equal to` 2
         game.stateHandler `should not be` null
         game.sudoku.getCell(Position[8, 8]).currentValue `should be equal to` Cell.EMPTYVAL
@@ -73,7 +73,7 @@ internal class GameTests {
 
     @Test
     fun gameInteraction() {
-        val game = Game(2, SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).build())
+        val game = Game(2, SudokuBuilderLegacy(SudokuTypes.standard9x9, sudokuTypeRepo).build())
 
         val pos = Position[1, 1]
         val start = game.currentState
@@ -104,9 +104,9 @@ internal class GameTests {
 
     @Test
     fun equals() {
-        val game = Game(2, SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).build())
+        val game = Game(2, SudokuBuilderLegacy(SudokuTypes.standard9x9, sudokuTypeRepo).build())
         game `should be equal to` game
-        val game2 = Game(3, SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).build())
+        val game2 = Game(3, SudokuBuilderLegacy(SudokuTypes.standard9x9, sudokuTypeRepo).build())
         game2 `should not be equal to` game
 
         val pos = Position[1, 1]
@@ -131,7 +131,7 @@ internal class GameTests {
 
     @Test
     fun gameXML() {
-        val s = SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).id(5).build()
+        val s = SudokuBuilderLegacy(SudokuTypes.standard9x9, sudokuTypeRepo).id(5).build()
         val game = Game(2, s)
 
         val pos = Position[1, 1]
@@ -155,7 +155,7 @@ internal class GameTests {
     // Regression Test for Issue-89
     @Test
     fun finishedAttributeConsistency() {
-        val sb = SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo)
+        val sb = SudokuBuilderLegacy(SudokuTypes.standard9x9, sudokuTypeRepo)
         for (i in 0..8) {
             for (j in 0..8) {
                 sb.addSolution(Position[i, j], 1)
@@ -172,7 +172,7 @@ internal class GameTests {
             override fun getAssistance(assistance: Assistances): Boolean = true
         }
         val game = Game(2,
-            SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).build(),
+            SudokuBuilderLegacy(SudokuTypes.standard9x9, sudokuTypeRepo).build(),
             mockGameSettings
         )
 
@@ -233,7 +233,7 @@ internal class GameTests {
     @Test
     fun noteAdjustment() {
         val `as` = GameSettings().also { it.setAssistance(Assistances.autoAdjustNotes) }
-        val game = Game(2, SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).build(), `as`)
+        val game = Game(2, SudokuBuilderLegacy(SudokuTypes.standard9x9, sudokuTypeRepo).build(), `as`)
 
         game.addAndExecute(NoteActionFactory().createAction(2, game.sudoku.getCell(Position[1, 0])))
         game.addAndExecute(NoteActionFactory().createAction(3, game.sudoku.getCell(Position[1, 0])))
@@ -351,7 +351,7 @@ internal class GameTests {
     // Regression Test for Issue-90
     @Test
     fun autoAdjustNotesForAutomaticSolving() {
-        val sb = SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo)
+        val sb = SudokuBuilderLegacy(SudokuTypes.standard9x9, sudokuTypeRepo)
         for (i in 0..8) {
             for (j in 0..8) {
                 sb.addSolution(Position[i, j], 1)

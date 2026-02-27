@@ -19,7 +19,7 @@ internal class SudokuBuilderTests {
     fun initialisation() = SudokuTypes.entries.forEach(::testBuildergeneric)
 
     private fun testBuildergeneric(t: SudokuTypes) {
-        val sudoku = SudokuBuilder(t, str).build()
+        val sudoku = SudokuBuilderLegacy(t, str).build()
         sudoku.sudokuType.validPositions
             .map(sudoku::getCell)
             .`should match all with` { it.currentValue == Cell.EMPTYVAL }
@@ -27,7 +27,7 @@ internal class SudokuBuilderTests {
 
     @Test
     fun builderWithSolutions() {
-        val sb = SudokuBuilder(SudokuTypes.standard9x9, str)
+        val sb = SudokuBuilderLegacy(SudokuTypes.standard9x9, str)
         sb.addSolution(Position[0, 0], 5)
         sb.setFixed(Position[0, 0])
         sb.addSolution(Position[0, 1], 3)

@@ -15,8 +15,9 @@ import de.sudoq.model.solverGenerator.solver.Solver
 import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.PositionMap
-import de.sudoq.model.sudoku.Sudoku
-import de.sudoq.model.sudoku.SudokuBuilder
+import de.sudoq.model.sudoku.SudokuBuilderLegacy
+import de.sudoq.model.sudoku.SudokuBuilderNew
+import de.sudoq.model.sudoku.SudokuUnderConstruction
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import java.util.LinkedList
@@ -33,7 +34,7 @@ import java.util.Stack
  * @property Das Objekt, auf dem nach Abschluss der Generierung die Callback-Methode aufgerufen wird
  */
 class GenerationAlgo(
-    private var sudoku: Sudoku,
+    private var sudoku: SudokuUnderConstruction,
     private var callbackObject: GeneratorCallback,
     random: Random
 ) : Runnable {
@@ -42,11 +43,6 @@ class GenerationAlgo(
      * Das Zufallsobjekt für den Generator
      */
     private var random: Random = random
-
-    /**
-     * Der Solver, der für Validierungsvorgänge genutzt wird
-     */
-    private var solver: Solver = Solver(sudoku)
 
     /**
      * List of currently defined(occupied) Fields.
@@ -58,12 +54,12 @@ class GenerationAlgo(
     /**
      * Die noch freien, also nicht belegten Felder des Sudokus
      */
-    private var freeCells: MutableList<Position> = ArrayList(getPositions(sudoku))
+    private var freeCells: MutableList<Position> = sudoku.sudokuType.validPositions.toMutableList()
 
     /**
      * Das gelöste Sudoku
      */
-    private var solvedSudoku: Sudoku? = null
+    private var solvedSudoku: SudokuUnderConstruction? = null
 
     /**
      * Die Anzahl der Felder, die fest zu definieren ist
@@ -91,7 +87,7 @@ class GenerationAlgo(
         createAllocation(solvedSudoku!!)
 
         // Call the callback
-        val suBi = SudokuBuilder(sudoku.sudokuType)
+        val suBi = SudokuBuilderLegacy(sudoku.sudokuType)
         for (p in getPositions(solvedSudoku!!)) {
             val value = solvedSudoku!!.getCell(p).solution
             suBi.addSolution(p, value)
@@ -111,7 +107,7 @@ class GenerationAlgo(
         }
     }
 
-    private fun createSudokuPattern(): Sudoku {
+    private fun createSudokuPattern(): SudokuUnderConstruction {
         //determine ideal number of prefilled fields
         cellsToDefine = getNumberOfCellsToDefine(sudoku.sudokuType, desiredComplexityConstraint)
 
@@ -125,7 +121,7 @@ class GenerationAlgo(
         var fieldsToDefineDynamic = cellsToDefine
 
         /* until a solution is found, remove 5 random fields and add new ones */
-        var fs = FastSolverFactory.getSolver(sudoku)
+        var fs = FastSolverFactory.getSolver(sudoku.produceSudoku4Solving())
         while (!fs.hasSolution()) {
             //System.out.println("Iteration: "+(iteration++)+", defined Fields: "+definedFields.size());
             // Remove some fields, because sudoku could not be validated
@@ -137,7 +133,7 @@ class GenerationAlgo(
                     removeDefinedCells(5) //remove 5 fields
             if (fieldsToDefineDynamic > 0 && random.nextFloat() < 0.2)
                 fieldsToDefineDynamic-- //to avoid infinite loop slowly relax
-            fs = FastSolverFactory.getSolver(sudoku)
+            fs = FastSolverFactory.getSolver(sudoku.produceSudoku4Solving())
         }
 
         /* we found a solution i.e. a combination of nxn numbers that fulfill all constraints */
@@ -158,13 +154,13 @@ class GenerationAlgo(
         /* We have (validated) filled `solution` with the right values */
 
         // Create the sudoku template generated before
-        val sub = SudokuBuilder(sudoku.sudokuType)
+        val sub = SudokuBuilderNew(sudoku.sudokuType)
         for (p in getPositions(sudoku))
             sub.addSolution(p, solution[p]) //fill in all solutions
         return sub.build()
     }
 
-    private fun createAllocation(pattern: Sudoku) {
+    private fun createAllocation(pattern: SudokuUnderConstruction) {
 
         //ensure all fields are defined
         while (freeCells.isNotEmpty()) {
@@ -206,7 +202,7 @@ class GenerationAlgo(
 				System.out.println("validate says: " + rel);*/
 
             //fast validation where after 10 branchpoints we return too diificult
-            val solver = FastBranchAndBound(sudoku)
+            val solver = FastBranchAndBound(sudoku.produceSudoku4Solving())
             rel = solver.validate()
             when (rel) {
                 ComplexityRelation.MUCH_TOO_EASY -> removeDefinedCells(reallocationAmount)
@@ -219,9 +215,9 @@ class GenerationAlgo(
                     }
 
                 }
-                ComplexityRelation.CONSTRAINT_SATURATION -> {} //do nothing
+                ComplexityRelation.CONSTRAINT_SATURATION -> { /* do nothing */ }
 
-                else -> throw IllegalStateException("Unexpected value: $rel")
+                else -> error("Unexpected value: $rel")
             }
             plusminuscounter++
         }
@@ -231,14 +227,14 @@ class GenerationAlgo(
 	 * While there are 2 solutions, add solution that is different in second sudoku
 	 * Careful! If looking for the 2nd solution takes longer than x min, sudoku is declared unambiguous
 	 */
-    private fun removeAmbiguity(sudoku: Sudoku): Sudoku {
-        var fs = FastSolverFactory.getSolver(sudoku)
+    private fun removeAmbiguity(sudoku: SudokuUnderConstruction): SudokuUnderConstruction {
+        var fs = FastSolverFactory.getSolver(sudoku.produceSudoku4Solving())
         //samurai take a long time -> try without uniqueness constraint
         //if (sudoku.getSudokuType().getEnumType() != SudokuTypes.samurai)
         while (fs.isAmbiguous) {
             val p = fs.ambiguousPos
             addDefinedCell2(p)
-            fs = FastSolverFactory.getSolver(sudoku)
+            fs = FastSolverFactory.getSolver(sudoku.produceSudoku4Solving())
         }
         return sudoku
     }
@@ -357,7 +353,7 @@ class GenerationAlgo(
         for (s in symbols) {
             sudoku.getCell(p).setCurrentValue(s, false)
             //alle constraints saturiert?
-            valid = sudoku.sudokuType.all { it.isSaturated(sudoku) }
+            valid = sudoku.sudokuType.all { it.isSaturated(sudoku.produceSudoku4Solving()) }//todo
 
             if (!valid)
                 sudoku.getCell(p).setCurrentValue(Cell.EMPTYVAL, false)
@@ -439,13 +435,7 @@ class GenerationAlgo(
          * @return list of positions whose corresponding `Field` objects are not null
          */
         @JvmStatic ///todo Generator has same function...
-        fun getPositions(sudoku: Sudoku): List<Position> {
-            val p: List<Position> = sudoku.sudokuType.validPositions
-                .filter(sudoku::hasCell) //todo necessary?
-                .toList()
-
-            return p
-        }
+        fun getPositions(sudoku: SudokuUnderConstruction): List<Position> = sudoku.sudokuType.validPositions.toList()
 
         //nono usage found
         /*fun getSudoku(path: String, st: SudokuTypes): Sudoku? {

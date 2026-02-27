@@ -5,7 +5,7 @@ import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests
 import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.Sudoku
-import de.sudoq.model.sudoku.SudokuBuilder
+import de.sudoq.model.sudoku.SudokuBuilderLegacy
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
@@ -19,14 +19,14 @@ object SudokuMockUps {
     private val str: ReadRepo<SudokuType> = SudokuTypeRepo4Tests()
 
     fun stringTo9x9Sudoku(pattern: String): Sudoku {
-        val s = SudokuBuilder(SudokuTypes.standard9x9, str).build()
+        val s = SudokuBuilderLegacy(SudokuTypes.standard9x9, str).build()
         s.complexity = Complexity.arbitrary
         return transform(s, pattern)
     }
 
     @JvmStatic
     fun stringTo16x16Sudoku(pattern: String): Sudoku {
-        val s = SudokuBuilder(SudokuTypes.standard16x16, str).build()
+        val s = SudokuBuilderLegacy(SudokuTypes.standard16x16, str).build()
         s.complexity = Complexity.arbitrary
         return transformX(16, s, pattern)
     }
@@ -34,7 +34,7 @@ object SudokuMockUps {
     /* expects values in [1,9] */
     @JvmStatic
     fun stringToSamuraiSudoku(pattern: String): Sudoku {
-        val s = SudokuBuilder(SudokuTypes.samurai, str).build()
+        val s = SudokuBuilderLegacy(SudokuTypes.samurai, str).build()
         s.complexity = Complexity.arbitrary
         val dim = 21
         for (y in 0..<dim) for (x in 0..<dim) {
@@ -94,7 +94,7 @@ object SudokuMockUps {
 
 
     fun stringToSudoku(type: SudokuTypes, pattern: String): Sudoku {
-        val sudoku = SudokuBuilder(type, str).build()
+        val sudoku = SudokuBuilderLegacy(type, str).build()
         sudoku.complexity = Complexity.arbitrary
         val xLim = sudoku.sudokuType.size.x
 
