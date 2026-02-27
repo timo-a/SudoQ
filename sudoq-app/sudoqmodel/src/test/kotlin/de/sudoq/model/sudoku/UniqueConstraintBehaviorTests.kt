@@ -13,25 +13,13 @@ class UniqueConstraintBehaviorTests {
 
         val sudoku = mockk<Sudoku>(relaxed = true)
 
-        fun mkCell(id: Int, currentValue: Int): Cell {
-            val c = Cell(id,9)
-            c.currentValue = currentValue
-            return c
-        }
-
-        val cell00 = mkCell(0, 1)
-        val cell01 = mkCell(1, 2)
-        val cell02 = mkCell(2, 3)
-        val cell10 = mkCell(3, 4)
-        val cell11 = mkCell(4, 5)
-        val cell12 = mkCell(5, 6)
-
-        every { sudoku.getCell(Position[0, 0]) } returns cell00
-        every { sudoku.getCell(Position[0, 1]) } returns cell01
-        every { sudoku.getCell(Position[0, 2]) } returns cell02
-        every { sudoku.getCell(Position[1, 0]) } returns cell10
-        every { sudoku.getCell(Position[1, 1]) } returns cell11
-        every { sudoku.getCell(Position[1, 2]) } returns cell12
+        every { sudoku.getCurrentValue(Position[0, 0]) } returns 1
+        every { sudoku.getCurrentValue(Position[0, 1]) } returns 2
+        every { sudoku.getCurrentValue(Position[0, 2]) } returns 3
+        every { sudoku.getCurrentValue(Position[1, 0]) } returns 4
+        every { sudoku.getCurrentValue(Position[1, 1]) } returns 5
+        every { sudoku.getCurrentValue(Position[1, 2]) } returns 6
+        every { sudoku.isSolved(any()) } returns true
 
         val constraint = Constraint(UniqueConstraintBehavior(), ConstraintType.LINE,
             Position[0, 0], Position[0, 1], Position[0, 2],
@@ -40,7 +28,7 @@ class UniqueConstraintBehaviorTests {
         constraint.isSaturated(sudoku).`should be true`()
 
         // WHEN we change a value so the constraint is no longer satisfied
-        cell00.currentValue = 2
+        every { sudoku.getCurrentValue(Position[0, 0]) } returns 2
 
         // THEN the constraint is no longer saturated
         constraint.isSaturated(sudoku).`should be false`()

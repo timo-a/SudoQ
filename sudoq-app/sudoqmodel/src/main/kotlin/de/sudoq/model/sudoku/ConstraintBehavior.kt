@@ -19,5 +19,5 @@ interface ConstraintBehavior {//todo refactor. make abstract class instead?
      * @param sudoku The Sudoku on which to check
      * @return true, iff sudoku satisfies the constraint
      */
-    fun check(constraint: Constraint, sudoku: Sudoku): Boolean
+    fun check(constraint: Constraint, sudoku: ReadableCells): Boolean
 }

@@ -35,7 +35,7 @@ class Constraint(private val behavior: ConstraintBehavior,
      * @return true if sudoku satisfies this constraint,
      * false if it doesn't or even if it doesn't contain all the positions in this constraint
      */
-    fun isSaturated(sudoku: Sudoku): Boolean {
+    fun isSaturated(sudoku: ReadableCells): Boolean {
         return behavior.check(this, sudoku)
     }
 

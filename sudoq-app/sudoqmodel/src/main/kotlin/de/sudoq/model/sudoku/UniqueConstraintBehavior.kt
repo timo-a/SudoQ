@@ -10,28 +10,16 @@ package de.sudoq.model.sudoku
 /** UniqueConstraintBehavior means no symbol may appear twice within a constraint. */
 class UniqueConstraintBehavior : ConstraintBehavior {
 
-    /** list of symbols found in the check method. */
-    private var foundNumbers: MutableList<Int> = ArrayList()
-
     /**
      * Checks if the passed Constraint satisfies Unique behaviour, i.e.
      * if no symbol appears twice among the cells in the constraint.
      *
      * @return true, iff constraint satisfies unique behaviour.
      */
-    override fun check(constraint: Constraint, sudoku: Sudoku): Boolean {
-        var currentValue: Int
-        foundNumbers.clear()
-        val positions = constraint.getPositions()
-        for (pos in positions) {
-            currentValue = sudoku.getCell(pos).currentValue
-            if (currentValue != -1)
-                if (foundNumbers.contains(currentValue))
-                    return false
-                else
-                    foundNumbers.add(currentValue)
-        }
-        return true
+    override fun check(constraint: Constraint, sudoku: ReadableCells): Boolean {
+        val positionsWithEntry = constraint.getPositions().filter(sudoku::isSolved)
+        return positionsWithEntry.map(sudoku::getCurrentValue).distinct().count() == positionsWithEntry.size
+                //&& positionsWithEntry.isNotEmpty() todo we should probably check this too...
     }
 
 }

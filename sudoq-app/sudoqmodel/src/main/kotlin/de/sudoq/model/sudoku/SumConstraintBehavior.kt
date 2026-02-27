@@ -23,12 +23,12 @@ class SumConstraintBehavior(private val sum: Int) : ConstraintBehavior {
      *
      * @return true, iff constraint satisfies sum behaviour.
      */
-    override fun check(constraint: Constraint, sudoku: Sudoku): Boolean {
+    override fun check(constraint: Constraint, sudoku: ReadableCells): Boolean {
         var fieldSum = 0
         var fullySolved = true
         for (pos in constraint) {
-            fieldSum += sudoku.getCell(pos).currentValue
-            if (sudoku.getCell(pos).isNotSolved) fullySolved = false
+            fieldSum += sudoku.getCurrentValue(pos)
+            if (!sudoku.isSolved(pos)) fullySolved = false
         }
         return fieldSum == sum || !fullySolved && fieldSum <= sum
     }
