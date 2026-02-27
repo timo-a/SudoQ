@@ -48,7 +48,8 @@ class SudokuBuilder(private val type: SudokuType?) {
      * @throws IllegalArgumentException If the value is out of bounds for the type
      */
     fun addSolution(pos: Position, value: Int) {
-        require(!(value < 0 || value >= type!!.numberOfSymbols)) { "Invalid value for given Sudoku Type" }
+        require(value >= 0) { "value must be at least 0, but $value was passed" }
+        require(value < type!!.numberOfSymbols) { "value must be under ${type.numberOfSymbols} but $value was passed" }
         solutions.put(pos, value)
     }
 
