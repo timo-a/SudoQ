@@ -19,7 +19,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
 
 import de.sudoq.model.Utility;
-import de.sudoq.model.ports.persistence.ReadRepo;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solver.ComplexityRelation;
 import de.sudoq.model.solverGenerator.solver.Solver;
@@ -56,8 +55,7 @@ public class GeneratorTests implements GeneratorCallback {
     @BeforeEach
     void beforeTest() {
 		TypeBuilder.get99();
-		ReadRepo<SudokuType> dummySoItCompiles = id -> null;
-		generator = new Generator(dummySoItCompiles/*sudokuDir*/);
+		generator = new Generator();
 	}
 
 	@Override
@@ -76,7 +74,7 @@ public class GeneratorTests implements GeneratorCallback {
 
 	//@Test todo fix this
 	public void testGenerationDebug() throws ExecutionException, InterruptedException {
-        Generator generator = new Generator(new SudokuTypeRepo4Tests());
+        Generator generator = new Generator();
 		Random rnd = new Random(0);
 		generator.setRandom(rnd);
 		Transformer.setRandom(rnd);
@@ -93,7 +91,7 @@ public class GeneratorTests implements GeneratorCallback {
             }
         };
 
-        generator.generate(SudokuTypes.standard4x4, Complexity.infernal, gc);
+        generator.generate(new SudokuTypeRepo4Tests().read(SudokuTypes.standard4x4.ordinal()), Complexity.infernal, gc);
         assertTimeoutPreemptively(Duration.ofSeconds(60), () -> {
             future.get();
         });
@@ -113,7 +111,8 @@ public class GeneratorTests implements GeneratorCallback {
 		Random rnd = new Random(159145199318451l);
 		generator.setRandom(rnd);
 		Transformer.setRandom(rnd);
-		generator.generate(SudokuTypes.samurai, Complexity.difficult, this);
+        SudokuType samurai = new SudokuTypeRepo4Tests().read(SudokuTypes.samurai.ordinal());
+		generator.generate(samurai, Complexity.difficult, this);
 		synchronized (this) {
 			try {
 				wait();

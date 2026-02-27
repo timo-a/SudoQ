@@ -7,14 +7,12 @@
  */
 package de.sudoq.model.solverGenerator
 
-import de.sudoq.model.ports.persistence.ReadRepo
 import de.sudoq.model.solverGenerator.solver.Solver
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.SudokuBuilder
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
-import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import java.util.Random
 
 /**
@@ -28,7 +26,7 @@ import java.util.Random
  *
  * @see Solver
  */
-class Generator(private val sudokuTypeRepo: ReadRepo<SudokuType>) {
+class Generator() {
 
     private var random: Random
 
@@ -43,9 +41,7 @@ class Generator(private val sudokuTypeRepo: ReadRepo<SudokuType>) {
      * null, oder hat das Complexity-Argument einen ungültigen Wert, so wird
      * false zurückgegeben. Ansonsten ist der Rückgabewert true.
      *
-     * @param type
-     * Der SudokuTypes-Enum Wert, aus welchem ein Sudoku erstellt und
-     * generiert werden soll
+     * @param type SudokuType instanz zu der ein Sudoku erstellt und generiert werden soll
      * @param complexity
      * Die Komplexität des zu erstellenden Sudokus
      * @param callbackObject
@@ -55,14 +51,14 @@ class Generator(private val sudokuTypeRepo: ReadRepo<SudokuType>) {
      * hinzugefügt werden konnte, false andernfalls
      */
     fun generate(
-        type: SudokuTypes?,
+        type: SudokuType,
         complexity: Complexity?,
         callbackObject: GeneratorCallback?
     ): Boolean {
-        if (type == null || complexity == null || callbackObject == null) return false
+        if (complexity == null || callbackObject == null) return false
 
         // Create sudoku
-        val sudoku = SudokuBuilder(type, sudokuTypeRepo).build()
+        val sudoku = SudokuBuilder(type).build()
         sudoku.complexity = complexity
         val t = Thread(GenerationAlgo(sudoku, callbackObject, random))
         t.start()
