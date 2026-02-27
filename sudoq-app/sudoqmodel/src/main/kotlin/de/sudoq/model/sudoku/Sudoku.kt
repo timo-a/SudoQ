@@ -12,21 +12,21 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 
 /**
  * This class represents a Sudoku with mit seinem Typ, seinen Feldern und seinem Schwierigkeitsgrad.
+ *
+ * @property id An ID uniquely identifying the Sudoku
+ * @param type The Type of the Sudoku
+ * @property cells Eine Map, welche jeder Position des Sudokus ein Feld zuweist
  */
-open class Sudoku : Iterable<Cell>, AbstractSudoku<Cell> {
-
-    /** An ID uniquely identifying the Sudoku */
-    var id: Int = 0
+open class Sudoku private constructor(
+    val id: Int = 0,
+    type: SudokuType,
+    val cells: HashMap<Position, Cell>, //todo why isn't this a [PositionMap]?)
+    private val cellPositions: MutableMap<Int, Position>
+): Iterable<Cell>, AbstractSudoku<Cell>(type) {
 
     /** Counts how often the Sudoku was already transformed */
     var transformCount = 0
         private set
-
-    /** Eine Map, welche jeder Position des Sudokus ein Feld zuweist */
-    @JvmField
-    val cells: HashMap<Position, Cell> //todo why isn't this a [PositionMap]?
-
-    private var cellPositions: MutableMap<Int, Position>? = null
 
     /** The Complexity of this Sudoku */
     var complexity: Complexity? = null
@@ -40,10 +40,9 @@ open class Sudoku : Iterable<Cell>, AbstractSudoku<Cell> {
      * @param map A Map from Positions to solution values. Values in pre-filled Cells are negated. (actually bitwise negated)
      * @param setValues A Map from Position to whether the value is pre-filled.
      */
-    constructor(type: SudokuType, map: PositionMap<Int>, setValues: Set<Position>) : super(type) {
+    constructor(type: SudokuType, map: PositionMap<Int>, setValues: Set<Position>, id: Int=0
+    ) : this(id, type, HashMap(), HashMap()) {
         var cellIdCounter = 1
-        cellPositions = HashMap()
-        cells = HashMap()
 
         // iterate over the constraints of the type and create the fields
         type.flatMap(Constraint::getPositions).distinct().forEach { position ->
@@ -57,7 +56,7 @@ open class Sudoku : Iterable<Cell>, AbstractSudoku<Cell> {
                     Cell(cellIdCounter, type.numberOfSymbols)
                 }
             }
-            cellPositions!![cellIdCounter++] = position
+            cellPositions[cellIdCounter++] = position
         }
     }
 
@@ -68,14 +67,10 @@ open class Sudoku : Iterable<Cell>, AbstractSudoku<Cell> {
         sudokuType: SudokuType,
         complexity: Complexity,
         cells: HashMap<Position, Cell>
-    ) : super(sudokuType) {
-        this.id = id
+    ) : this(id, sudokuType, cells, HashMap()) {
         this.transformCount = transformCount
         this.complexity = complexity
-        this.cells = cells
-
-        cellPositions = HashMap()
-        cells.forEach { (pos, c) -> cellPositions!![c.id] = pos }
+        cells.forEach { (pos, c) -> cellPositions[c.id] = pos }
     }
 
     /** increases transform count by one */
@@ -101,7 +96,7 @@ open class Sudoku : Iterable<Cell>, AbstractSudoku<Cell> {
      * @return the [Cell] at the specified id
      */
     fun getCell(id: Int): Cell {
-        val p = cellPositions!!.getValue(id)
+        val p = cellPositions.getValue(id)
         return getCell(p)
     }
 
@@ -113,12 +108,9 @@ open class Sudoku : Iterable<Cell>, AbstractSudoku<Cell> {
      * @param cell the new [Cell]
      * @param position the [Position] for the new Cell
      */
-    fun setCell(cell: Cell?, position: Position) {
-        //todo cell can be null because samurai transformation needs it -> refactor?
-        if (cell == null) return
-
+    fun setCell(cell: Cell, position: Position) {
         cells[position] = cell
-        cellPositions!![cell.id] = position
+        cellPositions[cell.id] = position
     }
 
 
@@ -126,10 +118,8 @@ open class Sudoku : Iterable<Cell>, AbstractSudoku<Cell> {
      * Checks if the id is mapped to a cell
      */
     fun hasCell(id: Int): Boolean {
-        if (cellPositions == null)
-            return false
 
-        val p: Position = cellPositions!![id] ?: return false
+        val p: Position = cellPositions[id] ?: return false
 
         return cells[p] != null
 
@@ -138,12 +128,7 @@ open class Sudoku : Iterable<Cell>, AbstractSudoku<Cell> {
     /**
      * Checks if the id is mapped to a cell
      */
-    fun hasCell(pos: Position): Boolean {
-        if (cellPositions == null)
-            return false
-
-        return cells[pos] != null
-    }
+    fun hasCell(pos: Position): Boolean = cells[pos] != null
 
     /**
      * Returns the [Position] of the [Cell] if the given id.
@@ -153,7 +138,7 @@ open class Sudoku : Iterable<Cell>, AbstractSudoku<Cell> {
      * @return the [Position] of the id
      */
     fun getPosition(id: Int): Position {
-        return requireNotNull(cellPositions!![id], { "id not found" })
+        return requireNotNull(cellPositions[id], { "id not found" })
     }
 
     /**
@@ -174,13 +159,7 @@ open class Sudoku : Iterable<Cell>, AbstractSudoku<Cell> {
     open val isFinished: Boolean
         get() {
             //todo doesn't check for completeness
-            var allCorrect = true
-            for (cell in cells.values)
-                if (!cell.isSolvedCorrect) {
-                    allCorrect = false
-                    break
-                }
-            return allCorrect
+            return cells.values.all(Cell::isSolvedCorrect)
         }
 
     /**
@@ -208,14 +187,7 @@ open class Sudoku : Iterable<Cell>, AbstractSudoku<Cell> {
      *
      * @return true, if there are incorrectly solved cells, false otherwise
      */
-    open fun hasErrors(): Boolean {
-        for (f in cells.values)
-            if (!f.isNotWrong)
-                return true
-        return false
-
-        //return this.fields.values().stream().anyMatch(f -> !f.isNotWrong()); //looks weird but be very careful with simplifications!
-    }
+    open fun hasErrors(): Boolean = cells.values.any { !it.isNotWrong }
 
     //debug
     override fun toString(): String {
@@ -246,6 +218,5 @@ open class Sudoku : Iterable<Cell>, AbstractSudoku<Cell> {
         sb.deleteAt(sb.length - 1)//delete last newline
         return sb.toString()
     }
-
 
 }
