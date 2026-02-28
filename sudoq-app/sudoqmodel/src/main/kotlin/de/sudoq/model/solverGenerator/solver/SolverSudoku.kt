@@ -161,7 +161,7 @@ class SolverSudoku : Sudoku {
         // set the candidate lists of all unsolved cells to 'all possible'
         positions.filter { position -> cells[position]!!.isNotSolved }
             .map(currentCandidates::get)
-            .forEach { candidateSet -> candidateSet.set(0, sudokuType.numberOfSymbols) }
+            .forEach { candidateSet -> candidateSet[0, sudokuType.numberOfSymbols] = true }
 
         updateCandidates()
     }
@@ -180,7 +180,7 @@ class SolverSudoku : Sudoku {
      * Wird geworfen, falls die spezifizierte Position nicht in dem Sudoku vorhanden ist
      */
     fun startNewBranch(pos: Position, candidate: Int) {
-        require(cells[pos] != null) { "Position does not exist in this sudoku." }
+        requireNotNull(cells[pos]) { "Position does not exist in this sudoku." }
 
         // initialize a new branch and copy candidate lists of current branch
         val branch = branchPool!!.getBranching(pos, candidate, currentCandidates) //create new branch, store current candidates there
