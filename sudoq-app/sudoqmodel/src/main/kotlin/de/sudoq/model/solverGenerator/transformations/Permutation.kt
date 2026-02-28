@@ -7,12 +7,12 @@
  */
 package de.sudoq.model.solverGenerator.transformations
 
-import de.sudoq.model.sudoku.Sudoku
+import de.sudoq.model.sudoku.SudokuUnderTransformation
 import de.sudoq.model.sudoku.sudokuTypes.PermutationProperties
 
 interface Permutation {
 
-    fun permutate(sudoku: Sudoku)
+    fun permutate(sudoku: SudokuUnderTransformation)
 
     val condition: PermutationProperties
 }

@@ -3,7 +3,9 @@ package de.sudoq.model.solverGenerator
 import de.sudoq.model.solverGenerator.transformations.Transformer.transform
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.PositionMap
+import de.sudoq.model.sudoku.SimpleCell
 import de.sudoq.model.sudoku.Sudoku
+import de.sudoq.model.sudoku.SudokuUnderTransformation
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder
 import org.amshove.kluent.`should be`
@@ -226,38 +228,53 @@ class TransformerTests {
         validSudoku(sudoku1) `should be` true
     }
 
-    fun mkSudoku(type: SudokuTypes, values: PositionMap<Int>) = Sudoku(TypeBuilder.getType(type),
-        values, setOf())
-
-    private fun initializeSamuraiMap(values: String): PositionMap<Int> {
-        val map = PositionMap.Builder<Int>(Position[21, 21])
-        val length = 21
-        for (y in 0..<length) for (x in 0..<length)
-            if (values[y * 21 + x] != ' ')
-                map.put(Position[x, y], (values[y * 21 + x].toString() + "").toInt() - 1)
-
-        return map.build()
+    fun mkSudoku(type: SudokuTypes, values: MutableMap<Position, SimpleCell>) : SudokuUnderTransformation {
+        //val cells: MutableMap<Position, SimpleCell> = type.values.
+        val cellPositions : MutableMap<Int, Position> = values.keys
+            .mapIndexed { index, position -> index to position }
+            .toMap(mutableMapOf())
+        return SudokuUnderTransformation(TypeBuilder.getType(type), values, cellPositions)
     }
 
-    private fun initializeMap(length: Int, values: IntArray): PositionMap<Int> {
+    private fun initializeSamuraiMap(values: String): MutableMap<Position, SimpleCell> {
+        val length = 21
+        val map: MutableMap<Position, SimpleCell> = HashMap()
+
+        for (y in 0..<length)
+            for (x in 0..<length)
+                if (values[y * 21 + x] != ' ') {
+                    val value = (values[y * 21 + x].toString() + "").toInt() - 1
+                    val cell = SimpleCell(true, value, value, length)
+                    map[Position[x, y]] = cell
+                }
+        return map
+    }
+
+    private fun initializeMap(length: Int, values: IntArray): MutableMap<Position, SimpleCell> {
         for (i in values.indices) {
             values[i]--
         }
+        val map: MutableMap<Position, SimpleCell> = HashMap()
 
         // assertTrue(ss99[0] == 8);
-        for (y in 0..<length) for (x in 0..<length) map.put(Position[x, y], values[y * length + x])
 
-        return map.build()
+        for (y in 0..<length)
+            for (x in 0..<length) {
+                val value = values[y * length + x]
+                val cell = SimpleCell(true, value, value, length)
+                map[Position[x, y]] = cell
+            }
+        return map
     }
 
-    private fun validSudoku(sudoku: Sudoku): Boolean {
+    private fun validSudoku(sudoku: SudokuUnderTransformation): Boolean {
         var elcount: Int
 
         for (c in sudoku.sudokuType) {
             for (i in 0..<c.size) {
                 elcount = 0
                 for (p in c) {
-                    if (sudoku.getCell(p).solution == i) elcount++
+                    if (sudoku.getCell(p).value == i) elcount++
                 }
                 if (elcount != 1) {
                     return false

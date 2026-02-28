@@ -122,7 +122,6 @@ open class Sudoku private constructor(
         val p: Position = cellPositions[id] ?: return false
 
         return cells[p] != null
-
     }
 
     /**
@@ -222,5 +221,19 @@ open class Sudoku private constructor(
     override fun getCurrentValue(pos: Position): Int = getCell(pos).currentValue
 
     override fun isSolved(pos: Position): Boolean = getCell(pos).isSolved
+
+    fun asSudokuUnderTransformation(): SudokuUnderTransformation {
+        val simpleCells = cells
+            .mapValues { SudokuUnderTransformation.map(it.value) }
+            .toMutableMap()
+        return SudokuUnderTransformation(sudokuType, simpleCells, cellPositions)
+    }
+
+    fun acceptTransformedSudoku(sudoku: SudokuUnderTransformation) {
+        cells.clear()
+        cells.putAll(sudoku.cells
+            .mapValues { SudokuUnderTransformation.map(it.value) }
+        )
+    }
 
 }
