@@ -2,8 +2,7 @@ package de.sudoq.model.solverGenerator.solution
 
 import de.sudoq.model.actionTree.Action
 import de.sudoq.model.solvingAssistant.HintTypes
-import de.sudoq.model.sudoku.Sudoku
-import java.util.*
+import de.sudoq.model.sudoku.IntermediateSudoku
 
 /**
  * A Derivation on the way to a solution of a Cell.
@@ -82,7 +81,7 @@ open class SolveDerivation constructor(var type: HintTypes?) {
         return hasActionListCapability
     }
 
-    open fun getActionList(sudoku: Sudoku): List<Action> {
+    open fun getActionList(sudoku: IntermediateSudoku): List<Action> {
         return ArrayList()
     }
 

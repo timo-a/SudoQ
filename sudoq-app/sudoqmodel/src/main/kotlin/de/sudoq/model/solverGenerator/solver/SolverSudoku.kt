@@ -5,16 +5,21 @@ import de.sudoq.model.solverGenerator.solver.BranchingPool.Branching
 import de.sudoq.model.sudoku.CandidateSet
 import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Constraint
+import de.sudoq.model.sudoku.IntermediateSudoku
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.PositionMap
+import de.sudoq.model.sudoku.ReadableCells
 import de.sudoq.model.sudoku.Sudoku
+import de.sudoq.model.sudoku.complexity.Complexity
 import java.util.BitSet
 import java.util.Stack
 
 /**
  * Eine für den Lösungsalgorithmus optimierte und erweiterte Sudoku Klasse
  */
-class SolverSudoku : Sudoku {
+class SolverSudoku : Iterable<Cell>, IntermediateSudoku, ReadableCells {
+
+    var complexity: Complexity? //todo is it ever used?
 
     /**
      * A list of all [Position]s in this sudoku
@@ -384,6 +389,14 @@ class SolverSudoku : Sudoku {
                 branchings.peek()!!.complexityValue += value
             complexityValue += value
         }
+    }
+
+    override fun getCurrentValue(pos: Position): Int = getCell(pos).currentValue
+
+    override fun isSolved(pos: Position): Boolean = getCell(pos).isSolved
+
+    override fun iterator(): Iterator<Cell> {
+        return cells.values.iterator()
     }
 
     /**

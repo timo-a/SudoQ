@@ -4,8 +4,8 @@ import de.sudoq.model.actionTree.Action
 import de.sudoq.model.actionTree.SolveActionFactory
 import de.sudoq.model.solvingAssistant.HintTypes
 import de.sudoq.model.sudoku.Constraint
+import de.sudoq.model.sudoku.IntermediateSudoku
 import de.sudoq.model.sudoku.Position
-import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.Utils
 import de.sudoq.model.sudoku.getGroupShape
 
@@ -18,7 +18,7 @@ class LastDigitDerivation(
     val constraintShape: Utils.ConstraintShape
         get() = getGroupShape(constraint)
 
-    override fun getActionList(sudoku: Sudoku): List<Action> {
+    override fun getActionList(sudoku: IntermediateSudoku): List<Action> {
         val af = SolveActionFactory()
         return listOf(af.createAction(solution, sudoku.getCell(emptyPosition)))
     }

@@ -124,7 +124,7 @@ class SubsetHelperTests : HiddenHelper(SolverSudoku(Sudoku(TypeBuilder.get99()))
          * @param y number of row starting with 1
          * @param val value starting with 1
          */
-        fun setVal(s: Sudoku, x: Int, y: Int, `val`: Int) {
+        fun setVal(s: SolverSudoku, x: Int, y: Int, `val`: Int) {
             s.getCell(Position[x - 1, y - 1]).currentValue = `val` - 1
         }
 
