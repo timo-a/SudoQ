@@ -20,9 +20,13 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 open class Sudoku private constructor(
     val id: Int = 0,
     type: SudokuType,
-    val cells: HashMap<Position, Cell>, //todo why isn't this a [PositionMap]?)
+    cells: HashMap<Position, Cell>, //todo why isn't this a [PositionMap]?)
     private val cellPositions: MutableMap<Int, Position>
 ): Iterable<Cell>, AbstractSudoku<Cell>(type), ReadableCells {
+
+    /** Eine Map, welche jeder Position des Sudokus ein Feld zuweist */
+    var cells: HashMap<Position, Cell> = cells
+        private set
 
     /** Counts how often the Sudoku was already transformed */
     var transformCount = 0
