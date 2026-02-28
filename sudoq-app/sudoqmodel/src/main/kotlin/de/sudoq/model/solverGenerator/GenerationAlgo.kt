@@ -93,13 +93,13 @@ class GenerationAlgo(
             suBi.addSolution(p, value)
             if (!sudoku.getCell(p).isNotSolved) suBi.setFixed(p)
         }
-        val res = suBi.build()
-        res.complexity = sudoku.complexity!! //vorsichtshalber dazunehmen
+        val res = suBi
+            .complexity(sudoku.complexity!!) //vorsichtshalber dazunehmen
+            .build()
 
         //we want to know the solutions used, so quickly an additional solver
         val quickSolver = Solver(res)
         quickSolver.solveAll(true, false, false)
-        res.complexity = sudoku.complexity
         if (callbackObject.toString() == "experiment") {
             callbackObject.generationFinished(res, quickSolver.solutions!!)
         } else {

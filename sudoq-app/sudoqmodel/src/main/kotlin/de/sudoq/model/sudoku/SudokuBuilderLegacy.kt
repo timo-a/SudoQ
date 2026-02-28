@@ -8,6 +8,7 @@
 package de.sudoq.model.sudoku
 
 import de.sudoq.model.ports.persistence.ReadRepo
+import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider.getSudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
@@ -16,6 +17,8 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 class SudokuBuilderLegacy(private val type: SudokuType?) {
 
     var id: Int = 0
+
+    var complexity: Complexity? = null
 
     private val solutions: PositionMap.Builder<Int> = PositionMap.Builder(type!!.size)
     private val setValues: MutableSet<Position> = HashSet()
@@ -30,6 +33,11 @@ class SudokuBuilderLegacy(private val type: SudokuType?) {
 
     fun id(id: Int): SudokuBuilderLegacy {
         this.id = id
+        return this
+    }
+
+    fun complexity(complexity: Complexity): SudokuBuilderLegacy {
+        this.complexity = complexity
         return this
     }
 

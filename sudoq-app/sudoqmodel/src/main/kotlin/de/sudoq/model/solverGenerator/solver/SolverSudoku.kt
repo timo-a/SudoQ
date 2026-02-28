@@ -19,20 +19,20 @@ class SolverSudoku : Sudoku {
     /**
      * A list of all [Position]s in this sudoku
      */
-    lateinit var positions: MutableList<Position>
+    var positions: MutableList<Position>
         private set
 
     /**
      * Maps each [Position]s in this sudoku to a list of Constraints, that contain it
      */
-    lateinit var constraints: PositionMap<ArrayList<Constraint>>
+    var constraints: PositionMap<ArrayList<Constraint>>
          private set
 
     /**
      * Mappt die Positionen auf ein BitSet, welches die Kandidaten für dieses Feld nach jedem
      * Branching-Schritt repräsentiert
      */
-    private lateinit var currentCandidates: PositionMap<CandidateSet>
+    private var currentCandidates: PositionMap<CandidateSet>
 
     /**
      * Speichert die Positionen an denen gebrancht wurde. (implizit in den einzelnen branchings )
@@ -72,12 +72,11 @@ class SolverSudoku : Sudoku {
      * Parameter and created object will be different objects with independent values,
      * can be modified independently
      */
-    constructor(sudoku: Sudoku) : super(sudoku.sudokuType) {
-        initializeSolverSudoku(sudoku, Initialization.NEW_CANDIDATES)
-    }
+    constructor(sudoku: Sudoku) : this(sudoku, Initialization.NEW_CANDIDATES)
 
     /**
      * Instanziiert ein neues SolverSudoku, welches sich auf das spezifizierte Sudoku bezieht.
+     * the passed sudoku is neither modified nor stored
      *
      * @param sudoku
      * Das Sudoku das zu dem dieses SolverSudoku gehört
@@ -86,15 +85,7 @@ class SolverSudoku : Sudoku {
      * @param mode
      * The initialization mode
      */
-    constructor(sudoku: Sudoku, mode: Initialization?) : super(sudoku.sudokuType) {
-        initializeSolverSudoku(sudoku, mode)
-    }
-
-    /**
-     * Initializes this object according to the passed sudoku
-	 * the passed sudoku is neither modified nor stored
-	 */
-    private fun initializeSolverSudoku(sudoku: Sudoku, mode: Initialization?) {
+    constructor(sudoku: Sudoku, mode: Initialization) : super(sudoku.sudokuType) {
         complexity = sudoku.complexity //transfer complexity as well
 
         // initialize the list of positions
@@ -139,8 +130,6 @@ class SolverSudoku : Sudoku {
                             if (sudoku.getCell(p).isNoteSet(i) != currentCandidates[p][i])
                                 currentCandidates[p].flip(i)
                     }
-
-            else -> throw IllegalStateException("Unexpected value: $mode")
         }
     }
 
