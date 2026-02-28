@@ -7,11 +7,11 @@
  */
 package de.sudoq.model.solverGenerator.transformations
 
-import de.sudoq.model.sudoku.Sudoku
+import de.sudoq.model.sudoku.SudokuUnderTransformation
 import de.sudoq.model.sudoku.sudokuTypes.PermutationProperties
 
 class Rotate90 : Permutation {
-    override fun permutate(sudoku: Sudoku) {
+    override fun permutate(sudoku: SudokuUnderTransformation) {
         rotate90(sudoku)
     }
 

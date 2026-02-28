@@ -28,7 +28,7 @@ class XSudokuTest {
     void solveXSudoku() {
         Path sudokuPath = Paths.get("sudokus/x_easy_1.pretty");
         Sudoku s_ = sudokuRepo.read(sudokuPath, Complexity.easy);
-        SudokuUnderConstruction s = new SudokuUnderConstruction(-1, -1, s_.getSudokuType(), s_.getComplexity(), s_.getCells());
+        SudokuUnderConstruction s = new SudokuUnderConstruction(-1, s_.getSudokuType(), s_.getComplexity(), s_.getCells());
         System.out.println(s);
         FastSolver fs = FastSolverFactory.getSolver(s_);
 

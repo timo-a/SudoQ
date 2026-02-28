@@ -25,14 +25,8 @@ open class SudokuUnderConstruction private constructor(
     private val cellPositions: MutableMap<Int, Position>
 ): Iterable<Cell>, AbstractSudoku<Cell>(type) {
 
-    /** Counts how often the Sudoku was already transformed */
-    var transformCount = 0
-        private set
-
     /** The Complexity of this Sudoku */
     var complexity: Complexity? = null
-
-    constructor(type: SudokuType) : this(type, PositionMap.Builder<Int>(type.size).build(), setOf())
 
     /**
      * All Cells are set as editable.
@@ -64,19 +58,12 @@ open class SudokuUnderConstruction private constructor(
     /*init from basic properties. use this to init from BE */
     constructor(
         id: Int,
-        transformCount: Int,
         sudokuType: SudokuType,
         complexity: Complexity,
         cells: HashMap<Position, Cell>
     ) : this(id, sudokuType, cells, HashMap()) {
-        this.transformCount = transformCount
         this.complexity = complexity
         cells.forEach { (pos, c) -> cellPositions[c.id] = pos }
-    }
-
-    /** increases transform count by one */
-    fun increaseTransformCount() {
-        transformCount++
     }
 
     /**

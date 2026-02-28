@@ -58,8 +58,11 @@ open class SudokuManager(val sudokuTypeRepo: ReadRepo<SudokuType>,
             used = sudoku
             generator.generate(sudoku.sudokuType, sudoku.complexity!!, this)
         } else {
-            Transformer.transform(sudoku)
+            val transformed = Transformer.transform(sudoku.asSudokuUnderTransformation())
             val sudokuRepo = sudokuRepoProvider.getRepo(sudoku)
+            //todo can the repo be refactored to accept old and transformed so that the old sudoku is never mutated?
+            sudoku.acceptTransformedSudoku(transformed)
+            sudoku.increaseTransformCount()
             sudokuRepo.update(sudoku)
         }
     }
