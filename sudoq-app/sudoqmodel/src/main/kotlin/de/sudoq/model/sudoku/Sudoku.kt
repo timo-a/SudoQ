@@ -21,12 +21,11 @@ open class Sudoku private constructor(
     val id: Int = 0,
     type: SudokuType,
     cells: HashMap<Position, Cell>, //todo why isn't this a [PositionMap]?)
-    private val cellPositions: MutableMap<Int, Position>
-): Iterable<Cell>, AbstractSudoku<Cell>(type), ReadableCells {
+    cellPositions: MutableMap<Int, Position>
+) : Iterable<Cell>,
+    IntermediateSudoku(type, cells, cellPositions),
+    ReadableCells {
 
-    /** Eine Map, welche jeder Position des Sudokus ein Feld zuweist */
-    var cells: HashMap<Position, Cell> = cells
-        private set
 
     /** Counts how often the Sudoku was already transformed */
     var transformCount = 0
@@ -82,27 +81,6 @@ open class Sudoku private constructor(
         transformCount++
     }
 
-    /**
-     * Returns the [Cell] at the specified [Position].
-     *
-     * @param position Position of the cell
-     * @return Cell at the [Position]
-     * @throws IllegalArgumentException if the position is not mapped to a [Cell].
-     */
-    fun getCell(position: Position): Cell {
-        return requireNotNull(cells[position])
-    }
-
-    /**
-     * Returns the [Cell] at the id.
-     *
-     * @param id ID of the [Cell] to return
-     * @return the [Cell] at the specified id
-     */
-    fun getCell(id: Int): Cell {
-        val p = cellPositions.getValue(id)
-        return getCell(p)
-    }
 
     /**
      * Maps the [Position] to the [Cell]

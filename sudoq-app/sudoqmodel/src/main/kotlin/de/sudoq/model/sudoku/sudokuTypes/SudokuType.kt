@@ -10,6 +10,7 @@ package de.sudoq.model.sudoku.sudokuTypes
 import de.sudoq.model.solverGenerator.solver.helper.Helpers
 import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.Position
+import de.sudoq.model.sudoku.ReadableCells
 import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.complexity.ComplexityConstraint
@@ -70,7 +71,7 @@ open class SudokuType(val enumType: SudokuTypes,
      * @param sudoku Sudoku to check for constraint satisfaction
      * @return true, iff the sudoku satisfies all constraints
      */
-    fun checkSudoku(sudoku: Sudoku): Boolean {
+    fun checkSudoku(sudoku: ReadableCells): Boolean {
         return constraints.all { it.isSaturated(sudoku) }
     }
 

@@ -6,7 +6,7 @@ import de.sudoq.model.solvingAssistant.HintTypes
 import de.sudoq.model.sudoku.CandidateSet
 import de.sudoq.model.sudoku.CandidateSet.Companion.fromBitSet
 import de.sudoq.model.sudoku.Constraint
-import de.sudoq.model.sudoku.Sudoku
+import de.sudoq.model.sudoku.IntermediateSudoku
 import java.util.BitSet
 import java.util.Stack
 
@@ -40,7 +40,7 @@ class HiddenSetDerivation(technique: HintTypes) : SolveDerivation(technique) {
 
 
     /* creates a list of actions in case the user want the app to execute the hints */
-    override fun getActionList(sudoku: Sudoku): List<Action> {
+    override fun getActionList(sudoku: IntermediateSudoku): List<Action> {
         val actionlist: MutableList<Action> = ArrayList()
         val af = NoteActionFactory()
         val it = cellIterator
