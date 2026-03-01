@@ -22,7 +22,7 @@ class SudokuRepo(
     constructor(sudokusDir: File, sudoku: Sudoku, sudokuTypeRepo: ReadRepo<SudokuType>) : this(
         sudokusDir,
         sudoku.sudokuType.enumType,
-        sudoku.complexity!!,
+        sudoku.complexity,
         sudokuTypeRepo
     )
 
@@ -72,7 +72,7 @@ class SudokuRepo(
         val file = File(
             getSudokuDir(
                 t.sudokuType.enumType,
-                t.complexity!!
+                t.complexity
             ).absolutePath + File.separator + "sudoku_" + id + ".xml"
         )
 

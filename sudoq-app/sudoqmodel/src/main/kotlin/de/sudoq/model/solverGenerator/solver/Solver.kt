@@ -733,8 +733,7 @@ if there is another candidate -> advance
      */
     init {
         solverSudoku = SolverSudoku(sudoku)
-        complConstr = if (sudoku.complexity == null) null //manche methoden setzen den wert nochmal vom solver... todo ausmisten, refactoren
-        else sudoku.sudokuType.buildComplexityConstraint(sudoku.complexity!!)
+        complConstr = sudoku.sudokuType.buildComplexityConstraint(sudoku.complexity)
 
         helper = makeHelperList()
         numberOfHelpers = helper.size

@@ -111,7 +111,7 @@ class Game private constructor(val id: Int, val sudoku: Sudoku,
                 Complexity.medium -> power(3.0)
                 Complexity.easy -> power(2.5)
                 //todo refactor to make these illegal values unrepresentable
-                Complexity.arbitrary, null -> throw IllegalStateException("should not happen")
+                Complexity.arbitrary -> throw IllegalStateException("should not happen")
             }
             return (scoreFactor * 10 / ((time + assistancesTimeCost) / 60.0f)).toInt()
         }
