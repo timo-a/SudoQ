@@ -388,7 +388,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
      */
     private fun setTypeText() {
         val type = Utility.type2string(this, game.sudoku.sudokuType.enumType)
-        val comp = Utility.complexity2string(this, game.sudoku.complexity!!)
+        val comp = Utility.complexity2string(this, game.sudoku.complexity)
         val ab = supportActionBar
         ab!!.title = type
         ab.subtitle = comp

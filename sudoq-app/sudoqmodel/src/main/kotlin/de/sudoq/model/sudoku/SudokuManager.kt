@@ -35,7 +35,7 @@ open class SudokuManager(val sudokuTypeRepo: ReadRepo<SudokuType>,
         val sudokuWithId = Sudoku(-1,
                                   sudoku.transformCount,
                                   sudoku.sudokuType,
-                                  sudoku.complexity!!,
+                                  sudoku.complexity,
                                   sudoku.cells
         )
         sudokuRepo.update(sudokuWithId)
@@ -56,7 +56,7 @@ open class SudokuManager(val sudokuTypeRepo: ReadRepo<SudokuType>,
     fun usedSudoku(sudoku: Sudoku) {
         if (sudoku.transformCount >= 10) {
             used = sudoku
-            generator.generate(sudoku.sudokuType, sudoku.complexity!!, this)
+            generator.generate(sudoku.sudokuType, sudoku.complexity, this)
         } else {
             val transformed = Transformer.transform(sudoku.asSudokuUnderTransformation())
             val sudokuRepo = sudokuRepoProvider.getRepo(sudoku)

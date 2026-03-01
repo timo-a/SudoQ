@@ -75,7 +75,7 @@ class SudokuController(
     override fun onAddEntry(cell: Cell, value: Int) {
         game.addAndExecute(SolveActionFactory().createAction(value, cell))
         if (game.isFinished()) {
-            statistics.updateAfterWin(game.sudoku.complexity!!, game.time, game.score)
+            statistics.updateAfterWin(game.sudoku.complexity, game.time, game.score)
             handleFinish(false)
         }
     }
@@ -83,7 +83,7 @@ class SudokuController(
     fun onHintAction(a: Action) {
         game.addAndExecute(a)
         if (game.isFinished()) {
-            statistics.updateAfterWin(game.sudoku.complexity!!, game.time, game.score)
+            statistics.updateAfterWin(game.sudoku.complexity, game.time, game.score)
             handleFinish(false)
         }
     }
@@ -101,7 +101,7 @@ class SudokuController(
     override fun onSolveOne(): Boolean {
         val res = game.solveCell()
         if (game.isFinished()) {
-            statistics.updateAfterWin(game.sudoku.complexity!!, game.time, game.score)
+            statistics.updateAfterWin(game.sudoku.complexity, game.time, game.score)
             handleFinish(false)
         }
         return res
@@ -113,7 +113,7 @@ class SudokuController(
     override fun onSolveCurrent(cell: Cell): Boolean {
         val res = game.solveCell(cell)
         if (game.isFinished()) {
-            statistics.updateAfterWin(game.sudoku.complexity!!, game.time, game.score)
+            statistics.updateAfterWin(game.sudoku.complexity, game.time, game.score)
             handleFinish(false)
         }
         return res
