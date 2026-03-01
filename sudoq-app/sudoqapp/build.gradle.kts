@@ -12,7 +12,7 @@ android {
     defaultConfig {
         applicationId = "de.sudoq"
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 35
         multiDexEnabled = true
         testApplicationId = "de.sudoq.test"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
