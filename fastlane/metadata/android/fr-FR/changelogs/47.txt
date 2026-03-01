@@ -1,0 +1,3 @@
+- Rétablir la conformité au Play Store
+  - Ajouter une politique de confidentialité
+  - Mettre à jour le SDK cible vers la version 47

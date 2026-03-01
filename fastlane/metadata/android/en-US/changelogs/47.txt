@@ -1,0 +1,3 @@
+ - restore play store compliance
+   - add privacy policy
+   - update target sdk to 47

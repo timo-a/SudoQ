@@ -1,0 +1,3 @@
+ - Play Store Compliance wiederherstellen
+   - fügt privacy policy hinzu
+   - aktualisiert target sdk auf 47
