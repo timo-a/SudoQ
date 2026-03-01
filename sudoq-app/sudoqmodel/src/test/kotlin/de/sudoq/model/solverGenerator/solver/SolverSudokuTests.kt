@@ -5,6 +5,7 @@ import de.sudoq.model.sudoku.ConstraintType
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.Sudoku
 import de.sudoq.model.sudoku.SumConstraintBehavior
+import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.ComplexityConstraintBuilder
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
@@ -23,13 +24,13 @@ internal class SolverSudokuTests {
 
     @BeforeEach
     fun before() {
-        sudoku = SolverSudoku(Sudoku(TypeBuilder.get99()))
+        sudoku = SolverSudoku(Sudoku(TypeBuilder.get99(), Complexity.easy))
     }
 
     @Test
     fun killBranchWhenThereAreNone() {
         //GIVEN
-        val sudoku = SolverSudoku(Sudoku(TypeBuilder.get99()))
+        val sudoku = SolverSudoku(Sudoku(TypeBuilder.get99(), Complexity.easy))
         //WHEN
         invoking { sudoku.killCurrentBranch() } `should throw` IllegalArgumentException::class
     }
@@ -37,7 +38,7 @@ internal class SolverSudokuTests {
     @Test
     fun killBranchShouldRemoveTheGuess() {
         //GIVEN
-        val s = Sudoku(TypeBuilder.get99())
+        val s = Sudoku(TypeBuilder.get99(), Complexity.easy)
         val p = Position[5, 7]
         s.getCell(p).toggleNote(2)
         s.getCell(p).toggleNote(3)
@@ -56,7 +57,7 @@ internal class SolverSudokuTests {
     @Test
     fun killBranchShouldRemoveTheGuess2() {
         //GIVEN
-        val s = Sudoku(TypeBuilder.get99())
+        val s = Sudoku(TypeBuilder.get99(), Complexity.easy)
         val p1 = Position[5, 7]
         s.getCell(p1).toggleNote(2)
         s.getCell(p1).toggleNote(3)
@@ -202,7 +203,7 @@ internal class SolverSudokuTests {
             ComplexityConstraintBuilder(HashMap())
         )
 
-        val sudoku = SolverSudoku(Sudoku(type))
+        val sudoku = SolverSudoku(Sudoku(type, Complexity.easy))
         sudoku.sudokuType.numberOfSymbols `should be equal to` 4
         sudoku.getCurrentCandidates(Position[0, 0]).cardinality() `should be equal to` 4
 

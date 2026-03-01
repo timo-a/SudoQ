@@ -19,23 +19,26 @@ object SudokuMockUps {
     private val str: ReadRepo<SudokuType> = SudokuTypeRepo4Tests()
 
     fun stringTo9x9Sudoku(pattern: String): Sudoku {
-        val s = SudokuBuilderLegacy(SudokuTypes.standard9x9, str).build()
-        s.complexity = Complexity.arbitrary
+        val s = SudokuBuilderLegacy(SudokuTypes.standard9x9, str)
+            .complexity(Complexity.arbitrary)
+            .build()
         return transform(s, pattern)
     }
 
     @JvmStatic
     fun stringTo16x16Sudoku(pattern: String): Sudoku {
-        val s = SudokuBuilderLegacy(SudokuTypes.standard16x16, str).build()
-        s.complexity = Complexity.arbitrary
+        val s = SudokuBuilderLegacy(SudokuTypes.standard16x16, str)
+            .complexity(Complexity.arbitrary)
+            .build()
         return transformX(16, s, pattern)
     }
 
     /* expects values in [1,9] */
     @JvmStatic
     fun stringToSamuraiSudoku(pattern: String): Sudoku {
-        val s = SudokuBuilderLegacy(SudokuTypes.samurai, str).build()
-        s.complexity = Complexity.arbitrary
+        val s = SudokuBuilderLegacy(SudokuTypes.samurai, str)
+            .complexity(Complexity.arbitrary)
+            .build()
         val dim = 21
         for (y in 0..<dim) for (x in 0..<dim) {
             val c = pattern[2 * (dim * y + x)]
@@ -94,8 +97,9 @@ object SudokuMockUps {
 
 
     fun stringToSudoku(type: SudokuTypes, pattern: String): Sudoku {
-        val sudoku = SudokuBuilderLegacy(type, str).build()
-        sudoku.complexity = Complexity.arbitrary
+        val sudoku = SudokuBuilderLegacy(type, str)
+            .complexity(Complexity.arbitrary)
+            .build()
         val xLim = sudoku.sudokuType.size.x
 
         val candidates =

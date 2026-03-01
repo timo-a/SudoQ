@@ -46,7 +46,7 @@ class SudokuBuilderLegacy(private val type: SudokuType?) {
      *
      * @return a new Sudoku
      */
-    fun build(): Sudoku = Sudoku(type!!, solutions.build(), setValues, id)
+    fun build(): Sudoku = Sudoku(type!!, solutions.build(), setValues, id = id)
 
     /**
      * Ads a solution to the Sudoku

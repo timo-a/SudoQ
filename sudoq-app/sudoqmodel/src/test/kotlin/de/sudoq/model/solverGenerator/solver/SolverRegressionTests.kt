@@ -23,11 +23,13 @@ internal class SolverRegressionTests {
         val str: ReadRepo<SudokuType> = SudokuTypeRepo4Tests()
 
 
-        sudoku = SudokuBuilderLegacy(SudokuTypes.standard9x9, str).build()
-        sudoku.complexity = Complexity.arbitrary
+        sudoku = SudokuBuilderLegacy(SudokuTypes.standard9x9, str)
+            .complexity(Complexity.arbitrary)
+            .build()
         solver = Solver(sudoku)
-        sudoku16x16 = SudokuBuilderLegacy(SudokuTypes.standard16x16, str).build()
-        sudoku16x16.complexity = Complexity.arbitrary
+        sudoku16x16 = SudokuBuilderLegacy(SudokuTypes.standard16x16, str)
+            .complexity(Complexity.arbitrary)
+            .build()
     }
 
 

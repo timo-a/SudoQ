@@ -33,17 +33,19 @@ internal class SolverTests {
 
     @BeforeEach
     fun before() {
-        sudoku = SudokuBuilderLegacy(SudokuTypes.standard9x9, sudokuTypeRepo).build()
-        sudoku.complexity = Complexity.arbitrary
+        sudoku = SudokuBuilderLegacy(SudokuTypes.standard9x9, sudokuTypeRepo)
+            .complexity(Complexity.arbitrary)
+            .build()
         solver = Solver(sudoku)
-        sudoku16x16 = SudokuBuilderLegacy(SudokuTypes.standard16x16, sudokuTypeRepo).build()
-        sudoku16x16.complexity = Complexity.arbitrary
+        sudoku16x16 = SudokuBuilderLegacy(SudokuTypes.standard16x16, sudokuTypeRepo)
+            .complexity(Complexity.arbitrary)
+            .build()
         solution16x16 = PositionMap.Builder(sudoku16x16.sudokuType.size)
     }
 
     @Test
     fun test1() {
-        val initialSudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal))
+        val initialSudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal), Complexity.arbitrary)
         for (i in 0..7) initialSudoku.getCell(Position[i, 0]).currentValue = i
         val solver = Solver(initialSudoku)
         solver.solveAll(true, false, true)
@@ -91,7 +93,7 @@ internal class SolverTests {
     @Test
     @Timeout(value = 3, unit = TimeUnit.SECONDS)
     fun solveOneAutomaticallyApplied() {
-        val sudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal))
+        val sudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal), Complexity.arbitrary)
         initSudoku9x9(sudoku)
         val solver = Solver(sudoku)
         val solverSudoku = solver.solverSudoku
@@ -112,7 +114,7 @@ internal class SolverTests {
     @Test
     @Timeout(value = 3, unit = TimeUnit.SECONDS)
     fun solveOneManuallyApplied() {
-        val sudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal))
+        val sudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal), Complexity.arbitrary)
         initSudoku9x9(sudoku)
         val solver = Solver(sudoku)
         val solverSudoku = solver.solverSudoku
@@ -135,7 +137,7 @@ internal class SolverTests {
     @Timeout(value = 3, unit = TimeUnit.SECONDS)
     fun solveOneIncorrect() {
         // GIVEN
-        val initialSudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal))
+        val initialSudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal), Complexity.arbitrary)
         for (i in 0..7) initialSudoku.getCell(Position[i, 0]).currentValue = i
         initialSudoku.getCell(Position[1, 0]).currentValue = 0 //set a second cell to 0
         val solver = Solver(initialSudoku)
@@ -150,7 +152,7 @@ internal class SolverTests {
     @Test
     @Timeout(value = 3, unit = TimeUnit.SECONDS)
     fun solveAll() {
-        val sudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal))
+        val sudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal), Complexity.arbitrary)
         initSudoku9x9(sudoku)
         val solver = Solver(sudoku)
         val solverSudoku = solver.solverSudoku
@@ -168,7 +170,7 @@ internal class SolverTests {
     @Timeout(value = 3, unit = TimeUnit.SECONDS)
     fun solveAllIncorrect() {
         // GIVEN
-        val initialSudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal))
+        val initialSudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal), Complexity.arbitrary)
         for (i in 0..7) initialSudoku.getCell(Position[i, 0]).currentValue = i
         initialSudoku.getCell(Position[1, 0]).currentValue = 0 //set a second cell to 0
         val solver = Solver(initialSudoku)
@@ -224,7 +226,6 @@ internal class SolverTests {
         )
         parse16x16(pattern)
 
-        sudoku16x16.complexity = Complexity.arbitrary
         val solver = Solver(sudoku16x16)
         val cr = solver.validateDeprecated()
 
@@ -268,7 +269,6 @@ internal class SolverTests {
         )
         parse16x16(pattern)
 
-        sudoku16x16.complexity = Complexity.arbitrary
         val solver = Solver(sudoku16x16)
         val cr = solver.validateDeprecated()
 
@@ -281,7 +281,6 @@ internal class SolverTests {
         sudoku.getCell(Position[0, 0]).currentValue = 0
         sudoku.getCell(Position[1, 0]).currentValue = 0
 
-        sudoku.complexity = Complexity.arbitrary
         val solver = Solver(sudoku)
         Assertions.assertEquals(ComplexityRelation.INVALID, solver.validateDeprecated().first)
     }

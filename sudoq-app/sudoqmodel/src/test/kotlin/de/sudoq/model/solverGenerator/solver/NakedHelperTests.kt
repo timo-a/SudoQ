@@ -5,6 +5,7 @@ import de.sudoq.model.solverGenerator.solver.helper.NakedHelper
 import de.sudoq.model.solverGenerator.solver.helper.SubsetHelper
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.Sudoku
+import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder
 import org.amshove.kluent.invoking
@@ -18,16 +19,17 @@ import java.util.BitSet
  * Created by timo on 15.10.16.
  */
 internal class NakedHelperTests {
+
     @Test
     fun illegalArgumentLevelTooLow() {
-        invoking { NakedHelper(SolverSudoku(Sudoku(TypeBuilder.get99())), 0, 20)
+        invoking { NakedHelper(mkSolverSudoku99(), 0, 20)
         } `should throw` IllegalArgumentException::class
     }
 
     @Test
     fun illegalArgumentComplexityTooLow() {
         invoking {//todo wo wird es geworfen? rest nach oben ziehen
-            NakedHelper(SolverSudoku(Sudoku(TypeBuilder.get99())), 1, -1)
+            NakedHelper(mkSolverSudoku99(), 1, -1)
         } `should throw` IllegalArgumentException::class
     }
 
@@ -79,7 +81,7 @@ internal class NakedHelperTests {
      */
     @Test
     fun nakedUpdateOne() {
-        val sudoku = SolverSudoku(Sudoku(TypeBuilder.get99()))
+        val sudoku = mkSolverSudoku99()
 
         prepareSudoku(sudoku)
 
@@ -122,7 +124,7 @@ internal class NakedHelperTests {
 
     @Test
     fun nakedUpdateAll() {
-        val sudoku = SolverSudoku(Sudoku(TypeBuilder.get99()))
+        val sudoku = mkSolverSudoku99()
 
         prepareSudoku(sudoku)
 
@@ -159,7 +161,7 @@ internal class NakedHelperTests {
 
     @Test
     fun nakedInvalidCandidateLists() {
-        val sudoku = SolverSudoku(Sudoku(TypeBuilder.get99()))
+        val sudoku = mkSolverSudoku99()
         for (p in sudoku.positions) sudoku.getCurrentCandidates(p).clear()
 
 
@@ -178,6 +180,9 @@ internal class NakedHelperTests {
         sudoku.getCurrentCandidates(Position[0, 2]) `should be equal to` nakedDouble
     }
 
+    private fun mkSolverSudoku99(): SolverSudoku {
+        return SolverSudoku(Sudoku(TypeBuilder.get99(), Complexity.easy))
+    }
 
     private fun getNumberOfNotes(s: SolverSudoku, x: Int, y: Int): Int {
         return s.getCurrentCandidates(Position[x - 1, y - 1]).cardinality()
