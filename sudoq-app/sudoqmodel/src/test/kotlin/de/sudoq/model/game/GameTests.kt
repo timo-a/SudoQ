@@ -256,8 +256,7 @@ internal class GameTests {
     @ParameterizedTest
     @CsvSource(value = ["easy,2430", "medium,7290", "difficult,21870", "infernal,65610"])
     fun score(c: Complexity, score: Int) {
-        val sudoku = Sudoku(TypeBuilder.get99())
-        sudoku.complexity = c
+        val sudoku = Sudoku(TypeBuilder.get99(), c)
         val game = Game(0, sudoku)
         game.addTime(60)
         game.score `should be equal to` score
@@ -265,8 +264,7 @@ internal class GameTests {
 
     @Test
     fun `score for arbitrary should not be possible`() {
-        val sudoku = Sudoku(TypeBuilder.get99())
-        sudoku.complexity = Complexity.arbitrary
+        val sudoku = Sudoku(TypeBuilder.get99(), Complexity.arbitrary)
         val game = Game(0, sudoku)
         game.addTime(60)
         invoking { game.score } `should throw` IllegalStateException::class

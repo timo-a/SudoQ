@@ -8,7 +8,6 @@ import org.amshove.kluent.invoking
 import org.amshove.kluent.`should be`
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should be false`
-import org.amshove.kluent.`should be null`
 import org.amshove.kluent.`should be true`
 import org.amshove.kluent.`should not be equal to`
 import org.amshove.kluent.`should not be null`
@@ -21,7 +20,7 @@ class SudokuTests {
 
     @Test
     fun initializeStandardSudoku() {
-        val sudoku = Sudoku(sudokuType99)
+        val sudoku = Sudoku(sudokuType99, Complexity.arbitrary)
 
         sudoku.sudokuType `should be` sudokuType99
         sudoku.isFinished.`should be false`()
@@ -42,7 +41,7 @@ class SudokuTests {
 
     @Test
     fun initializeWithoutSolutions() {
-        val sudoku = Sudoku(sudokuType99)
+        val sudoku = Sudoku(sudokuType99, Complexity.arbitrary)
 
         sudoku.sudokuType.`should be`(sudokuType99)
         sudoku.isFinished.`should be false`()
@@ -85,7 +84,7 @@ class SudokuTests {
 
     @Test
     fun getCell() {
-        val sudoku = Sudoku(sudokuType99)
+        val sudoku = Sudoku(sudokuType99, Complexity.arbitrary)
         val p12 = Position[1, 2]
         sudoku.hasCell(Position[9, 10]) `should be` false //because out of board
 
@@ -96,16 +95,14 @@ class SudokuTests {
 
     @Test
     fun complexity() {
-        val sudoku = Sudoku(sudokuType99)
-        sudoku.complexity.`should be null`()
-        sudoku.complexity = Complexity.easy
-        sudoku.complexity.`should not be null`()
-        sudoku.complexity.`should be`(Complexity.easy)
+        val sudoku = Sudoku(sudokuType99, Complexity.arbitrary)
+        sudoku.complexity `should be` Complexity.arbitrary
+
     }
 
     @Test//TODO no chance to fail...
     fun iterator() {
-        val su = Sudoku(sudokuType99)
+        val su = Sudoku(sudokuType99, Complexity.arbitrary)
         su.getCell(Position[0, 0]).currentValue = 5
         su.getCell(Position[1, 4]).currentValue = 4
         val i = su.iterator()
@@ -138,17 +135,14 @@ class SudokuTests {
 
     @Test
     fun notEquals() {
-        val s1 = Sudoku(sudokuType99)
-        var s2 = Sudoku(TypeBuilder.getType(SudokuTypes.standard16x16))
+        val s1 = Sudoku(sudokuType99, Complexity.easy)
+        var s2 = Sudoku(TypeBuilder.getType(SudokuTypes.standard16x16), Complexity.arbitrary)
         s1.`should not be equal to`(s2)
         s1.`should not be null`()
 
-        s2 = Sudoku(sudokuType99)
-        s1.complexity = Complexity.easy
-        s2.complexity = Complexity.medium
+        s2 = Sudoku(sudokuType99, Complexity.medium)
         s1.`should not be equal to`(s2)
-        s2 = Sudoku(TypeBuilder.getType(SudokuTypes.samurai))
-        s2.complexity = Complexity.easy
+        s2 = Sudoku(TypeBuilder.getType(SudokuTypes.samurai), Complexity.easy)
         s2.`should not be equal to`(s1)
     }
 
@@ -165,7 +159,7 @@ class SudokuTests {
 
     @Test
     fun cellModification() {
-        val s = Sudoku(TypeBuilder.get99())
+        val s = Sudoku(TypeBuilder.get99(), Complexity.arbitrary)
         val f = Cell(1000, 9)
         s.setCell(f, Position[4, 4])
         s.getCell(Position[4, 4]).`should be`(f)
@@ -176,7 +170,7 @@ class SudokuTests {
     @Test
     fun toString44() {
         val sudokuType = TypeBuilder.getType(SudokuTypes.standard4x4)
-        val sudoku = Sudoku(sudokuType)
+        val sudoku = Sudoku(sudokuType, Complexity.arbitrary)
         sudoku.getCell(Position[1, 1]).currentValue = 3
         sudoku.cells.remove(Position[1, 2])
         sudoku.toString().`should be equal to`(
@@ -192,7 +186,7 @@ class SudokuTests {
     @Test
     fun toString99() {
         val sudokuType = TypeBuilder.getType(SudokuTypes.standard16x16)
-        val sudoku = Sudoku(sudokuType)
+        val sudoku = Sudoku(sudokuType, Complexity.arbitrary)
         sudoku.getCell(Position[1, 1]).currentValue = 12
         sudoku.toString().`should be equal to`(
             """

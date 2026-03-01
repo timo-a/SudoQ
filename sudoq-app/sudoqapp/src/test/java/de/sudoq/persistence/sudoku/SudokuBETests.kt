@@ -86,7 +86,7 @@ class SudokuBETests {
 
     @Test
     fun testFromXmlError() {
-        val sudoku = Sudoku(sudokuType9x9)
+        val sudoku = Sudoku(sudokuType9x9, Complexity.easy)
         val sudokuBE = SudokuBE(
             sudoku.id, sudoku.transformCount,
             sudoku.sudokuType, Complexity.difficult, sudoku.cells
@@ -104,7 +104,7 @@ class SudokuBETests {
 
     @Test//(expected = java.lang.IllegalArgumentException::class)
     fun testFromXmlError2() {
-        val sudoku = Sudoku(sudokuType9x9)
+        val sudoku = Sudoku(sudokuType9x9, Complexity.easy)
         val sudokuBE = SudokuBE(
             sudoku.id, sudoku.transformCount,
             sudoku.sudokuType, Complexity.difficult, sudoku.cells
@@ -128,7 +128,7 @@ class SudokuBETests {
 
     @Test
     fun testFromXmlAdditionalChild() {
-        val sudoku = Sudoku(sudokuType9x9)
+        val sudoku = Sudoku(sudokuType9x9, Complexity.easy)
         val sudokuBE = SudokuBE(2, sudoku.transformCount, sudoku.sudokuType,
             Complexity.difficult, sudoku.cells
         )

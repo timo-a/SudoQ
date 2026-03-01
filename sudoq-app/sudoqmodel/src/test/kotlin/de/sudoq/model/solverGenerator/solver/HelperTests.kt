@@ -11,6 +11,7 @@ import de.sudoq.model.solverGenerator.solver.helper.SubsetHelper
 import de.sudoq.model.solverGenerator.solver.helper.XWingHelper
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.Sudoku
+import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder
 import org.amshove.kluent.invoking
 import org.amshove.kluent.`should be`
@@ -94,7 +95,7 @@ internal class HelperTests {
 
     @Test
     fun nakedInvalidCandidateLists() {
-        val sudoku = SolverSudoku(Sudoku(TypeBuilder.get99()))
+        val sudoku = SolverSudoku(Sudoku(TypeBuilder.get99(), Complexity.easy))
         for (p in sudoku.positions) {
             sudoku.getCurrentCandidates(p).clear()
         }
@@ -116,13 +117,13 @@ internal class HelperTests {
 
     @Test
     fun illegalArgumentLevelTooLow() {
-        invoking { NakedHelper(SolverSudoku(Sudoku(TypeBuilder.get99())), 0, 20)
+        invoking { NakedHelper(SolverSudoku(Sudoku(TypeBuilder.get99(), Complexity.easy)), 0, 20)
         } `should throw` IllegalArgumentException::class
     }
 
     @Test
     fun illegalArgumentComplexityTooLow() {
-        invoking { NakedHelper(SolverSudoku(Sudoku(TypeBuilder.get99())), 1, -1)
+        invoking { NakedHelper(SolverSudoku(Sudoku(TypeBuilder.get99(), Complexity.easy)), 1, -1)
         } `should throw` IllegalArgumentException::class
     }
 

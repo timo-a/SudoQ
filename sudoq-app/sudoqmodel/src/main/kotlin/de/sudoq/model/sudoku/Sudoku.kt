@@ -21,7 +21,8 @@ open class Sudoku private constructor(
     val id: Int = 0,
     type: SudokuType,
     cells: HashMap<Position, Cell>, //todo why isn't this a [PositionMap]?)
-    cellPositions: MutableMap<Int, Position>
+    cellPositions: MutableMap<Int, Position>,
+    complexity: Complexity
 ) : Iterable<Cell>,
     IntermediateSudoku(type, cells, cellPositions),
     ReadableCells {
@@ -32,9 +33,10 @@ open class Sudoku private constructor(
         private set
 
     /** The Complexity of this Sudoku */
-    var complexity: Complexity? = null
+    var complexity: Complexity = complexity
+        private set
 
-    constructor(type: SudokuType) : this(type, PositionMap.Builder<Int>(type.size).build(), setOf())
+    constructor(type: SudokuType, complexity: Complexity) : this(type, PositionMap.Builder<Int>(type.size).build(), setOf(), complexity)
 
     /**
      * All Cells are set as editable.
@@ -43,8 +45,13 @@ open class Sudoku private constructor(
      * @param map A Map from Positions to solution values. Values in pre-filled Cells are negated. (actually bitwise negated)
      * @param setValues A Map from Position to whether the value is pre-filled.
      */
-    constructor(type: SudokuType, map: PositionMap<Int>, setValues: Set<Position>, id: Int=0
-    ) : this(id, type, HashMap(), HashMap()) {
+    constructor(
+        type: SudokuType,
+        map: PositionMap<Int>,
+        setValues: Set<Position>,
+        complexity: Complexity = Complexity.arbitrary,
+        id: Int = 0
+    ) : this(id, type, HashMap(), HashMap(), complexity) {
         var cellIdCounter = 1
 
         // iterate over the constraints of the type and create the fields
@@ -70,9 +77,8 @@ open class Sudoku private constructor(
         sudokuType: SudokuType,
         complexity: Complexity,
         cells: HashMap<Position, Cell>
-    ) : this(id, sudokuType, cells, HashMap()) {
+    ) : this(id, sudokuType, cells, HashMap(), complexity) {
         this.transformCount = transformCount
-        this.complexity = complexity
         cells.forEach { (pos, c) -> cellPositions[c.id] = pos }
     }
 
