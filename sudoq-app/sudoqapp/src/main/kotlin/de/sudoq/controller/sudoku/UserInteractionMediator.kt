@@ -245,14 +245,12 @@ class UserInteractionMediator(
         } else {
             var number: Int = Symbol.getInstance().getAbstract(prediction.name)
             val save = currentCell.currentValue
-            if (number >= game.sudoku.sudokuType.numberOfSymbols) number = -1
-            if (number != -1 && game.isAssistanceAvailable(Assistances.restrictCandidates)) {
+            if (number >= game.sudoku.sudokuType.numberOfSymbols)
+                number = -1
+            else if (game.isAssistanceAvailable(Assistances.restrictCandidates)) {
                 currentCell.setCurrentValue(number, false)
-                for (c in game.sudoku.sudokuType) {
-                    if (!c.isSaturated(game.sudoku)) {
-                        number = -2
-                        break
-                    }
+                if (game.sudoku.sudokuType.any { !it.isSaturated(game.sudoku) }) {
+                    number = -2
                 }
                 currentCell.setCurrentValue(save, false)
             }
