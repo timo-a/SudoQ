@@ -1,0 +1,60 @@
+name: Create delayed releases
+
+on:
+  schedule:
+    - cron: "0 3 * * *"   # daily at 03:00
+  workflow_dispatch:
+
+jobs:
+  create_releases:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      BRANCH_NAME: development
+
+    steps:
+      - uses: actions/checkout@v6.0.2
+        with:
+          ref: ${{ env.BRANCH_NAME }}
+          fetch-depth: 100 # only last 100 commits
+          fetch-tags: true # fetch tags
+
+      - name: Create releases from tags
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          NOW=$(date +%s)
+          SEVEN_DAYS=$((7 * 86400))
+
+          # Only match tags like v1.2.3
+          git for-each-ref --merged="origin/${BRANCH_NAME}" \
+            --format='%(refname:short)|%(creatordate:unix)' \
+            refs/tags/v* | while read -r line; do
+
+            TAG=$(echo "$line" | cut -d'|' -f1)
+            TAG_TIME=$(echo "$line" | cut -d'|' -f2)
+          
+            # Strict SemVer check (v1.2.3)
+            if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+              echo "Skip $TAG, not semver."
+              continue
+            fi
+          
+            # Efficiency: Check age first (Local check, no API)
+            if (( NOW - TAG_TIME < SEVEN_DAYS )); then
+              echo "Skip $TAG, too new."
+              continue
+            fi
+          
+            # Efficiency: Check if release exists (Network API call)
+            if gh release view "$TAG" >/dev/null 2>&1; then
+              echo "Skip $TAG, release already exists."
+              continue
+            fi
+
+            # Create the release
+            VERSION="${TAG#v}"
+            echo "Creating release for $TAG"
+            gh release create "$TAG" --title "$VERSION" --notes ""
+          done
