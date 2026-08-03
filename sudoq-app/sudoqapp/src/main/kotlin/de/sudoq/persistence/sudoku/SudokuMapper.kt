@@ -10,7 +10,7 @@ object SudokuMapper {
             sudoku.transformCount,
             sudoku.sudokuType,
             sudoku.complexity!!,
-            sudoku.cells!!
+            sudoku.cells
         )
     }
 
