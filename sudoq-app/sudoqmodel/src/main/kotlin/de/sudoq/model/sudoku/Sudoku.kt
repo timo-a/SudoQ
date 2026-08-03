@@ -24,7 +24,7 @@ open class Sudoku : Iterable<Cell>, AbstractSudoku<Cell> {
 
     /** Eine Map, welche jeder Position des Sudokus ein Feld zuweist */
     @JvmField
-    var cells: HashMap<Position, Cell>? = null //todo why isn't this a [PositionMap]?
+    val cells: HashMap<Position, Cell> //todo why isn't this a [PositionMap]?
 
     private var cellPositions: MutableMap<Int, Position>? = null
 
