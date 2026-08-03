@@ -91,7 +91,7 @@ open class Sudoku : Iterable<Cell>, AbstractSudoku<Cell> {
      * @throws IllegalArgumentException if the position is not mapped to a [Cell].
      */
     fun getCell(position: Position): Cell {
-        return requireNotNull(cells!![position])
+        return requireNotNull(cells[position])
     }
 
     /**
@@ -117,7 +117,7 @@ open class Sudoku : Iterable<Cell>, AbstractSudoku<Cell> {
         //todo cell can be null because samurai transformation needs it -> refactor?
         if (cell == null) return
 
-        cells!![position] = cell
+        cells[position] = cell
         cellPositions!![cell.id] = position
     }
 
@@ -131,7 +131,7 @@ open class Sudoku : Iterable<Cell>, AbstractSudoku<Cell> {
 
         val p: Position = cellPositions!![id] ?: return false
 
-        return cells?.get(p) != null
+        return cells[p] != null
 
     }
 
@@ -142,7 +142,7 @@ open class Sudoku : Iterable<Cell>, AbstractSudoku<Cell> {
         if (cellPositions == null)
             return false
 
-        return cells!![pos] != null
+        return cells[pos] != null
     }
 
     /**
@@ -162,7 +162,7 @@ open class Sudoku : Iterable<Cell>, AbstractSudoku<Cell> {
      * @return An [Iterator] over the [Cell]s
      */
     override fun iterator(): Iterator<Cell> {
-        return cells!!.values.iterator()
+        return cells.values.iterator()
     }
 
 
@@ -175,7 +175,7 @@ open class Sudoku : Iterable<Cell>, AbstractSudoku<Cell> {
         get() {
             //todo doesn't check for completeness
             var allCorrect = true
-            for (cell in cells!!.values)
+            for (cell in cells.values)
                 if (!cell.isSolvedCorrect) {
                     allCorrect = false
                     break
@@ -192,14 +192,14 @@ open class Sudoku : Iterable<Cell>, AbstractSudoku<Cell> {
 
         val complexityMatch = complexity === other.complexity
         val typeMatch = sudokuType.enumType === other.sudokuType.enumType
-        val cellsMatch = cells!!.values.all {
+        val cellsMatch = cells.values.all {
             c -> other.hasCell(c.id) && c == other.getCell(c.id)
         }
         return complexityMatch && typeMatch && cellsMatch
     }
 
     override fun hashCode(): Int {
-        return complexity.hashCode() + sudokuType.enumType.hashCode() + cells!!.hashCode()
+        return complexity.hashCode() + sudokuType.enumType.hashCode() + cells.hashCode()
     }
 
     /**
@@ -209,7 +209,7 @@ open class Sudoku : Iterable<Cell>, AbstractSudoku<Cell> {
      * @return true, if there are incorrectly solved cells, false otherwise
      */
     open fun hasErrors(): Boolean {
-        for (f in cells!!.values)
+        for (f in cells.values)
             if (!f.isNotWrong)
                 return true
         return false

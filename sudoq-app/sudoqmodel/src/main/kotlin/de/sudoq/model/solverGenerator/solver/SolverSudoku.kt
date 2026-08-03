@@ -107,7 +107,7 @@ class SolverSudoku : Sudoku {
 
         // initialize new SolverSudoku with the fields of the specified one
         for (p in positions)
-            cells!![p] = (sudoku.getCell(p).clone() as Cell)
+            cells[p] = (sudoku.getCell(p).clone() as Cell)
 
         // initialize the constraints lists for each position and the initial
         // candidates for each field
@@ -159,7 +159,7 @@ class SolverSudoku : Sudoku {
         currentCandidates = positionPool!!.positionMap
 
         // set the candidate lists of all unsolved cells to 'all possible'
-        positions.filter { position -> cells!![position]!!.isNotSolved }
+        positions.filter { position -> cells[position]!!.isNotSolved }
             .map(currentCandidates::get)
             .forEach { candidateSet -> candidateSet.set(0, sudokuType.numberOfSymbols) }
 
@@ -180,7 +180,7 @@ class SolverSudoku : Sudoku {
      * Wird geworfen, falls die spezifizierte Position nicht in dem Sudoku vorhanden ist
      */
     fun startNewBranch(pos: Position, candidate: Int) {
-        require(cells!![pos] != null) { "Position does not exist in this sudoku." }
+        require(cells[pos] != null) { "Position does not exist in this sudoku." }
 
         // initialize a new branch and copy candidate lists of current branch
         val branch = branchPool!!.getBranching(pos, candidate, currentCandidates) //create new branch, store current candidates there
@@ -215,7 +215,7 @@ class SolverSudoku : Sudoku {
         val lastBranching = branchings.pop()
         currentCandidates = lastBranching!!.candidates //override current branch B with A
         for (p in lastBranching.solutionsSet)
-            cells!![p]!!.setCurrentValue(Cell.EMPTYVAL, false) //remove solutions added in B
+            cells[p]!!.setCurrentValue(Cell.EMPTYVAL, false) //remove solutions added in B
         complexityValue -= lastBranching.complexityValue //substract cmplx scores of techniques that are not used after all todo these techniques are still part of the solution journey... average them in somehow?
 
         //val branchCandidates = this.currentCandidates!!.get(lastBranching.position!!);//candidates of A at critical pos of A
@@ -269,7 +269,7 @@ class SolverSudoku : Sudoku {
 
                 //boolean hasNonUnique = updatedConstraints.stream().anyMatch(c -> !c.hasUniqueBehavior());
                 if (hasNonUnique) {
-                    val currentCell: Cell = cells!![position]!!
+                    val currentCell: Cell = cells[position]!!
                     val currentCandidatesSet: BitSet = currentCandidates[position]
                     var currentCandidate = -1
                     val numberOfCandidates = currentCandidatesSet.cardinality()
@@ -306,21 +306,21 @@ class SolverSudoku : Sudoku {
         for (constr in updatedConstraints) {
             updatedPositions = constr.getPositions()
             for (uPos in updatedPositions) {
-                if (cells!![uPos]!!.isNotSolved && constr.hasUniqueBehavior())
+                if (cells[uPos]!!.isNotSolved && constr.hasUniqueBehavior())
                     currentCandidates[uPos].clear(candidate)
                 else {
                     var currentCandidate = -1
                     val numberOfCandidates = currentCandidates[uPos].cardinality()
                     repeat(numberOfCandidates)  {
                         currentCandidate = currentCandidates[uPos].nextSetBit(currentCandidate + 1)
-                        cells!![uPos]!!.setCurrentValue(currentCandidate, false)
+                        cells[uPos]!!.setCurrentValue(currentCandidate, false)
                         checkedConstraints = constraints[uPos]
                         for (checkedConstraint in checkedConstraints) {
                             if (!checkedConstraint.isSaturated(this))
                                 //todo this can't be right. the following line is potentially repeated several times... is a break statement missing?
                                 currentCandidates[uPos].clear(currentCandidate)
                         }
-                        cells!![uPos]!!.setCurrentValue(Cell.EMPTYVAL, false)
+                        cells[uPos]!!.setCurrentValue(Cell.EMPTYVAL, false)
                     }
                 }
             }
@@ -340,7 +340,7 @@ class SolverSudoku : Sudoku {
     fun setSolution(pos: Position?, candidate: Int) {
         if (pos == null || candidate < 0)
             return
-        cells!![pos]!!.setCurrentValue(candidate, false)
+        cells[pos]!!.setCurrentValue(candidate, false)
         currentCandidates[pos].clear()
         if (hasBranch())
             branchings.peek()!!.solutionsSet.add(pos)

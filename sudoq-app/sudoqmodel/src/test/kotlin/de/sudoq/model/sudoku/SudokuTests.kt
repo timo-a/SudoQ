@@ -178,7 +178,7 @@ class SudokuTests {
         val sudokuType = TypeBuilder.getType(SudokuTypes.standard4x4)
         val sudoku = Sudoku(sudokuType)
         sudoku.getCell(Position[1, 1]).currentValue = 3
-        sudoku.cells!!.remove(Position[1, 2])
+        sudoku.cells.remove(Position[1, 2])
         sudoku.toString().`should be equal to`(
             """
             x x x x

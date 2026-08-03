@@ -36,7 +36,8 @@ open class SudokuManager(val sudokuTypeRepo: ReadRepo<SudokuType>,
                                   sudoku.transformCount,
                                   sudoku.sudokuType,
                                   sudoku.complexity!!,
-                                  sudoku.cells!!)
+                                  sudoku.cells
+        )
         sudokuRepo.update(sudokuWithId)
         used?.also { sudokuRepo.delete(it.id) }
     }
