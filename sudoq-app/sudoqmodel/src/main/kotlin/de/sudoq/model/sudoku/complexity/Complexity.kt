@@ -7,8 +7,6 @@
  */
 package de.sudoq.model.sudoku.complexity
 
-import java.util.*
-
 /**
  * The complexity of a sudoku.
  */
@@ -28,10 +26,7 @@ enum class Complexity {
 
     companion object {
 
-        fun playableValues(): Iterable<Complexity> {
-            val l: MutableList<Complexity> = ArrayList(listOf(*values()))
-            l.remove(arbitrary)//skip arbitrary as it is not playable
-            return l
-        }
+        fun playableValues(): Iterable<Complexity> = entries
+            .filter { it != arbitrary } //skip arbitrary as it is not playable
     }
 }
