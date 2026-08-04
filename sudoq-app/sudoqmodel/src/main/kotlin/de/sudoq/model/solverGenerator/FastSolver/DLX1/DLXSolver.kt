@@ -22,11 +22,11 @@ open class DLXSolver(s: Sudoku) : FastSolver {
     private val array: Array<IntArray?>
 
     init {
-        when (s.sudokuType.enumType) {
-            SudokuTypes.standard16x16 -> solver = Sudoku16DLX()
-            SudokuTypes.samurai -> solver = DLXSudokuSamurai()
-            SudokuTypes.Xsudoku -> solver = DLXSudokuX()
-            SudokuTypes.standard9x9 -> solver = SudokuDLX()
+        solver = when (s.sudokuType.enumType) {
+            SudokuTypes.standard16x16 -> Sudoku16DLX()
+            SudokuTypes.samurai -> DLXSudokuSamurai()
+            SudokuTypes.Xsudoku -> DLXSudokuX()
+            SudokuTypes.standard9x9 -> SudokuDLX()
             else -> throw IllegalArgumentException("only 16x16 are accepted at the moment!!!")
         }
 
