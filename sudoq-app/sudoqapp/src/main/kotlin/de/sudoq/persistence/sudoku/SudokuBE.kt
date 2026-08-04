@@ -10,7 +10,6 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.persistence.XmlAttribute
 import de.sudoq.persistence.XmlTree
 import de.sudoq.persistence.XmlableWithRepo
-import java.util.*
 
 class SudokuBE() : XmlableWithRepo<SudokuType> {
 
@@ -81,11 +80,11 @@ class SudokuBE() : XmlableWithRepo<SudokuType> {
             -1
         }
         val enumType =
-            SudokuTypes.values()[xmlTreeRepresentation.getAttributeValue("type")!!.toInt() ]
+            SudokuTypes.entries[xmlTreeRepresentation.getAttributeValue("type")!!.toInt() ]
         sudokuType = SudokuTypeProvider.getSudokuType(enumType, sudokuTypeRepo)
         transformCount = xmlTreeRepresentation.getAttributeValue("transformCount")!!.toInt()
         val compl = xmlTreeRepresentation.getAttributeValue("complexity")
-        complexity = if (compl == null) null else Complexity.values()[compl.toInt()]
+        complexity = if (compl == null) null else Complexity.entries[compl.toInt()]
 
         // build the fields
         for (sub in xmlTreeRepresentation) {
