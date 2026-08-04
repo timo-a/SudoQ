@@ -29,7 +29,7 @@ class SolverSudoku : Sudoku {
          private set
 
     /**
-     * Mappt die Positionen auf ein BitSet, welches die Kandidaten für dieses Feld repräsentiert nach jedem
+     * Mappt die Positionen auf ein BitSet, welches die Kandidaten für dieses Feld nach jedem
      * Branching-Schritt repräsentiert
      */
     private lateinit var currentCandidates: PositionMap<CandidateSet>
@@ -69,7 +69,7 @@ class SolverSudoku : Sudoku {
      *
      * @param sudoku
      * Das Sudoku das zu dem dieses SolverSudoku gehört
-     * Parameter and created object will be different objects with indepentent values,
+     * Parameter and created object will be different objects with independent values,
      * can be modified independently
      */
     constructor(sudoku: Sudoku) : super(sudoku.sudokuType) {
@@ -81,7 +81,7 @@ class SolverSudoku : Sudoku {
      *
      * @param sudoku
      * Das Sudoku das zu dem dieses SolverSudoku gehört
-     * Parameter and created object will be different objects with indepentent values,
+     * Parameter and created object will be different objects with independent values,
      * can be modified independently
      * @param mode
      * The initialization mode
@@ -118,7 +118,7 @@ class SolverSudoku : Sudoku {
         //this.constraints = new PositionMap<>(this.getSudokuType().getSize());
         //this.positions.stream().forEach(p -> this.constraints.put(p, new ArrayList<>()));
 
-        // add the constraints each position belongs to to the list
+        // add the constraints each position belongs to the list
         val allConstraints: Iterable<Constraint> = sudoku.sudokuType
         for (constr in allConstraints)
             for (pos in constr.getPositions())
@@ -329,7 +329,7 @@ class SolverSudoku : Sudoku {
 
     /**
      * Setzt die temporären Lösung für das Feld an der spezifizierten Position auf den angegebenen Kandidaten. Es werden
-     * alle abhängigen Kandidatenlisten upgedatet. Beim Entfernene des aktuellen Zweiges wird die eingetragene Lösung
+     * alle abhängigen Kandidatenlisten upgedatet. Beim Entfernen des aktuellen Zweiges wird die eingetragene Lösung
      * wieder gelöscht.
      *
      * @param pos
