@@ -19,7 +19,7 @@ class SudokuBuilder(private val type: SudokuType?) {
     private val setValues: MutableSet<Position> = HashSet()
 
     /**
-     * Cretaes a Builder for a [Sudoku] of the specified type.
+     * Creates a Builder for a [Sudoku] of the specified type.
      *
      * @param type Enum-Type of the [Sudoku] to create
      * @throws NullPointerException if type invalid.

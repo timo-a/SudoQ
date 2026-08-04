@@ -12,7 +12,7 @@ package de.sudoq.model.sudoku
  * Since the mapping is defined directly over the x,y coordinates it is more efficient than a HashMap or a TreeMap.
  *
  * @param T arbitrary type on which to map positions
- * @param dimension the bounding box dimensions of this positions to map, components must be at least 1
+ * @param dimension the bounding box dimensions of these positions to map, components must be at least 1
  * @param values value array of this map
  * @throws IllegalArgumentException if either dimension component is <= 0
  */
@@ -42,7 +42,7 @@ class PositionMap<T> private constructor(
      * Indicates if there is a value for the specified position.
      *
      * @param pos [Position] to query for
-     * @return true iff the PositionMap has a non null value saved for the parameter [pos]
+     * @return true iff the PositionMap has a non-null value saved for the parameter [pos]
      */
     operator fun contains(pos: Position): Boolean {
         require(pos.x in 0 until dimension.x) { "x coordinate of pos out of range [0, ${dimension.x-1}]: ${pos.x}" }
@@ -86,7 +86,7 @@ class PositionMap<T> private constructor(
         fun from(positions: Iterable<Position>, mapper: (Position) -> T): PositionMap<T> {
 
             require(positions.count() <= dimension.x * dimension.y)
-            //for samurai there are less positions
+            //for samurai there are fewer positions
             for (pos in positions) {
                  this.put(pos, mapper(pos))
             }

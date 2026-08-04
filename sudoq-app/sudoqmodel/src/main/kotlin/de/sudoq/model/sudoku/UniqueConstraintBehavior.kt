@@ -14,7 +14,7 @@ class UniqueConstraintBehavior : ConstraintBehavior {
     private var foundNumbers: MutableList<Int> = ArrayList()
 
     /**
-     * Checkcs if the passed Constraint satisfies Unique behaviour, i.e.
+     * Checks if the passed Constraint satisfies Unique behaviour, i.e.
      * if no symbol appears twice among the cells in the constraint.
      *
      * @return true, iff constraint satisfies unique behaviour.

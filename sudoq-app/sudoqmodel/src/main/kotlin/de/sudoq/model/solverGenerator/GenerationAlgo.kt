@@ -50,7 +50,7 @@ class GenerationAlgo(
 
     /**
      * List of currently defined(occupied) Fields.
-     * If we gave the current sudoku to the user tey wouldn't have to solve these fields
+     * If we gave the current sudoku to the user they wouldn't have to solve these fields
      * as they'd already be filled in.
      */
     private var definedCells: MutableList<Position> = ArrayList()
