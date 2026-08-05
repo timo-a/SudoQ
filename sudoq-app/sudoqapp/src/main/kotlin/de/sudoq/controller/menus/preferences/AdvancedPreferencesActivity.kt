@@ -11,8 +11,13 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.*
-import android.widget.*
+import android.view.Menu
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.Spinner
 import androidx.appcompat.widget.Toolbar
 import dagger.hilt.android.AndroidEntryPoint
 import de.sudoq.R
@@ -26,8 +31,10 @@ import de.sudoq.model.game.GameSettings
 @AndroidEntryPoint
 class AdvancedPreferencesActivity : PreferencesActivity() {
     enum class ParentActivity {
-        PROFILE, NEW_SUDOKU, NOT_SPECIFIED
+        PROFILE, NEW_SUDOKU
     }
+
+    private lateinit var myCaller: ParentActivity
 
     lateinit var lefthand: CheckBox
 
@@ -45,6 +52,11 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
         Log.i("lang", "AdvancedPreferencesActivity.onCreate() called.")
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.preferences_advanced)
+
+        require(intent.hasExtra(EXTRA_CALLER)) { "EXTRA_CALLER must be provided" }
+        // name 'caller' is already taken by property of super class androidx.activity.ComponentActivity (`getCaller()`)
+        myCaller = ParentActivity.entries[intent.getIntExtra(EXTRA_CALLER, -1)]
+
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
         val ab = supportActionBar
@@ -60,7 +72,7 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
         //exporter      = (CheckBox) findViewById(R.id.checkbox_exportcrash_trigger);
         gameSettings = NewSudokuActivity.gameSettings
         val profileGameSettings = profileManager.assistances
-        when (caller) {
+        when (myCaller) {
             ParentActivity.NEW_SUDOKU -> {
                 debug.isChecked = profileManager.appSettings.isDebugSet
                 if (debug.isChecked) {
@@ -69,7 +81,7 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
                 helper.isChecked = gameSettings!!.isHelpersSet
                 lefthand.isChecked = gameSettings!!.isLeftHandModeSet
             }
-            ParentActivity.PROFILE, ParentActivity.NOT_SPECIFIED -> {
+            ParentActivity.PROFILE -> {
                 if (debug.isChecked) {
                     debug.visibility = View.VISIBLE
                 }
@@ -171,13 +183,12 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
     }
 
     override fun adjustValuesAndSave() {
-        when (caller) {
+        when (myCaller) {
             ParentActivity.NEW_SUDOKU -> {
                 saveToGameSettings()
                 profileManager.setDebugActive(debug.isChecked)
             }
             ParentActivity.PROFILE -> saveToProfile()
-            ParentActivity.NOT_SPECIFIED -> { /* do nothing */ }
         }
     }
 
@@ -208,8 +219,8 @@ class AdvancedPreferencesActivity : PreferencesActivity() {
 
     companion object {
 
-        /*this is still a hack! this activity can be called in newSudoku-pref and in player(profile)Pref, but has different behaviours*/
-        var caller = ParentActivity.NOT_SPECIFIED
+        const val EXTRA_CALLER = "extra_caller"
+
         var gameSettings: GameSettings? = null
     }
 }

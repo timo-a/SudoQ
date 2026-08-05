@@ -8,9 +8,10 @@
 package de.sudoq.controller.menus.preferences
 
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.widget.CheckBox
 import android.widget.EditText
 import androidx.appcompat.widget.Toolbar
@@ -74,9 +75,6 @@ class PlayerPreferencesActivity : PreferencesActivity() {
 
     /**
      * Wird beim Buttonklick aufgerufen und erstellt ein neues Profil
-     *
-     * @param view
-     * von android xml übergebene View
      */
     private fun createProfile() {
         if (firstStartup) {
@@ -133,17 +131,15 @@ class PlayerPreferencesActivity : PreferencesActivity() {
 
     /* parameter View only needed to be found by xml who clicks this */
     fun switchToAdvancedPreferences(view: View?) {
-        val advIntent = Intent(this, AdvancedPreferencesActivity::class.java)
-        AdvancedPreferencesActivity.caller = ParentActivity.PROFILE
+        val advIntent = Intent(this, AdvancedPreferencesActivity::class.java).apply {
+            putExtra(AdvancedPreferencesActivity.EXTRA_CALLER, ParentActivity.PROFILE.ordinal)
+        }
         //AdvancedPreferencesActivity.gameSettings = this.gameSettings;
         startActivity(advIntent)
     }
 
     /**
      * wechselt zur Profil Liste
-     *
-     * @param view
-     * von der android xml übergebene view
      */
     private fun switchToProfileList() {
         val profileListIntent = Intent(this, ProfileListActivity::class.java)
@@ -152,9 +148,6 @@ class PlayerPreferencesActivity : PreferencesActivity() {
 
     /**
      * Löscht das ausgewählte Profil
-     *
-     * @param view
-     * von der android xml übergebene view
      */
     private fun deleteProfile() {
         profileManager.deleteProfile()
