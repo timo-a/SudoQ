@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "de.sudoq"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "de.sudoq"
         minSdk = 21
-        targetSdk = 35
+        targetSdk = 36
         multiDexEnabled = true
         testApplicationId = "de.sudoq.test"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
