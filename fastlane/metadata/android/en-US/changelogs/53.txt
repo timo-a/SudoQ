@@ -1,0 +1,1 @@
+ - update target sdk and compile sdk to 36

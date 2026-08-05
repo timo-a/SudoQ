@@ -1,0 +1,1 @@
+- Mettre à jour le target SDK et le compile SDK vers la version 36
