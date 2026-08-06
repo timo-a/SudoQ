@@ -62,21 +62,29 @@ class SudokuRepo(
 
     }
 
+    /**
+     *  updates and saves a sudoku.
+     *  For a new sudoku please use id = -1
+     */
     override fun update(t: Sudoku): Sudoku {
+        require(t.id >= -1)
+        val id: Int = if (t.id == -1) getFreeSudokuId() else t.id
         val file = File(
             getSudokuDir(
                 t.sudokuType.enumType,
                 t.complexity!!
-            ).absolutePath + File.separator + "sudoku_" + t.id + ".xml"
+            ).absolutePath + File.separator + "sudoku_" + id + ".xml"
         )
 
         try {
-            val tree = SudokuMapper.toBE(t).toXmlTree()
+            val tree = SudokuMapper.toBE(t)
+                .apply { this.id = id }
+                .toXmlTree()
             helper.saveXml(tree, file)
         } catch (e: IOException) {
             throw IllegalArgumentException("Something went wrong when writing xml", e)
         }
-        return read(t.id)
+        return read(id)
     }
 
     fun delete(t: Sudoku) {

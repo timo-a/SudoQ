@@ -8,7 +8,7 @@ import java.io.File
 
 class SudokuTypeRepo(private val sudokuDir: File) : ReadRepo<SudokuType> {
     override fun read(id: Int): SudokuType {
-        val st: SudokuTypes = SudokuTypes.values()[id]
+        val st: SudokuTypes = SudokuTypes.entries[id]
         return getSudokuType(st)
     }
 

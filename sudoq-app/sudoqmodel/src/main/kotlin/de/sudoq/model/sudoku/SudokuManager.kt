@@ -32,8 +32,7 @@ open class SudokuManager(val sudokuTypeRepo: ReadRepo<SudokuType>,
      */
     override fun generationFinished(sudoku: Sudoku) {
         val sudokuRepo = sudokuRepoProvider.getRepo(sudoku)
-        val i = sudokuRepo.create().id
-        val sudokuWithId = Sudoku(i,
+        val sudokuWithId = Sudoku(-1,
                                   sudoku.transformCount,
                                   sudoku.sudokuType,
                                   sudoku.complexity!!,
