@@ -14,6 +14,7 @@ import de.sudoq.persistence.XmlTree
 import de.sudoq.persistence.XmlableWithRepo
 import de.sudoq.persistence.sudoku.SudokuBE
 import de.sudoq.persistence.sudoku.SudokuMapper
+import java.lang.Boolean.parseBoolean
 
 class GameBE : XmlableWithRepo<SudokuType> {
 
@@ -125,22 +126,23 @@ class GameBE : XmlableWithRepo<SudokuType> {
                 } else { // if(sub.getAttributeValue(ActionTreeElement.ACTION_TYPE).equals(NoteAction.class.getSimpleName()))
                     stateHandler!!.addAndExecute(NoteActionFactory().createAction(diff, f))
                 }
-                if (java.lang.Boolean.parseBoolean(sub.getAttributeValue(ActionTreeElementBE.MARKED))) {
+                if (parseBoolean(sub.getAttributeValue(ActionTreeElementBE.MARKED))) {
                     markCurrentState()
                 }
                 var s = sub.getAttributeValue(ActionTreeElementBE.MISTAKE)
-                if (s != null && java.lang.Boolean.parseBoolean(s)) {
+                if (s != null && parseBoolean(s)) {
                     currentState.markWrong()
                 }
                 s = sub.getAttributeValue(ActionTreeElementBE.CORRECT)
-                if (s != null && java.lang.Boolean.parseBoolean(s)) {
+                if (s != null && parseBoolean(s)) {
                     currentState.markCorrect()
                 }
             }
         }
-        finished =
-            java.lang.Boolean.parseBoolean(xmlTreeRepresentation.getAttributeValue("finished"))
-        goToState(stateHandler!!.actionTree.getElement(currentStateId)!!)
+        finished = parseBoolean(xmlTreeRepresentation.getAttributeValue("finished"))
+        val currentState = stateHandler!!.actionTree.getElement(currentStateId)
+        checkNotNull(currentState) { "currentStateId not found in ActionTree. We don't know how this can happen..." }
+        goToState(currentState)
     }
 
     /**
