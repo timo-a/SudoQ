@@ -7,7 +7,7 @@ hilt = "2.58"
 
 
 # Dependencies
-appcompat = "1.7.1"
+appcompat = "1.8.0"
 material = "1.13.0"
 multidex = "2.0.1"
 coreSplashscreen = "1.0.1"
