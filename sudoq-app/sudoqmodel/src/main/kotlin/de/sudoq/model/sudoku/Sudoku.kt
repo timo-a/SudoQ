@@ -52,21 +52,17 @@ open class Sudoku private constructor(
         complexity: Complexity = Complexity.arbitrary,
         id: Int = 0
     ) : this(id, type, HashMap(), HashMap(), complexity) {
-        var cellIdCounter = 1
 
-        // iterate over the constraints of the type and create the fields
-        type.flatMap(Constraint::getPositions).distinct().forEach { position ->
-            val solution = if (map.contains(position)) map[position] else null
-            cells[position] = when {
-                solution != null -> {
+        // iterate over the positions of the type and create the cells
+        type.validPositions.forEachIndexed { index, position ->
+            var cellId = index + 1
+            cells[position] = if (map.contains(position)) {
                     val editable = position !in setValues
-                    Cell(editable, solution, cellIdCounter, type.numberOfSymbols)
-                }
-                else -> {
-                    Cell(cellIdCounter, type.numberOfSymbols)
-                }
+                    Cell(editable, map[position], cellId, type.numberOfSymbols)
+            } else {
+                    Cell(cellId, type.numberOfSymbols)
             }
-            cellPositions[cellIdCounter++] = position
+            cellPositions[cellId] = position
         }
     }
 
@@ -125,7 +121,7 @@ open class Sudoku private constructor(
      * @return the [Position] of the id
      */
     fun getPosition(id: Int): Position {
-        return requireNotNull(cellPositions[id], { "id not found" })
+        return requireNotNull(cellPositions[id]) { "id not found" }
     }
 
     /**
