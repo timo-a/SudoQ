@@ -14,7 +14,7 @@ jobs:
       BRANCH_NAME: development
 
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v7.0.1
         with:
           ref: ${{ env.BRANCH_NAME }}
           fetch-depth: 100 # only last 100 commits
