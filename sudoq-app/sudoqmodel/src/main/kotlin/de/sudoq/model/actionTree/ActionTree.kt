@@ -9,7 +9,8 @@ package de.sudoq.model.actionTree
 
 import de.sudoq.model.ObservableModelImpl
 import de.sudoq.model.sudoku.Cell
-import java.util.*
+import java.util.Collections
+import java.util.LinkedList
 
 /**
  * Diese Klasse repräsentiert die Menge aller Züge auf einem Sudoku. Sie erlaubt
@@ -60,8 +61,16 @@ class ActionTree : ObservableModelImpl<ActionTreeElement>(), Iterable<ActionTree
      * @return the node if found else null
      */
     fun getElement(id: Int): ActionTreeElement? {
+        //we had assumed [1,idCounter) here, but we can see in the developer console
+        // that some users get errors so we are relaxing to allow 0 and adding explicit `require`s
+        // to narrow it down
 
-        return if (id in 1 until idCounter) { //TODO is range check necessary?
+        // we expect only positive ids
+        require(id >= 0) { "unexpected input: $id" }
+        // we expect id to be below idCounter
+        require(id < idCounter) { "unexpected input: $id" }
+
+        return if (id in 0 until idCounter) { //TODO is range check necessary?
             this.firstOrNull { it.id == id }
         } else
             null
