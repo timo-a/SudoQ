@@ -13,14 +13,14 @@ jobs:
     name: App Unit Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Set up JDK 21
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           java-version: '21'
           distribution: 'temurin'
       - name: Cache Gradle packages
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
@@ -32,7 +32,7 @@ jobs:
           cd sudoq-app
           ./gradlew sudoqapp:testDebugUnitTest sudoqapp:createDebugUnitTestCoverageReport sudoqapp:lintDebug
       - name: Upload App Test Results
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: app-build-dir
           path: sudoq-app/sudoqapp/build/
@@ -42,14 +42,14 @@ jobs:
     name: Model Unit Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Set up JDK 21
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           java-version: '21'
           distribution: 'temurin'
       - name: Cache Gradle packages
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
@@ -61,7 +61,7 @@ jobs:
           cd sudoq-app
           ./gradlew sudoqmodel:test
       - name: Upload Model Test Results
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: model-build-dir
           path: sudoq-app/sudoqmodel/build/
@@ -72,26 +72,26 @@ jobs:
     needs: [app-tests, model-tests]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - name: Set up JDK 21
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           java-version: '21'
           distribution: 'temurin'
       - name: Download App Test Results
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: app-build-dir
           path: sudoq-app/sudoqapp/build/
       - name: Download Model Test Results
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: model-build-dir
           path: sudoq-app/sudoqmodel/build/
       - name: Cache SonarCloud packages
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
