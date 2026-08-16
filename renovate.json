@@ -15,5 +15,6 @@
       "matchPackageNames": ["io.mockk:**"],
       "groupName": "MockK dependencies",
     },
-  ]
+  ],
+  "baseBranch": "dependency-updates"
 }

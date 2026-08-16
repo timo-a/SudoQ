@@ -4,9 +4,9 @@ name: App Junit Tests
 
 on:
   push:
-    branches: [ master, development, feature/* ]
+    branches: [ master, development, dependency-updates, feature/* ]
   pull_request:
-    branches: [ master, development ]
+    branches: [ master, development, dependency-updates ]
 
 jobs:
   build:
