@@ -17,7 +17,7 @@ jobs:
   increase-version:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: increase version code
         id: increase_version_code
@@ -45,7 +45,7 @@ jobs:
           git commit -m "Version code bump: code: ${NEW_VERSION_CODE}" -a
 
       - name: push changes
-        uses: ad-m/github-push-action@v1.0.0
+        uses: ad-m/github-push-action@v1.3.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
