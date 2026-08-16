@@ -8,9 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import de.sudoq.model.sudoku.Cell;
 
@@ -81,7 +81,7 @@ public class ActionTreeTests {
 	}
 
     @Test
-    void searchForInexistentId() {
+    void searchForNonexistentId() {
 		ActionTree at = new ActionTree();
 		ActionFactory factory = new SolveActionFactory();
 		Cell cell = new Cell(-1, 1);
@@ -91,9 +91,9 @@ public class ActionTreeTests {
 		at.add(factory.createAction(1, cell), ate2);
 		at.add(factory.createAction(1, cell), ate2);
 
-		assertNull(at.getElement(10));
+		assertThrows(IllegalArgumentException.class, () -> at.getElement(10));
 		assertNull(at.getElement(0));
-		assertNull(at.getElement(-2));
+		assertThrows(IllegalArgumentException.class, () -> at.getElement(-2));
 	}
 
 	//@Test method no longer exists -> removed

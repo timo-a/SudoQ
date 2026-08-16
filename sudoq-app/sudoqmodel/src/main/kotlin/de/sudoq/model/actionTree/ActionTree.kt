@@ -73,7 +73,7 @@ class ActionTree : ObservableModelImpl<ActionTreeElement>(), Iterable<ActionTree
         return if (id in 0 until idCounter) { //TODO is range check necessary?
             this.firstOrNull { it.id == id }
         } else
-            null
+            null //TODO if we keep the assertions we can remove the else branch
     }
 
     /**
