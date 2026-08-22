@@ -21,6 +21,7 @@ apacheCommonsIo = "2.21.0"
 apacheCommonsLang3 = "3.20.0"
 kotlinxCoroutines = "1.10.2"
 androidxLifecycle = "2.8.7"
+androidxActivity = "1.9.3"
 
 [libraries]
 # AndroidX
@@ -28,6 +29,7 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 androidx-multidex = { group = "androidx.multidex", name = "multidex", version.ref = "multidex" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidxLifecycle" }
+androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidxActivity" }
 
 # Google
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
