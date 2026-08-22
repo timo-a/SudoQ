@@ -305,8 +305,12 @@ class FullScrollLayout : LinearLayout {
         override fun onScaleBegin(scaleGestureDetector: ScaleGestureDetector): Boolean {
             Log.d(LOG_TAG, "On scale begin-------------------------(")
             focus = Point(scaleGestureDetector.focusX, scaleGestureDetector.focusY)
-            (childView as SudokuLayout?)!!.focusX = focus!!.x //only for debug
-            (childView as SudokuLayout?)!!.focusY = focus!!.y
+            // other classes like ActionTreeLayout are currently not considered
+            // todo make ZoomableView a sealed interface and use `when`
+            (childView as? SudokuLayout)?.let {
+                it.focusX = focus!!.x
+                it.focusY = focus!!.y
+            }
             return true
         }
 
