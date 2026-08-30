@@ -1,5 +1,4 @@
 import com.android.build.api.dsl.ApplicationExtension
-import org.gradle.api.plugins.JavaPluginExtension
 
 plugins {
     alias(libs.plugins.android.application) apply false
@@ -8,6 +7,8 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.hilt) apply false
 }
+
+project.version = "3.2.4"
 
 subprojects {
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
