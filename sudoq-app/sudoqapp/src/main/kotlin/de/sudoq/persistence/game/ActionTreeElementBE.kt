@@ -10,14 +10,13 @@ package de.sudoq.persistence.game
 import de.sudoq.model.actionTree.Action
 import de.sudoq.persistence.XmlAttribute
 import de.sudoq.persistence.XmlTree
-import java.util.*
 
 /**
  * This class represents a node in the action tree.
  *
  * @property id an id that uniquely identifies this node.
  * @property action the action held by this node.
- * @property parent the parent node
+ * @property parentId the parent node
  *
  */
 class ActionTreeElementBE(val id: Int, val action: Action, private val parentId: Int?,
@@ -48,7 +47,7 @@ class ActionTreeElementBE(val id: Int, val action: Action, private val parentId:
         xml.addAttribute(XmlAttribute(PARENT, parentId?.toString() ?: ""))
         xml.addAttribute(XmlAttribute(DIFF, action.diff.toString()))
         xml.addAttribute(XmlAttribute(FIELD_ID, action.cellId.toString()))
-        xml.addAttribute(XmlAttribute(ACTION_TYPE, action.XML_ATTRIBUTE_NAME))
+        xml.addAttribute(XmlAttribute(ACTION_TYPE, action.xmlAttributeName))
         xml.addAttribute(XmlAttribute(MARKED, java.lang.Boolean.toString(isMarked)))
         if (isMistake) {
             xml.addAttribute(XmlAttribute(MISTAKE, java.lang.Boolean.toString(true)))

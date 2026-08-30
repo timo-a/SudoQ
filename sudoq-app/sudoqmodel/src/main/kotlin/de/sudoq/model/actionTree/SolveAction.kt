@@ -14,9 +14,8 @@ import de.sudoq.model.sudoku.Cell
  */
 class SolveAction(diff: Int, cell: Cell) : Action(diff, cell) {
 
-    init {
-        XML_ATTRIBUTE_NAME = "SolveAction"
-    }
+    override val cellId = cell.id
+    override val xmlAttributeName: String = XML_ATTRIBUTE_NAME
 
     /**
      * {@inheritDoc}
@@ -46,5 +45,18 @@ class SolveAction(diff: Int, cell: Cell) : Action(diff, cell) {
      */
     fun add(action: SolveAction): SolveAction {
         return SolveAction(diff + action.diff, cell)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other == null) return false
+        return when (other) {
+            is SolveAction -> diff == other.diff
+                    && cell == other.cell
+            else -> false
+        }
+    }
+
+    companion object {
+        const val XML_ATTRIBUTE_NAME: String = "SolveAction"
     }
 }

@@ -1,6 +1,7 @@
 package de.sudoq.persistence.game
 
 import de.sudoq.model.actionTree.ActionTreeElement
+import de.sudoq.model.actionTree.NoteAction
 import de.sudoq.model.actionTree.NoteActionFactory
 import de.sudoq.model.actionTree.SolveAction
 import de.sudoq.model.actionTree.SolveActionFactory
@@ -116,15 +117,17 @@ class GameBE : XmlableWithRepo<SudokuType> {
                 // every element has e parent
                 val field_id = sub.getAttributeValue(ActionTreeElementBE.FIELD_ID)!!.toInt()
                 val f = sudoku!!.getCell(field_id)
-                if (sub.getAttributeValue(ActionTreeElementBE.ACTION_TYPE) == SolveAction::class.java.simpleName) {
-                    stateHandler!!.addAndExecute(
-                        SolveActionFactory().createAction(
-                            f.currentValue + diff,
-                            f
-                        )
-                    )
-                } else { // if(sub.getAttributeValue(ActionTreeElement.ACTION_TYPE).equals(NoteAction.class.getSimpleName()))
-                    stateHandler!!.addAndExecute(NoteActionFactory().createAction(diff, f))
+                //todo deserialize the tree on its own, so that (de)serialization can be tested isolated
+                //todo deserialize in a way that is not dependent on order
+                when (val actionType = sub.getAttributeValue(ActionTreeElementBE.ACTION_TYPE)) {
+                    SolveAction.XML_ATTRIBUTE_NAME -> {
+                        val action = SolveActionFactory().createAction(f.currentValue + diff, f)
+                        stateHandler!!.addAndExecute(action)
+                    }
+                    NoteAction.XML_ATTRIBUTE_NAME -> {
+                        stateHandler!!.addAndExecute(NoteActionFactory().createAction(diff, f))
+                    }
+                    else -> throw IllegalStateException("unknown xml attribute value: $actionType")
                 }
                 if (parseBoolean(sub.getAttributeValue(ActionTreeElementBE.MARKED))) {
                     markCurrentState()
