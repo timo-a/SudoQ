@@ -198,10 +198,27 @@ class ActionTree : ObservableModelImpl<ActionTreeElement>(), Iterable<ActionTree
     }
 
     class MockAction : Action(0, Cell(-1, 1)) {
+
+        override val cellId = cell.id
+        override val xmlAttributeName: String = XML_ATTRIBUTE_NAME
+
         override fun undo() {}
         override fun execute() {}
         override fun inverse(a: Action): Boolean {
             return false
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (other == null) return false
+            return when (other) {
+                is MockAction -> diff == other.diff
+                        && cell == other.cell
+                else -> false
+            }
+        }
+
+        companion object {
+            const val XML_ATTRIBUTE_NAME: String = "MockAction"
         }
     }
 }

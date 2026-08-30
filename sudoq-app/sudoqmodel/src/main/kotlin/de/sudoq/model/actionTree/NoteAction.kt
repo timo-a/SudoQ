@@ -16,10 +16,8 @@ class NoteAction(diff: Int, val actionType: Action, cell: Cell) : Action(diff, c
 
     enum class Action {SET, REMOVE}
 
-
-    init {
-        XML_ATTRIBUTE_NAME = "NoteAction"
-    }
+    override val cellId = cell.id
+    override val xmlAttributeName: String = XML_ATTRIBUTE_NAME
 
     /**
      * {@inheritDoc}
@@ -45,4 +43,17 @@ class NoteAction(diff: Int, val actionType: Action, cell: Cell) : Action(diff, c
         return equals(a) && actionType == a.actionType
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (other == null) return false
+        return when (other) {
+            is NoteAction -> diff == other.diff
+                    && cell == other.cell
+                    && actionType == other.actionType
+            else -> false
+        }
+    }
+
+    companion object {
+        const val XML_ATTRIBUTE_NAME: String = "NoteAction"
+    }
 }

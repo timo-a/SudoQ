@@ -16,12 +16,9 @@ import de.sudoq.model.sudoku.Cell
  *            then the diff is 2.
  *  @property cell the [Cell] that this action is associated  with
  */
-abstract class Action internal constructor(@JvmField var diff: Int, @JvmField val cell: Cell) {
-//constuctor was originally package wide through protected
-//but there is no kotlin equivalent so it is `internal` now
+sealed class Action(var diff: Int, val cell: Cell) {
 
-    var XML_ATTRIBUTE_NAME = "Action"
-        protected set
+    abstract val xmlAttributeName: String
 
     /**
      * Executes the action.
@@ -38,22 +35,7 @@ abstract class Action internal constructor(@JvmField var diff: Int, @JvmField va
      *
      * @return the [Cell.id] of the cell associated with this class.
      */
-    val cellId: Int
-        get() = cell.id
-
-    /**
-     * {@inheritDoc}
-     */
-    override fun equals(other: Any?): Boolean {
-        if (other == null) return false
-        if (javaClass != other.javaClass)
-            return false
-
-        other as Action //TODO make explicit equals for all subclasses instead of comparing javaClass
-
-        return diff == other.diff
-                && cell == other.cell
-    }
+    abstract val cellId: Int
 
     /**
      * Determines whether two actions are inverse to each other.

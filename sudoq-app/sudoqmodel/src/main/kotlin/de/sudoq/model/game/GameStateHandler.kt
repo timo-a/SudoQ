@@ -71,6 +71,7 @@ class GameStateHandler : ObservableModelImpl<ActionTreeElement>() {
                 when(action) {
                     is NoteAction -> action.undo()
                     is SolveAction -> action.execute()
+                    is ActionTree.MockAction -> throw IllegalStateException()
                 }
             }
             isSolveOnSameCell(action) -> {
