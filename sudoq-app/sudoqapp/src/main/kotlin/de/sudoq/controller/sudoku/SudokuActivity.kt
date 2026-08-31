@@ -447,7 +447,10 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
         panel =
             supportFragmentManager.findFragmentById(R.id.controlPanelFragment) as ControlPanelFragment
         panel!!.initialize()
-        //panel!!.inflateButtons()
+        // The action-tree overlay (and its bookmark/close buttons) already exists in the
+        // layout at this point, unlike during the fragment's own onCreateView(), so it's
+        // safe to bind those buttons here.
+        panel!!.bindActionTreeButtons()
         var currentControlsView: LinearLayout? /* = (LinearLayout) findViewById(R.id.sudoku_time_border);
 		FieldViewPainter.getInstance().setMarking(currentControlsView, FieldViewStates.CONTROLS);*/
         currentControlsView = findViewById(R.id.sudoku_border)
