@@ -65,14 +65,9 @@ class ControlPanelFragment : Fragment() {
 
     /**
      * The bookmark/close buttons live in the activity's action-tree overlay, not in this
-     * fragment's own layout, so they can't be bound in [inflateButtons]/[populateViewForOrientation]:
-     * those run during onCreateView(), which happens while the activity's root layout is still
-     * being inflated - before the action-tree overlay (declared further down in the same XML)
-     * exists. findViewById() would silently return null there.
+     * fragment's own layout, so they can't be bound in [inflateButtons]/[populateViewForOrientation]
      *
-     * Call this only after the activity is done inflating its full layout (i.e. after the
-     * action-tree overlay is guaranteed to exist), e.g. from SudokuActivity once its own
-     * setContentView()/action-tree setup has completed.
+     * Call this only after the activity is done inflating its full layout and the buttons exist
      */
     fun bindActionTreeButtons() {
         val sudokuActivity = requireActivity() as SudokuActivity
