@@ -56,16 +56,27 @@ class ControlPanelFragment : Fragment() {
 
 
     fun inflateButtons(root: ViewGroup) {
-        val sudokuActivity = requireActivity() as SudokuActivity
-
         redoButton = root.findViewById<ImageButton>(R.id.button_sudoku_redo)
         undoButton = root.findViewById<ImageButton>(R.id.button_sudoku_undo)
         actionTreeButton = root.findViewById<ImageButton>(R.id.button_sudoku_actionTree)
         gestureButton = root.findViewById<ImageButton>(R.id.button_sudoku_toggle_gesture)
         assistancesButton = root.findViewById<ImageButton>(R.id.button_sudoku_help)
-        // todo what are they doing here? They belong in the action tree overlay.
+    }
+
+    /**
+     * The bookmark/close buttons live in the activity's action-tree overlay, not in this
+     * fragment's own layout, so they can't be bound in [inflateButtons]/[populateViewForOrientation]
+     *
+     * Call this only after the activity is done inflating its full layout and the buttons exist
+     */
+    fun bindActionTreeButtons() {
+        val sudokuActivity = requireActivity() as SudokuActivity
         bookmarkButton = sudokuActivity.findViewById<Button>(R.id.sudoku_action_tree_button_bookmark)
         closeButton = sudokuActivity.findViewById<Button>(R.id.sudoku_action_tree_button_close)
+
+        val clickListener = View.OnClickListener { v -> onClick(v) }
+        bookmarkButton?.setOnClickListener(clickListener)
+        closeButton?.setOnClickListener(clickListener)
     }
 
     /**
