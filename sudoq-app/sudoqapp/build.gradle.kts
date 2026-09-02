@@ -11,6 +11,9 @@ android {
 
     defaultConfig {
         applicationId = "de.sudoq"
+        versionCode = project.property("appVersionCode").toString().toInt()
+        versionName = project.property("appVersionName").toString()
+
         minSdk = 21
         targetSdk = 36
         multiDexEnabled = true
