@@ -1,9 +1,8 @@
 # SudoQ
 
-![build with gradle assemble](https://github.com/timo-a/SudoQ/actions/workflows/gradle_assemble.yml/badge.svg)  
-![build with gradle assemble](https://github.com/timo-a/SudoQ/actions/workflows/gradle_model_junit_kotlin.yml/badge.svg)  
-![build with gradle assemble](https://github.com/timo-a/SudoQ/actions/workflows/gradle_model_junit.yml/badge.svg)
-
+[![Assemble Release](https://github.com/timo-a/SudoQ/actions/workflows/gradle_assemble.yml/badge.svg)](https://github.com/timo-a/SudoQ/actions/workflows/gradle_assemble.yml)
+[![Sonar Cloud Analysis](https://github.com/timo-a/SudoQ/actions/workflows/sonar.yml/badge.svg)](https://github.com/timo-a/SudoQ/actions/workflows/sonar.yml)
+[![Quality gate status](https://sonarcloud.io/api/project_badges/measure?project=timo-a_SudoQ&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=timo-a_SudoQ)
 
 [<img src="https://f-droid.org/badge/get-it-on.png"
       alt="Get it on F-Droid"
