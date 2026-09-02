@@ -1,0 +1,107 @@
+name: Sonar Cloud Analysis
+
+on:
+  push:
+    branches:
+      - development
+      - dependency-updates
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  app-tests:
+    name: App Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up JDK 21
+        uses: actions/setup-java@v5
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: ${{ runner.os }}-gradle
+      - name: Grant execute permission for gradlew
+        run: chmod +x sudoq-app/gradlew
+      - name: Run App Tests
+        run: |
+          cd sudoq-app
+          ./gradlew sudoqapp:testDebugUnitTest
+      - name: Upload App Test Results
+        uses: actions/upload-artifact@v6
+        with:
+          name: app-build-dir
+          path: sudoq-app/sudoqapp/build/
+          retention-days: 1
+
+  model-tests:
+    name: Model Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up JDK 21
+        uses: actions/setup-java@v5
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: ${{ runner.os }}-gradle
+      - name: Grant execute permission for gradlew
+        run: chmod +x sudoq-app/gradlew
+      - name: Run Model Tests
+        run: |
+          cd sudoq-app
+          ./gradlew sudoqmodel:test # sudoqmodel:secondTest sudoqmodel:solverTest
+      - name: Upload Model Test Results
+        uses: actions/upload-artifact@v6
+        with:
+          name: model-build-dir
+          path: sudoq-app/sudoqmodel/build/
+          retention-days: 1
+
+  sonar:
+    name: SonarCloud Scan
+    needs: [app-tests, model-tests]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Set up JDK 21
+        uses: actions/setup-java@v5
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - name: Download App Test Results
+        uses: actions/download-artifact@v4
+        with:
+          name: app-build-dir
+          path: sudoq-app/sudoqapp/build/
+      - name: Download Model Test Results
+        uses: actions/download-artifact@v4
+        with:
+          name: model-build-dir
+          path: sudoq-app/sudoqmodel/build/
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Grant execute permission for gradlew
+        run: chmod +x sudoq-app/gradlew
+      - name: Run Sonar Scan
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          cd sudoq-app
+          ./gradlew sonar --info

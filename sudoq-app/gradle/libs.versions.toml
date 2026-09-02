@@ -4,6 +4,7 @@ agp = "9.0.0"
 kotlin = "2.3.0"
 ksp = "2.3.5"
 hilt = "2.58"
+sonar = "7.5.0.8588"
 
 
 # Dependencies
@@ -61,3 +62,4 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+sonar = { id = "org.sonarqube", version.ref = "sonar" }

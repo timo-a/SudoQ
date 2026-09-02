@@ -6,6 +6,21 @@ plugins {
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.hilt) apply false
+    alias(libs.plugins.sonar)
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "timo-a_SudoQ")
+        property("sonar.organization", "timo-a")
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.projectVersion", project.property("appVersionName").toString())
+
+        // Fix for "File can't be indexed twice" error with
+        // src/main/res/layouts/sudoku/layout-land/sudoku.xml
+        // by excluding all XML files
+        property("sonar.exclusions", "**/*.xml")
+    }
 }
 
 subprojects {
