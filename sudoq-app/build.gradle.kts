@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.sonar)
+    jacoco
 }
 
 sonar {
@@ -24,6 +25,26 @@ sonar {
 }
 
 subprojects {
+    apply(plugin = "jacoco")
+
+    configure<JacocoPluginExtension> {
+        toolVersion = "0.8.12"
+    }
+
+    sonar {
+        properties {
+            plugins.withId("com.android.application") {
+                property("sonar.android.buildVariant", "debug")
+                property("sonar.coverage.jacoco.xmlReportPaths", "${project.layout.buildDirectory.get().asFile}/reports/coverage/test/debug/report.xml")
+                property("sonar.junit.reportPaths", "${project.layout.buildDirectory.get().asFile}/test-results/testDebugUnitTest")
+            }
+            plugins.withId("java-library") {
+                property("sonar.coverage.jacoco.xmlReportPaths", "${project.layout.buildDirectory.get().asFile}/reports/jacoco/test/jacocoTestReport.xml")
+                property("sonar.junit.reportPaths", "${project.layout.buildDirectory.get().asFile}/test-results/test")
+            }
+        }
+    }
+
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
     }
