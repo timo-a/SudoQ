@@ -17,8 +17,8 @@ package de.sudoq.model.sudoku
  * @throws IllegalArgumentException if either dimension component is <= 0
  */
 class PositionMap<T> private constructor(
-    private var dimension: Position,
-    private val values: Array<Array<T?>> = Array(dimension.x) { arrayOfNulls<Any>(dimension.y) } as Array<Array<T?>>
+    private val dimension: Position,
+    private val values: Array<T?>
 ) : Cloneable {
 
     init {
@@ -33,9 +33,9 @@ class PositionMap<T> private constructor(
      * @return the object at the specified position or null if there is no mapping
      */
     operator fun get(pos: Position): T {
-        require(pos.x in 0 until dimension.x) { "x coordinate of pos out of range [0, ${dimension.x-1}]: ${pos.x}" }
-        require(pos.y in 0 until dimension.y) { "y coordinate of pos out of range [0, ${dimension.y-1}]: ${pos.y}" }
-        return values[pos.x][pos.y]!!
+        require(pos.x in 0 until dimension.x) { "x coordinate of pos out of range [0, ${dimension.x - 1}]: ${pos.x}" }
+        require(pos.y in 0 until dimension.y) { "y coordinate of pos out of range [0, ${dimension.y - 1}]: ${pos.y}" }
+        return values[toIndex(pos)]!!
     }
 
     /**
@@ -45,22 +45,31 @@ class PositionMap<T> private constructor(
      * @return true iff the PositionMap has a non-null value saved for the parameter [pos]
      */
     operator fun contains(pos: Position): Boolean {
-        require(pos.x in 0 until dimension.x) { "x coordinate of pos out of range [0, ${dimension.x-1}]: ${pos.x}" }
-        require(pos.y in 0 until dimension.y) { "y coordinate of pos out of range [0, ${dimension.y-1}]: ${pos.y}" }
-        return values[pos.x][pos.y] != null
+        require(pos.x in 0 until dimension.x) { "x coordinate of pos out of range [0, ${dimension.x - 1}]: ${pos.x}" }
+        require(pos.y in 0 until dimension.y) { "y coordinate of pos out of range [0, ${dimension.y - 1}]: ${pos.y}" }
+        return values[toIndex(pos)] != null
     }
 
-    class Builder<T>(private var dimension: Position) {
+    private fun toIndex(pos: Position): Int = pos.x + pos.y * dimension.x
+
+    /**
+     * Creates a shallow copy of this PositionMap.
+     */
+    public override fun clone(): PositionMap<T> {
+        return PositionMap(dimension, values.clone())
+    }
+
+    class Builder<T>(private val dimension: Position) {
 
         /**
-         * The 2D-Array of this PositionMap
+         * The flattened 1D-Array of this PositionMap
          */
-        var values: Array<Array<T?>>
+        private val values: Array<T?>
 
         init {
-            require(dimension.x >= 1 && dimension.y >= 1) { "Specified dimension or one of its components was null." }
+            require(dimension.x >= 1 && dimension.y >= 1) { "Specified dimension or one of its components was invalid." }
             @Suppress("UNCHECKED_CAST")
-            values = Array(dimension.x) { arrayOfNulls<Any>(dimension.y) } as Array<Array<T?>>
+            values = arrayOfNulls<Any?>(dimension.x * dimension.y) as Array<T?>
         }
 
         /**
@@ -70,12 +79,14 @@ class PositionMap<T> private constructor(
          * @param value the value to insert
          */
         fun put(pos: Position, value: T) {
-            require(!(pos.x > dimension.x || pos.y > dimension.y))
-            values[pos.x][pos.y] = value
+            require(pos.x in 0 until dimension.x && pos.y in 0 until dimension.y)
+            values[toIndex(pos)] = value
         }
 
+        private fun toIndex(pos: Position): Int = pos.x + pos.y * dimension.x
+
         fun build(): PositionMap<T> {
-            return PositionMap(dimension, values)
+            return PositionMap(dimension, values.clone())
         }
 
         /**
@@ -85,13 +96,10 @@ class PositionMap<T> private constructor(
          * @param mapper A function that takes a [Position] and returns the corresponding value of type T.
          */
         fun from(positions: Iterable<Position>, mapper: (Position) -> T): PositionMap<T> {
-
-            require(positions.count() <= dimension.x * dimension.y)
-            //for samurai there are fewer positions
             for (pos in positions) {
-                 this.put(pos, mapper(pos))
+                this.put(pos, mapper(pos))
             }
             return build()
-         }
+        }
     }
 }
