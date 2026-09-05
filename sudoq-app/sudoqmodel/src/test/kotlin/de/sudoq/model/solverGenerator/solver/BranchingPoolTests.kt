@@ -7,7 +7,7 @@ import org.amshove.kluent.`should be equal to`
 import org.junit.jupiter.api.Test
 
 internal class BranchingPoolTests {
-    private val dummyPositionMap = PositionMap<CandidateSet>(Position[9, 9])
+    private val dummyPositionMap = PositionMap.Builder<CandidateSet>(Position[9, 9]).build()
 
     @Test
     fun complete() {

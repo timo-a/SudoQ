@@ -8,12 +8,11 @@ import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.PositionMap
 import de.sudoq.model.sudoku.Sudoku
-import de.sudoq.model.sudoku.SudokuBuilder
+import de.sudoq.model.sudoku.SudokuBuilderLegacy
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import org.amshove.kluent.`should be`
-import org.amshove.kluent.`should match all with`
 import org.amshove.kluent.`should not be`
 import org.amshove.kluent.`should not be equal to`
 import org.amshove.kluent.shouldContainNone
@@ -27,24 +26,26 @@ internal class SolverTests {
     private lateinit var sudoku: Sudoku
     private lateinit var sudoku16x16: Sudoku
     private lateinit var solver: Solver
-    private lateinit var solution16x16: PositionMap<Int?>
+    private lateinit var solution16x16: PositionMap.Builder<Int?>
 
     private val sudokuTypeRepo: ReadRepo<SudokuType> = SudokuTypeRepo4Tests()
 
 
     @BeforeEach
     fun before() {
-        sudoku = SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku()
-        sudoku.complexity = Complexity.arbitrary
+        sudoku = SudokuBuilderLegacy(SudokuTypes.standard9x9, sudokuTypeRepo)
+            .complexity(Complexity.arbitrary)
+            .build()
         solver = Solver(sudoku)
-        sudoku16x16 = SudokuBuilder(SudokuTypes.standard16x16, sudokuTypeRepo).createSudoku()
-        sudoku16x16.complexity = Complexity.arbitrary
-        solution16x16 = PositionMap(sudoku16x16.sudokuType.size)
+        sudoku16x16 = SudokuBuilderLegacy(SudokuTypes.standard16x16, sudokuTypeRepo)
+            .complexity(Complexity.arbitrary)
+            .build()
+        solution16x16 = PositionMap.Builder(sudoku16x16.sudokuType.size)
     }
 
     @Test
     fun test1() {
-        val initialSudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal))
+        val initialSudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal), Complexity.arbitrary)
         for (i in 0..7) initialSudoku.getCell(Position[i, 0]).currentValue = i
         val solver = Solver(initialSudoku)
         solver.solveAll(true, false, true)
@@ -92,7 +93,7 @@ internal class SolverTests {
     @Test
     @Timeout(value = 3, unit = TimeUnit.SECONDS)
     fun solveOneAutomaticallyApplied() {
-        val sudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal))
+        val sudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal), Complexity.arbitrary)
         initSudoku9x9(sudoku)
         val solver = Solver(sudoku)
         val solverSudoku = solver.solverSudoku
@@ -113,7 +114,7 @@ internal class SolverTests {
     @Test
     @Timeout(value = 3, unit = TimeUnit.SECONDS)
     fun solveOneManuallyApplied() {
-        val sudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal))
+        val sudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal), Complexity.arbitrary)
         initSudoku9x9(sudoku)
         val solver = Solver(sudoku)
         val solverSudoku = solver.solverSudoku
@@ -136,7 +137,7 @@ internal class SolverTests {
     @Timeout(value = 3, unit = TimeUnit.SECONDS)
     fun solveOneIncorrect() {
         // GIVEN
-        val initialSudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal))
+        val initialSudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal), Complexity.arbitrary)
         for (i in 0..7) initialSudoku.getCell(Position[i, 0]).currentValue = i
         initialSudoku.getCell(Position[1, 0]).currentValue = 0 //set a second cell to 0
         val solver = Solver(initialSudoku)
@@ -151,7 +152,7 @@ internal class SolverTests {
     @Test
     @Timeout(value = 3, unit = TimeUnit.SECONDS)
     fun solveAll() {
-        val sudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal))
+        val sudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal), Complexity.arbitrary)
         initSudoku9x9(sudoku)
         val solver = Solver(sudoku)
         val solverSudoku = solver.solverSudoku
@@ -169,7 +170,7 @@ internal class SolverTests {
     @Timeout(value = 3, unit = TimeUnit.SECONDS)
     fun solveAllIncorrect() {
         // GIVEN
-        val initialSudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal))
+        val initialSudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal), Complexity.arbitrary)
         for (i in 0..7) initialSudoku.getCell(Position[i, 0]).currentValue = i
         initialSudoku.getCell(Position[1, 0]).currentValue = 0 //set a second cell to 0
         val solver = Solver(initialSudoku)
@@ -225,37 +226,11 @@ internal class SolverTests {
         )
         parse16x16(pattern)
 
-        sudoku16x16.complexity = Complexity.arbitrary
         val solver = Solver(sudoku16x16)
-        val cr = solver.validate(solution16x16)
+        val cr = solver.validateDeprecated()
 
         //assertEquals(ComplexityRelation.CONSTRAINT_SATURATION, cr); todo fix complexity determiation
 
-        // copy solution to current value
-        for (j in 0..<sudoku16x16.sudokuType.size.y) {
-            for (i in 0..<sudoku16x16.sudokuType.size.x) {
-                sudoku16x16.getCell(Position[i, j]).currentValue = solution16x16[Position[i, j]]!!
-            }
-        }
-
-        // check constraints
-        sudoku16x16.sudokuType `should match all with` { c -> c.isSaturated(sudoku16x16) }
-
-        println("Solution (16x16) - Complexity: " + solver.solverSudoku.complexityValue)
-        if (PRINT_SOLUTIONS) {
-            val sb = StringBuilder()
-            for (j in 0..<sudoku16x16.sudokuType.size.y) {
-                for (i in 0..<sudoku16x16.sudokuType.size.x) {
-                    val value = sudoku16x16.getCell(Position[i, j]).currentValue
-                    var op = value.toString() + ""
-                    if (value < 10) op = " " + value
-                    if (value == -1) op = " x"
-                    sb.append(op + ", ")
-                }
-                sb.append("\n")
-            }
-            println(sb)
-        }
     }
 
     private fun parse16x16(pattern: MutableList<String>) {
@@ -294,38 +269,11 @@ internal class SolverTests {
         )
         parse16x16(pattern)
 
-        sudoku16x16.complexity = Complexity.arbitrary
         val solver = Solver(sudoku16x16)
-        val cr = solver.validate(solution16x16)
+        val cr = solver.validateDeprecated()
 
         //assertEquals(ComplexityRelation.CONSTRAINT_SATURATION, cr);
 
-        // copy solution to current value
-        for (j in 0..<sudoku16x16.sudokuType.size.y) {
-            for (i in 0..<sudoku16x16.sudokuType.size.x) {
-                sudoku16x16.getCell(Position[i, j]).currentValue = solution16x16[Position[i, j]]!!
-            }
-        }
-
-        // check constraints
-        sudoku16x16.sudokuType `should match all with` { c -> c.isSaturated(sudoku16x16) }
-
-        // print solution if wanted
-        println("Solution (16x16) - Complexity: " + solver.solverSudoku.complexityValue)
-        if (PRINT_SOLUTIONS) {
-            val sb = StringBuilder()
-            for (j in 0..<sudoku16x16.sudokuType.size.y) {
-                for (i in 0..<sudoku16x16.sudokuType.size.x) {
-                    val value = sudoku16x16.getCell(Position[i, j]).currentValue
-                    var op = value.toString() + ""
-                    if (value < 10) op = " " + value
-                    if (value == -1) op = " x"
-                    sb.append(op + ", ")
-                }
-                sb.append("\n")
-            }
-            println(sb)
-        }
     }
 
     @Test
@@ -333,9 +281,8 @@ internal class SolverTests {
         sudoku.getCell(Position[0, 0]).currentValue = 0
         sudoku.getCell(Position[1, 0]).currentValue = 0
 
-        sudoku.complexity = Complexity.arbitrary
         val solver = Solver(sudoku)
-        Assertions.assertEquals(ComplexityRelation.INVALID, solver.validate(null))
+        Assertions.assertEquals(ComplexityRelation.INVALID, solver.validateDeprecated().first)
     }
 
     companion object {

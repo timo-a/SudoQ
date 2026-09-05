@@ -3,14 +3,16 @@ package de.sudoq.model.solverGenerator
 import de.sudoq.model.solverGenerator.transformations.Transformer.transform
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.PositionMap
+import de.sudoq.model.sudoku.SimpleCell
 import de.sudoq.model.sudoku.Sudoku
+import de.sudoq.model.sudoku.SudokuUnderTransformation
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder
 import org.amshove.kluent.`should be`
 import org.junit.jupiter.api.Test
 
 class TransformerTests {
-    var map: PositionMap<Int> = PositionMap(Position[9, 9])
+    var map: PositionMap.Builder<Int> = PositionMap.Builder(Position[9, 9])
 
     @Test
     fun transformS99Test1() {
@@ -26,7 +28,7 @@ class TransformerTests {
             2, 1, 9, 8, 3, 6, 4, 7, 5,
             6, 3, 4, 2, 5, 7, 1, 9, 8);
 
-		val sudoku1 = Sudoku(TypeBuilder.get99(), initializeMap(9, values), PositionMap(Position[9, 9]));
+		val sudoku1 = mkSudoku(SudokuTypes.standard9x9, initializeMap(9, values))
 
         repeat(1337) { transform(sudoku1) }
 
@@ -44,11 +46,7 @@ class TransformerTests {
             3, 1, 4, 2, 5, 6,
             6, 5, 2, 1, 4, 3)
 
-        val sudoku1 = Sudoku(
-            TypeBuilder.getType(SudokuTypes.standard6x6),
-            initializeMap(6, values),
-            PositionMap(Position[6, 6])
-        )
+        val sudoku1 = mkSudoku(SudokuTypes.standard6x6, initializeMap(6, values))
         repeat(3) { transform(sudoku1) }
 
         validSudoku(sudoku1) `should be` true
@@ -62,18 +60,14 @@ class TransformerTests {
             4, 3, 1, 2,
             2, 1, 3, 4)
 
-        val sudoku1 = Sudoku(
-            TypeBuilder.getType(SudokuTypes.standard4x4),
-            initializeMap(4, values),
-            PositionMap(Position[4, 4])
-        )
+        val sudoku1 = mkSudoku(SudokuTypes.standard4x4, initializeMap(4, values))
         repeat(100) { transform(sudoku1) }
         validSudoku(sudoku1) `should be` true
     }
 
     @Test
     fun transformS1616Test1() {
-        map = PositionMap(Position[16, 16])
+        map = PositionMap.Builder(Position[16, 16])
 
         val values = intArrayOf(
             1, 2, 13, 7, 11, 3, 4, 15, 16, 9, 10, 6, 12, 14, 8, 5,
@@ -93,11 +87,7 @@ class TransformerTests {
             5, 8, 7, 9, 14, 16, 1, 11, 12, 15, 6, 4, 3, 10, 13, 2,
             2, 1, 16, 4, 12, 8, 5, 13, 14, 10, 11, 3, 15, 7, 6, 9)
 
-        val sudoku1 = Sudoku(
-            TypeBuilder.getType(SudokuTypes.standard16x16),
-            initializeMap(16, values),
-            PositionMap(Position[16, 16])
-        )
+        val sudoku1 = mkSudoku(SudokuTypes.standard16x16, initializeMap(16, values))
 
         repeat(100) { transform(sudoku1) }
         validSudoku(sudoku1) `should be` true
@@ -105,7 +95,7 @@ class TransformerTests {
 
     @Test
     fun transformSudokuXTest1() {
-        map = PositionMap(Position[9, 9])
+        map = PositionMap.Builder(Position[9, 9])
 
         val values = intArrayOf(
             2, 8, 5, 6, 7, 9, 4, 3, 1,
@@ -118,11 +108,7 @@ class TransformerTests {
             5, 6, 8, 9, 2, 7, 1, 4, 3,
             7, 1, 3, 4, 8, 6, 2, 9, 5)
 
-        val sudoku1 = Sudoku(
-            TypeBuilder.getType(SudokuTypes.Xsudoku),
-            initializeMap(9, values),
-            PositionMap(Position[9, 9])
-        )
+        val sudoku1 = mkSudoku(SudokuTypes.Xsudoku, initializeMap(9, values))
 
         repeat(100) { transform(sudoku1) }
         validSudoku(sudoku1) `should be` true
@@ -130,7 +116,7 @@ class TransformerTests {
 
     @Test
     fun transformSudokuHyperTest1() {
-        map = PositionMap(Position[9, 9])
+        map = PositionMap.Builder(Position[9, 9])
 
         val values = intArrayOf(
             8, 4, 5, 2, 1, 3, 6, 7, 9,
@@ -143,11 +129,7 @@ class TransformerTests {
             3, 5, 2, 7, 8, 6, 4, 9, 1,
             7, 1, 9, 3, 5, 4, 8, 2, 6)
 
-        val sudoku1 = Sudoku(
-            TypeBuilder.getType(SudokuTypes.HyperSudoku),
-            initializeMap(9, values),
-            PositionMap(Position[9, 9])
-        )
+        val sudoku1 = mkSudoku(SudokuTypes.HyperSudoku, initializeMap(9, values))
         validSudoku(sudoku1) `should be` true
         repeat(100) { transform(sudoku1) }
         validSudoku(sudoku1) `should be` true
@@ -155,7 +137,7 @@ class TransformerTests {
 
     @Test
     fun transformSudokuStairStepTest1() {
-        map = PositionMap(Position[9, 9])
+        map = PositionMap.Builder(Position[9, 9])
 
         val values = intArrayOf(
             7, 8, 1, 3, 4, 6, 5, 2, 9,
@@ -168,11 +150,7 @@ class TransformerTests {
             4, 3, 2, 5, 1, 7, 9, 6, 8,
             8, 1, 9, 4, 6, 5, 3, 7, 2)
 
-        val sudoku1 = Sudoku(
-            TypeBuilder.getType(SudokuTypes.stairstep),
-            initializeMap(9, values),
-            PositionMap(Position[9, 9])
-        )
+        val sudoku1 = mkSudoku(SudokuTypes.stairstep, initializeMap(9, values))
         validSudoku(sudoku1) `should be` true
         repeat(100) { transform(sudoku1) }
         validSudoku(sudoku1) `should be` true
@@ -180,7 +158,7 @@ class TransformerTests {
 
     @Test
     fun transformSudokuSquigglyATest1() {
-        map = PositionMap(Position[9, 9])
+        map = PositionMap.Builder(Position[9, 9])
 
         val values = intArrayOf(
             6, 7, 4, 3, 9, 5, 1, 8, 2,
@@ -193,11 +171,7 @@ class TransformerTests {
             1, 2, 7, 9, 8, 4, 3, 5, 6,
             8, 9, 2, 5, 3, 6, 7, 4, 1)
 
-        val sudoku1 = Sudoku(
-            TypeBuilder.getType(SudokuTypes.squigglya),
-            initializeMap(9, values),
-            PositionMap(Position[9, 9])
-        )
+        val sudoku1 = mkSudoku(SudokuTypes.squigglya, initializeMap(9, values))
         validSudoku(sudoku1) `should be` true
         repeat(100) { transform(sudoku1) }
         validSudoku(sudoku1) `should be` true
@@ -205,7 +179,7 @@ class TransformerTests {
 
     @Test
     fun transformSudokuSquigglyBTest1() {
-        map = PositionMap(Position[9, 9])
+        map = PositionMap.Builder(Position[9, 9])
 
         val values = intArrayOf(
             8, 9, 2, 5, 1, 4, 6, 3, 7,
@@ -218,11 +192,7 @@ class TransformerTests {
             9, 7, 1, 2, 3, 5, 4, 8, 6,
             3, 6, 8, 4, 7, 1, 9, 5, 2)
 
-        val sudoku1 = Sudoku(
-            TypeBuilder.getType(SudokuTypes.squigglyb),
-            initializeMap(9, values),
-            PositionMap(Position[9, 9])
-        )
+        val sudoku1 = mkSudoku(SudokuTypes.squigglyb, initializeMap(9, values))
         validSudoku(sudoku1) `should be` true
         repeat(100) { transform(sudoku1) }
         validSudoku(sudoku1) `should be` true
@@ -252,45 +222,59 @@ class TransformerTests {
                 "283719654   564328197" +
                 "471562398   912675438"
 
-        val sudoku1 = Sudoku(
-            TypeBuilder.getType(SudokuTypes.samurai),
-            initializeSamuraiMap(values),
-            PositionMap(Position[21, 21])
-        )
+        val sudoku1 = mkSudoku(SudokuTypes.samurai, initializeSamuraiMap(values))
         validSudoku(sudoku1) `should be` true
         repeat(100) { transform(sudoku1) }
         validSudoku(sudoku1) `should be` true
     }
 
-    private fun initializeSamuraiMap(values: String): PositionMap<Int> {
-        val map = PositionMap<Int>(Position[21, 21])
-        val length = 21
-        for (y in 0..<length) for (x in 0..<length)
-            if (values[y * 21 + x] != ' ')
-                map.put(Position[x, y], (values[y * 21 + x].toString() + "").toInt() - 1)
+    fun mkSudoku(type: SudokuTypes, values: MutableMap<Position, SimpleCell>) : SudokuUnderTransformation {
+        //val cells: MutableMap<Position, SimpleCell> = type.values.
+        val cellPositions : MutableMap<Int, Position> = values.keys
+            .mapIndexed { index, position -> index to position }
+            .toMap(mutableMapOf())
+        return SudokuUnderTransformation(TypeBuilder.getType(type), values, cellPositions)
+    }
 
+    private fun initializeSamuraiMap(values: String): MutableMap<Position, SimpleCell> {
+        val length = 21
+        val map: MutableMap<Position, SimpleCell> = HashMap()
+
+        for (y in 0..<length)
+            for (x in 0..<length)
+                if (values[y * 21 + x] != ' ') {
+                    val value = (values[y * 21 + x].toString() + "").toInt() - 1
+                    val cell = SimpleCell(true, value, value, length)
+                    map[Position[x, y]] = cell
+                }
         return map
     }
 
-    private fun initializeMap(length: Int, values: IntArray): PositionMap<Int> {
+    private fun initializeMap(length: Int, values: IntArray): MutableMap<Position, SimpleCell> {
         for (i in values.indices) {
             values[i]--
         }
+        val map: MutableMap<Position, SimpleCell> = HashMap()
 
         // assertTrue(ss99[0] == 8);
-        for (y in 0..<length) for (x in 0..<length) map.put(Position[x, y], values[y * length + x])
 
+        for (y in 0..<length)
+            for (x in 0..<length) {
+                val value = values[y * length + x]
+                val cell = SimpleCell(true, value, value, length)
+                map[Position[x, y]] = cell
+            }
         return map
     }
 
-    private fun validSudoku(sudoku: Sudoku): Boolean {
+    private fun validSudoku(sudoku: SudokuUnderTransformation): Boolean {
         var elcount: Int
 
         for (c in sudoku.sudokuType) {
             for (i in 0..<c.size) {
                 elcount = 0
                 for (p in c) {
-                    if (sudoku.getCell(p).solution == i) elcount++
+                    if (sudoku.getCell(p).value == i) elcount++
                 }
                 if (elcount != 1) {
                     return false

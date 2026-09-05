@@ -4,6 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -14,26 +18,18 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.apache.commons.lang3.NotImplementedException;
-import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-
 import de.sudoq.model.Utility;
-import de.sudoq.model.ports.persistence.ReadRepo;
-import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests;
-import de.sudoq.model.utility.FileManager;
 import de.sudoq.model.solverGenerator.solution.Solution;
 import de.sudoq.model.solverGenerator.solver.ComplexityRelation;
 import de.sudoq.model.solverGenerator.solver.Solver;
 import de.sudoq.model.solverGenerator.transformations.Transformer;
+import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests;
 import de.sudoq.model.sudoku.Sudoku;
 import de.sudoq.model.sudoku.complexity.Complexity;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType;
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes;
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder;
+import de.sudoq.model.utility.FileManager;
 
 public class GeneratorTests implements GeneratorCallback {
 
@@ -59,27 +55,28 @@ public class GeneratorTests implements GeneratorCallback {
     @BeforeEach
     void beforeTest() {
 		TypeBuilder.get99();
-		ReadRepo<SudokuType> dummySoItCompiles = id -> null;
-		generator = new Generator(dummySoItCompiles/*sudokuDir*/);
+		generator = new Generator();
 	}
 
 	@Override
 	public synchronized void generationFinished(Sudoku sudoku) {
-        assertEquals(ComplexityRelation.CONSTRAINT_SATURATION, new Solver(sudoku).validate(null));
+        assertEquals(ComplexityRelation.CONSTRAINT_SATURATION,
+				new Solver(sudoku).validateDeprecated(false).getFirst());
 		this.notifyAll();
 	}
 
 	@Override
 	public synchronized void generationFinished(Sudoku sudoku, List<Solution> s) {
-        assertEquals(ComplexityRelation.CONSTRAINT_SATURATION, new Solver(sudoku).validate(null));
+        assertEquals(ComplexityRelation.CONSTRAINT_SATURATION,
+				new Solver(sudoku).validateDeprecated(false).getFirst());
 		this.notifyAll();
 	}
 
 	//@Test todo fix this
 	public void testGenerationDebug() throws ExecutionException, InterruptedException {
-        Generator generator = new Generator(new SudokuTypeRepo4Tests());
+        Generator localGenerator = new Generator();
 		Random rnd = new Random(0);
-		generator.setRandom(rnd);
+		localGenerator.setRandom(rnd);
 		Transformer.setRandom(rnd);
         CompletableFuture<Sudoku> future = new CompletableFuture<>();
         GeneratorCallback gc = new GeneratorCallback() {
@@ -94,7 +91,7 @@ public class GeneratorTests implements GeneratorCallback {
             }
         };
 
-        generator.generate(SudokuTypes.standard4x4, Complexity.infernal, gc);
+        localGenerator.generate(new SudokuTypeRepo4Tests().read(SudokuTypes.standard4x4.ordinal()), Complexity.infernal, gc);
         assertTimeoutPreemptively(Duration.ofSeconds(60), () -> {
             future.get();
         });
@@ -114,7 +111,8 @@ public class GeneratorTests implements GeneratorCallback {
 		Random rnd = new Random(159145199318451l);
 		generator.setRandom(rnd);
 		Transformer.setRandom(rnd);
-		generator.generate(SudokuTypes.samurai, Complexity.difficult, this);
+        SudokuType samurai = new SudokuTypeRepo4Tests().read(SudokuTypes.samurai.ordinal());
+		generator.generate(samurai, Complexity.difficult, this);
 		synchronized (this) {
 			try {
 				wait();

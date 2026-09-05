@@ -21,7 +21,7 @@ internal class BacktrackingTests {
 
     @Test
     fun initialisation() {
-        val sudoku = SolverSudoku(Sudoku(TypeBuilder.get99()))
+        val sudoku = SolverSudoku(Sudoku(TypeBuilder.get99(), Complexity.easy))
         val back = Backtracking(sudoku, 10)
         back.complexityScore `should be equal to` 10
     }
@@ -29,13 +29,13 @@ internal class BacktrackingTests {
     @Test
     fun iInitialisationWithInvalidComplexity() {
         invoking {
-            Backtracking(SolverSudoku(Sudoku(TypeBuilder.get99())), -2)
+            Backtracking(SolverSudoku(Sudoku(TypeBuilder.get99(), Complexity.easy)), -2)
         } `should throw` IllegalArgumentException::class
     }
 
     @Test
     fun updateOne() {
-        val sudoku = SolverSudoku(Sudoku(TypeBuilder.get99()))
+        val sudoku = SolverSudoku(Sudoku(TypeBuilder.get99(), Complexity.easy))
         val back = Backtracking(sudoku, 10)
 
         sudoku.getCurrentCandidates(Position[1, 3]).clear(2, 8)

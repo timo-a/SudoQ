@@ -19,7 +19,7 @@ object Utility {
     private fun getSudokuTypeValues(context: Context): Array<String?> { //we need a method because of the context...
         //we want to be independent of the order in which the enum fields are defined in their class
         //so we first create an empty array and fill it in an order unknown to us
-        val typeStrings = arrayOfNulls<String>(SudokuTypes.values().size)
+        val typeStrings = arrayOfNulls<String>(SudokuTypes.entries.size)
         typeStrings[SudokuTypes.standard4x4.ordinal] =
             context.getString(R.string.advanced_settings_restrict_item_standard_4x4)
         typeStrings[SudokuTypes.standard6x6.ordinal] =
@@ -51,7 +51,7 @@ object Utility {
 
     /* Complexities */
     private fun getComplexityValues(context: Context): Array<String?> {
-        val typeStrings = arrayOfNulls<String>(Complexity.values().size)
+        val typeStrings = arrayOfNulls<String>(Complexity.entries.size)
         typeStrings[Complexity.easy.ordinal] = context.getString(R.string.complexity_easy)
         typeStrings[Complexity.medium.ordinal] = context.getString(R.string.complexity_medium)
         typeStrings[Complexity.difficult.ordinal] = context.getString(R.string.complexity_difficult)
@@ -66,7 +66,7 @@ object Utility {
         return complexityStrings
             .withIndex()
             .find { (_, label) -> string == label }
-            ?.let { (i, _) -> Complexity.values()[i] }
+            ?.let { (i, _) -> Complexity.entries[i] }
     }
 
     fun complexity2string(context: Context, st: Complexity): String? {
@@ -77,7 +77,7 @@ object Utility {
 
     /* Shapes */
     private fun getConstraintShapeValuesAccusativeDetermined(context: Context): Array<String?> {
-        val typeStrings = arrayOfNulls<String>(ConstraintShape.values().size)
+        val typeStrings = arrayOfNulls<String>(ConstraintShape.entries.size)
         typeStrings[ConstraintShape.Row.ordinal] =
             context.getString(R.string.constraintshape_row_accusative_determined)
         typeStrings[ConstraintShape.Column.ordinal] =
@@ -90,7 +90,7 @@ object Utility {
     }
 
     private fun getConstraintShapeValuesGenitiveDetermined(context: Context): Array<String?> {
-        val typeStrings = arrayOfNulls<String>(ConstraintShape.values().size)
+        val typeStrings = arrayOfNulls<String>(ConstraintShape.entries.size)
         typeStrings[ConstraintShape.Row.ordinal] =
             context.getString(R.string.constraintshape_row_genitive_determined)
         typeStrings[ConstraintShape.Column.ordinal] =

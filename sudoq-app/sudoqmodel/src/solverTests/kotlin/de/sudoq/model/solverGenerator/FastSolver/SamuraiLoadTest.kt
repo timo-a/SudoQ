@@ -1,11 +1,10 @@
 package de.sudoq.model.solverGenerator.FastSolver
 
-import de.sudoq.model.solverGenerator.GenerationAlgo
 import de.sudoq.model.solverGenerator.utils.PrettySamuraiRepo
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.PositionMap
 import de.sudoq.model.sudoku.Sudoku
-import de.sudoq.model.sudoku.SudokuBuilder
+import de.sudoq.model.sudoku.SudokuBuilderLegacy
 import de.sudoq.model.sudoku.complexity.Complexity
 import org.amshove.kluent.`should be true`
 import org.junit.jupiter.params.ParameterizedTest
@@ -28,14 +27,14 @@ class SamuraiLoadTest {
         fs.hasSolution().`should be true`()
 
         val solution: PositionMap<Int>  = fs.getSolutions();
-        val sub = SudokuBuilder(s.sudokuType);
-        for( p: Position in GenerationAlgo.getPositions(s)) {
-            sub.addSolution(p, solution[p]!!);//fill in all solutions
+        val sub = SudokuBuilderLegacy(s.sudokuType);
+        for( p: Position in s.sudokuType.validPositions) {
+            sub.addSolution(p, solution[p]);//fill in all solutions
         }
-        val sudoku = sub.createSudoku();
-        for (p: Position in GenerationAlgo.getPositions(sudoku)) {
+        val sudoku = sub.build();
+        for (p: Position in sudoku.sudokuType.validPositions) {
             val f = sudoku.getCell(p);
-            f!!.currentValue = f.solution;
+            f.currentValue = f.solution;
         }
         println(sudoku);
     }

@@ -1,7 +1,5 @@
 package de.sudoq.model.sudoku
 
-import de.sudoq.model.ModelChangeListener
-import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
@@ -10,7 +8,6 @@ import org.amshove.kluent.invoking
 import org.amshove.kluent.`should be`
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should be false`
-import org.amshove.kluent.`should be null`
 import org.amshove.kluent.`should be true`
 import org.amshove.kluent.`should not be equal to`
 import org.amshove.kluent.`should not be null`
@@ -23,7 +20,7 @@ class SudokuTests {
 
     @Test
     fun initializeStandardSudoku() {
-        val sudoku = Sudoku(sudokuType99)
+        val sudoku = Sudoku(sudokuType99, Complexity.arbitrary)
 
         sudoku.sudokuType `should be` sudokuType99
         sudoku.isFinished.`should be false`()
@@ -44,7 +41,7 @@ class SudokuTests {
 
     @Test
     fun initializeWithoutSolutions() {
-        val sudoku = Sudoku(sudokuType99, null, null)
+        val sudoku = Sudoku(sudokuType99, Complexity.arbitrary)
 
         sudoku.sudokuType.`should be`(sudokuType99)
         sudoku.isFinished.`should be false`()
@@ -66,9 +63,10 @@ class SudokuTests {
 
     @Test
     fun initializeWithoutSetValues() {
-        val solutions = PositionMap<Int>(Position[9, 9], sudokuType99.validPositions) {
-            _ -> 0 }
-        val sudoku = Sudoku(sudokuType99, solutions, null)
+        val solutions = PositionMap.Builder<Int>(Position[9, 9])
+            .from(sudokuType99.validPositions)
+            { _ -> 0 }
+        val sudoku = Sudoku(sudokuType99, solutions, setOf())
         sudoku.sudokuType.`should be`(sudokuType99)
         sudoku.isFinished.`should be false`()
 
@@ -86,9 +84,9 @@ class SudokuTests {
 
     @Test
     fun getCell() {
-        val sudoku = Sudoku(sudokuType99)
+        val sudoku = Sudoku(sudokuType99, Complexity.arbitrary)
         val p12 = Position[1, 2]
-        sudoku.getCellNullable(Position[9, 10]).`should be null`() //because out of board
+        sudoku.hasCell(Position[9, 10]) `should be` false //because out of board
 
         val f = sudoku.getCell(p12)
         f.currentValue = 6
@@ -97,16 +95,14 @@ class SudokuTests {
 
     @Test
     fun complexity() {
-        val sudoku = Sudoku(sudokuType99)
-        sudoku.complexity.`should be null`()
-        sudoku.complexity = Complexity.easy
-        sudoku.complexity.`should not be null`()
-        sudoku.complexity.`should be`(Complexity.easy)
+        val sudoku = Sudoku(sudokuType99, Complexity.arbitrary)
+        sudoku.complexity `should be` Complexity.arbitrary
+
     }
 
     @Test//TODO no chance to fail...
     fun iterator() {
-        val su = Sudoku(sudokuType99)
+        val su = Sudoku(sudokuType99, Complexity.arbitrary)
         su.getCell(Position[0, 0]).currentValue = 5
         su.getCell(Position[1, 4]).currentValue = 4
         val i = su.iterator()
@@ -122,11 +118,9 @@ class SudokuTests {
 
     @Test
     fun initializeSudokuWithValues() {
-        val map = PositionMap<Int>(Position[9, 9], sudokuType99.validPositions) {
+        val map = PositionMap.Builder<Int>(Position[9, 9]).from(sudokuType99.validPositions) {
             pos -> pos.x + 1}
-        val setValues = PositionMap<Boolean>(Position[9, 9],
-            sudokuType99.validPositions.filter { pos -> pos.x != pos.y }) {
-            _ -> true }
+        val setValues = sudokuType99.validPositions.filter { pos -> pos.x != pos.y }.toSet()
         val sudoku = Sudoku(sudokuType99, map, setValues)
         var cell: Cell
         for (pos in sudokuType99.validPositions) {
@@ -139,59 +133,33 @@ class SudokuTests {
         }
     }
 
-    @Test //todo use mockk
-    fun cellChangeNotification() {
-        val sudokuTypeRepo = SudokuTypeRepo4Tests()
-        val sudoku = SudokuBuilder(SudokuTypes.standard9x9, sudokuTypeRepo).createSudoku()
-        val listener = Listener();
-
-        sudoku.getCell(Position[0, 0]).currentValue = 2
-        listener.callCount `should be` 0
-
-        sudoku.registerListener(listener);
-        sudoku.getCell(Position[3, 2]).currentValue = 5
-        listener.callCount `should be` 1
-   }
-
-    class Listener : ModelChangeListener<Cell> {
-        var callCount : Int = 0;
-
-        override fun onModelChanged(obj: Cell) {
-            callCount++;
-        }
-    }
-
     @Test
     fun notEquals() {
-        val s1 = Sudoku(sudokuType99)
-        var s2 = Sudoku(TypeBuilder.getType(SudokuTypes.standard16x16))
+        val s1 = Sudoku(sudokuType99, Complexity.easy)
+        var s2 = Sudoku(TypeBuilder.getType(SudokuTypes.standard16x16), Complexity.arbitrary)
         s1.`should not be equal to`(s2)
         s1.`should not be null`()
 
-        s2 = Sudoku(sudokuType99)
-        s1.complexity = Complexity.easy
-        s2.complexity = Complexity.medium
+        s2 = Sudoku(sudokuType99, Complexity.medium)
         s1.`should not be equal to`(s2)
-        s2 = Sudoku(TypeBuilder.getType(SudokuTypes.samurai))
-        s2.complexity = Complexity.easy
+        s2 = Sudoku(TypeBuilder.getType(SudokuTypes.samurai), Complexity.easy)
         s2.`should not be equal to`(s1)
     }
 
     @Test
     fun hasErrors() {
         val sudokuType = sudokuType99
-        val solutions = PositionMap<Int>(Position[9, 9])
-        for (pos in sudokuType.validPositions) {
-            solutions.put(pos, 0)
-        }
-        val sudoku = Sudoku(sudokuType, solutions, null)
+        val solutions = PositionMap.Builder<Int>(Position[9, 9])
+            .from(sudokuType.validPositions)
+            { _ -> 0 }
+        val sudoku = Sudoku(sudokuType, solutions, setOf())
         sudoku.getCell(Position[0, 0]).currentValue = 1
         sudoku.hasErrors().`should be true`()
     }
 
     @Test
     fun cellModification() {
-        val s = Sudoku(TypeBuilder.get99())
+        val s = Sudoku(TypeBuilder.get99(), Complexity.arbitrary)
         val f = Cell(1000, 9)
         s.setCell(f, Position[4, 4])
         s.getCell(Position[4, 4]).`should be`(f)
@@ -202,9 +170,9 @@ class SudokuTests {
     @Test
     fun toString44() {
         val sudokuType = TypeBuilder.getType(SudokuTypes.standard4x4)
-        val sudoku = Sudoku(sudokuType)
+        val sudoku = Sudoku(sudokuType, Complexity.arbitrary)
         sudoku.getCell(Position[1, 1]).currentValue = 3
-        sudoku.cells!!.remove(Position[1, 2])
+        sudoku.cells.remove(Position[1, 2])
         sudoku.toString().`should be equal to`(
             """
             x x x x
@@ -218,7 +186,7 @@ class SudokuTests {
     @Test
     fun toString99() {
         val sudokuType = TypeBuilder.getType(SudokuTypes.standard16x16)
-        val sudoku = Sudoku(sudokuType)
+        val sudoku = Sudoku(sudokuType, Complexity.arbitrary)
         sudoku.getCell(Position[1, 1]).currentValue = 12
         sudoku.toString().`should be equal to`(
             """

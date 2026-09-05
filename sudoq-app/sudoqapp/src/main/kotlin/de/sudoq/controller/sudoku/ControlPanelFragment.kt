@@ -39,7 +39,7 @@ class ControlPanelFragment : Fragment() {
 
     fun initialize() {
         val activity = requireActivity() as SudokuActivity
-        game = activity.game!!
+        game = activity.game
         controller = activity.sudokuController!!
         gameSettings = game.gameSettings
     }
@@ -145,7 +145,7 @@ class ControlPanelFragment : Fragment() {
 
     private fun populateViewForOrientation(inflater: LayoutInflater, viewGroup: ViewGroup?) {
         val sudokuActivity = requireActivity() as SudokuActivity
-        game = sudokuActivity.game!!
+        game = sudokuActivity.game
         viewGroup!!.removeAllViewsInLayout()
         val conf = resources.configuration
         // there is only a left handed version for Portrait

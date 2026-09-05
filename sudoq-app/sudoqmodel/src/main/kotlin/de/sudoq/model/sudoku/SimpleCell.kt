@@ -7,19 +7,31 @@
  */
 package de.sudoq.model.sudoku
 
-/** UniqueConstraintBehavior means no symbol may appear twice within a constraint. */
-class UniqueConstraintBehavior : ConstraintBehavior {
+/**
+ * A Cell describes an atomic unit in a sudoku board.
+ * It holds information about the current value, editability.
+ */
+class SimpleCell(editable: Boolean, var value: Int,
+                 /** A unique number identifying the cell in the scope of the sudoku */
+                 val id: Int,
+                 /** the number of symbols this cell can take */
+                 val numberOfValues: Int) {
+
+    /** The editability of this cell; false for prefilled cell */
+    val isEditable: Boolean = editable
+
+    /** The highest value this cell can take */
+    private val maxValue: Int = numberOfValues - 1
 
     /**
-     * Checks if the passed Constraint satisfies Unique behaviour, i.e.
-     * if no symbol appears twice among the cells in the constraint.
-     *
-     * @return true, iff constraint satisfies unique behaviour.
+     * {@inheritDoc}
      */
-    override fun check(constraint: Constraint, sudoku: ReadableCells): Boolean {
-        val positionsWithEntry = constraint.getPositions().filter(sudoku::isSolved)
-        return positionsWithEntry.map(sudoku::getCurrentValue).distinct().count() == positionsWithEntry.size
-                && positionsWithEntry.isNotEmpty() //avoid edge case: all cells empty
+    override fun toString(): String {
+        return value.toString()
     }
 
+    companion object {
+        /** The value representing an empty cell */
+        const val EMPTYVAL = -1
+    }
 }

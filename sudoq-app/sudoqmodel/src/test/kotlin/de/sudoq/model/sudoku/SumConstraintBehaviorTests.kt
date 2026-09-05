@@ -21,26 +21,21 @@ class SumConstraintBehaviorTests {
 
         val sudoku = mockk<Sudoku>();
 
-        fun mkCell(id: Int, currentValue: Int): Cell {
-            val c = Cell(id,9)
-            c.currentVal = currentValue
-            return c
-        }
-
-        every { sudoku.getCell(Position[0, 0]) } returns mkCell(0,1)
-        every { sudoku.getCell(Position[0, 1]) } returns mkCell(1,2)
-        every { sudoku.getCell(Position[0, 2]) } returns mkCell(2,3)
-        every { sudoku.getCell(Position[1, 0]) } returns mkCell(3,1)
-        every { sudoku.getCell(Position[1, 1]) } returns mkCell(4,2)
-        every { sudoku.getCell(Position[1, 2]) } returns mkCell(5,3)
+        every { sudoku.getCurrentValue(Position[0, 0]) } returns 1
+        every { sudoku.getCurrentValue(Position[0, 1]) } returns 2
+        every { sudoku.getCurrentValue(Position[0, 2]) } returns 3
+        every { sudoku.getCurrentValue(Position[1, 0]) } returns 1
+        every { sudoku.getCurrentValue(Position[1, 1]) } returns 2
+        every { sudoku.getCurrentValue(Position[1, 2]) } returns 3
+        every { sudoku.isSolved(any()) } returns true
 
         val constraint = Constraint(SumConstraintBehavior(12), ConstraintType.LINE, Position[0, 0],
             Position[0, 1], Position[0, 2], Position[1, 0], Position[1, 1], Position[1, 2])
         constraint.hasUniqueBehavior().`should be false`()
         constraint.isSaturated(sudoku).`should be true`()
-        sudoku.getCell(Position[1, 1]).currentValue = 3
+        every { sudoku.getCurrentValue(Position[1, 1]) } returns 3
         constraint.isSaturated(sudoku).`should be false`()
-        sudoku.getCell(Position[1, 2]).currentValue = 2
+        every { sudoku.getCurrentValue(Position[1, 2]) } returns 2
         constraint.isSaturated(sudoku).`should be true`()
     }
 

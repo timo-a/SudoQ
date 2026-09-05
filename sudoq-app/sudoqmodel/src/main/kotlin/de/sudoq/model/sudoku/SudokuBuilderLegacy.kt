@@ -8,32 +8,45 @@
 package de.sudoq.model.sudoku
 
 import de.sudoq.model.ports.persistence.ReadRepo
+import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypeProvider.getSudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 
 /** Provides functions to create a [SudokuType] or an empty [Sudoku] */
-class SudokuBuilder(private val type: SudokuType?) {
+class SudokuBuilderLegacy(private val type: SudokuType?) {
 
-    private val solutions: PositionMap<Int> = PositionMap(type!!.size)
-    private val setValues: PositionMap<Boolean> = PositionMap(type?.size!!)
+    var id: Int = 0
+
+    var complexity: Complexity? = null
+
+    private val solutions: PositionMap.Builder<Int> = PositionMap.Builder(type!!.size)
+    private val setValues: MutableSet<Position> = HashSet()
 
     /**
-     * Cretaes a Builder for a [Sudoku] of the specified type.
+     * Creates a Builder for a [Sudoku] of the specified type.
      *
      * @param type Enum-Type of the [Sudoku] to create
      * @throws NullPointerException if type invalid.
      */
     constructor(type: SudokuTypes, sudokuTypeRepo: ReadRepo<SudokuType>) : this(getSudokuType(type, sudokuTypeRepo))
 
+    fun id(id: Int): SudokuBuilderLegacy {
+        this.id = id
+        return this
+    }
+
+    fun complexity(complexity: Complexity): SudokuBuilderLegacy {
+        this.complexity = complexity
+        return this
+    }
+
     /**
      * Creates a [Sudoku] with the SudokeType of this builder and the entered Solutions.
      *
      * @return a new Sudoku
      */
-    fun createSudoku(): Sudoku {
-        return Sudoku(type!!, solutions, setValues)
-    }
+    fun build(): Sudoku = Sudoku(type!!, solutions.build(), setValues, id = id)
 
     /**
      * Ads a solution to the Sudoku
@@ -43,7 +56,8 @@ class SudokuBuilder(private val type: SudokuType?) {
      * @throws IllegalArgumentException If the value is out of bounds for the type
      */
     fun addSolution(pos: Position, value: Int) {
-        require(!(value < 0 || value >= type!!.numberOfSymbols)) { "Invalid value for given Sudoku Type" }
+        require(value >= 0) { "value must be at least 0, but $value was passed" }
+        require(value < type!!.numberOfSymbols) { "value must be under ${type.numberOfSymbols} but $value was passed" }
         solutions.put(pos, value)
     }
 
@@ -52,8 +66,8 @@ class SudokuBuilder(private val type: SudokuType?) {
      *
      * @param pos [Position] to mark as pre-filled
      */
-    fun setFixed(pos: Position?) {
-        setValues.put(pos!!, true)
+    fun setFixed(pos: Position) {
+        setValues.add(pos)
     }
 
 }

@@ -3,6 +3,7 @@ package de.sudoq.model.solverGenerator.solver
 import de.sudoq.model.solverGenerator.solver.helper.LeftoverNoteHelper
 import de.sudoq.model.solvingAssistant.HintTypes
 import de.sudoq.model.sudoku.Sudoku
+import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder
 import org.amshove.kluent.invoking
@@ -10,9 +11,7 @@ import org.amshove.kluent.`should be`
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should throw`
 import org.amshove.kluent.shouldHaveSize
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.function.Executable
 
 /**
  * Created by timo on 17.03.17.
@@ -20,7 +19,8 @@ import org.junit.jupiter.api.function.Executable
 internal class LeftoverNoteTests {
     @Test
     fun illegalArgumentComplexity() {
-        invoking { LeftoverNoteHelper(SolverSudoku(Sudoku(TypeBuilder.get99())), -1)
+        val solverSudoku = SolverSudoku(Sudoku(TypeBuilder.get99(), Complexity.easy))
+        invoking { LeftoverNoteHelper(solverSudoku, -1)
         } `should throw` IllegalArgumentException::class
     }
 

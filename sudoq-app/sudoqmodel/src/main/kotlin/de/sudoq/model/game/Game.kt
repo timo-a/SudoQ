@@ -111,7 +111,7 @@ class Game private constructor(val id: Int, val sudoku: Sudoku,
                 Complexity.medium -> power(3.0)
                 Complexity.easy -> power(2.5)
                 //todo refactor to make these illegal values unrepresentable
-                Complexity.arbitrary, null -> throw IllegalStateException("should not happen")
+                Complexity.arbitrary -> throw IllegalStateException("should not happen")
             }
             return (scoreFactor * 10 / ((time + assistancesTimeCost) / 60.0f)).toInt()
         }
@@ -169,7 +169,7 @@ class Game private constructor(val id: Int, val sudoku: Sudoku,
         val value = cell.currentValue
 
         val relevantConstraints = sudoku.sudokuType.constraints.filter { it.includes(editedPos) }
-        val relevantCells = relevantConstraints.flatMap { it.getPositions() }.map { sudoku.getCell(it) }
+        val relevantCells = relevantConstraints.flatMap { it.getPositions() }.map(sudoku::getCell)
 
         //transforming this to stream never works, probably because of side effects in addAndExecute
         relevantCells.forEach { cell ->
@@ -214,7 +214,7 @@ class Game private constructor(val id: Int, val sudoku: Sudoku,
      * Marks the current state to better find it later.
      */
     fun markCurrentState() {
-        stateHandler.markCurrentState() //TODO what doe this mean is it a book mark?
+        stateHandler.markCurrentState() //TODO what does this mean is it a book mark?
     }
 
     /**
@@ -223,18 +223,14 @@ class Game private constructor(val id: Int, val sudoku: Sudoku,
      * @param ate the ActionTreeElement to check
      * @return true iff it is marked
      */
-    fun isMarked(ate: ActionTreeElement?): Boolean {
-        return stateHandler.isMarked(ate)
-    }
+    fun isMarked(ate: ActionTreeElement?): Boolean = stateHandler.isMarked(ate)
 
     /**
      * Checks if the sudoku is solved completely and correct.
      *
      * @return true iff sudoku is finished (and correct)
      */
-    fun isFinished(): Boolean {
-        return finished || sudoku.isFinished
-    }
+    fun isFinished(): Boolean = finished || sudoku.isFinished
 
     /**
      * Tries to solve the specified [Cell] and returns if that attempt was successful.
@@ -243,9 +239,19 @@ class Game private constructor(val id: Int, val sudoku: Sudoku,
      * @param cell The cell to solve
      * @return true, if cell could be solved, false otherwise
      */
-    fun solveCell(cell: Cell?): Boolean { //TODO don't accept null
-        if (sudoku.hasErrors() || cell == null) return false
-        assistancesCost += 3
+    fun solveCell(cell: Cell): Boolean = solveCellInternal(3, cell)
+
+    /**
+     * Tries to solve a randomly selected [Cell] and returns whether that was successful.
+     *
+     * @return true, if a cell could be solved, false otherwise
+     */
+    fun solveCell(): Boolean = sudoku.find(Cell::isNotSolved)?.let { solveCellInternal(3, it) } ?: false
+
+    private fun solveCellInternal(cost: Int, cell: Cell): Boolean {
+        if (sudoku.hasErrors())
+            return false
+        assistancesCost += cost
         val solution = cell.solution
         return if (solution != Cell.EMPTYVAL) {
             addAndExecute(SolveActionFactory().createAction(solution, cell))
@@ -255,27 +261,6 @@ class Game private constructor(val id: Int, val sudoku: Sudoku,
         }
     }
 
-    /**
-     * Tries to solve a randomly selected [Cell] and returns whether that was successful.
-     *
-     * @return true, if a cell could be solved, false otherwise
-     */
-    fun solveCell(): Boolean {
-        if (sudoku.hasErrors()) return false
-        assistancesCost += 3
-        for (f in sudoku) {
-            if (f.isNotSolved) {
-                addAndExecute(SolveActionFactory().createAction(f.solution, f))
-                break
-            }
-        }
-        return true
-
-        /*
-         * Solution solution = solver.getHint(); if (solution != null) {
-         * stateHandler.addAndExecute(solution.getAction()); return true; } else { return false; }
-         */
-    }
 
     /**
      * Solves the entire sudoku.
@@ -284,12 +269,8 @@ class Game private constructor(val id: Int, val sudoku: Sudoku,
      */
     fun solveAll(): Boolean {
         if (sudoku.hasErrors()) return false
-        val unsolvedCells: MutableList<Cell> = ArrayList()
-        for (f in sudoku) {
-            if (f.isNotSolved) {
-                unsolvedCells.add(f)
-            }
-        }
+        val unsolvedCells: MutableList<Cell> = ArrayList(sudoku.filter(Cell::isNotSolved))
+
         val rnd = Random()
         while (unsolvedCells.isNotEmpty()) {
             val nr = rnd.nextInt(unsolvedCells.size)

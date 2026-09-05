@@ -22,7 +22,7 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
 open class SudokuManager(val sudokuTypeRepo: ReadRepo<SudokuType>,
                          private val sudokuRepoProvider: ISudokuRepoProvider) : GeneratorCallback {
 
-    private val generator = Generator(sudokuTypeRepo)
+    private val generator = Generator()
 
     /** holds the old sudoku while the new sudoku is being generated. */
     private var used: Sudoku? = null
@@ -35,8 +35,9 @@ open class SudokuManager(val sudokuTypeRepo: ReadRepo<SudokuType>,
         val sudokuWithId = Sudoku(-1,
                                   sudoku.transformCount,
                                   sudoku.sudokuType,
-                                  sudoku.complexity!!,
-                                  sudoku.cells!!)
+                                  sudoku.complexity,
+                                  sudoku.cells
+        )
         sudokuRepo.update(sudokuWithId)
         used?.also { sudokuRepo.delete(it.id) }
     }
@@ -55,10 +56,13 @@ open class SudokuManager(val sudokuTypeRepo: ReadRepo<SudokuType>,
     fun usedSudoku(sudoku: Sudoku) {
         if (sudoku.transformCount >= 10) {
             used = sudoku
-            generator.generate(sudoku.sudokuType.enumType, sudoku.complexity, this)
+            generator.generate(sudoku.sudokuType, sudoku.complexity, this)
         } else {
-            Transformer.transform(sudoku)
+            val transformed = Transformer.transform(sudoku.asSudokuUnderTransformation())
             val sudokuRepo = sudokuRepoProvider.getRepo(sudoku)
+            //todo can the repo be refactored to accept old and transformed so that the old sudoku is never mutated?
+            sudoku.acceptTransformedSudoku(transformed)
+            sudoku.increaseTransformCount()
             sudokuRepo.update(sudoku)
         }
     }

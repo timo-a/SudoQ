@@ -11,32 +11,22 @@ import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 
 /**
+ * This sudoku is not Playable but covers everything else: generation, solving?
  * This class represents a Sudoku with mit seinem Typ, seinen Feldern und seinem Schwierigkeitsgrad.
  *
  * @property id An ID uniquely identifying the Sudoku
  * @param type The Type of the Sudoku
  * @property cells Eine Map, welche jeder Position des Sudokus ein Feld zuweist
  */
-open class Sudoku private constructor(
+open class SudokuUnderConstruction private constructor(
     val id: Int = 0,
     type: SudokuType,
-    cells: HashMap<Position, Cell>, //todo why isn't this a [PositionMap]?)
-    cellPositions: MutableMap<Int, Position>,
-    complexity: Complexity
-) : Iterable<Cell>,
-    IntermediateSudoku(type, cells, cellPositions),
-    ReadableCells {
-
-
-    /** Counts how often the Sudoku was already transformed */
-    var transformCount = 0
-        private set
+    val cells: HashMap<Position, Cell>, //todo extend PositionMap into something mutable?
+    private val cellPositions: MutableMap<Int, Position>
+): Iterable<Cell>, AbstractSudoku<Cell>(type) {
 
     /** The Complexity of this Sudoku */
-    var complexity: Complexity = complexity
-        private set
-
-    constructor(type: SudokuType, complexity: Complexity) : this(type, PositionMap.Builder<Int>(type.size).build(), setOf(), complexity)
+    var complexity: Complexity? = null
 
     /**
      * All Cells are set as editable.
@@ -45,44 +35,58 @@ open class Sudoku private constructor(
      * @param map A Map from Positions to solution values. Values in pre-filled Cells are negated. (actually bitwise negated)
      * @param setValues A Map from Position to whether the value is pre-filled.
      */
-    constructor(
-        type: SudokuType,
-        map: PositionMap<Int>,
-        setValues: Set<Position>,
-        complexity: Complexity = Complexity.arbitrary,
-        id: Int = 0
-    ) : this(id, type, HashMap(), HashMap(), complexity) {
+    constructor(type: SudokuType, map: PositionMap<Int>, setValues: Set<Position>, id: Int=0
+    ) : this(id, type, HashMap(), HashMap()) {
+        var cellIdCounter = 1
 
-        // iterate over the positions of the type and create the cells
-        type.validPositions.forEachIndexed { index, position ->
-            var cellId = index + 1
-            cells[position] = if (map.contains(position)) {
+        // iterate over the constraints of the type and create the fields
+        type.flatMap(Constraint::getPositions).distinct().forEach { position ->
+            val solution = if (map.contains(position)) map[position] else null
+            cells[position] = when {
+                solution != null -> {
                     val editable = position !in setValues
-                    Cell(editable, map[position], cellId, type.numberOfSymbols)
-            } else {
-                    Cell(cellId, type.numberOfSymbols)
+                    Cell(editable, solution, cellIdCounter, type.numberOfSymbols)
+                }
+                else -> {
+                    Cell(cellIdCounter, type.numberOfSymbols)
+                }
             }
-            cellPositions[cellId] = position
+            cellPositions[cellIdCounter++] = position
         }
     }
 
     /*init from basic properties. use this to init from BE */
     constructor(
         id: Int,
-        transformCount: Int,
         sudokuType: SudokuType,
         complexity: Complexity,
         cells: HashMap<Position, Cell>
-    ) : this(id, sudokuType, cells, HashMap(), complexity) {
-        this.transformCount = transformCount
+    ) : this(id, sudokuType, cells, HashMap()) {
+        this.complexity = complexity
         cells.forEach { (pos, c) -> cellPositions[c.id] = pos }
     }
 
-    /** increases transform count by one */
-    fun increaseTransformCount() {
-        transformCount++
+    /**
+     * Returns the [Cell] at the specified [Position].
+     *
+     * @param position Position of the cell
+     * @return Cell at the [Position]
+     * @throws IllegalArgumentException if the position is not mapped to a [Cell].
+     */
+    fun getCell(position: Position): Cell {
+        return requireNotNull(cells[position])
     }
 
+    /**
+     * Returns the [Cell] at the id.
+     *
+     * @param id ID of the [Cell] to return
+     * @return the [Cell] at the specified id
+     */
+    fun getCell(id: Int): Cell {
+        val p = cellPositions.getValue(id)
+        return getCell(p)
+    }
 
     /**
      * Maps the [Position] to the [Cell]
@@ -106,6 +110,7 @@ open class Sudoku private constructor(
         val p: Position = cellPositions[id] ?: return false
 
         return cells[p] != null
+
     }
 
     /**
@@ -121,7 +126,7 @@ open class Sudoku private constructor(
      * @return the [Position] of the id
      */
     fun getPosition(id: Int): Position {
-        return requireNotNull(cellPositions[id]) { "id not found" }
+        return requireNotNull(cellPositions[id], { "id not found" })
     }
 
     /**
@@ -141,7 +146,6 @@ open class Sudoku private constructor(
      */
     open val isFinished: Boolean
         get() {
-            //todo doesn't check for completeness
             return cells.values.all(Cell::isSolvedCorrect)
         }
 
@@ -150,7 +154,7 @@ open class Sudoku private constructor(
      */
     override fun equals(other: Any?): Boolean {
         if (other == null) return false
-        if (other !is Sudoku) return false
+        if (other !is SudokuUnderConstruction) return false
 
         val complexityMatch = complexity === other.complexity
         val typeMatch = sudokuType.enumType === other.sudokuType.enumType
@@ -165,7 +169,7 @@ open class Sudoku private constructor(
     }
 
     /**
-     * Checks if this [Sudoku] has errors, i.e. if there is a [Cell] where the value is not the
+     * Checks if this [SudokuUnderConstruction] has errors, i.e. if there is a [Cell] where the value is not the
      * correct solution.
      *
      * @return true, if there are incorrectly solved cells, false otherwise
@@ -202,22 +206,11 @@ open class Sudoku private constructor(
         return sb.toString()
     }
 
-    override fun getCurrentValue(pos: Position): Int = getCell(pos).currentValue
-
-    override fun isSolved(pos: Position): Boolean = getCell(pos).isSolved
-
-    fun asSudokuUnderTransformation(): SudokuUnderTransformation {
-        val simpleCells = cells
-            .mapValues { SudokuUnderTransformation.map(it.value) }
-            .toMutableMap()
-        return SudokuUnderTransformation(sudokuType, simpleCells, cellPositions)
-    }
-
-    fun acceptTransformedSudoku(sudoku: SudokuUnderTransformation) {
-        cells.clear()
-        cells.putAll(sudoku.cells
-            .mapValues { SudokuUnderTransformation.map(it.value) }
-        )
+    fun produceSudoku4Solving() : Sudoku {//todo create own type, maybe used in Sudoku - why not solverSudoku?
+        return Sudoku(-1, -1,
+            this.sudokuType,
+            this.complexity!!,
+            this.cells)
     }
 
 }

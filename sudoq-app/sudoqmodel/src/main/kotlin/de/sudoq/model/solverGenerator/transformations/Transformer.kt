@@ -8,7 +8,9 @@
 package de.sudoq.model.solverGenerator.transformations
 
 import de.sudoq.model.sudoku.Sudoku
-import java.util.*
+import de.sudoq.model.sudoku.SudokuUnderTransformation
+import java.util.Random
+import java.util.Vector
 
 /**
  * Transforms a quadratic! Sudoku, so that it is still solvable with the same steps
@@ -61,7 +63,7 @@ object Transformer {
      * @param sudoku [Sudoku] to transform
      */
     @JvmStatic
-    fun transform(sudoku: Sudoku) {
+    fun transform(sudoku: SudokuUnderTransformation) : SudokuUnderTransformation {
         // not rotateClockwise and mirror! results in Clockrotation(grouptheory)
         elementaryPermutation(sudoku)
         subtlePermutation(sudoku)
@@ -69,8 +71,8 @@ object Transformer {
         subtlePermutation(sudoku)
         elementaryPermutation(sudoku)
         changeSymbols(sudoku)
-        sudoku.increaseTransformCount()
         random = Random()
+        return sudoku
     }
 
     /**
@@ -78,7 +80,7 @@ object Transformer {
      *
      * @param sudoku [Sudoku] to transform
      */
-    private fun elementaryPermutation(sudoku: Sudoku) {
+    private fun elementaryPermutation(sudoku: SudokuUnderTransformation) {
         val l: MutableList<Permutation> = Vector()
         for (p in elementaryList) {
             if (sudoku.sudokuType.permutationProperties.contains(p.condition)) {
@@ -88,7 +90,7 @@ object Transformer {
         //if we were functional...
         //List<Permutation> l = elementaryList.stream().filter(p -> sudoku.getSudokuType().getPermutationProperties().contains(p.getCondition()))
         //		                                     .collect(Collectors.toList());
-        if (l.size > 0) {
+        if (l.isNotEmpty()) {
             l[random.nextInt(l.size)].permutate(sudoku)
         }
     }
@@ -99,7 +101,7 @@ object Transformer {
      *
      * @param sudoku [Sudoku] to transform
      */
-    private fun subtlePermutation(sudoku: Sudoku) {
+    private fun subtlePermutation(sudoku: SudokuUnderTransformation) {
         /* make sure only allowed permutations are executed by intersecting subtleList with properties of the sudoku */
         val l: MutableList<Permutation> = Vector()
         for (p in subtleList) if (sudoku.sudokuType.permutationProperties.contains(p.condition)) l.add(

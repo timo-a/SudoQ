@@ -38,7 +38,7 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
     /**
      * Das Game, welches diese Anzeige verwaltet
      */
-    private val game: Game = (context as SudokuActivity).game!!
+    private val game: Game = (context as SudokuActivity).game
 
     /**
      * Die Standardgröße eines Feldes
@@ -87,18 +87,16 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
         val isMarkWrongSymbolAvailable = game.isAssistanceAvailable(Assistances.markWrongSymbol)
         sudokuCellViews = Array(sudokuType.size.x + 1) { arrayOfNulls(sudokuType.size.y + 1) }
         for (p in sudokuType.validPositions) {
-            val cell = sudoku.getCellNullable(p)
-            if (cell != null) {
-                val x = p.x
-                val y = p.y
-                val params = LayoutParams(currentCellViewSize, defaultCellViewSize)
-                params.topMargin = y * currentCellViewSize + y
-                params.leftMargin = x * currentCellViewSize + x
-                sudokuCellViews!![x][y] =
-                    SudokuCellView(context, game, cell, isMarkWrongSymbolAvailable)
-                cell.registerListener(sudokuCellViews!![x][y]!!)
-                this.addView(sudokuCellViews!![x][y], params)
-            }
+            val cell = sudoku.getCell(p)
+            val x = p.x
+            val y = p.y
+            val params = LayoutParams(currentCellViewSize, defaultCellViewSize)
+            params.topMargin = y * currentCellViewSize + y
+            params.leftMargin = x * currentCellViewSize + x
+            sudokuCellViews!![x][y] =
+                SudokuCellView(context, game, cell, isMarkWrongSymbolAvailable)
+            cell.registerListener(sudokuCellViews!![x][y]!!)
+            this.addView(sudokuCellViews!![x][y], params)
         }
         val x = sudoku.sudokuType.size.x //why all this????
         val y = sudoku.sudokuType.size.y
@@ -116,7 +114,8 @@ class SudokuLayout(context: Context) : RelativeLayout(context), ObservableCellIn
 
 
         /* In case highlighting of current row and col is activated,
-		   pass each pos its constraint-mates */if (game.isAssistanceAvailable(Assistances.markRowColumn)) {
+		   pass each pos its constraint-mates */
+        if (game.isAssistanceAvailable(Assistances.markRowColumn)) {
             var positions: List<Position>
             val allConstraints: Iterable<Constraint> = game.sudoku.sudokuType
             for (c in allConstraints) if (c.type == ConstraintType.LINE) {

@@ -47,15 +47,10 @@ class ConstraintTests {
 
         val sudo = mockk<Sudoku>()
 
-        fun mkCell(id: Int, currentValue: Int): Cell {
-            val c = Cell(id,9)
-            c.currentVal = currentValue
-            return c
-        }
-
-        every { sudo.getCell(posA) } returns mkCell(0,0)
-        every { sudo.getCell(posB) } returns mkCell(1,4)
-        every { sudo.getCell(posC) } returns mkCell(2,4)
+        every { sudo.getCurrentValue(posA) } returns 0
+        every { sudo.getCurrentValue(posB) } returns 4
+        every { sudo.getCurrentValue(posC) } returns 4
+        every { sudo.isSolved(any()) } returns true
 
         fun mkConstraint(vararg p: Position) = Constraint(UniqueConstraintBehavior(), ConstraintType.LINE, *p)
 

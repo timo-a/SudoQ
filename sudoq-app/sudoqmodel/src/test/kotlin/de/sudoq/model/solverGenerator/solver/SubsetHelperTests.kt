@@ -4,12 +4,13 @@ import de.sudoq.model.solverGenerator.solver.helper.HiddenHelper
 import de.sudoq.model.solverGenerator.solver.helper.SubsetHelper
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.Sudoku
+import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.TypeBuilder
 import org.amshove.kluent.`should be`
 import org.amshove.kluent.`should be equal to`
 import org.junit.jupiter.api.Test
 
-class SubsetHelperTests : HiddenHelper(SolverSudoku(Sudoku(TypeBuilder.get99())), 4, 0) {
+class SubsetHelperTests : HiddenHelper(SolverSudoku(Sudoku(TypeBuilder.get99(), Complexity.easy)), 4, 0) {
     @Test
     fun testGetNextSubset() {
         for (i in intArrayOf(0, 1, 2, 3, 5, 7)) constraintSet.set(i)
@@ -32,7 +33,7 @@ class SubsetHelperTests : HiddenHelper(SolverSudoku(Sudoku(TypeBuilder.get99()))
 
     @Test
     fun hiddenUpdateOne() {
-        val sudoku = SolverSudoku(Sudoku(TypeBuilder.get99()))
+        val sudoku = SolverSudoku(Sudoku(TypeBuilder.get99(), Complexity.easy))
         setVal(sudoku, 1, 1, 1)
         setVal(sudoku, 3, 1, 3)
         setVal(sudoku, 4, 1, 4)
@@ -78,7 +79,7 @@ class SubsetHelperTests : HiddenHelper(SolverSudoku(Sudoku(TypeBuilder.get99()))
 
     @Test
     fun hiddenUpdateAll() {
-        val sudoku = SolverSudoku(Sudoku(TypeBuilder.get99()))
+        val sudoku = SolverSudoku(Sudoku(TypeBuilder.get99(), Complexity.easy))
         for (i in intArrayOf(1, 3, 4, 5, 6, 7, 8)) setVal(sudoku, i, 1, i)
 
         setVal(sudoku, 1, 2, 4)
@@ -124,7 +125,7 @@ class SubsetHelperTests : HiddenHelper(SolverSudoku(Sudoku(TypeBuilder.get99()))
          * @param y number of row starting with 1
          * @param val value starting with 1
          */
-        fun setVal(s: Sudoku, x: Int, y: Int, `val`: Int) {
+        fun setVal(s: SolverSudoku, x: Int, y: Int, `val`: Int) {
             s.getCell(Position[x - 1, y - 1]).currentValue = `val` - 1
         }
 

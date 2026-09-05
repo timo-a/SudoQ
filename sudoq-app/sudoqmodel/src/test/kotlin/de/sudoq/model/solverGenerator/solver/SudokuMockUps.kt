@@ -5,7 +5,7 @@ import de.sudoq.model.solverGenerator.utils.SudokuTypeRepo4Tests
 import de.sudoq.model.sudoku.Cell
 import de.sudoq.model.sudoku.Position
 import de.sudoq.model.sudoku.Sudoku
-import de.sudoq.model.sudoku.SudokuBuilder
+import de.sudoq.model.sudoku.SudokuBuilderLegacy
 import de.sudoq.model.sudoku.complexity.Complexity
 import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 import de.sudoq.model.sudoku.sudokuTypes.SudokuTypes
@@ -19,30 +19,36 @@ object SudokuMockUps {
     private val str: ReadRepo<SudokuType> = SudokuTypeRepo4Tests()
 
     fun stringTo9x9Sudoku(pattern: String): Sudoku {
-        val s = SudokuBuilder(SudokuTypes.standard9x9, str).createSudoku()
-        s.complexity = Complexity.arbitrary
+        val s = SudokuBuilderLegacy(SudokuTypes.standard9x9, str)
+            .complexity(Complexity.arbitrary)
+            .build()
         return transform(s, pattern)
     }
 
     @JvmStatic
     fun stringTo16x16Sudoku(pattern: String): Sudoku {
-        val s = SudokuBuilder(SudokuTypes.standard16x16, str).createSudoku()
-        s.complexity = Complexity.arbitrary
+        val s = SudokuBuilderLegacy(SudokuTypes.standard16x16, str)
+            .complexity(Complexity.arbitrary)
+            .build()
         return transformX(16, s, pattern)
     }
 
     /* expects values in [1,9] */
     @JvmStatic
     fun stringToSamuraiSudoku(pattern: String): Sudoku {
-        val s = SudokuBuilder(SudokuTypes.samurai, str).createSudoku()
-        s.complexity = Complexity.arbitrary
+        val s = SudokuBuilderLegacy(SudokuTypes.samurai, str)
+            .complexity(Complexity.arbitrary)
+            .build()
         val dim = 21
         for (y in 0..<dim) for (x in 0..<dim) {
             val c = pattern[2 * (dim * y + x)]
-            val f = s.getCellNullable(Position[x, y])
-            if (f == null) ; else if (c == '.') {
+            val p = Position[x, y]
+            if (!s.hasCell(p)) {
+                // do nothing
+            } else if (c == '.') {
                 //empty
             } else if (c in '1'..'9') {
+                val f = s.getCell(p)
                 f.currentValue = c.code - '0'.code - 1
             } else throw IllegalArgumentException("parse error")
         }
@@ -91,8 +97,9 @@ object SudokuMockUps {
 
 
     fun stringToSudoku(type: SudokuTypes, pattern: String): Sudoku {
-        val sudoku = SudokuBuilder(type, str).createSudoku()
-        sudoku.complexity = Complexity.arbitrary
+        val sudoku = SudokuBuilderLegacy(type, str)
+            .complexity(Complexity.arbitrary)
+            .build()
         val xLim = sudoku.sudokuType.size.x
 
         val candidates =
