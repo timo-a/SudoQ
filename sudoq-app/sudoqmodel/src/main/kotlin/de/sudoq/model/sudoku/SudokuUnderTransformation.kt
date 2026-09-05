@@ -17,7 +17,7 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuType
  */
 open class SudokuUnderTransformation(
     type: SudokuType,
-    val cells: MutableMap<Position, SimpleCell>, //todo why isn't this a [PositionMap]?)
+    val cells: MutableMap<Position, SimpleCell>, //needs to be mutable for setCell. extend PositionMap?
     private val cellPositions: MutableMap<Int, Position>
 ): Iterable<SimpleCell>, AbstractSudoku<SimpleCell>(type) {
 
