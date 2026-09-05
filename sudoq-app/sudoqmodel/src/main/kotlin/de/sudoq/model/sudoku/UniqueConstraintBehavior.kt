@@ -19,7 +19,7 @@ class UniqueConstraintBehavior : ConstraintBehavior {
     override fun check(constraint: Constraint, sudoku: ReadableCells): Boolean {
         val positionsWithEntry = constraint.getPositions().filter(sudoku::isSolved)
         return positionsWithEntry.map(sudoku::getCurrentValue).distinct().count() == positionsWithEntry.size
-                //&& positionsWithEntry.isNotEmpty() todo we should probably check this too...
+                && positionsWithEntry.isNotEmpty() //avoid edge case: all cells empty
     }
 
 }

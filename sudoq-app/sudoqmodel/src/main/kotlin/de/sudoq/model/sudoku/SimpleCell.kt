@@ -8,9 +8,8 @@
 package de.sudoq.model.sudoku
 
 /**
- * A Cell describes an atomic unit in a sudoku board. It holds information about the current value,
- * editability, notes and the correct solution. It extends OberservableModel so changes in value
- * und notes can be observed.
+ * A Cell describes an atomic unit in a sudoku board.
+ * It holds information about the current value, editability.
  */
 class SimpleCell(editable: Boolean, var value: Int,
                  /** A unique number identifying the cell in the scope of the sudoku */

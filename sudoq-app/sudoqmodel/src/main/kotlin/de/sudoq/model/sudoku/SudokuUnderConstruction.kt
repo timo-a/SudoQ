@@ -21,7 +21,7 @@ import de.sudoq.model.sudoku.sudokuTypes.SudokuType
 open class SudokuUnderConstruction private constructor(
     val id: Int = 0,
     type: SudokuType,
-    val cells: HashMap<Position, Cell>, //todo why isn't this a [PositionMap]?)
+    val cells: HashMap<Position, Cell>, //todo extend PositionMap into something mutable?
     private val cellPositions: MutableMap<Int, Position>
 ): Iterable<Cell>, AbstractSudoku<Cell>(type) {
 
@@ -146,7 +146,6 @@ open class SudokuUnderConstruction private constructor(
      */
     open val isFinished: Boolean
         get() {
-            //todo doesn't check for completeness
             return cells.values.all(Cell::isSolvedCorrect)
         }
 
@@ -207,7 +206,7 @@ open class SudokuUnderConstruction private constructor(
         return sb.toString()
     }
 
-    fun produceSudoku4Solving() : Sudoku {//todo create own type, maybe used in Sudoku
+    fun produceSudoku4Solving() : Sudoku {//todo create own type, maybe used in Sudoku - why not solverSudoku?
         return Sudoku(-1, -1,
             this.sudokuType,
             this.complexity!!,

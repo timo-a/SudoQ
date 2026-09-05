@@ -74,9 +74,9 @@ public class GeneratorTests implements GeneratorCallback {
 
 	//@Test todo fix this
 	public void testGenerationDebug() throws ExecutionException, InterruptedException {
-        Generator generator = new Generator();
+        Generator localGenerator = new Generator();
 		Random rnd = new Random(0);
-		generator.setRandom(rnd);
+		localGenerator.setRandom(rnd);
 		Transformer.setRandom(rnd);
         CompletableFuture<Sudoku> future = new CompletableFuture<>();
         GeneratorCallback gc = new GeneratorCallback() {
@@ -91,7 +91,7 @@ public class GeneratorTests implements GeneratorCallback {
             }
         };
 
-        generator.generate(new SudokuTypeRepo4Tests().read(SudokuTypes.standard4x4.ordinal()), Complexity.infernal, gc);
+        localGenerator.generate(new SudokuTypeRepo4Tests().read(SudokuTypes.standard4x4.ordinal()), Complexity.infernal, gc);
         assertTimeoutPreemptively(Duration.ofSeconds(60), () -> {
             future.get();
         });
