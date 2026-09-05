@@ -24,6 +24,14 @@ tasks.named<Test>("test") {
     testLogging {
         events("passed", "skipped", "failed")
     }
+    finalizedBy("jacocoTestReport")
+}
+
+tasks.withType<JacocoReport> {
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
 }
 
 val testImplementation by configurations.getting

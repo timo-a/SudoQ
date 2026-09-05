@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.sonar)
+    jacoco
 }
 
 sonar {
@@ -20,10 +21,18 @@ sonar {
         // src/main/res/layouts/sudoku/layout-land/sudoku.xml
         // by excluding all XML files
         property("sonar.exclusions", "**/*.xml")
+
+        property("sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/sudoqapp/build/reports/jacoco/testDebugUnitTestCoverageReport/testDebugUnitTestCoverageReport.xml,${project.projectDir}/sudoqmodel/build/reports/jacoco/test/jacocoTestReport.xml")
     }
 }
 
 subprojects {
+    apply(plugin = "jacoco")
+
+    configure<JacocoPluginExtension> {
+        toolVersion = "0.8.12"
+    }
+
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
     }
