@@ -30,7 +30,7 @@ jobs:
       - name: Run App Tests
         run: |
           cd sudoq-app
-          ./gradlew sudoqapp:testDebugUnitTest sudoqapp:createDebugUnitTestCoverageReport
+          ./gradlew sudoqapp:testDebugUnitTest sudoqapp:createDebugUnitTestCoverageReport sudoqapp:lintDebug
       - name: Upload App Test Results
         uses: actions/upload-artifact@v6
         with:

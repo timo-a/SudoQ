@@ -20,7 +20,7 @@ sonar {
         // Fix for "File can't be indexed twice" error with
         // src/main/res/layouts/sudoku/layout-land/sudoku.xml
         // by excluding all XML files
-        property("sonar.exclusions", "**/*.xml")
+        property("sonar.exclusions", "**/src/main/res/layouts/**/*.xml, **/src/main/res/layout/**/*.xml")
     }
 }
 
@@ -37,6 +37,7 @@ subprojects {
                 property("sonar.android.buildVariant", "debug")
                 property("sonar.coverage.jacoco.xmlReportPaths", "${project.layout.buildDirectory.get().asFile}/reports/coverage/test/debug/report.xml")
                 property("sonar.junit.reportPaths", "${project.layout.buildDirectory.get().asFile}/test-results/testDebugUnitTest")
+                property("sonar.androidLint.reportPaths", "${project.layout.buildDirectory.get().asFile}/reports/lint-results-debug.xml")
             }
             plugins.withId("java-library") {
                 property("sonar.coverage.jacoco.xmlReportPaths", "${project.layout.buildDirectory.get().asFile}/reports/jacoco/test/jacocoTestReport.xml")

@@ -34,6 +34,11 @@ android {
         localeFilters.addAll(listOf("en", "de", "fr"))
     }
 
+    lint {
+        abortOnError = false
+        checkReleaseBuilds = false
+    }
+
     sourceSets {
         getByName("main") {
             // this allows us to group resources(layouts, values) by topic
