@@ -14,12 +14,15 @@ class UniqueConstraintBehavior : ConstraintBehavior {
      * Checks if the passed Constraint satisfies Unique behaviour, i.e.
      * if no symbol appears twice among the cells in the constraint.
      *
+     * Symbols may be missing, the check will still be successful
+     *
      * @return true, iff constraint satisfies unique behaviour.
      */
     override fun check(constraint: Constraint, sudoku: ReadableCells): Boolean {
         val positionsWithEntry = constraint.getPositions().filter(sudoku::isSolved)
         return positionsWithEntry.map(sudoku::getCurrentValue).distinct().count() == positionsWithEntry.size
-                && positionsWithEntry.isNotEmpty() //avoid edge case: all cells empty
+                //todo this constraint allows empty cells, I guess it's good for branch and bound
+                //but when do we check for completeness? investigate!
     }
 
 }
