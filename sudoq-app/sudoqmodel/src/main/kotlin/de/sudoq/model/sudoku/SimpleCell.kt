@@ -13,18 +13,30 @@ package de.sudoq.model.sudoku
  * with which values the user has filled in.
  * It holds information about the solution and if the solution is prefilled.
  */
-class SimpleCell(editable: Boolean, var value: Int, //todo get and set to ensure range
-                 /** A unique number identifying the cell in the scope of the sudoku */
-                 val id: Int,
-                 /** the number of symbols this cell can take */
-                 val numberOfValues: Int) {
+class SimpleCell(
+    /** The editability of this cell; false for prefilled cell */
+    val isEditable: Boolean,
+    value: Int,
+    /** A unique number identifying the cell in the scope of the sudoku */
+    val id: Int,
+    /** the number of symbols this cell can take */
+    val numberOfValues: Int) {
 
     init {
-        require(value in 0 .. numberOfValues)
+        validateValue(value)
     }
 
-    /** The editability of this cell; false for prefilled cell */
-    val isEditable: Boolean = editable
+    var value = value
+        set(value) {
+            validateValue(value)
+            field = value
+        }
+
+    private fun validateValue(value: Int) {
+        require(value in 0 until numberOfValues) {
+            "Value $value must be in range [0, $numberOfValues)"
+        }
+    }
 
     /** The highest value this cell can take */
     private val maxValue: Int = numberOfValues - 1
