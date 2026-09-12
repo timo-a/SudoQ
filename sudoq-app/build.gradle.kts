@@ -24,11 +24,13 @@ sonar {
     }
 }
 
+val jacocoVersion = libs.versions.jacoco.get()
+
 subprojects {
     apply(plugin = "jacoco")
 
     configure<JacocoPluginExtension> {
-        toolVersion = "0.8.12"
+        toolVersion = jacocoVersion
     }
 
     sonar {
