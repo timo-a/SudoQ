@@ -54,47 +54,41 @@ internal class SolverTests {
     }
 
     /** convenience init sudoku	  */
-    private fun initSudoku9x9(sudoku: Sudoku) {
-        val s = "0    52  " +
-                " 2  0  3 " +
-                "  84    6" +
-                "  52     " +
-                " 1  7    " +
-                "6    3   " +
-                "  48    2" +
-                "8     0  " +
-                " 7  1  6 "
+    private fun initSudoku9x9(): Sudoku {
+        val assignment = """
+            1    |    7|  9  
+              3  |  2  |    8
+            _ _ 9|6 _ _|5 _ _
+                5|3    |9    
+              1  |  8  |    2
+            6 _ _|_ _ 4|_ _ _
+            3    |     |  1  
+              4  |     |    7
+            _ _ 7|_ _ _|3 _ _
+        """.trimIndent()
+        return parse9x9FromBlock(assignment)
+    }
+    fun parse9x9FromBlock(block: String): Sudoku {
+        val sudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal), Complexity.arbitrary)
 
-        sudoku.getCell(Position[0, 0]).currentValue = 0
-        sudoku.getCell(Position[5, 0]).currentValue = 6
-        sudoku.getCell(Position[7, 0]).currentValue = 8
-        sudoku.getCell(Position[1, 1]).currentValue = 2
-        sudoku.getCell(Position[4, 1]).currentValue = 1
-        sudoku.getCell(Position[8, 1]).currentValue = 7
-        sudoku.getCell(Position[2, 2]).currentValue = 8
-        sudoku.getCell(Position[3, 2]).currentValue = 5
-        sudoku.getCell(Position[6, 2]).currentValue = 4
-        sudoku.getCell(Position[2, 3]).currentValue = 4
-        sudoku.getCell(Position[3, 3]).currentValue = 2
-        sudoku.getCell(Position[6, 3]).currentValue = 8
-        sudoku.getCell(Position[1, 4]).currentValue = 0
-        sudoku.getCell(Position[4, 4]).currentValue = 7
-        sudoku.getCell(Position[8, 4]).currentValue = 1
-        sudoku.getCell(Position[0, 5]).currentValue = 5
-        sudoku.getCell(Position[5, 5]).currentValue = 3
-        sudoku.getCell(Position[0, 6]).currentValue = 2
-        sudoku.getCell(Position[7, 6]).currentValue = 0
-        sudoku.getCell(Position[1, 7]).currentValue = 3
-        sudoku.getCell(Position[8, 7]).currentValue = 6
-        sudoku.getCell(Position[2, 8]).currentValue = 6
-        sudoku.getCell(Position[6, 8]).currentValue = 2
+        block.lines().forEachIndexed { y, line ->
+            line.chunked(2).forEachIndexed { x, value ->
+                when (value[0]) {
+                    ' ', '_', '.' -> {}
+                    in '1'..'9' -> sudoku.getCell(Position[x, y]).currentValue =
+                        value[0].digitToInt() - 1
+
+                    else -> throw IllegalArgumentException("Invalid character: $value")
+                }
+            }
+        }
+        return sudoku
     }
 
     @Test
     @Timeout(value = 3, unit = TimeUnit.SECONDS)
     fun solveOneAutomaticallyApplied() {
-        val sudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal), Complexity.arbitrary)
-        initSudoku9x9(sudoku)
+        val sudoku = initSudoku9x9()
         val solver = Solver(sudoku)
         val solverSudoku = solver.solverSudoku
         var solution = solver.solveOne(true)
@@ -114,8 +108,7 @@ internal class SolverTests {
     @Test
     @Timeout(value = 3, unit = TimeUnit.SECONDS)
     fun solveOneManuallyApplied() {
-        val sudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal), Complexity.arbitrary)
-        initSudoku9x9(sudoku)
+        val sudoku = initSudoku9x9()
         val solver = Solver(sudoku)
         val solverSudoku = solver.solverSudoku
         var solution = solver.solveOne(false)
@@ -152,8 +145,7 @@ internal class SolverTests {
     @Test
     @Timeout(value = 3, unit = TimeUnit.SECONDS)
     fun solveAll() {
-        val sudoku = Sudoku(sudokuTypeRepo.read(SudokuTypes.standard9x9.ordinal), Complexity.arbitrary)
-        initSudoku9x9(sudoku)
+        val sudoku = initSudoku9x9()
         val solver = Solver(sudoku)
         val solverSudoku = solver.solverSudoku
 

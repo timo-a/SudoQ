@@ -30,7 +30,7 @@ class PositionMap<T> private constructor(
      * Returns the object at the specified position.
      *
      * @param pos [Position] to query object for
-     * @return the object at the specified position or null if there is no mapping
+     * @return the object at the specified position or throw NPE if there is no mapping
      */
     operator fun get(pos: Position): T {
         require(pos.x in 0 until dimension.x) { "x coordinate of pos out of range [0, ${dimension.x - 1}]: ${pos.x}" }

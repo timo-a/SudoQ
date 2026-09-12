@@ -38,41 +38,465 @@ internal class SolverIntegrationTests {
     @Test
     @Timeout(value = 3, unit = TimeUnit.SECONDS)
     fun easySudoku1() {
-        sudoku.getCell(Position[1, 0]).currentValue = 3
-        sudoku.getCell(Position[3, 0]).currentValue = 4
-        sudoku.getCell(Position[3, 1]).currentValue = 6
-        sudoku.getCell(Position[4, 1]).currentValue = 5
-        sudoku.getCell(Position[0, 2]).currentValue = 7
-        sudoku.getCell(Position[4, 2]).currentValue = 0
-        sudoku.getCell(Position[6, 2]).currentValue = 8
-        sudoku.getCell(Position[8, 2]).currentValue = 6
-        sudoku.getCell(Position[0, 3]).currentValue = 0
-        sudoku.getCell(Position[3, 3]).currentValue = 8
-        sudoku.getCell(Position[8, 3]).currentValue = 7
-        sudoku.getCell(Position[8, 3]).currentValue = 7
-        sudoku.getCell(Position[0, 4]).currentValue = 8
-        sudoku.getCell(Position[1, 5]).currentValue = 2
-        sudoku.getCell(Position[2, 5]).currentValue = 5
-        sudoku.getCell(Position[3, 5]).currentValue = 1
-        sudoku.getCell(Position[4, 5]).currentValue = 4
-        sudoku.getCell(Position[7, 5]).currentValue = 0
-        sudoku.getCell(Position[3, 6]).currentValue = 2
-        sudoku.getCell(Position[6, 6]).currentValue = 5
-        sudoku.getCell(Position[7, 6]).currentValue = 6
-        sudoku.getCell(Position[2, 7]).currentValue = 2
-        sudoku.getCell(Position[4, 7]).currentValue = 1
-        sudoku.getCell(Position[5, 7]).currentValue = 5
-        sudoku.getCell(Position[8, 7]).currentValue = 3
-        sudoku.getCell(Position[0, 8]).currentValue = 5
-        sudoku.getCell(Position[1, 8]).currentValue = 8
-        sudoku.getCell(Position[4, 8]).currentValue = 6
-        sudoku.getCell(Position[6, 8]).currentValue = 0
-        solver = Solver(sudoku)
+        val assignment = """
+              4  |5    |     
+                 |7 6  |     
+            8 _ _|_ 1 _|9 _ 7
+            1    |9    |    8
+            9    |     |     
+            _ 3 6|2 5 _|_ 1 _
+                 |3    |6 7  
+                3|  2 6|    4
+            6 9  |  7  |1    
+        """.trimIndent()
+        val lsudoku = parse9x9FromBlock(assignment)
+
+        solver = Solver(lsudoku)
 
         val pair = solver!!.validateDeprecated()
         pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
 
         skeleton("Solution (Easy 1) - Complexity: ", pair.second!!)
+    }
+
+    @Test
+    @Timeout(value = 3, unit = TimeUnit.SECONDS)
+    fun easySudoku2() {
+        val assignment = """
+            2 8 1|  5  |  9 4
+            4    |2   1|  5 7
+            _ _ 7|4 _ 6|_ 3 _
+                5|6 4  |7   8
+            7 4 8|3 2 5|  6 1
+            _ 9 _|_ _ _|3 _ _
+            1    |9   7|5    
+            5 3 6|  1  |4 7  
+                9|5 3  |2 1  
+        """.trimIndent()
+        val lsudoku = parse9x9FromBlock(assignment)
+        solver = Solver(lsudoku)
+
+        val pair = solver!!.validateDeprecated()
+        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
+        solver!!.solverSudoku.complexity = Complexity.difficult
+
+        //assertEquals(solver.validate(solution), ComplexityRelation.MUCH_TOO_EASY);
+        skeleton("Solution (Easy 2) - Complexity: ", pair.second!!)
+    }
+
+    @Test
+    @Timeout(value = 3, unit = TimeUnit.SECONDS)
+    fun easySudoku3() {
+        val assignment = """
+            1   7   8     4  
+                  4   5 1   3
+            4 3 2 1   9   8 6
+            7   3   4   6   5
+            5     2   6 7   4
+            6 2     5 7 8    
+              8 5 7     9 1 2
+            2     5 9   3    
+            9 7   3 1        
+        """.trimIndent()
+        val lsudoku = parse9x9FromBlock(assignment)
+        solver = Solver(lsudoku)
+
+        val pair = solver!!.validateDeprecated()
+        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
+
+        skeleton("Solution (Easy 3) - Complexity: ", pair.second!!)
+    }
+
+    @Test
+    @Timeout(value = 3, unit = TimeUnit.SECONDS)
+    fun mediumSudoku1() {
+        val assignment = """
+                3 4 7   2   1
+              6 8 2          
+            4         1 6 5  
+            9   6 8   4     5
+                2   3   7   4
+                4 1       2  
+                      3     6
+              3 5   1 8 4 9  
+            7   9   5   8    
+        """.trimIndent()
+        val lsudoku = parse9x9FromBlock(assignment)
+        solver = Solver(lsudoku)
+
+        val pair = solver!!.validateDeprecated()
+        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
+
+        skeleton("Solution (Medium 1) - Complexity: ", pair.second!!)
+    }
+
+    @Test
+    @Timeout(value = 3, unit = TimeUnit.SECONDS)
+    fun mediumSudoku2() {
+        val assignment = """
+                1   5 2 8 3 7
+            7 2       1      
+                5 3       2  
+              4 9 2   8 1    
+                  9     2   6
+              8 2   3       9
+                      6     4
+            1 3     2     5  
+            9   4 7 8   6   2
+        """.trimIndent()
+        val lsudoku = parse9x9FromBlock(assignment)
+        solver = Solver(lsudoku)
+
+        val pair = solver!!.validateDeprecated()
+        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
+
+        skeleton("Solution (Medium 2) - Complexity: ", pair.second!!)
+    }
+
+    @Test
+    @Timeout(value = 3, unit = TimeUnit.SECONDS)
+    fun mediumSudoku3() {
+        val assignment = """
+            5 6 7 9 2     8  
+                3   1   7    
+                      6   2 5
+              3 9 2     5   1
+                1   6   8    
+            6   5   9 1 2 3  
+              4   6       5  
+                8   4     7  
+              9     5 2   1 3
+        """.trimIndent()
+        val lsudoku = parse9x9FromBlock(assignment)
+        solver = Solver(lsudoku)
+
+        val pair = solver!!.validateDeprecated()
+        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
+
+        skeleton("Solution (Medium 3) - Complexity: ", pair.second!!)
+    }
+
+    @Test
+    @Timeout(value = 3, unit = TimeUnit.SECONDS)
+    fun mediumSudoku4() {
+        val assignment = """
+              2 3     4   7 9
+            7       6        
+            1     5     6 3  
+              4 8   7     5  
+              6       3   8  
+            5             4  
+              3 6           7
+                9   4 1     5
+                        4    
+        """.trimIndent()
+        val lsudoku = parse9x9FromBlock(assignment)
+        solver = Solver(lsudoku)
+
+        val pair = solver!!.validateDeprecated()
+        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
+        solver!!.solverSudoku.complexity = Complexity.easy
+
+        //assertEquals(solver.validate(solution), ComplexityRelation.MUCH_TOO_DIFFICULT);
+        skeleton("Solution (Medium 4) - Complexity: ", pair.second!!)
+    }
+
+    @Test
+    @Timeout(value = 3, unit = TimeUnit.SECONDS)
+    fun difficultSudoku1() {
+        val assignment = """
+            3   9 5     2    
+                      1 9    
+            5 7   2       8  
+                             
+              5     9 2     6
+                    6 4 5   7
+              6   3          
+                8     6 4    
+                    1       3
+        """.trimIndent()
+        val lsudoku = parse9x9FromBlock(assignment)
+        solver = Solver(lsudoku)
+
+        val pair = solver!!.validateDeprecated()
+        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
+
+        skeleton("Solution (Difficult 1) - Complexity: ", pair.second!!)
+    }
+
+    @Test
+    @Timeout(value = 3, unit = TimeUnit.SECONDS)
+    fun difficultSudoku2() {
+        val assignment = """
+                6 8 3   2 1  
+            9         6      
+                3         4  
+              5 7           1
+                  7         8
+              2 4   1       7
+              9       8     5
+              1     4     3  
+            7     9     8    
+        """.trimIndent()
+        val lsudoku = parse9x9FromBlock(assignment)
+        solver = Solver(lsudoku)
+
+        val pair = solver!!.validateDeprecated()
+        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
+
+        skeleton("Solution (Difficult 2) - Complexity: ", pair.second!!)
+    }
+
+    @Test
+    @Timeout(value = 3, unit = TimeUnit.SECONDS)
+    fun difficultSudoku3() {
+        val assignment = """
+                1     7   4 6
+            3   7   2 8      
+                        2    
+              3   9     6    
+              6           5  
+                9 2   6   3  
+                6            
+                  3 5   8   2
+            2 5   8     9    
+        """.trimIndent()
+        val lsudoku = parse9x9FromBlock(assignment)
+        solver = Solver(lsudoku)
+
+        val pair = solver!!.validateDeprecated()
+        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
+
+        skeleton("Solution (Difficult 3) - Complexity: ", pair.second!!)
+    }
+
+    @Test
+    @Timeout(value = 3, unit = TimeUnit.SECONDS)
+    fun difficultSudoku4() {
+        val assignment = """
+                    8     3  
+                      7     1
+            3 1 6     4   8  
+                1           7
+            7     6 1 9     3
+            9           8    
+              8   5     4 2  
+            6     7          
+              5     2     7  
+        """.trimIndent()
+        val lsudoku = parse9x9FromBlock(assignment)
+        solver = Solver(lsudoku)
+
+        val pair = solver!!.validateDeprecated()
+        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
+        solver!!.solverSudoku.complexity = Complexity.infernal
+
+        // assertEquals(solver.validate(solution), ComplexityRelation.TOO_EASY);
+        skeleton("Solution (Difficult 4) - Complexity: ", pair.second!!)
+    }
+
+    @Test
+    @Timeout(value = 3, unit = TimeUnit.SECONDS)
+    fun difficultSudoku5() {
+        val assignment = """
+                          1  
+              7       8   2  
+                  3     7    
+            6 8 9            
+                      5      
+                  6 2       3
+              1 3   5     9 7
+                    4        
+                6 9 1     4 2
+        """.trimIndent()
+        val lsudoku = parse9x9FromBlock(assignment)
+        solver = Solver(lsudoku)
+
+        val pair = solver!!.validateDeprecated()
+        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
+        solver!!.solverSudoku.complexity = Complexity.easy
+
+        //assertEquals(ComplexityRelation.TOO_DIFFICULT, solver.validate(solution));
+        skeleton("Solution (Difficult 5) - Complexity: ", pair.second!!)
+    }
+
+    @Test
+    @Timeout(value = 3, unit = TimeUnit.SECONDS)
+    fun infernalSudoku1() {
+        val assignment = """
+              7   5     6    
+                3         1  
+                    2        
+                    1 3   9  
+              5              
+                      9      
+                  8     4   7
+            2               5
+            1                
+        """.trimIndent()
+        val lsudoku = parse9x9FromBlock(assignment)
+        solver = Solver(lsudoku)
+
+        val pair = solver!!.validateDeprecated()
+        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
+
+        skeleton("Solution (Infernal 1) - Complexity: ", pair.second!!)
+    }
+
+    @Test
+    @Timeout(value = 3, unit = TimeUnit.SECONDS)
+    fun infernalSudoku2() {
+        val assignment = """
+            9     5   6 4   1
+                2     9   8  
+                        9    
+              6         3    
+            5 3     9     6 4
+                4         7  
+                8            
+              7   9     5    
+            1   5 7   4     6
+        """.trimIndent()
+        val lsudoku = parse9x9FromBlock(assignment)
+        solver = Solver(lsudoku)
+
+        val pair = solver!!.validateDeprecated()
+        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
+
+        skeleton("Solution (Infernal 2) - Complexity: ", pair.second!!)
+    }
+
+    @Test
+    @Timeout(value = 3, unit = TimeUnit.SECONDS)
+    fun infernalSudoku3() {
+        val assignment = """
+                  7          
+                      8 2 1 9
+              2 6     9 8    
+              3   2     9   4
+                8   7   3    
+            2   9     3   6  
+                5 6     7 3  
+            9 7 3 1          
+                      7      
+        """.trimIndent()
+        val lsudoku = parse9x9FromBlock(assignment)
+        solver = Solver(lsudoku)
+
+        val pair = solver!!.validateDeprecated()
+        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
+
+        skeleton("Solution (Infernal 3) - Complexity: ", pair.second!!)
+    }
+
+    @Test
+    @Timeout(value = 3, unit = TimeUnit.SECONDS)
+    fun worldsHardestSudoku() {
+        val assignment = """
+            1         7   9  
+              3     2       8
+                9 6     5    
+                5 3     9    
+              1     8       2
+            6         4      
+            3             1  
+              4             7
+                7       3    
+        """.trimIndent()
+        val lsudoku = parse9x9FromBlock(assignment)
+        solver = Solver(lsudoku)
+
+        solver!!.solverSudoku.complexity = Complexity.easy
+        val pair = solver!!.validateDeprecated()
+        pair.first `should be equal to` ComplexityRelation.INVALID
+        solver!!.solverSudoku.complexity = Complexity.arbitrary
+        val pair2 = solver!!.validateDeprecated()
+        pair2.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
+
+        skeleton("Solution (world's hardest) - Complexity: ", pair2.second!!)
+    }
+
+    @Test
+    @Timeout(value = 3, unit = TimeUnit.SECONDS)
+    fun worldsHardestSudoku2() {
+        val assignment = """
+                5 3          
+            8             2  
+              7     1   5    
+            4         5 3    
+              1     7       6
+                3 2       8  
+              6   5         9
+                4         3  
+                      9 7    
+        """.trimIndent()
+        val lsudoku = parse9x9FromBlock(assignment)
+        solver = Solver(lsudoku)
+
+        val pair = solver!!.validateDeprecated()
+        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
+
+        skeleton("Solution (world's hardest 2) - Complexity: ", pair.second!!)
+    }
+
+    @Test
+    @Timeout(value = 3, unit = TimeUnit.SECONDS)
+    fun notSolvableSudoku() {
+        val assignment = """
+            3   9|5    |2    
+                 |    1|9    
+            5 7 _|2 _ _|_ 8  
+                 |     |     
+              5  |  9 2|    6
+            _ _ _|_ 6 4|5 _ 7
+              6  |3    |     
+                8|    6|4    
+            _ _ _|_ 1 _|_ _ 5
+        """.trimIndent()
+        val lsudoku = parse9x9FromBlock(assignment)
+        solver = Solver(lsudoku)
+        //assertEquals(solver.validate(solution), ComplexityRelation.INVALID);
+        while (solver!!.solveOne(true) != null);
+        solver!!.solveOne(true) `should be` null
+    }
+
+    @Test
+    @Timeout(value = 3, unit = TimeUnit.SECONDS)
+    fun ambiguouslySolvable() {
+        val assignment = """
+            . 7  |5    |6    
+                3|     |  1  
+            _ _ _|_ 2 _|_ _ _
+                 |  1 3|  9  
+              5  |     |     
+            _ _ _|_ _ 9|_ _ _
+                 |8    |4   7
+            2    |     |    5
+            _ _ _|_ _ _|_ _ _
+        """.trimIndent()
+        val lsudoku = parse9x9FromBlock(assignment)
+        solver = Solver(lsudoku)
+        //todo investigate validation, what are we currently using in main? does that work?
+        //assertEquals(ComplexityRelation.INVALID, solver.validate(solution));
+    }
+
+    fun parse9x9FromBlock(block: String): Sudoku {
+        val sudoku = SudokuBuilderLegacy(SudokuTypes.standard9x9, sudokuTypeRepo)
+            .complexity(Complexity.arbitrary)
+            .build()
+
+        block.lines().forEachIndexed { y, line ->
+            line.chunked(2).forEachIndexed { x, value ->
+                when (value[0]) {
+                    ' ', '_', '.' -> {}
+                    in '1'..'9' -> sudoku.getCell(Position[x, y]).currentValue =
+                        value[0].digitToInt() - 1
+
+                    else -> throw IllegalArgumentException("Invalid character: $value")
+                }
+            }
+        }
+        return sudoku
     }
 
     private fun skeleton(title: String?, solution: PositionMap<Int>) {
@@ -106,728 +530,6 @@ internal class SolverIntegrationTests {
             }
             println(sb)
         }
-    }
-
-    @Test
-    @Timeout(value = 3, unit = TimeUnit.SECONDS)
-    fun easySudoku2() {
-        sudoku.getCell(Position[0, 0]).currentValue = 1
-        sudoku.getCell(Position[0, 1]).currentValue = 3
-        sudoku.getCell(Position[0, 4]).currentValue = 6
-        sudoku.getCell(Position[0, 6]).currentValue = 0
-        sudoku.getCell(Position[0, 7]).currentValue = 4
-        sudoku.getCell(Position[1, 0]).currentValue = 7
-        sudoku.getCell(Position[1, 4]).currentValue = 3
-        sudoku.getCell(Position[1, 5]).currentValue = 8
-        sudoku.getCell(Position[1, 7]).currentValue = 2
-        sudoku.getCell(Position[2, 0]).currentValue = 0
-        sudoku.getCell(Position[2, 2]).currentValue = 6
-        sudoku.getCell(Position[2, 3]).currentValue = 4
-        sudoku.getCell(Position[2, 4]).currentValue = 7
-        sudoku.getCell(Position[2, 7]).currentValue = 5
-        sudoku.getCell(Position[2, 8]).currentValue = 8
-        sudoku.getCell(Position[3, 1]).currentValue = 1
-        sudoku.getCell(Position[3, 2]).currentValue = 3
-        sudoku.getCell(Position[3, 3]).currentValue = 5
-        sudoku.getCell(Position[3, 4]).currentValue = 2
-        sudoku.getCell(Position[3, 6]).currentValue = 8
-        sudoku.getCell(Position[3, 8]).currentValue = 4
-        sudoku.getCell(Position[4, 0]).currentValue = 4
-        sudoku.getCell(Position[4, 3]).currentValue = 3
-        sudoku.getCell(Position[4, 4]).currentValue = 1
-        sudoku.getCell(Position[4, 7]).currentValue = 0
-        sudoku.getCell(Position[4, 8]).currentValue = 2
-        sudoku.getCell(Position[5, 1]).currentValue = 0
-        sudoku.getCell(Position[5, 2]).currentValue = 5
-        sudoku.getCell(Position[5, 4]).currentValue = 4
-        sudoku.getCell(Position[5, 6]).currentValue = 6
-        sudoku.getCell(Position[6, 3]).currentValue = 6
-        sudoku.getCell(Position[6, 5]).currentValue = 2
-        sudoku.getCell(Position[6, 6]).currentValue = 4
-        sudoku.getCell(Position[6, 7]).currentValue = 3
-        sudoku.getCell(Position[6, 8]).currentValue = 1
-        sudoku.getCell(Position[7, 0]).currentValue = 8
-        sudoku.getCell(Position[7, 1]).currentValue = 4
-        sudoku.getCell(Position[7, 2]).currentValue = 2
-        sudoku.getCell(Position[7, 4]).currentValue = 5
-        sudoku.getCell(Position[7, 7]).currentValue = 6
-        sudoku.getCell(Position[7, 8]).currentValue = 0
-        sudoku.getCell(Position[8, 0]).currentValue = 3
-        sudoku.getCell(Position[8, 1]).currentValue = 6
-        sudoku.getCell(Position[8, 3]).currentValue = 7
-        sudoku.getCell(Position[8, 4]).currentValue = 0
-        solver = Solver(sudoku)
-
-        val pair = solver!!.validateDeprecated()
-        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
-        solver!!.solverSudoku.complexity = Complexity.difficult
-
-        //assertEquals(solver.validate(solution), ComplexityRelation.MUCH_TOO_EASY);
-        skeleton("Solution (Easy 2) - Complexity: ", pair.second!!)
-    }
-
-    @Test
-    @Timeout(value = 3, unit = TimeUnit.SECONDS)
-    fun easySudoku3() {
-        sudoku.getCell(Position[0, 0]).currentValue = 0
-        sudoku.getCell(Position[2, 0]).currentValue = 6
-        sudoku.getCell(Position[4, 0]).currentValue = 7
-        sudoku.getCell(Position[7, 0]).currentValue = 3
-        sudoku.getCell(Position[3, 1]).currentValue = 3
-        sudoku.getCell(Position[5, 1]).currentValue = 4
-        sudoku.getCell(Position[6, 1]).currentValue = 0
-        sudoku.getCell(Position[8, 1]).currentValue = 2
-        sudoku.getCell(Position[0, 2]).currentValue = 3
-        sudoku.getCell(Position[1, 2]).currentValue = 2
-        sudoku.getCell(Position[2, 2]).currentValue = 1
-        sudoku.getCell(Position[3, 2]).currentValue = 0
-        sudoku.getCell(Position[5, 2]).currentValue = 8
-        sudoku.getCell(Position[7, 2]).currentValue = 7
-        sudoku.getCell(Position[8, 2]).currentValue = 5
-        sudoku.getCell(Position[0, 3]).currentValue = 6
-        sudoku.getCell(Position[2, 3]).currentValue = 2
-        sudoku.getCell(Position[4, 3]).currentValue = 3
-        sudoku.getCell(Position[6, 3]).currentValue = 5
-        sudoku.getCell(Position[8, 3]).currentValue = 4
-        sudoku.getCell(Position[0, 4]).currentValue = 4
-        sudoku.getCell(Position[3, 4]).currentValue = 1
-        sudoku.getCell(Position[5, 4]).currentValue = 5
-        sudoku.getCell(Position[6, 4]).currentValue = 6
-        sudoku.getCell(Position[8, 4]).currentValue = 3
-        sudoku.getCell(Position[0, 5]).currentValue = 5
-        sudoku.getCell(Position[1, 5]).currentValue = 1
-        sudoku.getCell(Position[4, 5]).currentValue = 4
-        sudoku.getCell(Position[5, 5]).currentValue = 6
-        sudoku.getCell(Position[6, 5]).currentValue = 7
-        sudoku.getCell(Position[1, 6]).currentValue = 7
-        sudoku.getCell(Position[2, 6]).currentValue = 4
-        sudoku.getCell(Position[3, 6]).currentValue = 6
-        sudoku.getCell(Position[6, 6]).currentValue = 8
-        sudoku.getCell(Position[7, 6]).currentValue = 0
-        sudoku.getCell(Position[8, 6]).currentValue = 1
-        sudoku.getCell(Position[0, 7]).currentValue = 1
-        sudoku.getCell(Position[3, 7]).currentValue = 4
-        sudoku.getCell(Position[4, 7]).currentValue = 8
-        sudoku.getCell(Position[6, 7]).currentValue = 2
-        sudoku.getCell(Position[0, 8]).currentValue = 8
-        sudoku.getCell(Position[1, 8]).currentValue = 6
-        sudoku.getCell(Position[3, 8]).currentValue = 2
-        sudoku.getCell(Position[4, 8]).currentValue = 0
-        solver = Solver(sudoku)
-
-        val pair = solver!!.validateDeprecated()
-        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
-
-        skeleton("Solution (Easy 3) - Complexity: ", pair.second!!)
-    }
-
-    @Test
-    @Timeout(value = 3, unit = TimeUnit.SECONDS)
-    fun mediumSudoku1() {
-        sudoku.getCell(Position[2, 0]).currentValue = 2
-        sudoku.getCell(Position[3, 0]).currentValue = 3
-        sudoku.getCell(Position[4, 0]).currentValue = 6
-        sudoku.getCell(Position[6, 0]).currentValue = 1
-        sudoku.getCell(Position[8, 0]).currentValue = 0
-        sudoku.getCell(Position[1, 1]).currentValue = 5
-        sudoku.getCell(Position[2, 1]).currentValue = 7
-        sudoku.getCell(Position[3, 1]).currentValue = 1
-        sudoku.getCell(Position[0, 2]).currentValue = 3
-        sudoku.getCell(Position[5, 2]).currentValue = 0
-        sudoku.getCell(Position[6, 2]).currentValue = 5
-        sudoku.getCell(Position[7, 2]).currentValue = 4
-        sudoku.getCell(Position[0, 3]).currentValue = 8
-        sudoku.getCell(Position[2, 3]).currentValue = 5
-        sudoku.getCell(Position[3, 3]).currentValue = 7
-        sudoku.getCell(Position[5, 3]).currentValue = 3
-        sudoku.getCell(Position[8, 3]).currentValue = 4
-        sudoku.getCell(Position[2, 4]).currentValue = 1
-        sudoku.getCell(Position[4, 4]).currentValue = 2
-        sudoku.getCell(Position[6, 4]).currentValue = 6
-        sudoku.getCell(Position[8, 4]).currentValue = 3
-        sudoku.getCell(Position[2, 5]).currentValue = 3
-        sudoku.getCell(Position[3, 5]).currentValue = 0
-        sudoku.getCell(Position[7, 5]).currentValue = 1
-        sudoku.getCell(Position[5, 6]).currentValue = 2
-        sudoku.getCell(Position[8, 6]).currentValue = 5
-        sudoku.getCell(Position[1, 7]).currentValue = 2
-        sudoku.getCell(Position[2, 7]).currentValue = 4
-        sudoku.getCell(Position[4, 7]).currentValue = 0
-        sudoku.getCell(Position[5, 7]).currentValue = 7
-        sudoku.getCell(Position[6, 7]).currentValue = 3
-        sudoku.getCell(Position[7, 7]).currentValue = 8
-        sudoku.getCell(Position[0, 8]).currentValue = 6
-        sudoku.getCell(Position[2, 8]).currentValue = 8
-        sudoku.getCell(Position[4, 8]).currentValue = 4
-        sudoku.getCell(Position[6, 8]).currentValue = 7
-        solver = Solver(sudoku)
-
-        val pair = solver!!.validateDeprecated()
-        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
-
-        skeleton("Solution (Medium 1) - Complexity: ", pair.second!!)
-    }
-
-    @Test
-    @Timeout(value = 3, unit = TimeUnit.SECONDS)
-    fun mediumSudoku2() {
-        sudoku.getCell(Position[2, 0]).currentValue = 0
-        sudoku.getCell(Position[4, 0]).currentValue = 4
-        sudoku.getCell(Position[5, 0]).currentValue = 1
-        sudoku.getCell(Position[6, 0]).currentValue = 7
-        sudoku.getCell(Position[7, 0]).currentValue = 2
-        sudoku.getCell(Position[8, 0]).currentValue = 6
-        sudoku.getCell(Position[0, 1]).currentValue = 6
-        sudoku.getCell(Position[1, 1]).currentValue = 1
-        sudoku.getCell(Position[5, 1]).currentValue = 0
-        sudoku.getCell(Position[2, 2]).currentValue = 4
-        sudoku.getCell(Position[3, 2]).currentValue = 2
-        sudoku.getCell(Position[7, 2]).currentValue = 1
-        sudoku.getCell(Position[1, 3]).currentValue = 3
-        sudoku.getCell(Position[2, 3]).currentValue = 8
-        sudoku.getCell(Position[3, 3]).currentValue = 1
-        sudoku.getCell(Position[5, 3]).currentValue = 7
-        sudoku.getCell(Position[6, 3]).currentValue = 0
-        sudoku.getCell(Position[3, 4]).currentValue = 8
-        sudoku.getCell(Position[6, 4]).currentValue = 1
-        sudoku.getCell(Position[8, 4]).currentValue = 5
-        sudoku.getCell(Position[1, 5]).currentValue = 7
-        sudoku.getCell(Position[2, 5]).currentValue = 1
-        sudoku.getCell(Position[4, 5]).currentValue = 2
-        sudoku.getCell(Position[8, 5]).currentValue = 8
-        sudoku.getCell(Position[5, 6]).currentValue = 5
-        sudoku.getCell(Position[8, 6]).currentValue = 3
-        sudoku.getCell(Position[0, 7]).currentValue = 0
-        sudoku.getCell(Position[1, 7]).currentValue = 2
-        sudoku.getCell(Position[4, 7]).currentValue = 1
-        sudoku.getCell(Position[7, 7]).currentValue = 4
-        sudoku.getCell(Position[0, 8]).currentValue = 8
-        sudoku.getCell(Position[2, 8]).currentValue = 3
-        sudoku.getCell(Position[3, 8]).currentValue = 6
-        sudoku.getCell(Position[4, 8]).currentValue = 7
-        sudoku.getCell(Position[6, 8]).currentValue = 5
-        sudoku.getCell(Position[8, 8]).currentValue = 1
-        solver = Solver(sudoku)
-
-        val pair = solver!!.validateDeprecated()
-        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
-
-        skeleton("Solution (Medium 2) - Complexity: ", pair.second!!)
-    }
-
-    @Test
-    @Timeout(value = 3, unit = TimeUnit.SECONDS)
-    fun mediumSudoku3() {
-        sudoku.getCell(Position[0, 0]).currentValue = 4
-        sudoku.getCell(Position[1, 0]).currentValue = 5
-        sudoku.getCell(Position[2, 0]).currentValue = 6
-        sudoku.getCell(Position[3, 0]).currentValue = 8
-        sudoku.getCell(Position[4, 0]).currentValue = 1
-        sudoku.getCell(Position[7, 0]).currentValue = 7
-        sudoku.getCell(Position[2, 1]).currentValue = 2
-        sudoku.getCell(Position[4, 1]).currentValue = 0
-        sudoku.getCell(Position[6, 1]).currentValue = 6
-        sudoku.getCell(Position[5, 2]).currentValue = 5
-        sudoku.getCell(Position[7, 2]).currentValue = 1
-        sudoku.getCell(Position[8, 2]).currentValue = 4
-        sudoku.getCell(Position[1, 3]).currentValue = 2
-        sudoku.getCell(Position[2, 3]).currentValue = 8
-        sudoku.getCell(Position[3, 3]).currentValue = 1
-        sudoku.getCell(Position[6, 3]).currentValue = 4
-        sudoku.getCell(Position[8, 3]).currentValue = 0
-        sudoku.getCell(Position[2, 4]).currentValue = 0
-        sudoku.getCell(Position[4, 4]).currentValue = 5
-        sudoku.getCell(Position[6, 4]).currentValue = 7
-        sudoku.getCell(Position[0, 5]).currentValue = 5
-        sudoku.getCell(Position[2, 5]).currentValue = 4
-        sudoku.getCell(Position[4, 5]).currentValue = 8
-        sudoku.getCell(Position[5, 5]).currentValue = 0
-        sudoku.getCell(Position[6, 5]).currentValue = 1
-        sudoku.getCell(Position[7, 5]).currentValue = 2
-        sudoku.getCell(Position[1, 6]).currentValue = 3
-        sudoku.getCell(Position[3, 6]).currentValue = 5
-        sudoku.getCell(Position[7, 6]).currentValue = 4
-        sudoku.getCell(Position[2, 7]).currentValue = 7
-        sudoku.getCell(Position[4, 7]).currentValue = 3
-        sudoku.getCell(Position[7, 7]).currentValue = 6
-        sudoku.getCell(Position[1, 8]).currentValue = 8
-        sudoku.getCell(Position[4, 8]).currentValue = 4
-        sudoku.getCell(Position[5, 8]).currentValue = 1
-        sudoku.getCell(Position[7, 8]).currentValue = 0
-        sudoku.getCell(Position[8, 8]).currentValue = 2
-        solver = Solver(sudoku)
-
-        val pair = solver!!.validateDeprecated()
-        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
-
-        skeleton("Solution (Medium 3) - Complexity: ", pair.second!!)
-    }
-
-    @Test
-    @Timeout(value = 3, unit = TimeUnit.SECONDS)
-    fun mediumSudoku4() {
-        sudoku.getCell(Position[1, 0]).currentValue = 1
-        sudoku.getCell(Position[2, 0]).currentValue = 2
-        sudoku.getCell(Position[5, 0]).currentValue = 3
-        sudoku.getCell(Position[7, 0]).currentValue = 6
-        sudoku.getCell(Position[8, 0]).currentValue = 8
-        sudoku.getCell(Position[0, 1]).currentValue = 6
-        sudoku.getCell(Position[4, 1]).currentValue = 5
-        sudoku.getCell(Position[0, 2]).currentValue = 0
-        sudoku.getCell(Position[3, 2]).currentValue = 4
-        sudoku.getCell(Position[6, 2]).currentValue = 5
-        sudoku.getCell(Position[7, 2]).currentValue = 2
-        sudoku.getCell(Position[1, 3]).currentValue = 3
-        sudoku.getCell(Position[2, 3]).currentValue = 7
-        sudoku.getCell(Position[4, 3]).currentValue = 6
-        sudoku.getCell(Position[7, 3]).currentValue = 4
-        sudoku.getCell(Position[1, 4]).currentValue = 5
-        sudoku.getCell(Position[5, 4]).currentValue = 2
-        sudoku.getCell(Position[7, 4]).currentValue = 7
-        sudoku.getCell(Position[0, 5]).currentValue = 4
-        sudoku.getCell(Position[7, 5]).currentValue = 3
-        sudoku.getCell(Position[1, 6]).currentValue = 2
-        sudoku.getCell(Position[2, 6]).currentValue = 5
-        sudoku.getCell(Position[8, 6]).currentValue = 6
-        sudoku.getCell(Position[2, 7]).currentValue = 8
-        sudoku.getCell(Position[4, 7]).currentValue = 3
-        sudoku.getCell(Position[5, 7]).currentValue = 0
-        sudoku.getCell(Position[8, 7]).currentValue = 4
-        sudoku.getCell(Position[6, 8]).currentValue = 3
-        solver = Solver(sudoku)
-
-        val pair = solver!!.validateDeprecated()
-        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
-        solver!!.solverSudoku.complexity = Complexity.easy
-
-        //assertEquals(solver.validate(solution), ComplexityRelation.MUCH_TOO_DIFFICULT);
-        skeleton("Solution (Medium 4) - Complexity: ", pair.second!!)
-    }
-
-    @Test
-    @Timeout(value = 3, unit = TimeUnit.SECONDS)
-    fun difficultSudoku1() {
-        sudoku.getCell(Position[0, 0]).currentValue = 2
-        sudoku.getCell(Position[2, 0]).currentValue = 8
-        sudoku.getCell(Position[3, 0]).currentValue = 4
-        sudoku.getCell(Position[6, 0]).currentValue = 1
-        sudoku.getCell(Position[5, 1]).currentValue = 0
-        sudoku.getCell(Position[6, 1]).currentValue = 8
-        sudoku.getCell(Position[0, 2]).currentValue = 4
-        sudoku.getCell(Position[1, 2]).currentValue = 6
-        sudoku.getCell(Position[3, 2]).currentValue = 1
-        sudoku.getCell(Position[7, 2]).currentValue = 7
-        sudoku.getCell(Position[1, 4]).currentValue = 4
-        sudoku.getCell(Position[4, 4]).currentValue = 8
-        sudoku.getCell(Position[5, 4]).currentValue = 1
-        sudoku.getCell(Position[8, 4]).currentValue = 5
-        sudoku.getCell(Position[4, 5]).currentValue = 5
-        sudoku.getCell(Position[5, 5]).currentValue = 3
-        sudoku.getCell(Position[6, 5]).currentValue = 4
-        sudoku.getCell(Position[8, 5]).currentValue = 6
-        sudoku.getCell(Position[1, 6]).currentValue = 5
-        sudoku.getCell(Position[3, 6]).currentValue = 2
-        sudoku.getCell(Position[2, 7]).currentValue = 7
-        sudoku.getCell(Position[5, 7]).currentValue = 5
-        sudoku.getCell(Position[6, 7]).currentValue = 3
-        sudoku.getCell(Position[4, 8]).currentValue = 0
-        sudoku.getCell(Position[8, 8]).currentValue = 2
-        solver = Solver(sudoku)
-
-        val pair = solver!!.validateDeprecated()
-        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
-
-        skeleton("Solution (Difficult 1) - Complexity: ", pair.second!!)
-    }
-
-    @Test
-    @Timeout(value = 3, unit = TimeUnit.SECONDS)
-    fun difficultSudoku2() {
-        sudoku.getCell(Position[2, 0]).currentValue = 5
-        sudoku.getCell(Position[3, 0]).currentValue = 7
-        sudoku.getCell(Position[4, 0]).currentValue = 2
-        sudoku.getCell(Position[6, 0]).currentValue = 1
-        sudoku.getCell(Position[7, 0]).currentValue = 0
-        sudoku.getCell(Position[0, 1]).currentValue = 8
-        sudoku.getCell(Position[5, 1]).currentValue = 5
-        sudoku.getCell(Position[2, 2]).currentValue = 2
-        sudoku.getCell(Position[7, 2]).currentValue = 3
-        sudoku.getCell(Position[1, 3]).currentValue = 4
-        sudoku.getCell(Position[2, 3]).currentValue = 6
-        sudoku.getCell(Position[8, 3]).currentValue = 0
-        sudoku.getCell(Position[3, 4]).currentValue = 6
-        sudoku.getCell(Position[8, 4]).currentValue = 7
-        sudoku.getCell(Position[1, 5]).currentValue = 1
-        sudoku.getCell(Position[2, 5]).currentValue = 3
-        sudoku.getCell(Position[4, 5]).currentValue = 0
-        sudoku.getCell(Position[8, 5]).currentValue = 6
-        sudoku.getCell(Position[1, 6]).currentValue = 8
-        sudoku.getCell(Position[5, 6]).currentValue = 7
-        sudoku.getCell(Position[8, 6]).currentValue = 4
-        sudoku.getCell(Position[1, 7]).currentValue = 0
-        sudoku.getCell(Position[4, 7]).currentValue = 3
-        sudoku.getCell(Position[7, 7]).currentValue = 2
-        sudoku.getCell(Position[0, 8]).currentValue = 6
-        sudoku.getCell(Position[3, 8]).currentValue = 8
-        sudoku.getCell(Position[6, 8]).currentValue = 7
-        solver = Solver(sudoku)
-
-        val pair = solver!!.validateDeprecated()
-        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
-
-        skeleton("Solution (Difficult 2) - Complexity: ", pair.second!!)
-    }
-
-    @Test
-    @Timeout(value = 3, unit = TimeUnit.SECONDS)
-    fun difficultSudoku3() {
-        sudoku.getCell(Position[2, 0]).currentValue = 0
-        sudoku.getCell(Position[5, 0]).currentValue = 6
-        sudoku.getCell(Position[7, 0]).currentValue = 3
-        sudoku.getCell(Position[8, 0]).currentValue = 5
-        sudoku.getCell(Position[0, 1]).currentValue = 2
-        sudoku.getCell(Position[2, 1]).currentValue = 6
-        sudoku.getCell(Position[4, 1]).currentValue = 1
-        sudoku.getCell(Position[5, 1]).currentValue = 7
-        sudoku.getCell(Position[6, 2]).currentValue = 1
-        sudoku.getCell(Position[1, 3]).currentValue = 2
-        sudoku.getCell(Position[3, 3]).currentValue = 8
-        sudoku.getCell(Position[6, 3]).currentValue = 5
-        sudoku.getCell(Position[1, 4]).currentValue = 5
-        sudoku.getCell(Position[7, 4]).currentValue = 4
-        sudoku.getCell(Position[2, 5]).currentValue = 8
-        sudoku.getCell(Position[3, 5]).currentValue = 1
-        sudoku.getCell(Position[5, 5]).currentValue = 5
-        sudoku.getCell(Position[7, 5]).currentValue = 2
-        sudoku.getCell(Position[2, 6]).currentValue = 5
-        sudoku.getCell(Position[3, 7]).currentValue = 2
-        sudoku.getCell(Position[4, 7]).currentValue = 4
-        sudoku.getCell(Position[6, 7]).currentValue = 7
-        sudoku.getCell(Position[8, 7]).currentValue = 1
-        sudoku.getCell(Position[0, 8]).currentValue = 1
-        sudoku.getCell(Position[1, 8]).currentValue = 4
-        sudoku.getCell(Position[3, 8]).currentValue = 7
-        sudoku.getCell(Position[6, 8]).currentValue = 8
-        solver = Solver(sudoku)
-
-        val pair = solver!!.validateDeprecated()
-        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
-
-        skeleton("Solution (Difficult 3) - Complexity: ", pair.second!!)
-    }
-
-    @Test
-    @Timeout(value = 3, unit = TimeUnit.SECONDS)
-    fun difficultSudoku4() {
-        sudoku.getCell(Position[4, 0]).currentValue = 7
-        sudoku.getCell(Position[7, 0]).currentValue = 2
-        sudoku.getCell(Position[5, 1]).currentValue = 6
-        sudoku.getCell(Position[8, 1]).currentValue = 0
-        sudoku.getCell(Position[0, 2]).currentValue = 2
-        sudoku.getCell(Position[1, 2]).currentValue = 0
-        sudoku.getCell(Position[2, 2]).currentValue = 5
-        sudoku.getCell(Position[5, 2]).currentValue = 3
-        sudoku.getCell(Position[7, 2]).currentValue = 7
-        sudoku.getCell(Position[2, 3]).currentValue = 0
-        sudoku.getCell(Position[8, 3]).currentValue = 6
-        sudoku.getCell(Position[0, 4]).currentValue = 6
-        sudoku.getCell(Position[3, 4]).currentValue = 5
-        sudoku.getCell(Position[4, 4]).currentValue = 0
-        sudoku.getCell(Position[5, 4]).currentValue = 8
-        sudoku.getCell(Position[8, 4]).currentValue = 2
-        sudoku.getCell(Position[0, 5]).currentValue = 8
-        sudoku.getCell(Position[6, 5]).currentValue = 7
-        sudoku.getCell(Position[1, 6]).currentValue = 7
-        sudoku.getCell(Position[3, 6]).currentValue = 4
-        sudoku.getCell(Position[6, 6]).currentValue = 3
-        sudoku.getCell(Position[7, 6]).currentValue = 1
-        sudoku.getCell(Position[0, 7]).currentValue = 5
-        sudoku.getCell(Position[3, 7]).currentValue = 6
-        sudoku.getCell(Position[1, 8]).currentValue = 4
-        sudoku.getCell(Position[4, 8]).currentValue = 1
-        sudoku.getCell(Position[7, 8]).currentValue = 6
-        solver = Solver(sudoku)
-
-        val pair = solver!!.validateDeprecated()
-        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
-        solver!!.solverSudoku.complexity = Complexity.infernal
-
-        // assertEquals(solver.validate(solution), ComplexityRelation.TOO_EASY);
-        skeleton("Solution (Difficult 4) - Complexity: ", pair.second!!)
-    }
-
-    @Test
-    @Timeout(value = 3, unit = TimeUnit.SECONDS)
-    fun difficultSudoku5() {
-        sudoku.getCell(Position[7, 0]).currentValue = 0
-        sudoku.getCell(Position[1, 1]).currentValue = 6
-        sudoku.getCell(Position[5, 1]).currentValue = 7
-        sudoku.getCell(Position[7, 1]).currentValue = 1
-        sudoku.getCell(Position[3, 2]).currentValue = 2
-        sudoku.getCell(Position[6, 2]).currentValue = 6
-        sudoku.getCell(Position[0, 3]).currentValue = 5
-        sudoku.getCell(Position[1, 3]).currentValue = 7
-        sudoku.getCell(Position[2, 3]).currentValue = 8
-        sudoku.getCell(Position[5, 4]).currentValue = 4
-        sudoku.getCell(Position[3, 5]).currentValue = 5
-        sudoku.getCell(Position[4, 5]).currentValue = 1
-        sudoku.getCell(Position[8, 5]).currentValue = 2
-        sudoku.getCell(Position[1, 6]).currentValue = 0
-        sudoku.getCell(Position[2, 6]).currentValue = 2
-        sudoku.getCell(Position[4, 6]).currentValue = 4
-        sudoku.getCell(Position[7, 6]).currentValue = 8
-        sudoku.getCell(Position[8, 6]).currentValue = 6
-        sudoku.getCell(Position[4, 7]).currentValue = 3
-        sudoku.getCell(Position[2, 8]).currentValue = 5
-        sudoku.getCell(Position[3, 8]).currentValue = 8
-        sudoku.getCell(Position[4, 8]).currentValue = 0
-        sudoku.getCell(Position[7, 8]).currentValue = 3
-        sudoku.getCell(Position[8, 8]).currentValue = 1
-        solver = Solver(sudoku)
-
-        val pair = solver!!.validateDeprecated()
-        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
-        solver!!.solverSudoku.complexity = Complexity.easy
-
-        //assertEquals(ComplexityRelation.TOO_DIFFICULT, solver.validate(solution));
-        skeleton("Solution (Difficult 5) - Complexity: ", pair.second!!)
-    }
-
-    @Test
-    @Timeout(value = 3, unit = TimeUnit.SECONDS)
-    fun infernalSudoku1() {
-        sudoku.getCell(Position[1, 0]).currentValue = 6
-        sudoku.getCell(Position[3, 0]).currentValue = 4
-        sudoku.getCell(Position[6, 0]).currentValue = 5
-        sudoku.getCell(Position[2, 1]).currentValue = 2
-        sudoku.getCell(Position[7, 1]).currentValue = 0
-        sudoku.getCell(Position[4, 2]).currentValue = 1
-        sudoku.getCell(Position[4, 3]).currentValue = 0
-        sudoku.getCell(Position[5, 3]).currentValue = 2
-        sudoku.getCell(Position[7, 3]).currentValue = 8
-        sudoku.getCell(Position[1, 4]).currentValue = 4
-        sudoku.getCell(Position[5, 5]).currentValue = 8
-        sudoku.getCell(Position[3, 6]).currentValue = 7
-        sudoku.getCell(Position[6, 6]).currentValue = 3
-        sudoku.getCell(Position[8, 6]).currentValue = 6
-        sudoku.getCell(Position[0, 7]).currentValue = 1
-        sudoku.getCell(Position[8, 7]).currentValue = 4
-        sudoku.getCell(Position[0, 8]).currentValue = 0
-        solver = Solver(sudoku)
-
-        val pair = solver!!.validateDeprecated()
-        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
-
-        skeleton("Solution (Infernal 1) - Complexity: ", pair.second!!)
-    }
-
-    @Test
-    @Timeout(value = 3, unit = TimeUnit.SECONDS)
-    fun infernalSudoku2() {
-        sudoku.getCell(Position[0, 0]).currentValue = 8
-        sudoku.getCell(Position[3, 0]).currentValue = 4
-        sudoku.getCell(Position[5, 0]).currentValue = 5
-        sudoku.getCell(Position[6, 0]).currentValue = 3
-        sudoku.getCell(Position[8, 0]).currentValue = 0
-        sudoku.getCell(Position[2, 1]).currentValue = 1
-        sudoku.getCell(Position[5, 1]).currentValue = 8
-        sudoku.getCell(Position[7, 1]).currentValue = 7
-        sudoku.getCell(Position[6, 2]).currentValue = 8
-        sudoku.getCell(Position[1, 3]).currentValue = 5
-        sudoku.getCell(Position[6, 3]).currentValue = 2
-        sudoku.getCell(Position[0, 4]).currentValue = 4
-        sudoku.getCell(Position[1, 4]).currentValue = 2
-        sudoku.getCell(Position[4, 4]).currentValue = 8
-        sudoku.getCell(Position[7, 4]).currentValue = 5
-        sudoku.getCell(Position[8, 4]).currentValue = 3
-        sudoku.getCell(Position[2, 5]).currentValue = 3
-        sudoku.getCell(Position[7, 5]).currentValue = 6
-        sudoku.getCell(Position[2, 6]).currentValue = 7
-        sudoku.getCell(Position[1, 7]).currentValue = 6
-        sudoku.getCell(Position[3, 7]).currentValue = 8
-        sudoku.getCell(Position[6, 7]).currentValue = 4
-        sudoku.getCell(Position[0, 8]).currentValue = 0
-        sudoku.getCell(Position[2, 8]).currentValue = 4
-        sudoku.getCell(Position[3, 8]).currentValue = 6
-        sudoku.getCell(Position[5, 8]).currentValue = 3
-        sudoku.getCell(Position[8, 8]).currentValue = 5
-        solver = Solver(sudoku)
-
-        val pair = solver!!.validateDeprecated()
-        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
-
-        skeleton("Solution (Infernal 2) - Complexity: ", pair.second!!)
-    }
-
-    @Test
-    @Timeout(value = 3, unit = TimeUnit.SECONDS)
-    fun infernalSudoku3() {
-        sudoku.getCell(Position[3, 0]).currentValue = 6
-        sudoku.getCell(Position[5, 1]).currentValue = 7
-        sudoku.getCell(Position[6, 1]).currentValue = 1
-        sudoku.getCell(Position[7, 1]).currentValue = 0
-        sudoku.getCell(Position[8, 1]).currentValue = 8
-        sudoku.getCell(Position[1, 2]).currentValue = 1
-        sudoku.getCell(Position[2, 2]).currentValue = 5
-        sudoku.getCell(Position[5, 2]).currentValue = 8
-        sudoku.getCell(Position[6, 2]).currentValue = 7
-        sudoku.getCell(Position[1, 3]).currentValue = 2
-        sudoku.getCell(Position[3, 3]).currentValue = 1
-        sudoku.getCell(Position[6, 3]).currentValue = 8
-        sudoku.getCell(Position[8, 3]).currentValue = 3
-        sudoku.getCell(Position[2, 4]).currentValue = 7
-        sudoku.getCell(Position[4, 4]).currentValue = 6
-        sudoku.getCell(Position[6, 4]).currentValue = 2
-        sudoku.getCell(Position[0, 5]).currentValue = 1
-        sudoku.getCell(Position[2, 5]).currentValue = 8
-        sudoku.getCell(Position[5, 5]).currentValue = 2
-        sudoku.getCell(Position[7, 5]).currentValue = 5
-        sudoku.getCell(Position[2, 6]).currentValue = 4
-        sudoku.getCell(Position[3, 6]).currentValue = 5
-        sudoku.getCell(Position[6, 6]).currentValue = 6
-        sudoku.getCell(Position[7, 6]).currentValue = 2
-        sudoku.getCell(Position[0, 7]).currentValue = 8
-        sudoku.getCell(Position[1, 7]).currentValue = 6
-        sudoku.getCell(Position[2, 7]).currentValue = 2
-        sudoku.getCell(Position[3, 7]).currentValue = 0
-        sudoku.getCell(Position[5, 8]).currentValue = 6
-        solver = Solver(sudoku)
-
-        val pair = solver!!.validateDeprecated()
-        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
-
-        skeleton("Solution (Infernal 3) - Complexity: ", pair.second!!)
-    }
-
-    @Test
-    @Timeout(value = 3, unit = TimeUnit.SECONDS)
-    fun worldsHardestSudoku() {
-        sudoku.getCell(Position[0, 0]).currentValue = 0
-        sudoku.getCell(Position[5, 0]).currentValue = 6
-        sudoku.getCell(Position[7, 0]).currentValue = 8
-        sudoku.getCell(Position[1, 1]).currentValue = 2
-        sudoku.getCell(Position[4, 1]).currentValue = 1
-        sudoku.getCell(Position[8, 1]).currentValue = 7
-        sudoku.getCell(Position[2, 2]).currentValue = 8
-        sudoku.getCell(Position[3, 2]).currentValue = 5
-        sudoku.getCell(Position[6, 2]).currentValue = 4
-        sudoku.getCell(Position[2, 3]).currentValue = 4
-        sudoku.getCell(Position[3, 3]).currentValue = 2
-        sudoku.getCell(Position[6, 3]).currentValue = 8
-        sudoku.getCell(Position[1, 4]).currentValue = 0
-        sudoku.getCell(Position[4, 4]).currentValue = 7
-        sudoku.getCell(Position[8, 4]).currentValue = 1
-        sudoku.getCell(Position[0, 5]).currentValue = 5
-        sudoku.getCell(Position[5, 5]).currentValue = 3
-        sudoku.getCell(Position[0, 6]).currentValue = 2
-        sudoku.getCell(Position[7, 6]).currentValue = 0
-        sudoku.getCell(Position[1, 7]).currentValue = 3
-        sudoku.getCell(Position[8, 7]).currentValue = 6
-        sudoku.getCell(Position[2, 8]).currentValue = 6
-        sudoku.getCell(Position[6, 8]).currentValue = 2
-        solver = Solver(sudoku)
-
-        solver!!.solverSudoku.complexity = Complexity.easy
-        val pair = solver!!.validateDeprecated()
-        pair.first `should be equal to` ComplexityRelation.INVALID
-        solver!!.solverSudoku.complexity = Complexity.arbitrary
-        val pair2 = solver!!.validateDeprecated()
-        pair2.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
-
-        skeleton("Solution (world's hardest) - Complexity: ", pair2.second!!)
-    }
-
-    @Test
-    @Timeout(value = 3, unit = TimeUnit.SECONDS)
-    fun worldsHardestSudoku2() {
-        sudoku.getCell(Position[2, 0]).currentValue = 4
-        sudoku.getCell(Position[3, 0]).currentValue = 2
-        sudoku.getCell(Position[0, 1]).currentValue = 7
-        sudoku.getCell(Position[7, 1]).currentValue = 1
-        sudoku.getCell(Position[1, 2]).currentValue = 6
-        sudoku.getCell(Position[4, 2]).currentValue = 0
-        sudoku.getCell(Position[6, 2]).currentValue = 4
-        sudoku.getCell(Position[0, 3]).currentValue = 3
-        sudoku.getCell(Position[5, 3]).currentValue = 4
-        sudoku.getCell(Position[6, 3]).currentValue = 2
-        sudoku.getCell(Position[1, 4]).currentValue = 0
-        sudoku.getCell(Position[4, 4]).currentValue = 6
-        sudoku.getCell(Position[8, 4]).currentValue = 5
-        sudoku.getCell(Position[2, 5]).currentValue = 2
-        sudoku.getCell(Position[3, 5]).currentValue = 1
-        sudoku.getCell(Position[7, 5]).currentValue = 7
-        sudoku.getCell(Position[1, 6]).currentValue = 5
-        sudoku.getCell(Position[3, 6]).currentValue = 4
-        sudoku.getCell(Position[8, 6]).currentValue = 8
-        sudoku.getCell(Position[2, 7]).currentValue = 3
-        sudoku.getCell(Position[7, 7]).currentValue = 2
-        sudoku.getCell(Position[5, 8]).currentValue = 8
-        sudoku.getCell(Position[6, 8]).currentValue = 6
-        solver = Solver(sudoku)
-
-        val pair = solver!!.validateDeprecated()
-        pair.first `should be equal to` ComplexityRelation.CONSTRAINT_SATURATION
-
-        skeleton("Solution (world's hardest 2) - Complexity: ", pair.second!!)
-    }
-
-    @Test
-    @Timeout(value = 3, unit = TimeUnit.SECONDS)
-    fun notSolvableSudoku() {
-        sudoku.getCell(Position[0, 0]).currentValue = 2
-        sudoku.getCell(Position[2, 0]).currentValue = 8
-        sudoku.getCell(Position[3, 0]).currentValue = 4
-        sudoku.getCell(Position[6, 0]).currentValue = 1
-        sudoku.getCell(Position[5, 1]).currentValue = 0
-        sudoku.getCell(Position[6, 1]).currentValue = 8
-        sudoku.getCell(Position[0, 2]).currentValue = 4
-        sudoku.getCell(Position[1, 2]).currentValue = 6
-        sudoku.getCell(Position[3, 2]).currentValue = 1
-        sudoku.getCell(Position[7, 2]).currentValue = 7
-        sudoku.getCell(Position[1, 4]).currentValue = 4
-        sudoku.getCell(Position[4, 4]).currentValue = 8
-        sudoku.getCell(Position[5, 4]).currentValue = 1
-        sudoku.getCell(Position[8, 4]).currentValue = 5
-        sudoku.getCell(Position[4, 5]).currentValue = 5
-        sudoku.getCell(Position[5, 5]).currentValue = 3
-        sudoku.getCell(Position[6, 5]).currentValue = 4
-        sudoku.getCell(Position[8, 5]).currentValue = 6
-        sudoku.getCell(Position[1, 6]).currentValue = 5
-        sudoku.getCell(Position[3, 6]).currentValue = 2
-        sudoku.getCell(Position[2, 7]).currentValue = 7
-        sudoku.getCell(Position[5, 7]).currentValue = 5
-        sudoku.getCell(Position[6, 7]).currentValue = 3
-        sudoku.getCell(Position[4, 8]).currentValue = 0
-        sudoku.getCell(Position[8, 8]).currentValue = 4
-
-        //assertEquals(solver.validate(solution), ComplexityRelation.INVALID);
-        while (solver!!.solveOne(true) != null);
-        solver!!.solveOne(true) `should be` null
-    }
-
-    @Test
-    @Timeout(value = 3, unit = TimeUnit.SECONDS)
-    fun ambiguouslySolvable() {
-        sudoku.getCell(Position[1, 0]).currentValue = 6
-        sudoku.getCell(Position[3, 0]).currentValue = 4
-        sudoku.getCell(Position[6, 0]).currentValue = 5
-        sudoku.getCell(Position[2, 1]).currentValue = 2
-        sudoku.getCell(Position[7, 1]).currentValue = 0
-        sudoku.getCell(Position[4, 2]).currentValue = 1
-        sudoku.getCell(Position[4, 3]).currentValue = 0
-        sudoku.getCell(Position[5, 3]).currentValue = 2
-        sudoku.getCell(Position[7, 3]).currentValue = 8
-        sudoku.getCell(Position[1, 4]).currentValue = 4
-        sudoku.getCell(Position[5, 5]).currentValue = 8
-        sudoku.getCell(Position[3, 6]).currentValue = 7
-        sudoku.getCell(Position[6, 6]).currentValue = 3
-        sudoku.getCell(Position[8, 6]).currentValue = 6
-        sudoku.getCell(Position[0, 7]).currentValue = 1
-        sudoku.getCell(Position[8, 7]).currentValue = 4
-
-        solver = Solver(sudoku)
-        //todo investigate validation, what are we currently using in main? does that work?
-        //assertEquals(ComplexityRelation.INVALID, solver.validate(solution));
     }
 
     companion object {
