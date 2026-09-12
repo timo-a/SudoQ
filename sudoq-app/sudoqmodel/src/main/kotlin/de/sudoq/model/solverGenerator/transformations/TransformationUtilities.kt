@@ -202,6 +202,7 @@ fun changeSymbols(sudoku: SudokuUnderTransformation) {
     val permutationRule = createPermutation(sudoku)
     for (p in sudoku.sudokuType.validPositions) {
         val oldSymbol = sudoku.getValue(p)
+        check(permutationRule.containsKey(oldSymbol))
         val newSymbol = permutationRule[oldSymbol]!!
         if (newSymbol != oldSymbol) // nur wenn sich was ändert, sonst bleibts ja gleich
             sudoku.replaceValue(p, oldSymbol, newSymbol)

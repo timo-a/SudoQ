@@ -8,14 +8,20 @@
 package de.sudoq.model.sudoku
 
 /**
- * A Cell describes an atomic unit in a sudoku board.
- * It holds information about the current value, editability.
+ * A SimpleCell describes an atomic unit in a sudoku board.
+ * It is intended for transformations and thus not concerned
+ * with which values the user has filled in.
+ * It holds information about the solution and if the solution is prefilled.
  */
-class SimpleCell(editable: Boolean, var value: Int,
+class SimpleCell(editable: Boolean, var value: Int, //todo get and set to ensure range
                  /** A unique number identifying the cell in the scope of the sudoku */
                  val id: Int,
                  /** the number of symbols this cell can take */
                  val numberOfValues: Int) {
+
+    init {
+        require(value in 0 .. numberOfValues)
+    }
 
     /** The editability of this cell; false for prefilled cell */
     val isEditable: Boolean = editable
@@ -30,8 +36,4 @@ class SimpleCell(editable: Boolean, var value: Int,
         return value.toString()
     }
 
-    companion object {
-        /** The value representing an empty cell */
-        const val EMPTYVAL = -1
-    }
 }

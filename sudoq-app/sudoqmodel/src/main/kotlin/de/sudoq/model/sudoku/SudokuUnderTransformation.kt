@@ -24,7 +24,7 @@ open class SudokuUnderTransformation(
     companion object {
 
         fun map(cell: Cell) : SimpleCell {
-            return SimpleCell(cell.isEditable, cell.currentValue, cell.id, cell.numberOfValues)
+            return SimpleCell(cell.isEditable, cell.solution, cell.id, cell.numberOfValues)
         }
 
         fun map(cell: SimpleCell) : Cell {
