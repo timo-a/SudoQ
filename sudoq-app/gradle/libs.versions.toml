@@ -10,7 +10,7 @@ sonar = "7.5.0.8588"
 
 # Dependencies
 appcompat = "1.7.1"
-material = "1.13.0"
+material = "1.14.0"
 multidex = "2.0.1"
 coreSplashscreen = "1.0.1"
 junit = "4.13.2"
