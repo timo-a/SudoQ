@@ -16,7 +16,7 @@ import android.widget.Toast
 import androidx.core.content.edit
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
-import androidx.multidex.BuildConfig
+import de.sudoq.BuildConfig
 import de.sudoq.R
 import de.sudoq.controller.SudoqCompatActivity
 import de.sudoq.model.sudoku.complexity.Complexity.Companion.playableValues

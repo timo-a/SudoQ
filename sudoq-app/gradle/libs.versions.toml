@@ -11,7 +11,6 @@ sonar = "7.5.0.8588"
 # Dependencies
 appcompat = "1.7.1"
 material = "1.13.0"
-multidex = "2.0.1"
 coreSplashscreen = "1.0.1"
 junit = "4.13.2"
 junitJupiter = "6.0.2"
@@ -28,7 +27,6 @@ androidxActivity = "1.9.3"
 [libraries]
 # AndroidX
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-androidx-multidex = { group = "androidx.multidex", name = "multidex", version.ref = "multidex" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidxLifecycle" }
 androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidxActivity" }
