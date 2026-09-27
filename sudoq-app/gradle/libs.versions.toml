@@ -4,7 +4,7 @@ agp = "9.0.0"
 jacoco = "0.8.15"
 kotlin = "2.3.0"
 ksp = "2.3.5"
-hilt = "2.58"
+hilt = "2.60.1"
 sonar = "7.5.0.8588"
 
 
@@ -59,7 +59,6 @@ apache-commons-lang3 = { group = "org.apache.commons", name = "commons-lang3", v
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
