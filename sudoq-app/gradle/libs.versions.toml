@@ -22,7 +22,7 @@ apacheCommonsIo = "2.22.0"
 apacheCommonsLang3 = "3.21.0"
 kotlinxCoroutines = "1.10.2"
 androidxLifecycle = "2.8.7"
-androidxActivity = "1.9.3"
+androidxActivity = "1.13.0"
 
 [libraries]
 # AndroidX
