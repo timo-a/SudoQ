@@ -32,7 +32,7 @@ jobs:
           cd sudoq-app
           ./gradlew sudoqapp:testDebugUnitTest sudoqapp:createDebugUnitTestCoverageReport sudoqapp:lintDebug
       - name: Upload App Test Results
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: app-build-dir
           path: sudoq-app/sudoqapp/build/
@@ -61,7 +61,7 @@ jobs:
           cd sudoq-app
           ./gradlew sudoqmodel:test
       - name: Upload Model Test Results
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: model-build-dir
           path: sudoq-app/sudoqmodel/build/
@@ -81,12 +81,12 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
       - name: Download App Test Results
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: app-build-dir
           path: sudoq-app/sudoqapp/build/
       - name: Download Model Test Results
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: model-build-dir
           path: sudoq-app/sudoqmodel/build/
