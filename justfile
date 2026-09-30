@@ -17,6 +17,9 @@ copy-changelog source target:
     cp $FPATH/en-US/changelogs/{{source}}.txt $FPATH/en-US/changelogs/{{target}}.txt
     cp $FPATH/fr-FR/changelogs/{{source}}.txt $FPATH/fr-FR/changelogs/{{target}}.txt
 
+release-notes:
+    kotlinc -script utilities/scripts/bump_version_release_summary_googleplay.kts
+
 # requires: .env to contain keepassxc location and entry names (for keystore credentials)
 #           keystore.properties to contain keystore location and key alias
 #           keepassxc file and keystore to exist
