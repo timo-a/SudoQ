@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.ksp)
@@ -55,6 +57,29 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release") {
+            val keystorePropertiesFile = rootProject.file("keystore.properties")
+            require(keystorePropertiesFile.exists())
+            val keystoreProperties = Properties()
+                .also { it.load(keystorePropertiesFile.inputStream()) }
+
+            val storeFilePath = keystoreProperties.getProperty("KEYSTORE_FILE")
+            require(!storeFilePath.isNullOrBlank())
+            storeFile = file(storeFilePath)
+            require(storeFile!!.exists())
+
+            keyAlias = keystoreProperties.getProperty("KEY_ALIAS")
+
+            storePassword = requireNotNull(System.getenv("KEYSTORE_PASSWORD")) {
+                "KEYSTORE_PASSWORD environment variable is required for signing release builds"
+            }
+            keyPassword = requireNotNull(System.getenv("KEY_PASSWORD")) {
+                "KEY_PASSWORD environment variable is required for signing release builds"
+            }
+        }
+    }
+
     buildTypes {
         getByName("debug") {
             enableUnitTestCoverage = true
@@ -63,8 +88,17 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+
+            val releaseSigning = signingConfigs.getByName("release")
+            requireNotNull(releaseSigning.storeFile)
+            require(releaseSigning.storeFile!!.exists())
+            signingConfig = releaseSigning
         }
     }
+}
+
+base {
+    archivesName.set("sudoqapp-${project.property("appVersionName")}")
 }
 
 dependencies {
