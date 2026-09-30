@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
 }
@@ -16,9 +15,12 @@ android {
 
         minSdk = 21
         targetSdk = 36
-        multiDexEnabled = true
         testApplicationId = "de.sudoq.test"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     testOptions {
@@ -69,7 +71,6 @@ dependencies {
     implementation(project(":sudoqmodel"))
     implementation(libs.material)
     implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.multidex)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
