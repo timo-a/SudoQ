@@ -42,3 +42,6 @@ tmp
 sudoq-app/sudoqmodel/build/
 sudoq-app/investigateJARcreation/
 sudoq-app/sudoqmodel/sudoqmodel.jar
+.env
+keystore.properties
+

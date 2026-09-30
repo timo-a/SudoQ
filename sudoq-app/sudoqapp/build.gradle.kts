@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.ksp)
@@ -55,6 +57,10 @@ android {
         }
     }
 
+    signingConfigs {
+        create("localRelease")
+    }
+
     buildTypes {
         getByName("debug") {
             enableUnitTestCoverage = true
@@ -65,6 +71,48 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+}
+
+val isLocalSignedReleaseRequested = gradle.startParameter.taskNames.any { it.contains("localSignedRelease") }
+if (isLocalSignedReleaseRequested) {
+    val keystorePropertiesFile = rootProject.file("keystore.properties")
+    require(keystorePropertiesFile.exists()) {
+        "keystore.properties file not found at ${keystorePropertiesFile.absolutePath}"
+    }
+
+    val keystoreProperties = Properties().also { it.load(keystorePropertiesFile.inputStream()) }
+    val storeFilePath = keystoreProperties.getProperty("KEYSTORE_FILE")
+    require(!storeFilePath.isNullOrBlank()) { "KEYSTORE_FILE is missing in keystore.properties" }
+
+    val storeFileObj = file(storeFilePath)
+    require(storeFileObj.exists()) { "Keystore file not found at ${storeFileObj.absolutePath}" }
+
+    val keyAliasVal = keystoreProperties.getProperty("KEY_ALIAS")
+    val storePasswordVal = requireNotNull(System.getenv("KEYSTORE_PASSWORD")) {
+        "KEYSTORE_PASSWORD environment variable is required for localSignedRelease"
+    }
+    val keyPasswordVal = requireNotNull(System.getenv("KEY_PASSWORD")) {
+        "KEY_PASSWORD environment variable is required for localSignedRelease"
+    }
+
+    android.signingConfigs.getByName("localRelease").apply {
+        storeFile = storeFileObj
+        keyAlias = keyAliasVal
+        storePassword = storePasswordVal
+        keyPassword = keyPasswordVal
+    }
+
+    android.buildTypes.getByName("release").signingConfig = android.signingConfigs.getByName("localRelease")
+}
+
+base {
+    archivesName.set("sudoqapp-${project.property("appVersionName")}")
+}
+
+tasks.register("localSignedRelease") {
+    group = "publishing"
+    description = "Builds a signed release bundle locally using keystore.properties and environment variables."
+    dependsOn("bundleRelease")
 }
 
 dependencies {
