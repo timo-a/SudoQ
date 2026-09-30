@@ -16,5 +16,7 @@
       "groupName": "MockK dependencies",
     },
   ],
-  "baseBranch": "dependency-updates"
+  "baseBranchPatterns": [
+    "dependency-updates"
+  ]
 }
