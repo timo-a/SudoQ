@@ -28,6 +28,13 @@ import java.util.*
 class VirtualKeyboardButtonView(context: Context?, private val symbol: Int) : View(context),
     ObservableInput {
 
+    /** Blend existing colors with the keyboard background without disabling input. */
+    var isCompleted: Boolean = false
+        set(value) {
+            field = value
+            alpha = if (value) 0.5f else 1.0f
+        }
+
     /**
      * Das Symbol, welches in diesem Button steht so, wie es gemalt wird
      */
