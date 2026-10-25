@@ -1,5 +1,6 @@
 package de.sudoq.controller.sudoku
 
+import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.Sudoku
 
 /**
@@ -9,15 +10,15 @@ import de.sudoq.model.sudoku.Sudoku
  */
 internal fun completedSymbols(sudoku: Sudoku): Set<Int> {
     val type = sudoku.sudokuType
-    val regions = type.constraints.filter {
-        it.hasUniqueBehavior() && it.size == type.numberOfSymbols
-    }
-    if (regions.isEmpty()) return emptySet()
+    val uConstraints = type.constraints.filter(Constraint::hasUniqueBehavior)
+    uConstraints.forEach { check(it.size == type.numberOfSymbols) }
+
+    if (uConstraints.isEmpty()) return emptySet()
 
     val completed = type.symbolIterator.toMutableSet()
-    for (region in regions) {
+    for (uConstraint in uConstraints) {
         val counts = IntArray(type.numberOfSymbols)
-        for (position in region) {
+        for (position in uConstraint) {
             val value = sudoku.getCurrentValue(position)
             if (value in counts.indices) counts[value]++
         }
