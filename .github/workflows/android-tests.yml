@@ -24,15 +24,17 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x sudoq-app/gradlew
 
-      - name: "Run Instrumented UI Tests (AVD: API 36, Play Store, 2GB RAM)"
+      - name: "Run Instrumented UI Tests (AVD: API 36, Google APIs, 2GB RAM)"
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 36
-          target: google_apis_playstore
+          target: google_apis
           arch: x86_64
           ram-size: 2048M
           heap-size: 336M
           disk-size: 6G
+          avd-boot-timeout: 600
+          corrupt-avd-snapshots-retry: 3
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
           disable-animations: true
