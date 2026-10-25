@@ -4,9 +4,8 @@ import de.sudoq.model.sudoku.Constraint
 import de.sudoq.model.sudoku.Sudoku
 
 /**
- * Symbols that occur exactly once in every region that requires all symbols.
- * Using the regions also covers overlapping grids and additional variant rules,
- * without consulting the solution or counting pencil notes.
+ * Symbols that occur exactly once in every unique constraint.
+ * They don't need to be filled in anymore.
  */
 internal fun completedSymbols(sudoku: Sudoku): Set<Int> {
     val type = sudoku.sudokuType
@@ -15,14 +14,16 @@ internal fun completedSymbols(sudoku: Sudoku): Set<Int> {
 
     if (uConstraints.isEmpty()) return emptySet()
 
-    val completed = type.symbolIterator.toMutableSet()
-    for (uConstraint in uConstraints) {
-        val counts = IntArray(type.numberOfSymbols)
-        for (position in uConstraint) {
-            val value = sudoku.getCurrentValue(position)
-            if (value in counts.indices) counts[value]++
-        }
-        completed.removeAll { counts[it] != 1 }
+    fun getUniqueValues(constraint: Constraint) : Set<Int> {
+        return constraint
+            .map(sudoku::getCurrentValue)
+            .filter { it != -1 } // can be -1 if cell is empty, ignore those
+            .groupingBy { it }.eachCount() // group by occurrence count
+            .filterValues { it == 1 }.keys // return those that appear once
     }
+
+    val completed = uConstraints
+        .map(::getUniqueValues)
+        .reduce { acc, ints -> acc.intersect(ints) }
     return completed
 }
