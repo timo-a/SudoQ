@@ -33,8 +33,7 @@ jobs:
           ram-size: 2048M
           heap-size: 336M
           disk-size: 6G
-          avd-boot-timeout: 600
-          corrupt-avd-snapshots-retry: 3
+          emulator-boot-timeout: 600
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
           disable-animations: true
