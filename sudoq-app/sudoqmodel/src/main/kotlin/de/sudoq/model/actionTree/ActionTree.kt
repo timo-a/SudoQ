@@ -141,7 +141,7 @@ class ActionTree : ObservableModelImpl<ActionTreeElement>(), Iterable<ActionTree
 
             // both last elements now have the same id (worst case it is 1 i.e. root)
             // if the last elements are not also identical, they must be from different trees
-            if (startToRoot.last !== endToRoot.last) {
+            if (startToRoot.last() !== endToRoot.last()) {
                 return null //todo return [] instead?
             }
 
@@ -151,7 +151,7 @@ class ActionTree : ObservableModelImpl<ActionTreeElement>(), Iterable<ActionTree
                 commonAncestor = startToRoot.removeLast()
                 endToRoot.removeLast()
             } while (!startToRoot.isEmpty() && !endToRoot.isEmpty()
-                && startToRoot.last === endToRoot.last
+                && startToRoot.last() === endToRoot.last()
             )
 
             // add the end-root way backwards
@@ -167,8 +167,8 @@ class ActionTree : ObservableModelImpl<ActionTreeElement>(), Iterable<ActionTree
             startToRoot: LinkedList<ActionTreeElement>,
             endToRoot: LinkedList<ActionTreeElement>
         ): Boolean {
-            val lastId1 = startToRoot.last.id
-            val lastId2 = endToRoot.last.id
+            val lastId1 = startToRoot.last().id
+            val lastId2 = endToRoot.last().id
             val lastElementsDiffer = lastId1 != lastId2
             val notBothRoot =
                 lastId1 > 1 || lastId2 > 1 //not necessary when we are absolutely sure to end up at the same root node
@@ -183,8 +183,8 @@ class ActionTree : ObservableModelImpl<ActionTreeElement>(), Iterable<ActionTree
             current: LinkedList<ActionTreeElement>,
             other: LinkedList<ActionTreeElement>
         ) {
-            while (current.last.id > other.last.id) {
-                val parent = current.last.parent
+            while (current.last().id > other.last().id) {
+                val parent = current.last().parent
                 current.addLast(parent!!)
             }
         }
