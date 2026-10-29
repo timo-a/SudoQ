@@ -133,4 +133,9 @@ dependencies {
     testImplementation(libs.mockk)
     testRuntimeOnly(libs.junit.jupiter.engine)
     testRuntimeOnly(libs.junit.platform.launcher)
+
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.rules)
+    androidTestImplementation(libs.androidx.test.junit.ktx)
+    androidTestImplementation(libs.espresso.core)
 }

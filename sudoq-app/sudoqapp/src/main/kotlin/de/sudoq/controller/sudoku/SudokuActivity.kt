@@ -249,7 +249,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
         mediator!!.registerListener(this)
         if (game.isFinished()) {
             setFinished(showWinDialog = false, surrendered = false)
-        } else {
+        } else if (savedInstanceState == null) {
             //find the current cell from when the game was saved and mark it selected
             val lastAction = game.currentState.action
 
@@ -338,6 +338,7 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
             val position = game.sudoku.getPosition(sudokuLayout!!.currentCellView!!.cell.id)
             outState.putInt(SAVE_FIELD_X.toString(), position.x)
             outState.putInt(SAVE_FIELD_Y.toString(), position.y)
+            outState.putBoolean(SAVE_NOTE_MODE, sudokuLayout!!.currentCellView!!.isNoteMode)
         } else {
             outState.putInt(SAVE_FIELD_X.toString(), -1)
         }
@@ -369,7 +370,12 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
                     state.getInt(SAVE_FIELD_X.toString()),
                     state.getInt(SAVE_FIELD_Y.toString())]
 
-            sudokuLayout!!.getSudokuCellView(currentPosition).programmaticallySelectShort()
+            val cellView = sudokuLayout!!.getSudokuCellView(currentPosition)
+            if (state.getBoolean(SAVE_NOTE_MODE)) {
+                cellView.programmaticallySelectLong()
+            } else {
+                cellView.programmaticallySelectShort()
+            }
             //todo kann man hier auch mit dem letztem Blatt im ActionTree arbeiten, so wie oben in GlobalLayoutListener?
 
         }
@@ -809,6 +815,8 @@ class SudokuActivity : SudoqCompatActivity(), View.OnClickListener, ActionListen
          * Konstante für das Speichern des Scrollwertes in Y-Richtung
          */
         private const val SAVE_SCROLL_Y = 7
+
+        private const val SAVE_NOTE_MODE = "note_mode"
 
         /**
          * Returns a string in the format "HH:mm:ss" implied by the specified time in seconds.
