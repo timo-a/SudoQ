@@ -178,6 +178,12 @@ class VirtualKeyboardLayout(context: Context?, attrs: AttributeSet?) : LinearLay
         for (b in buttonIterator) b.isEnabled = true
     }
 
+    /** Softens completed symbols while keeping their input and selection states. */
+    fun setSymbolCompleted(symbol: Int, completed: Boolean) {
+        val buttonsPerRow = buttons!!.size
+        buttons!![symbol % buttonsPerRow][symbol / buttonsPerRow].isCompleted = completed
+    }
+
     /**
      * Deaktiviert den spezifizierten Button.
      *

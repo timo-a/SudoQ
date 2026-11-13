@@ -176,6 +176,7 @@ class UserInteractionMediator(
      */
     fun updateKeyboard() {
         val currentField = sudokuView.currentCellView
+        val completed = completedSymbols(game.sudoku)
         for (i in game.sudoku.sudokuType.symbolIterator) {
             val state: CellViewStates = if (currentField != null && i == currentField.cell.currentValue && !noteMode)
                 CellViewStates.SELECTED_INPUT_BORDER
@@ -184,6 +185,7 @@ class UserInteractionMediator(
             else
                 CellViewStates.DEFAULT_BORDER
             virtualKeyboard.markCell(i, state)
+            virtualKeyboard.setSymbolCompleted(i, i in completed)
         }
         virtualKeyboard.invalidate()
     }

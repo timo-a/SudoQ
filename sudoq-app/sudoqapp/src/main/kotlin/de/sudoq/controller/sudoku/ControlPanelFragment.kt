@@ -102,10 +102,12 @@ class ControlPanelFragment : Fragment() {
             undoButton -> {
                 controller.onUndo()
                 mediator!!.updateKeyboard()
+                updateButtons()
             }
             redoButton -> {
                 controller.onRedo()
                 mediator!!.updateKeyboard()
+                updateButtons()
             }
             actionTreeButton, closeButton -> {
                 sudokuActivity.toogleActionTree()
